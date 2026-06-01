@@ -17,6 +17,7 @@ Roadmap de acompanhamento para a reestruturação visual de alta conversão, com
 - [x] **Atenuação do Marquee de Projetos (`Home.jsx`)**: Forçar `grayscale` nas tags `<img>` e adicionar um overlay semi-transparente de `bg-background/90` para suavizar e tornar o marquee uma textura sutil no tema claro.
 - [x] **Contraste de Inputs e Labels em Área do Cliente e Rastreamento (`ClientArea.jsx` e `TrackTicket.jsx`)**: Substituir classes estáticas pretas e cinzas de labels e caixas de texto por classes dinâmicas com suporte reativo e alto contraste para ambos os temas.
 - [x] **Fundo e Links do Rodapé (`Footer.jsx`)**: Substituir o fundo translúcido no tema claro por um fundo sólido corporativo `bg-slate-50` com divisor em `border-slate-200` para garantir legibilidade impecável de todos os links institucionais e de contato.
+- [x] **Redesenho do Portfólio Geral (`Portfolio.jsx`)**: Substituição completa dos antigos carrosséis isolados por um layout estilo dashboard de elite, com contadores de autoridade, abas interativas com contadores dinâmicos, grid fluida animada com Framer Motion, pílulas de tecnologia exibidas no hover das cartas e uma seção de 'Pilares de Excelência' detalhando a alta competência.
 
 ## EM ANDAMENTO (DOING)
 *Nenhuma tarefa em andamento. Ajustes visuais 100% implementados, validados com build e documentados.*
