@@ -1,0 +1,13 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Ignorar rotas restritas e administrativas para segurança e otimização de rastreamento
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /area-clientes/
+Disallow: /support/
+Disallow: /track-ticket/
+
+# Sitemap do site
+Sitemap: https://rafaelpitaoficial.com.br/sitemap.xml

@@ -1,0 +1,500 @@
+import React, { useState, useEffect } from 'react';
+import { supabase } from '@/lib/customSupabaseClient';
+import { useToast } from '@/components/ui/use-toast';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose, DialogDescription } from '@/components/ui/dialog';
+import { Loader2, PlusCircle, Save, Trash2, Sparkles, Wand2, LayoutGrid, FileText, Image as ImageIcon, UploadCloud, Crop as CropIcon } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import imageCompression from 'browser-image-compression';
+import { generateProjectContent } from '@/lib/gemini';
+import ImageCropperModal from '@/components/ImageCropperModal';
+
+// Função auxiliar para converter Blob em File (necessário para o upload do Supabase esperar um File object as vezes, ou pelo menos ter nome)
+const blobToFile = (blob, fileName) => {
+    return new File([blob], fileName, { type: blob.type });
+};
+
+const ProjectFormModal = ({ project, onSave, onClose }) => {
+    const { toast } = useToast();
+    const [loading, setLoading] = useState(false);
+    const [aiLoading, setAiLoading] = useState(false);
+    const [activeTab, setActiveTab] = useState('info');
+    const [categories, setCategories] = useState([]);
+
+    // Form Data
+    const [formData, setFormData] = useState({
+        category_id: '',
+        slug: '',
+        title: '',
+        client: '',
+        year: new Date().getFullYear(),
+        services: '',
+        description: '',
+        challenge: '',
+        solution: '',
+        results: '',
+        project_url: '',
+        gallery_urls: [],
+        video_urls: '',
+        main_image_aspect_ratio: '16:9',
+        gallery_aspect_ratio: '16:9', // Novo campo
+    });
+
+    // Image States
+    const [mainImage, setMainImage] = useState(null); // File object
+    const [mainImagePreview, setMainImagePreview] = useState(null); // URL for preview
+    const [galleryImages, setGalleryImages] = useState([]); // Array of File objects (new uploads)
+
+    // Cropper State
+    const [cropperOpen, setCropperOpen] = useState(false);
+    const [imageToCrop, setImageToCrop] = useState(null); // URL or Base64
+    const [cropTarget, setCropTarget] = useState(null); // { type: 'main' } or { type: 'gallery', index: number }
+
+    const isEditing = !!project;
+
+    // Load Categories
+    useEffect(() => {
+        const fetchCategories = async () => {
+            const { data, error } = await supabase.from('categories').select('id, title');
+            if (!error) setCategories(data);
+        };
+        fetchCategories();
+    }, []);
+
+    // Load Project Data
+    useEffect(() => {
+        if (isEditing && project) {
+            setFormData({
+                ...project,
+                services: project.services ? project.services.join(', ') : '',
+                gallery_urls: project.gallery_urls || [],
+                video_urls: project.video_urls ? project.video_urls.join(', ') : '',
+                main_image_aspect_ratio: project.main_image_aspect_ratio || '16:9',
+                gallery_aspect_ratio: project.gallery_aspect_ratio || '16:9',
+                category_id: project.category_id || '', // Explicitly set category_id
+            });
+            // Se tiver imagem principal, poderíamos mostrar preview, mas como é URL remoto, deixamos quieto ou mostramos link.
+            // Para simplificar, mainImagePreview será usado apenas para NOVAS imagens locais.
+        } else {
+            setFormData({
+                category_id: '', slug: '', title: '', client: '', year: new Date().getFullYear(), services: '', description: '', challenge: '', solution: '', results: '', project_url: '', gallery_urls: [], video_urls: '', main_image_aspect_ratio: '4:5', gallery_aspect_ratio: '4:5',
+            });
+        }
+    }, [project, isEditing]);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleSelectChange = (name, value) => {
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    // --- Image Handling Logic ---
+
+    // 1. Select Main Image -> Open Cropper
+    const handleMainImageSelect = (e) => {
+        if (e.target.files && e.target.files.length > 0) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.addEventListener('load', () => {
+                setImageToCrop(reader.result);
+                setCropTarget({ type: 'main', fileName: file.name });
+                setCropperOpen(true);
+            });
+            reader.readAsDataURL(file);
+            // Reset input value to allow re-selecting same file
+            e.target.value = '';
+        }
+    };
+
+    // 2. Select Gallery Images -> Add to list (No auto crop for bulk)
+    const handleGalleryImagesSelect = (e) => {
+        if (e.target.files && e.target.files.length > 0) {
+            const newFiles = Array.from(e.target.files).map(file => ({
+                file,
+                id: Math.random().toString(36).substr(2, 9),
+                preview: URL.createObjectURL(file)
+            }));
+            setGalleryImages(prev => [...prev, ...newFiles]);
+        }
+    };
+
+    // 3. Trigger Crop for a specific Gallery Image
+    const handleCropGalleryImage = (index) => {
+        const img = galleryImages[index];
+        setImageToCrop(img.preview);
+        setCropTarget({ type: 'gallery', index, fileName: img.file.name });
+        setCropperOpen(true);
+    };
+
+    // 4. Crop Complete Callback
+    const onCropComplete = (croppedBlob) => {
+        if (cropTarget.type === 'main') {
+            const file = blobToFile(croppedBlob, cropTarget.fileName);
+            setMainImage(file);
+            setMainImagePreview(URL.createObjectURL(croppedBlob));
+        } else if (cropTarget.type === 'gallery') {
+            const file = blobToFile(croppedBlob, cropTarget.fileName);
+            setGalleryImages(prev => {
+                const newArr = [...prev];
+                newArr[cropTarget.index] = {
+                    ...newArr[cropTarget.index],
+                    file,
+                    preview: URL.createObjectURL(croppedBlob) // Update preview with cropped version
+                };
+                return newArr;
+            });
+        }
+    };
+
+    // Generate Slug automatically
+    useEffect(() => {
+        if (!isEditing && formData.title) {
+            const slug = formData.title.toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, "") // Remove accents
+                .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanum with -
+                .replace(/^-+|-+$/g, ''); // Trim -
+            setFormData(prev => ({ ...prev, slug }));
+        }
+    }, [formData.title, isEditing]);
+
+    // ... (Keep existing AI and Delete logic) ...
+    const handleGenerateAI = async () => {
+        if (!formData.title) return toast({ variant: "destructive", title: "Preencha o Título primeiro" });
+        setAiLoading(true);
+        try {
+            const categoryName = categories.find(c => String(c.id) === String(formData.category_id))?.title || 'Geral';
+            const content = await generateProjectContent(formData.title, categoryName, formData.client, formData.services);
+            setFormData(prev => ({ ...prev, ...content }));
+            toast({ title: "Conteúdo gerado! ✨" });
+        } catch (error) {
+            toast({ variant: "destructive", title: "Erro na IA", description: error.message });
+        } finally {
+            setAiLoading(false);
+        }
+    };
+
+    const handleDeleteGalleryUrl = async (url) => {
+        if (!window.confirm('Excluir imagem enviada?')) return;
+        const updated = formData.gallery_urls.filter(u => u !== url);
+        setFormData(prev => ({ ...prev, gallery_urls: updated }));
+        // Should delete from storage too ideally, but for now just updating ref
+    };
+
+    const handleRemoveNewGalleryImage = (index) => {
+        setGalleryImages(prev => prev.filter((_, i) => i !== index));
+    };
+
+    // --- Config for Aspects ---
+    const getAspectValue = (ratioString) => {
+        const [w, h] = ratioString.split(':').map(Number);
+        return w / h;
+    };
+
+
+    // --- Submit ---
+    const uploadFile = async (file, bucket, path) => {
+        // Simple compress before upload (extra safety, though crop already returns webp)
+        // If it's already a blob from cropper, it's efficient.
+        const { data, error } = await supabase.storage.from(bucket).upload(path, file, { upsert: isEditing });
+        if (error) throw error;
+        const { data: { publicUrl } } = supabase.storage.from(bucket).getPublicUrl(data.path);
+        return publicUrl;
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        try {
+            const projectData = {
+                ...formData,
+                services: formData.services.split(',').map(s => s.trim()).filter(s => s),
+                video_urls: formData.video_urls.split(',').map(s => s.trim()).filter(s => s),
+                year: formData.year ? parseInt(formData.year, 10) : new Date().getFullYear(),
+                category_id: formData.category_id ? parseInt(formData.category_id, 10) : null,
+            };
+
+            // Remove helper keys if they exist
+            delete projectData.category;
+
+            // Validate critical fields
+            if (!projectData.category_id) {
+                toast({ variant: 'destructive', title: 'Erro', description: 'Selecione uma categoria.' });
+                setLoading(false);
+                return;
+            }
+
+            const timestamp = Date.now();
+
+            // 1. Upload Main Image (if changed)
+            if (mainImage) {
+                const path = `${formData.slug}-main-${timestamp}-${mainImage.name}`;
+                projectData.main_image_url = await uploadFile(mainImage, 'project-images', path);
+            }
+
+            // 2. Upload New Gallery Images
+            if (galleryImages.length > 0) {
+                const newUrls = await Promise.all(galleryImages.map(async (item, i) => {
+                    const path = `${formData.slug}-gallery-${timestamp}-${i}-${item.file.name}`;
+                    return await uploadFile(item.file, 'project-images', path);
+                }));
+                projectData.gallery_urls = [...(formData.gallery_urls || []), ...newUrls];
+            }
+
+            // 3. Save to DB
+            const { error } = isEditing
+                ? await supabase.from('projects').update(projectData).eq('id', project.id)
+                : await supabase.from('projects').insert([projectData]);
+
+            if (error) throw error;
+
+            toast({ title: 'Sucesso!', description: `Projeto ${isEditing ? 'atualizado' : 'criado'}.` });
+            onSave();
+            onClose();
+
+        } catch (error) {
+            console.error(error);
+            toast({ variant: 'destructive', title: 'Erro', description: error.message });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <Dialog open={true} onOpenChange={onClose}>
+            <DialogContent className="max-h-[95vh] overflow-y-auto max-w-4xl bg-gray-900 border-gray-800 text-gray-100">
+                <DialogHeader>
+                    <DialogTitle className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
+                        {isEditing ? 'Editar Projeto' : 'Novo Projeto'}
+                    </DialogTitle>
+                    <DialogDescription className="text-gray-400">
+                        Preencha os detalhes do projeto, gere conteúdo com IA e gerencie as imagens.
+                    </DialogDescription>
+                </DialogHeader>
+
+                <form id="project-form" onSubmit={handleSubmit} className="space-y-6">
+                    <Tabs className="w-full">
+                        <TabsList className="grid w-full grid-cols-3 mb-6 bg-gray-800/50 p-1 rounded-lg">
+                            <TabsTrigger
+                                onClick={() => setActiveTab('info')}
+                                isActive={activeTab === 'info'}
+                                className="gap-2"
+                            >
+                                <LayoutGrid className="w-4 h-4" /> Informações
+                            </TabsTrigger>
+                            <TabsTrigger
+                                onClick={() => setActiveTab('content')}
+                                isActive={activeTab === 'content'}
+                                className="gap-2"
+                            >
+                                <FileText className="w-4 h-4" /> Conteúdo & IA
+                            </TabsTrigger>
+                            <TabsTrigger
+                                onClick={() => setActiveTab('media')}
+                                isActive={activeTab === 'media'}
+                                className="gap-2"
+                            >
+                                <ImageIcon className="w-4 h-4" /> Mídia
+                            </TabsTrigger>
+                        </TabsList>
+
+                        {/* INFO TAB */}
+                        <TabsContent isActive={activeTab === 'info'} className="space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label>Título</Label>
+                                    <Input name="title" value={formData.title} onChange={handleInputChange} required className="bg-gray-800 border-gray-700" />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label>Slug</Label>
+                                    <Input name="slug" value={formData.slug} onChange={handleInputChange} required className="bg-gray-800 border-gray-700" />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label>Categoria</Label>
+                                    <Select name="category_id" value={String(formData.category_id)} onValueChange={(v) => handleSelectChange('category_id', v)}>
+                                        <SelectTrigger className="bg-gray-800 border-gray-700"><SelectValue placeholder="Selecione..." /></SelectTrigger>
+                                        <SelectContent>
+                                            {categories.map(c => <SelectItem key={c.id} value={String(c.id)}>{c.title}</SelectItem>)}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label>Cliente</Label>
+                                    <Input name="client" value={formData.client} onChange={handleInputChange} className="bg-gray-800 border-gray-700" />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label>Ano</Label>
+                                    <Input name="year" type="number" value={formData.year} onChange={handleInputChange} className="bg-gray-800 border-gray-700" />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label>Serviços</Label>
+                                    <Input name="services" value={formData.services} onChange={handleInputChange} className="bg-gray-800 border-gray-700" />
+                                </div>
+                            </div>
+                            <div className="space-y-2">
+                                <Label>Link do Projeto</Label>
+                                <Input name="project_url" value={formData.project_url} onChange={handleInputChange} className="bg-gray-800 border-gray-700" />
+                            </div>
+                        </TabsContent>
+
+                        {/* CONTENT TAB */}
+                        <TabsContent isActive={activeTab === 'content'} className="space-y-6">
+                            <div className="flex justify-between items-center bg-purple-900/20 p-4 rounded-lg border border-purple-500/20">
+                                <div>
+                                    <h3 className="text-purple-400 font-semibold flex items-center gap-2"><Sparkles className="w-4 h-4" /> Gerador IA</h3>
+                                    <p className="text-xs text-gray-400">Gere descrições automáticas com base no título.</p>
+                                </div>
+                                <Button type="button" variant="outline" onClick={handleGenerateAI} disabled={aiLoading} className="border-purple-500 text-purple-400">
+                                    {aiLoading ? <Loader2 className="animate-spin w-4 h-4" /> : <Wand2 className="w-4 h-4" />} Gerar
+                                </Button>
+                            </div>
+                            <div className="space-y-3">
+                                <Label>Descrição Curta</Label>
+                                <Textarea name="description" value={formData.description} onChange={handleInputChange} className="bg-gray-800 border-gray-700" />
+                                <div className="grid md:grid-cols-2 gap-4">
+                                    <div><Label>Desafio</Label><Textarea name="challenge" value={formData.challenge} onChange={handleInputChange} className="bg-gray-800 border-gray-700" /></div>
+                                    <div><Label>Solução</Label><Textarea name="solution" value={formData.solution} onChange={handleInputChange} className="bg-gray-800 border-gray-700" /></div>
+                                </div>
+                                <Label>Resultados</Label><Textarea name="results" value={formData.results} onChange={handleInputChange} className="bg-gray-800 border-gray-700" />
+                                <Label>Vídeos (URLs)</Label><Input name="video_urls" value={formData.video_urls} onChange={handleInputChange} className="bg-gray-800 border-gray-700" />
+                            </div>
+                        </TabsContent>
+
+                        {/* MEDIA TAB */}
+                        <TabsContent isActive={activeTab === 'media'} className="space-y-8">
+                            {/* MAIN IMAGE */}
+                            <div className="p-4 rounded-lg bg-gray-800/30 border border-gray-700 space-y-4">
+                                <div className="flex justify-between items-center">
+                                    <h3 className="font-semibold text-gray-300 flex items-center gap-2"><ImageIcon className="w-4 h-4" /> Capa Principal</h3>
+                                    <div className="w-40">
+                                        <Select name="main_image_aspect_ratio" value={formData.main_image_aspect_ratio} onValueChange={(v) => handleSelectChange('main_image_aspect_ratio', v)}>
+                                            <SelectTrigger className="h-8 text-xs bg-gray-900 border-gray-700"><SelectValue /></SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="16:9">Paisagem (16:9)</SelectItem>
+                                                <SelectItem value="4:3">Padrão (4:3)</SelectItem>
+                                                <SelectItem value="1:1">Quadrado (1:1)</SelectItem>
+                                                <SelectItem value="9:16">Stories (9:16)</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+                                    <Label className="cursor-pointer md:col-span-1 h-32 border-2 border-dashed border-gray-600 rounded-lg flex flex-col items-center justify-center hover:border-blue-500 hover:text-blue-400 transition-colors bg-gray-800/50">
+                                        <UploadCloud className="w-8 h-8 mb-2" />
+                                        <span className="text-xs">Selecionar Capa</span>
+                                        <Input type="file" onChange={handleMainImageSelect} accept="image/*" className="hidden" />
+                                    </Label>
+
+                                    <div className="md:col-span-2 relative aspect-video bg-gray-900 rounded-lg overflow-hidden border border-gray-800 flex items-center justify-center">
+                                        {mainImagePreview ? (
+                                            <div className="relative group w-full h-full">
+                                                <img src={mainImagePreview} className="w-full h-full object-contain" alt="Preview" />
+                                                <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <Button type="button" size="sm" onClick={() => { setImageToCrop(mainImagePreview); setCropTarget({ type: 'main' }); setCropperOpen(true); }}>
+                                                        <CropIcon className="w-4 h-4 mr-2" /> Ajustar Recorte
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        ) : (formData.main_image_url ? (
+                                            <img src={formData.main_image_url} className="w-full h-full object-cover opacity-50" alt="Current" />
+                                        ) : <span className="text-gray-600 text-sm">Nenhuma capa selecionada</span>)}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* GALLERY */}
+                            <div className="p-4 rounded-lg bg-gray-800/30 border border-gray-700 space-y-4">
+                                <div className="flex justify-between items-center">
+                                    <h3 className="font-semibold text-gray-300 flex items-center gap-2"><LayoutGrid className="w-4 h-4" /> Galeria</h3>
+                                    <div className="w-40">
+                                        <Select name="gallery_aspect_ratio" value={formData.gallery_aspect_ratio} onValueChange={(v) => handleSelectChange('gallery_aspect_ratio', v)}>
+                                            <SelectTrigger className="h-8 text-xs bg-gray-900 border-gray-700"><SelectValue /></SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="16:9">PowerBI / Wide (16:9)</SelectItem>
+                                                <SelectItem value="4:3">Padrão (4:3)</SelectItem>
+                                                <SelectItem value="1:1">Instagram (1:1)</SelectItem>
+                                                <SelectItem value="4:5">Feed Instagram (4:5)</SelectItem>
+                                                <SelectItem value="9:16">Mobile (9:16)</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                </div>
+
+                                <Label className="cursor-pointer block border-2 border-dashed border-gray-600 rounded-lg p-8 text-center hover:border-blue-500 hover:text-blue-400 transition-colors bg-gray-800/50">
+                                    <PlusCircle className="w-8 h-8 mx-auto mb-2" />
+                                    <span className="text-sm">Adicionar imagens à galeria</span>
+                                    <Input type="file" multiple onChange={handleGalleryImagesSelect} accept="image/*" className="hidden" />
+                                </Label>
+
+                                {/* New Uploads Preview */}
+                                {galleryImages.length > 0 && (
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                        {galleryImages.map((img, idx) => (
+                                            <div key={img.id} className="relative group aspect-square rounded-md overflow-hidden bg-gray-900 border border-gray-700">
+                                                <img src={img.preview} className="w-full h-full object-cover" alt="New Gallery Item" />
+                                                <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <Button type="button" size="icon" variant="secondary" className="h-8 w-8" onClick={() => handleCropGalleryImage(idx)}>
+                                                        <CropIcon className="w-4 h-4" />
+                                                    </Button>
+                                                    <Button type="button" size="icon" variant="destructive" className="h-8 w-8" onClick={() => handleRemoveNewGalleryImage(idx)}>
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </Button>
+                                                </div>
+                                                <div className="absolute top-1 right-1 bg-green-500 text-[10px] text-white px-1.5 rounded-sm font-bold">NOVO</div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+
+                                {/* Existing Gallery */}
+                                {isEditing && formData.gallery_urls?.length > 0 && (
+                                    <div className="pt-4 border-t border-gray-700">
+                                        <h4 className="text-xs text-gray-500 uppercase font-bold mb-3">Imagens Já Salvas</h4>
+                                        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                                            {formData.gallery_urls.map((url, idx) => (
+                                                <div key={idx} className="relative group aspect-square rounded-md overflow-hidden bg-gray-900 opacity-75 hover:opacity-100 transition-opacity">
+                                                    <img src={url} className="w-full h-full object-cover" alt="Saved" />
+                                                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                        <Button type="button" size="icon" variant="destructive" className="h-8 w-8" onClick={() => handleDeleteGalleryUrl(url)}>
+                                                            <Trash2 className="w-4 h-4" />
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </TabsContent>
+                    </Tabs>
+
+                    <DialogFooter>
+                        <DialogClose asChild><Button variant="ghost">Cancelar</Button></DialogClose>
+                        <Button type="submit" disabled={loading} className="bg-gradient-to-r from-blue-600 to-purple-600">
+                            {loading ? <Loader2 className="animate-spin mr-2" /> : <Save className="mr-2" />} Salvar Projeto
+                        </Button>
+                    </DialogFooter>
+                </form>
+
+                {/* CROPPER MODAL */}
+                <ImageCropperModal
+                    isOpen={cropperOpen}
+                    onClose={() => setCropperOpen(false)}
+                    imageSrc={imageToCrop}
+                    aspect={cropTarget?.type === 'main' ? getAspectValue(formData.main_image_aspect_ratio) : getAspectValue(formData.gallery_aspect_ratio)}
+                    onCropComplete={onCropComplete}
+                />
+            </DialogContent>
+        </Dialog>
+    );
+};
+
+export default ProjectFormModal;

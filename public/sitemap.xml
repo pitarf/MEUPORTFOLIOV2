@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Página Inicial -->
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/</loc>
+    <lastmod>2026-06-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Página Sobre -->
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/sobre</loc>
+    <lastmod>2026-06-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Página de Serviços -->
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/servicos</loc>
+    <lastmod>2026-06-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Página de Portfólio Geral -->
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio</loc>
+    <lastmod>2026-06-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Página de Assinaturas/Planos -->
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/assinaturas</loc>
+    <lastmod>2026-06-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Landing Page de Fotografia -->
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio-fotografia</loc>
+    <lastmod>2026-06-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Galeria de Fotografia -->
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio-fotografia/galeria</loc>
+    <lastmod>2026-06-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Página de Avaliações / Depoimentos -->
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/avaliacoes</loc>
+    <lastmod>2026-06-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Página de Contato -->
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/contato</loc>
+    <lastmod>2026-06-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>
