@@ -3,7 +3,8 @@ import { useSiteConfig } from '@/contexts/SiteConfigContext';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Zap, ChevronDown, User, Ticket, FileText } from 'lucide-react';
+import { Menu, X, Zap, ChevronDown, User, Ticket, FileText, Sun, Moon } from 'lucide-react';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -13,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
+    const { theme, toggleTheme } = useTheme();
     const [isOpen, setIsOpen] = useState(false);
     const location = useLocation();
     const { config } = useSiteConfig();
@@ -78,7 +80,7 @@ const Navbar = () => {
     return (
         <nav
             className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled
-                ? (isPhotography ? 'bg-black/90 border-b border-white/10' : 'bg-black/20 backdrop-blur-lg border-b border-white/10')
+                ? (isPhotography ? 'bg-black/90 border-b border-white/10' : 'bg-white/80 dark:bg-black/20 backdrop-blur-lg border-b border-gray-200/50 dark:border-white/10')
                 : 'bg-transparent border-transparent py-4'
                 }`}
         >
@@ -102,7 +104,7 @@ const Navbar = () => {
                             <Link
                                 key={item.name}
                                 to={item.path}
-                                className={`text-sm font-medium transition-colors hover:text-blue-400 ${location.pathname === item.path ? 'text-blue-400' : 'text-gray-300'
+                                className={`text-sm font-medium transition-colors hover:text-blue-500 ${location.pathname === item.path ? 'text-blue-500 dark:text-blue-400' : 'text-gray-700 dark:text-gray-300'
                                     }`}
                             >
                                 {item.name}
@@ -111,7 +113,7 @@ const Navbar = () => {
 
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" className="flex items-center space-x-2 text-sm font-medium text-gray-300 hover:text-blue-400 p-0 h-auto hover:bg-transparent">
+                                <Button variant="ghost" className="flex items-center space-x-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 p-0 h-auto hover:bg-transparent">
                                     <span>O Estúdio</span>
                                     <ChevronDown className="w-4 h-4" />
                                 </Button>
@@ -125,7 +127,27 @@ const Navbar = () => {
                             </DropdownMenuContent>
                         </DropdownMenu>
 
-                        <div className="flex items-center gap-4 border-l border-gray-700 pl-4 ml-2">
+                        <div className="flex items-center gap-4 border-l border-gray-200 dark:border-gray-700 pl-4 ml-2">
+                            {/* Toggle de Tema Claro/Escuro */}
+                            {!isPhotography && (
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={toggleTheme}
+                                    className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-white/10"
+                                    title={theme === 'light' ? 'Ativar Modo Escuro' : 'Ativar Modo Claro'}
+                                >
+                                    <motion.div
+                                        key={theme}
+                                        initial={{ rotate: -30, opacity: 0 }}
+                                        animate={{ rotate: 0, opacity: 1 }}
+                                        transition={{ duration: 0.2 }}
+                                    >
+                                        {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5 text-yellow-400" />}
+                                    </motion.div>
+                                </Button>
+                            )}
+
                             {/* Client Area Dropdown */}
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
@@ -155,12 +177,24 @@ const Navbar = () => {
                         </div>
                     </div>
 
-                    {/* Mobile Menu Button */}
                     <div className="lg:hidden flex items-center gap-2">
+                        {/* Toggle de Tema Claro/Escuro Mobile */}
+                        {!isPhotography && (
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={toggleTheme}
+                                className="text-gray-600 dark:text-gray-300 hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-white/10"
+                            >
+                                {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5 text-yellow-400" />}
+                            </Button>
+                        )}
+
                         <Button
                             variant="ghost"
                             size="icon"
                             onClick={() => setIsOpen(!isOpen)}
+                            className="text-gray-600 dark:text-gray-300"
                         >
                             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
                         </Button>

@@ -179,17 +179,17 @@ const Contact = () => {
                 <section className="py-20 tech-pattern">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                         <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-5xl md:text-6xl font-bold mb-6"><span className="gradient-text">Fale Conosco</span></motion.h1>
-                        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-xl text-gray-400 max-w-3xl mx-auto">Pronto para transformar suas ideias em realidade? Vamos conversar sobre seu próximo projeto ou resolver qualquer questão.</motion.p>
+                        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">Pronto para transformar suas ideias em realidade? Vamos conversar sobre seu próximo projeto ou resolver qualquer questão.</motion.p>
                     </div>
                 </section>
 
-                <section className="py-12 bg-gray-900/50">
+                <section className="py-12 bg-white/40 dark:bg-gray-900/50 border-y border-gray-200/50 dark:border-white/5 transition-colors duration-300">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                         {contactInfo.map((info, index) => (
-                            <motion.div key={info.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }} className="text-center p-6 rounded-xl hover:bg-white/5 transition-colors">
+                            <motion.div key={info.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }} className="text-center p-6 rounded-xl hover:bg-gray-100/50 dark:hover:bg-white/5 transition-all">
                                 <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg shadow-purple-900/40"><info.icon className="w-8 h-8 text-white" /></div>
-                                <h3 className="text-xl font-semibold text-white mb-3">{info.title}</h3>
-                                <a href={info.link} className="text-gray-400 hover:text-blue-400 transition-colors block">{info.info}</a>
+                                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{info.title}</h3>
+                                <a href={info.link} className="text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors block font-medium">{info.info}</a>
                             </motion.div>
                         ))}
                     </div>
@@ -200,39 +200,39 @@ const Contact = () => {
                         {/* --- Tab Navigation --- */}
                         <div className="flex justify-center mb-12">
                             <div className="glass-effect p-2 rounded-xl flex flex-wrap justify-center gap-2 shadow-2xl">
-                                <Button onClick={() => setActiveForm('contact')} variant={activeForm === 'contact' ? 'default' : 'ghost'} className={`h-12 px-8 text-base rounded-lg ${activeForm === 'contact' ? 'bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg' : 'hover:bg-white/10'}`}><MessageSquare className="w-5 h-5 mr-2" />Contato</Button>
-                                <Button onClick={() => setActiveForm('quote')} variant={activeForm === 'quote' ? 'default' : 'ghost'} className={`h-12 px-8 text-base rounded-lg ${activeForm === 'quote' ? 'bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg' : 'hover:bg-white/10'}`}><Calculator className="w-5 h-5 mr-2" />Orçamento</Button>
-                                <Button onClick={() => setActiveForm('support')} variant={activeForm === 'support' ? 'default' : 'ghost'} className={`h-12 px-8 text-base rounded-lg ${activeForm === 'support' ? 'bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg' : 'hover:bg-white/10'}`}><LifeBuoy className="w-5 h-5 mr-2" />Suporte</Button>
+                                <Button onClick={() => setActiveForm('contact')} variant={activeForm === 'contact' ? 'default' : 'ghost'} className={`h-12 px-8 text-base rounded-lg ${activeForm === 'contact' ? 'bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white'}`}><MessageSquare className="w-5 h-5 mr-2" />Contato</Button>
+                                <Button onClick={() => setActiveForm('quote')} variant={activeForm === 'quote' ? 'default' : 'ghost'} className={`h-12 px-8 text-base rounded-lg ${activeForm === 'quote' ? 'bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white'}`}><Calculator className="w-5 h-5 mr-2" />Orçamento</Button>
+                                <Button onClick={() => setActiveForm('support')} variant={activeForm === 'support' ? 'default' : 'ghost'} className={`h-12 px-8 text-base rounded-lg ${activeForm === 'support' ? 'bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white'}`}><LifeBuoy className="w-5 h-5 mr-2" />Suporte</Button>
                             </div>
                         </div>
 
                         <AnimatePresence mode="wait">
-                            <motion.div key={activeForm} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="glass-effect p-8 md:p-12 rounded-3xl border border-white/5 shadow-2xl bg-black/40 backdrop-blur-xl">
+                            <motion.div key={activeForm} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="glass-effect p-8 md:p-12 rounded-3xl border border-gray-200/50 dark:border-white/5 shadow-2xl bg-white/70 dark:bg-black/40 backdrop-blur-xl">
 
                                 {/* --- CONTACT FORM --- */}
                                 {activeForm === 'contact' && (
                                     <>
                                         <div className="text-center mb-10">
-                                            <h2 className="text-3xl font-bold text-white mb-2">Envie uma Mensagem</h2>
-                                            <p className="text-gray-400">Dúvidas gerais ou parcerias? Escreva pra gente.</p>
+                                            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Envie uma Mensagem</h2>
+                                            <p className="text-gray-600 dark:text-gray-400">Dúvidas gerais ou parcerias? Escreva pra gente.</p>
                                         </div>
                                         <form onSubmit={(e) => handleSubmit(e, 'contact', contactForm, setContactForm)} className="space-y-6 max-w-2xl mx-auto">
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                <Input className="bg-gray-800/50 border-gray-700 h-14 text-lg" type="text" name="name" placeholder="Nome *" value={contactForm.name} onChange={handleFormChange('contact', setContactForm)} required />
-                                                <Input className="bg-gray-800/50 border-gray-700 h-14 text-lg" type="email" name="email" placeholder="Email *" value={contactForm.email} onChange={handleFormChange('contact', setContactForm)} required />
+                                                <Input className="bg-white/50 dark:bg-gray-800/50 border-gray-300 dark:border-gray-700 h-14 text-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500" type="text" name="name" placeholder="Nome *" value={contactForm.name} onChange={handleFormChange('contact', setContactForm)} required />
+                                                <Input className="bg-white/50 dark:bg-gray-800/50 border-gray-300 dark:border-gray-700 h-14 text-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500" type="email" name="email" placeholder="Email *" value={contactForm.email} onChange={handleFormChange('contact', setContactForm)} required />
                                             </div>
 
                                             <div className="space-y-2">
-                                                <label className="text-sm font-medium text-gray-400 ml-1">Assunto</label>
+                                                <label className="text-sm font-semibold text-gray-500 dark:text-gray-400 ml-1">Assunto</label>
                                                 <div className="flex flex-wrap gap-3">
                                                     {contactSubjects.map(sub => (
                                                         <button
                                                             key={sub.label}
                                                             type="button"
                                                             onClick={() => handleSelection(setContactForm, 'subject', sub.label)}
-                                                            className={`px-6 py-3 rounded-xl text-sm font-semibold border transition-all flex items-center gap-2 ${contactForm.subject === sub.label
-                                                                ? 'bg-gradient-to-r from-purple-500/20 to-blue-500/20 border-purple-500 text-white shadow-lg shadow-purple-900/20'
-                                                                : 'bg-gray-800/30 border-gray-700 text-gray-400 hover:border-gray-500 hover:bg-gray-800'}`}
+                                                            className={`px-6 py-3 rounded-xl text-sm font-bold border transition-all flex items-center gap-2 ${contactForm.subject === sub.label
+                                                                ? 'bg-purple-50 dark:bg-purple-500/20 border-purple-500 text-purple-700 dark:text-white shadow-lg'
+                                                                : 'bg-gray-50 dark:bg-gray-800/30 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800'}`}
                                                         >
                                                             <sub.icon className="w-4 h-4" />
                                                             {sub.label}
@@ -241,7 +241,7 @@ const Contact = () => {
                                                 </div>
                                             </div>
 
-                                            <Textarea className="bg-gray-800/50 border-gray-700 text-lg min-h-[150px]" name="message" placeholder="Sua mensagem *" value={contactForm.message} onChange={handleFormChange('contact', setContactForm)} required />
+                                            <Textarea className="bg-white/50 dark:bg-gray-800/50 border-gray-300 dark:border-gray-700 text-lg min-h-[150px] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500" name="message" placeholder="Sua mensagem *" value={contactForm.message} onChange={handleFormChange('contact', setContactForm)} required />
 
                                             <Button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-purple-600 py-6 text-lg font-semibold shadow-lg hover:brightness-110 transition-all rounded-xl" disabled={loading}>
                                                 {loading ? <Loader2 className="w-6 h-6 mr-2 animate-spin" /> : <Send className="w-6 h-6 mr-2" />}
@@ -255,29 +255,29 @@ const Contact = () => {
                                 {activeForm === 'quote' && (
                                     <>
                                         <div className="text-center mb-10">
-                                            <h2 className="text-3xl font-bold text-white mb-2">Solicitar Orçamento</h2>
-                                            <p className="text-gray-400">Conte sobre seu projeto e receba uma proposta personalizada.</p>
+                                            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Solicitar Orçamento</h2>
+                                            <p className="text-gray-600 dark:text-gray-400">Conte sobre seu projeto e receba uma proposta personalizada.</p>
                                         </div>
                                         <form onSubmit={(e) => handleSubmit(e, 'quote', quoteForm, setQuoteForm)} className="space-y-8">
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                 <div className="space-y-2">
-                                                    <label className="text-sm font-medium text-gray-400 ml-1">Seus Dados</label>
-                                                    <Input className="bg-gray-800/50 border-gray-700 h-12" type="text" name="name" placeholder="Seu Nome *" value={quoteForm.name} onChange={handleFormChange('quote', setQuoteForm)} required />
-                                                    <Input className="bg-gray-800/50 border-gray-700 h-12" type="email" name="email" placeholder="Seu Email *" value={quoteForm.email} onChange={handleFormChange('quote', setQuoteForm)} required />
-                                                    <Input className="bg-gray-800/50 border-gray-700 h-12" type="tel" name="phone" placeholder="WhatsApp / Telefone" value={quoteForm.phone} onChange={handleFormChange('quote', setQuoteForm)} />
+                                                    <label className="text-sm font-semibold text-gray-500 dark:text-gray-400 ml-1">Seus Dados</label>
+                                                    <Input className="bg-white/50 dark:bg-gray-800/50 border-gray-300 dark:border-gray-700 h-12 text-gray-900 dark:text-white placeholder-gray-400" type="text" name="name" placeholder="Seu Nome *" value={quoteForm.name} onChange={handleFormChange('quote', setQuoteForm)} required />
+                                                    <Input className="bg-white/50 dark:bg-gray-800/50 border-gray-300 dark:border-gray-700 h-12 text-gray-900 dark:text-white placeholder-gray-400" type="email" name="email" placeholder="Seu Email *" value={quoteForm.email} onChange={handleFormChange('quote', setQuoteForm)} required />
+                                                    <Input className="bg-white/50 dark:bg-gray-800/50 border-gray-300 dark:border-gray-700 h-12 text-gray-900 dark:text-white placeholder-gray-400" type="tel" name="phone" placeholder="WhatsApp / Telefone" value={quoteForm.phone} onChange={handleFormChange('quote', setQuoteForm)} />
                                                 </div>
 
                                                 <div className="space-y-4">
-                                                    <label className="text-sm font-medium text-gray-400 ml-1">O que você precisa?</label>
+                                                    <label className="text-sm font-semibold text-gray-500 dark:text-gray-400 ml-1">O que você precisa?</label>
                                                     <div className="flex flex-wrap gap-2">
                                                         {services.map(s => (
                                                             <button
                                                                 key={s}
                                                                 type="button"
                                                                 onClick={() => handleSelection(setQuoteForm, 'service', s)}
-                                                                className={`px-4 py-2 rounded-full text-sm font-medium border transition-all ${quoteForm.service === s
-                                                                    ? 'bg-purple-600 border-purple-500 text-white shadow-lg shadow-purple-500/30'
-                                                                    : 'bg-gray-800/30 border-gray-700 text-gray-300 hover:border-gray-500 hover:bg-gray-800'}`}
+                                                                className={`px-4 py-2 rounded-full text-sm font-semibold border transition-all ${quoteForm.service === s
+                                                                    ? 'bg-purple-600 border-purple-600 text-white shadow-lg'
+                                                                    : 'bg-gray-50 dark:bg-gray-800/30 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800'}`}
                                                             >
                                                                 {s}
                                                             </button>
@@ -287,18 +287,18 @@ const Contact = () => {
                                             </div>
 
                                             <div className="space-y-4">
-                                                <label className="text-sm font-medium text-gray-400 ml-1">Orçamento Estimado</label>
+                                                <label className="text-sm font-semibold text-gray-500 dark:text-gray-400 ml-1">Orçamento Estimado</label>
                                                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
                                                     {budgetRanges.map(b => (
                                                         <button
                                                             key={b.value}
                                                             type="button"
                                                             onClick={() => handleSelection(setQuoteForm, 'budget', b.value)}
-                                                            className={`p-3 rounded-xl text-sm font-medium border flex flex-col items-center justify-center gap-1 transition-all h-20 ${quoteForm.budget === b.value
-                                                                ? 'bg-blue-600/20 border-blue-500 text-blue-200 shadow-[0_0_15px_rgba(37,99,235,0.3)]'
-                                                                : 'bg-gray-800/30 border-gray-700 text-gray-400 hover:border-gray-500 hover:bg-gray-800'}`}
+                                                            className={`p-3 rounded-xl text-sm font-bold border flex flex-col items-center justify-center gap-1 transition-all h-20 ${quoteForm.budget === b.value
+                                                                ? 'bg-blue-50 dark:bg-blue-600/20 border-blue-500 text-blue-700 dark:text-blue-200 shadow-md'
+                                                                : 'bg-gray-50 dark:bg-gray-800/30 border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800'}`}
                                                         >
-                                                            <DollarSign className={`w-4 h-4 ${quoteForm.budget === b.value ? 'text-blue-400' : 'text-gray-600'}`} />
+                                                            <DollarSign className={`w-4 h-4 ${quoteForm.budget === b.value ? 'text-blue-500 dark:text-blue-400' : 'text-gray-400 dark:text-gray-600'}`} />
                                                             {b.label}
                                                         </button>
                                                     ))}
@@ -306,8 +306,8 @@ const Contact = () => {
                                             </div>
 
                                             <div className="space-y-2">
-                                                <label className="text-sm font-medium text-gray-400 ml-1">Detalhes do Projeto</label>
-                                                <Textarea className="bg-gray-800/50 border-gray-700 min-h-[120px]" name="description" placeholder="Descreva sua ideia, prazos desejados ou referências..." value={quoteForm.description} onChange={handleFormChange('quote', setQuoteForm)} required />
+                                                <label className="text-sm font-semibold text-gray-500 dark:text-gray-400 ml-1">Detalhes do Projeto</label>
+                                                <Textarea className="bg-white/50 dark:bg-gray-800/50 border-gray-300 dark:border-gray-700 min-h-[120px] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500" name="description" placeholder="Descreva sua ideia, prazos desejados ou referências..." value={quoteForm.description} onChange={handleFormChange('quote', setQuoteForm)} required />
                                             </div>
 
                                             <Button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-purple-600 py-6 text-lg font-semibold shadow-lg hover:brightness-110 transition-all rounded-xl mt-4" disabled={loading}>
@@ -322,26 +322,26 @@ const Contact = () => {
                                 {activeForm === 'support' && (
                                     <>
                                         <div className="text-center mb-10">
-                                            <h2 className="text-3xl font-bold text-white mb-2">Suporte Técnico</h2>
-                                            <p className="text-gray-400">Já é cliente? Abra um chamado para nossa equipe.</p>
+                                            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Suporte Técnico</h2>
+                                            <p className="text-gray-600 dark:text-gray-400">Já é cliente? Abra um chamado para nossa equipe.</p>
                                         </div>
                                         <form onSubmit={(e) => handleSubmit(e, 'support', supportForm, setSupportForm)} className="space-y-6 max-w-2xl mx-auto">
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                <Input className="bg-gray-800/50 border-gray-700 h-14" type="text" name="name" placeholder="Seu Nome *" value={supportForm.name} onChange={handleFormChange('support', setSupportForm)} required disabled={!!user} />
-                                                <Input className="bg-gray-800/50 border-gray-700 h-14" type="email" name="email" placeholder="Seu Email *" value={supportForm.email} onChange={handleFormChange('support', setSupportForm)} required disabled={!!user} />
+                                                <Input className="bg-white/50 dark:bg-gray-800/50 border-gray-300 dark:border-gray-700 h-14 text-gray-900 dark:text-white placeholder-gray-400" type="text" name="name" placeholder="Seu Nome *" value={supportForm.name} onChange={handleFormChange('support', setSupportForm)} required disabled={!!user} />
+                                                <Input className="bg-white/50 dark:bg-gray-800/50 border-gray-300 dark:border-gray-700 h-14 text-gray-900 dark:text-white placeholder-gray-400" type="email" name="email" placeholder="Seu Email *" value={supportForm.email} onChange={handleFormChange('support', setSupportForm)} required disabled={!!user} />
                                             </div>
 
                                             <div className="space-y-2">
-                                                <label className="text-sm font-medium text-gray-400 ml-1">Prioridade</label>
+                                                <label className="text-sm font-semibold text-gray-500 dark:text-gray-400 ml-1">Prioridade</label>
                                                 <div className="grid grid-cols-3 gap-4">
                                                     {supportPriorities.map(p => (
                                                         <button
                                                             key={p.value}
                                                             type="button"
                                                             onClick={() => handleSelection(setSupportForm, 'priority', p.value)}
-                                                            className={`py-3 rounded-lg text-sm font-semibold border transition-all flex items-center justify-center gap-2 ${supportForm.priority === p.value
-                                                                ? `${p.color} border-current shadow-lg`
-                                                                : 'bg-gray-800/30 border-gray-700 text-gray-400 hover:border-gray-500 hover:bg-gray-800'}`}
+                                                            className={`py-3 rounded-lg text-sm font-bold border transition-all flex items-center justify-center gap-2 ${supportForm.priority === p.value
+                                                                ? `${p.color} border-current shadow-md`
+                                                                : 'bg-gray-50 dark:bg-gray-800/30 border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800'}`}
                                                         >
                                                             <ShieldAlert className="w-4 h-4" />
                                                             {p.label}
@@ -350,8 +350,8 @@ const Contact = () => {
                                                 </div>
                                             </div>
 
-                                            <Input className="bg-gray-800/50 border-gray-700 h-14 text-lg" type="text" name="subject" placeholder="Assunto do problema *" value={supportForm.subject} onChange={handleFormChange('support', setSupportForm)} required />
-                                            <Textarea className="bg-gray-800/50 border-gray-700 text-lg min-h-[150px]" name="description" placeholder="Descreva detalhadamente o que está acontecendo..." value={supportForm.description} onChange={handleFormChange('support', setSupportForm)} rows={5} required />
+                                            <Input className="bg-white/50 dark:bg-gray-800/50 border-gray-300 dark:border-gray-700 h-14 text-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500" type="text" name="subject" placeholder="Assunto do problema *" value={supportForm.subject} onChange={handleFormChange('support', setSupportForm)} required />
+                                            <Textarea className="bg-white/50 dark:bg-gray-800/50 border-gray-300 dark:border-gray-700 text-lg min-h-[150px] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500" name="description" placeholder="Descreva detalhadamente o que está acontecendo..." value={supportForm.description} onChange={handleFormChange('support', setSupportForm)} rows={5} required />
 
                                             <Button type="submit" className="w-full bg-gradient-to-r from-blue-500 to-purple-600 py-6 text-lg font-semibold shadow-lg hover:brightness-110 transition-all rounded-xl" disabled={loading}>
                                                 {loading ? <Loader2 className="w-6 h-6 mr-2 animate-spin" /> : <LifeBuoy className="w-6 h-6 mr-2" />}

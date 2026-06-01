@@ -107,7 +107,7 @@ const Home = () => {
             </Helmet>
 
             {/* Hero Section */}
-            <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0f0f23]">
+            <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background text-foreground transition-colors duration-300">
                 {/* Project Marquee Background */}
                 <div className="absolute inset-0 z-0 opacity-10 grayscale overflow-hidden">
                     <div className="absolute top-10 left-0 w-full rotate-[-5deg]">
@@ -131,8 +131,8 @@ const Home = () => {
                 </div>
 
                 {/* Aurora Background Overlay */}
-                <div className="absolute inset-0 aurora-bg opacity-40 mix-blend-color-dodge z-0 pointer-events-none"></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f23] via-transparent to-[#0f0f23] z-0 pointer-events-none"></div>
+                <div className="absolute inset-0 aurora-bg opacity-30 dark:opacity-40 mix-blend-multiply dark:mix-blend-color-dodge z-0 pointer-events-none"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background z-0 pointer-events-none"></div>
 
                 {/* Central Spotlight */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-[100px] opacity-40 pulse-glow z-0"></div>
@@ -164,11 +164,11 @@ const Home = () => {
                                 <span className="gradient-text">{config?.hero_title || 'Rafael Pita Solutions'}</span>
                             </h1>
 
-                            <p className="text-lg md:text-2xl text-gray-300 max-w-3xl mx-auto px-4">
+                            <p className="text-lg md:text-2xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto px-4 font-medium">
                                 {config?.hero_subtitle || 'Criatividade e tecnologia em um só lugar'}
                             </p>
 
-                            <p className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto px-4">
+                            <p className="text-base md:text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto px-4">
                                 {config?.hero_description || 'Transformamos suas ideias em realidade digital com soluções inovadoras e personalizadas para o seu negócio.'}
                             </p>
                         </div>
@@ -184,7 +184,7 @@ const Home = () => {
                             </Link>
 
                              <Link to="/portfolio">
-                                <Button variant="outline" size="lg" className="text-lg px-8 py-4 border-gray-600 hover:border-blue-500 w-full sm:w-auto">
+                                <Button variant="outline" size="lg" className="text-lg px-8 py-4 border-gray-300 dark:border-gray-600 hover:border-blue-500 dark:hover:border-blue-400 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 w-full sm:w-auto">
                                     Ver Portfólio
                                 </Button>
                             </Link>
@@ -199,10 +199,10 @@ const Home = () => {
             </section >
 
             {/* Floating Stats Section */}
-            < div className="relative z-20 px-4 -mt-10 sm:-mt-20 md:-mt-32" >
+            <div className="relative z-20 px-4 -mt-10 sm:-mt-20 md:-mt-32">
                 <div className="max-w-6xl mx-auto">
-                    <div className="glass-effect rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl backdrop-blur-xl bg-gray-900/60">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 divide-x-0 md:divide-x divide-gray-700/50">
+                    <div className="glass-effect rounded-3xl p-6 sm:p-8 border border-gray-200/50 dark:border-white/10 shadow-2xl backdrop-blur-xl bg-white/70 dark:bg-gray-900/60">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 divide-x-0 md:divide-x divide-gray-200 dark:divide-gray-700/50">
                             {stats.map((stat, index) => (
                                 <motion.div
                                     key={stat.label}
@@ -214,16 +214,16 @@ const Home = () => {
                                     <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-xl flex items-center justify-center border border-white/5">
                                         <stat.icon className="w-6 h-6 text-blue-400" />
                                     </div>
-                                    <div className="text-3xl font-bold text-white mb-1">
-                                        <AnimatedStat to={stat.number} suffix={stat.suffix} />
-                                    </div>
-                                    <div className="text-sm text-gray-400 font-medium tracking-wide uppercase">{stat.label}</div>
+                                     <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
+                                         <AnimatedStat to={stat.number} suffix={stat.suffix} />
+                                     </div>
+                                     <div className="text-xs text-gray-500 dark:text-gray-400 font-semibold tracking-wide uppercase">{stat.label}</div>
                                 </motion.div>
                             ))}
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
 
             {/* Projects Carousel Section */}
             < section className="py-20" >
@@ -233,10 +233,10 @@ const Home = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         className="text-center mb-16"
                     >
-                        <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                        <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-white">
                             <span className="gradient-text">Projetos em Destaque</span>
                         </h2>
-                        <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+                        <p className="text-xl text-gray-500 dark:text-gray-400 max-w-3xl mx-auto">
                             Uma amostra do nosso trabalho, combinando criatividade e tecnologia para entregar resultados de impacto.
                         </p>
                     </motion.div>
@@ -247,12 +247,12 @@ const Home = () => {
                         whileInView={{ opacity: 1 }}
                         className="text-center mt-12"
                     >
-                        <Link to="/portfolio">
-                            <Button size="lg" variant="outline" className="border-gray-600 hover:border-blue-500">
-                                Conhecer todos os projetos
-                                <ArrowRight className="ml-2 w-5 h-5" />
-                            </Button>
-                        </Link>
+                         <Link to="/portfolio">
+                            <Button size="lg" variant="outline" className="border-gray-300 dark:border-gray-600 hover:border-blue-500 dark:hover:border-blue-400 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5">
+                                 Conhecer todos os projetos
+                                 <ArrowRight className="ml-2 w-5 h-5" />
+                             </Button>
+                         </Link>
                     </motion.div>
                 </div>
             </section >
@@ -265,10 +265,10 @@ const Home = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         className="text-center mb-16"
                     >
-                        <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                        <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-white">
                             <span className="gradient-text">Fotografia em Destaque</span>
                         </h2>
-                        <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+                        <p className="text-xl text-gray-500 dark:text-gray-400 max-w-3xl mx-auto">
                             Capturando a essência de cada momento com olhar artístico e profissional.
                         </p>
                     </motion.div>
@@ -297,10 +297,10 @@ const Home = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         className="text-center mb-16"
                     >
-                        <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                        <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-white">
                             <span className="gradient-text">Nossos Serviços</span>
                         </h2>
-                        <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+                        <p className="text-xl text-gray-500 dark:text-gray-400 max-w-3xl mx-auto">
                             Oferecemos soluções completas para transformar sua presença digital e impulsionar seu negócio
                         </p>
                     </motion.div>
@@ -316,11 +316,11 @@ const Home = () => {
                                     transition={{ delay: index * 0.1 }}
                                     className="service-card p-6 rounded-xl"
                                 >
-                                    <div className={`w-12 h-12 mb-4 rounded-lg bg-gradient-to-r ${service.color || 'from-blue-500 to-purple-600'} flex items-center justify-center`}>
-                                        <IconComponent className="w-6 h-6 text-white" />
-                                    </div>
-                                    <h3 className="text-xl font-semibold mb-3 text-white">{service.title}</h3>
-                                    <p className="text-gray-400">{service.description}</p>
+                                     <div className={`w-12 h-12 mb-4 rounded-lg bg-gradient-to-r ${service.color || 'from-blue-500 to-purple-600'} flex items-center justify-center shadow-md`}>
+                                         <IconComponent className="w-6 h-6 text-white" />
+                                     </div>
+                                     <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">{service.title}</h3>
+                                     <p className="text-gray-600 dark:text-gray-400">{service.description}</p>
                                 </motion.div>
                             );
                         })}
@@ -332,11 +332,11 @@ const Home = () => {
                         className="text-center mt-12"
                     >
                         <Link to="/servicos">
-                            <Button size="lg" variant="outline" className="border-gray-600 hover:border-blue-500">
-                                Ver Todos os Serviços
-                                <ArrowRight className="ml-2 w-5 h-5" />
-                            </Button>
-                        </Link>
+                            <Button size="lg" variant="outline" className="border-gray-300 dark:border-gray-600 hover:border-blue-500 dark:hover:border-blue-400 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5">
+                                 Ver Todos os Serviços
+                                 <ArrowRight className="ml-2 w-5 h-5" />
+                             </Button>
+                         </Link>
                     </motion.div>
                 </div>
             </section >
@@ -380,9 +380,9 @@ const Home = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         className="text-center mb-16"
                     >
-                        <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                            <span className="gradient-text">O que nossos clientes dizem</span>
-                        </h2>
+                        <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-white">
+                             <span className="gradient-text">O que nossos clientes dizem</span>
+                         </h2>
                     </motion.div>
                     <ReviewsCarousel />
                 </div>

@@ -1,83 +1,70 @@
-# MANUAL DO DESENVOLVEDOR (MANUAL_DEV) - ESTRUTURA DE SEO DINÂMICO
+# MANUAL DO DESENVOLVEDOR (MANUAL_DEV) - ESTRUTURA DE SEO & TEMAS PREMIUM
 
-Este documento detalha o funcionamento técnico da infraestrutura de SEO Dinâmico e Branding implementada no projeto **MeuPortfolio v2**.
-
----
-
-## 1. Modelagem do Banco de Dados (Supabase / PostgreSQL)
-
-As configurações globais do site e metadados de SEO estão centralizados na tabela `site_config`. A migração [08_add_seo_columns.sql](file:///C:/Git/React/MeuPortfolio%20v2/migrations/08_add_seo_columns.sql) adicionou com segurança as seguintes colunas à tabela:
-
-| Coluna | Tipo | Descrição |
-| :--- | :--- | :--- |
-| `site_title` | `TEXT` | Título SEO global do site para a aba do navegador. |
-| `site_description` | `TEXT` | Descrição SEO global (Meta Description) exibida no Google. |
-| `site_keywords` | `TEXT` | Palavras-chave do site separadas por vírgula. |
-| `favicon_url` | `TEXT` | URL pública da imagem de favicon do site (Bucket: `site-assets`). |
-| `og_image_url` | `TEXT` | URL pública da imagem padrão de compartilhamento social (Open Graph). |
+Este documento detalha o funcionamento técnico da infraestrutura de SEO Dinâmico e da Arquitetura Dinâmica de Temas (Claro/Escuro) implementada no projeto **MeuPortfolio v2**.
 
 ---
 
-## 2. Arquitetura do Frontend e Fluxo de Dados
+## 1. Arquitetura de Temas (Claro e Escuro)
 
-O sistema de SEO utiliza um fluxo dinâmico alimentado pelo Supabase e injetado de forma segura no lado do cliente:
+O projeto foi reestruturado para suportar a alternância entre o **Tema Claro (Light Mode)** — padrão comercial corporativo focado em legibilidade e conversão — e o **Tema Escuro (Dark Mode)**, preservando a imersão visual original.
 
-```
-[Banco de Dados] -> [SiteConfigContext.jsx] -> [SEO.jsx (react-helmet-async)] -> [Navegador (<head>)]
-```
+### 1.1 Contexto de Tema (`ThemeContext.jsx`)
+O [ThemeContext.jsx](file:///C:/Git/React/MeuPortfolio%20v2/src/contexts/ThemeContext.jsx) gerencia o estado global de temas. Ele é inicializado por padrão como `'light'`. Suas atribuições principais são:
+1. **Persistência**: Grava a preferência escolhida do usuário no `localStorage`. Em futuras visitas, a aplicação lê esse valor e carrega a interface de acordo com a preferência do usuário.
+2. **Injeção do Tailwind**: Adiciona ou remove a classe `.dark` e `.light` no elemento principal `document.documentElement`, permitindo que o Tailwind CSS aplique as cores de tema reativo de forma fluida.
+3. **Exposição**: Disponibiliza a string `theme` e a função `toggleTheme` através do hook customizado `useTheme()`.
 
-### 2.1 Contexto Geral (`SiteConfigContext.jsx`)
-O [SiteConfigContext.jsx](file:///C:/Git/React/MeuPortfolio%20v2/src/contexts/SiteConfigContext.jsx) gerencia a busca em tempo real da tabela `site_config`. Ele expõe o objeto `config`. Em caso de falha de conexão ou tabela vazia, o contexto injeta com segurança os valores padrões do `defaultConfig` para evitar quebras no frontend.
+### 1.2 Estilos Globais e Variáveis HSL (`index.css`)
+As cores do projeto são dinâmicas e definidas em classes semânticas HSL. O arquivo [index.css](file:///C:/Git/React/MeuPortfolio%20v2/src/index.css) organiza a paleta de cores nos seguintes blocos:
 
-### 2.2 Componente Centralizador (`SEO.jsx`)
-O componente [SEO.jsx](file:///C:/Git/React/MeuPortfolio%20v2/src/components/SEO.jsx) é responsável pela injeção dos metadados nas tags `<head>` utilizando a biblioteca `react-helmet-async`. Suas principais atribuições são:
+* **`:root` (Tema Claro)**: Tons neutros de branco e cinza ultra claros com contraste perfeito para tipografia escura, aliado a um azul primário corporativo sofisticado (`--primary: 221.2 83.2% 53.3%`).
+* **`.dark` (Tema Escuro)**: Tons pretos/espaciais com nuances escuras e azul/lavanda neon original.
 
-1. **Prioridade de Título e Descrição**: 
-   - Utiliza as propriedades passadas via `props` individualmente por página.
-   - Caso estejam ausentes, busca as informações personalizadas do banco (`site_title` / `site_description`).
-   - Se ainda assim não encontrar, recorre aos fallbacks do `defaultConfig`.
-2. **URLs Absolutas Obrigatórias**:
-   - Redes sociais exigem URLs absolutas para imagens de compartilhamento e ícones. O componente analisa as URLs vindas do banco e, se forem relativas (ex: `/favicon.png`), concatena-as automaticamente com o `window.location.origin`.
-3. **Canonical Tags**:
-   - Injeta de forma autônoma a tag `<link rel="canonical" href={currentUrl} />` baseado na URL ativa do navegador, evitando punições do Google por conteúdo duplicado.
-4. **Segurança e noindex Automático**:
-   - Identifica automaticamente se a rota em navegação pertence a caminhos administrativos ou privados (`/admin`, `/dashboard`, `/area-clientes`, `/support`, `/track-ticket`).
-   - Caso seja uma página interna, injeta `<meta name="robots" content="noindex, nofollow" />`.
-   - Se for uma página pública, injeta `<meta name="robots" content="index, follow" />`.
+As classes premium utilitárias adaptam-se dinamicamente conforme a classe `.dark` na tag `html`:
+* **`.glass-effect`**:
+  * *Tema Claro*: Vidro branco brilhante translúcido (`rgba(255,255,255,0.7)`) com bordas muito sutis e sombra de profundidade leve.
+  * *Tema Escuro*: Vidro preto espacial translúcido (`rgba(255,255,255,0.05)`) com bordas escuras.
+* **`.service-card`**:
+  * *Tema Claro*: Fundo branco translúcido, bordas sutis e elevação de -5px com sombra pastel roxa no hover.
+  * *Tema Escuro*: Gradiente preto sutil, elevação de -10px com brilho neon roxo no hover.
+* **`.gradient-text`**:
+  * *Tema Claro*: Gradiente escuro de azul a violeta para legibilidade impecável e contraste em fundos brancos.
+  * *Tema Escuro*: Gradiente brilhante lavanda original.
+
+### 1.3 Isolamento da Seção de Fotografia
+Para manter a identidade visual clássica de estúdios fotográficos profissionais de luxo, a área de fotografia (`/portfolio-fotografia`) possui **Tema Escuro forçado**. Independentemente da seleção do usuário global, o cabeçalho e rodapé desta seção são travados no tema escuro para assegurar o maior realce artístico e contraste das fotos corporativas e artísticas do profissional.
 
 ---
 
-## 3. Como Estender e Definir Metadados por Página
+## 2. Estrutura de SEO Dinâmico
 
-Por utilizar o `react-helmet-async`, o SEO permite a sobreposição de tags. Caso você crie uma nova página pública e deseje definir metadados específicos para ela, basta importar e renderizar o componente `<SEO />` no topo do arquivo passando as propriedades desejadas:
+As configurações globais de metadados e marcas são carregadas diretamente do banco de dados (tabela `site_config`). A migração [08_add_seo_columns.sql](file:///C:/Git/React/MeuPortfolio%20v2/migrations/08_add_seo_columns.sql) adicionou com segurança as colunas de metadados à tabela.
+
+### 2.1 Componente Centralizador (`SEO.jsx`)
+O componente [SEO.jsx](file:///C:/Git/React/MeuPortfolio%20v2/src/components/SEO.jsx) é responsável pela injeção das tags de cabeçalho via `react-helmet-async`. Suas principais funções são:
+1. **Hierarquia de Prioridade**: Combina as propriedades individuais de páginas com as variáveis globais de SEO cadastradas no banco de dados.
+2. **URLs Absolutas Obrigatórias**: Transforma caminhos relativos em caminhos absolutos completos concatenando `window.location.origin` para exibição correta de previews de imagens em redes sociais (WhatsApp/LinkedIn).
+3. **Canonical Tags**: Evita conteúdo duplicado no Google ao injetar a tag canônica com a URL ativa do navegador.
+4. **noindex Automatizado**: Injeta a tag `<meta name="robots" content="noindex, nofollow" />` em qualquer rota administrativa ou privada (`/admin`, `/dashboard`, `/area-clientes`, `/support`, `/track-ticket`), garantindo a segurança e proteção das faturas e dados de suporte.
+
+---
+
+## 3. Como Estender e Adicionar Novos Componentes Reativos
+
+Ao criar novos componentes de interface, **nunca** utilize classes de cores escuras ou claras estáticas (como `bg-gray-900` ou `text-white`) se o componente precisar de adaptabilidade de temas. Utilize o padrão semântico do Tailwind:
 
 ```jsx
 import React from 'react';
-import SEO from '@/components/SEO';
 
-const NovaPagina = () => {
+const NovoCard = () => {
     return (
-        <>
-            <SEO 
-                title="Novo Serviço de Desenvolvimento" 
-                description="Conheça nossas soluções completas de desenvolvimento de sistemas." 
-                keywords="desenvolvimento, sistemas, react, software"
-                image="/imagens/og-servico.jpg" // Pode ser relativo ou absoluto
-            />
-            
-            {/* Conteúdo da Página */}
-            <div>...</div>
-        </>
+        <div className="bg-card text-card-foreground border border-border p-6 rounded-xl shadow-sm transition-colors duration-300">
+            <h4 className="text-xl font-bold text-gray-900 dark:text-white">Título do Bloco</h4>
+            <p className="text-gray-600 dark:text-gray-400 mt-2">Descrição descritiva do bloco adaptável.</p>
+        </div>
     );
 };
 
-export default NovaPagina;
+export default NovoCard;
 ```
-
-O `react-helmet-async` identificará a tag mais interna e substituirá os metadados globais configurados no `App.jsx` de forma automática e transparente.
-
----
-
-## 4. Otimização de Imagens e Favicons
-
-Os uploads de Favicon e Imagem Open Graph são processados e compactados no frontend através da função utilitária `compressImage` (dentro de [ManageGeneralSettings.jsx](file:///C:/Git/React/MeuPortfolio%20v2/src/pages/admin/ManageGeneralSettings.jsx)) antes de serem enviados para o bucket de armazenamento `site-assets` no Supabase. Isso garante arquivos leves e carregamentos instantâneos.
+As classes `text-gray-900 dark:text-white` e `text-gray-600 dark:text-gray-400` garantem contraste impecável e conforto visual nos dois modos sem quebras de layout.

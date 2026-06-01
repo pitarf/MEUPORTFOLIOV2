@@ -75,3 +75,21 @@ Para gerenciar o seu SEO e identidade de marca:
 > [!IMPORTANT]
 > **Privacidade das Áreas Restritas**:
 > Fique tranquilo! Suas páginas privadas (como faturas, suporte, tickets e o próprio painel de controle) possuem uma barreira de segurança de SEO automática que proíbe o Google de lê-las e indexá-las. Seus dados e de seus clientes estão 100% protegidos!
+
+---
+
+## 6. Alternador de Temas (Claro / Escuro Corporativo)
+
+Pensando na usabilidade comercial e na experiência dos seus clientes, o seu portfólio agora possui um **sistema inteligente de transição de temas**:
+
+### 6.1 Tema Claro (Light Mode) - Padrão de Alta Conversão
+- O site inicia automaticamente no **Tema Claro**, que utiliza fundos suaves, tipografia de altíssimo contraste e cores harmoniosas inspiradas em portais corporativos modernos como Apple e Stripe.
+- Este tema foi planejado para maximizar a conversão de novos clientes, trazendo maior legibilidade para orçamentos, termos e leitura de seus serviços.
+
+### 6.2 Tema Escuro (Dark Mode) - Estética Tech Premium
+- O usuário pode alternar para o **Tema Escuro** clicando no botão do **Sol / Lua** localizado na ponta direita da barra de navegação superior (Navbar), tanto em computadores quanto em celulares.
+- A mudança ocorre de forma extremamente suave, utilizando micro-transições visuais que adaptam todos os botões, cartões, formulários e textos sem perder a elegibilidade da marca.
+
+### 6.3 Isolamento da Galeria de Fotografia (`/portfolio-fotografia`)
+- **Destaque Artístico**: Independentemente de o usuário estar navegando no Tema Claro ou Tema Escuro, a página de portfólio fotográfico `/portfolio-fotografia` é mantida permanentemente no **Tema Escuro**.
+- Isso foi implementado de forma intencional para garantir que o contraste profundo das fotografias artísticas, ensaios e produções corporativas se sobressaiam em fundos escuros de padrão cinematográfico, sem distrações.

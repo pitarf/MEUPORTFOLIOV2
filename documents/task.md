@@ -1,19 +1,21 @@
-# ROADMAP DE TAREFAS - SEO & BRANDING PREMIUM
+# ROADMAP DE TAREFAS - REDESENHO ULTRA-PREMIUM CORPORATIVO
 
-Roadmap de acompanhamento de tarefas de otimização de SEO e Branding.
+Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
 ## CONCLUÍDO (DONE)
-- [x] **Modelagem de SEO no Banco de Dados**: Criar migration segura `08_add_seo_columns.sql` para a tabela `site_config` contendo colunas de título, descrição, palavras-chave, favicon e og_image.
-- [x] **Atualização de Contextos**: Estender `SiteConfigContext.jsx` adicionando os fallbacks correspondentes aos novos campos.
-- [x] **Componente SEO Dinâmico**: Reestruturar `SEO.jsx` com injeção automática de links canônicos, suporte a palavras-chave, conversão de caminhos de imagens em URLs absolutas e fallbacks inteligentes.
-- [x] **Políticas de noindex Automatizadas**: Proteção de áreas administrativas/logadas (`/admin`, `/dashboard`, `/area-clientes`, etc.) injetando automaticamente tag robots noindex/nofollow.
-- [x] **Arquivos de Indexação do Google**: Geração e inclusão de `public/robots.txt` e `public/sitemap.xml` para rápida indexação no buscador.
-- [x] **Nova Interface do Painel Admin**: Seção premium "Configurações de SEO & Compartilhamento" integrada na tela de Configurações Gerais (`/admin/settings`), habilitando inputs e seletores de arquivos de imagens (Favicon, OG Image) com compressão e preview ativo.
-- [x] **Validação e Integridade**: Teste de compilação de produção (`vite build`) executado e concluído com 100% de sucesso.
-- [x] **Documentações Automáticas**: Geração de `CHANGELOG.md`, `documents/task.md`, `MANUAL_DEV.md` e `MANUAL_USER.md`.
+- [x] **Contexto de Temas (`ThemeContext.jsx`)**: Desenvolver gerenciador global de temas com persistência de preferências de navegação no `localStorage`.
+- [x] **Integração na Raiz (`App.jsx`)**: Envelopar toda a aplicação com o `<ThemeProvider>` e criar o corpo da aplicação com transições dinâmicas de cores (`transition-colors duration-300`).
+- [x] **Variáveis de Estilo HSL (`index.css`)**: Definir a nova paleta do Tema Claro Premium corporativa (estilo Stripe e Apple) no `:root`, transferir a paleta escura existente para a classe `.dark` e adequar as classes premium `.glass-effect`, `.service-card` e `.gradient-text` para transições inteligentes.
+- [x] **Seletor de Temas na Barra de Navegação (`Navbar.jsx`)**: Desenhar e integrar o botão de toggle dinâmico (ícones Sol/Lua) com micro-animações do Framer Motion nas versões de computadores e smartphones.
+- [x] **Refatoração da Home (`Home.jsx`)**: Eliminar fundos e fontes escuras estáticas, implantando classes semânticas HSL que reagem e trazem extremo contraste e legibilidade corporativa.
+- [x] **Refatoração de Contato (`Contact.jsx`)**: Refinar formulários de orçamentos, seleção de faixas de preço e chamados técnicos de suporte para legibilidade e Glassmorphism claro premium impecável.
+- [x] **Ajustes de Componentes Adicionais (`Footer.jsx`)**: Otimizar bordas e links do rodapé corporativo para perfeita visualização nos dois modos.
+- [x] **Isolamento Artístico de Fotografia**: Garantir o bloqueio de tema escuro permanente apenas para `/portfolio-fotografia` (preservando o tom artístico original das fotos).
+- [x] **Build de Validação de Produção**: Processo de build (`vite build`) executado localmente para garantir a integridade estrutural e de tipos do React.
+- [x] **Atualização de Manuais**: Documentação do projeto estendida com os arquivos `CHANGELOG.md`, `documents/task.md`, `MANUAL_DEV.md` e `MANUAL_USER.md`.
 
 ## EM ANDAMENTO (DOING)
-*Nenhuma tarefa em andamento. Todas as atividades propostas foram implementadas e validadas.*
+*Nenhuma tarefa em andamento. Redesenho visual 100% implementado, testado e documentado.*
 
 ## PENDENTE (TODO)
-- [ ] Monitoramento de cliques e métricas do Google Search Console após a indexação do site.
+- [ ] Mapeamento e coleta de feedbacks dos usuários corporativos após lançamento em produção.

@@ -31,12 +31,12 @@ const Footer = () => {
     const services = ['Design Gráfico', 'Fotografia', 'Desenvolvimento Web', 'Dashboards Power BI', 'Vídeos com IA', 'Tráfego Pago', 'Manutenção de PCs', 'Instalação CFTV'];
 
     // Dynamic Styles for Photography
-    const footerBg = isPhotography ? 'bg-black border-white/10' : 'bg-gray-900/50 backdrop-blur-lg border-gray-800';
-    const textHover = isPhotography ? 'hover:text-white' : 'hover:text-blue-400';
-    const iconColor = isPhotography ? 'text-white' : 'text-blue-400';
+    const footerBg = isPhotography ? 'bg-black border-white/10' : 'bg-white/40 dark:bg-gray-900/50 backdrop-blur-lg border-gray-200/50 dark:border-gray-800';
+    const textHover = isPhotography ? 'hover:text-white' : 'hover:text-blue-600 dark:hover:text-blue-400';
+    const iconColor = isPhotography ? 'text-white' : 'text-blue-600 dark:text-blue-400';
     const socialBtnClass = (colorClass) => isPhotography
         ? 'w-10 h-10 bg-white text-black rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors'
-        : `w-10 h-10 ${colorClass} rounded-full flex items-center justify-center hover:opacity-90 transition-colors`;
+        : `w-10 h-10 ${colorClass} rounded-full flex items-center justify-center hover:opacity-90 transition-colors shadow-sm`;
 
     return <footer className={`${footerBg} border-t transition-colors duration-500`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -53,7 +53,7 @@ const Footer = () => {
                         )}
                         <span className={`text-xl font-bold ${isPhotography ? 'text-white' : 'gradient-text'}`}>{siteName}</span>
                     </div>
-                    <p className="text-gray-400 text-sm">
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">
                         {description}
                     </p>
                     <div className="flex space-x-4">
@@ -82,9 +82,9 @@ const Footer = () => {
 
                 {/* Quick Links */}
                 <div className="space-y-4">
-                    <span className="text-lg font-semibold text-white">Links Rápidos</span>
+                    <span className="text-lg font-bold text-gray-900 dark:text-white">Links Rápidos</span>
                     <div className="space-y-2">
-                        {quickLinks.map(link => <Link key={link.name} to={link.path} className={`block text-gray-400 transition-colors text-sm ${textHover}`}>
+                        {quickLinks.map(link => <Link key={link.name} to={link.path} className={`block text-gray-600 dark:text-gray-400 transition-colors text-sm font-medium ${textHover}`}>
                             {link.name}
                         </Link>)}
                     </div>
@@ -92,9 +92,9 @@ const Footer = () => {
 
                 {/* Services */}
                 <div className="space-y-4">
-                    <span className="text-lg font-semibold text-white">Serviços</span>
+                    <span className="text-lg font-bold text-gray-900 dark:text-white">Serviços</span>
                     <div className="space-y-2">
-                        {services.map(service => <span key={service} className="block text-gray-400 text-sm">
+                        {services.map(service => <span key={service} className="block text-gray-600 dark:text-gray-400 text-sm font-medium">
                             {service}
                         </span>)}
                     </div>
@@ -102,26 +102,26 @@ const Footer = () => {
 
                 {/* Contact Info */}
                 <div className="space-y-4">
-                    <span className="text-lg font-semibold text-white">Contato</span>
+                    <span className="text-lg font-bold text-gray-900 dark:text-white">Contato</span>
                     <div className="space-y-3">
                         <div className="flex items-center space-x-3">
                             <Mail className={`w-5 h-5 ${iconColor}`} />
-                            <span className="text-gray-400 text-sm">{contactEmail}</span>
+                            <span className="text-gray-600 dark:text-gray-400 text-sm font-medium">{contactEmail}</span>
                         </div>
                         <div className="flex items-center space-x-3">
                             <Phone className={`w-5 h-5 ${iconColor}`} />
-                            <span className="text-gray-400 text-sm">{contactPhone}</span>
+                            <span className="text-gray-600 dark:text-gray-400 text-sm font-medium">{contactPhone}</span>
                         </div>
                         <div className="flex items-center space-x-3">
                             <MapPin className={`w-5 h-5 ${iconColor}`} />
-                            <span className="text-gray-400 text-sm">{contactAddress}</span>
+                            <span className="text-gray-600 dark:text-gray-400 text-sm font-medium">{contactAddress}</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className={`border-t mt-8 pt-8 text-center ${isPhotography ? 'border-white/10' : 'border-gray-800'}`}>
-                <p className="text-gray-400 text-sm">
+            <div className={`border-t mt-8 pt-8 text-center ${isPhotography ? 'border-white/10' : 'border-gray-200/50 dark:border-gray-800'}`}>
+                <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">
                     © {new Date().getFullYear()} {siteName}. Todos os direitos reservados.
                 </p>
             </div>
