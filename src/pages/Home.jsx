@@ -107,14 +107,14 @@ const Home = () => {
             </Helmet>
 
             {/* Hero Section */}
-            <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background text-foreground transition-colors duration-300">
+            <section className="relative min-h-[calc(100vh-5rem)] flex items-center justify-center overflow-hidden bg-background text-foreground transition-colors duration-300 py-12 md:py-20">
                 {/* Project Marquee Background */}
-                <div className="absolute inset-0 z-0 opacity-10 grayscale overflow-hidden">
+                <div className="absolute inset-0 z-0 opacity-[0.06] dark:opacity-[0.04] grayscale overflow-hidden transition-opacity duration-300 pointer-events-none">
                     <div className="absolute top-10 left-0 w-full rotate-[-5deg]">
                         <div className="flex gap-4 animate-marquee whitespace-nowrap">
                             {bgProjects.map((proj, idx) => (
-                                <div key={`row1-${idx}`} className="w-[600px] h-[400px] bg-gray-800 rounded-xl overflow-hidden flex-shrink-0 border border-white/5 opacity-80">
-                                    <img src={proj.main_image_url || "https://images.unsplash.com/photo-1550745165-9bc0b252726f"} className="w-full h-full object-cover" alt="" />
+                                <div key={`row1-${idx}`} className="w-[500px] h-[330px] rounded-xl overflow-hidden flex-shrink-0 border border-gray-200/20 dark:border-white/5 bg-gray-200 dark:bg-gray-800">
+                                    <img src={proj.main_image_url || "https://images.unsplash.com/photo-1550745165-9bc0b252726f"} className="w-full h-full object-cover grayscale" alt="" />
                                 </div>
                             ))}
                         </div>
@@ -122,8 +122,8 @@ const Home = () => {
                     <div className="absolute bottom-10 left-0 w-full rotate-[5deg]">
                         <div className="flex gap-4 animate-marquee-reverse whitespace-nowrap">
                             {bgProjects.map((proj, idx) => (
-                                <div key={`row2-${idx}`} className="w-[600px] h-[400px] bg-gray-800 rounded-xl overflow-hidden flex-shrink-0 border border-white/5 opacity-80">
-                                    <img src={proj.main_image_url || "https://images.unsplash.com/photo-1550745165-9bc0b252726f"} className="w-full h-full object-cover" alt="" />
+                                <div key={`row2-${idx}`} className="w-[500px] h-[330px] rounded-xl overflow-hidden flex-shrink-0 border border-gray-200/20 dark:border-white/5 bg-gray-200 dark:bg-gray-800">
+                                    <img src={proj.main_image_url || "https://images.unsplash.com/photo-1550745165-9bc0b252726f"} className="w-full h-full object-cover grayscale" alt="" />
                                 </div>
                             ))}
                         </div>
@@ -131,60 +131,58 @@ const Home = () => {
                 </div>
 
                 {/* Aurora Background Overlay */}
-                <div className="absolute inset-0 aurora-bg opacity-30 dark:opacity-40 mix-blend-multiply dark:mix-blend-color-dodge z-0 pointer-events-none"></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background z-0 pointer-events-none"></div>
+                <div className="absolute inset-0 aurora-bg opacity-40 dark:opacity-50 z-0 pointer-events-none"></div>
+                <div className="absolute inset-0 bg-background/90 dark:bg-background/95 z-0 pointer-events-none transition-colors duration-300"></div>
 
                 {/* Central Spotlight */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-[100px] opacity-40 pulse-glow z-0"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-[80px] opacity-40 pulse-glow z-0"></div>
 
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <motion.div
-                        initial={{ opacity: 0, y: 50 }}
+                        initial={{ opacity: 0, y: 40 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
-                        className="space-y-8 sm:space-y-10"
+                        className="space-y-6 sm:space-y-8"
                     >
-                        <div className="space-y-4 sm:space-y-6">
+                        <div className="space-y-3 sm:space-y-4">
                             <motion.div
                                 initial={{ scale: 0 }}
                                 animate={{ scale: 1 }}
                                 transition={{ delay: 0.2, type: "spring", stiffness: 260, damping: 20 }}
-                                className="w-28 h-28 sm:w-40 sm:h-40 mx-auto flex items-center justify-center mb-4 sm:mb-8"
+                                className="w-24 h-24 sm:w-32 sm:h-32 mx-auto flex items-center justify-center mb-2 sm:mb-4"
                             >
                                 {config?.logo_url ? (
                                     <img src={config.logo_url} alt={config.site_name} className="w-full h-full object-contain drop-shadow-2xl" />
                                 ) : (
-                                    <div className="w-32 h-32 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                                        <Zap className="w-16 h-16 text-white" />
+                                    <div className="w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+                                        <Zap className="w-12 h-12 text-white" />
                                     </div>
                                 )}
                             </motion.div>
 
-                            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold px-2">
+                            <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold px-2 tracking-tight">
                                 <span className="gradient-text">{config?.hero_title || 'Rafael Pita Solutions'}</span>
                             </h1>
 
-                            <p className="text-lg md:text-2xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto px-4 font-medium">
+                            <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto px-4 font-semibold leading-relaxed">
                                 {config?.hero_subtitle || 'Criatividade e tecnologia em um só lugar'}
                             </p>
 
-                            <p className="text-base md:text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto px-4">
+                            <p className="text-sm md:text-base text-gray-500 dark:text-gray-400 max-w-2xl mx-auto px-4 leading-relaxed font-medium">
                                 {config?.hero_description || 'Transformamos suas ideias em realidade digital com soluções inovadoras e personalizadas para o seu negócio.'}
                             </p>
                         </div>
 
-
-
-                        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-8">
-                            <Link to="/contato">
-                                <Button size="lg" className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-lg px-8 py-4 neon-glow">
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4 sm:pt-6">
+                            <Link to="/contato" className="w-full sm:w-auto">
+                                <Button size="lg" className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-lg px-8 py-4 neon-glow font-bold text-white transition-all duration-300">
                                     Solicitar Orçamento
                                     <ArrowRight className="ml-2 w-5 h-5" />
                                 </Button>
                             </Link>
 
-                             <Link to="/portfolio">
-                                <Button variant="outline" size="lg" className="text-lg px-8 py-4 border-gray-300 dark:border-gray-600 hover:border-blue-500 dark:hover:border-blue-400 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 w-full sm:w-auto">
+                             <Link to="/portfolio" className="w-full sm:w-auto">
+                                <Button variant="outline" size="lg" className="w-full text-lg px-8 py-4 border-primary/20 dark:border-gray-700 text-primary dark:text-gray-300 hover:bg-primary/5 dark:hover:bg-white/5 font-semibold transition-all duration-300">
                                     Ver Portfólio
                                 </Button>
                             </Link>
@@ -193,9 +191,9 @@ const Home = () => {
                 </div >
 
                 {/* Floating Elements */}
-                < div className="absolute top-20 left-10 w-20 h-20 bg-blue-500/10 rounded-full blur-xl floating-animation" ></div >
-                <div className="absolute bottom-20 right-10 w-32 h-32 bg-purple-500/10 rounded-full blur-xl floating-animation" style={{ animationDelay: '2s' }}></div>
-                <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-pink-500/10 rounded-full blur-xl floating-animation" style={{ animationDelay: '4s' }}></div>
+                <div className="absolute top-20 left-10 w-20 h-20 bg-blue-500/10 rounded-full blur-xl floating-animation pointer-events-none" ></div>
+                <div className="absolute bottom-20 right-10 w-32 h-32 bg-purple-500/10 rounded-full blur-xl floating-animation pointer-events-none" style={{ animationDelay: '2s' }}></div>
+                <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-pink-500/10 rounded-full blur-xl floating-animation pointer-events-none" style={{ animationDelay: '4s' }}></div>
             </section >
 
             {/* Floating Stats Section */}

@@ -31,14 +31,14 @@ const Footer = () => {
     const services = ['Design Gráfico', 'Fotografia', 'Desenvolvimento Web', 'Dashboards Power BI', 'Vídeos com IA', 'Tráfego Pago', 'Manutenção de PCs', 'Instalação CFTV'];
 
     // Dynamic Styles for Photography
-    const footerBg = isPhotography ? 'bg-black border-white/10' : 'bg-white/40 dark:bg-gray-900/50 backdrop-blur-lg border-gray-200/50 dark:border-gray-800';
+    const footerBg = isPhotography ? 'bg-black border-white/10' : 'bg-slate-50 dark:bg-gray-900/90 border-slate-200 dark:border-white/10';
     const textHover = isPhotography ? 'hover:text-white' : 'hover:text-blue-600 dark:hover:text-blue-400';
     const iconColor = isPhotography ? 'text-white' : 'text-blue-600 dark:text-blue-400';
     const socialBtnClass = (colorClass) => isPhotography
         ? 'w-10 h-10 bg-white text-black rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors'
         : `w-10 h-10 ${colorClass} rounded-full flex items-center justify-center hover:opacity-90 transition-colors shadow-sm`;
 
-    return <footer className={`${footerBg} border-t transition-colors duration-500`}>
+    return <footer className={`${footerBg} border-t transition-colors duration-300`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {/* Brand */}
@@ -120,7 +120,7 @@ const Footer = () => {
                 </div>
             </div>
 
-            <div className={`border-t mt-8 pt-8 text-center ${isPhotography ? 'border-white/10' : 'border-gray-200/50 dark:border-gray-800'}`}>
+            <div className={`border-t mt-8 pt-8 text-center ${isPhotography ? 'border-white/10' : 'border-slate-200 dark:border-gray-800'}`}>
                 <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">
                     © {new Date().getFullYear()} {siteName}. Todos os direitos reservados.
                 </p>

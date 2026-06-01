@@ -67,21 +67,21 @@ const ClientArea = () => {
                                 <Lock className="w-8 h-8 text-white" />
                             </div>
                             <h1 className="text-3xl font-bold gradient-text mb-2">Área de Clientes</h1>
-                            <p className="text-gray-400">Acesse sua área exclusiva</p>
+                            <p className="text-gray-600 dark:text-gray-400 font-medium">Acesse sua área exclusiva</p>
                         </div>
 
                         <form onSubmit={handleLogin} className="space-y-6">
                             <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">
+                                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                                     Email
                                 </label>
                                 <div className="relative">
-                                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                                     <input
                                         type="email"
                                         value={loginData.email}
                                         onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-                                        className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg focus:border-blue-500 focus:outline-none text-white"
+                                        className="w-full pl-10 pr-4 py-3 bg-white/50 dark:bg-gray-800/50 border border-gray-300 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:outline-none text-gray-900 dark:text-white transition-all duration-300"
                                         placeholder="seu@email.com"
                                         disabled={isSubmitting}
                                     />
@@ -89,23 +89,23 @@ const ClientArea = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">
+                                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                                     Senha
                                 </label>
                                 <div className="relative">
-                                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                                     <input
                                         type={showPassword ? "text" : "password"}
                                         value={loginData.password}
                                         onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-                                        className="w-full pl-10 pr-12 py-3 bg-gray-800/50 border border-gray-600 rounded-lg focus:border-blue-500 focus:outline-none text-white"
+                                        className="w-full pl-10 pr-12 py-3 bg-white/50 dark:bg-gray-800/50 border border-gray-300 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:outline-none text-gray-900 dark:text-white transition-all duration-300"
                                         placeholder="••••••••"
                                         disabled={isSubmitting}
                                     />
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-300"
+                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-300 dark:hover:text-white"
                                     >
                                         {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                                     </button>
@@ -114,7 +114,7 @@ const ClientArea = () => {
 
                             <Button
                                 type="submit"
-                                className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 py-3"
+                                className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 py-3 font-bold text-white shadow-lg"
                                 disabled={isSubmitting}
                             >
                                 {isSubmitting ? 'Entrando...' : 'Entrar'}
@@ -122,14 +122,14 @@ const ClientArea = () => {
                         </form>
 
                         <div className="mt-6 text-center">
-                            <p className="text-gray-400 text-sm">
+                            <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">
                                 Esqueceu sua senha?{' '}
                                 <button
                                     onClick={() => toast({
                                         title: "🚧 Funcionalidade em desenvolvimento",
                                         description: "A recuperação de senha será implementada em breve!",
                                     })}
-                                    className="text-blue-400 hover:text-blue-300"
+                                    className="text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300 underline"
                                 >
                                     Clique aqui
                                 </button>

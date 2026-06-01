@@ -85,7 +85,7 @@ const TrackTicket = () => {
                     <h1 className="text-4xl md:text-5xl font-bold mb-4">
                         <span className="gradient-text">Rastrear Chamado</span>
                     </h1>
-                    <p className="text-lg text-gray-400">Insira o código do seu chamado para ver o status e as atualizações.</p>
+                    <p className="text-lg text-gray-650 dark:text-gray-400 font-medium">Insira o código do seu chamado para ver o status e as atualizações.</p>
                 </motion.div>
 
                 <form onSubmit={handleSearch} className="flex gap-2 mb-12">
@@ -94,9 +94,9 @@ const TrackTicket = () => {
                         placeholder="Digite o código do chamado (ex: RPS-123456)"
                         value={ticketCode}
                         onChange={(e) => setTicketCode(e.target.value)}
-                        className="text-lg"
+                        className="text-lg bg-white/50 dark:bg-gray-800/50 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white"
                     />
-                    <Button type="submit" size="lg" className="bg-gradient-to-r from-blue-500 to-purple-600" disabled={loading}>
+                    <Button type="submit" size="lg" className="bg-gradient-to-r from-blue-500 to-purple-600 font-bold text-white" disabled={loading}>
                         {loading ? <Loader2 className="animate-spin" /> : <Search />}
                     </Button>
                 </form>
@@ -109,9 +109,9 @@ const TrackTicket = () => {
 
                 {!loading && searched && !ticketData && (
                     <div className="text-center glass-effect p-8 rounded-lg">
-                        <AlertTriangle className="mx-auto h-12 w-12 text-yellow-400 mb-4" />
-                        <h2 className="text-2xl font-bold">Nenhum chamado encontrado</h2>
-                        <p className="text-gray-400">O código inserido não corresponde a nenhum chamado. Por favor, verifique e tente novamente.</p>
+                        <AlertTriangle className="mx-auto h-12 w-12 text-yellow-500 mb-4" />
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Nenhum chamado encontrado</h2>
+                        <p className="text-gray-600 dark:text-gray-400 font-medium mt-2">O código inserido não corresponde a nenhum chamado. Por favor, verifique e tente novamente.</p>
                     </div>
                 )}
 
@@ -119,22 +119,22 @@ const TrackTicket = () => {
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-effect p-8 rounded-2xl space-y-8">
                         <div>
                             <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-4">
-                                <h2 className="text-2xl font-bold flex items-center gap-2">
-                                    <Ticket className="text-blue-400" />
+                                <h2 className="text-2xl font-bold flex items-center gap-2 text-gray-900 dark:text-white">
+                                    <Ticket className="text-blue-500 dark:text-blue-400" />
                                     Chamado: {ticketData.ticket_code}
                                 </h2>
                                 <span className={`text-sm font-bold py-1 px-3 rounded-full ${getStatusInfo(ticketData.status).bgColor} ${getStatusInfo(ticketData.status).color}`}>
                                     {ticketData.status.toUpperCase()}
                                 </span>
                             </div>
-                            <p className="text-lg font-semibold">{ticketData.subject}</p>
-                            <p className="text-gray-400 mt-2">{ticketData.description}</p>
-                            <p className="text-xs text-gray-500 mt-4">Criado em: {new Date(ticketData.created_at).toLocaleString()}</p>
+                            <p className="text-lg font-bold text-gray-900 dark:text-white">{ticketData.subject}</p>
+                            <p className="text-gray-700 dark:text-gray-300 mt-2 font-medium">{ticketData.description}</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-4 font-semibold">Criado em: {new Date(ticketData.created_at).toLocaleString()}</p>
                         </div>
 
-                        <div className="border-t border-gray-700 pt-8">
-                            <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
-                                <MessageSquare className="text-purple-400" />
+                        <div className="border-t border-gray-200 dark:border-gray-700 pt-8">
+                            <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-gray-900 dark:text-white">
+                                <MessageSquare className="text-purple-500 dark:text-purple-400" />
                                 Histórico de Atualizações
                             </h3>
                             <div className="space-y-6">
@@ -143,11 +143,11 @@ const TrackTicket = () => {
                                         <div key={update.id} className="flex gap-4">
                                             <div className="flex flex-col items-center">
                                                 <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                                                <div className="w-px flex-grow bg-gray-700"></div>
+                                                <div className="w-px flex-grow bg-gray-200 dark:bg-gray-700"></div>
                                             </div>
                                             <div className="pb-6">
-                                                <p className="text-gray-300">{update.note}</p>
-                                                <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                                                <p className="text-gray-700 dark:text-gray-250 font-medium">{update.note}</p>
+                                                <p className="text-xs text-gray-550 dark:text-gray-450 mt-1 flex items-center gap-1 font-semibold">
                                                     <Clock className="w-3 h-3" />
                                                     {new Date(update.created_at).toLocaleString()}
                                                 </p>
@@ -155,7 +155,7 @@ const TrackTicket = () => {
                                         </div>
                                     ))
                                 ) : (
-                                    <p className="text-gray-500">Nenhuma atualização ainda.</p>
+                                    <p className="text-gray-500 dark:text-gray-450 font-medium">Nenhuma atualização ainda.</p>
                                 )}
                             </div>
                         </div>
