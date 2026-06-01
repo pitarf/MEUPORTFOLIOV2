@@ -360,11 +360,11 @@ const Home = () => {
                                     <ArrowRight className="ml-2 w-5 h-5" />
                                 </Button>
                             </Link>
-                            <Link to="/avaliacoes">
-                                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 text-lg px-8 py-4">
-                                    Ver Avaliações
-                                </Button>
-                            </Link>
+                             <Link to="/avaliacoes">
+                                 <Button size="lg" className="bg-transparent border-2 border-white hover:bg-white text-white hover:text-blue-600 text-lg px-8 py-4 font-bold transition-all duration-300">
+                                     Ver Avaliações
+                                 </Button>
+                             </Link>
                         </div>
                     </motion.div>
                 </div>
