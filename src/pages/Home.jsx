@@ -107,9 +107,9 @@ const Home = () => {
             </Helmet>
 
             {/* Hero Section */}
-            <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background text-foreground transition-colors duration-300 py-6 md:py-12 -mt-20">
+            <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background text-foreground transition-colors duration-300 pt-24 sm:pt-32 pb-32 md:pb-44 -mt-20">
                 {/* Project Marquee Background */}
-                <div className="absolute inset-0 z-0 opacity-20 dark:opacity-15 overflow-hidden transition-opacity duration-300 pointer-events-none">
+                <div className="absolute inset-0 z-0 opacity-30 dark:opacity-20 overflow-hidden transition-opacity duration-300 pointer-events-none">
                     <div className="absolute top-10 left-0 w-full rotate-[-5deg]">
                         <div className="flex gap-4 animate-marquee whitespace-nowrap">
                             {bgProjects.map((proj, idx) => (
@@ -132,12 +132,12 @@ const Home = () => {
 
                 {/* Aurora Background Overlay */}
                 <div className="absolute inset-0 aurora-bg opacity-40 dark:opacity-50 z-0 pointer-events-none"></div>
-                <div className="absolute inset-0 bg-background/70 dark:bg-background/85 z-0 pointer-events-none transition-colors duration-300"></div>
+                <div className="absolute inset-0 bg-background/55 dark:bg-background/80 z-0 pointer-events-none transition-colors duration-300"></div>
 
                 {/* Central Spotlight */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-[80px] opacity-40 pulse-glow z-0"></div>
 
-                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-24 sm:pt-28">
+                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-16 sm:pt-20">
                     <motion.div
                         initial={{ opacity: 0, y: 40 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -197,7 +197,7 @@ const Home = () => {
             </section>
 
             {/* Floating Stats Section */}
-            <div className="relative z-20 px-4 -mt-10 sm:-mt-20 md:-mt-32">
+            <div className="relative z-20 px-4 -mt-20 sm:-mt-24 md:-mt-28">
                 <div className="max-w-6xl mx-auto">
                     <div className="glass-effect rounded-3xl p-6 sm:p-8 border border-gray-200/50 dark:border-white/10 shadow-2xl backdrop-blur-xl bg-white/70 dark:bg-gray-900/60">
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 divide-x-0 md:divide-x divide-gray-200 dark:divide-gray-700/50">
