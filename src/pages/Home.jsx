@@ -107,14 +107,14 @@ const Home = () => {
             </Helmet>
 
             {/* Hero Section */}
-            <section className="relative min-h-[calc(100vh-5rem)] flex items-center justify-center overflow-hidden bg-background text-foreground transition-colors duration-300 py-12 md:py-20">
+            <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background text-foreground transition-colors duration-300 py-6 md:py-12 -mt-20">
                 {/* Project Marquee Background */}
-                <div className="absolute inset-0 z-0 opacity-[0.06] dark:opacity-[0.04] grayscale overflow-hidden transition-opacity duration-300 pointer-events-none">
+                <div className="absolute inset-0 z-0 opacity-20 dark:opacity-15 overflow-hidden transition-opacity duration-300 pointer-events-none">
                     <div className="absolute top-10 left-0 w-full rotate-[-5deg]">
                         <div className="flex gap-4 animate-marquee whitespace-nowrap">
                             {bgProjects.map((proj, idx) => (
-                                <div key={`row1-${idx}`} className="w-[500px] h-[330px] rounded-xl overflow-hidden flex-shrink-0 border border-gray-200/20 dark:border-white/5 bg-gray-200 dark:bg-gray-800">
-                                    <img src={proj.main_image_url || "https://images.unsplash.com/photo-1550745165-9bc0b252726f"} className="w-full h-full object-cover grayscale" alt="" />
+                                <div key={`row1-${idx}`} className="w-[500px] h-[330px] rounded-xl overflow-hidden flex-shrink-0 border border-gray-200/10 dark:border-white/5 bg-gray-100 dark:bg-gray-800 shadow-lg">
+                                    <img src={proj.main_image_url || "https://images.unsplash.com/photo-1550745165-9bc0b252726f"} className="w-full h-full object-cover opacity-80" alt="" />
                                 </div>
                             ))}
                         </div>
@@ -122,8 +122,8 @@ const Home = () => {
                     <div className="absolute bottom-10 left-0 w-full rotate-[5deg]">
                         <div className="flex gap-4 animate-marquee-reverse whitespace-nowrap">
                             {bgProjects.map((proj, idx) => (
-                                <div key={`row2-${idx}`} className="w-[500px] h-[330px] rounded-xl overflow-hidden flex-shrink-0 border border-gray-200/20 dark:border-white/5 bg-gray-200 dark:bg-gray-800">
-                                    <img src={proj.main_image_url || "https://images.unsplash.com/photo-1550745165-9bc0b252726f"} className="w-full h-full object-cover grayscale" alt="" />
+                                <div key={`row2-${idx}`} className="w-[500px] h-[330px] rounded-xl overflow-hidden flex-shrink-0 border border-gray-200/10 dark:border-white/5 bg-gray-100 dark:bg-gray-800 shadow-lg">
+                                    <img src={proj.main_image_url || "https://images.unsplash.com/photo-1550745165-9bc0b252726f"} className="w-full h-full object-cover opacity-80" alt="" />
                                 </div>
                             ))}
                         </div>
@@ -132,12 +132,12 @@ const Home = () => {
 
                 {/* Aurora Background Overlay */}
                 <div className="absolute inset-0 aurora-bg opacity-40 dark:opacity-50 z-0 pointer-events-none"></div>
-                <div className="absolute inset-0 bg-background/90 dark:bg-background/95 z-0 pointer-events-none transition-colors duration-300"></div>
+                <div className="absolute inset-0 bg-background/70 dark:bg-background/85 z-0 pointer-events-none transition-colors duration-300"></div>
 
                 {/* Central Spotlight */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-[80px] opacity-40 pulse-glow z-0"></div>
 
-                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-24 sm:pt-28">
                     <motion.div
                         initial={{ opacity: 0, y: 40 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -164,11 +164,11 @@ const Home = () => {
                                 <span className="gradient-text">{config?.hero_title || 'Rafael Pita Solutions'}</span>
                             </h1>
 
-                            <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto px-4 font-semibold leading-relaxed">
+                            <p className="text-lg md:text-xl text-gray-750 dark:text-gray-300 max-w-3xl mx-auto px-4 font-semibold leading-relaxed">
                                 {config?.hero_subtitle || 'Criatividade e tecnologia em um só lugar'}
                             </p>
 
-                            <p className="text-sm md:text-base text-gray-500 dark:text-gray-400 max-w-2xl mx-auto px-4 leading-relaxed font-medium">
+                            <p className="text-sm md:text-base text-gray-550 dark:text-gray-400 max-w-2xl mx-auto px-4 leading-relaxed font-medium">
                                 {config?.hero_description || 'Transformamos suas ideias em realidade digital com soluções inovadoras e personalizadas para o seu negócio.'}
                             </p>
                         </div>
@@ -194,7 +194,7 @@ const Home = () => {
                 <div className="absolute top-20 left-10 w-20 h-20 bg-blue-500/10 rounded-full blur-xl floating-animation pointer-events-none" ></div>
                 <div className="absolute bottom-20 right-10 w-32 h-32 bg-purple-500/10 rounded-full blur-xl floating-animation pointer-events-none" style={{ animationDelay: '2s' }}></div>
                 <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-pink-500/10 rounded-full blur-xl floating-animation pointer-events-none" style={{ animationDelay: '4s' }}></div>
-            </section >
+            </section>
 
             {/* Floating Stats Section */}
             <div className="relative z-20 px-4 -mt-10 sm:-mt-20 md:-mt-32">
@@ -256,17 +256,17 @@ const Home = () => {
             </section >
 
             {/* Photography Section - Only visible if there are projects */}
-            < section className={`py-20 bg-gray-900/30 ${photographyCount === 0 ? 'hidden' : ''}`}>
+            <section className={`py-20 bg-slate-950 border-y border-slate-900 text-white ${photographyCount === 0 ? 'hidden' : ''}`}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         className="text-center mb-16"
                     >
-                        <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-white">
-                            <span className="gradient-text">Fotografia em Destaque</span>
+                        <h2 className="text-4xl md:text-5xl font-extrabold mb-6">
+                            <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Fotografia em Destaque</span>
                         </h2>
-                        <p className="text-xl text-gray-500 dark:text-gray-400 max-w-3xl mx-auto">
+                        <p className="text-xl text-slate-300 max-w-3xl mx-auto font-medium">
                             Capturando a essência de cada momento com olhar artístico e profissional.
                         </p>
                     </motion.div>
@@ -278,14 +278,14 @@ const Home = () => {
                         className="text-center mt-12"
                     >
                         <Link to="/portfolio-fotografia/galeria">
-                            <Button size="lg" className="bg-white text-gray-900 hover:bg-gray-200 text-lg px-8 py-4 font-semibold">
+                            <Button size="lg" className="bg-white text-slate-950 hover:bg-slate-200 text-lg px-8 py-4 font-bold shadow-lg shadow-white/5 hover:scale-105 transition-all">
                                 Ver Galeria de Fotografia
                                 <ArrowRight className="ml-2 w-5 h-5" />
                             </Button>
                         </Link>
                     </motion.div>
                 </div>
-            </section >
+            </section>
 
             {/* Services Section */}
             < section className="py-20" >
