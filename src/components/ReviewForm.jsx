@@ -144,11 +144,11 @@ const ReviewForm = ({ onSuccess, className }) => {
         <form onSubmit={handleSubmitReview} className={`space-y-6 ${className}`}>
             <div className="flex items-center space-x-6">
                 <div className="relative">
-                    <div className="w-24 h-24 rounded-full bg-gray-700 flex items-center justify-center overflow-hidden">
+                    <div className="w-24 h-24 rounded-full bg-slate-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden transition-colors duration-300 border border-slate-300/50 dark:border-transparent shadow-inner">
                         {avatarPreview ? (
                             <img src={avatarPreview} alt="Preview do Avatar" className="w-full h-full object-cover" loading="lazy" />
                         ) : (
-                            <User className="w-12 h-12 text-gray-400" />
+                            <User className="w-12 h-12 text-slate-400 dark:text-gray-400 transition-colors duration-300" />
                         )}
                     </div>
                     <label htmlFor="avatar-upload-form" className="absolute -bottom-2 -right-2 bg-blue-500 p-2 rounded-full cursor-pointer hover:bg-blue-600 transition-colors">

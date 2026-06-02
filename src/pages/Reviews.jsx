@@ -222,9 +222,9 @@ const Reviews = () => {
                 <meta name="description" content="Veja o que nossos clientes dizem sobre nossos serviços. Avaliações reais de projetos de design, desenvolvimento, marketing digital e muito mais." />
             </Helmet>
 
-            <div className="pt-20">
-                <section className="py-20 tech-pattern">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="pt-20 min-h-screen bg-background text-foreground transition-colors duration-300">
+                <section className="py-20 tech-pattern relative">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -233,7 +233,7 @@ const Reviews = () => {
                             <h1 className="text-5xl md:text-6xl font-bold mb-6">
                                 <span className="gradient-text">Avaliações</span>
                             </h1>
-                            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+                            <p className="text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto font-medium transition-colors duration-300">
                                 Veja os depoimentos reais de clientes que confiaram em nossos serviços e na qualidade do nosso trabalho
                             </p>
                         </motion.div>
@@ -259,24 +259,24 @@ const Reviews = () => {
                                     {reviews.map((review) => (
                                         <CarouselItem key={review.id} className="md:basis-1/2 lg:basis-1/3">
                                             <div className="p-4 h-full">
-                                                <motion.div className="service-card p-6 rounded-xl relative h-full flex flex-col">
+                                                <motion.div className="service-card p-6 rounded-xl relative h-full flex flex-col border border-slate-200/50 dark:border-white/5 bg-white/40 dark:bg-transparent shadow-lg dark:shadow-none transition-all duration-300">
                                                     <div className="absolute top-4 right-4"><Quote className="w-8 h-8 text-blue-400/30" /></div>
                                                     <div className="flex items-center space-x-4 mb-4">
                                                         {review.avatar_url ? (
-                                                            <img alt={review.name} className="w-12 h-12 rounded-full object-cover" src={review.avatar_url} loading="lazy" />
+                                                            <img alt={review.name} className="w-12 h-12 rounded-full object-cover shadow-sm" src={review.avatar_url} loading="lazy" />
                                                         ) : (
-                                                            <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center">
-                                                                <User className="w-6 h-6 text-gray-400" />
+                                                            <div className="w-12 h-12 rounded-full bg-slate-200 dark:bg-gray-700 flex items-center justify-center shadow-sm">
+                                                                <User className="w-6 h-6 text-slate-400 dark:text-gray-400" />
                                                             </div>
                                                         )}
                                                         <div>
-                                                            <h3 className="text-white font-semibold">{review.name}</h3>
-                                                            <p className="text-gray-400 text-sm">{review.role}</p>
+                                                            <h3 className="text-gray-900 dark:text-white font-bold transition-colors duration-300">{review.name}</h3>
+                                                            <p className="text-slate-600 dark:text-gray-400 text-sm font-medium transition-colors duration-300">{review.role}</p>
                                                         </div>
                                                     </div>
                                                     <div className="flex items-center space-x-2 mb-4">{renderStars(review.rating)}</div>
-                                                    <p className="text-gray-300 mb-4 leading-relaxed flex-grow">"{review.comment}"</p>
-                                                    <div className="flex justify-between items-center text-sm text-gray-400 mt-auto">
+                                                    <p className="text-slate-700 dark:text-gray-300 mb-4 leading-relaxed flex-grow font-medium transition-colors duration-300">"{review.comment}"</p>
+                                                    <div className="flex justify-between items-center text-sm text-slate-500 dark:text-gray-400 mt-auto transition-colors duration-300">
                                                         <span>{new Date(review.created_at).toLocaleDateString()}</span>
                                                         <button
                                                             onClick={() => handleLikeToggle(review.id, review.likes)}
@@ -298,40 +298,38 @@ const Reviews = () => {
                     </div>
                 </section>
 
-                <section className="py-20 bg-gray-900/50">
+                <section className="py-20 bg-slate-50 dark:bg-gray-900/40 border-y border-slate-200/50 dark:border-white/5 transition-colors duration-300">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="text-center">
                                 <div className="text-4xl font-bold gradient-text mb-2">{averageRating.toFixed(1)}</div>
                                 <div className="flex justify-center mb-2">{renderStars(Math.round(averageRating))}</div>
-                                <div className="text-gray-400">Avaliação Média</div>
+                                <div className="text-slate-600 dark:text-gray-400 font-medium transition-colors duration-300">Avaliação Média</div>
                             </motion.div>
                             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-center">
                                 <div className="text-4xl font-bold gradient-text mb-2">{reviews.length}</div>
-                                <div className="text-gray-400">Avaliações</div>
+                                <div className="text-slate-600 dark:text-gray-400 font-medium transition-colors duration-300">Avaliações</div>
                             </motion.div>
                             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-center">
                                 <div className="text-4xl font-bold gradient-text mb-2">98%</div>
-                                <div className="text-gray-400">Satisfação</div>
+                                <div className="text-slate-600 dark:text-gray-400 font-medium transition-colors duration-300">Satisfação</div>
                             </motion.div>
                             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="text-center">
                                 <div className="text-4xl font-bold gradient-text mb-2">200+</div>
-                                <div className="text-gray-400">Clientes Atendidos</div>
+                                <div className="text-slate-600 dark:text-gray-400 font-medium transition-colors duration-300">Clientes Atendidos</div>
                             </motion.div>
                         </div>
                     </div>
                 </section>
 
-                <section className="py-20 bg-gray-900/50">
+                <section className="py-20 bg-slate-50 dark:bg-gray-900/40 border-t border-slate-200/50 dark:border-white/5 transition-colors duration-300">
                     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="text-center mb-12">
                             <h2 className="text-4xl font-bold gradient-text mb-6">Deixe sua avaliação</h2>
-                            <p className="text-xl text-gray-400">Compartilhe sua experiência conosco e ajude outros clientes</p>
+                            <p className="text-xl text-slate-600 dark:text-gray-400 font-medium transition-colors duration-300">Compartilhe sua experiência conosco e ajude outros clientes</p>
                         </motion.div>
-                        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="glass-effect p-8 rounded-2xl">
-                            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="glass-effect p-8 rounded-2xl">
-                                <ReviewForm />
-                            </motion.div>
+                        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="glass-effect p-8 rounded-2xl border border-slate-200/50 dark:border-white/5 shadow-xl transition-all duration-300">
+                            <ReviewForm />
                         </motion.div>
                     </div>
                 </section>

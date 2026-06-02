@@ -184,7 +184,7 @@ const Portfolio = () => {
                             {/* Contadores Rápidos de Autoridade */}
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-3.5 max-w-xl mx-auto pt-4 text-center">
                                 <div className="glass-effect p-4 rounded-xl border border-gray-200/50 dark:border-white/5 bg-white/40 dark:bg-gray-900/30">
-                                    <div className="text-2xl sm:text-3xl font-extrabold text-blue-600 dark:text-blue-400">500+</div>
+                                    <div className="text-2xl sm:text-3xl font-extrabold text-blue-600 dark:text-blue-400">50+</div>
                                     <div className="text-xs text-gray-500 dark:text-gray-400 font-semibold tracking-wide uppercase mt-1">Entregas de Sucesso</div>
                                 </div>
                                 <div className="glass-effect p-4 rounded-xl border border-gray-200/50 dark:border-white/5 bg-white/40 dark:bg-gray-900/30">

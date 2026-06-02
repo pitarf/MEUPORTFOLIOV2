@@ -27,10 +27,10 @@ const About = () => {
             <meta name="description" content="Conheça a história, missão, visão e valores da Rafael Pita Solutions. Uma empresa dedicada à inovação e excelência em soluções digitais." />
         </Helmet>
 
-        <div className="pt-20">
+        <div className="pt-20 min-h-screen bg-background text-foreground transition-colors duration-300">
             {/* Hero Section */}
-            <section className="py-20 tech-pattern">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <section className="py-20 tech-pattern relative">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <motion.div initial={{
                         opacity: 0,
                         y: 20
@@ -41,7 +41,7 @@ const About = () => {
                         <h1 className="text-5xl md:text-6xl font-bold mb-6">
                             <span className="gradient-text">Sobre Nós</span>
                         </h1>
-                        <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+                        <p className="text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto font-medium transition-colors duration-300">
                             Conheça a história por trás da Rafael Pita Solutions e nossa paixão por transformar ideias em realidade digital
                         </p>
                     </motion.div>
@@ -60,7 +60,7 @@ const About = () => {
                             x: 0
                         }} className="space-y-6">
                             <h2 className="text-4xl font-bold gradient-text">Nossa História</h2>
-                            <div className="space-y-4 text-gray-300">
+                            <div className="space-y-4 text-slate-700 dark:text-gray-300 font-medium transition-colors duration-300">
                                 <p>
                                     A Rafael Pita Solutions nasceu da paixão por tecnologia e criatividade. Fundada com o objetivo de oferecer soluções digitais completas e inovadoras, nossa empresa cresceu rapidamente, conquistando a confiança de centenas de clientes.
                                 </p>
@@ -87,7 +87,7 @@ const About = () => {
             </section>
 
             {/* Mission, Vision, Values */}
-            <section className="py-20 bg-gray-900/50">
+            <section className="py-20 bg-slate-50 dark:bg-gray-900/40 border-y border-slate-200/50 dark:border-white/5 transition-colors duration-300">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <motion.div initial={{
@@ -97,11 +97,11 @@ const About = () => {
                             opacity: 1,
                             y: 0
                         }} className="text-center space-y-4">
-                            <div className="w-16 h-16 mx-auto bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                            <div className="w-16 h-16 mx-auto bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-md">
                                 <Target className="w-8 h-8 text-white" />
                             </div>
-                            <h3 className="text-2xl font-bold text-white">Missão</h3>
-                            <p className="text-gray-400">
+                            <h3 className="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">Missão</h3>
+                            <p className="text-slate-600 dark:text-gray-400 font-medium transition-colors duration-300">
                                 Transformar ideias em soluções digitais inovadoras, ajudando nossos clientes a alcançar seus objetivos através da tecnologia e criatividade.
                             </p>
                         </motion.div>
@@ -115,11 +115,11 @@ const About = () => {
                         }} transition={{
                             delay: 0.1
                         }} className="text-center space-y-4">
-                            <div className="w-16 h-16 mx-auto bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
+                            <div className="w-16 h-16 mx-auto bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center shadow-md">
                                 <Eye className="w-8 h-8 text-white" />
                             </div>
-                            <h3 className="text-2xl font-bold text-white">Visão</h3>
-                            <p className="text-gray-400">
+                            <h3 className="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">Visão</h3>
+                            <p className="text-slate-600 dark:text-gray-400 font-medium transition-colors duration-300">
                                 Ser reconhecida como a principal referência em soluções digitais criativas, liderando a transformação digital de empresas no Brasil.
                             </p>
                         </motion.div>
@@ -133,11 +133,11 @@ const About = () => {
                         }} transition={{
                             delay: 0.2
                         }} className="text-center space-y-4">
-                            <div className="w-16 h-16 mx-auto bg-gradient-to-r from-pink-500 to-red-600 rounded-full flex items-center justify-center">
+                            <div className="w-16 h-16 mx-auto bg-gradient-to-r from-pink-500 to-red-600 rounded-full flex items-center justify-center shadow-md">
                                 <Heart className="w-8 h-8 text-white" />
                             </div>
-                            <h3 className="text-2xl font-bold text-white">Valores</h3>
-                            <p className="text-gray-400">
+                            <h3 className="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">Valores</h3>
+                            <p className="text-slate-600 dark:text-gray-400 font-medium transition-colors duration-300">
                                 Inovação, qualidade, transparência e compromisso com o sucesso de nossos clientes são os pilares que guiam todas as nossas ações.
                             </p>
                         </motion.div>
@@ -156,7 +156,7 @@ const About = () => {
                         y: 0
                     }} className="text-center mb-16">
                         <h2 className="text-4xl font-bold gradient-text mb-6">Nossos Valores</h2>
-                        <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+                        <p className="text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto font-medium transition-colors duration-300">
                             Os princípios que norteiam nossa empresa e garantem a excelência em tudo que fazemos
                         </p>
                     </motion.div>
@@ -170,14 +170,14 @@ const About = () => {
                             y: 0
                         }} transition={{
                             delay: index * 0.1
-                        }} className="service-card p-8 rounded-xl">
+                        }} className="service-card p-8 rounded-xl border border-slate-200/50 dark:border-white/5 bg-white/40 dark:bg-transparent shadow-lg dark:shadow-none transition-all duration-300">
                             <div className="flex items-start space-x-4">
-                                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
                                     <value.icon className="w-6 h-6 text-white" />
                                 </div>
                                 <div>
-                                    <h3 className="text-xl font-semibold text-white mb-3">{value.title}</h3>
-                                    <p className="text-gray-400">{value.description}</p>
+                                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 transition-colors duration-300">{value.title}</h3>
+                                    <p className="text-slate-600 dark:text-gray-400 font-medium transition-colors duration-300">{value.description}</p>
                                 </div>
                             </div>
                         </motion.div>)}
@@ -186,7 +186,7 @@ const About = () => {
             </section>
 
             {/* Team Section */}
-            <section className="py-20 bg-gray-900/50">
+            <section className="py-20 bg-slate-50 dark:bg-gray-900/40 border-t border-slate-200/50 dark:border-white/5 transition-colors duration-300">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <motion.div initial={{
                         opacity: 0,
@@ -196,7 +196,7 @@ const About = () => {
                         y: 0
                     }} className="text-center mb-16">
                         <h2 className="text-4xl font-bold gradient-text mb-6">Nossa Equipe</h2>
-                        <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+                        <p className="text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto font-medium transition-colors duration-300">
                             Profissionais especializados e apaixonados por tecnologia, unidos pelo objetivo comum de entregar excelência
                         </p>
                     </motion.div>
@@ -210,12 +210,12 @@ const About = () => {
                             y: 0
                         }} className="text-center">
                             <div className="relative mb-6">
-                                <img alt="Rafael Pita - Fundador" className="w-32 h-32 rounded-full mx-auto object-cover" src="https://horizons-cdn.hostinger.com/55810f13-6c54-4da4-a823-2e484d52677d/img_0208-aveV3.JPG" />
-                                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-600/20 rounded-full"></div>
+                                <img alt="Rafael Pita - Fundador" className="w-32 h-32 rounded-full mx-auto object-cover border-4 border-white dark:border-gray-800 shadow-xl transition-colors duration-300" src="https://horizons-cdn.hostinger.com/55810f13-6c54-4da4-a823-2e484d52677d/img_0208-aveV3.JPG" />
+                                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-600/20 rounded-full opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
                             </div>
-                            <h3 className="text-xl font-semibold text-white mb-2">Rafael Pita</h3>
-                            <p className="text-blue-400 mb-3">Fundador & CEO</p>
-                            <p className="text-gray-400 text-sm">
+                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 transition-colors duration-300">Rafael Pita</h3>
+                            <p className="text-blue-600 dark:text-blue-400 mb-3 font-bold transition-colors duration-300">Fundador & CEO</p>
+                            <p className="text-slate-600 dark:text-gray-400 text-sm font-medium transition-colors duration-300">
                                 Especialista em soluções digitais com mais de 10 anos de experiência em tecnologia e design.
                             </p>
                         </motion.div>
@@ -230,12 +230,12 @@ const About = () => {
                             delay: 0.1
                         }} className="text-center">
                             <div className="relative mb-6">
-                                <img alt="Designer Gráfico" className="w-32 h-32 rounded-full mx-auto object-cover" src="https://images.unsplash.com/photo-1495224814653-94f36c0a31ea" />
-                                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-600/20 rounded-full"></div>
+                                <img alt="Designer Gráfico" className="w-32 h-32 rounded-full mx-auto object-cover border-4 border-white dark:border-gray-800 shadow-xl transition-colors duration-300" src="https://images.unsplash.com/photo-1495224814653-94f36c0a31ea" />
+                                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-600/20 rounded-full opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
                             </div>
-                            <h3 className="text-xl font-semibold text-white mb-2">Equipe Design</h3>
-                            <p className="text-purple-400 mb-3">Designers Criativos</p>
-                            <p className="text-gray-400 text-sm">
+                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 transition-colors duration-300">Equipe Design</h3>
+                            <p className="text-purple-600 dark:text-purple-400 mb-3 font-bold transition-colors duration-300">Designers Criativos</p>
+                            <p className="text-slate-600 dark:text-gray-400 text-sm font-medium transition-colors duration-300">
                                 Profissionais especializados em criar identidades visuais marcantes e experiências únicas.
                             </p>
                         </motion.div>
@@ -250,12 +250,12 @@ const About = () => {
                             delay: 0.2
                         }} className="text-center">
                             <div className="relative mb-6">
-                                <img alt="Equipe de Desenvolvimento" className="w-32 h-32 rounded-full mx-auto object-cover" src="https://images.unsplash.com/photo-1634836023845-eddbfe9937da" />
-                                <div className="absolute inset-0 bg-gradient-to-r from-green-500/20 to-blue-600/20 rounded-full"></div>
+                                <img alt="Equipe de Desenvolvimento" className="w-32 h-32 rounded-full mx-auto object-cover border-4 border-white dark:border-gray-800 shadow-xl transition-colors duration-300" src="https://images.unsplash.com/photo-1634836023845-eddbfe9937da" />
+                                <div className="absolute inset-0 bg-gradient-to-r from-green-500/20 to-blue-600/20 rounded-full opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
                             </div>
-                            <h3 className="text-xl font-semibold text-white mb-2">Equipe Tech</h3>
-                            <p className="text-green-400 mb-3">Desenvolvedores</p>
-                            <p className="text-gray-400 text-sm">
+                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 transition-colors duration-300">Equipe Tech</h3>
+                            <p className="text-green-600 dark:text-green-400 mb-3 font-bold transition-colors duration-300">Desenvolvedores</p>
+                            <p className="text-slate-600 dark:text-gray-400 text-sm font-medium transition-colors duration-300">
                                 Especialistas em desenvolvimento web, mobile e soluções tecnológicas avançadas.
                             </p>
                         </motion.div>
