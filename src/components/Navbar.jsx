@@ -80,7 +80,7 @@ const Navbar = () => {
     return (
         <nav
             className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled
-                ? (isPhotography ? 'bg-black/90 border-b border-white/10' : 'bg-white/80 dark:bg-black/20 backdrop-blur-lg border-b border-gray-200/50 dark:border-white/10')
+                ? 'bg-white/80 dark:bg-black/20 backdrop-blur-lg border-b border-gray-200/50 dark:border-white/10'
                 : 'bg-transparent border-transparent py-4'
                 }`}
         >
@@ -129,24 +129,22 @@ const Navbar = () => {
 
                         <div className="flex items-center gap-4 border-l border-gray-200 dark:border-gray-700 pl-4 ml-2">
                             {/* Toggle de Tema Claro/Escuro */}
-                            {!isPhotography && (
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    onClick={toggleTheme}
-                                    className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-white/10"
-                                    title={theme === 'light' ? 'Ativar Modo Escuro' : 'Ativar Modo Claro'}
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={toggleTheme}
+                                className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-white/10"
+                                title={theme === 'light' ? 'Ativar Modo Escuro' : 'Ativar Modo Claro'}
+                            >
+                                <motion.div
+                                    key={theme}
+                                    initial={{ rotate: -30, opacity: 0 }}
+                                    animate={{ rotate: 0, opacity: 1 }}
+                                    transition={{ duration: 0.2 }}
                                 >
-                                    <motion.div
-                                        key={theme}
-                                        initial={{ rotate: -30, opacity: 0 }}
-                                        animate={{ rotate: 0, opacity: 1 }}
-                                        transition={{ duration: 0.2 }}
-                                    >
-                                        {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5 text-yellow-400" />}
-                                    </motion.div>
-                                </Button>
-                            )}
+                                    {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5 text-yellow-400" />}
+                                </motion.div>
+                            </Button>
 
                             {/* Client Area Dropdown */}
                             <DropdownMenu>
@@ -170,7 +168,7 @@ const Navbar = () => {
                             </DropdownMenu>
 
                             <Link to="/contato">
-                                <Button className={`${isPhotography ? 'bg-white text-black hover:bg-gray-200' : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700'} shadow-lg transition-all`}>
+                                <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-lg transition-all text-white font-bold">
                                     Orçamento
                                 </Button>
                             </Link>
@@ -179,16 +177,14 @@ const Navbar = () => {
 
                     <div className="lg:hidden flex items-center gap-2">
                         {/* Toggle de Tema Claro/Escuro Mobile */}
-                        {!isPhotography && (
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={toggleTheme}
-                                className="text-gray-600 dark:text-gray-300 hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-white/10"
-                            >
-                                {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5 text-yellow-400" />}
-                            </Button>
-                        )}
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={toggleTheme}
+                            className="text-gray-600 dark:text-gray-300 hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-white/10"
+                        >
+                            {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5 text-yellow-400" />}
+                        </Button>
 
                         <Button
                             variant="ghost"

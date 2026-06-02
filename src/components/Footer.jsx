@@ -30,13 +30,11 @@ const Footer = () => {
     }];
     const services = ['Design Gráfico', 'Fotografia', 'Desenvolvimento Web', 'Dashboards Power BI', 'Vídeos com IA', 'Tráfego Pago', 'Manutenção de PCs', 'Instalação CFTV'];
 
-    // Dynamic Styles for Photography
-    const footerBg = isPhotography ? 'bg-black border-white/10' : 'bg-slate-50 dark:bg-gray-900/90 border-slate-200 dark:border-white/10';
-    const textHover = isPhotography ? 'hover:text-white' : 'hover:text-blue-600 dark:hover:text-blue-400';
-    const iconColor = isPhotography ? 'text-white' : 'text-blue-600 dark:text-blue-400';
-    const socialBtnClass = (colorClass) => isPhotography
-        ? 'w-10 h-10 bg-white text-black rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors'
-        : `w-10 h-10 ${colorClass} rounded-full flex items-center justify-center hover:opacity-90 transition-colors shadow-sm`;
+    // Dynamic Styles for Footer
+    const footerBg = 'bg-slate-50 dark:bg-gray-900/90 border-slate-200 dark:border-white/10';
+    const textHover = 'hover:text-blue-600 dark:hover:text-blue-400';
+    const iconColor = 'text-blue-600 dark:text-blue-400';
+    const socialBtnClass = (colorClass) => `w-10 h-10 ${colorClass} rounded-full flex items-center justify-center hover:opacity-90 transition-colors shadow-sm`;
 
     return <footer className={`${footerBg} border-t transition-colors duration-300`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -47,11 +45,11 @@ const Footer = () => {
                         {config?.logo_url ? (
                             <img src={config.logo_url} alt={siteName} className="h-10 w-auto object-contain" />
                         ) : (
-                            <div className={`w-10 h-10 ${isPhotography ? 'bg-white' : 'bg-gradient-to-r from-blue-500 to-purple-600'} rounded-lg flex items-center justify-center`}>
-                                <Zap className={`w-6 h-6 ${isPhotography ? 'text-black' : 'text-white'}`} />
+                            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                <Zap className="w-6 h-6 text-white" />
                             </div>
                         )}
-                        <span className={`text-xl font-bold ${isPhotography ? 'text-white' : 'gradient-text'}`}>{siteName}</span>
+                        <span className="text-xl font-bold gradient-text">{siteName}</span>
                     </div>
                     <p className="text-gray-600 dark:text-gray-400 text-sm">
                         {description}
@@ -120,7 +118,7 @@ const Footer = () => {
                 </div>
             </div>
 
-            <div className={`border-t mt-8 pt-8 text-center ${isPhotography ? 'border-white/10' : 'border-slate-200 dark:border-gray-800'}`}>
+            <div className="border-t mt-8 pt-8 text-center border-slate-200 dark:border-gray-800">
                 <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">
                     © {new Date().getFullYear()} {siteName}. Todos os direitos reservados.
                 </p>

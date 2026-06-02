@@ -26,9 +26,13 @@ Roadmap de acompanhamento para a reestruturação visual de alta conversão, com
 - [x] **Legibilidade do Tema Claro em Serviços (`Services.jsx`)**: Refatoração das cores estáticas pretas e brancas por classes adaptativas (HSL) e novos fundos de seções corporativas, garantindo legibilidade perfeita e refinamento estético premium.
 - [x] **Correção de Cores Purgadas e Ícones Invisíveis (`Services.jsx`)**: Implementação de mapeamento estático e literal de gradientes de cores (`serviceColors`) no front-end para evitar a purga do Tailwind CSS, restaurando a visibilidade de todos os ícones da página.
 - [x] **Otimização de Espaçamento no Hero (`Home.jsx`)**: Redução em 30-40% do padding top acumulado (section principal ajustada para `sm:pt-24` conforme feedback e div interna) no Hero, aproximando a logo e o nome da marca em relação à navbar de forma fluida.
+- [x] **Redesenho Completo da Seção de Fotografia (`PhotographyLanding.jsx` & `PhotographyPortfolio.jsx`)**: Reestruturação das duas páginas para dar-lhes uma identidade de estúdio de luxo e galeria de arte com suporte adaptável Claro/Escuro completo, layout de grade simétrico regular na galeria, filtros rápidos horizontais deslizantes e total integração à Navbar/Footer dinâmicos.
+- [x] **Grade Simétrica Uniforme da Galeria de Fotografia (`PhotographyPortfolio.jsx`)**: Implantação de cartões de imagem fixos em `aspect-[3/2]` com cantos arredondados e remoção da cortina escura do hover para 100% de visibilidade das fotos, com títulos, nichos e link "VER GALERIA" perfeitamente centralizados por baixo de cada imagem.
+- [x] **Reatividade e Contraste Premium no Tema Claro (Oportuno)**: Liberação e adaptação total de contraste para toda a galeria de fotografia no Tema Claro. O fundo, seletores de abas rápidas, botões e campo de pesquisa transitam suavemente com cores de altíssimo nível de legibilidade (fundo marfim/claro, tipografia escura sofisticada e acendimento em azul no hover).
+- [x] **Visibilidade Otimizada das Fotos do Hero (`PhotographyLanding.jsx`)**: Ajustada a opacidade das imagens do slideshow de fundo (aumentada para `opacity-70` no claro e `opacity-80` no escuro) e suavizados os overlays de fusão do Hero. Isso enaltece a nitidez e a vivacidade das fotografias artísticas, assegurando ao mesmo tempo contraste e legibilidade perfeita para a tipografia em primeiro plano.
 
 ## EM ANDAMENTO (DOING)
-*Nenhuma tarefa em andamento. Ajustes visuais 100% implementados, validados com build e documentados.*
+*Nenhuma tarefa em andamento. Ajustes visuais e de design 100% implementados, validados com build e documentados.*
 
 ## PENDENTE (TODO)
 - [ ] Mapeamento e coleta de feedbacks dos usuários corporativos após lançamento em produção.

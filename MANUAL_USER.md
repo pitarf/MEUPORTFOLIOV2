@@ -90,9 +90,11 @@ Pensando na usabilidade comercial e na experiência dos seus clientes, o seu por
 - O usuário pode alternar para o **Tema Escuro** clicando no botão do **Sol / Lua** localizado na ponta direita da barra de navegação superior (Navbar), tanto em computadores quanto em celulares.
 - A mudança ocorre de forma extremamente suave, utilizando micro-transições visuais que adaptam todos os botões, cartões, formulários e textos sem perder a elegibilidade da marca.
 
-### 6.3 Isolamento da Galeria de Fotografia (`/portfolio-fotografia`)
-- **Destaque Artístico**: Independentemente de o usuário estar navegando no Tema Claro ou Tema Escuro, a página de portfólio fotográfico `/portfolio-fotografia` é mantida permanentemente no **Tema Escuro**.
-- Isso foi implementado de forma intencional para garantir que o contraste profundo das fotografias artísticas, ensaios e produções corporativas se sobressaiam em fundos escuros de padrão cinematográfico, sem distrações.
+### 6.3 Integração de Temas na Galeria de Fotografia (`/portfolio-fotografia`)
+
+* **Identidade Dupla Premium**: A área de fotografia e a galeria de trabalhos agora respondem totalmente ao alternador de temas global do site.
+* **Modo Claro (Light Mode) Editorial**: Ao selecionar o tema claro, as fotos são apresentadas sobre um fundo marfim ultra-limpo. Toda a tipografia de títulos, nichos e o link sutil "VER GALERIA" mudam para tons escuros de alta legibilidade, lembrando o layout de catálogos artísticos de museus e revistas de luxo.
+* **Modo Escuro (Dark Mode) Imersivo**: Ao acionar o tema escuro, a tela transita para pretos cinematográficos puros, destacando cada detalhe de iluminação e as cores intensas capturadas nas lentes.
 
 ---
 

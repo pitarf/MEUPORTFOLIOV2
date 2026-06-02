@@ -31,8 +31,14 @@ As classes premium utilitárias adaptam-se dinamicamente conforme a classe `.dar
   * *Tema Claro*: Gradiente escuro de azul a violeta para legibilidade impecável e contraste em fundos brancos.
   * *Tema Escuro*: Gradiente brilhante lavanda original.
 
-### 1.3 Isolamento da Seção de Fotografia
-Para manter a identidade visual clássica de estúdios fotográficos profissionais de luxo, a área de fotografia (`/portfolio-fotografia`) possui **Tema Escuro forçado**. Independentemente da seleção do usuário global, o cabeçalho e rodapé desta seção são travados no tema escuro para assegurar o maior realce artístico e contraste das fotos corporativas e artísticas do profissional.
+### 1.3 Integração e Reatividade Total de Temas na Fotografia
+
+Diferente da estrutura legada que forçava o Tema Escuro em toda a área de fotografia (`/portfolio-fotografia` e `/portfolio-fotografia/galeria`), a seção foi integralmente integrada ao alternador dinâmico de temas da Navbar. 
+
+1. **Tema Claro Editorial (Light Mode)**: Foco em fundos marfim/branco limpos, molduras finas, tipografia em cinza-escuro (`text-gray-900`) e rótulos discretos em cinza (`text-gray-400`), resultando em um visual de portfólio artístico de altíssimo nível.
+2. **Tema Escuro Cinematográfico (Dark Mode)**: Preservação de fundos pretos espaciais profundos de alto contraste e realce cromático de fotos em lote.
+
+As páginas transitam suavemente através do wrapper `min-h-screen bg-background text-foreground transition-colors duration-300`.
 
 ---
 
