@@ -155,6 +155,15 @@ body {
     animation: marquee-reverse 60s linear infinite;
 }
 
+@media (max-width: 768px) {
+    .animate-marquee {
+        animation: marquee 16s linear infinite;
+    }
+    .animate-marquee-reverse {
+        animation: marquee-reverse 16s linear infinite;
+    }
+}
+
 @keyframes float {
     0%, 100% {
         transform: translateY(0px);

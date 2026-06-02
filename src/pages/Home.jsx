@@ -107,13 +107,13 @@ const Home = () => {
             </Helmet>
 
             {/* Hero Section */}
-            <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background text-foreground transition-colors duration-300 pt-24 sm:pt-24 pb-24 md:pb-32 -mt-20">
+            <section className="relative min-h-0 md:min-h-screen flex items-center justify-center overflow-hidden bg-background text-foreground transition-colors duration-300 pt-28 pb-12 md:py-0 -mt-20">
                 {/* Project Marquee Background */}
                 <div className="absolute inset-0 z-0 opacity-30 dark:opacity-20 overflow-hidden transition-opacity duration-300 pointer-events-none">
                     <div className="absolute top-10 left-0 w-full rotate-[-5deg]">
                         <div className="flex gap-4 animate-marquee whitespace-nowrap">
                             {bgProjects.map((proj, idx) => (
-                                <div key={`row1-${idx}`} className="w-[500px] h-[330px] rounded-xl overflow-hidden flex-shrink-0 border border-gray-200/10 dark:border-white/5 bg-gray-100 dark:bg-gray-800 shadow-lg">
+                                <div key={`row1-${idx}`} className="w-[280px] h-[180px] md:w-[500px] md:h-[330px] rounded-xl overflow-hidden flex-shrink-0 border border-gray-200/10 dark:border-white/5 bg-gray-100 dark:bg-gray-800 shadow-lg">
                                     <img src={proj.main_image_url || "https://images.unsplash.com/photo-1550745165-9bc0b252726f"} className="w-full h-full object-cover opacity-80" alt="" />
                                 </div>
                             ))}
@@ -122,7 +122,7 @@ const Home = () => {
                     <div className="absolute bottom-10 left-0 w-full rotate-[5deg]">
                         <div className="flex gap-4 animate-marquee-reverse whitespace-nowrap">
                             {bgProjects.map((proj, idx) => (
-                                <div key={`row2-${idx}`} className="w-[500px] h-[330px] rounded-xl overflow-hidden flex-shrink-0 border border-gray-200/10 dark:border-white/5 bg-gray-100 dark:bg-gray-800 shadow-lg">
+                                <div key={`row2-${idx}`} className="w-[280px] h-[180px] md:w-[500px] md:h-[330px] rounded-xl overflow-hidden flex-shrink-0 border border-gray-200/10 dark:border-white/5 bg-gray-100 dark:bg-gray-800 shadow-lg">
                                     <img src={proj.main_image_url || "https://images.unsplash.com/photo-1550745165-9bc0b252726f"} className="w-full h-full object-cover opacity-80" alt="" />
                                 </div>
                             ))}

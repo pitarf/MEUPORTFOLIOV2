@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { ExternalLink, ArrowRight, Camera, Loader2, ArrowLeft, Search, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useTheme } from '@/contexts/ThemeContext';
 
@@ -36,7 +36,9 @@ const PhotographyPortfolio = () => {
     const [filteredProjects, setFilteredProjects] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const [activeTab, setActiveTab] = useState('all');
+    const [searchParams] = useSearchParams();
+    const nichoParam = searchParams.get('nicho');
+    const [activeTab, setActiveTab] = useState(nichoParam || 'all');
 
     const fetchPhotographyProjects = useCallback(async () => {
         setLoading(true);

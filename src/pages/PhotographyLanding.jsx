@@ -140,8 +140,9 @@ const PhotographyLanding = () => {
                 // Shuffle images for randomness
                 const shuffled = allImages.sort(() => 0.5 - Math.random());
 
-                // Limit to say 50 images max
-                setBgImages(shuffled.slice(0, 50));
+                // Limit to say 50 images max (or 12 on mobile to load fast and slide smoothly)
+                const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+                setBgImages(shuffled.slice(0, isMobile ? 12 : 50));
 
                 // Shuffle each niche group images
                 Object.keys(grouped).forEach(k => {
@@ -172,7 +173,7 @@ const PhotographyLanding = () => {
     const heroSubtitle = content?.hero_subtitle || "Mais do que fotos, entregamos memórias. Um olhar artístico para os momentos mais importantes da sua vida e do seu negócio.";
     const heroImage = content?.hero_image_url || "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4";
 
-    // Default niches
+    // Default niches (Ensaios antes de Eventos conforme solicitação)
     const defaultNiches = [
         {
             title: 'Casamentos',
@@ -180,18 +181,29 @@ const PhotographyLanding = () => {
             image: 'https://images.unsplash.com/photo-1511285560982-1351cdeb9821'
         },
         {
-            title: 'Eventos',
-            description: 'Cobertura dinâmica e completa para congressos corporativos e celebrações sociais.',
-            image: 'https://images.unsplash.com/photo-1511578314322-379afb476865'
-        },
-        {
             title: 'Ensaios',
             description: 'Retratos artísticos e corporativos que valorizam sua autoridade, essência e presença.',
             image: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04'
+        },
+        {
+            title: 'Eventos',
+            description: 'Cobertura dinâmica e completa para congressos corporativos e celebrações sociais.',
+            image: 'https://images.unsplash.com/photo-1511578314322-379afb476865'
         }
     ];
 
-    const niches = (content?.specialties && content.specialties.length > 0) ? content.specialties : defaultNiches;
+    const orderMap = {
+        'casamentos': 1,
+        'ensaios': 2,
+        'eventos': 3
+    };
+
+    // Ordenação garantida das especialidades: Casamentos -> Ensaios -> Eventos
+    const niches = [...((content?.specialties && content.specialties.length > 0) ? content.specialties : defaultNiches)].sort((a, b) => {
+        const orderA = orderMap[a.title.toLowerCase()] || 99;
+        const orderB = orderMap[b.title.toLowerCase()] || 99;
+        return orderA - orderB;
+    });
 
 
     // Classes dinâmicas baseadas no tema para controle de contraste impecável do slideshow
@@ -211,13 +223,13 @@ const PhotographyLanding = () => {
             <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
 
                 {/* Hero Section */}
-                <section className="relative h-screen flex items-center justify-center overflow-hidden -mt-20">
+                <section className="relative min-h-0 md:h-screen flex items-center justify-center overflow-hidden pt-24 pb-6 md:py-0 -mt-20">
                     <div className="absolute inset-0 z-0">
                         {bgImages.length > 0 ? (
                             bgImages.map((img, index) => (
                                 <div
                                     key={img}
-                                    className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentImageIndex ? imageOpacityClass : 'opacity-0'}`}
+                                    className={`absolute inset-0 transition-opacity duration-1000 ease-in-out transform-gpu will-change-[opacity] ${index === currentImageIndex ? imageOpacityClass : 'opacity-0'}`}
                                 >
                                     <img
                                         src={img}
@@ -239,7 +251,7 @@ const PhotographyLanding = () => {
                         <div className="absolute inset-0 bg-background/10 dark:bg-transparent pointer-events-none" />
                     </div>
 
-                    <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20">
+                    <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-12 md:pt-20">
                         <motion.div
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -276,7 +288,7 @@ const PhotographyLanding = () => {
                 </section>
 
                 {/* Niches / Specialties */}
-                <section className="py-32 bg-background transition-colors duration-300 border-y border-slate-200/50 dark:border-white/5">
+                <section className="py-16 md:py-32 bg-background transition-colors duration-300 border-y border-slate-200/50 dark:border-white/5">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
@@ -291,7 +303,7 @@ const PhotographyLanding = () => {
                             </p>
                         </motion.div>
 
-                        <div className="space-y-32">
+                        <div className="space-y-24 md:space-y-32">
                             {niches.map((niche, index) => {
                                 const nicheKey = niche.title.toLowerCase() === 'casamentos' 
                                     ? 'casamentos' 
@@ -322,8 +334,8 @@ const PhotographyLanding = () => {
                                             <p className="text-lg md:text-xl text-slate-600 dark:text-gray-400 font-medium leading-relaxed max-w-lg mx-auto md:mx-0">
                                                 {niche.description}
                                             </p>
-                                            <div className="pt-8">
-                                                <Link to={galleryPath}>
+                                            <div className="pt-0 md:pt-2">
+                                                <Link to={`${galleryPath}?nicho=${nicheKey}`}>
                                                     <Button variant="outline" className="rounded-full px-10 py-7 text-lg border-slate-300 dark:border-white/20 text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-all font-semibold">
                                                         Ver Trabalhos
                                                     </Button>
@@ -338,7 +350,7 @@ const PhotographyLanding = () => {
                 </section>
 
                 {/* Portfolio Feed / Últimos Trabalhos */}
-                <section id="portfolio" className="py-32 bg-slate-50 dark:bg-gray-900/30 transition-colors duration-300">
+                <section id="portfolio" className="py-16 md:py-32 bg-slate-50 dark:bg-gray-900/30 transition-colors duration-300">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
                             <div className="max-w-2xl space-y-4">
@@ -369,7 +381,7 @@ const PhotographyLanding = () => {
                 </section>
 
                 {/* CTA Final Premium */}
-                <section className="py-32 relative overflow-hidden bg-slate-900 dark:bg-black transition-colors duration-300">
+                <section className="py-16 md:py-32 relative overflow-hidden bg-slate-900 dark:bg-black transition-colors duration-300">
                     <div className="absolute inset-0 opacity-30 bg-[url('https://images.unsplash.com/photo-1511285560982-1351cdeb9821')] bg-cover bg-center mix-blend-overlay"></div>
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-slate-900/40 dark:from-black dark:via-black/90 dark:to-black/60"></div>
                     <div className="max-w-4xl mx-auto px-4 relative z-10 text-center">
