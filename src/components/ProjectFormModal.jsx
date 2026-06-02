@@ -269,19 +269,19 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
 
     return (
         <Dialog open={true} onOpenChange={onClose}>
-            <DialogContent className="max-h-[95vh] overflow-y-auto max-w-4xl bg-gray-900 border-gray-800 text-gray-100">
+            <DialogContent className="max-h-[95vh] overflow-y-auto max-w-4xl bg-card border-border text-foreground">
                 <DialogHeader>
                     <DialogTitle className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
                         {isEditing ? 'Editar Projeto' : 'Novo Projeto'}
                     </DialogTitle>
-                    <DialogDescription className="text-gray-400">
+                    <DialogDescription className="text-muted-foreground">
                         Preencha os detalhes do projeto, gere conteúdo com IA e gerencie as imagens.
                     </DialogDescription>
                 </DialogHeader>
 
                 <form id="project-form" onSubmit={handleSubmit} className="space-y-6">
                     <Tabs className="w-full">
-                        <TabsList className="grid w-full grid-cols-3 mb-6 bg-gray-800/50 p-1 rounded-lg">
+                        <TabsList className="grid w-full grid-cols-3 mb-6 bg-muted p-1 rounded-lg">
                             <TabsTrigger
                                 onClick={() => setActiveTab('info')}
                                 isActive={activeTab === 'info'}
@@ -310,16 +310,16 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <Label>Título</Label>
-                                    <Input name="title" value={formData.title} onChange={handleInputChange} required className="bg-gray-800 border-gray-700" />
+                                    <Input name="title" value={formData.title} onChange={handleInputChange} required />
                                 </div>
                                 <div className="space-y-2">
                                     <Label>Slug</Label>
-                                    <Input name="slug" value={formData.slug} onChange={handleInputChange} required className="bg-gray-800 border-gray-700" />
+                                    <Input name="slug" value={formData.slug} onChange={handleInputChange} required />
                                 </div>
                                 <div className="space-y-2">
                                     <Label>Categoria</Label>
                                     <Select name="category_id" value={String(formData.category_id)} onValueChange={(v) => handleSelectChange('category_id', v)}>
-                                        <SelectTrigger className="bg-gray-800 border-gray-700"><SelectValue placeholder="Selecione..." /></SelectTrigger>
+                                        <SelectTrigger><SelectValue placeholder="Selecione..." /></SelectTrigger>
                                         <SelectContent>
                                             {categories.map(c => <SelectItem key={c.id} value={String(c.id)}>{c.title}</SelectItem>)}
                                         </SelectContent>
@@ -327,55 +327,55 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
                                 </div>
                                 <div className="space-y-2">
                                     <Label>Cliente</Label>
-                                    <Input name="client" value={formData.client} onChange={handleInputChange} className="bg-gray-800 border-gray-700" />
+                                    <Input name="client" value={formData.client} onChange={handleInputChange} />
                                 </div>
                                 <div className="space-y-2">
                                     <Label>Ano</Label>
-                                    <Input name="year" type="number" value={formData.year} onChange={handleInputChange} className="bg-gray-800 border-gray-700" />
+                                    <Input name="year" type="number" value={formData.year} onChange={handleInputChange} />
                                 </div>
                                 <div className="space-y-2">
                                     <Label>Serviços</Label>
-                                    <Input name="services" value={formData.services} onChange={handleInputChange} className="bg-gray-800 border-gray-700" />
+                                    <Input name="services" value={formData.services} onChange={handleInputChange} />
                                 </div>
                             </div>
                             <div className="space-y-2">
                                 <Label>Link do Projeto</Label>
-                                <Input name="project_url" value={formData.project_url} onChange={handleInputChange} className="bg-gray-800 border-gray-700" />
+                                <Input name="project_url" value={formData.project_url} onChange={handleInputChange} />
                             </div>
                         </TabsContent>
 
                         {/* CONTENT TAB */}
                         <TabsContent isActive={activeTab === 'content'} className="space-y-6">
-                            <div className="flex justify-between items-center bg-purple-900/20 p-4 rounded-lg border border-purple-500/20">
+                            <div className="flex justify-between items-center bg-purple-500/10 dark:bg-purple-950/20 p-4 rounded-lg border border-purple-500/20">
                                 <div>
-                                    <h3 className="text-purple-400 font-semibold flex items-center gap-2"><Sparkles className="w-4 h-4" /> Gerador IA</h3>
-                                    <p className="text-xs text-gray-400">Gere descrições automáticas com base no título.</p>
+                                    <h3 className="text-purple-600 dark:text-purple-400 font-semibold flex items-center gap-2"><Sparkles className="w-4 h-4" /> Gerador IA</h3>
+                                    <p className="text-xs text-muted-foreground">Gere descrições automáticas com base no título.</p>
                                 </div>
-                                <Button type="button" variant="outline" onClick={handleGenerateAI} disabled={aiLoading} className="border-purple-500 text-purple-400">
+                                <Button type="button" variant="outline" onClick={handleGenerateAI} disabled={aiLoading} className="border-purple-500/30 text-purple-600 dark:text-purple-400 hover:bg-purple-500/10 hover:text-purple-700 dark:hover:text-purple-300">
                                     {aiLoading ? <Loader2 className="animate-spin w-4 h-4" /> : <Wand2 className="w-4 h-4" />} Gerar
                                 </Button>
                             </div>
                             <div className="space-y-3">
                                 <Label>Descrição Curta</Label>
-                                <Textarea name="description" value={formData.description} onChange={handleInputChange} className="bg-gray-800 border-gray-700" />
+                                <Textarea name="description" value={formData.description} onChange={handleInputChange} />
                                 <div className="grid md:grid-cols-2 gap-4">
-                                    <div><Label>Desafio</Label><Textarea name="challenge" value={formData.challenge} onChange={handleInputChange} className="bg-gray-800 border-gray-700" /></div>
-                                    <div><Label>Solução</Label><Textarea name="solution" value={formData.solution} onChange={handleInputChange} className="bg-gray-800 border-gray-700" /></div>
+                                    <div><Label>Desafio</Label><Textarea name="challenge" value={formData.challenge} onChange={handleInputChange} /></div>
+                                    <div><Label>Solução</Label><Textarea name="solution" value={formData.solution} onChange={handleInputChange} /></div>
                                 </div>
-                                <Label>Resultados</Label><Textarea name="results" value={formData.results} onChange={handleInputChange} className="bg-gray-800 border-gray-700" />
-                                <Label>Vídeos (URLs)</Label><Input name="video_urls" value={formData.video_urls} onChange={handleInputChange} className="bg-gray-800 border-gray-700" />
+                                <Label>Resultados</Label><Textarea name="results" value={formData.results} onChange={handleInputChange} />
+                                <Label>Vídeos (URLs)</Label><Input name="video_urls" value={formData.video_urls} onChange={handleInputChange} />
                             </div>
                         </TabsContent>
 
                         {/* MEDIA TAB */}
                         <TabsContent isActive={activeTab === 'media'} className="space-y-8">
                             {/* MAIN IMAGE */}
-                            <div className="p-4 rounded-lg bg-gray-800/30 border border-gray-700 space-y-4">
+                            <div className="p-4 rounded-lg bg-muted/30 border border-border space-y-4">
                                 <div className="flex justify-between items-center">
-                                    <h3 className="font-semibold text-gray-300 flex items-center gap-2"><ImageIcon className="w-4 h-4" /> Capa Principal</h3>
+                                    <h3 className="font-semibold text-foreground flex items-center gap-2"><ImageIcon className="w-4 h-4" /> Capa Principal</h3>
                                     <div className="w-40">
                                         <Select name="main_image_aspect_ratio" value={formData.main_image_aspect_ratio} onValueChange={(v) => handleSelectChange('main_image_aspect_ratio', v)}>
-                                            <SelectTrigger className="h-8 text-xs bg-gray-900 border-gray-700"><SelectValue /></SelectTrigger>
+                                            <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value="16:9">Paisagem (16:9)</SelectItem>
                                                 <SelectItem value="4:3">Padrão (4:3)</SelectItem>
@@ -387,13 +387,13 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-                                    <Label className="cursor-pointer md:col-span-1 h-32 border-2 border-dashed border-gray-600 rounded-lg flex flex-col items-center justify-center hover:border-blue-500 hover:text-blue-400 transition-colors bg-gray-800/50">
+                                    <Label className="cursor-pointer md:col-span-1 h-32 border-2 border-dashed border-muted-foreground/45 rounded-lg flex flex-col items-center justify-center hover:border-primary hover:text-primary transition-colors bg-muted/50">
                                         <UploadCloud className="w-8 h-8 mb-2" />
                                         <span className="text-xs">Selecionar Capa</span>
                                         <Input type="file" onChange={handleMainImageSelect} accept="image/*" className="hidden" />
                                     </Label>
 
-                                    <div className="md:col-span-2 relative aspect-video bg-gray-900 rounded-lg overflow-hidden border border-gray-800 flex items-center justify-center">
+                                    <div className="md:col-span-2 relative aspect-video bg-muted rounded-lg overflow-hidden border border-border flex items-center justify-center">
                                         {mainImagePreview ? (
                                             <div className="relative group w-full h-full">
                                                 <img src={mainImagePreview} className="w-full h-full object-contain" alt="Preview" />
@@ -405,18 +405,18 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
                                             </div>
                                         ) : (formData.main_image_url ? (
                                             <img src={formData.main_image_url} className="w-full h-full object-cover opacity-50" alt="Current" />
-                                        ) : <span className="text-gray-600 text-sm">Nenhuma capa selecionada</span>)}
+                                        ) : <span className="text-muted-foreground/60 text-sm">Nenhuma capa selecionada</span>)}
                                     </div>
                                 </div>
                             </div>
 
                             {/* GALLERY */}
-                            <div className="p-4 rounded-lg bg-gray-800/30 border border-gray-700 space-y-4">
+                            <div className="p-4 rounded-lg bg-muted/30 border border-border space-y-4">
                                 <div className="flex justify-between items-center">
-                                    <h3 className="font-semibold text-gray-300 flex items-center gap-2"><LayoutGrid className="w-4 h-4" /> Galeria</h3>
+                                    <h3 className="font-semibold text-foreground flex items-center gap-2"><LayoutGrid className="w-4 h-4" /> Galeria</h3>
                                     <div className="w-40">
                                         <Select name="gallery_aspect_ratio" value={formData.gallery_aspect_ratio} onValueChange={(v) => handleSelectChange('gallery_aspect_ratio', v)}>
-                                            <SelectTrigger className="h-8 text-xs bg-gray-900 border-gray-700"><SelectValue /></SelectTrigger>
+                                            <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value="16:9">PowerBI / Wide (16:9)</SelectItem>
                                                 <SelectItem value="4:3">Padrão (4:3)</SelectItem>
@@ -428,7 +428,7 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
                                     </div>
                                 </div>
 
-                                <Label className="cursor-pointer block border-2 border-dashed border-gray-600 rounded-lg p-8 text-center hover:border-blue-500 hover:text-blue-400 transition-colors bg-gray-800/50">
+                                <Label className="cursor-pointer block border-2 border-dashed border-muted-foreground/45 rounded-lg p-8 text-center hover:border-primary hover:text-primary transition-colors bg-muted/50">
                                     <PlusCircle className="w-8 h-8 mx-auto mb-2" />
                                     <span className="text-sm">Adicionar imagens à galeria</span>
                                     <Input type="file" multiple onChange={handleGalleryImagesSelect} accept="image/*" className="hidden" />
@@ -438,7 +438,7 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
                                 {galleryImages.length > 0 && (
                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                                         {galleryImages.map((img, idx) => (
-                                            <div key={img.id} className="relative group aspect-square rounded-md overflow-hidden bg-gray-900 border border-gray-700">
+                                            <div key={img.id} className="relative group aspect-square rounded-md overflow-hidden bg-muted border border-border">
                                                 <img src={img.preview} className="w-full h-full object-cover" alt="New Gallery Item" />
                                                 <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                                     <Button type="button" size="icon" variant="secondary" className="h-8 w-8" onClick={() => handleCropGalleryImage(idx)}>
@@ -456,11 +456,11 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
 
                                 {/* Existing Gallery */}
                                 {isEditing && formData.gallery_urls?.length > 0 && (
-                                    <div className="pt-4 border-t border-gray-700">
-                                        <h4 className="text-xs text-gray-500 uppercase font-bold mb-3">Imagens Já Salvas</h4>
+                                    <div className="pt-4 border-t border-border">
+                                        <h4 className="text-xs text-muted-foreground uppercase font-bold mb-3">Imagens Já Salvas</h4>
                                         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                                             {formData.gallery_urls.map((url, idx) => (
-                                                <div key={idx} className="relative group aspect-square rounded-md overflow-hidden bg-gray-900 opacity-75 hover:opacity-100 transition-opacity">
+                                                <div key={idx} className="relative group aspect-square rounded-md overflow-hidden bg-muted opacity-75 hover:opacity-100 transition-opacity">
                                                     <img src={url} className="w-full h-full object-cover" alt="Saved" />
                                                     <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                                         <Button type="button" size="icon" variant="destructive" className="h-8 w-8" onClick={() => handleDeleteGalleryUrl(url)}>

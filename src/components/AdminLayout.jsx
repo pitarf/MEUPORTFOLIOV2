@@ -15,10 +15,13 @@ import {
     Home,
     User,
     Settings, // Added
-    Image
+    Image,
+    Sun,
+    Moon
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
+import { useTheme } from '@/contexts/ThemeContext';
 
 const SidebarItem = ({ icon: Icon, label, path, isActive, collapsed, isExternal }) => {
     const Content = (
@@ -51,6 +54,7 @@ const SidebarItem = ({ icon: Icon, label, path, isActive, collapsed, isExternal 
 
 const AdminLayout = () => {
     const { isAdmin, signOut } = useAuth();
+    const { theme, toggleTheme } = useTheme();
     const navigate = useNavigate();
     const location = useLocation();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -144,7 +148,21 @@ const AdminLayout = () => {
                 </div>
 
                 {/* Footer Actions */}
-                <div className="p-3 border-t border-border">
+                <div className="p-3 border-t border-border space-y-1">
+                    <button
+                        onClick={toggleTheme}
+                        className={`
+                            flex items-center gap-3 w-full px-4 py-3 rounded-lg
+                            text-muted-foreground hover:bg-muted hover:text-foreground
+                            transition-colors
+                            ${collapsed ? 'justify-center' : ''}
+                        `}
+                        title={theme === 'light' ? 'Ativar Modo Escuro' : 'Ativar Modo Claro'}
+                    >
+                        {theme === 'light' ? <Moon size={20} /> : <Sun size={20} className="text-yellow-500" />}
+                        {!collapsed && <span className="font-medium">{theme === 'light' ? 'Modo Escuro' : 'Modo Claro'}</span>}
+                    </button>
+
                     <button
                         onClick={handleSignOut}
                         className={`
@@ -170,6 +188,15 @@ const AdminLayout = () => {
                         </Button>
                         <span className="font-semibold text-lg">Menu</span>
                     </div>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={toggleTheme}
+                        className="text-muted-foreground hover:text-foreground"
+                        title={theme === 'light' ? 'Ativar Modo Escuro' : 'Ativar Modo Claro'}
+                    >
+                        {theme === 'light' ? <Moon size={20} /> : <Sun size={20} className="text-yellow-500" />}
+                    </Button>
                 </header>
 
                 {/* Content */}
