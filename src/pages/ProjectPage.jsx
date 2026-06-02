@@ -66,6 +66,19 @@ const ProjectPage = () => {
             console.error('Error fetching project:', error);
             navigate('/portfolio');
         } else {
+            // Mapeamento dinâmico de títulos corporativos compactos e refinados
+            if (data.category) {
+                const slug = (data.category.slug || '').toLowerCase();
+                const title = (data.category.title || '').toLowerCase();
+
+                if (slug === 'desenvolvimento-de-sites' || title === 'desenvolvimento de sites') {
+                    data.category.title = 'Sites';
+                } else if (slug === 'dashboards-em-power-bi' || title === 'dashboards em power bi') {
+                    data.category.title = 'Power BI';
+                } else if (slug === 'producao-com-ia' || title === 'produção com ia' || title === 'produção ia') {
+                    data.category.title = 'Produção IA';
+                }
+            }
             setProject(data);
             const currentIdx = allData.findIndex(p => p.slug === data.slug);
             setCurrentIndex(currentIdx);
@@ -143,15 +156,15 @@ const ProjectPage = () => {
                 >
                     <Link
                         to={project.category && project.category.slug === 'fotografia' ? '/portfolio-fotografia/galeria' : '/portfolio'}
-                        className="inline-flex items-center text-gray-400 hover:text-white mb-8 transition-colors"
+                        className="inline-flex items-center text-slate-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white mb-8 transition-colors font-semibold"
                     >
-                        <ArrowLeft className="mr-2" /> {project.category && project.category.slug === 'fotografia' ? 'Voltar para Galeria' : 'Voltar ao Portfólio'}
+                        <ArrowLeft className="mr-2 w-4 h-4" /> {project.category && project.category.slug === 'fotografia' ? 'Voltar para Galeria' : 'Voltar ao Portfólio'}
                     </Link>
                     <h1 className="text-4xl md:text-6xl font-bold mb-2">
                         <span className="gradient-text">{project.title}</span>
                     </h1>
-                    <div className="flex flex-wrap items-center gap-x-4 text-gray-400 mb-8">
-                        <Link to={`/portfolio?category=${project.category.slug}`} className="hover:text-blue-400 transition-colors">{project.category.title}</Link>
+                    <div className="flex flex-wrap items-center gap-x-4 text-slate-500 dark:text-gray-400 mb-8 font-semibold">
+                        <Link to={`/portfolio?category=${project.category.slug}`} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{project.category.title}</Link>
                     </div>
                 </motion.div>
 
@@ -171,7 +184,7 @@ const ProjectPage = () => {
                         {project.description && (
                             <motion.div variants={itemVariants} className="glass-effect p-8 rounded-2xl">
                                 <h2 className="text-3xl font-bold mb-4 gradient-text">Sobre o Projeto</h2>
-                                <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">{project.description}</p>
+                                <p className="text-slate-650 dark:text-gray-300 leading-relaxed whitespace-pre-wrap font-medium">{project.description}</p>
                             </motion.div>
                         )}
 
@@ -179,13 +192,13 @@ const ProjectPage = () => {
                             {project.challenge && (
                                 <motion.div variants={itemVariants} className="glass-effect p-6 rounded-2xl">
                                     <h2 className="text-2xl font-bold mb-3 gradient-text">O Desafio</h2>
-                                    <p className="text-gray-300 leading-relaxed whitespace-pre-wrap text-sm">{project.challenge}</p>
+                                    <p className="text-slate-650 dark:text-gray-300 leading-relaxed whitespace-pre-wrap text-sm font-medium">{project.challenge}</p>
                                 </motion.div>
                             )}
                             {project.solution && (
                                 <motion.div variants={itemVariants} className="glass-effect p-6 rounded-2xl">
                                     <h2 className="text-2xl font-bold mb-3 gradient-text">A Solução</h2>
-                                    <p className="text-gray-300 leading-relaxed whitespace-pre-wrap text-sm">{project.solution}</p>
+                                    <p className="text-slate-650 dark:text-gray-300 leading-relaxed whitespace-pre-wrap text-sm font-medium">{project.solution}</p>
                                 </motion.div>
                             )}
                         </div>
@@ -193,7 +206,7 @@ const ProjectPage = () => {
                         {project.results && (
                             <motion.div variants={itemVariants} className="glass-effect p-8 rounded-2xl">
                                 <h2 className="text-3xl font-bold mb-4 gradient-text">Resultados</h2>
-                                <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">{project.results}</p>
+                                <p className="text-slate-650 dark:text-gray-300 leading-relaxed whitespace-pre-wrap font-medium">{project.results}</p>
                             </motion.div>
                         )}
                     </motion.div>
@@ -201,17 +214,17 @@ const ProjectPage = () => {
                     <aside className="lg:sticky top-24 self-start">
                         <motion.div variants={sectionVariants} initial="hidden" animate="visible" className="glass-effect p-8 rounded-2xl space-y-8">
                             <div>
-                                <h3 className="text-xl font-bold mb-4">Detalhes do Projeto</h3>
-                                <ul className="space-y-3 text-gray-300">
-                                    <li className="flex items-center gap-3"><User className="w-5 h-5 text-blue-400" /> <span>{project.client}</span></li>
-                                    <li className="flex items-center gap-3"><Calendar className="w-5 h-5 text-blue-400" /> <span>{project.year}</span></li>
+                                <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Detalhes do Projeto</h3>
+                                <ul className="space-y-3 text-slate-650 dark:text-gray-300 font-semibold text-sm">
+                                    <li className="flex items-center gap-3"><User className="w-5 h-5 text-blue-500 dark:text-blue-400" /> <span>{project.client}</span></li>
+                                    <li className="flex items-center gap-3"><Calendar className="w-5 h-5 text-blue-500 dark:text-blue-400" /> <span>{project.year}</span></li>
                                 </ul>
                             </div>
                             <div>
-                                <h3 className="text-xl font-bold mb-4">Serviços Prestados</h3>
+                                <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Serviços Prestados</h3>
                                 <ul className="flex flex-wrap gap-2">
                                     {project.services.map((service, index) => (
-                                        <li key={index} className="bg-gray-700/50 text-gray-300 text-sm px-3 py-1 rounded-full flex items-center gap-2"><Tag className="w-3 h-3" />{service}</li>
+                                        <li key={index} className="bg-slate-100 dark:bg-gray-800 text-slate-700 dark:text-gray-300 text-sm px-3 py-1 rounded-full flex items-center gap-2 border border-slate-200 dark:border-gray-700 font-bold"><Tag className="w-3 h-3 text-blue-500 dark:text-blue-400" />{service}</li>
                                     ))}
                                 </ul>
                             </div>
@@ -291,18 +304,18 @@ const ProjectPage = () => {
                 >
                     <div className="glass-effect inline-block p-8 rounded-2xl max-w-3xl mx-auto">
                         <h3 className="text-2xl font-bold mb-4 gradient-text">Vamos criar algo incrível?</h3>
-                        <p className="text-gray-400 mb-8">Transforme suas ideias em realidade ou nos conte como foi sua experiência.</p>
+                        <p className="text-slate-650 dark:text-gray-400 mb-8 font-medium text-sm md:text-base">Transforme suas ideias em realidade ou nos conte como foi sua experiência.</p>
 
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <Link to="/contato">
-                                <Button size="lg" className="bg-gradient-to-r from-green-500 to-teal-600 hover:scale-105 transition-transform w-full sm:w-auto">
+                                <Button size="lg" className="bg-gradient-to-r from-green-500 to-teal-600 hover:scale-105 transition-transform w-full sm:w-auto font-bold text-white">
                                     Peça seu orçamento
                                 </Button>
                             </Link>
                             <Dialog>
                                 <DialogTrigger asChild>
-                                    <Button size="lg" variant="outline" className="border-gray-600 hover:border-blue-500 w-full sm:w-auto hover:bg-gray-800 text-white">
-                                        <Star className="mr-2 h-4 w-4" /> Deixar Avaliação
+                                    <Button size="lg" variant="outline" className="border-slate-300 dark:border-gray-700 text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-gray-800 hover:text-slate-900 dark:hover:text-white w-full sm:w-auto font-bold shadow-sm transition-all duration-300">
+                                        <Star className="mr-2 h-4 w-4 text-yellow-500 fill-yellow-500" /> Deixar Avaliação
                                     </Button>
                                 </DialogTrigger>
                                 <DialogContent className="sm:max-w-2xl bg-gray-900 border-gray-800 text-white">
@@ -322,18 +335,18 @@ const ProjectPage = () => {
                     variants={sectionVariants}
                     initial="hidden"
                     animate="visible"
-                    className="flex justify-between items-center mt-20 pt-8 border-t border-gray-800"
+                    className="flex justify-between items-center mt-20 pt-8 border-t border-slate-200 dark:border-gray-850"
                 >
                     {prevProject ? (
                         <Link to={`/portfolio/${prevProject.category.slug}/${prevProject.slug}`}>
-                            <Button variant="outline" className="border-gray-700 hover:bg-gray-800">
+                            <Button variant="outline" className="border-slate-300 dark:border-gray-700 text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800 hover:text-slate-900 dark:hover:text-white font-bold transition-all shadow-sm">
                                 <ArrowLeft className="mr-2 h-4 w-4" /> Projeto Anterior
                             </Button>
                         </Link>
                     ) : <div />}
                     {nextProject ? (
                         <Link to={`/portfolio/${nextProject.category.slug}/${nextProject.slug}`}>
-                            <Button variant="outline" className="border-gray-700 hover:bg-gray-800">
+                            <Button variant="outline" className="border-slate-300 dark:border-gray-700 text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800 hover:text-slate-900 dark:hover:text-white font-bold transition-all shadow-sm">
                                 Próximo Projeto <ArrowRight className="ml-2 h-4 w-4" />
                             </Button>
                         </Link>

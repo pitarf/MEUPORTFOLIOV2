@@ -107,7 +107,7 @@ const Home = () => {
             </Helmet>
 
             {/* Hero Section */}
-            <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background text-foreground transition-colors duration-300 pt-24 sm:pt-32 pb-32 md:pb-44 -mt-20">
+            <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background text-foreground transition-colors duration-300 pt-24 sm:pt-24 pb-24 md:pb-32 -mt-20">
                 {/* Project Marquee Background */}
                 <div className="absolute inset-0 z-0 opacity-30 dark:opacity-20 overflow-hidden transition-opacity duration-300 pointer-events-none">
                     <div className="absolute top-10 left-0 w-full rotate-[-5deg]">
@@ -137,7 +137,7 @@ const Home = () => {
                 {/* Central Spotlight */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-[80px] opacity-40 pulse-glow z-0"></div>
 
-                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-16 sm:pt-20">
+                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-4 sm:pt-6">
                     <motion.div
                         initial={{ opacity: 0, y: 40 }}
                         animate={{ opacity: 1, y: 0 }}

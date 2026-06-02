@@ -93,3 +93,17 @@ Pensando na usabilidade comercial e na experiência dos seus clientes, o seu por
 ### 6.3 Isolamento da Galeria de Fotografia (`/portfolio-fotografia`)
 - **Destaque Artístico**: Independentemente de o usuário estar navegando no Tema Claro ou Tema Escuro, a página de portfólio fotográfico `/portfolio-fotografia` é mantida permanentemente no **Tema Escuro**.
 - Isso foi implementado de forma intencional para garantir que o contraste profundo das fotografias artísticas, ensaios e produções corporativas se sobressaiam em fundos escuros de padrão cinematográfico, sem distrações.
+
+---
+
+## 7. Navegação Avançada e Otimização do Portfólio Geral (`/portfolio`)
+
+A página de portfólio corporativo foi equipada com um painel de controle premium que torna a descoberta do seu trabalho extremamente intuitiva e veloz:
+
+### 7.1 Pílulas de Especialidades sem Barra de Rolagem
+* **Adeus Scroll Horizontal**: Substituímos as antigas listagens com barra de rolagem lateral (que causava barras cinzas grossas no Windows) por um layout multilinha moderno e flexível. Agora, as categorias são dispostas lado a lado e se adaptam para quebrar de linha de forma elegante tanto em celulares quanto em telas de computador.
+* **Transição Física Deslizante**: Ao selecionar uma especialidade, você notará que o fundo colorido ativo desliza de forma contínua e dinâmica para a nova opção (efeito de transição móvel nativo), conferindo um toque de sofisticação e excelência à sua marca.
+
+### 7.2 Inteligência de Exibição Dinâmica (Ocultação de Especialidades Vazias)
+* Para manter a navegação limpa, profissional e evitar frustração do cliente, **as especialidades que possuem 0 projetos cadastrados são ocultadas automaticamente** do painel de filtros. Elas reaparecerão sozinhas assim que você cadastrar pelo menos 1 projeto corporativo nelas!
+* **Portfólio Limpo e Focado**: Todo projeto de fotografia artística foi excluído da listagem corporativa (filtrando termos legados classificados como "Geral"), mantendo seu portfólio corporativo focado estritamente em tecnologia, design, tráfego pago e inteligência de dados. As fotografias ficam guardadas na galeria de fotos dedicada.

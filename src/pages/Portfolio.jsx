@@ -67,7 +67,23 @@ const Portfolio = () => {
                 .order('id');
 
             if (catError) throw catError;
-            setAllCategories(categoriesData || []);
+            
+            // Mapeamento dinâmico de títulos corporativos compactos de elite
+            const mappedCategories = (categoriesData || []).map(cat => {
+                const slug = (cat.slug || '').toLowerCase();
+                const title = (cat.title || '').toLowerCase();
+
+                if (slug === 'desenvolvimento-de-sites' || title === 'desenvolvimento de sites') {
+                    return { ...cat, title: 'Sites' };
+                }
+                if (slug === 'dashboards-em-power-bi' || title === 'dashboards em power bi') {
+                    return { ...cat, title: 'Power BI' };
+                }
+                if (slug === 'producao-com-ia' || title === 'produção com ia' || title === 'produção ia') {
+                    return { ...cat, title: 'Produção IA' };
+                }
+                return cat;
+            });
 
             // 2. Coleta todos os projetos
             const { data: projectsData, error: projError } = await supabase
@@ -77,11 +93,17 @@ const Portfolio = () => {
 
             if (projError) throw projError;
             
-            // Filtra fora projetos de fotografia (estes possuem galeria exclusiva)
-            const photoCat = categoriesData.find(c => c.slug === 'fotografia');
-            const photoCatId = photoCat ? photoCat.id : null;
-            const filteredProjs = projectsData ? projectsData.filter(p => p.category_id !== photoCatId) : [];
+            // Filtra fora projetos de fotografia e projetos sem categoria corporativa válida (descartando "Geral")
+            const activeCategoryIds = new Set(mappedCategories.map(c => c.id));
+            const filteredProjs = projectsData ? projectsData.filter(p => p.category_id && activeCategoryIds.has(p.category_id)) : [];
             
+            // Filtra e mantém apenas as categorias corporativas que possuem pelo menos 1 projeto ativo
+            const categoriesWithProjects = mappedCategories.filter(cat => {
+                const count = filteredProjs.filter(p => p.category_id === cat.id).length;
+                return count > 0;
+            });
+            
+            setAllCategories(categoriesWithProjects);
             setProjects(filteredProjs);
             setFilteredProjects(filteredProjs);
         } catch (error) {
@@ -137,30 +159,30 @@ const Portfolio = () => {
             <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
                 
                 {/* 1. Hero Section de Autoridade */}
-                <section className="relative py-24 md:py-32 overflow-hidden bg-gradient-to-b from-blue-50/20 via-transparent to-transparent dark:from-blue-950/10">
+                <section className="relative pt-12 pb-14 md:pt-16 md:pb-20 overflow-hidden bg-gradient-to-b from-blue-50/20 via-transparent to-transparent dark:from-blue-950/10">
                     <div className="absolute inset-0 aurora-bg opacity-30 dark:opacity-40 z-0 pointer-events-none"></div>
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
                         <motion.div
-                            initial={{ opacity: 0, y: 30 }}
+                            initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8 }}
-                            className="space-y-6"
+                            transition={{ duration: 0.6 }}
+                            className="space-y-4"
                         >
-                            <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-500/10 to-purple-600/10 rounded-full flex items-center justify-center border border-blue-500/20 shadow-md">
-                                <Award className="w-8 h-8 text-blue-500 dark:text-blue-400" />
+                            <div className="w-14 h-14 mx-auto mb-2 bg-gradient-to-br from-blue-500/10 to-purple-600/10 rounded-full flex items-center justify-center border border-blue-500/20 shadow-md">
+                                <Award className="w-7 h-7 text-blue-500 dark:text-blue-400" />
                             </div>
-                            <h1 className="text-4xl sm:text-6xl font-extrabold px-2 tracking-tight">
+                            <h1 className="text-4xl sm:text-5xl font-extrabold px-2 tracking-tight">
                                 <span className="gradient-text">Nosso Portfólio</span>
                             </h1>
-                            <p className="text-lg md:text-2xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto px-4 font-semibold leading-relaxed">
+                            <p className="text-base md:text-xl text-gray-700 dark:text-gray-300 max-w-2xl mx-auto px-4 font-semibold leading-relaxed">
                                 Excelência Técnica e Design de Conversão em Dezenas de Projetos Entregues
                             </p>
-                            <p className="text-sm md:text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto px-4 leading-relaxed font-medium">
+                            <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 max-w-xl mx-auto px-4 leading-relaxed font-medium">
                                 Explore a notoriedade do nosso histórico. Cada cartão expõe a aplicação rigorosa de metodologias e ferramentas para gerar lucros e resultados expressivos aos nossos parceiros.
                             </p>
 
                             {/* Contadores Rápidos de Autoridade */}
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-xl mx-auto pt-6 text-center">
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3.5 max-w-xl mx-auto pt-4 text-center">
                                 <div className="glass-effect p-4 rounded-xl border border-gray-200/50 dark:border-white/5 bg-white/40 dark:bg-gray-900/30">
                                     <div className="text-2xl sm:text-3xl font-extrabold text-blue-600 dark:text-blue-400">500+</div>
                                     <div className="text-xs text-gray-500 dark:text-gray-400 font-semibold tracking-wide uppercase mt-1">Entregas de Sucesso</div>
@@ -182,19 +204,26 @@ const Portfolio = () => {
                 <section className="relative z-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto -mt-6">
                     <div className="glass-effect rounded-2xl p-4 border border-gray-200/50 dark:border-white/10 shadow-2xl backdrop-blur-xl bg-white/80 dark:bg-gray-900/60 flex flex-col md:flex-row gap-4 items-center justify-between">
                         
-                        {/* Seletor de Categorias por Abas Horizontais com Contadores */}
-                        <div className="flex gap-2 overflow-x-auto w-full md:w-auto py-1 no-scrollbar scroll-smooth">
+                        {/* Seletor de Categorias por Abas Multilinha (Layout Flex-Wrap sem Barra de Rolagem) */}
+                        <div className="flex flex-wrap gap-2 justify-center md:justify-start w-full md:flex-1 py-1">
                             <button
                                 onClick={() => setActiveTab('all')}
-                                className={`px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-all flex-shrink-0 ${
+                                className={`relative px-3.5 py-2 rounded-xl text-xs md:text-[13px] font-semibold flex items-center gap-1.5 transition-colors duration-300 z-10 ${
                                     activeTab === 'all'
-                                        ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-md shadow-blue-500/10'
+                                        ? 'text-white'
                                         : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5'
                                 }`}
                             >
-                                <Cpu className="w-4 h-4" />
+                                {activeTab === 'all' && (
+                                    <motion.span
+                                        layoutId="activeTabBackground"
+                                        className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl -z-10 shadow-md shadow-blue-500/15"
+                                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                                    />
+                                )}
+                                <Cpu className="w-3.5 h-3.5" />
                                 Todos
-                                <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${
+                                <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-semibold transition-colors ${
                                     activeTab === 'all' ? 'bg-white/20 text-white' : 'bg-gray-200 dark:bg-gray-800 text-gray-500'
                                 }`}>
                                     {projects.length}
@@ -208,15 +237,22 @@ const Portfolio = () => {
                                     <button
                                         key={cat.id}
                                         onClick={() => setActiveTab(cat.slug)}
-                                        className={`px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-all flex-shrink-0 ${
+                                        className={`relative px-3.5 py-2 rounded-xl text-xs md:text-[13px] font-semibold flex items-center gap-1.5 transition-colors duration-300 z-10 ${
                                             activeTab === cat.slug
-                                                ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-md shadow-blue-500/10'
+                                                ? 'text-white'
                                                 : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5'
                                         }`}
                                     >
-                                        <IconComp className="w-4 h-4" />
+                                        {activeTab === cat.slug && (
+                                            <motion.span
+                                                layoutId="activeTabBackground"
+                                                className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl -z-10 shadow-md shadow-blue-500/15"
+                                                transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                                            />
+                                        )}
+                                        <IconComp className="w-3.5 h-3.5" />
                                         {cat.title}
-                                        <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${
+                                        <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-semibold transition-colors ${
                                             activeTab === cat.slug ? 'bg-white/20 text-white' : 'bg-gray-200 dark:bg-gray-800 text-gray-500'
                                         }`}>
                                             {catCount}
@@ -227,14 +263,14 @@ const Portfolio = () => {
                         </div>
 
                         {/* Barra de Pesquisa Integrada */}
-                        <div className="relative w-full md:w-80">
+                        <div className="relative w-full md:w-72 flex-shrink-0">
                             <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                             <Input
                                 type="text"
                                 placeholder="Buscar projetos..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2.5 bg-white/50 dark:bg-gray-800/40 border-gray-200 dark:border-gray-800 rounded-xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 font-medium"
+                                className="w-full pl-10 pr-4 py-2.5 bg-white/50 dark:bg-gray-800/40 border-gray-200 dark:border-gray-800 rounded-xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 font-semibold"
                             />
                             {searchQuery && (
                                 <button 
@@ -275,8 +311,10 @@ const Portfolio = () => {
                                                     src={project.main_image_url || 'https://images.unsplash.com/photo-1572177812156-58036aae439c'}
                                                     loading="lazy"
                                                 />
-                                                {/* Gradiente de Fusão para Legibilidade */}
-                                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent opacity-85 group-hover:opacity-90 transition-opacity duration-300" />
+                                                {/* Gradiente de Fusão Estático (Padrão) */}
+                                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/15 opacity-85 transition-opacity duration-300 group-hover:opacity-0" />
+                                                {/* Cortina Escura Premium e Desfocada no Hover para Legibilidade Absoluta */}
+                                                <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-[3px] opacity-0 group-hover:opacity-100 transition-all duration-500" />
                                             </div>
 
                                             {/* Micro-cápsula da Categoria no topo esquerdo */}

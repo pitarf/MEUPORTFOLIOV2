@@ -68,3 +68,22 @@ const NovoCard = () => {
 export default NovoCard;
 ```
 As classes `text-gray-900 dark:text-white` e `text-gray-600 dark:text-gray-400` garantem contraste impecável e conforto visual nos dois modos sem quebras de layout.
+
+---
+
+## 4. Arquitetura de Abas e Otimização de Filtros do Portfólio (`Portfolio.jsx`)
+
+Para garantir uma interface corporativa refinada de alta autoridade, o portfólio geral implementa uma lógica de dados inteligente combinada com design multilinha adaptável.
+
+### 4.1 Limpeza Estrita de Dados (Filtro Fotografia/"Geral")
+Os projetos de fotografia possuem seu próprio estúdio dedicado em `/portfolio-fotografia`. No portfólio geral corporativo, registros legados ou sem categoria atribuída (classificados como "Geral") são eliminados no carregamento de dados (`fetchPortfolioData`):
+1. O sistema obtém as categorias corporativas ativas no Supabase (excluindo o slug `'fotografia'`).
+2. Os projetos carregados são filtrados em lote, permitindo a exibição **apenas** daqueles que possuem um `category_id` pertencente à lista de IDs corporativos ativos. Isso blinda a rota corporativa contra poluição de conteúdos artísticos de fotografia.
+
+### 4.2 Ocultação Automática de Especialidades Vazias
+Para manter a interface limpa e focada nas entregas do portfólio, categorias que possuem `0 projetos` associados na base de dados ativa são ocultadas de forma dinâmica. O array de abas é calculado filtrando as categorias carregadas, restando apenas especialidades com projetos vinculados (`count > 0`).
+
+### 4.3 Pílulas Multilinha Sem Rolagem (`layoutId`)
+Para banir a barra de rolagem inestética horizontal do Windows, o seletor utiliza uma grade multilinha flexível (`flex flex-wrap gap-2.5`). A troca de abas é suavizada usando a animação física de mola do **Framer Motion**:
+* O botão ativo renderiza internamente um `motion.span` configurado com `layoutId="activeTabBackground"`.
+* Ao clicar em uma nova pílula de categoria, o gradiente azul-púrpura de fundo "desliza" de forma contínua e orgânica entre as abas em vez de dar um salto brusco, simulando a fluidez de interfaces móveis e de alta sofisticação.
