@@ -41,6 +41,8 @@ import { ThemeProvider } from '@/contexts/ThemeContext';
  * Configura as rotas públicas, rotas protegidas do painel administrativo,
  * e integra os provedores de estado global do Supabase (Autenticação, Configurações de Site e Temas).
  */
+const isPhotoSubdomain = typeof window !== 'undefined' && window.location.hostname.includes('fotografia');
+
 function App() {
     return (
         <ThemeProvider>
@@ -53,7 +55,7 @@ function App() {
                         <Routes>
                             {/* Rotas Públicas - Envolvidas com o MainLayout */}
                             <Route element={<MainLayout />}>
-                                <Route path="/" element={<Home />} />
+                                <Route path="/" element={isPhotoSubdomain ? <PhotographyLanding /> : <Home />} />
                                 <Route path="/sobre" element={<About />} />
                                 <Route path="/servicos" element={<Services />} />
                                 <Route path="/portfolio" element={<Portfolio />} />
@@ -62,6 +64,7 @@ function App() {
                                 <Route path="/assinaturas" element={<Subscriptions />} />
                                 <Route path="/portfolio-fotografia" element={<PhotographyLanding />} />
                                 <Route path="/portfolio-fotografia/galeria" element={<PhotographyPortfolio />} />
+                                {isPhotoSubdomain && <Route path="/galeria" element={<PhotographyPortfolio />} />}
                                 <Route path="/avaliacoes" element={<Reviews />} />
                                 <Route path="/contato" element={<Contact />} />
                                 <Route path="/support" element={<Support />} />

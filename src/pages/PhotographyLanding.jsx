@@ -85,6 +85,9 @@ const PhotographyLanding = () => {
     const [projectCount, setProjectCount] = useState(0);
     const [content, setContent] = useState(null);
 
+    const isPhotoSubdomain = typeof window !== 'undefined' && window.location.hostname.includes('fotografia');
+    const galleryPath = isPhotoSubdomain ? "/galeria" : "/portfolio-fotografia/galeria";
+
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [bgImages, setBgImages] = useState([]);
     const [nicheImages, setNicheImages] = useState({
@@ -258,7 +261,7 @@ const PhotographyLanding = () => {
                                         Solicitar Orçamento
                                     </Button>
                                 </Link>
-                                <Link to="/portfolio-fotografia/galeria" className="w-full sm:w-auto">
+                                <Link to={galleryPath} className="w-full sm:w-auto">
                                     <Button
                                         size="lg"
                                         variant="outline"
@@ -320,7 +323,7 @@ const PhotographyLanding = () => {
                                                 {niche.description}
                                             </p>
                                             <div className="pt-8">
-                                                <Link to={`/portfolio-fotografia/galeria`}>
+                                                <Link to={galleryPath}>
                                                     <Button variant="outline" className="rounded-full px-10 py-7 text-lg border-slate-300 dark:border-white/20 text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-all font-semibold">
                                                         Ver Trabalhos
                                                     </Button>
@@ -346,7 +349,7 @@ const PhotographyLanding = () => {
                                     Explore nossa galeria selecionada com os melhores cliques corporativos e artísticos.
                                 </p>
                             </div>
-                            <Link to="/portfolio-fotografia/galeria" className="hidden md:block">
+                            <Link to={galleryPath} className="hidden md:block">
                                 <Button variant="link" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 p-0 text-xl font-bold">
                                     Ver galeria completa <ArrowRight className="ml-2 w-6 h-6" />
                                 </Button>
@@ -356,7 +359,7 @@ const PhotographyLanding = () => {
                         <ProjectCarousel excludeCategorySlug="" categorySlug="fotografia" onDataLoaded={setProjectCount} />
 
                         <div className="mt-16 text-center md:hidden">
-                            <Link to="/portfolio-fotografia/galeria">
+                            <Link to={galleryPath}>
                                 <Button variant="link" className="text-blue-600 dark:text-blue-400 font-bold text-lg">
                                     Ver galeria completa <ArrowRight className="ml-2 w-5 h-5" />
                                 </Button>
