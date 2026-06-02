@@ -150,7 +150,7 @@ const ManageLandingPage = () => {
     return (
         <div className="space-y-8">
             <div className="flex justify-between items-center">
-                <h1 className="text-3xl font-bold text-white">Gerenciar Página de Fotografia</h1>
+                <h1 className="text-3xl font-bold text-foreground">Gerenciar Página de Fotografia</h1>
                 <Button onClick={handleSave} disabled={saving} className="bg-green-600 hover:bg-green-700">
                     {saving ? <Loader2 className="animate-spin mr-2" /> : <Save className="mr-2 w-4 h-4" />}
                     Salvar Alterações
@@ -158,42 +158,42 @@ const ManageLandingPage = () => {
             </div>
 
             {/* Navbar Branding Section */}
-            <Card className="bg-gray-900 border-gray-800">
+            <Card>
                 <CardHeader>
-                    <CardTitle className="text-white">Identidade Visual no Menu (Exclusivo Fotografia)</CardTitle>
+                    <CardTitle className="text-foreground">Identidade Visual no Menu (Exclusivo Fotografia)</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div>
-                        <label className="text-sm font-medium text-gray-400">Nome do Site no Menu</label>
+                        <label className="text-sm font-medium text-muted-foreground">Nome do Site no Menu</label>
                         <Input
-                            className="bg-gray-800 border-gray-700 text-white mt-1"
+                            className="mt-1"
                             placeholder="Ex: Rafael Pita Photography"
                             value={content.nav_site_name || ''}
                             onChange={(e) => setContent({ ...content, nav_site_name: e.target.value })}
                         />
                     </div>
                     <div>
-                        <label className="text-sm font-medium text-gray-400">Logo do Menu</label>
+                        <label className="text-sm font-medium text-muted-foreground">Logo do Menu</label>
                         <div className="flex gap-4 mt-1">
                             {/* File Upload UI */}
-                            <div className="w-24 h-24 rounded-lg bg-gray-800 border border-gray-700 flex items-center justify-center overflow-hidden relative group">
+                            <div className="w-24 h-24 rounded-lg bg-muted border border-border flex items-center justify-center overflow-hidden relative group">
                                 {logoPreview ? (
                                     <img src={logoPreview} alt="Logo Preview" className="w-full h-full object-contain p-2" />
                                 ) : (
-                                    <ImageIcon className="w-8 h-8 text-gray-500" />
+                                    <ImageIcon className="w-8 h-8 text-muted-foreground/60" />
                                 )}
-                                <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                                    <Upload className="w-6 h-6 text-white" />
+                                <label className="absolute inset-0 bg-background/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                                    <Upload className="w-6 h-6 text-foreground" />
                                     <input type="file" className="hidden" accept="image/*" onChange={handleLogoChange} />
                                 </label>
                             </div>
 
-                            <div className="flex-1 flex flex-col justify-center text-sm text-gray-400">
+                            <div className="flex-1 flex flex-col justify-center text-sm text-muted-foreground">
                                 <p>Clique na imagem para alterar.</p>
-                                <p className="text-xs text-gray-500 mt-1">Recomendado: PNG Transparente</p>
+                                <p className="text-xs text-muted-foreground/80 mt-1">Recomendado: PNG Transparente</p>
                                 {/* Fallback URL Input */}
                                 <input
-                                    className="bg-gray-800 border border-gray-700 text-white text-xs mt-2 p-1 rounded w-full"
+                                    className="bg-background border border-border text-foreground text-xs mt-2 p-1 rounded w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                                     placeholder="Ou cole uma URL direta..."
                                     value={content.nav_logo_url || ''}
                                     onChange={(e) => {
@@ -208,37 +208,37 @@ const ManageLandingPage = () => {
             </Card>
 
             {/* Hero Section */}
-            <Card className="bg-gray-900 border-gray-800">
+            <Card>
                 <CardHeader>
-                    <CardTitle className="text-white">Seção Hero (Capa)</CardTitle>
+                    <CardTitle className="text-foreground">Seção Hero (Capa)</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div>
-                        <label className="text-sm font-medium text-gray-400">Título Principal</label>
+                        <label className="text-sm font-medium text-muted-foreground">Título Principal</label>
                         <Input
-                            className="bg-gray-800 border-gray-700 text-white mt-1"
+                            className="mt-1"
                             value={content.hero_title || ''}
                             onChange={(e) => setContent({ ...content, hero_title: e.target.value })}
                         />
                     </div>
                     <div>
-                        <label className="text-sm font-medium text-gray-400">Subtítulo</label>
+                        <label className="text-sm font-medium text-muted-foreground">Subtítulo</label>
                         <Textarea
-                            className="bg-gray-800 border-gray-700 text-white mt-1"
+                            className="mt-1"
                             value={content.hero_subtitle || ''}
                             onChange={(e) => setContent({ ...content, hero_subtitle: e.target.value })}
                         />
                     </div>
                     <div>
-                        <label className="text-sm font-medium text-gray-400">Imagem de Fundo (URL)</label>
+                        <label className="text-sm font-medium text-muted-foreground">Imagem de Fundo (URL)</label>
                         <div className="flex gap-4 mt-1">
                             <Input
-                                className="bg-gray-800 border-gray-700 text-white flex-1"
+                                className="flex-1"
                                 value={content.hero_image_url || ''}
                                 onChange={(e) => setContent({ ...content, hero_image_url: e.target.value })}
                             />
                             {content.hero_image_url && (
-                                <div className="w-16 h-10 rounded overflow-hidden border border-gray-700 flex-shrink-0">
+                                <div className="w-16 h-10 rounded overflow-hidden border border-border flex-shrink-0">
                                     <img src={content.hero_image_url} alt="Preview" className="w-full h-full object-cover" />
                                 </div>
                             )}
@@ -248,16 +248,16 @@ const ManageLandingPage = () => {
             </Card>
 
             {/* Specialties Section */}
-            <Card className="bg-gray-900 border-gray-800">
+            <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle className="text-white">Especialidades</CardTitle>
-                    <Button variant="outline" size="sm" onClick={addSpecialty} className="border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white">
+                    <CardTitle className="text-foreground">Especialidades</CardTitle>
+                    <Button variant="outline" size="sm" onClick={addSpecialty} className="border-border text-foreground hover:bg-muted">
                         <Plus className="w-4 h-4 mr-2" /> Adicionar
                     </Button>
                 </CardHeader>
                 <CardContent className="space-y-6">
                     {content.specialties?.map((item, index) => (
-                        <div key={index} className="p-4 bg-gray-800/50 rounded-lg border border-gray-700 relative group">
+                        <div key={index} className="p-4 bg-muted/50 rounded-lg border border-border relative group">
                             <Button
                                 variant="destructive"
                                 size="icon"
@@ -269,25 +269,25 @@ const ManageLandingPage = () => {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label className="text-xs font-medium text-gray-500">Título</label>
+                                    <label className="text-xs font-medium text-muted-foreground">Título</label>
                                     <Input
-                                        className="bg-gray-800 border-gray-700 text-white mt-1 h-9"
+                                        className="mt-1 h-9"
                                         value={item.title || ''}
                                         onChange={(e) => handleSpecialtyChange(index, 'title', e.target.value)}
                                     />
                                 </div>
                                 <div>
-                                    <label className="text-xs font-medium text-gray-500">Imagem URL</label>
+                                    <label className="text-xs font-medium text-muted-foreground">Imagem URL</label>
                                     <Input
-                                        className="bg-gray-800 border-gray-700 text-white mt-1 h-9"
+                                        className="mt-1 h-9"
                                         value={item.image || ''}
                                         onChange={(e) => handleSpecialtyChange(index, 'image', e.target.value)}
                                     />
                                 </div>
                                 <div className="md:col-span-2">
-                                    <label className="text-xs font-medium text-gray-500">Descrição</label>
+                                    <label className="text-xs font-medium text-muted-foreground">Descrição</label>
                                     <Textarea
-                                        className="bg-gray-800 border-gray-700 text-white mt-1 h-20"
+                                        className="mt-1 h-20"
                                         value={item.description || ''}
                                         onChange={(e) => handleSpecialtyChange(index, 'description', e.target.value)}
                                     />
@@ -296,7 +296,7 @@ const ManageLandingPage = () => {
                         </div>
                     ))}
                     {content.specialties?.length === 0 && (
-                        <p className="text-center text-gray-500 py-4">Nenhuma especialidade adicionada.</p>
+                        <p className="text-center text-muted-foreground py-4">Nenhuma especialidade adicionada.</p>
                     )}
                 </CardContent>
             </Card>

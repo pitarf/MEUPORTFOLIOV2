@@ -89,22 +89,22 @@ const AdminSubmissions = () => {
                     <div
                         key={submission.id}
                         onClick={() => openSubmission(submission)}
-                        className="flex items-center justify-between p-4 rounded-lg bg-gray-800/50 border border-gray-700 hover:bg-gray-800 cursor-pointer transition-colors"
+                        className="flex items-center justify-between p-4 rounded-lg bg-card border border-border hover:bg-muted/50 cursor-pointer transition-colors"
                     >
                         <div className="flex items-center gap-4">
                             <StatusIcon className={`w-5 h-5 ${statusOptions[submission.status]?.color}`} />
                             <div>
-                                <p className="font-semibold text-white">{submission.subject || submission.service}</p>
-                                <p className="text-sm text-gray-400">{submission.name}</p>
+                                <p className="font-semibold text-foreground">{submission.subject || submission.service}</p>
+                                <p className="text-sm text-muted-foreground">{submission.name}</p>
                             </div>
                         </div>
-                        <span className="text-xs text-gray-500">{new Date(submission.created_at).toLocaleDateString()}</span>
+                        <span className="text-xs text-muted-foreground">{new Date(submission.created_at).toLocaleDateString()}</span>
                     </div>
                 )
             }) : (
-                <div className="text-center py-12 text-gray-500">
+                <div className="text-center py-12 text-muted-foreground">
                     <Inbox className="mx-auto h-12 w-12 mb-4" />
-                    <p>Nenhuma submissão ativa.</p>
+                    <p>Nenhuma submissão activa.</p>
                 </div>
             )}
         </div>
@@ -167,16 +167,16 @@ const AdminSubmissions = () => {
                                 De: {selectedSubmission.name} ({selectedSubmission.email}) em {new Date(selectedSubmission.created_at).toLocaleString()}
                             </DialogDescription>
                         </DialogHeader>
-                        <div className="py-4 space-y-4 text-gray-300">
-                            <p className="whitespace-pre-wrap bg-gray-800 p-4 rounded-md">{selectedSubmission.message || selectedSubmission.description}</p>
+                        <div className="py-4 space-y-4 text-foreground">
+                            <p className="whitespace-pre-wrap bg-muted p-4 rounded-md text-foreground">{selectedSubmission.message || selectedSubmission.description}</p>
                             <div className="grid grid-cols-2 gap-4 text-sm">
-                                {selectedSubmission.phone && <div><strong className="text-gray-400">Telefone:</strong> {selectedSubmission.phone}</div>}
-                                {selectedSubmission.company && <div><strong className="text-gray-400">Empresa:</strong> {selectedSubmission.company}</div>}
-                                {selectedSubmission.budget && <div><strong className="text-gray-400">Orçamento:</strong> {selectedSubmission.budget}</div>}
-                                {selectedSubmission.deadline && <div><strong className="text-gray-400">Prazo:</strong> {new Date(selectedSubmission.deadline).toLocaleDateString()}</div>}
+                                {selectedSubmission.phone && <div><strong className="text-muted-foreground">Telefone:</strong> {selectedSubmission.phone}</div>}
+                                {selectedSubmission.company && <div><strong className="text-muted-foreground">Empresa:</strong> {selectedSubmission.company}</div>}
+                                {selectedSubmission.budget && <div><strong className="text-muted-foreground">Orçamento:</strong> {selectedSubmission.budget}</div>}
+                                {selectedSubmission.deadline && <div><strong className="text-muted-foreground">Prazo:</strong> {new Date(selectedSubmission.deadline).toLocaleDateString()}</div>}
                             </div>
                         </div>
-                        <div className="flex justify-between items-center pt-4 border-t border-gray-700">
+                        <div className="flex justify-between items-center pt-4 border-t border-border">
                             <div className="flex items-center gap-2">
                                 <Select value={selectedSubmission.status} onValueChange={(newStatus) => handleStatusChange(selectedSubmission.id, newStatus)}>
                                     <SelectTrigger className="w-[180px]">

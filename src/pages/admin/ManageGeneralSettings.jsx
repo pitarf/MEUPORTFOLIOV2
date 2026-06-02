@@ -235,7 +235,7 @@ const ManageGeneralSettings = () => {
         <div className="space-y-8 p-8 max-w-5xl mx-auto">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                 <h1 className="text-3xl font-bold gradient-text mb-2">Configurações Gerais</h1>
-                <p className="text-gray-400">Gerencie as informações globais do seu portfólio.</p>
+                <p className="text-muted-foreground">Gerencie as informações globais do seu portfólio.</p>
             </motion.div>
 
             {dbError && (
@@ -254,25 +254,25 @@ const ManageGeneralSettings = () => {
                 <section className="glass-effect p-6 rounded-xl space-y-6">
                     <div className="flex items-center gap-3 mb-4">
                         <Globe className="w-6 h-6 text-blue-400" />
-                        <h2 className="text-xl font-semibold text-white">Identidade Visual</h2>
+                        <h2 className="text-xl font-semibold text-foreground">Identidade Visual</h2>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                             <Label>Logo do Site</Label>
                             <div className="flex items-center gap-4">
-                                <div className="w-24 h-24 rounded-lg bg-gray-800 border border-gray-700 flex items-center justify-center overflow-hidden relative group">
+                                <div className="w-24 h-24 rounded-lg bg-muted border border-border flex items-center justify-center overflow-hidden relative group">
                                     {logoPreview ? (
                                         <img src={logoPreview} alt="Logo Preview" className="w-full h-full object-contain p-2" />
                                     ) : (
-                                        <ImageIcon className="w-8 h-8 text-gray-500" />
+                                        <ImageIcon className="w-8 h-8 text-muted-foreground/60" />
                                     )}
-                                    <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                                        <Upload className="w-6 h-6 text-white" />
+                                    <label className="absolute inset-0 bg-background/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                                        <Upload className="w-6 h-6 text-foreground" />
                                         <input type="file" className="hidden" accept="image/*" onChange={handleLogoChange} />
                                     </label>
                                 </div>
-                                <div className="text-sm text-gray-400 flex-1">
+                                <div className="text-sm text-muted-foreground flex-1">
                                     Clique na imagem para enviar sua logo.<br />
                                     Recomendado: PNG com fundo transparente.
                                 </div>
@@ -286,7 +286,6 @@ const ManageGeneralSettings = () => {
                                 name="site_name"
                                 value={formData.site_name}
                                 onChange={handleChange}
-                                className="bg-gray-800 border-gray-700 text-white"
                             />
                         </div>
                     </div>
@@ -296,7 +295,7 @@ const ManageGeneralSettings = () => {
                 <section className="glass-effect p-6 rounded-xl space-y-6">
                     <div className="flex items-center gap-2 mb-4">
                         <Globe className="w-6 h-6 text-blue-400" />
-                        <h2 className="text-xl font-semibold text-white">Conteúdo da Seção Hero</h2>
+                        <h2 className="text-xl font-semibold text-foreground">Conteúdo da Seção Hero</h2>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
@@ -322,7 +321,7 @@ const ManageGeneralSettings = () => {
                 <section className="glass-effect p-6 rounded-xl space-y-6">
                     <div className="flex items-center gap-3 mb-4">
                         <Sparkles className="w-6 h-6 text-yellow-400" />
-                        <h2 className="text-xl font-semibold text-white">Configurações de SEO & Compartilhamento</h2>
+                        <h2 className="text-xl font-semibold text-foreground">Configurações de SEO & Compartilhamento</h2>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -334,9 +333,8 @@ const ManageGeneralSettings = () => {
                                 value={formData.site_title || ''}
                                 onChange={handleChange}
                                 placeholder="Ex: Rafael Pita Solutions - Criatividade e Tecnologia"
-                                className="bg-gray-800 border-gray-700 text-white"
                             />
-                            <p className="text-xs text-gray-400">
+                            <p className="text-xs text-muted-foreground">
                                 Este título aparece na aba do navegador e nos resultados de pesquisa do Google. Recomendado: 50-60 caracteres.
                             </p>
                         </div>
@@ -349,9 +347,9 @@ const ManageGeneralSettings = () => {
                                 value={formData.site_description || ''}
                                 onChange={handleChange}
                                 placeholder="Descreva brevemente sua empresa e o que faz para atrair cliques no Google."
-                                className="bg-gray-800 border-gray-700 text-white min-h-[80px]"
+                                className="min-h-[80px]"
                             />
-                            <p className="text-xs text-gray-400">
+                            <p className="text-xs text-muted-foreground">
                                 Esta descrição é exibida abaixo do título nos resultados de pesquisa. Recomendado: 120-160 caracteres.
                             </p>
                         </div>
@@ -364,9 +362,8 @@ const ManageGeneralSettings = () => {
                                 value={formData.site_keywords || ''}
                                 onChange={handleChange}
                                 placeholder="portfólio, design, desenvolvimento, fotografia"
-                                className="bg-gray-800 border-gray-700 text-white"
                             />
-                            <p className="text-xs text-gray-400">
+                            <p className="text-xs text-muted-foreground">
                                 Termos relevantes pesquisados por seus clientes. Separe-os por vírgulas.
                             </p>
                         </div>
@@ -375,18 +372,18 @@ const ManageGeneralSettings = () => {
                         <div className="space-y-2">
                             <Label>Favicon do Site (Ícone de Aba)</Label>
                             <div className="flex items-center gap-4">
-                                <div className="w-16 h-16 rounded-lg bg-gray-800 border border-gray-700 flex items-center justify-center overflow-hidden relative group">
+                                <div className="w-16 h-16 rounded-lg bg-muted border border-border flex items-center justify-center overflow-hidden relative group">
                                     {faviconPreview ? (
                                         <img src={faviconPreview} alt="Favicon Preview" className="w-full h-full object-contain p-2" />
                                     ) : (
-                                        <ImageIcon className="w-6 h-6 text-gray-500" />
+                                        <ImageIcon className="w-6 h-6 text-muted-foreground/60" />
                                     )}
-                                    <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                                        <Upload className="w-4 h-4 text-white" />
+                                    <label className="absolute inset-0 bg-background/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                                        <Upload className="w-4 h-4 text-foreground" />
                                         <input type="file" className="hidden" accept="image/*" onChange={handleFaviconChange} />
                                     </label>
                                 </div>
-                                <div className="text-xs text-gray-400 flex-1">
+                                <div className="text-xs text-muted-foreground flex-1">
                                     Ícone exibido na aba do navegador.<br />
                                     Formatos suportados: ICO, PNG (quadrado, ex: 32x32px).
                                 </div>
@@ -397,18 +394,18 @@ const ManageGeneralSettings = () => {
                         <div className="space-y-2">
                             <Label>Imagem de Compartilhamento (Open Graph)</Label>
                             <div className="flex items-center gap-4">
-                                <div className="w-24 h-16 rounded-lg bg-gray-800 border border-gray-700 flex items-center justify-center overflow-hidden relative group">
+                                <div className="w-24 h-16 rounded-lg bg-muted border border-border flex items-center justify-center overflow-hidden relative group">
                                     {ogImagePreview ? (
                                         <img src={ogImagePreview} alt="OG Image Preview" className="w-full h-full object-cover" />
                                     ) : (
-                                        <ImageIcon className="w-6 h-6 text-gray-500" />
+                                        <ImageIcon className="w-6 h-6 text-muted-foreground/60" />
                                     )}
-                                    <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                                        <Upload className="w-4 h-4 text-white" />
+                                    <label className="absolute inset-0 bg-background/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                                        <Upload className="w-4 h-4 text-foreground" />
                                         <input type="file" className="hidden" accept="image/*" onChange={handleOgImageChange} />
                                     </label>
                                 </div>
-                                <div className="text-xs text-gray-400 flex-1">
+                                <div className="text-xs text-muted-foreground flex-1">
                                     Imagem exibida ao compartilhar o link em redes sociais (WhatsApp, LinkedIn, etc.).<br />
                                     Proporção recomendada: 1200x630px.
                                 </div>
@@ -420,7 +417,7 @@ const ManageGeneralSettings = () => {
                 <section className="glass-effect p-6 rounded-xl space-y-6">
                     <div className="flex items-center gap-2 mb-4">
                         <Phone className="w-6 h-6 text-green-400" />
-                        <h2 className="text-xl font-semibold text-white">Contato</h2>
+                        <h2 className="text-xl font-semibold text-foreground">Contato</h2>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div className="space-y-2">
@@ -442,7 +439,7 @@ const ManageGeneralSettings = () => {
                 <section className="glass-effect p-6 rounded-xl space-y-6">
                     <div className="flex items-center gap-2 mb-4">
                         <BarChart3 className="w-6 h-6 text-purple-400" />
-                        <h2 className="text-xl font-semibold text-white">Estatísticas (Numéricas)</h2>
+                        <h2 className="text-xl font-semibold text-foreground">Estatísticas (Numéricas)</h2>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div className="space-y-2">
@@ -464,7 +461,7 @@ const ManageGeneralSettings = () => {
                 <section className="glass-effect p-6 rounded-xl space-y-6">
                     <div className="flex items-center gap-2 mb-4">
                         <Share2 className="w-6 h-6 text-pink-400" />
-                        <h2 className="text-xl font-semibold text-white">Redes Sociais</h2>
+                        <h2 className="text-xl font-semibold text-foreground">Redes Sociais</h2>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">

@@ -127,8 +127,8 @@ const StorageOptimization = () => {
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-white">Otimização de Armazenamento</h1>
-                    <p className="text-gray-400 mt-1">Recupere espaço comprimindo imagens antigas.</p>
+                    <h1 className="text-3xl font-bold text-foreground">Otimização de Armazenamento</h1>
+                    <p className="text-muted-foreground mt-1">Recupere espaço comprimindo imagens antigas.</p>
                 </div>
                 <Button
                     onClick={startOptimization}
@@ -141,7 +141,7 @@ const StorageOptimization = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <Card className="bg-gray-900 border-gray-800 text-gray-100 col-span-2">
+                <Card className="col-span-2">
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2"><HardDrive className="w-5 h-5 text-blue-400" /> Status do Processo</CardTitle>
                         <CardDescription>O navegador fará todo o trabalho. Não feche esta aba.</CardDescription>
@@ -150,26 +150,26 @@ const StorageOptimization = () => {
                         <div className="space-y-2">
                             <div className="flex justify-between text-sm">
                                 <span>Progresso Geral</span>
-                                <span className={loading ? "text-green-400 animate-pulse" : "text-gray-400"}>{stats.processed} / {stats.totalImages} imagens</span>
+                                <span className={loading ? "text-green-500 animate-pulse" : "text-muted-foreground"}>{stats.processed} / {stats.totalImages} imagens</span>
                             </div>
-                            <Progress value={progressPercentage} className="h-2 bg-gray-800" indicatorClassName="bg-green-500" />
+                            <Progress value={progressPercentage} className="h-2 bg-muted" indicatorClassName="bg-green-500" />
                         </div>
 
                         {loading && (
-                            <div className="p-4 bg-gray-800/50 rounded-lg border border-gray-700 flex items-center gap-3">
-                                <Loader2 className="w-5 h-5 animate-spin text-purple-400" />
+                            <div className="p-4 bg-muted/50 rounded-lg border border-border flex items-center gap-3">
+                                <Loader2 className="w-5 h-5 animate-spin text-purple-500 dark:text-purple-400" />
                                 <div className="overflow-hidden">
-                                    <p className="text-xs text-gray-400 uppercase font-bold mb-1">Processando agora:</p>
-                                    <p className="text-sm truncate font-mono text-purple-300" title={currentFile}>{currentFile || 'Preparando...'}</p>
+                                    <p className="text-xs text-muted-foreground uppercase font-bold mb-1">Processando agora:</p>
+                                    <p className="text-sm truncate font-mono text-purple-650 dark:text-purple-300" title={currentFile}>{currentFile || 'Preparando...'}</p>
                                 </div>
                             </div>
                         )}
 
-                        <div className="bg-black/40 rounded-lg p-4 h-64 overflow-y-auto font-mono text-xs border border-gray-800 space-y-1">
-                            {logs.length === 0 && <p className="text-gray-600 italic text-center py-10">O log de execução aparecerá aqui...</p>}
+                        <div className="bg-muted/40 rounded-lg p-4 h-64 overflow-y-auto font-mono text-xs border border-border space-y-1">
+                            {logs.length === 0 && <p className="text-muted-foreground/60 italic text-center py-10">O log de execução aparecerá aqui...</p>}
                             {logs.map((log, i) => (
-                                <div key={i} className={`flex items-start gap-2 ${log.type === 'error' ? 'text-red-400' : log.type === 'success' ? 'text-green-400' : log.type === 'warning' ? 'text-yellow-400' : 'text-gray-400'}`}>
-                                    <span className="text-gray-600">[{log.timestamp}]</span>
+                                <div key={i} className={`flex items-start gap-2 ${log.type === 'error' ? 'text-destructive' : log.type === 'success' ? 'text-green-600 dark:text-green-400' : log.type === 'warning' ? 'text-yellow-600 dark:text-yellow-400' : 'text-muted-foreground'}`}>
+                                    <span className="text-muted-foreground/60">[{log.timestamp}]</span>
                                     <span>{log.message}</span>
                                 </div>
                             ))}
@@ -177,23 +177,23 @@ const StorageOptimization = () => {
                     </CardContent>
                 </Card>
 
-                <Card className="bg-gray-900 border-gray-800 text-gray-100">
+                <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2"><ImageIcon className="w-5 h-5 text-purple-400" /> Resumo</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <div className="p-4 bg-gray-800/30 rounded-lg border border-gray-800">
-                            <p className="text-sm text-gray-400">Total de Projetos</p>
-                            <p className="text-2xl font-bold text-white">{projects.length}</p>
+                        <div className="p-4 bg-muted/30 rounded-lg border border-border">
+                            <p className="text-sm text-muted-foreground">Total de Projetos</p>
+                            <p className="text-2xl font-bold text-foreground">{projects.length}</p>
                         </div>
-                        <div className="p-4 bg-gray-800/30 rounded-lg border border-gray-800">
-                            <p className="text-sm text-gray-400">Total de Imagens</p>
-                            <p className="text-2xl font-bold text-white">{stats.totalImages}</p>
+                        <div className="p-4 bg-muted/30 rounded-lg border border-border">
+                            <p className="text-sm text-muted-foreground">Total de Imagens</p>
+                            <p className="text-2xl font-bold text-foreground">{stats.totalImages}</p>
                         </div>
-                        <div className="bg-yellow-500/10 border border-yellow-500/20 p-4 rounded-lg">
+                        <div className="bg-yellow-500/10 dark:bg-yellow-500/5 border border-yellow-500/20 p-4 rounded-lg">
                             <div className="flex items-start gap-2">
-                                <AlertTriangle className="w-5 h-5 text-yellow-500 shrink-0 mt-0.5" />
-                                <div className="text-sm text-yellow-200/80">
+                                <AlertTriangle className="w-5 h-5 text-yellow-600 dark:text-yellow-500 shrink-0 mt-0.5" />
+                                <div className="text-sm text-yellow-800 dark:text-yellow-200/80">
                                     <p className="font-semibold mb-1">Atenção</p>
                                     <p>Esta ação substitui os arquivos originais. Certifique-se de que sua conexão com a internet esteja estável.</p>
                                 </div>

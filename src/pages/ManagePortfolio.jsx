@@ -184,7 +184,7 @@ const ManagePortfolio = () => {
                         <h1 className="text-4xl md:text-5xl font-bold">
                             <span className="gradient-text">Gerenciar Portfólio</span>
                         </h1>
-                        <p className="text-lg text-gray-400">Adicione, edite ou remova projetos do seu site.</p>
+                        <p className="text-lg text-muted-foreground font-medium">Adicione, edite ou remova projetos do seu site.</p>
                     </div>
                     <Button onClick={handleAddNew} className="bg-gradient-to-r from-blue-500 to-purple-600">
                         <PlusCircle className="mr-2 h-4 w-4" />
@@ -193,7 +193,7 @@ const ManagePortfolio = () => {
                 </motion.div>
 
                 <div className="glass-effect p-4 rounded-lg mb-8 flex flex-wrap items-center gap-4">
-                    <Filter className="text-gray-400" />
+                    <Filter className="text-muted-foreground" />
                     <Input
                         placeholder="Buscar por título..."
                         value={filters.search}
@@ -226,14 +226,14 @@ const ManagePortfolio = () => {
                         <div className="overflow-x-auto">
                             <table className="w-full text-left">
                                 <thead>
-                                    <tr className="border-b border-gray-700">
-                                        <th className="p-4 cursor-pointer hover:bg-white/5 transition-colors" onClick={() => handleSort('title')}>
+                                    <tr className="border-b border-border">
+                                        <th className="p-4 cursor-pointer hover:bg-muted transition-colors" onClick={() => handleSort('title')}>
                                             <div className="flex items-center">Projeto <SortIcon column="title" /></div>
                                         </th>
-                                        <th className="p-4 hidden md:table-cell cursor-pointer hover:bg-white/5 transition-colors" onClick={() => handleSort('category')}>
+                                        <th className="p-4 hidden md:table-cell cursor-pointer hover:bg-muted transition-colors" onClick={() => handleSort('category')}>
                                             <div className="flex items-center">Categoria <SortIcon column="category" /></div>
                                         </th>
-                                        <th className="p-4 hidden lg:table-cell cursor-pointer hover:bg-white/5 transition-colors" onClick={() => handleSort('year')}>
+                                        <th className="p-4 hidden lg:table-cell cursor-pointer hover:bg-muted transition-colors" onClick={() => handleSort('year')}>
                                             <div className="flex items-center">Ano <SortIcon column="year" /></div>
                                         </th>
                                         <th className="p-4 text-right">Ações</th>
@@ -241,10 +241,10 @@ const ManagePortfolio = () => {
                                 </thead>
                                 <tbody>
                                     {sortedProjects.map(project => (
-                                        <tr key={project.id} className="border-b border-gray-800 hover:bg-gray-800/50">
+                                        <tr key={project.id} className="border-b border-border hover:bg-muted/50">
                                             <td className="p-4 font-medium">{project.title}</td>
-                                            <td className="p-4 text-gray-400 hidden md:table-cell">{project.category?.title}</td>
-                                            <td className="p-4 text-gray-400 hidden lg:table-cell">{project.year}</td>
+                                            <td className="p-4 text-muted-foreground hidden md:table-cell">{project.category?.title}</td>
+                                            <td className="p-4 text-muted-foreground hidden lg:table-cell">{project.year}</td>
                                             <td className="p-4 flex justify-end gap-2">
                                                 <Button variant="ghost" size="icon" onClick={() => handleEdit(project)}>
                                                     <Edit className="h-4 w-4 text-blue-400" />

@@ -8,8 +8,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from 'recharts';
+import { useTheme } from '@/contexts/ThemeContext';
 
 const Dashboard = () => {
+    const { theme } = useTheme();
     const { user, isAdmin, signOut } = useAuth();
     const navigate = useNavigate();
     const [stats, setStats] = useState({
@@ -116,7 +118,7 @@ const Dashboard = () => {
                         <h1 className="text-3xl md:text-4xl font-bold mb-2">
                             <span className="gradient-text">Bem-vindo, {user?.user_metadata?.full_name || user?.email}!</span>
                         </h1>
-                        <p className="text-lg text-gray-400">Aqui está um resumo da sua atividade.</p>
+                        <p className="text-lg text-muted-foreground font-medium">Aqui está um resumo da sua atividade.</p>
                     </div>
                 </motion.div>
 
@@ -129,16 +131,31 @@ const Dashboard = () => {
                     >
                         <motion.div className="lg:col-span-2 space-y-8" variants={itemVariants}>
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                                <Card className="glass-effect"><CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2"><CardTitle className="text-sm font-medium text-gray-400">Projetos</CardTitle><Briefcase className="h-4 w-4 text-gray-500" /></CardHeader><CardContent><div className="text-2xl font-bold">{stats.projects}</div></CardContent></Card>
-                                <Card className="glass-effect"><CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2"><CardTitle className="text-sm font-medium text-gray-400">Contatos</CardTitle><Inbox className="h-4 w-4 text-gray-500" /></CardHeader><CardContent><div className="text-2xl font-bold">{stats.newContacts}</div></CardContent></Card>
-                                <Card className="glass-effect"><CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2"><CardTitle className="text-sm font-medium text-gray-400">Avaliações</CardTitle><Star className="h-4 w-4 text-gray-500" /></CardHeader><CardContent><div className="text-2xl font-bold">{stats.pendingReviews}</div></CardContent></Card>
-                                <Card className="glass-effect"><CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2"><CardTitle className="text-sm font-medium text-gray-400">Suporte Aberto</CardTitle><AlertCircle className="h-4 w-4 text-gray-500" /></CardHeader><CardContent><div className="text-2xl font-bold">{stats.supportOpen}</div></CardContent></Card>
+                                <Card className="glass-effect"><CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Projetos</CardTitle><Briefcase className="h-4 w-4 text-muted-foreground" /></CardHeader><CardContent><div className="text-2xl font-bold">{stats.projects}</div></CardContent></Card>
+                                <Card className="glass-effect"><CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Contatos</CardTitle><Inbox className="h-4 w-4 text-muted-foreground" /></CardHeader><CardContent><div className="text-2xl font-bold">{stats.newContacts}</div></CardContent></Card>
+                                <Card className="glass-effect"><CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Avaliações</CardTitle><Star className="h-4 w-4 text-muted-foreground" /></CardHeader><CardContent><div className="text-2xl font-bold">{stats.pendingReviews}</div></CardContent></Card>
+                                <Card className="glass-effect"><CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Suporte Aberto</CardTitle><AlertCircle className="h-4 w-4 text-muted-foreground" /></CardHeader><CardContent><div className="text-2xl font-bold">{stats.supportOpen}</div></CardContent></Card>
                             </div>
                             <Card className="glass-effect">
                                 <CardHeader><CardTitle>Visão Geral</CardTitle></CardHeader>
                                 <CardContent className="pl-2 h-64">
                                     <ResponsiveContainer width="100%" height="100%">
-                                        <BarChart data={mainChartData}><XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} /><YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} /><Tooltip contentStyle={{ backgroundColor: 'rgba(31, 41, 55, 0.8)', borderColor: '#4b5563', borderRadius: '0.5rem' }} cursor={{ fill: 'rgba(107, 114, 128, 0.1)' }} /><Bar dataKey="value" radius={[4, 4, 0, 0]}>{mainChartData.map((entry, index) => (<Cell key={`cell-${index}`} fill={entry.color} />))}</Bar></BarChart>
+                                        <BarChart data={mainChartData}>
+                                            <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
+                                            <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
+                                            <Tooltip 
+                                                contentStyle={{ 
+                                                    backgroundColor: theme === 'dark' ? 'rgba(31, 41, 55, 0.8)' : 'rgba(255, 255, 255, 0.9)', 
+                                                    borderColor: theme === 'dark' ? '#4b5563' : '#e2e8f0', 
+                                                    borderRadius: '0.5rem',
+                                                    color: theme === 'dark' ? '#fff' : '#000'
+                                                }} 
+                                                cursor={{ fill: theme === 'dark' ? 'rgba(107, 114, 128, 0.1)' : 'rgba(0, 0, 0, 0.05)' }} 
+                                            />
+                                            <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                                                {mainChartData.map((entry, index) => (<Cell key={`cell-${index}`} fill={entry.color} />))}
+                                            </Bar>
+                                        </BarChart>
                                     </ResponsiveContainer>
                                 </CardContent>
                             </Card>
@@ -151,7 +168,14 @@ const Dashboard = () => {
                                     <ResponsiveContainer width="100%" height="100%">
                                         <PieChart>
                                             <Pie data={supportChartData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label={(props) => `${props.name}: ${props.value}`} />
-                                            <Tooltip contentStyle={{ backgroundColor: 'rgba(31, 41, 55, 0.8)', borderColor: '#4b5563', borderRadius: '0.5rem' }} />
+                                            <Tooltip 
+                                                contentStyle={{ 
+                                                    backgroundColor: theme === 'dark' ? 'rgba(31, 41, 55, 0.8)' : 'rgba(255, 255, 255, 0.9)', 
+                                                    borderColor: theme === 'dark' ? '#4b5563' : '#e2e8f0', 
+                                                    borderRadius: '0.5rem',
+                                                    color: theme === 'dark' ? '#fff' : '#000'
+                                                }} 
+                                            />
                                         </PieChart>
                                     </ResponsiveContainer>
                                 </CardContent>
@@ -164,7 +188,7 @@ const Dashboard = () => {
                         <Card className="glass-effect">
                             <CardHeader><CardTitle>Sua Área de Cliente</CardTitle></CardHeader>
                             <CardContent className="space-y-4">
-                                <p className="text-gray-400">Bem-vindo à sua área de cliente. Em breve, você poderá acompanhar seus projetos e abrir chamados de suporte por aqui.</p>
+                                <p className="text-muted-foreground font-medium">Bem-vindo à sua área de cliente. Em breve, você poderá acompanhar seus projetos e abrir chamados de suporte por aqui.</p>
                                 <Link to="/contato"><Button className="bg-gradient-to-r from-blue-500 to-purple-600"><LifeBuoy className="mr-2 h-4 w-4" />Abrir Chamado de Suporte</Button></Link>
                             </CardContent>
                         </Card>

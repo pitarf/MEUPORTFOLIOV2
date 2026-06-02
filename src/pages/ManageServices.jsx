@@ -151,8 +151,8 @@ const ManageServices = () => {
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-white">Gerenciar Serviços</h1>
-                    <p className="text-gray-400 mt-1">Adicione ou edite os serviços exibidos no site</p>
+                    <h1 className="text-3xl font-bold text-foreground">Gerenciar Serviços</h1>
+                    <p className="text-muted-foreground mt-1">Adicione ou edite os serviços exibidos no site</p>
                 </div>
                 <Button
                     onClick={() => {
@@ -171,10 +171,10 @@ const ManageServices = () => {
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-gray-800 p-6 rounded-xl border border-gray-700"
+                    className="bg-card p-6 rounded-xl border border-border"
                 >
                     <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-xl font-semibold text-white">
+                        <h2 className="text-xl font-semibold text-foreground">
                             {currentService ? 'Editar Serviço' : 'Novo Serviço'}
                         </h2>
                         <Button variant="ghost" size="icon" onClick={() => setIsEditing(false)}>
@@ -184,29 +184,27 @@ const ManageServices = () => {
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <label className="text-sm text-gray-400">Título</label>
+                                <label className="text-sm text-muted-foreground">Título</label>
                                 <Input
                                     value={formData.title}
                                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                                     required
-                                    className="bg-gray-900 border-gray-700 text-white"
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm text-gray-400">Slug (URL)</label>
+                                <label className="text-sm text-muted-foreground">Slug (URL)</label>
                                 <Input
                                     value={formData.slug}
                                     onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
                                     placeholder="Auto-gerado se vazio"
-                                    className="bg-gray-900 border-gray-700 text-white"
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm text-gray-400">Ícone</label>
+                                <label className="text-sm text-muted-foreground">Ícone</label>
                                 <select
                                     value={formData.icon}
                                     onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-                                    className="w-full bg-gray-900 border border-gray-700 rounded-md p-2 text-white"
+                                    className="w-full bg-background border border-border rounded-md p-2 text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                                 >
                                     {Object.keys(iconMap).map(iconName => (
                                         <option key={iconName} value={iconName}>{iconName}</option>
@@ -214,30 +212,28 @@ const ManageServices = () => {
                                 </select>
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm text-gray-400">Cor (Gradiente Tailwind)</label>
+                                <label className="text-sm text-muted-foreground">Cor (Gradiente Tailwind)</label>
                                 <Input
                                     value={formData.color}
                                     onChange={(e) => setFormData({ ...formData, color: e.target.value })}
                                     placeholder="from-blue-500 to-purple-600"
-                                    className="bg-gray-900 border-gray-700 text-white"
                                 />
                             </div>
                         </div>
                         <div className="space-y-2">
-                            <label className="text-sm text-gray-400">Descrição</label>
+                            <label className="text-sm text-muted-foreground">Descrição</label>
                             <Textarea
                                 value={formData.description}
                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                 required
-                                className="bg-gray-900 border-gray-700 text-white"
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-sm text-gray-400">Recursos (um por linha)</label>
+                            <label className="text-sm text-muted-foreground">Recursos (um por linha)</label>
                             <Textarea
                                 value={formData.features}
                                 onChange={(e) => setFormData({ ...formData, features: e.target.value })}
-                                className="bg-gray-900 border-gray-700 text-white h-32"
+                                className="h-32"
                                 placeholder="Ex: Sites Responsivos&#10;E-commerce"
                             />
                         </div>
@@ -253,19 +249,19 @@ const ManageServices = () => {
 
             {/* Search Bar */}
             <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
                 <Input
                     type="text"
                     placeholder="Buscar serviços..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 bg-gray-800 border-gray-700 text-white w-full md:w-96"
+                    className="pl-10 w-full md:w-96"
                 />
             </div>
 
             {/* Services Grid */}
             {loading ? (
-                <div className="text-center py-20 text-gray-400">Carregando serviços...</div>
+                <div className="text-center py-20 text-muted-foreground">Carregando serviços...</div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredServices.map((service, index) => {
@@ -276,7 +272,7 @@ const ManageServices = () => {
                                 layout
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                className="bg-gray-800 rounded-xl p-6 border border-gray-700 hover:border-purple-500/50 transition-colors group"
+                                className="bg-card rounded-xl p-6 border border-border hover:border-purple-500/50 transition-colors group"
                             >
                                 <div className="flex justify-between items-start mb-4">
                                     <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${service.color} flex items-center justify-center`}>
@@ -289,7 +285,7 @@ const ManageServices = () => {
                                             onClick={() => handleMove(index, 'up')}
                                             disabled={index === 0}
                                         >
-                                            <ArrowUp className="w-4 h-4 text-gray-400 hover:text-white" />
+                                            <ArrowUp className="w-4 h-4 text-muted-foreground hover:text-foreground" />
                                         </Button>
                                         <Button
                                             variant="ghost"
@@ -297,7 +293,7 @@ const ManageServices = () => {
                                             onClick={() => handleMove(index, 'down')}
                                             disabled={index === filteredServices.length - 1}
                                         >
-                                            <ArrowDown className="w-4 h-4 text-gray-400 hover:text-white" />
+                                            <ArrowDown className="w-4 h-4 text-muted-foreground hover:text-foreground" />
                                         </Button>
                                         <Button variant="ghost" size="icon" onClick={() => handleEdit(service)}>
                                             <Edit2 className="w-4 h-4 text-blue-400" />
@@ -307,17 +303,17 @@ const ManageServices = () => {
                                         </Button>
                                     </div>
                                 </div>
-                                <h3 className="text-xl font-bold text-white mb-2">{service.title}</h3>
-                                <p className="text-gray-400 text-sm mb-4 line-clamp-3">{service.description}</p>
+                                <h3 className="text-xl font-bold text-foreground mb-2">{service.title}</h3>
+                                <p className="text-muted-foreground text-sm mb-4 line-clamp-3">{service.description}</p>
                                 <div className="space-y-1">
                                     {service.features && service.features.slice(0, 3).map((feature, i) => (
-                                        <div key={i} className="flex items-center text-xs text-gray-500">
-                                            <div className="w-1.5 h-1.5 bg-gray-600 rounded-full mr-2" />
+                                        <div key={i} className="flex items-center text-xs text-muted-foreground/80">
+                                            <div className="w-1.5 h-1.5 bg-muted-foreground/60 rounded-full mr-2" />
                                             {feature}
                                         </div>
                                     ))}
                                     {service.features && service.features.length > 3 && (
-                                        <span className="text-xs text-gray-600 pl-3.5">+{service.features.length - 3} mais</span>
+                                        <span className="text-xs text-muted-foreground/60 pl-3.5">+{service.features.length - 3} mais</span>
                                     )}
                                 </div>
                             </motion.div>

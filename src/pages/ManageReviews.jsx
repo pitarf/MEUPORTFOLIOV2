@@ -21,7 +21,7 @@ const ReviewCard = ({ review, onToggle, onDelete }) => {
     };
 
     return (
-        <Card className={`bg-gray-800/50 border-gray-700 transition-all`}>
+        <Card className="bg-card border-border transition-all">
             <CardHeader>
                 <div className="flex justify-between items-start">
                     <div>
@@ -29,8 +29,8 @@ const ReviewCard = ({ review, onToggle, onDelete }) => {
                             {review.avatar_url ? (
                                 <img src={review.avatar_url} alt={review.name} className="w-10 h-10 rounded-full object-cover" loading="lazy" />
                             ) : (
-                                <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center">
-                                    <User className="w-5 h-5 text-gray-400" />
+                                <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
+                                    <User className="w-5 h-5 text-muted-foreground" />
                                 </div>
                             )}
                             <div>
@@ -40,16 +40,16 @@ const ReviewCard = ({ review, onToggle, onDelete }) => {
                         </div>
                         <div className="flex items-center gap-1 mt-2">{renderStars(review.rating)}</div>
                     </div>
-                    <span className="text-xs text-gray-400">{new Date(review.created_at).toLocaleString()}</span>
+                    <span className="text-xs text-muted-foreground">{new Date(review.created_at).toLocaleString()}</span>
                 </div>
             </CardHeader>
             <CardContent>
-                <p className="whitespace-pre-wrap mb-4 text-gray-300">"{review.comment}"</p>
-                <div className="flex items-center justify-end gap-2 pt-4 border-t border-gray-700">
+                <p className="whitespace-pre-wrap mb-4 text-foreground">"{review.comment}"</p>
+                <div className="flex items-center justify-end gap-2 pt-4 border-t border-border">
                     <Button
                         variant="outline"
                         size="sm"
-                        className={`border ${review.is_approved ? 'border-yellow-500/50 text-yellow-300 hover:bg-yellow-500/10' : 'border-green-500/50 text-green-300 hover:bg-green-500/10'}`}
+                        className={`border ${review.is_approved ? 'border-yellow-500/50 text-yellow-600 dark:text-yellow-300 hover:bg-yellow-500/10' : 'border-green-500/50 text-green-600 dark:text-green-300 hover:bg-green-500/10'}`}
                         onClick={() => onToggle(review.id, review.is_approved)}
                     >
                         {review.is_approved ? <X className="w-4 h-4 mr-2" /> : <Check className="w-4 h-4 mr-2" />}
@@ -158,7 +158,7 @@ const ManageReviews = () => {
                 </motion.div>
 
                 <div className="glass-effect p-4 rounded-lg mb-8 flex flex-wrap items-center gap-4">
-                    <Filter className="text-gray-400" />
+                    <Filter className="text-muted-foreground" />
                     <Input
                         placeholder="Buscar por nome..."
                         value={filters.search}
@@ -196,7 +196,7 @@ const ManageReviews = () => {
                                     ))}
                                 </div>
                             ) : (
-                                <p className="text-gray-500 mt-4">Nenhuma avaliação pendente.</p>
+                                <p className="text-muted-foreground mt-4">Nenhuma avaliação pendente.</p>
                             )}
                         </div>
                         <div>
@@ -208,7 +208,7 @@ const ManageReviews = () => {
                                     ))}
                                 </div>
                             ) : (
-                                <p className="text-gray-500 mt-4">Nenhuma avaliação aprovada.</p>
+                                <p className="text-muted-foreground mt-4">Nenhuma avaliação aprovada.</p>
                             )}
                         </div>
                     </div>

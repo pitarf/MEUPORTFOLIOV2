@@ -51,7 +51,7 @@ const Profile = () => {
 
             <div>
                 <h1 className="text-3xl font-bold mb-2">Minha Conta</h1>
-                <p className="text-gray-400">Gerencie suas informações pessoais e segurança.</p>
+                <p className="text-muted-foreground font-medium">Gerencie suas informações pessoais e segurança.</p>
             </div>
 
             <div className="grid gap-8 md:grid-cols-2">
@@ -67,16 +67,15 @@ const Profile = () => {
                     <CardContent>
                         <form onSubmit={handleUpdateProfile} className="space-y-4">
                             <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-300">Email</label>
-                                <Input disabled value={user?.email || ''} className="bg-gray-800/50 border-gray-700 text-gray-400" />
+                                <label className="text-sm font-medium text-muted-foreground">Email</label>
+                                <Input disabled value={user?.email || ''} />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-300">Nome Completo</label>
+                                <label className="text-sm font-medium text-muted-foreground">Nome Completo</label>
                                 <Input
                                     value={fullName}
                                     onChange={(e) => setFullName(e.target.value)}
                                     placeholder="Seu nome"
-                                    className="bg-gray-900/50 border-gray-700"
                                 />
                             </div>
                             <Button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700">
@@ -99,23 +98,21 @@ const Profile = () => {
                     <CardContent>
                         <form onSubmit={handleUpdatePassword} className="space-y-4">
                             <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-300">Nova Senha</label>
+                                <label className="text-sm font-medium text-muted-foreground">Nova Senha</label>
                                 <Input
                                     type="password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="••••••••"
-                                    className="bg-gray-900/50 border-gray-700"
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-300">Confirmar Senha</label>
+                                <label className="text-sm font-medium text-muted-foreground">Confirmar Senha</label>
                                 <Input
                                     type="password"
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                     placeholder="••••••••"
-                                    className="bg-gray-900/50 border-gray-700"
                                 />
                             </div>
                             <Button type="submit" disabled={loading || !password || password !== confirmPassword} className="w-full bg-purple-600 hover:bg-purple-700">

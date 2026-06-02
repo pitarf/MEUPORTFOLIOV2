@@ -23,10 +23,10 @@ import { useAuth } from '@/contexts/SupabaseAuthContext';
 const SidebarItem = ({ icon: Icon, label, path, isActive, collapsed, isExternal }) => {
     const Content = (
         <div className={`
-            flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200
+            flex items-center gap-3 px-4 py-3 rounded-lg border transition-all duration-200
             ${isActive
-                ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30'
-                : 'text-gray-400 hover:text-white hover:bg-white/5'
+                ? 'bg-primary/10 text-primary border-primary/20'
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted'
             }
         `}>
             <Icon size={20} />
@@ -78,7 +78,7 @@ const AdminLayout = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-gray-950 flex font-sans text-gray-100">
+        <div className="min-h-screen bg-background flex font-sans text-foreground transition-colors duration-300">
             {/* Mobile Overlay */}
             <AnimatePresence>
                 {isMobileMenuOpen && (
@@ -97,7 +97,7 @@ const AdminLayout = () => {
                 className={`
                     fixed lg:static inset-y-0 left-0 z-50
                     ${collapsed ? 'w-20' : 'w-64'}
-                    bg-[#0B0F17] border-r border-white/10
+                    bg-card border-r border-border
                     flex flex-col transition-all duration-300 ease-in-out
                 `}
                 initial={false}
@@ -107,7 +107,7 @@ const AdminLayout = () => {
                 }}
             >
                 {/* Logo Area */}
-                <div className={`h-16 flex items-center px-4 border-b border-white/10 ${collapsed ? 'justify-center' : 'justify-between'}`}>
+                <div className={`h-16 flex items-center px-4 border-b border-border ${collapsed ? 'justify-center' : 'justify-between'}`}>
                     <div className="flex items-center gap-2 overflow-hidden">
                         <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex-shrink-0" />
                         {!collapsed && <span className="font-bold text-lg whitespace-nowrap">Painel Admin</span>}
@@ -118,7 +118,7 @@ const AdminLayout = () => {
                             variant="ghost"
                             size="icon"
                             onClick={() => setCollapsed(!collapsed)}
-                            className="h-8 w-8 text-gray-500 hover:text-white"
+                            className="h-8 w-8 text-muted-foreground hover:text-foreground"
                         >
                             <ChevronLeft className={`transition-transform duration-300 ${collapsed ? 'rotate-180' : ''}`} />
                         </Button>
@@ -144,7 +144,7 @@ const AdminLayout = () => {
                 </div>
 
                 {/* Footer Actions */}
-                <div className="p-3 border-t border-white/10">
+                <div className="p-3 border-t border-border">
                     <button
                         onClick={handleSignOut}
                         className={`
@@ -161,9 +161,9 @@ const AdminLayout = () => {
             </motion.aside>
 
             {/* Main Content */}
-            <main className="flex-1 flex flex-col min-w-0 bg-[#0F141E]">
+            <main className="flex-1 flex flex-col min-w-0 bg-background transition-colors duration-300">
                 {/* Mobile Header */}
-                <header className="h-16 lg:hidden flex items-center justify-between px-4 border-b border-white/10 bg-[#0B0F17]">
+                <header className="h-16 lg:hidden flex items-center justify-between px-4 border-b border-border bg-card">
                     <div className="flex items-center gap-3">
                         <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(true)}>
                             <Menu size={20} />

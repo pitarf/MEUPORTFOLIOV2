@@ -113,7 +113,7 @@ const AdminSupport = () => {
             case 'em andamento': return 'border-yellow-500';
             case 'concluído': return 'border-green-500';
             case 'cancelado': return 'border-red-500';
-            default: return 'border-gray-700';
+            default: return 'border-border';
         }
     };
 
@@ -131,7 +131,7 @@ const AdminSupport = () => {
                 </motion.div>
 
                 <div className="glass-effect p-4 rounded-lg mb-8 flex flex-wrap items-center gap-4">
-                    <Filter className="text-gray-400" />
+                    <Filter className="text-muted-foreground" />
                     <Input placeholder="Buscar..." value={filters.search} onChange={(e) => handleFilterChange('search', e.target.value)} className="max-w-xs" />
                     <Select value={filters.status} onValueChange={(value) => handleFilterChange('status', value)}>
                         <SelectTrigger className="w-[180px]"><SelectValue placeholder="Filtrar por status" /></SelectTrigger>
@@ -150,13 +150,13 @@ const AdminSupport = () => {
                                 <h2 className={`text-xl font-bold mb-4 capitalize p-2 rounded-t-lg ${getStatusColor(status).replace('border-', 'bg-').replace('-500', '-500/20')} border-b-2 ${getStatusColor(status)}`}>{status} ({ticketsByStatus[status]?.length || 0})</h2>
                                 <div className="space-y-4 h-[60vh] overflow-y-auto pr-2">
                                     {ticketsByStatus[status]?.map(ticket => (
-                                        <motion.div key={ticket.id} layoutId={`ticket-${ticket.id}`} onClick={() => setSelectedTicket(ticket)} className={`p-4 rounded-lg cursor-pointer glass-effect border-l-4 ${getStatusColor(ticket.status)} hover:bg-gray-700/50 transition-colors`}>
+                                        <motion.div key={ticket.id} layoutId={`ticket-${ticket.id}`} onClick={() => setSelectedTicket(ticket)} className={`p-4 rounded-lg cursor-pointer glass-effect border-l-4 ${getStatusColor(ticket.status)} hover:bg-muted/50 transition-colors`}>
                                             <p className="font-bold truncate">{ticket.subject}</p>
-                                            <p className="text-sm text-gray-400">{ticket.name || ticket.email}</p>
-                                            <p className="text-xs text-gray-500 mt-2">{ticket.ticket_code}</p>
+                                            <p className="text-sm text-muted-foreground">{ticket.name || ticket.email}</p>
+                                            <p className="text-xs text-muted-foreground mt-2">{ticket.ticket_code}</p>
                                         </motion.div>
                                     ))}
-                                    {(ticketsByStatus[status]?.length === 0) && <p className="text-gray-600 text-sm p-4">Nenhum chamado.</p>}
+                                    {(ticketsByStatus[status]?.length === 0) && <p className="text-muted-foreground text-sm p-4">Nenhum chamado.</p>}
                                 </div>
                             </div>
                         ))}
@@ -178,11 +178,11 @@ const AdminSupport = () => {
                             </div>
                             <div className="flex-grow overflow-y-auto pr-2 space-y-4 glass-effect p-4 rounded-lg">
                                 <h3 className="font-bold text-lg">Descrição Original</h3>
-                                <p className="text-gray-300 whitespace-pre-wrap bg-gray-800/50 p-3 rounded-md">{selectedTicket.description}</p>
+                                <p className="text-foreground whitespace-pre-wrap bg-muted p-3 rounded-md">{selectedTicket.description}</p>
                                 <h3 className="font-bold text-lg mt-4">Histórico de Atualizações</h3>
                                 <div className="space-y-4">
                                     {(selectedTicket.ticket_updates || []).sort((a, b) => new Date(a.created_at) - new Date(b.created_at)).map(update => (
-                                        <div key={update.id} className="text-sm"><p className="text-gray-300 bg-gray-800/50 p-3 rounded-md">{update.note}</p><p className="text-xs text-gray-500 mt-1 flex items-center gap-1"><Clock className="w-3 h-3" />{new Date(update.created_at).toLocaleString()}</p></div>
+                                        <div key={update.id} className="text-sm"><p className="text-foreground bg-muted p-3 rounded-md">{update.note}</p><p className="text-xs text-muted-foreground mt-1 flex items-center gap-1"><Clock className="w-3 h-3" />{new Date(update.created_at).toLocaleString()}</p></div>
                                     ))}
                                 </div>
                             </div>
