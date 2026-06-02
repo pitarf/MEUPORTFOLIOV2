@@ -1,4 +1,17 @@
 {
+    "redirects": [
+        {
+            "source": "/",
+            "has": [
+                {
+                    "type": "host",
+                    "value": "fotografia.rafaelpitaoficial.com.br"
+                }
+            ],
+            "destination": "/portfolio-fotografia",
+            "permanent": true
+        }
+    ],
     "rewrites": [
         {
             "source": "/(.*)",
