@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/customSupabaseClient';
 import { motion } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
+import SEO from '@/components/SEO';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Palette, Camera, Code, BarChart3, Video, Target, Wrench, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -49,10 +49,11 @@ const Services = () => {
 
     return (
         <>
-            <Helmet>
-                <title>Serviços - Rafael Pita Solutions</title>
-                <meta name="description" content="Conheça todos os serviços oferecidos pela Rafael Pita Solutions: design gráfico, fotografia, desenvolvimento web, Power BI, vídeos com IA, tráfego pago e muito mais." />
-            </Helmet>
+            <SEO 
+                title="Serviços Digitais e Tecnologia - Rafael Pita Solutions"
+                description="Serviços premium de desenvolvimento web, criação de sites profissionais, sistemas comerciais, dashboards Power BI, tráfego pago e fotografia artística no RJ."
+                keywords="servicos de tecnologia rj, criacao de sites profissional rj, programador rio de janeiro, desenvolvimento de sites rj, fotografo rio de janeiro, dashboards power bi rio de janeiro"
+            />
 
             <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
                 {/* Hero Section */}

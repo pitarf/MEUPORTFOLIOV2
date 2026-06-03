@@ -53,6 +53,11 @@ O componente [SEO.jsx](file:///C:/Git/React/MeuPortfolio%20v2/src/components/SEO
 3. **Canonical Tags**: Evita conteúdo duplicado no Google ao injetar a tag canônica com a URL ativa do navegador.
 4. **noindex Automatizado**: Injeta a tag `<meta name="robots" content="noindex, nofollow" />` em qualquer rota administrativa ou privada (`/admin`, `/dashboard`, `/area-clientes`, `/support`, `/track-ticket`), garantindo a segurança e proteção das faturas e dados de suporte.
 
+### 2.2 Fallback Automático e Otimização Regional (RJ)
+1. **Herança do Logotipo**: Se a URL do Favicon (`favicon_url`) ou a imagem Open Graph (`og_image_url`) não estiverem cadastradas no banco de dados, o componente resolve dinamicamente herdando a URL da logo principal do site (`logo_url`) de forma automatizada.
+2. **Integração Unificada**: O componente `<SEO />` substitui todas as tags `<Helmet>` brutas nas páginas chaves (`Home.jsx`, `Services.jsx`, `Portfolio.jsx`, `PhotographyLanding.jsx`, `PhotographyPortfolio.jsx` e `ProjectPage.jsx`).
+3. **SEO Local RJ**: As palavras-chave e descrições foram estruturadas nas páginas públicas com termos fortes de buscas regionais, como *"fotos de pre wedding rio de janeiro"*, *"fotos casamento rio de janeiro"* e *"desenvolvimento de sites rj"*, garantindo prioridade de ranqueamento para o portfólio nessas palavras-chave.
+
 ---
 
 ## 3. Como Estender e Adicionar Novos Componentes Reativos

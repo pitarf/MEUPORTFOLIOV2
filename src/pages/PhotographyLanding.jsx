@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
+import SEO from '@/components/SEO';
 import { Link } from 'react-router-dom';
 import { Camera, Heart, Users, Star, ArrowRight, Instagram } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -112,6 +112,8 @@ const PhotographyLanding = () => {
                 .from('projects')
                 .select('title, services, main_image_url, gallery_urls, category:categories!inner(slug)')
                 .eq('category.slug', 'fotografia')
+                .order('display_order', { ascending: true })
+                .order('created_at', { ascending: false })
                 .limit(50);
 
             if (projectsData && projectsData.length > 0) {
@@ -215,10 +217,11 @@ const PhotographyLanding = () => {
 
     return (
         <>
-            <Helmet>
-                <title>Fotografia Profissional - Rafael Pita Solutions</title>
-                <meta name="description" content="Serviços de fotografia profissional para casamentos, eventos e ensaios. Capture seus melhores momentos com qualidade e arte." />
-            </Helmet>
+            <SEO 
+                title="Fotografia Profissional RJ | Casamentos, Pre Wedding e Ensaios"
+                description="Fotógrafo profissional no Rio de Janeiro especializado em casamentos, ensaios pre-wedding, retratos corporativos e cobertura de eventos no RJ. Eternize seus melhores momentos."
+                keywords="fotos de pre wedding rio de janeiro, fotos casamento rio de janeiro, fotografo rio de janeiro, fotos pre wedding rj, ensaio pre wedding rj, fotografo de casamento rj, ensaio fotografico rj, fotografia rj, rafael pita photography"
+            />
 
             <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
 

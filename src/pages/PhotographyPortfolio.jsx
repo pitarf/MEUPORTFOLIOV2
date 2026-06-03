@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
+import SEO from '@/components/SEO';
 import { ExternalLink, ArrowRight, Camera, Loader2, ArrowLeft, Search, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -60,6 +60,7 @@ const PhotographyPortfolio = () => {
             .from('projects')
             .select('*')
             .eq('category_id', categoryData.id)
+            .order('display_order', { ascending: true })
             .order('created_at', { ascending: false });
 
         if (error) {
@@ -99,10 +100,11 @@ const PhotographyPortfolio = () => {
 
     return (
         <>
-            <Helmet>
-                <title>Galeria de Fotografia - Rafael Pita Solutions</title>
-                <meta name="description" content="Explore nossa galeria completa de fotografia. Casamentos, eventos, ensaios e muito mais." />
-            </Helmet>
+            <SEO 
+                title="Galeria de Fotografia RJ | Pre Wedding, Casamentos e Ensaios"
+                description="Confira a galeria de trabalhos fotográficos de Rafael Pita no Rio de Janeiro. Fotos de casamentos, ensaios pre-wedding, aniversários e eventos corporativos no RJ."
+                keywords="galeria de fotos pre wedding, fotos pre wedding rj, fotos casamento rio de janeiro, ensaio fotografico rj, fotografo profissional rj, fotos de casamento rio de janeiro"
+            />
 
             <div className="pt-24 pb-20 min-h-screen bg-background text-foreground transition-colors duration-300">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

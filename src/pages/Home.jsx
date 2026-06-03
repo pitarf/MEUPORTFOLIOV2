@@ -3,7 +3,7 @@ import { useSiteConfig } from '@/contexts/SiteConfigContext';
 import { supabase } from '@/lib/customSupabaseClient'; // Import supabase
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import SEO from '@/components/SEO';
 import { ArrowRight, Zap, Star, Users, Award, TrendingUp, Palette, Camera, Code, BarChart3, Video, Target, Wrench, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ProjectCarousel from '@/components/ProjectCarousel';
@@ -48,6 +48,7 @@ const Home = () => {
                     .from('projects')
                     .select('main_image_url, category:categories!inner(slug)')
                     .eq('category.slug', 'desenvolvimento-web')
+                    .order('display_order', { ascending: true })
                     .order('created_at', { ascending: false })
                     .limit(35);
 
@@ -57,6 +58,7 @@ const Home = () => {
                     .select('main_image_url, category:categories!inner(slug)')
                     .neq('category.slug', 'fotografia')
                     .neq('category.slug', 'desenvolvimento-web')
+                    .order('display_order', { ascending: true })
                     .order('created_at', { ascending: false })
                     .limit(15);
 
@@ -101,10 +103,11 @@ const Home = () => {
 
     return (
         <>
-            <Helmet>
-                <title>Rafael Pita Solutions - Criatividade e tecnologia em um só lugar</title>
-                <meta name="description" content="Transformamos suas ideias em realidade digital. Serviços completos de design, desenvolvimento, marketing digital e muito mais." />
-            </Helmet>
+            <SEO 
+                title="Rafael Pita Solutions - Desenvolvimento Web e Fotografia Profissional"
+                description="Desenvolvimento de sites profissionais, sistemas web sob medida, dashboards Power BI interativos e fotografia profissional no Rio de Janeiro. Criatividade e tecnologia para impulsionar seu negócio."
+                keywords="desenvolvimento de sites rj, criacao de sites profissional, criacao de sistemas web, programador rio de janeiro, dashboards power bi rio de janeiro, fotografo rio de janeiro, fotos pre wedding rj, rafael pita solutions"
+            />
 
             {/* Hero Section */}
             <section className="relative min-h-0 md:min-h-screen flex items-center justify-center overflow-hidden bg-background text-foreground transition-colors duration-300 pt-28 pb-12 md:py-0 -mt-20">

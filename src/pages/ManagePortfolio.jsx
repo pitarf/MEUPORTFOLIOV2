@@ -27,7 +27,7 @@ const ManagePortfolio = () => {
     const [categories, setCategories] = useState([]);
     const [filters, setFilters] = useState({ search: '', categoryId: 'all' });
     const [modalState, setModalState] = useState({ isOpen: false, project: null });
-    const [sortConfig, setSortConfig] = useState({ key: 'created_at', direction: 'desc' });
+    const [sortConfig, setSortConfig] = useState({ key: 'display_order', direction: 'asc' });
 
     const fetchCategories = useCallback(async () => {
         const { data, error } = await supabase.from('categories').select('id, title');
@@ -44,6 +44,7 @@ const ManagePortfolio = () => {
         let query = supabase
             .from('projects')
             .select('*, category:categories(title)')
+            .order('display_order', { ascending: true })
             .order('created_at', { ascending: false });
 
         if (filters.search) {
@@ -116,6 +117,72 @@ const ManagePortfolio = () => {
 
     const clearFilters = () => {
         setFilters({ search: '', categoryId: 'all' });
+    };
+
+    const handleMove = async (index, direction) => {
+        const otherIndex = direction === 'up' ? index - 1 : index + 1;
+        if (otherIndex < 0 || otherIndex >= sortedProjects.length) return;
+
+        const currentProject = sortedProjects[index];
+        const otherProject = sortedProjects[otherIndex];
+
+        let currentOrder = currentProject.display_order ?? 0;
+        let otherOrder = otherProject.display_order ?? 0;
+
+        if (currentOrder === otherOrder) {
+            // Se as ordens forem iguais (ex: tudo 0), vamos normalizar os display_orders
+            // de todos os projetos exibidos na categoria de 10 em 10 (ex: 10, 20, 30, ...)
+            const updates = sortedProjects.map((p, idx) => ({
+                id: p.id,
+                display_order: (idx + 1) * 10
+            }));
+
+            // Atualização local imediata (otimista)
+            setProjects(prev => prev.map(p => {
+                const update = updates.find(u => u.id === p.id);
+                return update ? { ...p, display_order: update.display_order } : p;
+            }));
+
+            // Salva no banco de dados
+            try {
+                await Promise.all(updates.map(u => 
+                    supabase.from('projects').update({ display_order: u.display_order }).eq('id', u.id)
+                ));
+                toast({ title: 'Ajustando ordenação...', description: 'Normalizamos a ordenação interna. Tente mover novamente.' });
+            } catch (error) {
+                console.error('Error resetting order:', error);
+                toast({ variant: 'destructive', title: 'Erro ao reordenar', description: 'Erro ao normalizar as ordens.' });
+            }
+            fetchProjects();
+            return;
+        }
+
+        // Caso normal: troca de display_orders
+        // Atualização local imediata
+        setProjects(prev => prev.map(p => {
+            if (p.id === currentProject.id) return { ...p, display_order: otherOrder };
+            if (p.id === otherProject.id) return { ...p, display_order: currentOrder };
+            return p;
+        }));
+
+        try {
+            const { error: error1 } = await supabase
+                .from('projects')
+                .update({ display_order: otherOrder })
+                .eq('id', currentProject.id);
+            
+            const { error: error2 } = await supabase
+                .from('projects')
+                .update({ display_order: currentOrder })
+                .eq('id', otherProject.id);
+
+            if (error1 || error2) throw new Error("Erro na atualização do Supabase.");
+            toast({ title: 'Ordem salva!' });
+        } catch (error) {
+            console.error('Error swapping order:', error);
+            toast({ variant: 'destructive', title: 'Erro ao salvar ordem', description: 'Não foi possível salvar no banco de dados.' });
+            fetchProjects();
+        }
     };
 
     const handleAddNew = () => {
@@ -227,6 +294,11 @@ const ManagePortfolio = () => {
                             <table className="w-full text-left">
                                 <thead>
                                     <tr className="border-b border-border">
+                                        {filters.categoryId !== 'all' && (
+                                            <th className="p-4 w-24 cursor-pointer hover:bg-muted transition-colors" onClick={() => handleSort('display_order')}>
+                                                <div className="flex items-center">Ordem <SortIcon column="display_order" /></div>
+                                            </th>
+                                        )}
                                         <th className="p-4 cursor-pointer hover:bg-muted transition-colors" onClick={() => handleSort('title')}>
                                             <div className="flex items-center">Projeto <SortIcon column="title" /></div>
                                         </th>
@@ -240,12 +312,37 @@ const ManagePortfolio = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {sortedProjects.map(project => (
+                                    {sortedProjects.map((project, idx) => (
                                         <tr key={project.id} className="border-b border-border hover:bg-muted/50">
+                                            {filters.categoryId !== 'all' && (
+                                                <td className="p-4 font-mono text-xs text-muted-foreground">{project.display_order ?? 0}</td>
+                                            )}
                                             <td className="p-4 font-medium">{project.title}</td>
                                             <td className="p-4 text-muted-foreground hidden md:table-cell">{project.category?.title}</td>
                                             <td className="p-4 text-muted-foreground hidden lg:table-cell">{project.year}</td>
                                             <td className="p-4 flex justify-end gap-2">
+                                                {filters.categoryId !== 'all' && sortConfig.key === 'display_order' && (
+                                                    <>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            onClick={() => handleMove(idx, 'up')}
+                                                            disabled={idx === 0}
+                                                            title="Mover para cima"
+                                                        >
+                                                            <ArrowUp className="h-4 w-4 text-muted-foreground hover:text-foreground" />
+                                                        </Button>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            onClick={() => handleMove(idx, 'down')}
+                                                            disabled={idx === sortedProjects.length - 1}
+                                                            title="Mover para baixo"
+                                                        >
+                                                            <ArrowDown className="h-4 w-4 text-muted-foreground hover:text-foreground" />
+                                                        </Button>
+                                                    </>
+                                                )}
                                                 <Button variant="ghost" size="icon" onClick={() => handleEdit(project)}>
                                                     <Edit className="h-4 w-4 text-blue-400" />
                                                 </Button>

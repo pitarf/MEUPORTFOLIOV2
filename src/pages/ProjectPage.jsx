@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import SEO from '@/components/SEO';
 import { motion } from 'framer-motion';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Loader2, ArrowLeft, ArrowRight, ExternalLink, User, Calendar, Tag, Star } from 'lucide-react';
@@ -47,6 +47,7 @@ const ProjectPage = () => {
         const { data: allData, error: allError } = await supabase
             .from('projects')
             .select('id, slug, title, category:categories(slug)')
+            .order('display_order', { ascending: true })
             .order('created_at', { ascending: false });
 
         if (allError) {
@@ -136,10 +137,12 @@ const ProjectPage = () => {
 
     return (
         <>
-            <Helmet>
-                <title>{`${project.title} - Portfólio`}</title>
-                <meta name="description" content={project.description} />
-            </Helmet>
+            <SEO 
+                title={project.title}
+                description={project.description ? (project.description.length > 160 ? `${project.description.substring(0, 157)}...` : project.description) : `Detalhes do projeto ${project.title} desenvolvido por Rafael Pita Solutions.`}
+                keywords={`projeto ${project.title}, ${project.client || ''}, ${project.category?.title || ''}, Rafael Pita, portfolio`}
+                image={project.main_image_url}
+            />
 
             {isModalOpen && (
                 <ImageGalleryModal

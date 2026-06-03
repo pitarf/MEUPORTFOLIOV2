@@ -32,6 +32,7 @@ const ProjectCarousel = ({ categorySlug, excludeCategorySlug, onDataLoaded }) =>
                 let query = supabase
                     .from('projects')
                     .select(selectString)
+                    .order('display_order', { ascending: true })
                     .order('created_at', { ascending: false })
                     .limit(50);
 

@@ -373,8 +373,8 @@ const ManageGeneralSettings = () => {
                             <Label>Favicon do Site (Ícone de Aba)</Label>
                             <div className="flex items-center gap-4">
                                 <div className="w-16 h-16 rounded-lg bg-muted border border-border flex items-center justify-center overflow-hidden relative group">
-                                    {faviconPreview ? (
-                                        <img src={faviconPreview} alt="Favicon Preview" className="w-full h-full object-contain p-2" />
+                                    {faviconPreview || logoPreview ? (
+                                        <img src={faviconPreview || logoPreview} alt="Favicon Preview" className="w-full h-full object-contain p-2" />
                                     ) : (
                                         <ImageIcon className="w-6 h-6 text-muted-foreground/60" />
                                     )}
@@ -385,7 +385,8 @@ const ManageGeneralSettings = () => {
                                 </div>
                                 <div className="text-xs text-muted-foreground flex-1">
                                     Ícone exibido na aba do navegador.<br />
-                                    Formatos suportados: ICO, PNG (quadrado, ex: 32x32px).
+                                    Formatos suportados: ICO, PNG (quadrado, ex: 32x32px).<br />
+                                    <span className="text-blue-500 dark:text-blue-400 font-medium">* Se não for enviado, herdará a logo do site.</span>
                                 </div>
                             </div>
                         </div>
@@ -395,8 +396,8 @@ const ManageGeneralSettings = () => {
                             <Label>Imagem de Compartilhamento (Open Graph)</Label>
                             <div className="flex items-center gap-4">
                                 <div className="w-24 h-16 rounded-lg bg-muted border border-border flex items-center justify-center overflow-hidden relative group">
-                                    {ogImagePreview ? (
-                                        <img src={ogImagePreview} alt="OG Image Preview" className="w-full h-full object-cover" />
+                                    {ogImagePreview || logoPreview ? (
+                                        <img src={ogImagePreview || logoPreview} alt="OG Image Preview" className="w-full h-full object-cover" />
                                     ) : (
                                         <ImageIcon className="w-6 h-6 text-muted-foreground/60" />
                                     )}
@@ -407,7 +408,8 @@ const ManageGeneralSettings = () => {
                                 </div>
                                 <div className="text-xs text-muted-foreground flex-1">
                                     Imagem exibida ao compartilhar o link em redes sociais (WhatsApp, LinkedIn, etc.).<br />
-                                    Proporção recomendada: 1200x630px.
+                                    Proporção recomendada: 1200x630px.<br />
+                                    <span className="text-blue-500 dark:text-blue-400 font-medium">* Se não for enviada, herdará a logo do site.</span>
                                 </div>
                             </div>
                         </div>

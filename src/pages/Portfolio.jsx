@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
+import SEO from '@/components/SEO';
 import { 
     ExternalLink, ArrowRight, Palette, Camera, Code, 
     BarChart3, Video, Target, Wrench, Shield, Loader2, 
@@ -89,6 +89,7 @@ const Portfolio = () => {
             const { data: projectsData, error: projError } = await supabase
                 .from('projects')
                 .select('*')
+                .order('display_order', { ascending: true })
                 .order('created_at', { ascending: false });
 
             if (projError) throw projError;
@@ -151,10 +152,11 @@ const Portfolio = () => {
 
     return (
         <>
-            <Helmet>
-                <title>Portfólio de Alta Performance - Rafael Pita Solutions</title>
-                <meta name="description" content="Explore a excelência técnica de dezenas de projetos concluídos em tecnologia, design inteligente, marketing de alta conversão e inteligência de dados." />
-            </Helmet>
+            <SEO 
+                title="Portfólio de Tecnologia e Soluções Digitais - Rafael Pita Solutions"
+                description="Conheça os cases de sucesso e projetos de desenvolvimento web, criação de sites, sistemas sob medida e painéis corporativos de Power BI criados por Rafael Pita."
+                keywords="desenvolvimento de sites rj, criacao de sites profissional, programador rio de janeiro, portfolio de desenvolvimento web, desenvolvedor react rj, dashboard power bi rj"
+            />
 
             <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
                 

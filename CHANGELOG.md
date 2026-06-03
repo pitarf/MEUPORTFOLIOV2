@@ -2,13 +2,23 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.2.4] - 2026-06-03
+
+### Adicionado
+- **Palavras-chave e Descrições Geolocalizadas (RJ)**: Otimização de metadados nas páginas públicas chaves do sistema focando no ranqueamento regional líder no Rio de Janeiro para tecnologia ("desenvolvimento de sites rj", "programador rio de janeiro", "dashboards power bi rio de janeiro") e fotografia profissional ("fotos de pre wedding rio de janeiro", "fotos casamento rio de janeiro", "ensaio pre wedding rj", "fotografo de casamento rj").
+- **Unificação do Componente de SEO (`SEO.jsx`)**: Substituição completa de todas as ocorrências brutas de `<Helmet>` nas páginas públicas (`Home.jsx`, `Services.jsx`, `Portfolio.jsx`, `PhotographyLanding.jsx`, `PhotographyPortfolio.jsx` e `ProjectPage.jsx`) pelo componente unificado `<SEO />`.
+- **Previsualização de Herança de Logotipo no Admin**: Validação do comportamento reativo do componente de SEO e previews nas telas de administração para herdar automaticamente o logotipo principal do site (`logo_url`) como Favicon do Site e Imagem Open Graph de Compartilhamento, garantindo que o branding funcione perfeitamente sem campos em branco.
+
 ## [1.2.3] - 2026-06-02
 
 ### Adicionado
 - **Alternador de Temas no Painel Administrativo (`AdminLayout.jsx`)**: Adicionado o botão de alternar de tema (Sol/Lua) no rodapé da barra lateral (Sidebar) no desktop e à direita no cabeçalho móvel no mobile, permitindo que o administrador altere o tema Claro/Escuro do painel e do site de forma prática diretamente de dentro da área restrita.
+- **Ordenação Manual de Projetos por Categoria (`ManagePortfolio.jsx`)**: Desenvolvemos uma funcionalidade completa para reordenar projetos do portfólio. Ao filtrar por uma categoria específica, o usuário ganha botões de "Subir" e "Descer" na tabela. A lógica é inteligente: se os projetos possuírem ordens idênticas, elas são normalizadas de 10 em 10 automaticamente antes de realizar a movimentação.
+- **Atualização da Migração SQL (`10_add_display_order_to_projects.sql`)**: Adicionada migração segura para criar a coluna `display_order` na tabela `projects`, inicializando os projetos legados de acordo com sua data de criação (`created_at`) sequencialmente e definindo o valor padrão como `0` (assim, novos projetos criados sobem para o topo por padrão).
 
 ### Alterado
 - **Contraste e Suporte a Temas no Formulário de Edição de Projetos (`ProjectFormModal.jsx`)**: Ajustado o modal de criar/editar projetos de portfólio para se adequar perfeitamente ao tema selecionado. Removemos fundos, bordas e textos escuros rígidos e substituímos por classes utilitárias semânticas HSL (`bg-card`, `bg-muted` e `border-border`), resolvendo a ilegibilidade das fontes cinzas sob fundo escuro fixo em telas claras.
+- **Prioridade de Ordenação nos Projetos (Portfolio, Home, Galeria)**: Todas as queries do Supabase que consultam a tabela `projects` foram alteradas para ordenar primeiramente pelo campo `display_order` (crescente) e secundariamente por `created_at` (decrescente).
 
 ## [1.2.2] - 2026-06-02
 

@@ -64,6 +64,10 @@ Para gerenciar o seu SEO e identidade de marca:
   3. Dimensão ideal: **1200x630 pixels** (proporção 1.91:1).
   4. Clique em **Salvar Alterações** no final da página administrativa.
 
+> [!TIP]
+> **Herança Automática da Logo**:
+> Caso você não possua uma imagem específica para o Favicon ou para a Imagem de Compartilhamento de redes sociais, **não se preocupe!** O sistema é inteligente: se esses campos forem deixados em branco, ele utilizará automaticamente o seu **Logotipo Principal** (`logo_url`) cadastrado nas configurações gerais. A tela do painel mostrará uma pré-visualização indicando que o logotipo está sendo herdado.
+
 ---
 
 ## 5. Cuidados e Boas Práticas
