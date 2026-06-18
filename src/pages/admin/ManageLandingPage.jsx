@@ -4,8 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { compressImage } from '@/utils/imageCompression';
 import { Loader2, Save, Plus, Trash2, Image as ImageIcon, Upload } from 'lucide-react';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '@/lib/firebaseClient';
+import { optimizeAndConvertToWebP } from '@/utils/imageOptimizer';
 import { useToast } from '@/components/ui/use-toast';
 
 const ManageLandingPage = () => {
@@ -64,8 +66,8 @@ const ManageLandingPage = () => {
                 reader.onloadend = () => setLogoPreview(reader.result);
                 reader.readAsDataURL(file);
 
-                // Compress
-                const compressed = await compressImage(file);
+                // Compress and convert to WebP
+                const compressed = await optimizeAndConvertToWebP(file);
                 setLogoFile(compressed);
             } catch (error) {
                 console.error("Error compressing logo:", error);
@@ -81,16 +83,10 @@ const ManageLandingPage = () => {
 
             // Upload Logo if changed
             if (logoFile) {
-                const fileExt = logoFile.name.split('.').pop();
-                const fileName = `nav_logo_photo_${Date.now()}.${fileExt}`;
-                const { data: uploadData, error: uploadError } = await supabase.storage
-                    .from('site-assets')
-                    .upload(fileName, logoFile);
-
-                if (uploadError) throw uploadError;
-
-                const { data: urlData } = supabase.storage.from('site-assets').getPublicUrl(uploadData.path);
-                finalLogoUrl = urlData.publicUrl;
+                const fileName = `nav_logo_photo_${Date.now()}.webp`;
+                const storageRef = ref(storage, `site-assets/${fileName}`);
+                const snapshot = await uploadBytes(storageRef, logoFile);
+                finalLogoUrl = await getDownloadURL(snapshot.ref);
             }
 
             const { error } = await supabase

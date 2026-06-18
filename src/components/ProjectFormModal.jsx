@@ -9,9 +9,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogC
 import { Loader2, PlusCircle, Save, Trash2, Sparkles, Wand2, LayoutGrid, FileText, Image as ImageIcon, UploadCloud, Crop as CropIcon } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import imageCompression from 'browser-image-compression';
 import { generateProjectContent } from '@/lib/gemini';
 import ImageCropperModal from '@/components/ImageCropperModal';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '@/lib/firebaseClient';
+import { optimizeAndConvertToWebP } from '@/utils/imageOptimizer';
 
 // Função auxiliar para converter Blob em File (necessário para o upload do Supabase esperar um File object as vezes, ou pelo menos ter nome)
 const blobToFile = (blob, fileName) => {
@@ -101,13 +103,8 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
     const handleMainImageSelect = (e) => {
         if (e.target.files && e.target.files.length > 0) {
             const file = e.target.files[0];
-            const reader = new FileReader();
-            reader.addEventListener('load', () => {
-                setImageToCrop(reader.result);
-                setCropTarget({ type: 'main', fileName: file.name });
-                setCropperOpen(true);
-            });
-            reader.readAsDataURL(file);
+            setMainImage(file);
+            setMainImagePreview(URL.createObjectURL(file));
             // Reset input value to allow re-selecting same file
             e.target.value = '';
         }
@@ -200,12 +197,27 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
 
     // --- Submit ---
     const uploadFile = async (file, bucket, path) => {
-        // Simple compress before upload (extra safety, though crop already returns webp)
-        // If it's already a blob from cropper, it's efficient.
-        const { data, error } = await supabase.storage.from(bucket).upload(path, file, { upsert: isEditing });
-        if (error) throw error;
-        const { data: { publicUrl } } = supabase.storage.from(bucket).getPublicUrl(data.path);
-        return publicUrl;
+        try {
+            // Otimiza e converte para WebP
+            const optimizedFile = await optimizeAndConvertToWebP(file);
+            
+            // Garante que o nome do arquivo tenha extensão .webp no Firebase
+            let finalPath = path;
+            const extIndex = path.lastIndexOf('.');
+            if (extIndex !== -1) {
+                finalPath = path.substring(0, extIndex) + '.webp';
+            } else {
+                finalPath = path + '.webp';
+            }
+
+            const storageRef = ref(storage, `${bucket}/${finalPath}`);
+            const snapshot = await uploadBytes(storageRef, optimizedFile);
+            const downloadURL = await getDownloadURL(snapshot.ref);
+            return downloadURL;
+        } catch (error) {
+            console.error('Erro no upload para o Firebase Storage:', error);
+            throw new Error(`Falha no upload da imagem: ${error.message}`);
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -398,7 +410,7 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
                                             <div className="relative group w-full h-full">
                                                 <img src={mainImagePreview} className="w-full h-full object-contain" alt="Preview" />
                                                 <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                                    <Button type="button" size="sm" onClick={() => { setImageToCrop(mainImagePreview); setCropTarget({ type: 'main' }); setCropperOpen(true); }}>
+                                                    <Button type="button" size="sm" onClick={() => { setImageToCrop(mainImagePreview); setCropTarget({ type: 'main', fileName: mainImage?.name || 'capa.jpg' }); setCropperOpen(true); }}>
                                                         <CropIcon className="w-4 h-4 mr-2" /> Ajustar Recorte
                                                     </Button>
                                                 </div>

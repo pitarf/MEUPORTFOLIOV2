@@ -7,7 +7,9 @@ import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Star, Loader2, MessageCircle, User, Upload } from 'lucide-react';
-import { compressImage } from '@/utils/imageCompression';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '@/lib/firebaseClient';
+import { optimizeAndConvertToWebP } from '@/utils/imageOptimizer';
 
 const ReviewForm = ({ onSuccess, className }) => {
     const { toast } = useToast();
@@ -36,8 +38,8 @@ const ReviewForm = ({ onSuccess, className }) => {
                 };
                 reader.readAsDataURL(file);
 
-                // Compress the image
-                const compressedFile = await compressImage(file);
+                // Compress and convert to WebP
+                const compressedFile = await optimizeAndConvertToWebP(file);
                 setAvatarFile(compressedFile);
                 console.log(`Image compressed: ${(file.size / 1024).toFixed(2)}KB -> ${(compressedFile.size / 1024).toFixed(2)}KB`);
             } catch (error) {
@@ -64,24 +66,10 @@ const ReviewForm = ({ onSuccess, className }) => {
 
         if (avatarFile) {
             try {
-                const fileExt = avatarFile.name.split('.').pop();
-                const fileName = `${Date.now()}.${fileExt}`;
-                const { data: uploadData, error: uploadError } = await supabase.storage
-                    .from('avatars')
-                    .upload(fileName, avatarFile);
-
-                if (uploadError) {
-                    console.error("Image upload failed:", uploadError);
-                    toast({
-                        variant: "warning",
-                        title: "Aviso na Imagem",
-                        description: "Sua foto não pode ser enviada, mas seu comentário será salvo.",
-                    });
-                    // Proceed without avatar_url
-                } else {
-                    const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(uploadData.path);
-                    avatar_url = urlData.publicUrl;
-                }
+                const fileName = `${Date.now()}.webp`;
+                const storageRef = ref(storage, `avatars/${fileName}`);
+                const snapshot = await uploadBytes(storageRef, avatarFile);
+                avatar_url = await getDownloadURL(snapshot.ref);
             } catch (err) {
                 console.error("Unexpected image error:", err);
                 toast({

@@ -2,6 +2,20 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.2.6] - 2026-06-18
+
+### Adicionado
+- **Zoom na Capa Principal (`ProjectPage.jsx`)**: Integração da imagem de capa principal do projeto no lightbox do visualizador de mídias (`ImageGalleryModal.jsx`). Ao clicar na capa principal do projeto, a foto agora se expande em tamanho original sem cortes.
+- **Upload de Capa sem Recorte Obrigatório (`ProjectFormModal.jsx`)**: Refatoração do fluxo de upload para desativar a abertura forçada do editor de corte (crop). O administrador agora pode salvar imagens em sua proporção original, utilizando o botão "Ajustar Recorte" apenas de forma opcional.
+- **Unificação do Visualizador de Galeria**: A imagem principal foi anexada ao início do carrossel da galeria pública, possibilitando navegar por todo o acervo de fotos do projeto em tela cheia a partir de qualquer clique de card.
+
+## [1.2.5] - 2026-06-03
+
+### Adicionado
+- **Integração com Firebase Storage**: Substituição do Supabase Storage para armazenamento de arquivos pesados (fotos de projetos, imagens de landing page, avatares de avaliações, favicon e logotipos). O Firebase Storage fornece 5 GB gratuitos ( Spark Plan), resolvendo o limite apertado de 1 GB do plano gratuito do Supabase Cloud.
+- **Otimização Automática para WebP (`imageOptimizer.js`)**: Criação de um utilitário que comprime e converte dinamicamente qualquer arquivo de imagem para o formato `.webp` de alta eficiência antes do envio. Isso reduz fotos de alta resolução de 5MB-10MB para menos de 1MB, garantindo carregamento instantâneo.
+- **Ferramenta de Migração Automática (`StorageOptimization.jsx`)**: Refatoração do painel de otimização de armazenamento no painel de administração para baixar as imagens antigas hospedadas no Supabase, convertê-las para WebP, enviá-las para o Firebase Storage, atualizar a referência das URLs no banco de dados e excluir os originais do Supabase de forma totalmente automatizada.
+
 ## [1.2.4] - 2026-06-03
 
 ### Adicionado

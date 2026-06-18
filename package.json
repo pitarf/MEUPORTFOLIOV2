@@ -30,6 +30,7 @@
         "clsx": "^2.0.0",
         "embla-carousel-autoplay": "^8.1.5",
         "embla-carousel-react": "^8.1.5",
+        "firebase": "^12.14.0",
         "framer-motion": "^10.16.4",
         "lucide-react": "^0.285.0",
         "react": "^18.2.0",

@@ -34,6 +34,11 @@ Roadmap de acompanhamento para a reestruturação visual de alta conversão, com
 - [x] **Unificação do Componente de SEO (`SEO.jsx`)**: Substituição de todas as tags `<Helmet>` brutas de terceiros pelas instâncias do componente `<SEO />` integrado no projeto, assegurando que o gerenciamento de metadados, links canônicos e robots noindex/index de páginas do portfólio seja feito em um único ponto confiável.
 - [x] **Herança Automática de Logotipo nos Previews e SEO**: Configuração e validação do fallback que herda automaticamente a logo principal do site (`logo_url`) como Favicon e imagem Open Graph de Compartilhamento em caso de campos vazios, com avisos de auxílio visual na tela de configurações gerais do painel administrativo.
 
+- [x] **Integração com Firebase Storage**: Substituição completa do Supabase Storage para armazenamento de arquivos de mídia (projetos, avaliações, favicon, og_image e logotipos), utilizando o Plano Spark gratuito do Firebase que fornece 5 GB de armazenamento.
+- [x] **Otimização Automática WebP (`imageOptimizer.js`)**: Desenvolvimento de rotina com `browser-image-compression` para converter de forma transparente qualquer imagem enviada para o formato `.webp` com limites ideais de qualidade e resolução (max 1.2MB, max 1920px), melhorando as taxas de carregamento do site.
+- [x] **Migração de Mídia Integrada (`StorageOptimization.jsx`)**: Refatoração do utilitário administrativo de otimização para realizar a migração automática das mídias antigas do Supabase Storage para o Firebase Storage, atualizando as chaves do banco de dados relacional e excluindo os arquivos antigos no Supabase.
+- [x] **Upload de Capa Original & Lightbox da Imagem Principal**: Habilitação de upload de imagem de capa sem crop físico obrigatório no painel (`ProjectFormModal.jsx`), mantendo o recorte via CSS (`object-cover`) apenas nas vitrines de layout e exibindo a imagem inteira original no visualizador de zoom (`ProjectPage.jsx`).
+
 ## EM ANDAMENTO (DOING)
 *Nenhuma tarefa em andamento. Ajustes visuais e de design 100% implementados, validados com build e documentados.*
 

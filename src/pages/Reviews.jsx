@@ -9,6 +9,9 @@ import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '@/lib/firebaseClient';
+import { optimizeAndConvertToWebP } from '@/utils/imageOptimizer';
 import {
     Carousel,
     CarouselContent,
@@ -130,15 +133,22 @@ const Reviews = () => {
         }
     };
 
-    const handleAvatarChange = (e) => {
+    const handleAvatarChange = async (e) => {
         const file = e.target.files[0];
         if (file) {
-            setAvatarFile(file);
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setAvatarPreview(reader.result);
-            };
-            reader.readAsDataURL(file);
+            try {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    setAvatarPreview(reader.result);
+                };
+                reader.readAsDataURL(file);
+
+                const optimizedFile = await optimizeAndConvertToWebP(file);
+                setAvatarFile(optimizedFile);
+            } catch (error) {
+                console.error("Error optimizing avatar:", error);
+                setAvatarFile(file);
+            }
         }
     };
 
@@ -157,13 +167,12 @@ const Reviews = () => {
         let avatar_url = null;
 
         if (avatarFile) {
-            const fileExt = avatarFile.name.split('.').pop();
-            const fileName = `${Date.now()}.${fileExt}`;
-            const { data: uploadData, error: uploadError } = await supabase.storage
-                .from('avatars')
-                .upload(fileName, avatarFile);
-
-            if (uploadError) {
+            try {
+                const fileName = `${Date.now()}.webp`;
+                const storageRef = ref(storage, `avatars/${fileName}`);
+                const snapshot = await uploadBytes(storageRef, avatarFile);
+                avatar_url = await getDownloadURL(snapshot.ref);
+            } catch (uploadError) {
                 setSubmitting(false);
                 toast({
                     variant: "destructive",
@@ -172,9 +181,6 @@ const Reviews = () => {
                 });
                 return;
             }
-
-            const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(uploadData.path);
-            avatar_url = urlData.publicUrl;
         }
 
         const reviewData = { ...newReview, avatar_url, is_approved: false };

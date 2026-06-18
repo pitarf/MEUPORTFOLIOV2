@@ -113,3 +113,22 @@ A página de portfólio corporativo foi equipada com um painel de controle premi
 ### 7.2 Inteligência de Exibição Dinâmica (Ocultação de Especialidades Vazias)
 * Para manter a navegação limpa, profissional e evitar frustração do cliente, **as especialidades que possuem 0 projetos cadastrados são ocultadas automaticamente** do painel de filtros. Elas reaparecerão sozinhas assim que você cadastrar pelo menos 1 projeto corporativo nelas!
 * **Portfólio Limpo e Focado**: Todo projeto de fotografia artística foi excluído da listagem corporativa (filtrando termos legados classificados como "Geral"), mantendo seu portfólio corporativo focado estritamente em tecnologia, design, tráfego pago e inteligência de dados. As fotografias ficam guardadas na galeria de fotos dedicada.
+
+---
+
+## 8. Armazenamento Inteligente das Fotos (Firebase Storage & Otimização WebP)
+
+Para dar total liberdade no upload de novas fotos de fotografia e projetos sem esbarrar no limite do plano gratuito do Supabase (que restringe a apenas 1 GB de mídia), implementamos uma integração automática com o **Firebase Storage** (5 GB gratuitos).
+
+### 8.1 Otimização Automática para WebP no Upload
+Ao criar ou editar um projeto, ou atualizar a identidade do site (Favicon, Logo e imagens de compartilhamento de SEO):
+* **Conversão em Tempo Real**: Qualquer arquivo que você selecionar (PNG, JPG, JPEG) será automaticamente convertido para o formato **WebP** antes do upload.
+* **Compactação Inteligente**: As fotos pesadas que saem da sua câmera (muitas vezes com 5 MB ou 10 MB) são compactadas para menos de 1 MB de forma imperceptível ao olho humano. Isso reduz o consumo do seu armazenamento gratuito e garante que seu site carregue instantaneamente para seus clientes.
+
+### 8.2 Como Migrar Suas Fotos Antigas do Supabase para o Firebase
+Se você já possui imagens antigas cadastradas no site antes da migração, você pode transferi-las e otimizá-las automaticamente a partir do painel de administração:
+1. Acesse a área de administração do seu site e vá na aba **Otimização de Armazenamento** (ou na URL `/admin/otimizacao` / `/admin/storage`).
+2. Clique no botão verde **Iniciar Otimização**.
+3. O sistema baixará todas as fotos antigas salvadas no Supabase Storage, as compactará em formato WebP, as enviará para o seu novo Firebase Storage e atualizará o link de exibição no banco de dados automaticamente.
+4. Por fim, a ferramenta excluirá os arquivos originais pesados do Supabase, liberando espaço de armazenamento do banco de dados na hora!
+

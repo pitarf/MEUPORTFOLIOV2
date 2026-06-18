@@ -6,8 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { compressImage } from '@/utils/imageCompression'; // Import compression
 import { useToast } from '@/components/ui/use-toast';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '@/lib/firebaseClient';
+import { optimizeAndConvertToWebP } from '@/utils/imageOptimizer';
 import { Save, Loader2, Globe, Phone, Share2, BarChart3, AlertTriangle, Upload, Image as ImageIcon, Sparkles } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { motion } from 'framer-motion';
@@ -49,8 +51,8 @@ const ManageGeneralSettings = () => {
                 reader.onloadend = () => setLogoPreview(reader.result);
                 reader.readAsDataURL(file);
 
-                // Compress
-                const compressed = await compressImage(file);
+                // Compress and convert to WebP
+                const compressed = await optimizeAndConvertToWebP(file);
                 setLogoFile(compressed);
             } catch (error) {
                 console.error("Error compressing logo:", error);
@@ -67,7 +69,8 @@ const ManageGeneralSettings = () => {
                 reader.onloadend = () => setFaviconPreview(reader.result);
                 reader.readAsDataURL(file);
 
-                const compressed = await compressImage(file);
+                // Compress and convert to WebP
+                const compressed = await optimizeAndConvertToWebP(file);
                 setFaviconFile(compressed);
             } catch (error) {
                 console.error("Error compressing favicon:", error);
@@ -84,7 +87,8 @@ const ManageGeneralSettings = () => {
                 reader.onloadend = () => setOgImagePreview(reader.result);
                 reader.readAsDataURL(file);
 
-                const compressed = await compressImage(file);
+                // Compress and convert to WebP
+                const compressed = await optimizeAndConvertToWebP(file);
                 setOgImageFile(compressed);
             } catch (error) {
                 console.error("Error compressing OG image:", error);
@@ -126,44 +130,26 @@ const ManageGeneralSettings = () => {
 
             // Upload Logo se foi alterado
             if (logoFile) {
-                const fileExt = logoFile.name.split('.').pop();
-                const fileName = `logo_${user.id}_${Date.now()}.${fileExt}`;
-                const { data: uploadData, error: uploadError } = await supabase.storage
-                    .from('site-assets')
-                    .upload(fileName, logoFile);
-
-                if (uploadError) throw uploadError;
-
-                const { data: urlData } = supabase.storage.from('site-assets').getPublicUrl(uploadData.path);
-                logo_url = urlData.publicUrl;
+                const fileName = `logo_${user.id}_${Date.now()}.webp`;
+                const storageRef = ref(storage, `site-assets/${fileName}`);
+                const snapshot = await uploadBytes(storageRef, logoFile);
+                logo_url = await getDownloadURL(snapshot.ref);
             }
 
             // Upload Favicon se foi alterado
             if (faviconFile) {
-                const fileExt = faviconFile.name.split('.').pop();
-                const fileName = `favicon_${user.id}_${Date.now()}.${fileExt}`;
-                const { data: uploadData, error: uploadError } = await supabase.storage
-                    .from('site-assets')
-                    .upload(fileName, faviconFile);
-
-                if (uploadError) throw uploadError;
-
-                const { data: urlData } = supabase.storage.from('site-assets').getPublicUrl(uploadData.path);
-                favicon_url = urlData.publicUrl;
+                const fileName = `favicon_${user.id}_${Date.now()}.webp`;
+                const storageRef = ref(storage, `site-assets/${fileName}`);
+                const snapshot = await uploadBytes(storageRef, faviconFile);
+                favicon_url = await getDownloadURL(snapshot.ref);
             }
 
             // Upload OG Image se foi alterada
             if (ogImageFile) {
-                const fileExt = ogImageFile.name.split('.').pop();
-                const fileName = `og_${user.id}_${Date.now()}.${fileExt}`;
-                const { data: uploadData, error: uploadError } = await supabase.storage
-                    .from('site-assets')
-                    .upload(fileName, ogImageFile);
-
-                if (uploadError) throw uploadError;
-
-                const { data: urlData } = supabase.storage.from('site-assets').getPublicUrl(uploadData.path);
-                og_image_url = urlData.publicUrl;
+                const fileName = `og_${user.id}_${Date.now()}.webp`;
+                const storageRef = ref(storage, `site-assets/${fileName}`);
+                const snapshot = await uploadBytes(storageRef, ogImageFile);
+                og_image_url = await getDownloadURL(snapshot.ref);
             }
 
             // Determine se é Update ou Insert com base no config.id

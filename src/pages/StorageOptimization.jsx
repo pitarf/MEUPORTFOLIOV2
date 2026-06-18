@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/customSupabaseClient';
-import imageCompression from 'browser-image-compression';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '@/lib/firebaseClient';
+import { optimizeAndConvertToWebP } from '@/utils/imageOptimizer';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -41,56 +43,58 @@ const StorageOptimization = () => {
         setLogs(prev => [{ message, type, timestamp: new Date().toLocaleTimeString() }, ...prev]);
     };
 
-    const processImage = async (url) => {
+    const processImage = async (url, project, type) => {
         try {
-            // 1. Extract path from URL
-            // Supabase URL format: .../storage/v1/object/public/[bucket]/[path]
-            // We need [path]
+            // Se já for uma URL do Firebase, ignora a migração
+            if (url.includes('firebasestorage.googleapis.com')) {
+                addLog(`Ignorado (já no Firebase): ${url.split('/').pop()}`, 'warning');
+                return url;
+            }
+
+            // 1. Extrair path da URL do Supabase
             const urlObj = new URL(url);
             const pathParts = urlObj.pathname.split('/project-images/');
-            if (pathParts.length < 2) return false; // Not in expected bucket
+            if (pathParts.length < 2) return url;
             const path = decodeURIComponent(pathParts[1]);
 
             setCurrentFile(path);
 
-            // 2. Download File
+            // 2. Download do arquivo
             const response = await fetch(url);
             const blob = await response.blob();
             const originalSize = blob.size;
 
-            // 3. Compress
-            const options = {
-                maxSizeMB: 1,
-                maxWidthOrHeight: 1920,
-                useWebWorker: true,
-                fileType: 'image/webp'
-            };
-            const compressedFile = await imageCompression(blob, options);
-            const newSize = compressedFile.size;
+            // 3. Converter e Otimizar para WebP
+            const webpFile = await optimizeAndConvertToWebP(new File([blob], path, { type: blob.type }));
+            const newSize = webpFile.size;
 
-            // Only upload if smaller
-            if (newSize < originalSize) {
-                // 4. Upload (Upsert)
-                const { error } = await supabase.storage
-                    .from('project-images')
-                    .upload(path, compressedFile, { upsert: true, contentType: 'image/webp' });
+            // 4. Upload para o Firebase Storage
+            const finalName = path.replace(/\.[^/.]+$/, "") + ".webp";
+            const storageRef = ref(storage, `project-images/${finalName}`);
+            const snapshot = await uploadBytes(storageRef, webpFile);
+            const firebasePublicUrl = await getDownloadURL(snapshot.ref);
 
-                if (error) throw error;
-                addLog(`Otimizado: ${path} (${(originalSize / 1024).toFixed(0)}KB -> ${(newSize / 1024).toFixed(0)}KB)`, 'success');
-            } else {
-                addLog(`Ignorado (já otimizado): ${path}`, 'warning');
+            addLog(`Migrado: ${finalName} (${(originalSize / 1024).toFixed(0)}KB -> ${(newSize / 1024).toFixed(0)}KB)`, 'success');
+
+            // 5. Excluir do Supabase Storage
+            try {
+                await supabase.storage.from('project-images').remove([path]);
+                addLog(`Removido do Supabase: ${path}`, 'info');
+            } catch (delErr) {
+                console.warn(`Erro ao excluir ${path} do Supabase:`, delErr);
             }
-            return true;
+
+            return firebasePublicUrl;
 
         } catch (error) {
             console.error(error);
-            addLog(`Erro em ${url}: ${error.message}`, 'error');
-            return false;
+            addLog(`Erro ao migrar ${url}: ${error.message}`, 'error');
+            return url; // Retorna URL antiga em caso de erro para não danificar o banco
         }
     };
 
     const startOptimization = async () => {
-        if (!window.confirm('Isso irá baixar, comprimir e substituir todas as imagens dos seus projetos. O processo pode demorar. Deseja continuar?')) return;
+        if (!window.confirm('Isso irá baixar, converter para WebP, fazer upload para o Firebase Storage e atualizar as referências de todas as imagens no banco de dados. Deseja continuar?')) return;
 
         setLoading(true);
         setStats(prev => ({ ...prev, processed: 0 }));
@@ -99,26 +103,64 @@ const StorageOptimization = () => {
         let processedCount = 0;
 
         for (const project of projects) {
-            // Process Main Image
-            if (project.main_image_url) {
-                await processImage(project.main_image_url);
+            let updatedData = {};
+            let hasChanges = false;
+
+            // Processar Capa Principal
+            if (project.main_image_url && !project.main_image_url.includes('firebasestorage.googleapis.com')) {
+                const newUrl = await processImage(project.main_image_url, project, 'main');
+                if (newUrl !== project.main_image_url) {
+                    updatedData.main_image_url = newUrl;
+                    hasChanges = true;
+                }
                 processedCount++;
                 setStats(prev => ({ ...prev, processed: processedCount }));
             }
 
-            // Process Gallery
+            // Processar Galeria
             if (project.gallery_urls && project.gallery_urls.length > 0) {
+                const newGalleryUrls = [];
+                let galleryChanged = false;
+
                 for (const url of project.gallery_urls) {
-                    await processImage(url);
+                    if (!url.includes('firebasestorage.googleapis.com')) {
+                        const newUrl = await processImage(url, project, 'gallery');
+                        newGalleryUrls.push(newUrl);
+                        if (newUrl !== url) {
+                            galleryChanged = true;
+                        }
+                    } else {
+                        newGalleryUrls.push(url);
+                    }
                     processedCount++;
                     setStats(prev => ({ ...prev, processed: processedCount }));
+                }
+
+                if (galleryChanged) {
+                    updatedData.gallery_urls = newGalleryUrls;
+                    hasChanges = true;
+                }
+            }
+
+            // Atualiza o banco do Supabase com as URLs do Firebase
+            if (hasChanges) {
+                const { error } = await supabase
+                    .from('projects')
+                    .update(updatedData)
+                    .eq('id', project.id);
+
+                if (error) {
+                    addLog(`Erro ao salvar projeto "${project.title}" no banco: ${error.message}`, 'error');
+                } else {
+                    addLog(`Salvo no banco de dados: "${project.title}"`, 'info');
                 }
             }
         }
 
         setLoading(false);
         setCurrentFile('');
-        toast({ title: 'Otimização Concluída!', description: `${processedCount} imagens processadas.` });
+        fetchProjects(); // Recarrega dados com novas URLs
+        toast({ title: 'Migração Concluída!', description: `${processedCount} imagens processadas.` });
     };
 
     const progressPercentage = stats.totalImages === 0 ? 0 : (stats.processed / stats.totalImages) * 100;

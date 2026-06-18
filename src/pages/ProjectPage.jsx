@@ -135,6 +135,10 @@ const ProjectPage = () => {
     };
     const mainImageAspectRatio = project.main_image_aspect_ratio || '16:9';
 
+    const allGalleryImages = project.main_image_url 
+        ? [project.main_image_url, ...(project.gallery_urls || [])] 
+        : (project.gallery_urls || []);
+
     return (
         <>
             <SEO 
@@ -146,7 +150,7 @@ const ProjectPage = () => {
 
             {isModalOpen && (
                 <ImageGalleryModal
-                    images={project.gallery_urls}
+                    images={allGalleryImages}
                     startIndex={modalStartIndex}
                     onClose={closeModal}
                 />
@@ -172,13 +176,19 @@ const ProjectPage = () => {
                 </motion.div>
 
                 <motion.div variants={sectionVariants} initial="hidden" animate="visible">
-                    <div className={cn("w-full rounded-2xl mb-12 shadow-2xl shadow-black/30 overflow-hidden", aspectRatioClasses[mainImageAspectRatio])}>
+                    <div 
+                        className={cn("w-full rounded-2xl mb-12 shadow-2xl shadow-black/30 overflow-hidden cursor-pointer group relative", aspectRatioClasses[mainImageAspectRatio])}
+                        onClick={() => openModal(0)}
+                    >
                         <img
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                             alt={`Imagem principal do projeto ${project.title}`}
                             src={project.main_image_url || "https://images.unsplash.com/photo-1572177812156-58036aae439c"}
                             loading="lazy"
                         />
+                        <div className="absolute inset-0 bg-black/45 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <p className="text-white text-sm font-bold bg-black/50 px-4 py-2 rounded-full border border-white/10 backdrop-blur-sm shadow-lg">Ver Capa Completa</p>
+                        </div>
                     </div>
                 </motion.div>
 
@@ -282,7 +292,7 @@ const ProjectPage = () => {
                                     className={cn("relative group overflow-hidden rounded-lg cursor-pointer",
                                         aspectRatioClasses[project.gallery_aspect_ratio || '16:9'] || 'aspect-[4/5]'
                                     )}
-                                    onClick={() => openModal(index)}
+                                    onClick={() => openModal(project.main_image_url ? index + 1 : index)}
                                 >
                                     <img
                                         src={url}

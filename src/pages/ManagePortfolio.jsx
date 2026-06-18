@@ -3,6 +3,8 @@ import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useToast } from '@/components/ui/use-toast';
+import { ref, deleteObject } from 'firebase/storage';
+import { storage } from '@/lib/firebaseClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -202,23 +204,26 @@ const ManagePortfolio = () => {
             const projectToDelete = projects.find(p => p.id === projectId);
             if (!projectToDelete) return;
 
-            const filesToRemove = [];
+            // Deletar as imagens do Firebase Storage
             if (projectToDelete.main_image_url) {
-                const fileName = projectToDelete.main_image_url.split('/').pop();
-                filesToRemove.push(fileName);
-            }
-            if (projectToDelete.gallery_urls && projectToDelete.gallery_urls.length > 0) {
-                projectToDelete.gallery_urls.forEach(url => {
-                    const fileName = url.split('/').pop();
-                    filesToRemove.push(fileName);
-                });
+                try {
+                    // ref(storage, url) aceita a URL completa do Firebase
+                    const imgRef = ref(storage, projectToDelete.main_image_url);
+                    await deleteObject(imgRef);
+                } catch (err) {
+                    console.warn("Could not delete main image from Firebase Storage:", err.message);
+                }
             }
 
-            if (filesToRemove.length > 0) {
-                const { error: storageError } = await supabase.storage.from('project-images').remove(filesToRemove);
-                if (storageError) {
-                    console.warn("Could not delete some images, but proceeding with db deletion:", storageError.message);
-                }
+            if (projectToDelete.gallery_urls && projectToDelete.gallery_urls.length > 0) {
+                await Promise.all(projectToDelete.gallery_urls.map(async (url) => {
+                    try {
+                        const imgRef = ref(storage, url);
+                        await deleteObject(imgRef);
+                    } catch (err) {
+                        console.warn("Could not delete gallery image from Firebase Storage:", err.message);
+                    }
+                }));
             }
 
             const { error } = await supabase.from('projects').delete().eq('id', projectId);

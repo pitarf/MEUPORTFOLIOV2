@@ -98,3 +98,29 @@ Para manter a interface limpa e focada nas entregas do portfólio, categorias qu
 Para banir a barra de rolagem inestética horizontal do Windows, o seletor utiliza uma grade multilinha flexível (`flex flex-wrap gap-2.5`). A troca de abas é suavizada usando a animação física de mola do **Framer Motion**:
 * O botão ativo renderiza internamente um `motion.span` configurado com `layoutId="activeTabBackground"`.
 * Ao clicar em uma nova pílula de categoria, o gradiente azul-púrpura de fundo "desliza" de forma contínua e orgânica entre as abas em vez de dar um salto brusco, simulando a fluidez de interfaces móveis e de alta sofisticação.
+
+---
+
+## 5. Armazenamento Híbrido & Otimização WebP
+
+Para contornar o limite restrito de 1 GB do Supabase Cloud, o projeto adota uma arquitetura híbrida:
+- **Dados Estruturados e Login:** Supabase Database (PostgreSQL) e Supabase Auth.
+- **Arquivos e Mídias Pesadas:** Firebase Storage ( Spark Plan - 5 GB gratuitos).
+
+### 5.1 Otimizador de Imagem (`src/utils/imageOptimizer.js`)
+O utilitário `optimizeAndConvertToWebP` utiliza a biblioteca `browser-image-compression` para processar arquivos de imagem localmente no navegador antes de realizar qualquer envio:
+1. **Compressão**: Limita o tamanho do arquivo a no máximo `1.2MB` e a resolução máxima a `1920px` (largura ou altura).
+2. **Conversão**: Converte forçadamente arquivos PNG, JPG e JPEG para a extensão `.webp`.
+3. **Qualidade**: Qualidade de compressão definida para `0.85`, preservando o padrão visual de fotografia premium sem sobrecarregar o tráfego do usuário.
+
+### 5.2 Cliente Firebase (`src/lib/firebaseClient.js`)
+Centraliza as chaves do Firebase obtidas a partir de variáveis de ambiente do Vite (`import.meta.env`). Exporta a instância `storage` usada em toda a plataforma.
+
+### 5.3 Painel de Migração (`StorageOptimization.jsx`)
+A tela de otimização no painel administrativo foi transformada em uma ferramenta de migração segura de dados. Ao rodar a rotina:
+1. Baixa as imagens originais do Supabase.
+2. Otimiza localmente para `.webp` de forma transparente.
+3. Faz o upload para o Firebase Storage e recupera a URL pública definitiva.
+4. Atualiza os campos correspondentes na tabela `projects` do Supabase.
+5. Deleta a imagem antiga do Supabase Storage, liberando espaço imediatamente.
+
