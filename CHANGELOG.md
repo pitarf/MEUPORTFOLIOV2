@@ -2,6 +2,12 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.2.7] - 2026-06-18
+
+### Adicionado
+- **Zoom Inteligente de Largura Total (`ImageGalleryModal.jsx`)**: Suporte a exibição de imagens muito compridas na vertical (como prints de páginas inteiras de navegadores) ajustadas pela largura total da tela (`w-full max-w-4xl`) no lightbox. O alinhamento passa para o topo (`items-start`) e ativa o scroll vertical nativo (`overflow-y-auto`), permitindo a rolagem fluida e confortável da captura de tela de ponta a ponta.
+- **Preservação de Resolução e Legibilidade de Prints (`imageOptimizer.js`)**: Modificação do utilitário de otimização para inspecionar dinamicamente as proporções da imagem. Imagens muito verticais (proporção altura/largura > 1.5) têm o limite padrão de 1920px desativado ou estendido para até `8192px`. Isso impede que a largura seja reduzida drasticamente e garante que o texto fique 100% legível no zoom.
+
 ## [1.2.6] - 2026-06-18
 
 ### Adicionado

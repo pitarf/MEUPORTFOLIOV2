@@ -96,8 +96,13 @@ Para manter a interface limpa e focada nas entregas do portfólio, categorias qu
 
 ### 4.3 Pílulas Multilinha Sem Rolagem (`layoutId`)
 Para banir a barra de rolagem inestética horizontal do Windows, o seletor utiliza uma grade multilinha flexível (`flex flex-wrap gap-2.5`). A troca de abas é suavizada usando a animação física de mola do **Framer Motion**:
-* O botão ativo renderiza internamente um `motion.span` configurado com `layoutId="activeTabBackground"`.
+* O botão ativo renderiza internamente um `motion.span` configurado with `layoutId="activeTabBackground"`.
 * Ao clicar em uma nova pílula de categoria, o gradiente azul-púrpura de fundo "desliza" de forma contínua e orgânica entre as abas em vez de dar um salto brusco, simulando a fluidez de interfaces móveis e de alta sofisticação.
+
+### 4.4 Visualizador de Mídias e Zoom Vertical Inteligente (`ImageGalleryModal.jsx`)
+O lightbox de visualização pública de mídias integra em um único carrossel unificado a capa principal e as fotos da galeria do projeto. Ele dispõe de comportamento adaptativo baseado no zoom:
+1. **Visualização Padrão**: A imagem é exibida de forma contida e centralizada (`items-center max-w-full max-h-full object-contain`).
+2. **Modo Zoom**: Ao clicar na imagem, se for uma captura vertical longa (como prints de páginas inteiras de sites), o wrapper do slide altera seu alinhamento para o topo (`items-start`) e ativa a rolagem vertical (`overflow-y-auto`), enquanto a imagem expande para preencher a largura (`w-full max-w-4xl h-auto`). Isso possibilita ler o conteúdo e rolar de cima a baixo com perfeita legibilidade e sem distorções de escala.
 
 ---
 
@@ -109,9 +114,10 @@ Para contornar o limite restrito de 1 GB do Supabase Cloud, o projeto adota uma 
 
 ### 5.1 Otimizador de Imagem (`src/utils/imageOptimizer.js`)
 O utilitário `optimizeAndConvertToWebP` utiliza a biblioteca `browser-image-compression` para processar arquivos de imagem localmente no navegador antes de realizar qualquer envio:
-1. **Compressão**: Limita o tamanho do arquivo a no máximo `1.2MB` e a resolução máxima a `1920px` (largura ou altura).
-2. **Conversão**: Converte forçadamente arquivos PNG, JPG e JPEG para a extensão `.webp`.
-3. **Qualidade**: Qualidade de compressão definida para `0.85`, preservando o padrão visual de fotografia premium sem sobrecarregar o tráfego do usuário.
+1. **Detecção de Proporção**: Obtém a largura e altura nativas da imagem. Se a proporção `altura/largura > 1.5` (prints de tela cheia/verticais), estende dinamicamente o limite máximo de resolução (`maxWidthOrHeight`) para até `8192px` para preservar a largura original da imagem e manter os textos e elementos legíveis no zoom.
+2. **Compressão**: Para imagens normais (quadradas ou horizontais), limita a resolução máxima a `1920px` (largura ou altura) para economia de banda, e reduz o tamanho do arquivo a no máximo `1.2MB`.
+3. **Conversão**: Converte forçadamente arquivos PNG, JPG e JPEG para a extensão `.webp`.
+4. **Qualidade**: Qualidade de compressão definida para `0.85`, preservando o padrão visual de fotografia premium sem sobrecarregar o tráfego do usuário.
 
 ### 5.2 Cliente Firebase (`src/lib/firebaseClient.js`)
 Centraliza as chaves do Firebase obtidas a partir de variáveis de ambiente do Vite (`import.meta.env`). Exporta a instância `storage` usada em toda a plataforma.

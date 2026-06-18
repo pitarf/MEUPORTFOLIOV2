@@ -123,6 +123,7 @@ Para dar total liberdade no upload de novas fotos de fotografia e projetos sem e
 ### 8.1 Otimização Automática para WebP no Upload
 Ao criar ou editar um projeto, ou atualizar a identidade do site (Favicon, Logo e imagens de compartilhamento de SEO):
 * **Conversão em Tempo Real**: Qualquer arquivo que você selecionar (PNG, JPG, JPEG) será automaticamente convertido para o formato **WebP** antes do upload.
+* **Preservação de Resolução para Prints**: O sistema detecta de forma inteligente se a imagem possui formato muito vertical (como capturas de tela inteira de sites) e preserva a resolução de largura original (suportando até 8192px na altura). Isso impede que a imagem seja reduzida e ficasse pixelizada ou ilegível ao dar zoom.
 * **Compactação Inteligente**: As fotos pesadas que saem da sua câmera (muitas vezes com 5 MB ou 10 MB) são compactadas para menos de 1 MB de forma imperceptível ao olho humano. Isso reduz o consumo do seu armazenamento gratuito e garante que seu site carregue instantaneamente para seus clientes.
 
 ### 8.2 Como Migrar Suas Fotos Antigas do Supabase para o Firebase
@@ -131,4 +132,13 @@ Se você já possui imagens antigas cadastradas no site antes da migração, voc
 2. Clique no botão verde **Iniciar Otimização**.
 3. O sistema baixará todas as fotos antigas salvadas no Supabase Storage, as compactará em formato WebP, as enviará para o seu novo Firebase Storage e atualizará o link de exibição no banco de dados automaticamente.
 4. Por fim, a ferramenta excluirá os arquivos originais pesados do Supabase, liberando espaço de armazenamento do banco de dados na hora!
+
+---
+
+## 9. Visualização de Projetos e Zoom Inteligente (Lightbox)
+
+Ao navegar pelas fotos e cases de projetos no seu site:
+* **Capa e Galeria Integradas**: Ao abrir um case, o usuário pode clicar em qualquer imagem, incluindo a imagem de capa principal do projeto, para abrir o visualizador em tela cheia (Lightbox).
+* **Zoom Adaptativo de Imagens Compridas**: Ao clicar na foto dentro do visualizador em tela cheia para dar zoom, o sistema detecta se a imagem é muito comprida (como prints verticais de páginas de sites inteiros). Em vez de distorcer ou achatá-la, o sistema ajusta a imagem na largura ideal da tela e habilita rolagem vertical natural. Isso permite que seus clientes naveguem pelo print da página inteira deslizando de cima a baixo com facilidade e nitidez de textos.
+* **Navegação Simplificada**: Você pode fechar o visualizador clicando no botão `X`, pressionando a tecla `ESC` no teclado, ou clicando em qualquer ponto fora ou sobre a imagem com zoom ativo para retirá-lo.
 

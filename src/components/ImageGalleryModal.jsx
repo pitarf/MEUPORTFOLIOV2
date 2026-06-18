@@ -74,12 +74,19 @@ const ImageGalleryModal = ({ images, startIndex, onClose }) => {
                     <div className="overflow-hidden w-full h-full" ref={emblaRef}>
                         <div className="flex h-full">
                             {images.map((url, index) => (
-                                <div key={index} className="flex-[0_0_100%] min-w-0 h-full flex items-center justify-center p-8 overflow-auto" onClick={toggleZoom}>
+                                <div
+                                    key={index}
+                                    className={`flex-[0_0_100%] min-w-0 h-full flex justify-center p-8 transition-all duration-300 ${
+                                        isZoomed ? 'items-start overflow-y-auto' : 'items-center overflow-hidden'
+                                    }`}
+                                    onClick={toggleZoom}
+                                >
                                     <motion.img
                                         src={url}
                                         alt={`Galeria do projeto - Imagem ${index + 1}`}
-                                        className="max-w-full max-h-full object-contain cursor-zoom-in transition-transform duration-300"
-                                        animate={{ scale: isZoomed ? 2 : 1 }}
+                                        className={`transition-all duration-300 ease-in-out cursor-zoom-in ${
+                                            isZoomed ? 'w-full max-w-4xl h-auto' : 'max-w-full max-h-full object-contain'
+                                        }`}
                                         style={{
                                             cursor: isZoomed ? 'zoom-out' : 'zoom-in',
                                         }}
