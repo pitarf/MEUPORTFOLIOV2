@@ -8,7 +8,7 @@ import { storage } from '@/lib/firebaseClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Loader2, PlusCircle, Edit, Trash2, Filter, X, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Loader2, PlusCircle, Edit, Trash2, Filter, X, ArrowUpDown, ArrowUp, ArrowDown, GripVertical } from 'lucide-react';
 import ProjectFormModal from '@/components/ProjectFormModal';
 import {
     AlertDialog,
@@ -30,6 +30,8 @@ const ManagePortfolio = () => {
     const [filters, setFilters] = useState({ search: '', categoryId: 'all' });
     const [modalState, setModalState] = useState({ isOpen: false, project: null });
     const [sortConfig, setSortConfig] = useState({ key: 'display_order', direction: 'asc' });
+    const [draggedIndex, setDraggedIndex] = useState(null);
+    const [dragOverIndex, setDragOverIndex] = useState(null);
 
     const fetchCategories = useCallback(async () => {
         const { data, error } = await supabase.from('categories').select('id, title');
@@ -187,6 +189,37 @@ const ManagePortfolio = () => {
         }
     };
 
+    const handleDragDrop = async (sourceIndex, targetIndex) => {
+        if (sourceIndex === null || targetIndex === null || sourceIndex === targetIndex) return;
+
+        const reorderedProjects = [...sortedProjects];
+        const [movedItem] = reorderedProjects.splice(sourceIndex, 1);
+        reorderedProjects.splice(targetIndex, 0, movedItem);
+
+        // Calcula os novos display_orders de 10 em 10 para todos os itens
+        const updates = reorderedProjects.map((p, idx) => ({
+            id: p.id,
+            display_order: (idx + 1) * 10
+        }));
+
+        // Atualização local imediata (otimista)
+        setProjects(prev => prev.map(p => {
+            const update = updates.find(u => u.id === p.id);
+            return update ? { ...p, display_order: update.display_order } : p;
+        }));
+
+        try {
+            await Promise.all(updates.map(u => 
+                supabase.from('projects').update({ display_order: u.display_order }).eq('id', u.id)
+            ));
+            toast({ title: 'Ordem salva com sucesso!' });
+        } catch (error) {
+            console.error('Error updating drag-and-drop order:', error);
+            toast({ variant: 'destructive', title: 'Erro ao salvar ordem', description: 'Não foi possível salvar a nova ordenação.' });
+            fetchProjects();
+        }
+    };
+
     const handleAddNew = () => {
         setModalState({ isOpen: true, project: null });
     };
@@ -289,99 +322,150 @@ const ManagePortfolio = () => {
                         <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
                     </div>
                 ) : (
-                    <motion.div
-                        className="glass-effect p-4 sm:p-8 rounded-2xl"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.2 }}
-                    >
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-left">
-                                <thead>
-                                    <tr className="border-b border-border">
-                                        {filters.categoryId !== 'all' && (
-                                            <th className="p-4 w-24 cursor-pointer hover:bg-muted transition-colors" onClick={() => handleSort('display_order')}>
-                                                <div className="flex items-center">Ordem <SortIcon column="display_order" /></div>
-                                            </th>
-                                        )}
-                                        <th className="p-4 cursor-pointer hover:bg-muted transition-colors" onClick={() => handleSort('title')}>
-                                            <div className="flex items-center">Projeto <SortIcon column="title" /></div>
-                                        </th>
-                                        <th className="p-4 hidden md:table-cell cursor-pointer hover:bg-muted transition-colors" onClick={() => handleSort('category')}>
-                                            <div className="flex items-center">Categoria <SortIcon column="category" /></div>
-                                        </th>
-                                        <th className="p-4 hidden lg:table-cell cursor-pointer hover:bg-muted transition-colors" onClick={() => handleSort('year')}>
-                                            <div className="flex items-center">Ano <SortIcon column="year" /></div>
-                                        </th>
-                                        <th className="p-4 text-right">Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {sortedProjects.map((project, idx) => (
-                                        <tr key={project.id} className="border-b border-border hover:bg-muted/50">
-                                            {filters.categoryId !== 'all' && (
-                                                <td className="p-4 font-mono text-xs text-muted-foreground">{project.display_order ?? 0}</td>
+                    <>
+                        {filters.categoryId !== 'all' && sortConfig.key === 'display_order' && sortConfig.direction === 'asc' && (
+                            <div className="bg-blue-500/10 border border-blue-500/20 text-blue-400 p-4 rounded-xl text-sm mb-6 flex items-start gap-2 shadow-sm animate-fade-in">
+                                <span className="text-base select-none">💡</span>
+                                <div>
+                                    <span className="font-semibold text-blue-300">Dica de Ordenação:</span> Você pode clicar e arrastar as linhas da tabela pelo ícone <strong className="font-semibold text-blue-300">⋮⋮ (Grip)</strong> para reordenar os projetos de forma prática, ou continuar usando as setas.
+                                </div>
+                            </div>
+                        )}
+                        <motion.div
+                            className="glass-effect p-4 sm:p-8 rounded-2xl"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.2 }}
+                        >
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left">
+                                    <thead>
+                                        <tr className="border-b border-border">
+                                            {filters.categoryId !== 'all' && sortConfig.key === 'display_order' && sortConfig.direction === 'asc' && (
+                                                <th className="p-4 w-12"></th>
                                             )}
-                                            <td className="p-4 font-medium">{project.title}</td>
-                                            <td className="p-4 text-muted-foreground hidden md:table-cell">{project.category?.title}</td>
-                                            <td className="p-4 text-muted-foreground hidden lg:table-cell">{project.year}</td>
-                                            <td className="p-4 flex justify-end gap-2">
-                                                {filters.categoryId !== 'all' && sortConfig.key === 'display_order' && (
-                                                    <>
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="icon"
-                                                            onClick={() => handleMove(idx, 'up')}
-                                                            disabled={idx === 0}
-                                                            title="Mover para cima"
-                                                        >
-                                                            <ArrowUp className="h-4 w-4 text-muted-foreground hover:text-foreground" />
-                                                        </Button>
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="icon"
-                                                            onClick={() => handleMove(idx, 'down')}
-                                                            disabled={idx === sortedProjects.length - 1}
-                                                            title="Mover para baixo"
-                                                        >
-                                                            <ArrowDown className="h-4 w-4 text-muted-foreground hover:text-foreground" />
-                                                        </Button>
-                                                    </>
-                                                )}
-                                                <Button variant="ghost" size="icon" onClick={() => handleEdit(project)}>
-                                                    <Edit className="h-4 w-4 text-blue-400" />
-                                                </Button>
-                                                <AlertDialog>
-                                                    <AlertDialogTrigger asChild>
-                                                        <Button variant="ghost" size="icon">
-                                                            <Trash2 className="h-4 w-4 text-red-500" />
-                                                        </Button>
-                                                    </AlertDialogTrigger>
-                                                    <AlertDialogContent>
-                                                        <AlertDialogHeader>
-                                                            <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
-                                                            <AlertDialogDescription>
-                                                                Esta ação não pode ser desfeita. Isso excluirá permanentemente o projeto e todas as suas imagens do servidor.
-                                                            </AlertDialogDescription>
-                                                        </AlertDialogHeader>
-                                                        <AlertDialogFooter>
-                                                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                                            <AlertDialogAction
-                                                                className="bg-red-600 hover:bg-red-700"
-                                                                onClick={() => handleDelete(project.id)}
-                                                            >
-                                                                Excluir
-                                                            </AlertDialogAction>
-                                                        </AlertDialogFooter>
-                                                    </AlertDialogContent>
-                                                </AlertDialog>
-                                            </td>
+                                            {filters.categoryId !== 'all' && (
+                                                <th className="p-4 w-24 cursor-pointer hover:bg-muted transition-colors" onClick={() => handleSort('display_order')}>
+                                                    <div className="flex items-center">Ordem <SortIcon column="display_order" /></div>
+                                                </th>
+                                            )}
+                                            <th className="p-4 cursor-pointer hover:bg-muted transition-colors" onClick={() => handleSort('title')}>
+                                                <div className="flex items-center">Projeto <SortIcon column="title" /></div>
+                                            </th>
+                                            <th className="p-4 hidden md:table-cell cursor-pointer hover:bg-muted transition-colors" onClick={() => handleSort('category')}>
+                                                <div className="flex items-center">Categoria <SortIcon column="category" /></div>
+                                            </th>
+                                            <th className="p-4 hidden lg:table-cell cursor-pointer hover:bg-muted transition-colors" onClick={() => handleSort('year')}>
+                                                <div className="flex items-center">Ano <SortIcon column="year" /></div>
+                                            </th>
+                                            <th className="p-4 text-right">Ações</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </motion.div>
+                                    </thead>
+                                    <tbody>
+                                        {sortedProjects.map((project, idx) => {
+                                            const isDragEnabled = filters.categoryId !== 'all' && sortConfig.key === 'display_order' && sortConfig.direction === 'asc';
+                                            return (
+                                                <tr
+                                                    key={project.id}
+                                                    className={`border-b border-border transition-all duration-200 ${
+                                                        draggedIndex === idx ? 'opacity-40 bg-muted/30' : 'hover:bg-muted/50'
+                                                    } ${
+                                                        dragOverIndex === idx && draggedIndex !== idx ? 'border-t-2 border-blue-500 bg-blue-500/10' : ''
+                                                    }`}
+                                                    draggable={isDragEnabled}
+                                                    onDragStart={(e) => {
+                                                        if (!isDragEnabled) return;
+                                                        setDraggedIndex(idx);
+                                                        e.dataTransfer.effectAllowed = 'move';
+                                                    }}
+                                                    onDragOver={(e) => {
+                                                        if (!isDragEnabled) return;
+                                                        e.preventDefault();
+                                                        if (dragOverIndex !== idx) {
+                                                            setDragOverIndex(idx);
+                                                        }
+                                                    }}
+                                                    onDragEnd={() => {
+                                                        setDraggedIndex(null);
+                                                        setDragOverIndex(null);
+                                                    }}
+                                                    onDrop={() => {
+                                                        if (!isDragEnabled) return;
+                                                        handleDragDrop(draggedIndex, idx);
+                                                        setDraggedIndex(null);
+                                                        setDragOverIndex(null);
+                                                    }}
+                                                >
+                                                    {isDragEnabled && (
+                                                        <td className="p-4 cursor-grab active:cursor-grabbing text-muted-foreground/40 hover:text-muted-foreground transition-colors select-none">
+                                                            <GripVertical className="h-5 w-5" />
+                                                        </td>
+                                                    )}
+                                                    {filters.categoryId !== 'all' && (
+                                                        <td className="p-4 font-mono text-xs text-muted-foreground">{project.display_order ?? 0}</td>
+                                                    )}
+                                                    <td className="p-4 font-medium">{project.title}</td>
+                                                    <td className="p-4 text-muted-foreground hidden md:table-cell">{project.category?.title}</td>
+                                                    <td className="p-4 text-muted-foreground hidden lg:table-cell">{project.year}</td>
+                                                    <td className="p-4 flex justify-end gap-2">
+                                                        {filters.categoryId !== 'all' && sortConfig.key === 'display_order' && (
+                                                            <>
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    size="icon"
+                                                                    onClick={() => handleMove(idx, 'up')}
+                                                                    disabled={idx === 0}
+                                                                    title="Mover para cima"
+                                                                >
+                                                                    <ArrowUp className="h-4 w-4 text-muted-foreground hover:text-foreground" />
+                                                                </Button>
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    size="icon"
+                                                                    onClick={() => handleMove(idx, 'down')}
+                                                                    disabled={idx === sortedProjects.length - 1}
+                                                                    title="Mover para baixo"
+                                                                >
+                                                                    <ArrowDown className="h-4 w-4 text-muted-foreground hover:text-foreground" />
+                                                                </Button>
+                                                            </>
+                                                        )}
+                                                        <Button variant="ghost" size="icon" onClick={() => handleEdit(project)}>
+                                                            <Edit className="h-4 w-4 text-blue-400" />
+                                                        </Button>
+                                                        <AlertDialog>
+                                                            <AlertDialogTrigger asChild>
+                                                                <Button variant="ghost" size="icon">
+                                                                    <Trash2 className="h-4 w-4 text-red-500" />
+                                                                </Button>
+                                                            </AlertDialogTrigger>
+                                                            <AlertDialogContent>
+                                                                <AlertDialogHeader>
+                                                                    <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
+                                                                    <AlertDialogDescription>
+                                                                        Esta ação não pode ser desfeita. Isso excluirá permanentemente o projeto e todas as suas imagens do servidor.
+                                                                    </AlertDialogDescription>
+                                                                </AlertDialogHeader>
+                                                                <AlertDialogFooter>
+                                                                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                                                    <AlertDialogAction
+                                                                        className="bg-red-600 hover:bg-red-700"
+                                                                        onClick={() => handleDelete(project.id)}
+                                                                    >
+                                                                        Excluir
+                                                                    </AlertDialogAction>
+                                                                </AlertDialogFooter>
+                                                            </AlertDialogContent>
+                                                        </AlertDialog>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </motion.div>
+                    </>
                 )}
             </div>
 

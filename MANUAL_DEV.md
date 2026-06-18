@@ -82,7 +82,7 @@ As classes `text-gray-900 dark:text-white` e `text-gray-600 dark:text-gray-400` 
 
 ---
 
-## 4. Arquitetura de Abas e Otimização de Filtros do Portfólio (`Portfolio.jsx`)
+## 4. Abas, Filtros e Reordenação de Projetos (`Portfolio.jsx` & `ManagePortfolio.jsx`)
 
 Para garantir uma interface corporativa refinada de alta autoridade, o portfólio geral implementa uma lógica de dados inteligente combinada com design multilinha adaptável.
 
@@ -103,6 +103,15 @@ Para banir a barra de rolagem inestética horizontal do Windows, o seletor utili
 O lightbox de visualização pública de mídias integra em um único carrossel unificado a capa principal e as fotos da galeria do projeto. Ele dispõe de comportamento adaptativo baseado no zoom:
 1. **Visualização Padrão**: A imagem é exibida de forma contida e centralizada (`items-center max-w-full max-h-full object-contain`).
 2. **Modo Zoom**: Ao clicar na imagem, se for uma captura vertical longa (como prints de páginas inteiras de sites), o wrapper do slide altera seu alinhamento para o topo (`items-start`) e ativa a rolagem vertical (`overflow-y-auto`), enquanto a imagem expande para preencher a largura (`w-full max-w-4xl h-auto`). Isso possibilita ler o conteúdo e rolar de cima a baixo com perfeita legibilidade e sem distorções de escala.
+
+### 4.5 Reordenação por Drag and Drop no Painel Administrativo (`ManagePortfolio.jsx`)
+Para facilitar a ordenação de projetos pelo administrador sem o uso exaustivo de botões de setas, implementamos a reordenação por arraste nativo do HTML5:
+1. **Ativação Segura**: O arraste das linhas `<tr>` é habilitado (`draggable={true}`) somente ao filtrar por uma categoria específica (`filters.categoryId !== 'all'`), com a ordenação ativa por ordem de exibição (`sortConfig.key === 'display_order'`) e direção crescente (`asc`).
+2. **Eventos DOM**:
+   - `onDragStart`: Armazena o índice do item de origem (`draggedIndex`).
+   - `onDragOver`: Atualiza o estado visual da linha alvo (`dragOverIndex`) e previne o comportamento padrão para permitir a soltura (drop).
+   - `onDrop`: Dispara a função `handleDragDrop(draggedIndex, targetIndex)` e redefine os estados.
+3. **Persistência em Lote**: A função de drop reposiciona o elemento no array ordenado, reconstrói os valores de `display_order` de todos os elementos correspondentes de 10 em 10 (ex: 10, 20, 30...) para evitar colisões e normalizar a ordenação, e atualiza o Supabase de forma otimista localmente e persistida em lote via `Promise.all`.
 
 ---
 

@@ -142,3 +142,15 @@ Ao navegar pelas fotos e cases de projetos no seu site:
 * **Zoom Adaptativo de Imagens Compridas**: Ao clicar na foto dentro do visualizador em tela cheia para dar zoom, o sistema detecta se a imagem é muito comprida (como prints verticais de páginas de sites inteiros). Em vez de distorcer ou achatá-la, o sistema ajusta a imagem na largura ideal da tela e habilita rolagem vertical natural. Isso permite que seus clientes naveguem pelo print da página inteira deslizando de cima a baixo com facilidade e nitidez de textos.
 * **Navegação Simplificada**: Você pode fechar o visualizador clicando no botão `X`, pressionando a tecla `ESC` no teclado, ou clicando em qualquer ponto fora ou sobre a imagem com zoom ativo para retirá-lo.
 
+---
+
+## 10. Reordenação Prática de Projetos no Portfólio (Drag & Drop)
+
+Para organizar visualmente a ordem de exibição dos seus cases no site de maneira rápida e intuitiva:
+1. Acesse o **Gerenciador de Portfólio** no painel de administração (`/admin/portfolio`).
+2. Utilize o seletor de filtros para escolher uma **Categoria Específica** (a ordenação personalizada por arraste é executada por categoria).
+3. Certifique-se de que a tabela está listada pela coluna **Ordem** de forma crescente. Um aviso azul brilhante no topo confirmará que o modo de arraste está ativo.
+4. **Como Arrastar**: Coloque o cursor do mouse sobre o ícone de arraste **⋮⋮ (Grip)** da linha que deseja reordenar. Clique, segure e arraste a linha para cima ou para baixo.
+5. **Destaque Visual**: Uma linha azul brilhante mostrará onde o projeto será inserido. Solte o botão do mouse para concluir.
+6. A ordem é salva no banco de dados Supabase de forma totalmente automática e instantânea, exibindo uma notificação de sucesso na tela!
+

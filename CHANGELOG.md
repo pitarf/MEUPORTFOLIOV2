@@ -2,6 +2,12 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.2.8] - 2026-06-18
+
+### Adicionado
+- **Reordenação por Drag and Drop no Painel Admin (`ManagePortfolio.jsx`)**: Substituição da reordenação sequencial por cliques em setas pelo arraste nativo HTML5. O administrador agora pode reordenar a listagem de projetos arrastando qualquer linha através do ícone GripVertical (`GripVertical`). Inclui feedback visual premium com linhas e fundo destacados durante o arraste e normalização de ordem automática em lote no banco Supabase.
+- **Badge de Auxílio ao Usuário**: Inserção de banner de dica de UX sobre o funcionamento do arraste ao filtrar categorias.
+
 ## [1.2.7] - 2026-06-18
 
 ### Adicionado
