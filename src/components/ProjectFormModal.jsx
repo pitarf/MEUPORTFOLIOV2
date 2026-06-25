@@ -43,7 +43,8 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
         gallery_urls: [],
         video_urls: '',
         main_image_aspect_ratio: '16:9',
-        gallery_aspect_ratio: '16:9', // Novo campo
+        gallery_aspect_ratio: '16:9',
+        photography_nicho: 'ensaios',
     });
 
     // Image States
@@ -61,7 +62,7 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
     // Load Categories
     useEffect(() => {
         const fetchCategories = async () => {
-            const { data, error } = await supabase.from('categories').select('id, title');
+            const { data, error } = await supabase.from('categories').select('id, title, slug');
             if (!error) setCategories(data);
         };
         fetchCategories();
@@ -70,6 +71,17 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
     // Load Project Data
     useEffect(() => {
         if (isEditing && project) {
+            const currentServices = project.services || [];
+            const currentTitle = project.title || '';
+            let nicho = 'ensaios';
+            const servicesLower = currentServices.map(s => s.toLowerCase());
+            const titleLower = currentTitle.toLowerCase();
+            if (servicesLower.includes('casamento') || servicesLower.includes('pedido') || titleLower.includes('casamento') || titleLower.includes('pedido') || titleLower.includes('noivado')) {
+                nicho = 'casamentos';
+            } else if (servicesLower.includes('evento') || servicesLower.includes('festa') || servicesLower.includes('corporativo') || titleLower.includes('evento') || titleLower.includes('festa') || titleLower.includes('corporativo') || titleLower.includes('aniversario') || titleLower.includes('aniversário')) {
+                nicho = 'eventos';
+            }
+
             setFormData({
                 ...project,
                 services: project.services ? project.services.join(', ') : '',
@@ -78,12 +90,11 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
                 main_image_aspect_ratio: project.main_image_aspect_ratio || '16:9',
                 gallery_aspect_ratio: project.gallery_aspect_ratio || '16:9',
                 category_id: project.category_id || '', // Explicitly set category_id
+                photography_nicho: nicho,
             });
-            // Se tiver imagem principal, poderíamos mostrar preview, mas como é URL remoto, deixamos quieto ou mostramos link.
-            // Para simplificar, mainImagePreview será usado apenas para NOVAS imagens locais.
         } else {
             setFormData({
-                category_id: '', slug: '', title: '', client: '', year: new Date().getFullYear(), services: '', description: '', challenge: '', solution: '', results: '', project_url: '', gallery_urls: [], video_urls: '', main_image_aspect_ratio: '4:5', gallery_aspect_ratio: '4:5',
+                category_id: '', slug: '', title: '', client: '', year: new Date().getFullYear(), services: '', description: '', challenge: '', solution: '', results: '', project_url: '', gallery_urls: [], video_urls: '', main_image_aspect_ratio: '4:5', gallery_aspect_ratio: '4:5', photography_nicho: 'ensaios',
             });
         }
     }, [project, isEditing]);
@@ -225,18 +236,37 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
         setLoading(true);
 
         try {
+            const selectedCategory = categories.find(c => String(c.id) === String(formData.category_id));
+            const isPhotography = selectedCategory?.slug === 'fotografia';
+
+            let servicesArray = formData.services.split(',').map(s => s.trim()).filter(s => s);
+            if (isPhotography) {
+                // Remove termos antigos de nicho para evitar conflitos
+                const termsToRemove = ['casamento', 'pedido', 'noivado', 'evento', 'festa', 'corporativo', 'aniversario', 'aniversário', 'ensaio'];
+                servicesArray = servicesArray.filter(s => !termsToRemove.includes(s.toLowerCase()));
+
+                // Adiciona o termo do nicho correto
+                if (formData.photography_nicho === 'casamentos') {
+                    servicesArray.push('Casamento');
+                } else if (formData.photography_nicho === 'eventos') {
+                    servicesArray.push('Evento');
+                } else {
+                    servicesArray.push('Ensaio');
+                }
+            }
+
             const projectData = {
                 ...formData,
-                services: formData.services.split(',').map(s => s.trim()).filter(s => s),
+                services: servicesArray,
                 video_urls: formData.video_urls.split(',').map(s => s.trim()).filter(s => s),
                 year: formData.year ? parseInt(formData.year, 10) : new Date().getFullYear(),
                 category_id: formData.category_id ? parseInt(formData.category_id, 10) : null,
             };
 
-            // Remove helper keys if they exist
+            // Remove helper keys
             delete projectData.category;
+            delete projectData.photography_nicho;
 
-            // Validate critical fields
             if (!projectData.category_id) {
                 toast({ variant: 'destructive', title: 'Erro', description: 'Selecione uma categoria.' });
                 setLoading(false);
@@ -278,6 +308,9 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
             setLoading(false);
         }
     };
+
+    const selectedCategory = categories.find(c => String(c.id) === String(formData.category_id));
+    const isPhotography = selectedCategory?.slug === 'fotografia';
 
     return (
         <Dialog open={true} onOpenChange={onClose}>
@@ -337,6 +370,21 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
                                         </SelectContent>
                                     </Select>
                                 </div>
+                                {isPhotography && (
+                                    <div className="space-y-2">
+                                        <Label className="flex items-center gap-1.5 text-blue-500 dark:text-blue-400 font-semibold">
+                                            <Sparkles className="w-3.5 h-3.5" /> Subcategoria (Nicho)
+                                        </Label>
+                                        <Select name="photography_nicho" value={formData.photography_nicho || 'ensaios'} onValueChange={(v) => handleSelectChange('photography_nicho', v)}>
+                                            <SelectTrigger className="border-blue-500/30 focus:ring-blue-500"><SelectValue placeholder="Selecione o nicho..." /></SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="casamentos">Casamentos</SelectItem>
+                                                <SelectItem value="ensaios">Ensaios</SelectItem>
+                                                <SelectItem value="eventos">Eventos</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                )}
                                 <div className="space-y-2">
                                     <Label>Cliente</Label>
                                     <Input name="client" value={formData.client} onChange={handleInputChange} />

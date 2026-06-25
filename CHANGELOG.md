@@ -2,6 +2,13 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.2.9] - 2026-06-25
+
+### Adicionado
+- **Subcategoria de Fotografia (Nicho) no Admin (`ProjectFormModal.jsx`)**: Integração de um campo Select exclusivo para o nicho (subcategoria) de fotografia (Casamentos, Ensaios, Eventos) na tela de cadastro/edição de projetos. O campo é exibido dinamicamente apenas quando a categoria selecionada é "Fotografia".
+- **Gravação Inteligente Retrocompatível**: A seleção do nicho é traduzida e integrada de forma invisível nas tags do array `services` ao salvar, garantindo o funcionamento do filtro de abas na galeria de arte pública sem precisar quebrar a compatibilidade do banco de dados ou rodar migrations.
+- **Leitura Automática na Edição**: O modal inspeciona as tags e o título do projeto ao carregar os dados para pré-selecionar o nicho correto de forma 100% transparente.
+
 ## [1.2.8] - 2026-06-18
 
 ### Adicionado

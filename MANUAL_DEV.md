@@ -113,6 +113,13 @@ Para facilitar a ordenação de projetos pelo administrador sem o uso exaustivo 
    - `onDrop`: Dispara a função `handleDragDrop(draggedIndex, targetIndex)` e redefine os estados.
 3. **Persistência em Lote**: A função de drop reposiciona o elemento no array ordenado, reconstrói os valores de `display_order` de todos os elementos correspondentes de 10 em 10 (ex: 10, 20, 30...) para evitar colisões e normalizar a ordenação, e atualiza o Supabase de forma otimista localmente e persistida em lote via `Promise.all`.
 
+### 4.6 Seleção de Subcategoria de Fotografia (Nicho) no Admin (`ProjectFormModal.jsx`)
+Para guiar o administrador no preenchimento de subcategorias de fotografia de forma coerente com a filtragem da galeria pública, implementamos um campo Select reativo no formulário de criação/edição de projetos:
+1. **Identificação Dinâmica**: Carrega as propriedades de `slug` das categorias do Supabase. A flag `isPhotography` é ativada se a categoria selecionada possuir `slug === 'fotografia'`.
+2. **Select Reativo**: Apresenta o select de Nicho com as opções `Casamentos`, `Ensaios` e `Eventos` embutido na aba "Informações", visível exclusivamente se a flag `isPhotography` for ativa.
+3. **Decodificação de Dados na Edição**: O componente lê o título e os serviços do projeto no banco ao carregar e define o estado temporário `photography_nicho` com o nicho atual do projeto.
+4. **Acoplamento Retrocompatível no Submit**: No `handleSubmit`, se for um projeto de fotografia, removemos termos antigos e inserimos dinamicamente a tag correspondente (como `'Casamento'`, `'Evento'` ou `'Ensaio'`). A chave temporária `photography_nicho` é excluída do objeto de dados enviado à API para manter o banco de dados e queries legadas públicas intocados.
+
 ---
 
 ## 5. Armazenamento Híbrido & Otimização WebP

@@ -154,3 +154,19 @@ Para organizar visualmente a ordem de exibição dos seus cases no site de manei
 5. **Destaque Visual**: Uma linha azul brilhante mostrará onde o projeto será inserido. Solte o botão do mouse para concluir.
 6. A ordem é salva no banco de dados Supabase de forma totalmente automática e instantânea, exibindo uma notificação de sucesso na tela!
 
+---
+
+## 11. Cadastro de Projetos de Fotografia e Seleção de Subcategoria (Nicho)
+
+Para garantir que seus novos trabalhos artísticos de fotografia sejam catalogados nas abas corretas da sua Galeria de Arte pública (Todos, Casamentos, Ensaios ou Eventos):
+
+1. Acesse o **Gerenciador de Portfólio** e clique em **Adicionar Projeto** (ou clique para editar um projeto de fotografia existente).
+2. Na aba **Informações**, localize o campo **Categoria** e selecione a opção **Fotografia**.
+3. **Selecione a Subcategoria**: Assim que a categoria "Fotografia" for selecionada, um campo Select exclusivo com uma borda azul brilhante e um ícone de estrela surgirá: **Subcategoria (Nicho)**.
+4. Selecione a opção desejada:
+   * **Casamentos**: Para casamentos, noivados, elopements e pedidos.
+   * **Ensaios**: Para ensaios de casal, gestante, retrato individual ou pré-wedding tradicional.
+   * **Eventos**: Para aniversários, festas e cobertura fotográfica corporativa.
+5. Complete os demais campos de texto e mídia normalmente e clique em **Salvar**.
+6. **Mapeamento Automático**: O sistema salvará a subcategoria de forma invisível nas tags do seu projeto e, imediatamente, o novo álbum aparecerá catalogado na aba correspondente na sua galeria pública de fotografia!
+
