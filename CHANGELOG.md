@@ -5,9 +5,9 @@ Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 ## [1.2.9] - 2026-06-25
 
 ### Adicionado
-- **Subcategoria de Fotografia (Nicho) no Admin (`ProjectFormModal.jsx`)**: Integração de um campo Select exclusivo para o nicho (subcategoria) de fotografia (Casamentos, Ensaios, Eventos) na tela de cadastro/edição de projetos. O campo é exibido dinamicamente apenas quando a categoria selecionada é "Fotografia".
-- **Gravação Inteligente Retrocompatível**: A seleção do nicho é traduzida e integrada de forma invisível nas tags do array `services` ao salvar, garantindo o funcionamento do filtro de abas na galeria de arte pública sem precisar quebrar a compatibilidade do banco de dados ou rodar migrations.
-- **Leitura Automática na Edição**: O modal inspeciona as tags e o título do projeto ao carregar os dados para pré-selecionar o nicho correto de forma 100% transparente.
+- **Criação e Seleção Dinâmica de Subcategorias (Nichos) de Fotografia (`ProjectFormModal.jsx`)**: Integração de um seletor dinâmico de subcategorias que carrega as opções diretamente do banco de dados por varredura de tags. Inclui a opção especial "+ Criar Nova Subcategoria..." que abre um campo de texto interativo para cadastrar novos nichos personalizados (como Gestantes, Retratos, Newborn) sob demanda.
+- **Gravação Inteligente Retrocompatível**: O novo nicho inserido é formatado e gravado de forma transparente sob o prefixo `nicho:NomeDaSubcategoria` no array `services` no banco Supabase. Evita a necessidade de migrações estruturais ou alterações DDL no PostgreSQL.
+- **Filtros e Abas Públicas Automáticas (`PhotographyPortfolio.jsx`)**: A página da galeria de arte detecta os nichos ativos nos projetos salvos e renderiza as abas de filtros correspondentes dinamicamente, permitindo a navegação imediata sem intervenção técnica.
 
 ## [1.2.8] - 2026-06-18
 

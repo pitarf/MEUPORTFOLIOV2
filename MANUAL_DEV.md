@@ -113,12 +113,13 @@ Para facilitar a ordenação de projetos pelo administrador sem o uso exaustivo 
    - `onDrop`: Dispara a função `handleDragDrop(draggedIndex, targetIndex)` e redefine os estados.
 3. **Persistência em Lote**: A função de drop reposiciona o elemento no array ordenado, reconstrói os valores de `display_order` de todos os elementos correspondentes de 10 em 10 (ex: 10, 20, 30...) para evitar colisões e normalizar a ordenação, e atualiza o Supabase de forma otimista localmente e persistida em lote via `Promise.all`.
 
-### 4.6 Seleção de Subcategoria de Fotografia (Nicho) no Admin (`ProjectFormModal.jsx`)
-Para guiar o administrador no preenchimento de subcategorias de fotografia de forma coerente com a filtragem da galeria pública, implementamos um campo Select reativo no formulário de criação/edição de projetos:
-1. **Identificação Dinâmica**: Carrega as propriedades de `slug` das categorias do Supabase. A flag `isPhotography` é ativada se a categoria selecionada possuir `slug === 'fotografia'`.
-2. **Select Reativo**: Apresenta o select de Nicho com as opções `Casamentos`, `Ensaios` e `Eventos` embutido na aba "Informações", visível exclusivamente se a flag `isPhotography` for ativa.
-3. **Decodificação de Dados na Edição**: O componente lê o título e os serviços do projeto no banco ao carregar e define o estado temporário `photography_nicho` com o nicho atual do projeto.
-4. **Acoplamento Retrocompatível no Submit**: No `handleSubmit`, se for um projeto de fotografia, removemos termos antigos e inserimos dinamicamente a tag correspondente (como `'Casamento'`, `'Evento'` ou `'Ensaio'`). A chave temporária `photography_nicho` é excluída do objeto de dados enviado à API para manter o banco de dados e queries legadas públicas intocados.
+### 4.6 Seleção e Criação Dinâmica de Subcategoria de Fotografia (Nicho) no Admin (`ProjectFormModal.jsx`)
+Para guiar o administrador no preenchimento de subcategorias de fotografia de forma flexível e permitir a expansão de escopo do portfólio, implementamos um campo de seleção dinâmico e auto-alimentado:
+1. **Identificação Dinâmica de Categoria**: A flag `isPhotography` é ativada se a categoria selecionada no formulário possuir `slug === 'fotografia'`.
+2. **Carregamento Automático de Nichos Existentes**: Um `useEffect` na inicialização faz uma varredura em todos os projetos de fotografia ativos na tabela `projects`, filtrando as tags que iniciam com o padrão `nicho:`. As subcategorias encontradas são consolidadas em um conjunto de dados únicos (`nichoOptions`), garantindo que novas subcategorias criadas anteriormente já apareçam como opções selecionáveis para futuros cadastros.
+3. **Select Dinâmico com Criador Reativo**: Apresenta o select de Nicho alimentado pelo array `nichoOptions` e insere no final a opção especial `+ Criar Nova Subcategoria...` (valor `new_nicho`). Se esta opção for selecionada, é renderizado sob demanda um campo de texto (`new_photography_nicho`) para inserção manual da nova subcategoria.
+4. **Persistência Retrocompatível no Submit**: No `handleSubmit`, se for um projeto de fotografia, removemos termos antigos e inserimos dinamicamente a tag formatada (ex: `nicho:Gestantes` ou `nicho:Casamentos`) no array `services`. As propriedades temporárias auxiliares do formulário (`photography_nicho` e `new_photography_nicho`) são removidas do objeto antes da persistência de dados no Supabase para manter o schema de tabelas inalterado.
+5. **Atualização Dinâmica na Galeria Pública**: A galeria de fotografia em `PhotographyPortfolio.jsx` lê essas tags e renderiza dinamicamente novas abas de filtros para subcategorias personalizadas criadas na administração de forma transparente.
 
 ---
 

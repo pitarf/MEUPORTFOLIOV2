@@ -156,17 +156,17 @@ Para organizar visualmente a ordem de exibição dos seus cases no site de manei
 
 ---
 
-## 11. Cadastro de Projetos de Fotografia e Seleção de Subcategoria (Nicho)
+## 11. Cadastro de Projetos de Fotografia e Gerenciamento de Subcategorias (Nichos)
 
-Para garantir que seus novos trabalhos artísticos de fotografia sejam catalogados nas abas corretas da sua Galeria de Arte pública (Todos, Casamentos, Ensaios ou Eventos):
+Para garantir que seus novos trabalhos artísticos de fotografia sejam catalogados nas abas corretas da sua Galeria de Arte pública (e permitir que você crie novos filtros dinamicamente):
 
 1. Acesse o **Gerenciador de Portfólio** e clique em **Adicionar Projeto** (ou clique para editar um projeto de fotografia existente).
 2. Na aba **Informações**, localize o campo **Categoria** e selecione a opção **Fotografia**.
 3. **Selecione a Subcategoria**: Assim que a categoria "Fotografia" for selecionada, um campo Select exclusivo com uma borda azul brilhante e um ícone de estrela surgirá: **Subcategoria (Nicho)**.
 4. Selecione a opção desejada:
-   * **Casamentos**: Para casamentos, noivados, elopements e pedidos.
-   * **Ensaios**: Para ensaios de casal, gestante, retrato individual ou pré-wedding tradicional.
-   * **Eventos**: Para aniversários, festas e cobertura fotográfica corporativa.
-5. Complete os demais campos de texto e mídia normalmente e clique em **Salvar**.
-6. **Mapeamento Automático**: O sistema salvará a subcategoria de forma invisível nas tags do seu projeto e, imediatamente, o novo álbum aparecerá catalogado na aba correspondente na sua galeria pública de fotografia!
+   * **Subcategorias Existentes**: O sistema lista automaticamente todas as subcategorias que já possuem projetos no banco (como *Casamentos*, *Ensaios* ou *Eventos*).
+   * **+ Criar Nova Subcategoria...**: Se você deseja cadastrar uma subcategoria inédita (ex: *Gestantes*, *Retratos*, *Newborn*), selecione esta opção.
+5. **Cadastrando Novo Nicho**: Ao selecionar a opção de criação de nova subcategoria, um campo de texto adicional chamado **Nome da Nova Subcategoria** será exibido. Digite o nome do novo nicho (ex: `Gestantes`) com a grafia correta.
+6. Complete os demais campos de texto e mídia normalmente e clique em **Salvar Projeto**.
+7. **Mapeamento Automático & Filtros Públicos**: O sistema salvará a subcategoria de forma invisível nas tags do seu projeto e atualizará a lista de opções automaticamente. Na galeria pública, uma nova aba de filtro contendo o nome da nova subcategoria surgirá de forma instantânea para os seus visitantes, contanto que haja pelo menos um álbum ativo nela.
 

@@ -13,6 +13,13 @@ import { useTheme } from '@/contexts/ThemeContext';
  * Baseia-se em termos contidos no array de serviços ou no título/descrição.
  */
 const getProjectNiche = (project) => {
+    // 1. Tenta achar tag com o prefixo 'nicho:'
+    const nicheTag = (project.services || []).find(s => s.toLowerCase().startsWith('nicho:'));
+    if (nicheTag) {
+        return nicheTag.substring(6).toLowerCase();
+    }
+
+    // 2. Fallback para retrocompatibilidade
     const services = (project.services || []).map(s => s.toLowerCase());
     const title = (project.title || '').toLowerCase();
 
@@ -32,6 +39,7 @@ const getProjectNiche = (project) => {
  */
 const PhotographyPortfolio = () => {
     const { theme } = useTheme();
+    const capitalize = (s) => s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
     const [projects, setProjects] = useState([]);
     const [filteredProjects, setFilteredProjects] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -39,6 +47,35 @@ const PhotographyPortfolio = () => {
     const [searchParams] = useSearchParams();
     const nichoParam = searchParams.get('nicho');
     const [activeTab, setActiveTab] = useState(nichoParam || 'all');
+
+    // 1. Coleta todos os nichos únicos encontrados nos projetos
+    const dynamicNiches = React.useMemo(() => {
+        const nichesSet = new Set(['casamentos', 'ensaios', 'eventos']); // Inicia com os nichos padrão
+        projects.forEach(p => {
+            const niche = getProjectNiche(p);
+            if (niche) {
+                nichesSet.add(niche);
+            }
+        });
+        return Array.from(nichesSet);
+    }, [projects]);
+
+    // 2. Cria o array de abas com título capitalizado e contagem correspondente
+    const tabs = React.useMemo(() => {
+        const list = [
+            { id: 'all', title: 'Todos', count: projects.length }
+        ];
+        
+        dynamicNiches.forEach(niche => {
+            const count = projects.filter(p => getProjectNiche(p) === niche).length;
+            list.push({
+                id: niche,
+                title: capitalize(niche),
+                count
+            });
+        });
+        return list;
+    }, [dynamicNiches, projects]);
 
     const fetchPhotographyProjects = useCallback(async () => {
         setLoading(true);
@@ -148,12 +185,7 @@ const PhotographyPortfolio = () => {
 
                     {/* Filtros em Abas Deslizantes (Framer Motion) */}
                     <div className="glass-effect rounded-2xl p-3 border border-gray-200/50 dark:border-white/10 shadow-lg backdrop-blur-xl bg-white/60 dark:bg-gray-900/40 mb-12 flex flex-wrap gap-2 justify-center md:justify-start">
-                        {[
-                            { id: 'all', title: 'Todos', count: projects.length },
-                            { id: 'casamentos', title: 'Casamentos', count: projects.filter(p => getProjectNiche(p) === 'casamentos').length },
-                            { id: 'eventos', title: 'Eventos', count: projects.filter(p => getProjectNiche(p) === 'eventos').length },
-                            { id: 'ensaios', title: 'Ensaios', count: projects.filter(p => getProjectNiche(p) === 'ensaios').length }
-                        ].map((tab) => {
+                        {tabs.map((tab) => {
                             if (tab.count === 0 && tab.id !== 'all') return null; // Oculta abas sem projetos
                             return (
                                 <button
@@ -194,7 +226,7 @@ const PhotographyPortfolio = () => {
                             <AnimatePresence mode="popLayout">
                                 {filteredProjects.map((project, index) => {
                                     const niche = getProjectNiche(project);
-                                    const nicheLabel = niche === 'casamentos' ? 'Casamento' : niche === 'eventos' ? 'Evento' : 'Ensaio';
+                                    const nicheLabel = capitalize(niche);
                                     return (
                                         <motion.div
                                             key={project.id}

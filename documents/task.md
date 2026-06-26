@@ -38,6 +38,7 @@ Roadmap de acompanhamento para a reestruturação visual de alta conversão, com
 - [x] **Otimização Automática WebP (`imageOptimizer.js`)**: Desenvolvimento de rotina com `browser-image-compression` para converter de forma transparente qualquer imagem enviada para o formato `.webp` com limites ideais de qualidade e resolução (max 1.2MB, max 1920px), melhorando as taxas de carregamento do site.
 - [x] **Migração de Mídia Integrada (`StorageOptimization.jsx`)**: Refatoração do utilitário administrativo de otimização para realizar a migração automática das mídias antigas do Supabase Storage para o Firebase Storage, atualizando as chaves do banco de dados relacional e excluindo os arquivos antigos no Supabase.
 - [x] **Upload de Capa Original & Lightbox da Imagem Principal**: Habilitação de upload de imagem de capa sem crop físico obrigatório no painel (`ProjectFormModal.jsx`), mantendo o recorte via CSS (`object-cover`) apenas nas vitrines de layout e exibindo a imagem inteira original no visualizador de zoom (`ProjectPage.jsx`).
+- [x] **Criação Dinâmica de Subcategorias de Fotografia**: Integração de select dinâmico auto-alimentado a partir das tags existentes de projetos de fotografia e suporte a criação reativa de novas subcategorias (nichos) via input de texto no admin. A galeria de fotos reflete dinamicamente os novos nichos como abas de filtros de forma retrocompatível.
 
 ## EM ANDAMENTO (DOING)
 *Nenhuma tarefa em andamento. Ajustes visuais e de design 100% implementados, validados com build e documentados.*
