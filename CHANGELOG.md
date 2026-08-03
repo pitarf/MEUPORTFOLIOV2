@@ -2,6 +2,19 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.3.0] - 2026-08-03
+
+### Adicionado
+- **Páginas Individuais de Serviços com Foco em SEO e Conversão (`ServiceDetailPage.jsx`)**: Criação de páginas exclusivas para os 7 serviços chaves corporativos (Criação de Sites, Landing Pages, Sistemas Web, Automações, Power BI, Fotografia de Eventos e Fotografia Corporativa), integrando copy focada em benefícios, prova social (depoimentos de `reviews`), projetos reais do Supabase da categoria, FAQs interativos para IA e frases geolocalizadas locais do Rio de Janeiro.
+- **Roteamento Exclusivo e Amigável (`App.jsx`)**: Integração de rotas dedicadas de alta autoridade na raiz do site para cada serviço (ex: `/criacao-de-sites`, `/landing-pages`).
+- **Navegação de Funil de Leads (`Services.jsx`)**: Atualização do Link "Saiba mais" na página geral para redirecionar os visitantes de forma estratégica para as páginas de serviço específicas em vez da seção geral de portfólio.
+- **Gerador Dinâmico de Sitemap.xml (`generate-sitemap.js`)**: Criação de script Node.js integrado ao pré-build que reconstrói de forma autônoma o arquivo `public/sitemap.xml` a cada compilação de produção. Mapeia automaticamente as páginas estáticas, as 7 páginas de serviço e as 50 URLs individuais de cases de portfólio via REST API do Supabase, com suporte nativo de fallback e process.env para hospedagem na Vercel.
+- **Dados Estruturados JSON-LD (Schema.org)**: Injeção automatizada de tags Schema.org para os tipos `ProfessionalService`/`Service`, `Organization` e `FAQPage` específicos de cada serviço no cabeçalho via `react-helmet-async`.
+- **Cabeçalhos de Segurança HTTP (`vercel.json`)**: Configuração de headers avançados de infraestrutura na Vercel injetando HSTS de longa duração para HTTPS, XSS Protection, nosniff MIME, Clickjacking protection e Content-Security-Policy (CSP) customizada para Supabase, Firebase Storage e Google Fonts.
+
+### Alterado
+- **HTML Semântico de Barra de Navegação (`Navbar.jsx`)**: Envolvimento do cabeçalho fixo global na tag `<header>` para conformidade com a estrutura do HTML5.
+
 ## [1.2.9] - 2026-06-25
 
 ### Adicionado

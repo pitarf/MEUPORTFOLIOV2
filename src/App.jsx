@@ -15,6 +15,7 @@ import PhotographyLanding from '@/pages/PhotographyLanding';
 import ProjectPage from '@/pages/ProjectPage';
 import ScrollToTop from '@/components/ScrollToTop';
 import SEO from '@/components/SEO';
+import ServiceDetailPage from '@/pages/ServiceDetailPage';
 
 import ProtectedRoute from '@/components/ProtectedRoute';
 import Dashboard from '@/pages/Dashboard';
@@ -58,6 +59,13 @@ function App() {
                                 <Route path="/" element={isPhotoSubdomain ? <PhotographyLanding /> : <Home />} />
                                 <Route path="/sobre" element={<About />} />
                                 <Route path="/servicos" element={<Services />} />
+                                <Route path="/criacao-de-sites" element={<ServiceDetailPage serviceSlug="criacao-de-sites" />} />
+                                <Route path="/landing-pages" element={<ServiceDetailPage serviceSlug="landing-pages" />} />
+                                <Route path="/desenvolvimento-de-sistemas" element={<ServiceDetailPage serviceSlug="desenvolvimento-de-sistemas" />} />
+                                <Route path="/automacoes" element={<ServiceDetailPage serviceSlug="automacoes" />} />
+                                <Route path="/dashboards-power-bi" element={<ServiceDetailPage serviceSlug="dashboards-power-bi" />} />
+                                <Route path="/fotografia-eventos" element={<ServiceDetailPage serviceSlug="fotografia-eventos" />} />
+                                <Route path="/fotografia-corporativa" element={<ServiceDetailPage serviceSlug="fotografia-corporativa" />} />
                                 <Route path="/portfolio" element={<Portfolio />} />
                                 <Route path="/portfolio/:categorySlug/:projectSlug" element={<ProjectPage />} />
                                 <Route path="/area-clientes" element={<ClientArea />} />

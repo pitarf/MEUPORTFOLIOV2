@@ -42,6 +42,18 @@ const Services = () => {
         'instalacao-cftv': 'from-indigo-500 to-blue-600'
     };
 
+    // Mapeamento de slugs do banco para as novas URLs focadas em SEO de serviços
+    const serviceSlugMap = {
+        'desenvolvimento-web': '/criacao-de-sites',
+        'dashboards-power-bi': '/dashboards-power-bi',
+        'fotografia': '/fotografia-corporativa',
+        'videos-com-ia': '/automacoes',
+        'trafego-pago': '/landing-pages',
+        'design-grafico': '/portfolio#design-grafico',
+        'manutencao-de-computadores': '/portfolio#manutencao-de-computadores',
+        'instalacao-cftv': '/portfolio#instalacao-cftv'
+    };
+
     // Icon mapping
     const iconMap = {
         Palette, Camera, Code, BarChart3, Video, Target, Wrench, Shield
@@ -111,7 +123,7 @@ const Services = () => {
                                                 ))}
                                             </div>
 
-                                            <Link to={`/portfolio#${service.slug}`} className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors font-bold text-sm">
+                                            <Link to={serviceSlugMap[service.slug] || `/portfolio#${service.slug}`} className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors font-bold text-sm">
                                                 <span>Saiba mais</span>
                                                 <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
                                             </Link>

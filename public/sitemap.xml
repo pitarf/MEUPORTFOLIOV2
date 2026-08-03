@@ -1,74 +1,315 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Página Inicial -->
   <url>
-    <loc>https://rafaelpitaoficial.com.br/</loc>
-    <lastmod>2026-06-01</lastmod>
+    <loc>https://rafaelpitaoficial.com.br</loc>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
-
-  <!-- Página Sobre -->
   <url>
     <loc>https://rafaelpitaoficial.com.br/sobre</loc>
-    <lastmod>2026-06-01</lastmod>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-
-  <!-- Página de Serviços -->
   <url>
     <loc>https://rafaelpitaoficial.com.br/servicos</loc>
-    <lastmod>2026-06-01</lastmod>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-
-  <!-- Página de Portfólio Geral -->
   <url>
     <loc>https://rafaelpitaoficial.com.br/portfolio</loc>
-    <lastmod>2026-06-01</lastmod>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-
-  <!-- Página de Assinaturas/Planos -->
   <url>
     <loc>https://rafaelpitaoficial.com.br/assinaturas</loc>
-    <lastmod>2026-06-01</lastmod>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-
-  <!-- Landing Page de Fotografia -->
   <url>
     <loc>https://rafaelpitaoficial.com.br/portfolio-fotografia</loc>
-    <lastmod>2026-06-01</lastmod>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-
-  <!-- Galeria de Fotografia -->
   <url>
     <loc>https://rafaelpitaoficial.com.br/portfolio-fotografia/galeria</loc>
-    <lastmod>2026-06-01</lastmod>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
-
-  <!-- Página de Avaliações / Depoimentos -->
   <url>
     <loc>https://rafaelpitaoficial.com.br/avaliacoes</loc>
-    <lastmod>2026-06-01</lastmod>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
-
-  <!-- Página de Contato -->
   <url>
     <loc>https://rafaelpitaoficial.com.br/contato</loc>
-    <lastmod>2026-06-01</lastmod>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/criacao-de-sites</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/landing-pages</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/desenvolvimento-de-sistemas</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/automacoes</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/dashboards-power-bi</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/fotografia-eventos</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/fotografia-corporativa</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/desenvolvimento-web/detetivebuscas</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/desenvolvimento-web/sistema-de-escalas-vitoriosas</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/desenvolvimento-web/sms-facil-plataforma-saas-de-numeros-virtuais</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/desenvolvimento-web/rafael-pita-phothography-site</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/desenvolvimento-web/rafael-pita-solutions-site</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/desenvolvimento-web/sistema-de-escalas</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/desenvolvimento-web/thd-engenharia-consultoria-de-provedores-de-internet-site</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/desenvolvimento-web/contabilidade-landing-page</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/desenvolvimento-web/moy-seguros-site-e-sorteio</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/desenvolvimento-web/connect-conference-2025-site</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/desenvolvimento-web/landing-page-cbjjo</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/design-grafico/pharmaville-social-media</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/design-grafico/provedor-de-internet-social-media</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/design-grafico/farmacia-social-media</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/design-grafico/alimentacao-social-media</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/design-grafico/acai</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/design-grafico/dcont-modelo</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/design-grafico/Kaizen-Credencial</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/design-grafico/eu-cc25</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/design-grafico/millena-cc25</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/design-grafico/paula-leal</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/design-grafico/coopertramo</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/dashboards-power-bi/power-bi</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/design-grafico/connect-designer</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/design-grafico/nobre-propagando</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/design-grafico/prospecta</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/design-grafico/anhanguera</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/design-grafico/atelier-petshopping</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/design-grafico/2mconect</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/videos-com-ia/imagens-ia</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/design-grafico/mascote-css</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/design-grafico/seu-genio</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/design-grafico/saldo-positivo</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/design-grafico/opala-coupe</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/design-grafico/cardapio-la-bella-pasta</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rafaelpitaoficial.com.br/portfolio/design-grafico/brito-adv</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
   </url>
 </urlset>

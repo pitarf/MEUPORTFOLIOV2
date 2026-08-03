@@ -39,9 +39,12 @@ Roadmap de acompanhamento para a reestruturação visual de alta conversão, com
 - [x] **Migração de Mídia Integrada (`StorageOptimization.jsx`)**: Refatoração do utilitário administrativo de otimização para realizar a migração automática das mídias antigas do Supabase Storage para o Firebase Storage, atualizando as chaves do banco de dados relacional e excluindo os arquivos antigos no Supabase.
 - [x] **Upload de Capa Original & Lightbox da Imagem Principal**: Habilitação de upload de imagem de capa sem crop físico obrigatório no painel (`ProjectFormModal.jsx`), mantendo o recorte via CSS (`object-cover`) apenas nas vitrines de layout e exibindo a imagem inteira original no visualizador de zoom (`ProjectPage.jsx`).
 - [x] **Criação Dinâmica de Subcategorias de Fotografia**: Integração de select dinâmico auto-alimentado a partir das tags existentes de projetos de fotografia e suporte a criação reativa de novas subcategorias (nichos) via input de texto no admin. A galeria de fotos reflete dinamicamente os novos nichos como abas de filtros de forma retrocompatível.
+- [x] **Páginas de Serviços de Alta Conversão**: Criação de páginas individuais para os 7 serviços principais do portfólio, integrando copy otimizada de benefícios, FAQs estruturados para IA, depoimentos do banco, projetos do portfólio dinâmicos e dados de geolocalização no RJ para SEO local.
+- [x] **Gerador de Sitemap.xml Dinâmico**: Desenvolvimento do script Node.js de compilação dinâmica de sitemap que mapeia páginas estáticas, as 7 páginas de serviço e todos os projetos reais do banco de dados a cada build em produção, compatível com Vercel (process.env) e local (.env).
+- [x] **Segurança Avançada e CSP (Content Security Policy)**: Injeção de cabeçalhos de segurança HTTP na Vercel (HSTS, CSP, XSS, nosniff, frame-protection) e adequação de tags HTML5 semânticas como <header> no menu principal de navegação.
 
 ## EM ANDAMENTO (DOING)
-*Nenhuma tarefa em andamento. Ajustes visuais e de design 100% implementados, validados com build e documentados.*
+*Nenhuma tarefa em andamento. Ajustes visuais, funcionais e de auditoria de SEO/Segurança 100% implementados, validados com build e documentados.*
 
 ## PENDENTE (TODO)
 - [ ] Mapeamento e coleta de feedbacks dos usuários corporativos após lançamento em produção.
