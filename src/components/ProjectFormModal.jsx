@@ -443,7 +443,7 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
                                         </SelectContent>
                                     </Select>
                                 </div>
-                                {selectedCategory && ['desenvolvimento-web', 'dashboards-power-bi', 'fotografia'].includes(selectedCategory.slug) && (
+                                {selectedCategory && (
                                     <div className="space-y-2">
                                         <Label className="flex items-center gap-1.5 text-purple-500 font-semibold">
                                             <Wand2 className="w-3.5 h-3.5" /> Subcategoria (SEO)
@@ -453,7 +453,7 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
                                                 <SelectValue placeholder="Selecione a subcategoria..." />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="none">Não Definido</SelectItem>
+                                                <SelectItem value="none">Não Definido (Opcional)</SelectItem>
                                                 {selectedCategory.slug === 'desenvolvimento-web' && (
                                                     <>
                                                         <SelectItem value="criacao-de-sites">Criação de Sites</SelectItem>
@@ -469,6 +469,19 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
                                                     <>
                                                         <SelectItem value="fotografia-corporativa">Fotografia Corporativa & Ensaios</SelectItem>
                                                         <SelectItem value="fotografia-eventos">Fotografia de Eventos</SelectItem>
+                                                    </>
+                                                )}
+                                                {selectedCategory.slug === 'design-grafico' && (
+                                                    <>
+                                                        <SelectItem value="identidade-visual">Identidade Visual</SelectItem>
+                                                        <SelectItem value="social-media">Social Media</SelectItem>
+                                                        <SelectItem value="materiais-impressos">Materiais Impressos</SelectItem>
+                                                    </>
+                                                )}
+                                                {selectedCategory.slug === 'trafego-pago' && (
+                                                    <>
+                                                        <SelectItem value="google-ads">Google Ads</SelectItem>
+                                                        <SelectItem value="meta-ads">Meta Ads (Facebook/Instagram)</SelectItem>
                                                     </>
                                                 )}
                                             </SelectContent>
