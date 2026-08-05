@@ -16,6 +16,7 @@ import ProjectPage from '@/pages/ProjectPage';
 import ScrollToTop from '@/components/ScrollToTop';
 import SEO from '@/components/SEO';
 import ServiceDetailPage from '@/pages/ServiceDetailPage';
+import GTMRouteTracker from '@/components/GTMRouteTracker';
 
 import ProtectedRoute from '@/components/ProtectedRoute';
 import Dashboard from '@/pages/Dashboard';
@@ -50,6 +51,7 @@ function App() {
             <SiteConfigProvider>
                 <Router>
                     <ScrollToTop />
+                    <GTMRouteTracker />
                     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
                         <SEO />
 

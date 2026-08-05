@@ -44,6 +44,7 @@ Roadmap de acompanhamento para a reestruturação visual de alta conversão, com
 - [x] **Segurança Avançada e CSP (Content Security Policy)**: Injeção de cabeçalhos de segurança HTTP na Vercel (HSTS, CSP, XSS, nosniff, frame-protection) e adequação de tags HTML5 semânticas como <header> no menu principal de navegação.
 - [x] **Classificação de Projetos em Subcategorias (Landing Pages)**: Criação de seletor dinâmico no painel administrativo para categorizar precisamente os projetos de Desenvolvimento Web, Power BI e Fotografia nas subcategorias correspondentes às 7 landing pages de SEO, gravando como tags semânticas `subcategoria:` no array `services` no banco, com exibição de badges na listagem e filtros reativos com fallback nas páginas públicas.
 - [x] **Correção de noindex em Dashboards Power BI**: Correção do bug do SEO.jsx que aplicava noindex na página pública `/dashboards-power-bi` por ter prefixo coincidente com a rota restrita `/dashboard`. A validação agora é feita de forma precisa.
+- [x] **Integração do Google Tag Manager (GTM)**: Instalação do container GTM-KMZ79L23 no index.html com fallback <noscript> e criação do componente de rastreamento reativo GTMRouteTracker.jsx para registrar eventos de pageview na SPA do React Router.
 
 ## EM ANDAMENTO (DOING)
 *Nenhuma tarefa em andamento. Ajustes visuais, funcionais e de auditoria de SEO/Segurança 100% implementados, validados com build e documentados.*

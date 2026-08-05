@@ -2,6 +2,13 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.3.3] - 2026-08-04
+
+### Adicionado
+- **Integração do Google Tag Manager (GTM) com Rastreamento SPA**: Instalação oficial do container `GTM-KMZ79L23` injetando o script assíncrono otimizado no `<head>` do `index.html` e a tag `<noscript>` de fallback no `<body>`.
+- **Rastreamento de Transições de Página no React Router (`GTMRouteTracker.jsx`)**: Desenvolvimento de componente reativo para enviar eventos customizados de `pageview` para o `dataLayer` a cada mudança de rota do React Router na SPA.
+- **Internacionalização no index.html**: Alteração do idioma da página no elemento html para `pt-BR`.
+
 ## [1.3.2] - 2026-08-04
 
 ### Corrigido
