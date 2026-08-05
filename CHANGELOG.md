@@ -2,6 +2,19 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.3.2] - 2026-08-04
+
+### Corrigido
+- **Falso Positivo de noindex em Rota Pública (`SEO.jsx`)**: Correção do bug de correspondência de prefixo simples (`location.pathname.startsWith`) que marcava erroneamente a página pública `/dashboards-power-bi` com a tag `noindex` devido ao prefixo compartilhado com a rota restrita `/dashboard`. A verificação agora exige igualdade exata do caminho ou correspondência com subrotas via barra final (`/dashboard/`).
+
+## [1.3.1] - 2026-08-04
+
+### Adicionado
+- **Classificação Avançada de Projetos em Subcategorias (`ProjectFormModal.jsx`)**: Adicionado um campo seletor de "Subcategoria de Serviço (SEO)" no Painel Administrativo que aparece de forma dinâmica para as categorias Desenvolvimento Web, Dashboards Power BI e Fotografia. As subcategorias correspondem diretamente às 7 novas landing pages de serviços.
+- **Gravação Segura por Tags e Retrocompatibilidade**: As subcategorias selecionadas são gravadas de forma transparente como etiquetas `subcategoria:slug-do-servico` no array `services` no banco Supabase. Evita a necessidade de migrações estruturais no PostgreSQL.
+- **Badges Organizacionais no Painel (`ManagePortfolio.jsx`)**: A listagem de projetos exibe de forma clara um badge com o nome da subcategoria/nicho ao lado da categoria principal para conferência visual imediata.
+- **Filtro de Projetos Preciso com Fallback (`ServiceDetailPage.jsx`)**: O filtro de cases relacionados nas páginas públicas agora prioriza a exibição de projetos com tags explícitas de subcategoria de SEO. Caso não existam projetos tagueados, executa automaticamente a heurística anterior baseada em termos de busca no título.
+
 ## [1.3.0] - 2026-08-03
 
 ### Adicionado

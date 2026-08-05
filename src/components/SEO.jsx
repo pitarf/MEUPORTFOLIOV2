@@ -25,7 +25,9 @@ const SEO = ({ title, description, keywords, image, url }) => {
 
     // Detectar rotas privadas/administrativas que NÃO devem ser indexadas pelo Google (Proteção de Dados)
     const noIndexPaths = ['/admin', '/dashboard', '/area-clientes', '/support', '/track-ticket'];
-    const isNoIndex = noIndexPaths.some(path => location.pathname.startsWith(path));
+    const isNoIndex = noIndexPaths.some(path => 
+        location.pathname === path || location.pathname.startsWith(`${path}/`)
+    );
 
     // Carregar metadados específicos para a área de fotografia se necessário
     useEffect(() => {
