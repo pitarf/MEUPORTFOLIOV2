@@ -47,6 +47,7 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
         gallery_aspect_ratio: '16:9',
         photography_nicho: 'Ensaios',
         new_photography_nicho: '',
+        seo_subcategoria: '',
     });
 
     // Image States
@@ -132,6 +133,10 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
                 }
             }
 
+            // 3. Tenta achar tag de subcategoria com o prefixo 'subcategoria:'
+            const subcatTag = currentServices.find(s => s.startsWith('subcategoria:'));
+            const subcat = subcatTag ? subcatTag.substring(13) : '';
+
             setFormData({
                 ...project,
                 services: project.services ? project.services.join(', ') : '',
@@ -142,10 +147,11 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
                 category_id: project.category_id || '', // Explicitly set category_id
                 photography_nicho: nicho,
                 new_photography_nicho: '',
+                seo_subcategoria: subcat,
             });
         } else {
             setFormData({
-                category_id: '', slug: '', title: '', client: '', year: new Date().getFullYear(), services: '', description: '', challenge: '', solution: '', results: '', project_url: '', gallery_urls: [], video_urls: '', main_image_aspect_ratio: '4:5', gallery_aspect_ratio: '4:5', photography_nicho: 'Ensaios', new_photography_nicho: '',
+                category_id: '', slug: '', title: '', client: '', year: new Date().getFullYear(), services: '', description: '', challenge: '', solution: '', results: '', project_url: '', gallery_urls: [], video_urls: '', main_image_aspect_ratio: '4:5', gallery_aspect_ratio: '4:5', photography_nicho: 'Ensaios', new_photography_nicho: '', seo_subcategoria: '',
             });
         }
     }, [project, isEditing]);
@@ -291,6 +297,15 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
             const isPhotography = selectedCategory?.slug === 'fotografia';
 
             let servicesArray = formData.services.split(',').map(s => s.trim()).filter(s => s);
+            
+            // Remove qualquer tag antiga de subcategoria
+            servicesArray = servicesArray.filter(s => !s.startsWith('subcategoria:'));
+
+            // Adiciona a nova tag de subcategoria se selecionada
+            if (formData.seo_subcategoria) {
+                servicesArray.push(`subcategoria:${formData.seo_subcategoria}`);
+            }
+
             if (isPhotography) {
                 // Remove termos de nicho antigos, incluindo qualquer tag que comece com "nicho:" ou tags livres relacionadas
                 servicesArray = servicesArray.filter(s => {
@@ -323,6 +338,7 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
             delete projectData.category;
             delete projectData.photography_nicho;
             delete projectData.new_photography_nicho;
+            delete projectData.seo_subcategoria;
 
             if (!projectData.category_id) {
                 toast({ variant: 'destructive', title: 'Erro', description: 'Selecione uma categoria.' });
@@ -427,6 +443,38 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
                                         </SelectContent>
                                     </Select>
                                 </div>
+                                {selectedCategory && ['desenvolvimento-web', 'dashboards-power-bi', 'fotografia'].includes(selectedCategory.slug) && (
+                                    <div className="space-y-2">
+                                        <Label className="flex items-center gap-1.5 text-purple-500 font-semibold">
+                                            <Wand2 className="w-3.5 h-3.5" /> Subcategoria (SEO)
+                                        </Label>
+                                        <Select name="seo_subcategoria" value={formData.seo_subcategoria || 'none'} onValueChange={(v) => handleSelectChange('seo_subcategoria', v)}>
+                                            <SelectTrigger className="border-purple-500/30 focus:ring-purple-500">
+                                                <SelectValue placeholder="Selecione a subcategoria..." />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="none">Não Definido</SelectItem>
+                                                {selectedCategory.slug === 'desenvolvimento-web' && (
+                                                    <>
+                                                        <SelectItem value="criacao-de-sites">Criação de Sites</SelectItem>
+                                                        <SelectItem value="landing-pages">Landing Pages</SelectItem>
+                                                        <SelectItem value="desenvolvimento-de-sistemas">Desenvolvimento de Sistemas</SelectItem>
+                                                        <SelectItem value="automacoes">Automações</SelectItem>
+                                                    </>
+                                                )}
+                                                {selectedCategory.slug === 'dashboards-power-bi' && (
+                                                    <SelectItem value="dashboards-power-bi">Dashboards Power BI</SelectItem>
+                                                )}
+                                                {selectedCategory.slug === 'fotografia' && (
+                                                    <>
+                                                        <SelectItem value="fotografia-corporativa">Fotografia Corporativa & Ensaios</SelectItem>
+                                                        <SelectItem value="fotografia-eventos">Fotografia de Eventos</SelectItem>
+                                                    </>
+                                                )}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                )}
                                 {isPhotography && (
                                     <>
                                         <div className="space-y-2">
