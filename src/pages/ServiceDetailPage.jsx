@@ -270,9 +270,23 @@ const ServiceDetailPage = ({ serviceSlug }) => {
                         .order('created_at', { ascending: false });
 
                     if (!projError && projectsData) {
-                        // Aplica o filtro de subcategoria específico (ex: sites vs landing pages)
-                        const filtered = projectsData.filter(service.projectFilter).slice(0, 6);
-                        setProjects(filtered);
+                        // Verifica se existe pelo menos um projeto explicitamente tagueado com essa subcategoria
+                        const hasExplicitTag = projectsData.some(p => 
+                            (p.services || []).includes(`subcategoria:${activeSlug}`)
+                        );
+
+                        let filtered;
+                        if (hasExplicitTag) {
+                            // Se houver tag explícita, filtra estritamente por ela
+                            filtered = projectsData.filter(p => 
+                                (p.services || []).includes(`subcategoria:${activeSlug}`)
+                            );
+                        } else {
+                            // Caso contrário, faz o fallback para as heurísticas do filtro padrão
+                            filtered = projectsData.filter(service.projectFilter);
+                        }
+                        
+                        setProjects(filtered.slice(0, 6));
                     }
                 }
             } catch (err) {
@@ -630,7 +644,7 @@ const ServiceDetailPage = ({ serviceSlug }) => {
                                     </Button>
                                 </Link>
                                 <a 
-                                    href="https://wa.me/5521999999999" // Link dinâmico se houvesse no site_config, senão fallback
+                                    href="https://wa.me/5521966149077"
                                     target="_blank" 
                                     rel="noopener noreferrer" 
                                     className="w-full sm:w-auto"
