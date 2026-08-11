@@ -301,63 +301,70 @@ const Portfolio = () => {
                                         animate={{ opacity: 1, scale: 1 }}
                                         exit={{ opacity: 0, scale: 0.9 }}
                                         transition={{ duration: 0.4 }}
-                                        className="group relative rounded-2xl overflow-hidden border border-gray-200/50 dark:border-white/10 hover:border-blue-500/30 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/10 aspect-[4/3] cursor-pointer bg-slate-900"
+                                        className="group relative rounded-2xl overflow-hidden border border-gray-200/60 dark:border-white/10 hover:border-blue-500/40 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 cursor-pointer bg-white dark:bg-gray-900/60 flex flex-col h-full"
                                     >
-                                        <Link to={`/portfolio/${cat.slug}/${project.slug}`} className="block h-full w-full">
+                                        <Link to={`/portfolio/${cat.slug}/${project.slug}`} className="flex flex-col h-full w-full">
                                             
-                                            {/* Imagem de Fundo em Alta Definição com Zoom no Hover */}
-                                            <div className="absolute inset-0 z-0">
+                                            {/* Imagem de Fundo em Alta Definição e Limpa */}
+                                            <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
                                                 <img
                                                     alt={project.title}
-                                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                                     src={project.main_image_url || 'https://images.unsplash.com/photo-1572177812156-58036aae439c'}
                                                     loading="lazy"
                                                 />
-                                                {/* Gradiente de Fusão Estático (Padrão) */}
-                                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/15 opacity-85 transition-opacity duration-300 group-hover:opacity-0" />
-                                                {/* Cortina Escura Premium e Desfocada no Hover para Legibilidade Absoluta */}
-                                                <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-[3px] opacity-0 group-hover:opacity-100 transition-all duration-500" />
+                                                
+                                                {/* Gradiente muito suave na parte inferior da imagem apenas para contraste */}
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                                                {/* Badge da Categoria sobre a Imagem */}
+                                                <div className="absolute top-3 left-3 z-10">
+                                                    <span className={`inline-flex items-center text-[11px] font-bold text-white px-2.5 py-1 rounded-full bg-gradient-to-r ${cat.color || 'from-blue-500 to-purple-600'} shadow-sm uppercase tracking-wider`}>
+                                                        {cat.title}
+                                                    </span>
+                                                </div>
+
+                                                {/* Ícone de Link Externo no Hover */}
+                                                <div className="absolute top-3 right-3 z-10 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0 shadow-md">
+                                                    <ExternalLink className="w-3.5 h-3.5 text-gray-700 dark:text-gray-200" />
+                                                </div>
                                             </div>
 
-                                            {/* Micro-cápsula da Categoria no topo esquerdo */}
-                                            <div className="absolute top-4 left-4 z-10">
-                                                <span className={`inline-flex items-center text-xs font-bold text-white px-3 py-1.5 rounded-full bg-gradient-to-r ${cat.color || 'from-blue-500 to-purple-600'} shadow-md uppercase tracking-wider`}>
-                                                    {cat.title}
-                                                </span>
-                                            </div>
+                                            {/* Conteúdo do Card Abaixo da Imagem */}
+                                            <div className="p-5 flex flex-col justify-between flex-1 space-y-3 bg-white dark:bg-gray-900/60">
+                                                <div className="space-y-1.5">
+                                                    {/* Cliente e Ano */}
+                                                    <div className="flex items-center justify-between text-xs font-semibold text-gray-500 dark:text-gray-400">
+                                                        <span className="truncate">{project.client || 'Cliente Corporativo'}</span>
+                                                        {project.year && <span className="flex-shrink-0">{project.year}</span>}
+                                                    </div>
 
-                                            {/* Conteúdo Central e Base */}
-                                            <div className="relative z-10 h-full flex flex-col justify-end p-6 sm:p-8">
-                                                <div className="transform translate-y-3 group-hover:translate-y-0 transition-transform duration-300 space-y-2">
-                                                    
                                                     {/* Título do Projeto */}
-                                                    <h3 className="text-xl sm:text-2xl font-extrabold text-white leading-tight group-hover:text-blue-400 transition-colors">
+                                                    <h3 className="text-lg sm:text-xl font-extrabold text-gray-900 dark:text-white leading-tight group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors line-clamp-1">
                                                         {project.title}
                                                     </h3>
                                                     
-                                                    {/* Descrição do Projeto */}
-                                                    <p className="text-gray-300 text-sm line-clamp-2 leading-relaxed opacity-0 group-hover:opacity-100 group-hover:block transition-opacity duration-300">
-                                                        {project.description}
-                                                    </p>
+                                                    {/* Descrição Curta */}
+                                                    {project.description && (
+                                                        <p className="text-gray-600 dark:text-gray-300 text-xs line-clamp-2 leading-relaxed font-normal">
+                                                            {project.description}
+                                                        </p>
+                                                    )}
+                                                </div>
 
-                                                    {/* Pílulas de Tecnologia / Ferramentas que aparecem no Hover */}
-                                                    <div className="flex flex-wrap gap-1.5 pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                                        {techs.map((tech) => (
-                                                            <span key={tech} className="text-[10px] font-bold text-blue-300 dark:text-blue-400 bg-blue-500/10 dark:bg-blue-400/10 border border-blue-500/20 dark:border-blue-450/20 px-2 py-0.5 rounded">
+                                                {/* Rodapé do Card: Tecnologias e Call to Action */}
+                                                <div className="pt-2 border-t border-gray-100 dark:border-white/5 flex items-center justify-between gap-2">
+                                                    <div className="flex flex-wrap gap-1 max-w-[70%]">
+                                                        {techs.slice(0, 3).map((tech) => (
+                                                            <span key={tech} className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 border border-blue-200/50 dark:border-blue-800/40 px-2 py-0.5 rounded">
                                                                 {tech}
                                                             </span>
                                                         ))}
                                                     </div>
 
-                                                    {/* Botão de Ver Projeto */}
-                                                    <div className="pt-2 flex items-center text-xs font-extrabold text-blue-400 uppercase tracking-wider gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                                        Conhecer Case <ArrowRight className="w-3.5 h-3.5" />
+                                                    <div className="flex items-center text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:translate-x-1 transition-transform duration-200">
+                                                        Ver Case <ArrowRight className="w-3.5 h-3.5 ml-1" />
                                                     </div>
-                                                </div>
-
-                                                {/* Detalhe de Setinha Sutil no Canto Superior Direito */}
-                                                <div className="absolute top-4 right-4 bg-white/10 backdrop-blur-md p-2.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-x-4 group-hover:translate-x-0 shadow-md">
-                                                    <ExternalLink className="w-4 h-4 text-white" />
                                                 </div>
                                             </div>
                                         </Link>
