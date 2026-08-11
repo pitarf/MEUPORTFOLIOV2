@@ -405,7 +405,40 @@ const ManagePortfolio = () => {
                                                         <td className="p-4 font-mono text-xs text-muted-foreground">{project.display_order ?? 0}</td>
                                                     )}
                                                     <td className="p-4 font-medium">{project.title}</td>
-                                                    <td className="p-4 text-muted-foreground hidden md:table-cell">{project.category?.title}</td>
+                                                    <td className="p-4 text-muted-foreground hidden md:table-cell">
+                                                         <div className="flex flex-col gap-1">
+                                                             <span>{project.category?.title}</span>
+                                                             {(() => {
+                                                                 const subcatTag = (project.services || []).find(s => s.startsWith('subcategoria:'));
+                                                                 const nicheTag = (project.services || []).find(s => s.startsWith('nicho:'));
+                                                                 const subcatNames = {
+                                                                     'criacao-de-sites': 'Criação de Sites',
+                                                                     'landing-pages': 'Landing Pages',
+                                                                     'desenvolvimento-de-sistemas': 'Sistemas Web',
+                                                                     'automacoes': 'Automações',
+                                                                     'dashboards-power-bi': 'Power BI',
+                                                                     'fotografia-corporativa': 'Retratos/Corporativo',
+                                                                     'fotografia-eventos': 'Eventos'
+                                                                 };
+                                                                 if (subcatTag) {
+                                                                     const code = subcatTag.substring(13);
+                                                                     return (
+                                                                         <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-purple-500/10 text-purple-400 border border-purple-500/20 w-fit">
+                                                                             {subcatNames[code] || code}
+                                                                         </span>
+                                                                     );
+                                                                 } else if (nicheTag) {
+                                                                     const label = nicheTag.substring(6);
+                                                                     return (
+                                                                         <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20 w-fit">
+                                                                             {label}
+                                                                         </span>
+                                                                     );
+                                                                 }
+                                                                 return null;
+                                                             })()}
+                                                         </div>
+                                                     </td>
                                                     <td className="p-4 text-muted-foreground hidden lg:table-cell">{project.year}</td>
                                                     <td className="p-4 flex justify-end gap-2">
                                                         {filters.categoryId !== 'all' && sortConfig.key === 'display_order' && (
