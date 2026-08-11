@@ -505,6 +505,7 @@ const ManagePortfolio = () => {
             {modalState.isOpen && (
                 <ProjectFormModal
                     project={modalState.project}
+                    categories={categories}
                     onSave={handleSave}
                     onClose={handleCloseModal}
                 />

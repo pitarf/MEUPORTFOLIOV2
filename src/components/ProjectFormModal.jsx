@@ -20,12 +20,12 @@ const blobToFile = (blob, fileName) => {
     return new File([blob], fileName, { type: blob.type });
 };
 
-const ProjectFormModal = ({ project, onSave, onClose }) => {
+const ProjectFormModal = ({ project, categories: propCategories = [], onSave, onClose }) => {
     const { toast } = useToast();
     const [loading, setLoading] = useState(false);
     const [aiLoading, setAiLoading] = useState(false);
     const [activeTab, setActiveTab] = useState('info');
-    const [categories, setCategories] = useState([]);
+    const [categories, setCategories] = useState(propCategories);
     const [nichoOptions, setNichoOptions] = useState(['Casamentos', 'Ensaios', 'Eventos']);
 
     // Form Data
@@ -47,7 +47,7 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
         gallery_aspect_ratio: '16:9',
         photography_nicho: 'Ensaios',
         new_photography_nicho: '',
-        seo_subcategoria: '',
+        seo_subcategoria: 'none',
     });
 
     // Image States
@@ -64,12 +64,16 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
 
     // Load Categories
     useEffect(() => {
-        const fetchCategories = async () => {
-            const { data, error } = await supabase.from('categories').select('id, title, slug');
-            if (!error) setCategories(data);
-        };
-        fetchCategories();
-    }, []);
+        if (propCategories && propCategories.length > 0) {
+            setCategories(propCategories);
+        } else {
+            const fetchCategories = async () => {
+                const { data, error } = await supabase.from('categories').select('id, title, slug');
+                if (!error) setCategories(data);
+            };
+            fetchCategories();
+        }
+    }, [propCategories]);
 
     // Fetch existing niches from all photography projects
     useEffect(() => {
@@ -91,7 +95,7 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
                     if (projectsData) {
                         const nichesSet = new Set(['Casamentos', 'Ensaios', 'Eventos']);
                         projectsData.forEach(p => {
-                            const nicheTag = (p.services || []).find(s => s.startsWith('nicho:'));
+                            const nicheTag = (p.services || []).find(s => typeof s === 'string' && s.startsWith('nicho:'));
                             if (nicheTag) {
                                 const name = nicheTag.substring(6);
                                 if (name) {
@@ -118,13 +122,13 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
             let nicho = 'Ensaios';
             
             // 1. Tenta achar tag de nicho com o prefixo 'nicho:'
-            const nicheTag = currentServices.find(s => s.startsWith('nicho:'));
+            const nicheTag = currentServices.find(s => typeof s === 'string' && s.startsWith('nicho:'));
             if (nicheTag) {
                 const name = nicheTag.substring(6);
                 nicho = name.charAt(0).toUpperCase() + name.slice(1);
             } else {
                 // 2. Fallback para retrocompatibilidade
-                const servicesLower = currentServices.map(s => s.toLowerCase());
+                const servicesLower = currentServices.map(s => (typeof s === 'string' ? s.toLowerCase() : ''));
                 const titleLower = currentTitle.toLowerCase();
                 if (servicesLower.includes('casamento') || servicesLower.includes('pedido') || titleLower.includes('casamento') || titleLower.includes('pedido') || titleLower.includes('noivado')) {
                     nicho = 'Casamentos';
@@ -134,8 +138,8 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
             }
 
             // 3. Tenta achar tag de subcategoria com o prefixo 'subcategoria:'
-            const subcatTag = currentServices.find(s => s.startsWith('subcategoria:'));
-            const subcat = subcatTag ? subcatTag.substring(13) : '';
+            const subcatTag = currentServices.find(s => typeof s === 'string' && s.startsWith('subcategoria:'));
+            const subcat = subcatTag ? subcatTag.substring(13) : 'none';
 
             // 4. Limpa as tags de sistema do array de serviços para exibir apenas as tecnologias/serviços reais no campo de texto
             const cleanServices = (project.services || []).filter(s => 
@@ -149,14 +153,14 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
                 video_urls: project.video_urls ? project.video_urls.join(', ') : '',
                 main_image_aspect_ratio: project.main_image_aspect_ratio || '16:9',
                 gallery_aspect_ratio: project.gallery_aspect_ratio || '16:9',
-                category_id: project.category_id || '', // Explicitly set category_id
+                category_id: project.category_id ? String(project.category_id) : '',
                 photography_nicho: nicho,
                 new_photography_nicho: '',
-                seo_subcategoria: subcat,
+                seo_subcategoria: subcat || 'none',
             });
         } else {
             setFormData({
-                category_id: '', slug: '', title: '', client: '', year: new Date().getFullYear(), services: '', description: '', challenge: '', solution: '', results: '', project_url: '', gallery_urls: [], video_urls: '', main_image_aspect_ratio: '4:5', gallery_aspect_ratio: '4:5', photography_nicho: 'Ensaios', new_photography_nicho: '', seo_subcategoria: '',
+                category_id: '', slug: '', title: '', client: '', year: new Date().getFullYear(), services: '', description: '', challenge: '', solution: '', results: '', project_url: '', gallery_urls: [], video_urls: '', main_image_aspect_ratio: '4:5', gallery_aspect_ratio: '4:5', photography_nicho: 'Ensaios', new_photography_nicho: '', seo_subcategoria: 'none',
             });
         }
     }, [project, isEditing]);
@@ -306,8 +310,8 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
             // Remove qualquer tag antiga de subcategoria
             servicesArray = servicesArray.filter(s => !s.startsWith('subcategoria:'));
 
-            // Adiciona a nova tag de subcategoria se selecionada
-            if (formData.seo_subcategoria) {
+            // Adiciona a nova tag de subcategoria se selecionada e diferente de 'none'
+            if (formData.seo_subcategoria && formData.seo_subcategoria !== 'none') {
                 servicesArray.push(`subcategoria:${formData.seo_subcategoria}`);
             }
 
