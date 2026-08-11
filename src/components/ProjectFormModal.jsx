@@ -64,16 +64,14 @@ const ProjectFormModal = ({ project, categories: propCategories = [], onSave, on
 
     // Load Categories
     useEffect(() => {
-        if (propCategories && propCategories.length > 0) {
-            setCategories(propCategories);
-        } else {
-            const fetchCategories = async () => {
-                const { data, error } = await supabase.from('categories').select('id, title, slug');
-                if (!error) setCategories(data);
-            };
-            fetchCategories();
-        }
-    }, [propCategories]);
+        const fetchCategories = async () => {
+            const { data, error } = await supabase.from('categories').select('id, title, slug');
+            if (!error && data) {
+                setCategories(data);
+            }
+        };
+        fetchCategories();
+    }, []);
 
     // Fetch existing niches from all photography projects
     useEffect(() => {
@@ -445,7 +443,12 @@ const ProjectFormModal = ({ project, categories: propCategories = [], onSave, on
                                 </div>
                                 <div className="space-y-2">
                                     <Label>Categoria</Label>
-                                    <Select name="category_id" value={String(formData.category_id)} onValueChange={(v) => handleSelectChange('category_id', v)}>
+                                    <Select 
+                                        key={`cat-select-${formData.category_id || 'empty'}`}
+                                        name="category_id" 
+                                        value={formData.category_id ? String(formData.category_id) : ''} 
+                                        onValueChange={(v) => handleSelectChange('category_id', v)}
+                                    >
                                         <SelectTrigger><SelectValue placeholder="Selecione..." /></SelectTrigger>
                                         <SelectContent>
                                             {categories.map(c => <SelectItem key={c.id} value={String(c.id)}>{c.title}</SelectItem>)}
@@ -457,7 +460,12 @@ const ProjectFormModal = ({ project, categories: propCategories = [], onSave, on
                                         <Label className="flex items-center gap-1.5 text-purple-500 font-semibold">
                                             <Wand2 className="w-3.5 h-3.5" /> Subcategoria (SEO)
                                         </Label>
-                                        <Select name="seo_subcategoria" value={formData.seo_subcategoria || 'none'} onValueChange={(v) => handleSelectChange('seo_subcategoria', v)}>
+                                        <Select 
+                                            key={`subcat-select-${formData.category_id}-${formData.seo_subcategoria || 'none'}`}
+                                            name="seo_subcategoria" 
+                                            value={formData.seo_subcategoria || 'none'} 
+                                            onValueChange={(v) => handleSelectChange('seo_subcategoria', v)}
+                                        >
                                             <SelectTrigger className="border-purple-500/30 focus:ring-purple-500">
                                                 <SelectValue placeholder="Selecione a subcategoria..." />
                                             </SelectTrigger>

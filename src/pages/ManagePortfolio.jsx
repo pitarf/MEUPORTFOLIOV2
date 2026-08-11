@@ -34,7 +34,7 @@ const ManagePortfolio = () => {
     const [dragOverIndex, setDragOverIndex] = useState(null);
 
     const fetchCategories = useCallback(async () => {
-        const { data, error } = await supabase.from('categories').select('id, title');
+        const { data, error } = await supabase.from('categories').select('id, title, slug');
         if (error) {
             toast({ variant: 'destructive', title: 'Erro ao buscar categorias.' });
         } else {
