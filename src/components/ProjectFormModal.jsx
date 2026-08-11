@@ -137,9 +137,14 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
             const subcatTag = currentServices.find(s => s.startsWith('subcategoria:'));
             const subcat = subcatTag ? subcatTag.substring(13) : '';
 
+            // 4. Limpa as tags de sistema do array de serviços para exibir apenas as tecnologias/serviços reais no campo de texto
+            const cleanServices = (project.services || []).filter(s => 
+                typeof s === 'string' && !s.startsWith('subcategoria:') && !s.startsWith('nicho:')
+            );
+
             setFormData({
                 ...project,
-                services: project.services ? project.services.join(', ') : '',
+                services: cleanServices.join(', '),
                 gallery_urls: project.gallery_urls || [],
                 video_urls: project.video_urls ? project.video_urls.join(', ') : '',
                 main_image_aspect_ratio: project.main_image_aspect_ratio || '16:9',
@@ -528,8 +533,16 @@ const ProjectFormModal = ({ project, onSave, onClose }) => {
                                     <Input name="year" type="number" value={formData.year} onChange={handleInputChange} />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label>Serviços</Label>
-                                    <Input name="services" value={formData.services} onChange={handleInputChange} />
+                                    <Label className="flex items-center justify-between">
+                                        <span>Tecnologias / Serviços (Tags)</span>
+                                        <span className="text-[11px] text-muted-foreground font-normal">Separados por vírgula</span>
+                                    </Label>
+                                    <Input 
+                                        name="services" 
+                                        value={formData.services} 
+                                        onChange={handleInputChange} 
+                                        placeholder="Ex: React, Tailwind CSS, Supabase, Photoshop, Figma..." 
+                                    />
                                 </div>
                             </div>
                             <div className="space-y-2">

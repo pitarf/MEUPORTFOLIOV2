@@ -236,9 +236,11 @@ const ProjectPage = () => {
                             <div>
                                 <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Serviços Prestados</h3>
                                 <ul className="flex flex-wrap gap-2">
-                                    {project.services.map((service, index) => (
-                                        <li key={index} className="bg-slate-100 dark:bg-gray-800 text-slate-700 dark:text-gray-300 text-sm px-3 py-1 rounded-full flex items-center gap-2 border border-slate-200 dark:border-gray-700 font-bold"><Tag className="w-3 h-3 text-blue-500 dark:text-blue-400" />{service}</li>
-                                    ))}
+                                    {(project.services || [])
+                                        .filter(service => typeof service === 'string' && !service.startsWith('subcategoria:') && !service.startsWith('nicho:'))
+                                        .map((service, index) => (
+                                            <li key={index} className="bg-slate-100 dark:bg-gray-800 text-slate-700 dark:text-gray-300 text-sm px-3 py-1 rounded-full flex items-center gap-2 border border-slate-200 dark:border-gray-700 font-bold"><Tag className="w-3 h-3 text-blue-500 dark:text-blue-400" />{service}</li>
+                                        ))}
                                 </ul>
                             </div>
                             {project.project_url && (

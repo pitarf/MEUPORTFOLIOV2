@@ -16,10 +16,30 @@ const icons = {
     Palette, Camera, Code, BarChart3, Video, Target, Wrench, Shield 
 };
 
-// Pílulas de tecnologia geradas dinamicamente com base na categoria e título do projeto para conferir autoridade técnica
-const getProjectTechs = (categorySlug, projectTitle) => {
-    const slug = categorySlug.toLowerCase();
-    const title = projectTitle.toLowerCase();
+// Pílulas de tecnologia geradas dinamicamente com base nas tags salvas do projeto ou fallback por categoria/título
+const getProjectTechs = (categorySlug, projectTitle, projectServices) => {
+    // 1. Tenta extrair tags personalizadas cadastradas manualmente no projeto (ignorando tags de sistema)
+    let customTechs = [];
+    if (Array.isArray(projectServices)) {
+        customTechs = projectServices.filter(s => 
+            typeof s === 'string' && 
+            !s.startsWith('subcategoria:') && 
+            !s.startsWith('nicho:') &&
+            s.trim() !== ''
+        );
+    } else if (typeof projectServices === 'string' && projectServices.trim() !== '') {
+        customTechs = projectServices.split(',')
+            .map(s => s.trim())
+            .filter(s => s && !s.startsWith('subcategoria:') && !s.startsWith('nicho:'));
+    }
+
+    if (customTechs.length > 0) {
+        return customTechs;
+    }
+
+    // 2. Fallback automático por categoria e título se não houver nada cadastrado no projeto
+    const slug = (categorySlug || '').toLowerCase();
+    const title = (projectTitle || '').toLowerCase();
     
     if (slug.includes('web') || slug.includes('site') || slug.includes('app')) {
         const techs = ['React', 'Tailwind CSS', 'Supabase', 'Node.js'];
@@ -292,7 +312,7 @@ const Portfolio = () => {
                         <AnimatePresence mode="popLayout">
                             {filteredProjects.map((project, index) => {
                                 const cat = allCategories.find(c => c.id === project.category_id) || { title: 'Geral', slug: 'geral', color: 'from-blue-500 to-purple-600' };
-                                const techs = getProjectTechs(cat.slug, project.title);
+                                const techs = getProjectTechs(cat.slug, project.title, project.services);
                                 return (
                                     <motion.div
                                         key={project.id}
