@@ -2,6 +2,14 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.4.0] - 2026-08-11
+
+### Adicionado
+- **Sistema Global de Internacionalização (i18n)**: Implementado o `LanguageContext.jsx` e `LanguageProvider` para gerenciamento reativo do idioma da aplicação com suporte a **Português Brasil (PT-BR)** e **Inglês (EN)**.
+- **Seletor de Idiomas na Barra de Navegação (`Navbar.jsx`)**: Adicionado botão de alternância com bandeiras e identificadores visuais (`PT 🇧🇷` / `EN 🇺🇸`), responsivo para telas Desktop e Mobile.
+- **Dicionário Central de Traduções (`translations.js`)**: Criado arquivo de mapeamento de termos para navegação, contadores de autoridade, busca, filtros de categorias, botões de ação e rodapé.
+- **Persistência de Preferência de Idioma**: A escolha do visitante é gravada no `localStorage`, garantindo a permanência do idioma em toda a sessão de navegação.
+
 ## [1.3.3] - 2026-08-04
 
 ### Adicionado

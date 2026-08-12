@@ -37,18 +37,20 @@ import AdminLayout from '@/components/AdminLayout';
 
 import { SiteConfigProvider } from '@/contexts/SiteConfigContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
+import { LanguageProvider } from '@/contexts/LanguageContext';
 
 /**
  * Componente principal da aplicação MeuPortfolio v2 / Rafael Pita Solutions
  * Configura as rotas públicas, rotas protegidas do painel administrativo,
- * e integra os provedores de estado global do Supabase (Autenticação, Configurações de Site e Temas).
+ * e integra os provedores de estado global (Autenticação, Configurações de Site, Temas e Idiomas).
  */
 const isPhotoSubdomain = typeof window !== 'undefined' && window.location.hostname.includes('fotografia');
 
 function App() {
     return (
         <ThemeProvider>
-            <SiteConfigProvider>
+            <LanguageProvider>
+                <SiteConfigProvider>
                 <Router>
                     <ScrollToTop />
                     <GTMRouteTracker />
@@ -100,7 +102,8 @@ function App() {
                     </div>
                 </Router>
             </SiteConfigProvider>
-        </ThemeProvider>
+        </LanguageProvider>
+    </ThemeProvider>
     );
 }
 

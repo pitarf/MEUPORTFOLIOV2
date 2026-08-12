@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 // Mapeamento dos ícones para as categorias de portfólio
 const icons = { 
@@ -69,6 +70,7 @@ const getProjectTechs = (categorySlug, projectTitle, projectServices) => {
 };
 
 const Portfolio = () => {
+    const { t } = useLanguage();
     const [allCategories, setAllCategories] = useState([]);
     const [projects, setProjects] = useState([]);
     const [filteredProjects, setFilteredProjects] = useState([]);
@@ -104,6 +106,8 @@ const Portfolio = () => {
                 }
                 return cat;
             });
+
+            setAllCategories(mappedCategories);
 
             // 2. Coleta todos os projetos
             const { data: projectsData, error: projError } = await supabase
@@ -173,9 +177,8 @@ const Portfolio = () => {
     return (
         <>
             <SEO 
-                title="Portfólio de Tecnologia e Soluções Digitais - Rafael Pita Solutions"
-                description="Conheça os cases de sucesso e projetos de desenvolvimento web, criação de sites, sistemas sob medida e painéis corporativos de Power BI criados por Rafael Pita."
-                keywords="desenvolvimento de sites rj, criacao de sites profissional, programador rio de janeiro, portfolio de desenvolvimento web, desenvolvedor react rj, dashboard power bi rj"
+                title={`${t('portfolio_title', 'Nosso Portfólio')} - Rafael Pita Solutions`}
+                description={t('portfolio_description', 'Explore nosso histórico técnico de excelência.')}
             />
 
             <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
@@ -194,28 +197,28 @@ const Portfolio = () => {
                                 <Award className="w-7 h-7 text-blue-500 dark:text-blue-400" />
                             </div>
                             <h1 className="text-4xl sm:text-5xl font-extrabold px-2 tracking-tight">
-                                <span className="gradient-text">Nosso Portfólio</span>
+                                <span className="gradient-text">{t('portfolio_title', 'Nosso Portfólio')}</span>
                             </h1>
                             <p className="text-base md:text-xl text-gray-700 dark:text-gray-300 max-w-2xl mx-auto px-4 font-semibold leading-relaxed">
-                                Excelência Técnica e Design de Conversão em Dezenas de Projetos Entregues
+                                {t('portfolio_subtitle', 'Excelência Técnica e Design de Conversão em Dezenas de Projetos Entregues')}
                             </p>
                             <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 max-w-xl mx-auto px-4 leading-relaxed font-medium">
-                                Explore a notoriedade do nosso histórico. Cada cartão expõe a aplicação rigorosa de metodologias e ferramentas para gerar lucros e resultados expressivos aos nossos parceiros.
+                                {t('portfolio_description_long', 'Explore a notoriedade do nosso histórico. Cada cartão expõe a aplicação rigorosa de metodologias e ferramentas para gerar lucros e resultados expressivos aos nossos parceiros.')}
                             </p>
 
                             {/* Contadores Rápidos de Autoridade */}
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-3.5 max-w-xl mx-auto pt-4 text-center">
                                 <div className="glass-effect p-4 rounded-xl border border-gray-200/50 dark:border-white/5 bg-white/40 dark:bg-gray-900/30">
                                     <div className="text-2xl sm:text-3xl font-extrabold text-blue-600 dark:text-blue-400">50+</div>
-                                    <div className="text-xs text-gray-500 dark:text-gray-400 font-semibold tracking-wide uppercase mt-1">Entregas de Sucesso</div>
+                                    <div className="text-xs text-gray-500 dark:text-gray-400 font-semibold tracking-wide uppercase mt-1">{t('portfolio_stat_deliveries', 'Entregas de Sucesso')}</div>
                                 </div>
                                 <div className="glass-effect p-4 rounded-xl border border-gray-200/50 dark:border-white/5 bg-white/40 dark:bg-gray-900/30">
                                     <div className="text-2xl sm:text-3xl font-extrabold text-purple-600 dark:text-purple-400">98%</div>
-                                    <div className="text-xs text-gray-500 dark:text-gray-400 font-semibold tracking-wide uppercase mt-1">Satisfação Geral</div>
+                                    <div className="text-xs text-gray-500 dark:text-gray-400 font-semibold tracking-wide uppercase mt-1">{t('portfolio_stat_satisfaction', 'Satisfação Geral')}</div>
                                 </div>
                                 <div className="glass-effect p-4 rounded-xl border border-gray-200/50 dark:border-white/5 bg-white/40 dark:bg-gray-900/30 col-span-2 md:col-span-1">
                                     <div className="text-2xl sm:text-3xl font-extrabold text-pink-600 dark:text-pink-400">100%</div>
-                                    <div className="text-xs text-gray-500 dark:text-gray-400 font-semibold tracking-wide uppercase mt-1">Foco Comercial</div>
+                                    <div className="text-xs text-gray-500 dark:text-gray-400 font-semibold tracking-wide uppercase mt-1">{t('portfolio_stat_focus', 'Foco Comercial')}</div>
                                 </div>
                             </div>
                         </motion.div>
@@ -244,7 +247,7 @@ const Portfolio = () => {
                                     />
                                 )}
                                 <Cpu className="w-3.5 h-3.5" />
-                                Todos
+                                {t('portfolio_all_categories', 'Todos')}
                                 <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-semibold transition-colors ${
                                     activeTab === 'all' ? 'bg-white/20 text-white' : 'bg-gray-200 dark:bg-gray-800 text-gray-500'
                                 }`}>
@@ -289,7 +292,7 @@ const Portfolio = () => {
                             <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                             <Input
                                 type="text"
-                                placeholder="Buscar projetos..."
+                                placeholder={t('portfolio_search_placeholder', 'Buscar projetos...')}
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="w-full pl-10 pr-4 py-2.5 bg-white/50 dark:bg-gray-800/40 border-gray-200 dark:border-gray-800 rounded-xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 font-semibold"
@@ -355,7 +358,7 @@ const Portfolio = () => {
                                                 <div className="space-y-1.5">
                                                     {/* Cliente e Ano */}
                                                     <div className="flex items-center justify-between text-xs font-semibold text-gray-500 dark:text-gray-400">
-                                                        <span className="truncate">{project.client || 'Cliente Corporativo'}</span>
+                                                        <span className="truncate">{project.client || t('portfolio_corporate_client', 'Cliente Corporativo')}</span>
                                                         {project.year && <span className="flex-shrink-0">{project.year}</span>}
                                                     </div>
 
@@ -383,7 +386,7 @@ const Portfolio = () => {
                                                     </div>
 
                                                     <div className="flex items-center text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:translate-x-1 transition-transform duration-200">
-                                                        Ver Case <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                                                        {t('portfolio_view_case', 'Ver Case')} <ArrowRight className="w-3.5 h-3.5 ml-1" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -397,8 +400,8 @@ const Portfolio = () => {
                     {filteredProjects.length === 0 && (
                         <div className="text-center glass-effect p-12 rounded-2xl max-w-md mx-auto mt-8 border border-gray-200/50 dark:border-white/5 bg-white/40 dark:bg-gray-900/30">
                             <X className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                            <h3 className="text-lg font-bold text-gray-900 dark:text-white">Nenhum projeto encontrado</h3>
-                            <p className="text-gray-500 dark:text-gray-400 mt-2 text-sm font-medium">Tente alterar os termos da busca ou filtre por outra especialidade.</p>
+                            <h3 className="text-lg font-bold text-gray-900 dark:text-white">{t('portfolio_no_projects', 'Nenhum projeto encontrado')}</h3>
+                            <p className="text-gray-500 dark:text-gray-400 mt-2 text-sm font-medium">{t('portfolio_no_projects_desc', 'Tente alterar os termos da busca ou filtre por outra especialidade.')}</p>
                         </div>
                     )}
                 </section>

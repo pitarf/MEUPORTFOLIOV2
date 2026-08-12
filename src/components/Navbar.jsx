@@ -5,6 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Zap, ChevronDown, User, Ticket, FileText, Sun, Moon } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -12,9 +13,11 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Globe } from 'lucide-react';
 
 const Navbar = () => {
     const { theme, toggleTheme } = useTheme();
+    const { language, toggleLanguage, t } = useLanguage();
     const [isOpen, setIsOpen] = useState(false);
     const location = useLocation();
     const { config } = useSiteConfig();
@@ -59,22 +62,21 @@ const Navbar = () => {
     }, [isOpen]);
 
     const mainNavItems = [
-        { name: 'Home', path: '/' },
-        { name: 'Portfólio', path: '/portfolio' },
-        { name: 'Serviços', path: '/servicos' },
-        { name: 'Fotografia', path: '/portfolio-fotografia' },
-        { name: 'Contato', path: '/contato' },
+        { name: t('nav_home', 'Home'), path: '/' },
+        { name: t('nav_portfolio', 'Portfólio'), path: '/portfolio' },
+        { name: t('nav_services', 'Serviços'), path: '/servicos' },
+        { name: t('nav_photography', 'Fotografia'), path: '/portfolio-fotografia' },
+        { name: t('nav_contact', 'Contato'), path: '/contato' },
     ];
 
     const studioNavItems = [
-        { name: 'Sobre', path: '/sobre' },
-        { name: 'Avaliações', path: '/avaliacoes' },
+        { name: t('nav_about', 'Sobre'), path: '/sobre' },
+        { name: t('nav_reviews', 'Avaliações'), path: '/avaliacoes' },
     ];
 
     const clientNavItems = [
-        { name: 'Login / Projetos', path: '/area-clientes', icon: <User className="w-4 h-4 mr-2" /> },
-        { name: 'Rastrear Chamado', path: '/track-ticket', icon: <Ticket className="w-4 h-4 mr-2" /> },
-        // { name: 'Assinaturas', path: '/assinaturas', icon: <FileText className="w-4 h-4 mr-2" /> },
+        { name: t('nav_login', 'Login / Projetos'), path: '/area-clientes', icon: <User className="w-4 h-4 mr-2" /> },
+        { name: t('nav_track_ticket', 'Rastrear Chamado'), path: '/track-ticket', icon: <Ticket className="w-4 h-4 mr-2" /> },
     ];
 
     return (
@@ -115,7 +117,7 @@ const Navbar = () => {
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="flex items-center space-x-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 p-0 h-auto hover:bg-transparent">
-                                    <span>O Estúdio</span>
+                                    <span>{t('nav_studio', 'O Estúdio')}</span>
                                     <ChevronDown className="w-4 h-4" />
                                 </Button>
                             </DropdownMenuTrigger>
@@ -128,7 +130,19 @@ const Navbar = () => {
                             </DropdownMenuContent>
                         </DropdownMenu>
 
-                        <div className="flex items-center gap-4 border-l border-gray-200 dark:border-gray-700 pl-4 ml-2">
+                        <div className="flex items-center gap-3 border-l border-gray-200 dark:border-gray-700 pl-4 ml-2">
+                            {/* Toggle de Idioma PT / EN */}
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={toggleLanguage}
+                                className="flex items-center gap-1.5 text-xs font-bold px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50 text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-all shadow-sm"
+                                title={language === 'pt' ? 'Switch to English' : 'Mudar para Português'}
+                            >
+                                <Globe className="w-3.5 h-3.5 text-blue-500" />
+                                <span>{language === 'pt' ? 'PT 🇧🇷' : 'EN 🇺🇸'}</span>
+                            </Button>
+
                             {/* Toggle de Tema Claro/Escuro */}
                             <Button
                                 variant="ghost"
@@ -152,7 +166,7 @@ const Navbar = () => {
                                 <DropdownMenuTrigger asChild>
                                     <Button variant="ghost" className="flex items-center space-x-2 text-sm text-gray-300 hover:text-white">
                                         <User className="h-5 w-5" />
-                                        <span className="hidden xl:inline">Área do Cliente</span>
+                                        <span className="hidden xl:inline">{t('nav_client_area', 'Área do Cliente')}</span>
                                         <ChevronDown className="w-3 h-3 opacity-50" />
                                     </Button>
                                 </DropdownMenuTrigger>
@@ -170,13 +184,24 @@ const Navbar = () => {
 
                             <Link to="/contato">
                                 <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-lg transition-all text-white font-bold">
-                                    Orçamento
+                                    {t('nav_quote', 'Orçamento')}
                                 </Button>
                             </Link>
                         </div>
                     </div>
 
                     <div className="lg:hidden flex items-center gap-2">
+                        {/* Toggle de Idioma Mobile */}
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={toggleLanguage}
+                            className="flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-lg border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300"
+                        >
+                            <Globe className="w-3.5 h-3.5 text-blue-500" />
+                            <span>{language === 'pt' ? 'PT' : 'EN'}</span>
+                        </Button>
+
                         {/* Toggle de Tema Claro/Escuro Mobile */}
                         <Button
                             variant="ghost"
