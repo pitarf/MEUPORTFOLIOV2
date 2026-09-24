@@ -200,14 +200,14 @@ const Contact = () => {
                         {/* --- Tab Navigation --- */}
                         <div className="flex justify-center mb-12">
                             <div className="glass-effect p-2 rounded-xl flex flex-wrap justify-center gap-2 shadow-2xl">
-                                <Button onClick={() => setActiveForm('contact')} variant={activeForm === 'contact' ? 'default' : 'ghost'} className={`h-12 px-8 text-base rounded-lg ${activeForm === 'contact' ? 'bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white'}`}><MessageSquare className="w-5 h-5 mr-2" />Contato</Button>
-                                <Button onClick={() => setActiveForm('quote')} variant={activeForm === 'quote' ? 'default' : 'ghost'} className={`h-12 px-8 text-base rounded-lg ${activeForm === 'quote' ? 'bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white'}`}><Calculator className="w-5 h-5 mr-2" />Orçamento</Button>
-                                <Button onClick={() => setActiveForm('support')} variant={activeForm === 'support' ? 'default' : 'ghost'} className={`h-12 px-8 text-base rounded-lg ${activeForm === 'support' ? 'bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white'}`}><LifeBuoy className="w-5 h-5 mr-2" />Suporte</Button>
+                                <Button onClick={() => setActiveForm('contact')} variant={activeForm === 'contact' ? 'default' : 'ghost'} className={`h-11 px-4 sm:px-8 text-sm sm:text-base rounded-lg ${activeForm === 'contact' ? 'bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg text-white font-bold' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white'}`}><MessageSquare className="w-4 h-4 mr-2" />Contato</Button>
+                                <Button onClick={() => setActiveForm('quote')} variant={activeForm === 'quote' ? 'default' : 'ghost'} className={`h-11 px-4 sm:px-8 text-sm sm:text-base rounded-lg ${activeForm === 'quote' ? 'bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg text-white font-bold' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white'}`}><Calculator className="w-4 h-4 mr-2" />Orçamento</Button>
+                                <Button onClick={() => setActiveForm('support')} variant={activeForm === 'support' ? 'default' : 'ghost'} className={`h-11 px-4 sm:px-8 text-sm sm:text-base rounded-lg ${activeForm === 'support' ? 'bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg text-white font-bold' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white'}`}><LifeBuoy className="w-4 h-4 mr-2" />Suporte</Button>
                             </div>
                         </div>
 
                         <AnimatePresence mode="wait">
-                            <motion.div key={activeForm} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="glass-effect p-8 md:p-12 rounded-3xl border border-gray-200/50 dark:border-white/5 shadow-2xl bg-white/70 dark:bg-black/40 backdrop-blur-xl">
+                            <motion.div key={activeForm} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="glass-effect p-4 sm:p-8 md:p-12 rounded-3xl border border-gray-200/50 dark:border-white/5 shadow-2xl bg-white/70 dark:bg-black/40 backdrop-blur-xl">
 
                                 {/* --- CONTACT FORM --- */}
                                 {activeForm === 'contact' && (
@@ -333,7 +333,7 @@ const Contact = () => {
 
                                             <div className="space-y-2">
                                                 <label className="text-sm font-semibold text-gray-500 dark:text-gray-400 ml-1">Prioridade</label>
-                                                <div className="grid grid-cols-3 gap-4">
+                                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                                     {supportPriorities.map(p => (
                                                         <button
                                                             key={p.value}

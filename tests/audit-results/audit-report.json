@@ -1,0 +1,791 @@
+{
+  "timestamp": "2026-09-24T16:43:30.557Z",
+  "baseUrl": "http://localhost:3001",
+  "totalChecked": 51,
+  "overflowIssues": [],
+  "consoleErrors": [],
+  "touchTargetWarnings": [
+    {
+      "route": "/",
+      "viewport": "mobile-iphone-390",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "Conhecer todos os projetos",
+          "width": 279,
+          "height": 20,
+          "class": ""
+        }
+      ]
+    },
+    {
+      "route": "/servicos",
+      "viewport": "mobile-iphone-390",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "Saiba mais",
+          "width": 96,
+          "height": 20,
+          "class": "inline-flex items-center text-blue-600"
+        },
+        {
+          "tag": "a",
+          "text": "Saiba mais",
+          "width": 96,
+          "height": 20,
+          "class": "inline-flex items-center text-blue-600"
+        },
+        {
+          "tag": "a",
+          "text": "Saiba mais",
+          "width": 96,
+          "height": 20,
+          "class": "inline-flex items-center text-blue-600"
+        }
+      ]
+    },
+    {
+      "route": "/criacao-de-sites",
+      "viewport": "mobile-iphone-390",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "Todos os Serviços",
+          "width": 165,
+          "height": 20,
+          "class": ""
+        }
+      ]
+    },
+    {
+      "route": "/landing-pages",
+      "viewport": "mobile-iphone-390",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "Todos os Serviços",
+          "width": 165,
+          "height": 20,
+          "class": ""
+        }
+      ]
+    },
+    {
+      "route": "/desenvolvimento-de-sistemas",
+      "viewport": "mobile-iphone-390",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "Todos os Serviços",
+          "width": 165,
+          "height": 20,
+          "class": ""
+        }
+      ]
+    },
+    {
+      "route": "/automacoes",
+      "viewport": "mobile-iphone-390",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "Todos os Serviços",
+          "width": 165,
+          "height": 20,
+          "class": ""
+        }
+      ]
+    },
+    {
+      "route": "/dashboards-power-bi",
+      "viewport": "mobile-iphone-390",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "Todos os Serviços",
+          "width": 165,
+          "height": 20,
+          "class": ""
+        }
+      ]
+    },
+    {
+      "route": "/fotografia-eventos",
+      "viewport": "mobile-iphone-390",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "Todos os Serviços",
+          "width": 165,
+          "height": 20,
+          "class": ""
+        }
+      ]
+    },
+    {
+      "route": "/fotografia-corporativa",
+      "viewport": "mobile-iphone-390",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "Todos os Serviços",
+          "width": 165,
+          "height": 20,
+          "class": ""
+        }
+      ]
+    },
+    {
+      "route": "/portfolio-fotografia",
+      "viewport": "mobile-iphone-390",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "Ver Trabalhos",
+          "width": 203,
+          "height": 20,
+          "class": ""
+        }
+      ]
+    },
+    {
+      "route": "/portfolio-fotografia/galeria",
+      "viewport": "mobile-iphone-390",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "Voltar para Home de Fotografia",
+          "width": 253,
+          "height": 20,
+          "class": ""
+        }
+      ]
+    },
+    {
+      "route": "/avaliacoes",
+      "viewport": "mobile-iphone-390",
+      "targets": [
+        {
+          "tag": "button",
+          "text": "Curtir",
+          "width": 57,
+          "height": 20,
+          "class": "flex items-center space-x-1"
+        },
+        {
+          "tag": "button",
+          "text": "Curtir",
+          "width": 57,
+          "height": 20,
+          "class": "flex items-center space-x-1"
+        },
+        {
+          "tag": "button",
+          "text": "Curtir",
+          "width": 57,
+          "height": 20,
+          "class": "flex items-center space-x-1"
+        }
+      ]
+    },
+    {
+      "route": "/contato",
+      "viewport": "mobile-iphone-390",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "contato@rafaelpitaoficial.com.",
+          "width": 310,
+          "height": 24,
+          "class": "text-gray-600 dark:text-gray-400 hover:text-blue-500"
+        },
+        {
+          "tag": "a",
+          "text": "(21) 96614-9077",
+          "width": 310,
+          "height": 24,
+          "class": "text-gray-600 dark:text-gray-400 hover:text-blue-500"
+        },
+        {
+          "tag": "a",
+          "text": "Rio de Janeiro, RJ - Brasil",
+          "width": 310,
+          "height": 24,
+          "class": "text-gray-600 dark:text-gray-400 hover:text-blue-500"
+        }
+      ]
+    },
+    {
+      "route": "/area-clientes",
+      "viewport": "mobile-iphone-390",
+      "targets": [
+        {
+          "tag": "button",
+          "text": "",
+          "width": 20,
+          "height": 20,
+          "class": "absolute right-3 top-1/2"
+        },
+        {
+          "tag": "button",
+          "text": "Clique aqui",
+          "width": 75,
+          "height": 20,
+          "class": "text-blue-500 dark:text-blue-400 hover:text-blue-600"
+        },
+        {
+          "tag": "a",
+          "text": "Home",
+          "width": 358,
+          "height": 20,
+          "class": "block text-gray-600 dark:text-gray-400"
+        }
+      ]
+    },
+    {
+      "route": "/track-ticket",
+      "viewport": "mobile-iphone-390",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "Home",
+          "width": 358,
+          "height": 20,
+          "class": "block text-gray-600 dark:text-gray-400"
+        },
+        {
+          "tag": "a",
+          "text": "Serviços",
+          "width": 358,
+          "height": 20,
+          "class": "block text-gray-600 dark:text-gray-400"
+        },
+        {
+          "tag": "a",
+          "text": "Portfólio",
+          "width": 358,
+          "height": 20,
+          "class": "block text-gray-600 dark:text-gray-400"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "viewport": "mobile-narrow-320",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "Conhecer todos os projetos",
+          "width": 279,
+          "height": 20,
+          "class": ""
+        }
+      ]
+    },
+    {
+      "route": "/servicos",
+      "viewport": "mobile-narrow-320",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "Saiba mais",
+          "width": 96,
+          "height": 20,
+          "class": "inline-flex items-center text-blue-600"
+        },
+        {
+          "tag": "a",
+          "text": "Saiba mais",
+          "width": 96,
+          "height": 20,
+          "class": "inline-flex items-center text-blue-600"
+        }
+      ]
+    },
+    {
+      "route": "/criacao-de-sites",
+      "viewport": "mobile-narrow-320",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "Todos os Serviços",
+          "width": 165,
+          "height": 20,
+          "class": ""
+        }
+      ]
+    },
+    {
+      "route": "/landing-pages",
+      "viewport": "mobile-narrow-320",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "Todos os Serviços",
+          "width": 165,
+          "height": 20,
+          "class": ""
+        }
+      ]
+    },
+    {
+      "route": "/desenvolvimento-de-sistemas",
+      "viewport": "mobile-narrow-320",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "Todos os Serviços",
+          "width": 165,
+          "height": 20,
+          "class": ""
+        }
+      ]
+    },
+    {
+      "route": "/automacoes",
+      "viewport": "mobile-narrow-320",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "Todos os Serviços",
+          "width": 165,
+          "height": 20,
+          "class": ""
+        }
+      ]
+    },
+    {
+      "route": "/dashboards-power-bi",
+      "viewport": "mobile-narrow-320",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "Todos os Serviços",
+          "width": 165,
+          "height": 20,
+          "class": ""
+        }
+      ]
+    },
+    {
+      "route": "/fotografia-eventos",
+      "viewport": "mobile-narrow-320",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "Todos os Serviços",
+          "width": 165,
+          "height": 20,
+          "class": ""
+        }
+      ]
+    },
+    {
+      "route": "/fotografia-corporativa",
+      "viewport": "mobile-narrow-320",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "Todos os Serviços",
+          "width": 165,
+          "height": 20,
+          "class": ""
+        }
+      ]
+    },
+    {
+      "route": "/portfolio-fotografia",
+      "viewport": "mobile-narrow-320",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "Ver Trabalhos",
+          "width": 203,
+          "height": 20,
+          "class": ""
+        }
+      ]
+    },
+    {
+      "route": "/portfolio-fotografia/galeria",
+      "viewport": "mobile-narrow-320",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "Voltar para Home de Fotografia",
+          "width": 253,
+          "height": 20,
+          "class": ""
+        }
+      ]
+    },
+    {
+      "route": "/avaliacoes",
+      "viewport": "mobile-narrow-320",
+      "targets": [
+        {
+          "tag": "button",
+          "text": "Curtir",
+          "width": 57,
+          "height": 20,
+          "class": "flex items-center space-x-1"
+        },
+        {
+          "tag": "button",
+          "text": "Curtir",
+          "width": 57,
+          "height": 20,
+          "class": "flex items-center space-x-1"
+        },
+        {
+          "tag": "button",
+          "text": "Curtir",
+          "width": 57,
+          "height": 20,
+          "class": "flex items-center space-x-1"
+        }
+      ]
+    },
+    {
+      "route": "/contato",
+      "viewport": "mobile-narrow-320",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "contato@rafaelpitaoficial.com.",
+          "width": 240,
+          "height": 24,
+          "class": "text-gray-600 dark:text-gray-400 hover:text-blue-500"
+        },
+        {
+          "tag": "a",
+          "text": "(21) 96614-9077",
+          "width": 240,
+          "height": 24,
+          "class": "text-gray-600 dark:text-gray-400 hover:text-blue-500"
+        },
+        {
+          "tag": "a",
+          "text": "Rio de Janeiro, RJ - Brasil",
+          "width": 240,
+          "height": 24,
+          "class": "text-gray-600 dark:text-gray-400 hover:text-blue-500"
+        }
+      ]
+    },
+    {
+      "route": "/area-clientes",
+      "viewport": "mobile-narrow-320",
+      "targets": [
+        {
+          "tag": "button",
+          "text": "",
+          "width": 20,
+          "height": 20,
+          "class": "absolute right-3 top-1/2"
+        },
+        {
+          "tag": "button",
+          "text": "Clique aqui",
+          "width": 75,
+          "height": 20,
+          "class": "text-blue-500 dark:text-blue-400 hover:text-blue-600"
+        },
+        {
+          "tag": "a",
+          "text": "Home",
+          "width": 288,
+          "height": 20,
+          "class": "block text-gray-600 dark:text-gray-400"
+        }
+      ]
+    },
+    {
+      "route": "/track-ticket",
+      "viewport": "mobile-narrow-320",
+      "targets": [
+        {
+          "tag": "a",
+          "text": "Home",
+          "width": 288,
+          "height": 20,
+          "class": "block text-gray-600 dark:text-gray-400"
+        },
+        {
+          "tag": "a",
+          "text": "Serviços",
+          "width": 288,
+          "height": 20,
+          "class": "block text-gray-600 dark:text-gray-400"
+        },
+        {
+          "tag": "a",
+          "text": "Portfólio",
+          "width": 288,
+          "height": 20,
+          "class": "block text-gray-600 dark:text-gray-400"
+        }
+      ]
+    }
+  ],
+  "themeToggleResults": [],
+  "langToggleResults": [],
+  "screenshots": [
+    {
+      "route": "/",
+      "viewport": "desktop-1440",
+      "file": "tests\\audit-results\\screenshots\\desktop-1440\\home.png"
+    },
+    {
+      "route": "/sobre",
+      "viewport": "desktop-1440",
+      "file": "tests\\audit-results\\screenshots\\desktop-1440\\sobre.png"
+    },
+    {
+      "route": "/servicos",
+      "viewport": "desktop-1440",
+      "file": "tests\\audit-results\\screenshots\\desktop-1440\\servicos.png"
+    },
+    {
+      "route": "/criacao-de-sites",
+      "viewport": "desktop-1440",
+      "file": "tests\\audit-results\\screenshots\\desktop-1440\\servico-criacao-sites.png"
+    },
+    {
+      "route": "/landing-pages",
+      "viewport": "desktop-1440",
+      "file": "tests\\audit-results\\screenshots\\desktop-1440\\servico-landing-pages.png"
+    },
+    {
+      "route": "/desenvolvimento-de-sistemas",
+      "viewport": "desktop-1440",
+      "file": "tests\\audit-results\\screenshots\\desktop-1440\\servico-desenvolvimento-sistemas.png"
+    },
+    {
+      "route": "/automacoes",
+      "viewport": "desktop-1440",
+      "file": "tests\\audit-results\\screenshots\\desktop-1440\\servico-automacoes.png"
+    },
+    {
+      "route": "/dashboards-power-bi",
+      "viewport": "desktop-1440",
+      "file": "tests\\audit-results\\screenshots\\desktop-1440\\servico-dashboards-power-bi.png"
+    },
+    {
+      "route": "/fotografia-eventos",
+      "viewport": "desktop-1440",
+      "file": "tests\\audit-results\\screenshots\\desktop-1440\\servico-fotografia-eventos.png"
+    },
+    {
+      "route": "/fotografia-corporativa",
+      "viewport": "desktop-1440",
+      "file": "tests\\audit-results\\screenshots\\desktop-1440\\servico-fotografia-corporativa.png"
+    },
+    {
+      "route": "/portfolio",
+      "viewport": "desktop-1440",
+      "file": "tests\\audit-results\\screenshots\\desktop-1440\\portfolio.png"
+    },
+    {
+      "route": "/portfolio-fotografia",
+      "viewport": "desktop-1440",
+      "file": "tests\\audit-results\\screenshots\\desktop-1440\\portfolio-fotografia.png"
+    },
+    {
+      "route": "/portfolio-fotografia/galeria",
+      "viewport": "desktop-1440",
+      "file": "tests\\audit-results\\screenshots\\desktop-1440\\fotografia-galeria.png"
+    },
+    {
+      "route": "/avaliacoes",
+      "viewport": "desktop-1440",
+      "file": "tests\\audit-results\\screenshots\\desktop-1440\\avaliacoes.png"
+    },
+    {
+      "route": "/contato",
+      "viewport": "desktop-1440",
+      "file": "tests\\audit-results\\screenshots\\desktop-1440\\contato.png"
+    },
+    {
+      "route": "/area-clientes",
+      "viewport": "desktop-1440",
+      "file": "tests\\audit-results\\screenshots\\desktop-1440\\area-clientes.png"
+    },
+    {
+      "route": "/track-ticket",
+      "viewport": "desktop-1440",
+      "file": "tests\\audit-results\\screenshots\\desktop-1440\\track-ticket.png"
+    },
+    {
+      "route": "/",
+      "viewport": "mobile-iphone-390",
+      "file": "tests\\audit-results\\screenshots\\mobile-iphone-390\\home.png"
+    },
+    {
+      "route": "/sobre",
+      "viewport": "mobile-iphone-390",
+      "file": "tests\\audit-results\\screenshots\\mobile-iphone-390\\sobre.png"
+    },
+    {
+      "route": "/servicos",
+      "viewport": "mobile-iphone-390",
+      "file": "tests\\audit-results\\screenshots\\mobile-iphone-390\\servicos.png"
+    },
+    {
+      "route": "/criacao-de-sites",
+      "viewport": "mobile-iphone-390",
+      "file": "tests\\audit-results\\screenshots\\mobile-iphone-390\\servico-criacao-sites.png"
+    },
+    {
+      "route": "/landing-pages",
+      "viewport": "mobile-iphone-390",
+      "file": "tests\\audit-results\\screenshots\\mobile-iphone-390\\servico-landing-pages.png"
+    },
+    {
+      "route": "/desenvolvimento-de-sistemas",
+      "viewport": "mobile-iphone-390",
+      "file": "tests\\audit-results\\screenshots\\mobile-iphone-390\\servico-desenvolvimento-sistemas.png"
+    },
+    {
+      "route": "/automacoes",
+      "viewport": "mobile-iphone-390",
+      "file": "tests\\audit-results\\screenshots\\mobile-iphone-390\\servico-automacoes.png"
+    },
+    {
+      "route": "/dashboards-power-bi",
+      "viewport": "mobile-iphone-390",
+      "file": "tests\\audit-results\\screenshots\\mobile-iphone-390\\servico-dashboards-power-bi.png"
+    },
+    {
+      "route": "/fotografia-eventos",
+      "viewport": "mobile-iphone-390",
+      "file": "tests\\audit-results\\screenshots\\mobile-iphone-390\\servico-fotografia-eventos.png"
+    },
+    {
+      "route": "/fotografia-corporativa",
+      "viewport": "mobile-iphone-390",
+      "file": "tests\\audit-results\\screenshots\\mobile-iphone-390\\servico-fotografia-corporativa.png"
+    },
+    {
+      "route": "/portfolio",
+      "viewport": "mobile-iphone-390",
+      "file": "tests\\audit-results\\screenshots\\mobile-iphone-390\\portfolio.png"
+    },
+    {
+      "route": "/portfolio-fotografia",
+      "viewport": "mobile-iphone-390",
+      "file": "tests\\audit-results\\screenshots\\mobile-iphone-390\\portfolio-fotografia.png"
+    },
+    {
+      "route": "/portfolio-fotografia/galeria",
+      "viewport": "mobile-iphone-390",
+      "file": "tests\\audit-results\\screenshots\\mobile-iphone-390\\fotografia-galeria.png"
+    },
+    {
+      "route": "/avaliacoes",
+      "viewport": "mobile-iphone-390",
+      "file": "tests\\audit-results\\screenshots\\mobile-iphone-390\\avaliacoes.png"
+    },
+    {
+      "route": "/contato",
+      "viewport": "mobile-iphone-390",
+      "file": "tests\\audit-results\\screenshots\\mobile-iphone-390\\contato.png"
+    },
+    {
+      "route": "/area-clientes",
+      "viewport": "mobile-iphone-390",
+      "file": "tests\\audit-results\\screenshots\\mobile-iphone-390\\area-clientes.png"
+    },
+    {
+      "route": "/track-ticket",
+      "viewport": "mobile-iphone-390",
+      "file": "tests\\audit-results\\screenshots\\mobile-iphone-390\\track-ticket.png"
+    },
+    {
+      "route": "/",
+      "viewport": "mobile-narrow-320",
+      "file": "tests\\audit-results\\screenshots\\mobile-narrow-320\\home.png"
+    },
+    {
+      "route": "/sobre",
+      "viewport": "mobile-narrow-320",
+      "file": "tests\\audit-results\\screenshots\\mobile-narrow-320\\sobre.png"
+    },
+    {
+      "route": "/servicos",
+      "viewport": "mobile-narrow-320",
+      "file": "tests\\audit-results\\screenshots\\mobile-narrow-320\\servicos.png"
+    },
+    {
+      "route": "/criacao-de-sites",
+      "viewport": "mobile-narrow-320",
+      "file": "tests\\audit-results\\screenshots\\mobile-narrow-320\\servico-criacao-sites.png"
+    },
+    {
+      "route": "/landing-pages",
+      "viewport": "mobile-narrow-320",
+      "file": "tests\\audit-results\\screenshots\\mobile-narrow-320\\servico-landing-pages.png"
+    },
+    {
+      "route": "/desenvolvimento-de-sistemas",
+      "viewport": "mobile-narrow-320",
+      "file": "tests\\audit-results\\screenshots\\mobile-narrow-320\\servico-desenvolvimento-sistemas.png"
+    },
+    {
+      "route": "/automacoes",
+      "viewport": "mobile-narrow-320",
+      "file": "tests\\audit-results\\screenshots\\mobile-narrow-320\\servico-automacoes.png"
+    },
+    {
+      "route": "/dashboards-power-bi",
+      "viewport": "mobile-narrow-320",
+      "file": "tests\\audit-results\\screenshots\\mobile-narrow-320\\servico-dashboards-power-bi.png"
+    },
+    {
+      "route": "/fotografia-eventos",
+      "viewport": "mobile-narrow-320",
+      "file": "tests\\audit-results\\screenshots\\mobile-narrow-320\\servico-fotografia-eventos.png"
+    },
+    {
+      "route": "/fotografia-corporativa",
+      "viewport": "mobile-narrow-320",
+      "file": "tests\\audit-results\\screenshots\\mobile-narrow-320\\servico-fotografia-corporativa.png"
+    },
+    {
+      "route": "/portfolio",
+      "viewport": "mobile-narrow-320",
+      "file": "tests\\audit-results\\screenshots\\mobile-narrow-320\\portfolio.png"
+    },
+    {
+      "route": "/portfolio-fotografia",
+      "viewport": "mobile-narrow-320",
+      "file": "tests\\audit-results\\screenshots\\mobile-narrow-320\\portfolio-fotografia.png"
+    },
+    {
+      "route": "/portfolio-fotografia/galeria",
+      "viewport": "mobile-narrow-320",
+      "file": "tests\\audit-results\\screenshots\\mobile-narrow-320\\fotografia-galeria.png"
+    },
+    {
+      "route": "/avaliacoes",
+      "viewport": "mobile-narrow-320",
+      "file": "tests\\audit-results\\screenshots\\mobile-narrow-320\\avaliacoes.png"
+    },
+    {
+      "route": "/contato",
+      "viewport": "mobile-narrow-320",
+      "file": "tests\\audit-results\\screenshots\\mobile-narrow-320\\contato.png"
+    },
+    {
+      "route": "/area-clientes",
+      "viewport": "mobile-narrow-320",
+      "file": "tests\\audit-results\\screenshots\\mobile-narrow-320\\area-clientes.png"
+    },
+    {
+      "route": "/track-ticket",
+      "viewport": "mobile-narrow-320",
+      "file": "tests\\audit-results\\screenshots\\mobile-narrow-320\\track-ticket.png"
+    }
+  ]
+}

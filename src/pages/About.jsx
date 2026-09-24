@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
+import SEO from '@/components/SEO';
 import { Target, Eye, Heart, Award, Users, Lightbulb } from 'lucide-react';
-import teamImage from '@/Assets/IMG_5637.JPG';
+import teamImage from '@/Assets/team-work.webp';
 const About = () => {
     const values = [{
         icon: Lightbulb,
@@ -22,12 +22,13 @@ const About = () => {
         description: 'Amamos o que fazemos e isso se reflete na dedicação em cada detalhe.'
     }];
     return <>
-        <Helmet>
-            <title>Sobre Nós - Rafael Pita Solutions</title>
-            <meta name="description" content="Conheça a história, missão, visão e valores da Rafael Pita Solutions. Uma empresa dedicada à inovação e excelência em soluções digitais." />
-        </Helmet>
+        <SEO 
+            title="Sobre Nós - Rafael Pita Solutions | Criatividade e Tecnologia"
+            description="Conheça a história, missão, visão e valores da Rafael Pita Solutions. Empresa especializada em desenvolvimento web, sistemas, Power BI e fotografia profissional."
+            keywords="sobre rafael pita solutions, equipe rafael pita, empresa desenvolvimento de sites rj, missao visao valores pita solutions"
+        />
 
-        <div className="pt-20 min-h-screen bg-background text-foreground transition-colors duration-300">
+        <div className="pt-20 min-h-screen bg-background text-foreground transition-colors duration-300 overflow-x-hidden">
             {/* Hero Section */}
             <section className="py-20 tech-pattern relative">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -49,7 +50,7 @@ const About = () => {
             </section>
 
             {/* Story Section */}
-            <section className="py-20">
+            <section className="py-20 overflow-hidden">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                         <motion.div initial={{
@@ -78,7 +79,7 @@ const About = () => {
                             opacity: 1,
                             x: 0
                         }} className="relative">
-                            <div className="glass-effect p-8 rounded-2xl">
+                            <div className="glass-effect p-4 sm:p-8 rounded-2xl">
                                 <img alt="Equipe Rafael Pita Solutions trabalhando" src={teamImage} className="w-full h-auto rounded-lg shadow-lg" />
                             </div>
                         </motion.div>
@@ -87,7 +88,7 @@ const About = () => {
             </section>
 
             {/* Mission, Vision, Values */}
-            <section className="py-20 bg-slate-50 dark:bg-gray-900/40 border-y border-slate-200/50 dark:border-white/5 transition-colors duration-300">
+            <section className="py-20 bg-slate-50 dark:bg-gray-900/40 border-y border-slate-200/50 dark:border-white/5 transition-colors duration-300 overflow-hidden">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <motion.div initial={{
@@ -146,7 +147,7 @@ const About = () => {
             </section>
 
             {/* Values Detail */}
-            <section className="py-20">
+            <section className="py-20 overflow-hidden">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <motion.div initial={{
                         opacity: 0,
@@ -186,7 +187,7 @@ const About = () => {
             </section>
 
             {/* Team Section */}
-            <section className="py-20 bg-slate-50 dark:bg-gray-900/40 border-t border-slate-200/50 dark:border-white/5 transition-colors duration-300">
+            <section className="py-20 bg-slate-50 dark:bg-gray-900/40 border-t border-slate-200/50 dark:border-white/5 transition-colors duration-300 overflow-hidden">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <motion.div initial={{
                         opacity: 0,

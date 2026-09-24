@@ -170,9 +170,11 @@ const ProjectPage = () => {
                     <h1 className="text-4xl md:text-6xl font-bold mb-2">
                         <span className="gradient-text">{project.title}</span>
                     </h1>
-                    <div className="flex flex-wrap items-center gap-x-4 text-slate-500 dark:text-gray-400 mb-8 font-semibold">
-                        <Link to={`/portfolio?category=${project.category.slug}`} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{project.category.title}</Link>
-                    </div>
+                    {project.category && (
+                        <div className="flex flex-wrap items-center gap-x-4 text-slate-500 dark:text-gray-400 mb-8 font-semibold">
+                            <Link to={`/portfolio?category=${project.category.slug || ''}`} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{project.category.title || 'Portfólio'}</Link>
+                        </div>
+                    )}
                 </motion.div>
 
                 <motion.div variants={sectionVariants} initial="hidden" animate="visible">
@@ -353,14 +355,14 @@ const ProjectPage = () => {
                     className="flex justify-between items-center mt-20 pt-8 border-t border-slate-200 dark:border-gray-850"
                 >
                     {prevProject ? (
-                        <Link to={`/portfolio/${prevProject.category.slug}/${prevProject.slug}`}>
+                        <Link to={`/portfolio/${prevProject.category?.slug || 'geral'}/${prevProject.slug}`}>
                             <Button variant="outline" className="border-slate-300 dark:border-gray-700 text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800 hover:text-slate-900 dark:hover:text-white font-bold transition-all shadow-sm">
                                 <ArrowLeft className="mr-2 h-4 w-4" /> Projeto Anterior
                             </Button>
                         </Link>
                     ) : <div />}
                     {nextProject ? (
-                        <Link to={`/portfolio/${nextProject.category.slug}/${nextProject.slug}`}>
+                        <Link to={`/portfolio/${nextProject.category?.slug || 'geral'}/${nextProject.slug}`}>
                             <Button variant="outline" className="border-slate-300 dark:border-gray-700 text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800 hover:text-slate-900 dark:hover:text-white font-bold transition-all shadow-sm">
                                 Próximo Projeto <ArrowRight className="ml-2 h-4 w-4" />
                             </Button>

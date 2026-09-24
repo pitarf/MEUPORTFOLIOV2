@@ -147,3 +147,36 @@ A tela de otimização no painel administrativo foi transformada em uma ferramen
 4. Atualiza os campos correspondentes na tabela `projects` do Supabase.
 5. Deleta a imagem antiga do Supabase Storage, liberando espaço imediatamente.
 
+---
+
+## 6. Suíte de Auditoria Automatizada com Playwright (`tools/audit-playwright.mjs`)
+
+O projeto dispõe de uma suíte de testes ponta a ponta e inspeção de front-end com Playwright e Chromium headless para garantir a diretriz inegociável de **Mobile-First** e excelência visual antes de qualquer deploy em produção.
+
+### 6.1 Como Executar
+1. Inicie o servidor de pré-visualização ou desenvolvimento:
+   ```bash
+   npm run preview
+   ```
+2. Em outro terminal, execute o script de auditoria:
+   ```bash
+   node tools/audit-playwright.mjs
+   ```
+*(Opcional: configure `BASE_URL=http://localhost:3000` se a porta variar).*
+
+### 6.2 O que é Testado
+1. **Viewports Rigorosos**:
+   - `desktop-1440` (1440x900)
+   - `mobile-iphone-390` (390x844)
+   - `mobile-narrow-320` (320x568 - celulares ultra-compactos)
+2. **Inspeção Matemática de Vazamento (Overflow)**:
+   - Mede `scrollWidth` contra `clientWidth`. Se `scrollWidth > clientWidth + 1px`, localiza e registra os nós DOM que ultrapassam a margem direita da tela.
+3. **Erros de Console**:
+   - Escuta mensagens `error` e exceções não tratadas (`pageerror`) em cada rota.
+4. **Alvos de Toque (Touch Targets)**:
+   - Valida se elementos interativos (`<a>`, `<button>`, `<input>`) respeitam a ergonomia mínima de toque mobile (32px a 44px).
+5. **Captura de Evidências Visuais**:
+   - Salva prints full-page em `tests/audit-results/screenshots/{viewport}/{rota}.png`.
+   - Gera relatório em `tests/audit-results/audit-report.json`.
+
+

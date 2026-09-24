@@ -64,7 +64,8 @@ const NicheSlideshow = ({ images, defaultImage, title }) => {
                     <img
                         src={img}
                         alt={`${title} - Slide ${index + 1}`}
-                        className="w-full h-full object-cover transition-transform duration-[4000ms] ease-out hover:scale-110"
+                        className="w-full h-full object-cover transition-transform ease-out hover:scale-110"
+                        style={{ transitionDuration: '4000ms' }}
                         loading="lazy"
                     />
                 </div>

@@ -164,7 +164,7 @@ const Navbar = () => {
                             {/* Client Area Dropdown */}
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" className="flex items-center space-x-2 text-sm text-gray-300 hover:text-white">
+                                    <Button variant="ghost" className="flex items-center space-x-2 text-sm text-slate-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white transition-colors">
                                         <User className="h-5 w-5" />
                                         <span className="hidden xl:inline">{t('nav_client_area', 'Área do Cliente')}</span>
                                         <ChevronDown className="w-3 h-3 opacity-50" />
@@ -230,44 +230,44 @@ const Navbar = () => {
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="lg:hidden glass-effect mt-2 rounded-lg p-4 overflow-hidden border border-gray-700/50"
+                            className="lg:hidden glass-effect mt-2 rounded-xl p-4 overflow-hidden border border-slate-200/80 dark:border-gray-700/50 shadow-2xl bg-white/90 dark:bg-black/80 backdrop-blur-xl"
                         >
-                            <div className="flex flex-col space-y-4">
+                            <div className="flex flex-col space-y-3">
                                 {mainNavItems.map((item) => (
                                     <Link
                                         key={item.name}
                                         to={item.path}
                                         onClick={() => setIsOpen(false)}
-                                        className={`text-base font-medium transition-colors hover:text-blue-400 block text-center py-2 ${location.pathname === item.path ? 'text-blue-400' : 'text-gray-300'
+                                        className={`text-base font-semibold transition-colors hover:text-blue-500 block text-center py-2.5 rounded-lg ${location.pathname === item.path ? 'text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/30' : 'text-slate-700 dark:text-gray-300'
                                             }`}
                                     >
                                         {item.name}
                                     </Link>
                                 ))}
 
-                                <div className="h-px bg-gray-700 my-2" />
-                                <p className="text-xs uppercase text-gray-500 font-bold text-center">O Estúdio</p>
+                                <div className="h-px bg-slate-200 dark:bg-gray-800 my-2" />
+                                <p className="text-xs uppercase text-slate-400 dark:text-gray-500 font-bold text-center tracking-wider">{t('nav_studio', 'O Estúdio')}</p>
 
                                 {studioNavItems.map((item) => (
                                     <Link
                                         key={item.name}
                                         to={item.path}
                                         onClick={() => setIsOpen(false)}
-                                        className="text-base font-medium text-gray-400 hover:text-white block text-center py-2"
+                                        className="text-base font-medium text-slate-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-white block text-center py-2 transition-colors"
                                     >
                                         {item.name}
                                     </Link>
                                 ))}
 
-                                <div className="h-px bg-gray-700 my-2" />
-                                <p className="text-xs uppercase text-gray-500 font-bold text-center">Área do Cliente</p>
+                                <div className="h-px bg-slate-200 dark:bg-gray-800 my-2" />
+                                <p className="text-xs uppercase text-slate-400 dark:text-gray-500 font-bold text-center tracking-wider">{t('nav_client_area', 'Área do Cliente')}</p>
 
                                 {clientNavItems.map((item) => (
                                     <Link
                                         key={item.name}
                                         to={item.path}
                                         onClick={() => setIsOpen(false)}
-                                        className="text-base font-medium text-gray-400 hover:text-white block text-center py-2 flex justify-center items-center"
+                                        className="text-base font-medium text-slate-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-white block text-center py-2 flex justify-center items-center transition-colors"
                                     >
                                         {item.icon}
                                         <span className="ml-2">{item.name}</span>
@@ -275,8 +275,8 @@ const Navbar = () => {
                                 ))}
 
                                 <Link to="/contato" onClick={() => setIsOpen(false)}>
-                                    <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 w-full mt-4 h-12 text-lg">
-                                        Solicitar Orçamento
+                                    <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 w-full mt-4 h-12 text-base font-bold text-white shadow-lg">
+                                        {t('nav_quote', 'Solicitar Orçamento')}
                                     </Button>
                                 </Link>
                             </div>

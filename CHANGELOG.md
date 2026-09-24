@@ -2,6 +2,28 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.5.0] - 2026-09-24
+
+### Adicionado
+- **Suíte Automatizada de Auditoria Front-End com Playwright (`tools/audit-playwright.mjs`)**: 51 testes em 3 viewports (Desktop 1440x900, iPhone 390x844 e Mobile Ultra-Estreito 320x568) com detecção matemática de horizontal overflow (`scrollWidth > clientWidth`), monitoramento de console errors, alvos de toque e captura de 51 prints fullPage em `tests/audit-results/screenshots/`.
+- **Otimização Extrema de Imagem WebP**: Conversão da imagem de equipe `IMG_5637.JPG` (5.87 MB) para `team-work.webp` (72.6 KB), economizando 98.8% de dados transferidos e acelerando o build em 43%.
+- **Leitura de Query Params de Categoria no Portfólio (`Portfolio.jsx`)**: O portfólio agora inicializa e reage dinamicamente a parâmetros de URL (`/portfolio?category=desenvolvimento-web` ou `/portfolio#nicho`) com `useSearchParams` e `useLocation`.
+- **Migração de Banco de Dados (`11_fix_reviews_rpc.sql`)**: Criação do script SQL oficial para corrigir a coluna referenciada de `approved` para `is_approved` na função `get_average_rating()`.
+- **Expansão do Dicionário de Traduções (`translations.js`)**: Adicionadas chaves faltantes de seções da Home e Portfólio (`portfolio_description_long`, `home_featured_projects`, `home_ready_title`, etc.).
+
+### Corrigido
+- **Eliminação do Vazamento de Layout em Mobile (`About.jsx`)**: Neutralizado o horizontal overflow detectado pelo Playwright nas resoluções 390px e 320px através de encapsulamento com `overflow-hidden` nas seções com animações do Framer Motion e padding responsivo (`p-4 sm:p-8`).
+- **Eliminação de Erro HTTP 400 da Home (`Home.jsx`)**: Corrigida a consulta de avaliação média para a tabela `reviews` com `is_approved = true`, eliminando o erro de coluna inexistente no Supabase e atualizando dinamicamente a avaliação média dos clientes.
+- **Proteção contra Crash por Null Pointer (`ProjectPage.jsx`)**: Inserido optional chaining e fallbacks em links com `project.category?.slug` e nos botões de projeto anterior/próximo.
+- **Texto Invisível no Tema Claro (`ReviewForm.jsx`)**: Substituído `text-white` rígido por `text-gray-900 dark:text-white` e `text-slate-600 dark:text-gray-300` na tela de sucesso pós-envio.
+- **Contraste da Barra de Navegação no Tema Claro (`Navbar.jsx`)**: O botão da Área do Cliente e os itens do drawer mobile receberam classes adaptativas HSL, eliminando links cinza-claros ilegíveis em fundos brancos e adicionando tradução no botão de orçamento.
+- **Ergonomia Mobile em Formulários (`Contact.jsx`)**: Transformada a grade de prioridades de `grid-cols-3` para `grid-cols-1 sm:grid-cols-3` e o container para `p-4 sm:p-8 md:p-12`, prevenindo quebra de texto em telas de 320px.
+- **Unificação de SEO em Sobre Nós (`About.jsx`)**: Substituída a tag `<Helmet>` bruta pelo componente padronizado `<SEO />`.
+- **Aviso Ambíguo do Tailwind CSS (`PhotographyLanding.jsx`)**: Substituída a classe `duration-[4000ms]` por estilo inline seguro.
+
+### Removido
+- **Exclusão de Código Órfão de E-commerce**: Deletados `ProductsList.jsx`, `ShoppingCart.jsx` e `useCart.jsx`, eliminando o wrapper `<CartProvider>` de `main.jsx` e o listener residual de localStorage.
+
 ## [1.4.0] - 2026-08-11
 
 ### Adicionado

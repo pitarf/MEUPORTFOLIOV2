@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams, useLocation } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -71,12 +71,27 @@ const getProjectTechs = (categorySlug, projectTitle, projectServices) => {
 
 const Portfolio = () => {
     const { t } = useLanguage();
+    const [searchParams] = useSearchParams();
+    const location = useLocation();
     const [allCategories, setAllCategories] = useState([]);
     const [projects, setProjects] = useState([]);
     const [filteredProjects, setFilteredProjects] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState('all');
+    const [activeTab, setActiveTab] = useState(() => {
+        return searchParams.get('category') || (location.hash ? location.hash.replace('#', '') : 'all');
+    });
     const [searchQuery, setSearchQuery] = useState('');
+
+    // Reage dinamicamente a mudanças de categoria via query params ou hash
+    useEffect(() => {
+        const cat = searchParams.get('category');
+        if (cat) {
+            setActiveTab(cat);
+        } else if (location.hash) {
+            const hash = location.hash.replace('#', '');
+            if (hash) setActiveTab(hash);
+        }
+    }, [searchParams, location.hash]);
 
     const fetchPortfolioData = useCallback(async () => {
         setLoading(true);

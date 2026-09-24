@@ -40,8 +40,9 @@ const ReviewForm = ({ onSuccess, className }) => {
 
                 // Compress and convert to WebP
                 const compressedFile = await optimizeAndConvertToWebP(file);
-                setAvatarFile(compressedFile);
-                console.log(`Image compressed: ${(file.size / 1024).toFixed(2)}KB -> ${(compressedFile.size / 1024).toFixed(2)}KB`);
+                if (import.meta.env.DEV) {
+                    console.log(`Image compressed: ${(file.size / 1024).toFixed(2)}KB -> ${(compressedFile.size / 1024).toFixed(2)}KB`);
+                }
             } catch (error) {
                 console.error("Error compressing image:", error);
                 // Fallback to original file if compression fails
@@ -118,10 +119,10 @@ const ReviewForm = ({ onSuccess, className }) => {
                     <Star className="w-10 h-10 text-white fill-current" />
                 </div>
                 <div className="space-y-2">
-                    <h3 className="text-3xl font-bold text-white">Obrigado!</h3>
-                    <p className="text-gray-300 text-lg">Sua avaliação foi enviada com sucesso.</p>
+                    <h3 className="text-3xl font-bold text-gray-900 dark:text-white transition-colors duration-300">Obrigado!</h3>
+                    <p className="text-slate-600 dark:text-gray-300 text-lg font-medium transition-colors duration-300">Sua avaliação foi enviada com sucesso.</p>
                 </div>
-                <Button onClick={() => setIsSuccess(false)} variant="outline" className="mt-6 border-gray-600 text-white hover:bg-gray-800 w-full py-6 text-lg">
+                <Button onClick={() => setIsSuccess(false)} variant="outline" className="mt-6 border-slate-300 dark:border-gray-600 text-slate-800 dark:text-white hover:bg-slate-100 dark:hover:bg-gray-800 w-full py-6 text-lg font-bold transition-all shadow-sm">
                     Enviar outra avaliação
                 </Button>
             </div>

@@ -45,9 +45,16 @@ Roadmap de acompanhamento para a reestruturação visual de alta conversão, com
 - [x] **Classificação de Projetos em Subcategorias (Landing Pages)**: Criação de seletor dinâmico no painel administrativo para categorizar precisamente os projetos de Desenvolvimento Web, Power BI e Fotografia nas subcategorias correspondentes às 7 landing pages de SEO, gravando como tags semânticas `subcategoria:` no array `services` no banco, com exibição de badges na listagem e filtros reativos com fallback nas páginas públicas.
 - [x] **Correção de noindex em Dashboards Power BI**: Correção do bug do SEO.jsx que aplicava noindex na página pública `/dashboards-power-bi` por ter prefixo coincidente com a rota restrita `/dashboard`. A validação agora é feita de forma precisa.
 - [x] **Integração do Google Tag Manager (GTM)**: Instalação do container GTM-KMZ79L23 no index.html com fallback <noscript> e criação do componente de rastreamento reativo GTMRouteTracker.jsx para registrar eventos de pageview na SPA do React Router.
+- [x] **Auditoria Automatizada Playwright (Desktop & Mobile)**: Implementação e execução de suíte de testes com 51 verificações em Chromium headless (1440px, 390px e 320px), gerando 51 capturas de tela full-page em `tests/audit-results/screenshots/`.
+- [x] **Eliminação de Vazamento de Layout Mobile em `/sobre`**: Diagnóstico e mitigação de overflow horizontal (`scrollWidth > clientWidth`) causado por offsets do Framer Motion e paddings estáticos, garantindo zero vazamento em 320px e 390px.
+- [x] **Resolução de Erro 400 no Supabase**: Correção da consulta de avaliação média da Home (`Home.jsx`) e criação da migração `11_fix_reviews_rpc.sql`, sanando a divergência da coluna `approved` vs `is_approved`.
+- [x] **Segurança de Rotas em `ProjectPage.jsx`**: Implementação de optional chaining e fallbacks nas navegações de categorias anterior/próxima para prevenção de erros de runtime com categorias nulas.
+- [x] **Otimização Extrema de Imagens de Bundling**: Conversão de `IMG_5637.JPG` (5.87 MB) para `team-work.webp` (72.6 KB), reduzindo o consumo de banda em 98.8% e acelerando o tempo de build em 43%.
+- [x] **Correções de Contraste no Modo Claro**: Resolução do bug de texto branco invisível no `ReviewForm.jsx` pós-envio e refinamento do botão Área do Cliente e menu mobile na `Navbar.jsx`.
+- [x] **Limpeza de Código Morto**: Exclusão de componentes órfãos de e-commerce (`ProductsList.jsx`, `ShoppingCart.jsx`, `useCart.jsx`) e remoção do `CartProvider` na raiz do sistema.
 
 ## EM ANDAMENTO (DOING)
-*Nenhuma tarefa em andamento. Ajustes visuais, funcionais e de auditoria de SEO/Segurança 100% implementados, validados com build e documentados.*
+*Nenhuma tarefa em andamento. Auditoria técnica Playwright, correções de código, otimizações de performance e build 100% validados.*
 
 ## PENDENTE (TODO)
 - [ ] Mapeamento e coleta de feedbacks dos usuários corporativos após lançamento em produção.

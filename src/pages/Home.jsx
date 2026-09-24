@@ -78,14 +78,21 @@ const Home = () => {
 
         const fetchReviewsAvg = async () => {
             try {
-                const { data, error } = await supabase.rpc('get_average_rating');
-                if (!error && data) {
-                    setStats(prev => prev.map(s => s.label === 'Avaliação Média' ? { ...s, number: data } : s));
+                // Consulta direta e segura para os reviews aprovados, calculando a média real
+                const { data: revs, error: revError } = await supabase
+                    .from('reviews')
+                    .select('rating')
+                    .eq('is_approved', true);
+
+                if (!revError && revs && revs.length > 0) {
+                    const sum = revs.reduce((acc, r) => acc + (Number(r.rating) || 5), 0);
+                    const avg = Number((sum / revs.length).toFixed(1));
+                    setStats(prev => prev.map(s => s.label === 'Avaliação Média' ? { ...s, number: avg } : s));
                 }
             } catch (error) {
                 console.error('Error fetching rating:', error);
             }
-        }
+        };
 
         if (config) {
             setStats(prev => prev.map(s => {
