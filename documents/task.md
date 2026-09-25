@@ -52,10 +52,11 @@ Roadmap de acompanhamento para a reestruturação visual de alta conversão, com
 - [x] **Copiloto Comercial de Vendas & Negociação (`generateSalesPitchWithAI`)**: Geração automática de propostas persuasivas focadas em ROI para envio imediato no WhatsApp e guias de quebra de objeções ("está caro", "concorrente mais barato").
 - [x] **Configurador de Precificação e Taxa de Hora-Homem (`PricingSettingsModal.jsx`)**: Configuração personalizável do valor da hora (R$/h), margens de lucro e contingência gravadas no banco de dados.
 - [x] **Conversão com 1 Clique em Portfólio Público (`convertBudgetToPortfolioProject`)**: Publicação instantânea de orçamentos concluídos na tabela `projects` com fotos WebP e links finais.
-- [x] **Migração de Banco de Dados Supabase (`12_create_budgets_and_pricing_tables.sql`)**: Criação das tabelas relacionais `pricing_settings` e `budgets` com RLS seguro e índices otimizados.
+- [x] **Migração e Ativação do Serviço de Autenticação GoTrue na VPS**: Implantação do contêiner `supabase/gotrue:v2.158.1` na VPS Oracle Cloud integrado ao banco de dados `portfolio-db` (Postgres 15), provisionamento da role `authenticated`, configuração de proxy reverso Nginx para `/auth/v1/` com mitigação de duplicidade de CORS (`proxy_hide_header`) e ativação do usuário administrador `rafael@rafaelpitaoficial.com.br` com login e acesso ao `/dashboard` e `/admin/orcamentos` 100% validados via Playwright.
+- [x] **Correção de Renderização dos Campos do Modal de Orçamento (`BudgetModal.jsx`)**: Integração de `TabsContext` no componente base `tabs.jsx` para suportar seleção de abas controladas e não controladas via `value` e `onValueChange`. Todos os campos de preenchimento de cliente, escopo, estimativa por IA, precificação e propostas comerciais agora renderizam instantaneamente com validação local via Playwright.
 
 ## EM ANDAMENTO (DOING)
-*Nenhuma tarefa em andamento. Módulo de Orçamentos, Kanban Trello e Copiloto IA 100% integrados e validados no build.*
+*Nenhuma tarefa em andamento. Autenticação, criação de orçamentos e painel administrativo 100% ativos e funcionais.*
 
 ## PENDENTE (TODO)
 - [ ] Mapeamento e coleta de feedbacks dos usuários corporativos após lançamento em produção.

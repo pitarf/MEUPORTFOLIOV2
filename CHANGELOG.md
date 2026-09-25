@@ -2,6 +2,24 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.7.0] - 2026-09-25
+
+### Adicionado
+- **Serviço de Autenticação Supabase GoTrue na VPS Oracle Cloud**:
+  - Implantação e orquestração do contêiner `supabase/gotrue:v2.158.1` (`portfolio-auth`) via Docker Compose integrado ao PostgreSQL 15 (`portfolio-db`).
+  - Execução bem-sucedida de todas as 52 migrações estruturais do schema `auth` do Supabase (`auth.users`, `auth.refresh_tokens`, `auth.sessions`, `auth.instances`).
+  - Criação da role `authenticated` no PostgreSQL com concessão de privilégios de acesso e execução para o PostgREST (`portfolio-api`), permitindo consultas tanto autenticadas quanto anônimas.
+  - Ativação do usuário administrador `rafael@rafaelpitaoficial.com.br` com privilégios completos de acesso.
+
+### Corrigido
+- **Renderização dos Campos do Modal de Orçamento (`BudgetModal.jsx` / `tabs.jsx`)**:
+  - Implementação de `TabsContext` no componente [tabs.jsx](file:///C:/Git/React/MeuPortfolio%20v2/src/components/ui/tabs.jsx), adicionando suporte nativo para ativação de abas via `value` e `onValueChange` além da prop legada `isActive`.
+  - Correção da exibição de todos os campos de formulário, seletores, textareas, abas de Precificação por HH, Copiloto IA de Vendas e Publicação em Portfólio no modal de criação e edição de orçamentos (`/admin/orcamentos`).
+- **Falha de Login e Acesso à Área do Cliente (`/area-clientes`)**:
+  - Configuração do proxy reverso Nginx em `https://license.rafaelpitaoficial.com.br/auth/v1/` roteando para o serviço GoTrue interno na porta 9999.
+  - Correção de conflito de cabeçalhos CORS (`Access-Control-Allow-Origin: *, <origin>`) através da diretiva `proxy_hide_header` no Nginx, permitindo requisições cross-origin seguras a partir do domínio de produção e localhost.
+  - Validação completa do fluxo de autenticação e redirecionamento para o `/dashboard` e `/admin/orcamentos` via testes automatizados reais com Playwright.
+
 ## [1.6.0] - 2026-09-25
 
 ### Adicionado

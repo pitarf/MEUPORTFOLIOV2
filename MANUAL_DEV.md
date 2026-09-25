@@ -213,5 +213,33 @@ Definida na migration `migrations/12_create_budgets_and_pricing_tables.sql`:
 - `PricingSettingsModal.jsx`: Modal de configuração ágil do valor da hora e margens comerciais.
 - `budgetService.js`: Camada de abstração do Supabase com tratamento granular de erros.
 
+---
+
+## 8. Infraestrutura Self-Hosted na VPS (PostgreSQL 15 + PostgREST + GoTrue Auth)
+
+Para máxima independência e eliminação de custos de cloud externa, toda a camada de banco de dados e autenticação foi migrada para a VPS Oracle Cloud (`144.22.173.125`) sob o domínio seguro `https://license.rafaelpitaoficial.com.br`.
+
+### 8.1 Topologia de Contêineres Docker (`/home/ubuntu/portfolio-db`)
+1. **`portfolio-db` (PostgreSQL 15 Alpine)**:
+   - Porta interna: `5432` (mapeada no host em `127.0.0.1:5436`).
+   - Armazenamento persistente: volume Docker `portfolio-postgres-data`.
+   - Schemas: `public` (tabelas de aplicação) e `auth` (52 migrações completas do Supabase GoTrue).
+   - Roles de segurança: `portfolio_user` (owner/superuser), `authenticator` (proxy), `anon` (consultas públicas) e `authenticated` (consultas autenticadas).
+2. **`portfolio-api` (PostgREST latest)**:
+   - Porta interna: `3000` (mapeada no host em `127.0.0.1:3025`).
+   - Assinatura JWT: Segredo compartilhado de 32+ caracteres.
+   - Responde em `/rest/v1/` e `/api/`.
+3. **`portfolio-auth` (Supabase GoTrue `v2.158.1`)**:
+   - Porta interna: `9999` (mapeada no host em `127.0.0.1:9999`).
+   - Emite tokens JWT válidos com claims `{ role: 'authenticated', email: '...', sub: '<uuid>' }`.
+   - Responde em `/auth/v1/`.
+
+### 8.2 Configuração do Nginx Reverso
+O Nginx atua como proxy reverso com SSL Let's Encrypt para `license.rafaelpitaoficial.com.br`:
+- `/rest/v1/` ➔ Proxy para PostgREST (`127.0.0.1:3025`).
+- `/auth/v1/` ➔ Proxy para GoTrue (`127.0.0.1:9999`).
+- CORS Unificado: `proxy_hide_header` é utilizado nas diretivas de CORS para evitar conflito de cabeçalhos duplos (`Access-Control-Allow-Origin: *, <origin>`), garantindo conectividade perfeita para `@supabase/supabase-js`.
+
+
 
 

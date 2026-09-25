@@ -222,4 +222,29 @@ Você pode acompanhar o progresso de cada cliente pelo quadro visual:
 4. Clique no botão **🚀 Publicar no Portfólio Agora**.
 5. O sistema cadastra o trabalho diretamente na vitrine pública do seu portfólio, sem que você precise preencher outro formulário!
 
+---
+
+## 13. Acesso à Área do Cliente e Painel Administrativo
+
+A autenticação da plataforma opera sob infraestrutura própria e segura (GoTrue na VPS).
+
+### 13.1 Como Fazer Login
+1. Acesse o endereço do seu site e clique no botão **Área do Cliente** no menu (ou acesse diretamente `https://rafaelpitaoficial.com.br/area-clientes`).
+2. Digite seu e-mail de administrador cadastrado:
+   * **E-mail**: `rafael@rafaelpitaoficial.com.br`
+   * **Senha Inicial**: `PitaAdmin@2026!`
+3. Clique em **Entrar**.
+4. O sistema efetuará a autenticação instantânea e você será redirecionado automaticamente para o seu **Dashboard** (`/dashboard`).
+5. A partir do Dashboard, você tem acesso irrestrito a todas as áreas administrativas:
+   * **Orçamentos & Vendas** (`/admin/orcamentos`)
+   * **Gerenciador de Portfólio** (`/admin/portfolio`)
+   * **Avaliações & Depoimentos** (`/admin/avaliacoes`)
+   * **Configurações Gerais & SEO** (`/admin/configuracoes`)
+
+### 13.2 Como Alterar sua Senha
+1. Uma vez conectado, clique no seu nome/perfil ou acesse a rota `/perfil`.
+2. No bloco **Segurança & Senha**, digite a sua nova senha desejada e confirme-a no segundo campo.
+3. Clique em **Atualizar Senha**. A alteração entra em vigor imediatamente!
+
+
 
