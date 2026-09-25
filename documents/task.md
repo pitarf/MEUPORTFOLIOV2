@@ -3,6 +3,26 @@
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
 ## CONCLUÍDO (DONE)
+- [x] **Auditoria Cruzada e Fechamento de Pontas Soltas (Subagentes Especialistas)**: Resolução de 15 itens críticos, incluindo correção de salvamento de avatares em avaliações (`ReviewForm.jsx`), eliminação de textos brancos no modo claro (`Subscriptions.jsx`), resiliência financeira a `NaN` (`parseAiNumber`), null safety de entregáveis no Gemini, coluna de recusados no Kanban, isolamento de impressão em PDF e exclusão de arquivos órfãos.
+- [x] **Motor de Precificação Inteligente por Níveis de Complexidade (`gemini.js`)**: Calibração avançada do Gemini com a base de conhecimento oficial de 4 níveis (Nível 1 a Nível 4) e modificadores de risco (urgência, gateways Stripe/MP, migrações de dados).
+- [x] **Cenários Estratégicos de Precificação com Aplicação em 1 Clique (`BudgetModal.jsx`)**: Painel com os 3 cenários (Piso/Fechamento Rápido, Recomendado de Mercado, Premium) na aba de HH com botões de 1 clique para ajuste imediato do valor final.
+- [x] **Base Oficial de Precificação de Projetos (`documents/guia_precificacao_projetos.md`)**: Clonagem e integração da base de referência para estimativas comerciais.
+- [x] **Auditoria Completa com Subagentes Especialistas**: Inspeção profunda de código, schemas, navegação e testes estáticos com subagente dedicado à caça de pontas soltas.
+- [x] **Treinamento e Calibração da IA para Design Gráfico (`gemini.js`)**: Ensino e calibração de critérios da IA Gemini para diferenciar projetos ágeis de design (posts, banners, logotipos, papelaria) com precificação justa e acessível no Brasil (R$ 80 a R$ 1.800) em vez de inflar horas de software.
+- [x] **Correção Crítica de Edição de Orçamentos no Supabase (`budgetService.js`)**: Saneamento de payload para remover `category` e `project` antes do update, evitando rejeição do PostgREST.
+- [x] **Correção de Nomes de Etapas no Documento PDF (`BudgetPdfModal.jsx`)**: Suporte nativo a `d.stage`, eliminando a exibição de etapas em branco na tabela impressa.
+- [x] **Persistência de `budget_code` (`BudgetModal.jsx`)**: Geração automática de código corporativo único `#ORC-YYYY-XXX` no cadastro de novos orçamentos.
+- [x] **Seletor de Tipo de Chave PIX & URL de Logotipo (`PricingSettingsModal.jsx`)**: Inclusão de seletor de tipo de PIX (CNPJ, CPF, E-mail, Celular, Aleatória) e URL de logotipo.
+- [x] **Substituição de Alerta Nativo (`ManageServices.jsx`)**: Substituição de `alert()` por toast notification com diagnóstico amigável.
+- [x] **Validação Segura de Telefones para WhatsApp**: Bloqueio de disparos para números inválidos (< 8 dígitos).
+- [x] **Responsividade Mobile Aprimorada nos Modais**: Abas em 2x2 no mobile (`grid-cols-2 sm:grid-cols-4`), footer verticalizado e botões adaptáveis.
+- [x] **Gerador de Propostas Comerciais em PDF de Alta Fidelidade (`BudgetPdfModal.jsx`)**: Renderização de folha A4 corporativa em degradê azul/slate alinhada à identidade visual do site, com exportação instantânea em PDF via `html2pdf.js` e suporte à impressão nativa `window.print()`.
+- [x] **Configurações Corporativas do Prestador de Serviços (`PricingSettingsModal.jsx`)**: Nova aba "Minha Empresa & PDF (CNPJ/PIX)" permitindo configurar Razão Social, CNPJ, CPF, Contato, E-mail, Endereço, Site Oficial, Chave PIX e Termos/Garantias da Proposta.
+- [x] **Campos Opcionais de Contratante/Cliente (`BudgetModal.jsx`)**: Inclusão de CPF/CNPJ, E-mail e Endereço do cliente no cadastro de orçamentos e visualização direta da proposta em PDF.
+- [x] **Acesso Rápido ao PDF no Pipeline Comercial (`BudgetKanban.jsx` & `ManageBudgets.jsx`)**: Botão de acesso direto ao PDF em cada card do Kanban e em cada linha da tabela de orçamentos.
+- [x] **Toggle de Visualização de Horas Técnicas**: Botão no topo do modal que permite alternar entre exibir as horas estimadas por etapa ou ocultá-las antes de gerar o PDF.
+- [x] **Migração de Banco de Dados (`13_add_company_and_client_fields_for_pdf.sql`)**: Executada com sucesso na VPS Oracle (`portfolio-db`), adicionando todas as colunas necessárias com recarregamento de schema no PostgREST.
+- [x] **Validação Automatizada com Playwright**: Suíte completa validando a renderização do PDF, alternância de visualização sem horas, abertura via Kanban e via Tabela, e formulário da empresa.
 - [x] **Contexto de Temas (`ThemeContext.jsx`)**: Desenvolver gerenciador global de temas com persistência de preferências de navegação no `localStorage`.
 - [x] **Integração na Raiz (`App.jsx`)**: Envelopar toda a aplicação com o `<ThemeProvider>` e criar o corpo da aplicação com transições dinâmicas de cores (`transition-colors duration-300`).
 - [x] **Variáveis de Estilo HSL (`index.css`)**: Definir a nova paleta do Tema Claro Premium corporativa (estilo Stripe e Apple) no `:root`, transferir a paleta escura existente para a classe `.dark` e adequar as classes premium `.glass-effect`, `.service-card` e `.gradient-text` para transições inteligentes.

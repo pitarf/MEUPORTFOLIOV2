@@ -1,17 +1,11 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { Star, Quote, ThumbsUp, MessageCircle, Loader2, Upload, User } from 'lucide-react';
+import { Star, Quote, ThumbsUp, MessageCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from '@/lib/firebaseClient';
-import { optimizeAndConvertToWebP } from '@/utils/imageOptimizer';
 import {
     Carousel,
     CarouselContent,
@@ -27,17 +21,7 @@ const Reviews = () => {
     const { user } = useAuth();
     const [reviews, setReviews] = useState([]);
     const [loadingReviews, setLoadingReviews] = useState(true);
-    const [submitting, setSubmitting] = useState(false);
     const [userLikes, setUserLikes] = useState(new Set());
-
-    const [newReview, setNewReview] = useState({
-        name: '',
-        role: '',
-        rating: 5,
-        comment: ''
-    });
-    const [avatarFile, setAvatarFile] = useState(null);
-    const [avatarPreview, setAvatarPreview] = useState(null);
 
     const plugin = useRef(
         Autoplay({ delay: 2000, stopOnInteraction: true })
@@ -131,82 +115,6 @@ const Reviews = () => {
             fetchReviews();
             fetchUserLikes();
         }
-    };
-
-    const handleAvatarChange = async (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            try {
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    setAvatarPreview(reader.result);
-                };
-                reader.readAsDataURL(file);
-
-                const optimizedFile = await optimizeAndConvertToWebP(file);
-                setAvatarFile(optimizedFile);
-            } catch (error) {
-                console.error("Error optimizing avatar:", error);
-                setAvatarFile(file);
-            }
-        }
-    };
-
-    const handleSubmitReview = async (e) => {
-        e.preventDefault();
-        if (!newReview.name || !newReview.comment) {
-            toast({
-                variant: "destructive",
-                title: "Campos obrigatórios",
-                description: "Por favor, preencha pelo menos o nome e comentário.",
-            });
-            return;
-        }
-
-        setSubmitting(true);
-        let avatar_url = null;
-
-        if (avatarFile) {
-            try {
-                const fileName = `${Date.now()}.webp`;
-                const storageRef = ref(storage, `avatars/${fileName}`);
-                const snapshot = await uploadBytes(storageRef, avatarFile);
-                avatar_url = await getDownloadURL(snapshot.ref);
-            } catch (uploadError) {
-                setSubmitting(false);
-                toast({
-                    variant: "destructive",
-                    title: "Erro no Upload",
-                    description: `Não foi possível enviar sua foto: ${uploadError.message}`,
-                });
-                return;
-            }
-        }
-
-        const reviewData = { ...newReview, avatar_url, is_approved: false };
-        if (user) {
-            reviewData.user_id = user.id;
-        }
-
-        const { error: insertError } = await supabase.from('reviews').insert([reviewData]);
-
-        if (insertError) {
-            setSubmitting(false);
-            toast({
-                variant: "destructive",
-                title: "Erro ao Enviar",
-                description: `Não foi possível salvar sua avaliação: ${insertError.message}`,
-            });
-        } else {
-            toast({
-                title: "Avaliação Enviada!",
-                description: "Obrigado! Sua avaliação foi enviada para aprovação.",
-            });
-            setNewReview({ name: '', role: '', rating: 5, comment: '' });
-            setAvatarFile(null);
-            setAvatarPreview(null);
-        }
-        setSubmitting(false);
     };
 
     const renderStars = (rating) => {

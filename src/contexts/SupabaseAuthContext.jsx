@@ -47,8 +47,10 @@ export const AuthProvider = ({ children }) => {
         if (error) {
             toast({
                 variant: "destructive",
-                title: "Sign up Failed",
-                description: error.message || "Something went wrong",
+                title: "Falha no Cadastro",
+                description: error.message?.includes('already registered')
+                    ? "Este e-mail já está cadastrado em nossa base."
+                    : (error.message || "Não foi possível concluir o cadastro. Verifique os dados informados."),
             });
         }
 
@@ -64,8 +66,10 @@ export const AuthProvider = ({ children }) => {
         if (error) {
             toast({
                 variant: "destructive",
-                title: "Sign in Failed",
-                description: error.message || "Something went wrong",
+                title: "Falha na Autenticação",
+                description: error.message?.includes('Invalid login credentials')
+                    ? "E-mail ou senha incorretos. Tente novamente."
+                    : (error.message || "Servidor instável. Tente novamente em alguns instantes."),
             });
         }
 
@@ -78,8 +82,8 @@ export const AuthProvider = ({ children }) => {
         if (error) {
             toast({
                 variant: "destructive",
-                title: "Sign out Failed",
-                description: error.message || "Something went wrong",
+                title: "Falha ao Desconectar",
+                description: "Não foi possível encerrar a sessão. Tente novamente.",
             });
         }
 
@@ -94,13 +98,13 @@ export const AuthProvider = ({ children }) => {
         if (error) {
             toast({
                 variant: "destructive",
-                title: "Update Failed",
-                description: error.message,
+                title: "Falha na Atualização",
+                description: error.message || "Não foi possível atualizar as informações do perfil.",
             });
         } else {
             toast({
-                title: "Profile Updated",
-                description: "Your profile information has been updated successfully.",
+                title: "Perfil Atualizado",
+                description: "Suas informações de perfil foram atualizadas com sucesso.",
             });
             // Refresh session to get updated data
             const { data: { session } } = await supabase.auth.getSession();
@@ -117,13 +121,13 @@ export const AuthProvider = ({ children }) => {
         if (error) {
             toast({
                 variant: "destructive",
-                title: "Password Update Failed",
-                description: error.message,
+                title: "Falha ao Alterar Senha",
+                description: error.message || "Não foi possível alterar sua senha. Tente novamente.",
             });
         } else {
             toast({
-                title: "Password Updated",
-                description: "Your password has been changed successfully.",
+                title: "Senha Atualizada",
+                description: "Sua senha de acesso foi modificada com sucesso.",
             });
         }
         return { error };

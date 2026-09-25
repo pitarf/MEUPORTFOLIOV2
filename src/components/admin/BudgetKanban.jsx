@@ -11,7 +11,8 @@ import {
     CheckCircle2,
     Building2,
     FolderKanban,
-    MoreHorizontal
+    MoreHorizontal,
+    FileText
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -52,6 +53,12 @@ export const KANBAN_COLUMNS = [
         title: 'Concluído & Quitado',
         icon: '✅',
         color: 'border-emerald-500/40 bg-emerald-500/5 text-emerald-600 dark:text-emerald-400'
+    },
+    {
+        id: 'recusado',
+        title: 'Recusado / Arquivado',
+        icon: '❌',
+        color: 'border-red-500/40 bg-red-500/5 text-red-600 dark:text-red-400'
     }
 ];
 
@@ -61,7 +68,8 @@ const ORDERED_STATUSES = [
     'em_andamento',
     'entregue',
     'pendente_pagamento',
-    'concluido'
+    'concluido',
+    'recusado'
 ];
 
 /**
@@ -70,19 +78,24 @@ const ORDERED_STATUSES = [
 const BudgetKanban = ({
     budgets = [],
     onSelectBudget,
-    onStatusChange
+    onStatusChange,
+    onViewPdf
 }) => {
-    // Agrupa orçamentos por status
+    // Agrupa orçamentos por status com normalização de status legados
     const groupedBudgets = ORDERED_STATUSES.reduce((acc, status) => {
-        acc[status] = budgets.filter(b => b.status === status);
+        acc[status] = budgets.filter(b => {
+            const normalized = b.status === 'aceito' ? 'em_andamento' : (b.status || 'pendente');
+            return normalized === status;
+        });
         return acc;
     }, {});
 
     // Mover para próxima coluna
     const handleMoveForward = (budget, e) => {
         e.stopPropagation();
-        const currentIndex = ORDERED_STATUSES.indexOf(budget.status);
-        if (currentIndex < ORDERED_STATUSES.length - 1) {
+        const currentStatus = budget.status === 'aceito' ? 'em_andamento' : (budget.status || 'pendente');
+        const currentIndex = ORDERED_STATUSES.indexOf(currentStatus);
+        if (currentIndex !== -1 && currentIndex < ORDERED_STATUSES.length - 1) {
             const nextStatus = ORDERED_STATUSES[currentIndex + 1];
             onStatusChange(budget.id, nextStatus);
         }
@@ -91,7 +104,8 @@ const BudgetKanban = ({
     // Mover para coluna anterior
     const handleMoveBackward = (budget, e) => {
         e.stopPropagation();
-        const currentIndex = ORDERED_STATUSES.indexOf(budget.status);
+        const currentStatus = budget.status === 'aceito' ? 'em_andamento' : (budget.status || 'pendente');
+        const currentIndex = ORDERED_STATUSES.indexOf(currentStatus);
         if (currentIndex > 0) {
             const prevStatus = ORDERED_STATUSES[currentIndex - 1];
             onStatusChange(budget.id, prevStatus);
@@ -197,7 +211,20 @@ const BudgetKanban = ({
                                                 {/* Ações Rápidas de Navegação no Kanban */}
                                                 <div className="flex items-center justify-between pt-1 border-t border-border/40">
                                                     <div className="flex items-center gap-1">
-                                                        {budget.client_phone && (
+                                                        {onViewPdf && (
+                                                            <button
+                                                                type="button"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    onViewPdf(budget);
+                                                                }}
+                                                                className="p-1 rounded text-blue-600 hover:bg-blue-500/10 transition-colors"
+                                                                title="Visualizar e Baixar Proposta em PDF"
+                                                            >
+                                                                <FileText className="w-3.5 h-3.5" />
+                                                            </button>
+                                                        )}
+                                                        {budget.client_phone && budget.client_phone.replace(/\D/g, '').length >= 8 && (
                                                             <button
                                                                 type="button"
                                                                 onClick={(e) => {

@@ -18,7 +18,8 @@ import {
     MessageCircle,
     Building2,
     Trash2,
-    Edit
+    Edit,
+    FileText
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -34,6 +35,7 @@ import {
 import BudgetKanban from '@/components/admin/BudgetKanban';
 import BudgetModal from '@/components/admin/BudgetModal';
 import PricingSettingsModal from '@/components/admin/PricingSettingsModal';
+import BudgetPdfModal from '@/components/admin/BudgetPdfModal';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -68,6 +70,8 @@ const ManageBudgets = () => {
     const [budgetModalOpen, setBudgetModalOpen] = useState(false);
     const [selectedBudget, setSelectedBudget] = useState(null);
     const [pricingModalOpen, setPricingModalOpen] = useState(false);
+    const [pdfModalOpen, setPdfModalOpen] = useState(false);
+    const [pdfBudget, setPdfBudget] = useState(null);
     const [deleteModalState, setDeleteModalState] = useState({ isOpen: false, budgetId: null, budgetTitle: '' });
 
     // Carregar categorias
@@ -369,6 +373,10 @@ const ManageBudgets = () => {
                         setBudgetModalOpen(true);
                     }}
                     onStatusChange={handleStatusChange}
+                    onViewPdf={(b) => {
+                        setPdfBudget(b);
+                        setPdfModalOpen(true);
+                    }}
                 />
             ) : (
                 /* Visualização em Lista / Tabela */
@@ -437,20 +445,34 @@ const ManageBudgets = () => {
                                             </td>
                                             <td className="py-3 px-4 text-right" onClick={(e) => e.stopPropagation()}>
                                                 <div className="flex items-center justify-end gap-1">
-                                                    {b.client_phone && (
+                                                    {b.client_phone && b.client_phone.replace(/\D/g, '').length >= 8 && (
                                                         <Button
                                                             variant="ghost"
                                                             size="icon"
                                                             className="h-7 w-7 text-emerald-600 hover:bg-emerald-500/10"
                                                             onClick={() => {
                                                                 const phone = b.client_phone.replace(/\D/g, '');
-                                                                window.open(`https://wa.me/${phone.length <= 11 ? '55' + phone : phone}`, '_blank');
+                                                                const fullPhone = phone.length <= 11 ? '55' + phone : phone;
+                                                                const text = encodeURIComponent(b.ai_sales_pitch || `Olá ${b.client_name}, tudo bem? Segue a proposta comercial referente ao projeto "${b.title}".`);
+                                                                window.open(`https://wa.me/${fullPhone}?text=${text}`, '_blank');
                                                             }}
                                                             title="WhatsApp"
                                                         >
                                                             <MessageCircle className="w-3.5 h-3.5" />
                                                         </Button>
                                                     )}
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        className="h-7 w-7 text-blue-600 hover:bg-blue-500/10"
+                                                        onClick={() => {
+                                                            setPdfBudget(b);
+                                                            setPdfModalOpen(true);
+                                                        }}
+                                                        title="Ver Proposta em PDF"
+                                                    >
+                                                        <FileText className="w-3.5 h-3.5" />
+                                                    </Button>
                                                     <Button
                                                         variant="ghost"
                                                         size="icon"
@@ -511,6 +533,20 @@ const ManageBudgets = () => {
                     onSaved={(updated) => {
                         setPricingSettings(updated);
                     }}
+                />
+            )}
+
+            {/* Modal de Visualização & Download de Proposta em PDF */}
+            {pdfModalOpen && pdfBudget && (
+                <BudgetPdfModal
+                    isOpen={pdfModalOpen}
+                    onClose={() => {
+                        setPdfModalOpen(false);
+                        setPdfBudget(null);
+                    }}
+                    budget={pdfBudget}
+                    pricingSettings={pricingSettings}
+                    categoryTitle={categories.find(c => String(c.id) === String(pdfBudget?.category_id))?.title}
                 />
             )}
 

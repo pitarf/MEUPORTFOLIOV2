@@ -74,8 +74,21 @@ export const updatePricingSettings = async (settings) => {
         profit_margin_percent: parseFloat(settings.profit_margin_percent) || 20.00,
         contingency_margin_percent: parseFloat(settings.contingency_margin_percent) || 15.00,
         fixed_costs_monthly: parseFloat(settings.fixed_costs_monthly) || 0.00,
-        min_project_value: parseFloat(settings.min_project_value) || 500.00,
+        min_project_value: isNaN(parseFloat(settings.min_project_value)) ? 500.00 : parseFloat(settings.min_project_value),
         notes: settings.notes || '',
+        company_name: settings.company_name ?? 'Rafael Pita Solutions',
+        company_trade_name: settings.company_trade_name ?? 'Rafael Pita',
+        company_cnpj: settings.company_cnpj ?? '',
+        company_cpf: settings.company_cpf ?? '',
+        company_email: settings.company_email ?? 'contato@rafaelpitaoficial.com.br',
+        company_phone: settings.company_phone ?? '(21) 96614-9077',
+        company_address: settings.company_address ?? 'Rio de Janeiro, RJ - Brasil',
+        company_logo_url: settings.company_logo_url ?? '',
+        company_website: settings.company_website ?? 'https://rafaelpitaoficial.com.br',
+        pix_key: settings.pix_key ?? '',
+        pix_key_type: settings.pix_key_type ?? 'CNPJ',
+        proposal_validity_days: parseInt(settings.proposal_validity_days, 10) || 15,
+        proposal_terms: settings.proposal_terms ?? '',
         updated_at: new Date().toISOString()
     };
 
@@ -129,10 +142,14 @@ export const fetchBudgets = async () => {
  * @returns {Promise<Object>}
  */
 export const createBudget = async (budgetData) => {
+    const cleanData = { ...budgetData };
+    delete cleanData.category;
+    delete cleanData.project;
+
     const { data, error } = await supabase
         .from('budgets')
         .insert([{
-            ...budgetData,
+            ...cleanData,
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
         }])
@@ -156,10 +173,14 @@ export const createBudget = async (budgetData) => {
  * @returns {Promise<Object>}
  */
 export const updateBudget = async (id, budgetData) => {
+    const cleanData = { ...budgetData };
+    delete cleanData.category;
+    delete cleanData.project;
+
     const { data, error } = await supabase
         .from('budgets')
         .update({
-            ...budgetData,
+            ...cleanData,
             updated_at: new Date().toISOString()
         })
         .eq('id', id)

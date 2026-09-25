@@ -25,13 +25,29 @@ import {
     Share2,
     MessageCircle,
     SlidersHorizontal,
-    UploadCloud
+    UploadCloud,
+    FileText
 } from 'lucide-react';
 import { estimateBudgetScopeWithAI, generateSalesPitchWithAI } from '@/lib/gemini';
 import { createBudget, updateBudget, convertBudgetToPortfolioProject, fetchPricingSettings } from '@/services/budgetService';
 import { optimizeAndConvertToWebP } from '@/utils/imageOptimizer';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '@/lib/firebaseClient';
+import BudgetPdfModal from '@/components/admin/BudgetPdfModal';
+
+/**
+ * Converte com segurança saídas monetárias de IA (string formatada ou número) em float
+ * Ex: "R$ 450,00" -> 450, "1.200,50" -> 1200.5, 750 -> 750
+ */
+export const parseAiNumber = (val, fallback = 0) => {
+    if (typeof val === 'number') return isNaN(val) ? fallback : val;
+    if (typeof val === 'string') {
+        const cleaned = val.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.');
+        const parsed = parseFloat(cleaned);
+        return isNaN(parsed) ? fallback : parsed;
+    }
+    return fallback;
+};
 
 /**
  * Modal Completo de Gestão de Orçamentos, Precificação por HH, Copiloto IA de Vendas e Conversão para Portfólio
@@ -54,6 +70,8 @@ const BudgetModal = ({
     const [uploadingImage, setUploadingImage] = useState(false);
     const [convertingPortfolio, setConvertingPortfolio] = useState(false);
     const [copiedWhatsApp, setCopiedWhatsApp] = useState(false);
+    const [pdfModalOpen, setPdfModalOpen] = useState(false);
+    const [aiScenarios, setAiScenarios] = useState(null);
 
     // Parâmetros de Precificação Base
     const [pricingBase, setPricingBase] = useState({
@@ -68,6 +86,9 @@ const BudgetModal = ({
         client_email: '',
         client_phone: '',
         client_company: '',
+        client_document: '',
+        client_address: '',
+        budget_code: '',
         category_id: '',
         scope_description: '',
         deliverables: [],
@@ -101,8 +122,17 @@ const BudgetModal = ({
                 }
 
                 if (budget) {
+                    if (budget.ai_scope_analysis && typeof budget.ai_scope_analysis === 'object') {
+                        setAiScenarios(budget.ai_scope_analysis.scenarios || budget.ai_scope_analysis);
+                    } else {
+                        setAiScenarios(null);
+                    }
+
                     setFormData({
                         ...budget,
+                        client_document: budget.client_document || '',
+                        client_address: budget.client_address || '',
+                        budget_code: budget.budget_code || '',
                         category_id: budget.category_id ? String(budget.category_id) : '',
                         deliverables: Array.isArray(budget.deliverables) ? budget.deliverables : [],
                         ai_objections_handling: Array.isArray(budget.ai_objections_handling) ? budget.ai_objections_handling : [],
@@ -110,12 +140,16 @@ const BudgetModal = ({
                     });
                 } else {
                     // Novo Orçamento
+                    setAiScenarios(null);
                     setFormData({
                         title: '',
                         client_name: '',
                         client_email: '',
                         client_phone: '',
                         client_company: '',
+                        client_document: '',
+                        client_address: '',
+                        budget_code: '',
                         category_id: categories.length > 0 ? String(categories[0].id) : '',
                         scope_description: '',
                         deliverables: [],
@@ -191,21 +225,34 @@ const BudgetModal = ({
                 contingencyMargin: pricingBase.contingency_margin_percent || 15
             });
 
-            const totalH = result.totalHours || result.estimatedHours || 10;
-            const deliverables = result.deliverables || [];
-            const suggestedFinal = result.suggestedPrice || (totalH * formData.hourly_rate_used);
+            const totalH = parseAiNumber(result.totalHours || result.estimatedHours, 10);
+            const deliverables = Array.isArray(result.deliverables) ? result.deliverables : [];
+            const suggestedFinal = parseAiNumber(result.suggestedPrice, totalH * (formData.hourly_rate_used || 120));
+            const minFinal = parseAiNumber(result.minPrice, suggestedFinal * 0.85);
+            const premiumFinal = parseAiNumber(result.premiumPrice, suggestedFinal * 1.35);
+            const recDeadline = parseInt(result.recommendedDeadlineDays, 10) || formData.deadline_days || 15;
+
+            const scenariosData = {
+                minPrice: minFinal,
+                suggestedPrice: suggestedFinal,
+                premiumPrice: premiumFinal,
+                level: result.level || 2,
+                complexity: result.complexity || 'Média',
+                recommendedDeadlineDays: recDeadline
+            };
+            setAiScenarios(scenariosData);
 
             setFormData(prev => ({
                 ...prev,
                 title: prev.title || `Projeto: ${categoryTitle} - ${prev.client_name || 'Novo Cliente'}`,
                 deliverables,
                 estimated_hours: totalH,
-                deadline_days: result.recommendedDeadlineDays || prev.deadline_days || 15,
+                deadline_days: recDeadline,
                 subtotal: parseFloat((totalH * prev.hourly_rate_used).toFixed(2)),
                 final_price: parseFloat(Number(suggestedFinal).toFixed(2)),
                 notes: prev.notes
                     ? `${prev.notes}\n\n[IA Recomendações]: ${result.technicalNotes || ''}`
-                    : `[IA Complexidade: ${result.complexity}]\n${result.technicalNotes || ''}`
+                    : `[IA Complexidade: ${result.complexity || 'Média'}]\n${result.technicalNotes || ''}`
             }));
 
             toast({
@@ -223,6 +270,19 @@ const BudgetModal = ({
         } finally {
             setAiScopeLoading(false);
         }
+    };
+
+    // Aplica diretamente um dos cenários da IA (Piso, Recomendado ou Premium)
+    const handleApplyPricingScenario = (price, label) => {
+        const val = parseAiNumber(price, 0);
+        setFormData(prev => ({
+            ...prev,
+            final_price: parseFloat(val.toFixed(2))
+        }));
+        toast({
+            title: `Cenário ${label} aplicado!`,
+            description: `Valor final ajustado para R$ ${val.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}.`
+        });
     };
 
     // Copiloto 2: Gerar Proposta Comercial Persuasiva e Quebra de Objeções
@@ -281,15 +341,15 @@ const BudgetModal = ({
 
     // Abrir conversa diretamente no WhatsApp do cliente
     const handleOpenWhatsApp = () => {
-        if (!formData.client_phone) {
+        const cleanPhone = formData.client_phone ? formData.client_phone.replace(/\D/g, '') : '';
+        if (!cleanPhone || cleanPhone.length < 8) {
             toast({
                 variant: 'destructive',
-                title: 'Telefone ausente',
-                description: 'Informe o WhatsApp do cliente nos dados de contato.'
+                title: 'WhatsApp inválido',
+                description: 'Informe um número de telefone com DDD válido nos dados de contato.'
             });
             return;
         }
-        const cleanPhone = formData.client_phone.replace(/\D/g, '');
         const phoneWithCountry = cleanPhone.length <= 11 ? `55${cleanPhone}` : cleanPhone;
         const encodedText = encodeURIComponent(formData.ai_sales_pitch || `Olá ${formData.client_name}, segue nossa proposta comercial.`);
         window.open(`https://wa.me/${phoneWithCountry}?text=${encodedText}`, '_blank');
@@ -324,6 +384,15 @@ const BudgetModal = ({
 
     // Conversão Direta em Projeto do Portfólio Público
     const handleConvertToPortfolio = async () => {
+        if (!isEditing && !budget?.id && !formData.id) {
+            toast({
+                variant: 'destructive',
+                title: 'Salve o orçamento primeiro',
+                description: 'É necessário salvar o orçamento no pipeline antes de publicá-lo no portfólio para evitar projetos desvinculados.'
+            });
+            return;
+        }
+
         if (!formData.title || !formData.category_id) {
             toast({
                 variant: 'destructive',
@@ -338,6 +407,7 @@ const BudgetModal = ({
             const result = await convertBudgetToPortfolioProject({
                 budget: {
                     ...formData,
+                    id: budget?.id || formData.id,
                     category_id: parseInt(formData.category_id, 10)
                 }
             });
@@ -381,6 +451,7 @@ const BudgetModal = ({
         try {
             const payload = {
                 ...formData,
+                budget_code: formData.budget_code || `ORC-${new Date().getFullYear()}-${String(Math.floor(100 + Math.random() * 900))}`,
                 category_id: formData.category_id ? parseInt(formData.category_id, 10) : null,
                 estimated_hours: parseFloat(formData.estimated_hours) || 0,
                 hourly_rate_used: parseFloat(formData.hourly_rate_used) || 120,
@@ -388,7 +459,8 @@ const BudgetModal = ({
                 profit_margin_percent: parseFloat(formData.profit_margin_percent) || 0,
                 discount_percent: parseFloat(formData.discount_percent) || 0,
                 final_price: parseFloat(formData.final_price) || 0,
-                deadline_days: parseInt(formData.deadline_days, 10) || 15
+                deadline_days: parseInt(formData.deadline_days, 10) || 15,
+                ai_scope_analysis: aiScenarios ? { scenarios: aiScenarios } : (formData.ai_scope_analysis || null)
             };
 
             let saved;
@@ -432,8 +504,8 @@ const BudgetModal = ({
                 </DialogHeader>
 
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                    <div className="px-6 pt-3 border-b border-border bg-background sticky top-0 z-10">
-                        <TabsList className="grid grid-cols-4 w-full h-auto p-1 bg-muted/60">
+                    <div className="px-4 sm:px-6 pt-3 border-b border-border bg-background sticky top-0 z-10">
+                        <TabsList className="grid grid-cols-2 sm:grid-cols-4 w-full h-auto p-1 bg-muted/60 gap-1">
                             <TabsTrigger value="escopo" className="text-xs py-2 gap-1.5">
                                 <Briefcase className="w-3.5 h-3.5" />
                                 1. Cliente & Escopo
@@ -488,31 +560,68 @@ const BudgetModal = ({
                             </div>
 
                             {/* Dados do Cliente */}
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 p-4 rounded-lg border border-border bg-muted/20">
-                                <div className="space-y-1">
-                                    <Label className="text-xs font-semibold">Nome do Cliente *</Label>
-                                    <Input
-                                        placeholder="Ex: Dr. Roberto / Mariana Silva"
-                                        value={formData.client_name}
-                                        onChange={(e) => setFormData({ ...formData, client_name: e.target.value })}
-                                        required
-                                    />
+                            <div className="space-y-3 p-4 rounded-lg border border-border bg-muted/20">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                    <div className="space-y-1">
+                                        <Label className="text-xs font-semibold">Nome do Cliente *</Label>
+                                        <Input
+                                            placeholder="Ex: Dr. Roberto / Mariana Silva"
+                                            value={formData.client_name}
+                                            onChange={(e) => setFormData({ ...formData, client_name: e.target.value })}
+                                            required
+                                        />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <Label className="text-xs font-semibold">Empresa / Razão Social</Label>
+                                        <Input
+                                            placeholder="Ex: Clínica Odonto Prime"
+                                            value={formData.client_company}
+                                            onChange={(e) => setFormData({ ...formData, client_company: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <Label className="text-xs font-semibold">WhatsApp (para propostas)</Label>
+                                        <Input
+                                            placeholder="(21) 99999-9999"
+                                            value={formData.client_phone}
+                                            onChange={(e) => setFormData({ ...formData, client_phone: e.target.value })}
+                                        />
+                                    </div>
                                 </div>
-                                <div className="space-y-1">
-                                    <Label className="text-xs font-semibold">Empresa / Marca</Label>
-                                    <Input
-                                        placeholder="Ex: Clínica Odonto Prime"
-                                        value={formData.client_company}
-                                        onChange={(e) => setFormData({ ...formData, client_company: e.target.value })}
-                                    />
-                                </div>
-                                <div className="space-y-1">
-                                    <Label className="text-xs font-semibold">WhatsApp (para propostas)</Label>
-                                    <Input
-                                        placeholder="(21) 99999-9999"
-                                        value={formData.client_phone}
-                                        onChange={(e) => setFormData({ ...formData, client_phone: e.target.value })}
-                                    />
+
+                                {/* Dados Opcionais para Emissão de PDF */}
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 border-t border-border/50">
+                                    <div className="space-y-1">
+                                        <Label className="text-xs font-semibold text-muted-foreground">
+                                            CPF / CNPJ do Cliente (Opcional p/ PDF)
+                                        </Label>
+                                        <Input
+                                            placeholder="Ex: 000.000.000-00 ou CNPJ"
+                                            value={formData.client_document}
+                                            onChange={(e) => setFormData({ ...formData, client_document: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <Label className="text-xs font-semibold text-muted-foreground">
+                                            E-mail do Cliente (Opcional p/ PDF)
+                                        </Label>
+                                        <Input
+                                            type="email"
+                                            placeholder="cliente@email.com"
+                                            value={formData.client_email}
+                                            onChange={(e) => setFormData({ ...formData, client_email: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <Label className="text-xs font-semibold text-muted-foreground">
+                                            Endereço / Cidade (Opcional p/ PDF)
+                                        </Label>
+                                        <Input
+                                            placeholder="Ex: Niterói, RJ"
+                                            value={formData.client_address}
+                                            onChange={(e) => setFormData({ ...formData, client_address: e.target.value })}
+                                        />
+                                    </div>
                                 </div>
                             </div>
 
@@ -656,6 +765,106 @@ const BudgetModal = ({
                                 </div>
                             </div>
 
+                            {/* Cenários Estratégicos de Precificação Sugeridos pela IA */}
+                            {aiScenarios && (
+                                <div className="p-3.5 rounded-xl border border-primary/20 bg-primary/5 space-y-2.5">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-1.5">
+                                            <Sparkles className="w-4 h-4 text-amber-500" />
+                                            <span className="text-xs font-bold text-foreground">
+                                                Cenários Estratégicos de Mercado (IA)
+                                            </span>
+                                            {aiScenarios.complexity && (
+                                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-medium">
+                                                    Nível {aiScenarios.level || '2'}: {aiScenarios.complexity}
+                                                </span>
+                                            )}
+                                        </div>
+                                        {aiScenarios.recommendedDeadlineDays && (
+                                            <span className="text-[11px] text-muted-foreground flex items-center gap-1">
+                                                <Clock className="w-3 h-3" /> Prazo sugerido: {aiScenarios.recommendedDeadlineDays} dias
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                                        {/* Piso / Fechamento Rápido */}
+                                        <div className="p-2.5 rounded-lg border border-border bg-card/60 flex flex-col justify-between hover:border-emerald-500/40 transition-colors">
+                                            <div>
+                                                <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                                                    Piso / Rápido
+                                                </span>
+                                                <p className="text-lg font-bold font-mono text-foreground mt-0.5">
+                                                    R$ {Number(aiScenarios.minPrice || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                                </p>
+                                                <p className="text-[10px] text-muted-foreground line-clamp-1">
+                                                    Sensíveis a preço / à vista
+                                                </p>
+                                            </div>
+                                            <Button
+                                                type="button"
+                                                size="sm"
+                                                variant="outline"
+                                                className="mt-2 h-7 text-xs border-emerald-500/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10"
+                                                onClick={() => handleApplyPricingScenario(aiScenarios.minPrice, 'Piso')}
+                                            >
+                                                Aplicar Piso
+                                            </Button>
+                                        </div>
+
+                                        {/* Recomendado / Mercado */}
+                                        <div className="p-2.5 rounded-lg border-2 border-emerald-500/50 bg-emerald-500/10 flex flex-col justify-between relative shadow-xs">
+                                            <span className="absolute -top-2 right-2 text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-emerald-600 text-white shadow-xs">
+                                                Recomendado
+                                            </span>
+                                            <div>
+                                                <span className="text-[10px] font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-300">
+                                                    Valor de Mercado
+                                                </span>
+                                                <p className="text-lg font-bold font-mono text-emerald-700 dark:text-emerald-300 mt-0.5">
+                                                    R$ {Number(aiScenarios.suggestedPrice || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                                </p>
+                                                <p className="text-[10px] text-muted-foreground line-clamp-1">
+                                                    Equilíbrio ideal e margem justa
+                                                </p>
+                                            </div>
+                                            <Button
+                                                type="button"
+                                                size="sm"
+                                                className="mt-2 h-7 text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-semibold"
+                                                onClick={() => handleApplyPricingScenario(aiScenarios.suggestedPrice, 'Recomendado')}
+                                            >
+                                                Aplicar Recomendado
+                                            </Button>
+                                        </div>
+
+                                        {/* Premium / Suporte */}
+                                        <div className="p-2.5 rounded-lg border border-border bg-card/60 flex flex-col justify-between hover:border-purple-500/40 transition-colors">
+                                            <div>
+                                                <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                                                    Premium / Suporte
+                                                </span>
+                                                <p className="text-lg font-bold font-mono text-foreground mt-0.5">
+                                                    R$ {Number(aiScenarios.premiumPrice || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                                </p>
+                                                <p className="text-[10px] text-muted-foreground line-clamp-1">
+                                                    Escopo total + adicionais
+                                                </p>
+                                            </div>
+                                            <Button
+                                                type="button"
+                                                size="sm"
+                                                variant="outline"
+                                                className="mt-2 h-7 text-xs border-purple-500/30 text-purple-600 dark:text-purple-400 hover:bg-purple-500/10"
+                                                onClick={() => handleApplyPricingScenario(aiScenarios.premiumPrice, 'Premium')}
+                                            >
+                                                Aplicar Premium
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
                             {/* Resumo Financeiro */}
                             <div className="p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/5 flex flex-col md:flex-row items-center justify-between gap-4">
                                 <div>
@@ -691,10 +900,10 @@ const BudgetModal = ({
                                         variant="ghost"
                                         className="h-7 text-xs gap-1 text-primary"
                                         onClick={() => {
-                                            setFormData(prev => ({
-                                                ...prev,
-                                                deliverables: [...prev.deliverables, { stage: 'Nova Etapa', hours: 4, description: '' }]
-                                            }));
+                                            const newDeliverables = [...formData.deliverables, { stage: 'Nova Etapa', hours: 4, description: '' }];
+                                            const totalH = newDeliverables.reduce((acc, curr) => acc + (parseFloat(curr.hours) || 0), 0);
+                                            recalculateTotals(totalH, formData.hourly_rate_used, formData.profit_margin_percent, formData.discount_percent);
+                                            setFormData(prev => ({ ...prev, deliverables: newDeliverables }));
                                         }}
                                     >
                                         <Plus className="w-3.5 h-3.5" /> Adicionar Etapa
@@ -715,9 +924,8 @@ const BudgetModal = ({
                                                             placeholder="Nome da Etapa"
                                                             value={item.stage || ''}
                                                             onChange={(e) => {
-                                                                const updated = [...formData.deliverables];
-                                                                updated[index].stage = e.target.value;
-                                                                setFormData({ ...formData, deliverables: updated });
+                                                                const updated = formData.deliverables.map((d, i) => i === index ? { ...d, stage: e.target.value } : d);
+                                                                setFormData(prev => ({ ...prev, deliverables: updated }));
                                                             }}
                                                             className="h-7 text-xs font-semibold w-2/3"
                                                         />
@@ -727,10 +935,9 @@ const BudgetModal = ({
                                                                 placeholder="Horas"
                                                                 value={item.hours || ''}
                                                                 onChange={(e) => {
-                                                                    const updated = [...formData.deliverables];
-                                                                    updated[index].hours = parseFloat(e.target.value) || 0;
+                                                                    const updated = formData.deliverables.map((d, i) => i === index ? { ...d, hours: parseFloat(e.target.value) || 0 } : d);
                                                                     const totalH = updated.reduce((acc, curr) => acc + (parseFloat(curr.hours) || 0), 0);
-                                                                    setFormData({ ...formData, deliverables: updated });
+                                                                    setFormData(prev => ({ ...prev, deliverables: updated }));
                                                                     recalculateTotals(totalH, formData.hourly_rate_used, formData.profit_margin_percent, formData.discount_percent);
                                                                 }}
                                                                 className="h-7 text-xs font-mono text-right"
@@ -742,9 +949,8 @@ const BudgetModal = ({
                                                         placeholder="Breve descrição dos entregáveis desta etapa..."
                                                         value={item.description || ''}
                                                         onChange={(e) => {
-                                                            const updated = [...formData.deliverables];
-                                                            updated[index].description = e.target.value;
-                                                            setFormData({ ...formData, deliverables: updated });
+                                                            const updated = formData.deliverables.map((d, i) => i === index ? { ...d, description: e.target.value } : d);
+                                                            setFormData(prev => ({ ...prev, deliverables: updated }));
                                                         }}
                                                         className="h-7 text-xs text-muted-foreground"
                                                     />
@@ -824,6 +1030,15 @@ const BudgetModal = ({
                                     >
                                         <MessageCircle className="w-3.5 h-3.5" />
                                         Enviar no WhatsApp
+                                    </Button>
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        onClick={() => setPdfModalOpen(true)}
+                                        className="gap-1.5 text-xs bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
+                                    >
+                                        <FileText className="w-3.5 h-3.5" />
+                                        Visualizar & Baixar PDF
                                     </Button>
                                 </div>
                             </div>
@@ -955,17 +1170,27 @@ const BudgetModal = ({
                         </TabsContent>
                     </div>
 
-                    <DialogFooter className="p-4 border-t border-border bg-muted/20 flex flex-row items-center justify-between sm:justify-between">
-                        <Button type="button" variant="outline" onClick={onClose} disabled={saving}>
+                    <DialogFooter className="p-4 border-t border-border bg-muted/20 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-2">
+                        <Button type="button" variant="outline" onClick={onClose} disabled={saving} className="w-full sm:w-auto">
                             Fechar
                         </Button>
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => setPdfModalOpen(true)}
+                                className="gap-1.5 text-xs border-primary/40 text-primary hover:bg-primary/10 w-full sm:w-auto"
+                            >
+                                <FileText className="w-3.5 h-3.5" />
+                                Ver PDF da Proposta
+                            </Button>
+
                             <Button
                                 type="button"
                                 onClick={handleSaveBudget}
                                 disabled={saving}
-                                className="gap-2"
+                                className="gap-2 w-full sm:w-auto"
                             >
                                 {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
                                 {isEditing ? 'Atualizar Orçamento' : 'Salvar no Pipeline'}
@@ -974,6 +1199,17 @@ const BudgetModal = ({
                     </DialogFooter>
                 </Tabs>
             </DialogContent>
+
+            {/* Modal de Exibição e Download do PDF */}
+            {pdfModalOpen && (
+                <BudgetPdfModal
+                    isOpen={pdfModalOpen}
+                    onClose={() => setPdfModalOpen(false)}
+                    budget={formData}
+                    pricingSettings={pricingBase}
+                    categoryTitle={categories.find(c => String(c.id) === String(formData.category_id))?.title || 'Tecnologia & Desenvolvimento'}
+                />
+            )}
         </Dialog>
     );
 };

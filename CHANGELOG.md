@@ -2,6 +2,90 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.11.0] - 2026-09-25
+
+### Corrigido & Aprimorado (Auditoria Minuciosa com Subagentes Especialistas)
+- **Correção Crítica no Upload de Avatares de Avaliações (`ReviewForm.jsx`)**:
+  - Restaurada a atribuição de `setAvatarFile(compressedFile)` no fluxo de compressão WebP, solucionando o bug silencioso onde fotos de perfil enviadas por clientes não eram salvas no Firebase Storage.
+- **Harmonização de Temas Claro/Escuro em Assinaturas (`Subscriptions.jsx`)**:
+  - Eliminação de textos brancos estáticos (`text-white`) sobre fundos claros em cartões de planos e FAQs, restaurando a legibilidade perfeita com classes semânticas HSL (`text-foreground`, `text-muted-foreground`, `border-border`).
+- **Resiliência a Formatos de Moeda e Strings da IA (`BudgetModal.jsx`)**:
+  - Implementado helper `parseAiNumber` para tratar saídas com `"R$"`, pontuações e decimais brasileiros, eliminando risco de `NaN` ou zeramento de preço (`R$ 0,00`) ao clicar nos botões de cenários de 1 clique.
+- **Null Safety e Parse Seguro no Copiloto IA (`gemini.js`)**:
+  - Implementado `safeDeliverables` prevenindo quebra de execução com `TypeError` caso o array de entregáveis venha `null` do banco, e extração cirúrgica de JSON entre `{` e `}` no `cleanJsonText`.
+- **Inclusão da Coluna de Orçamentos Recusados no Kanban (`BudgetKanban.jsx`)**:
+  - Adicionada coluna visual `Recusado / Arquivado` e mapeamento de status legado `aceito` para `em_andamento`, garantindo que nenhuma proposta comercial desapareça do quadro visual.
+- **Proteção contra Projetos Órfãos no Portfólio (`BudgetModal.jsx`)**:
+  - Adicionada trava de segurança exigindo que o orçamento esteja salvo antes de ser convertido em projeto público de portfólio.
+- **Persistência de Cenários Estratégicos da IA (`BudgetModal.jsx`)**:
+  - Salvamento dos cenários calculados (`minPrice`, `suggestedPrice`, `premiumPrice`, `level`) em `ai_scope_analysis` no banco de dados e restauração automática ao reabrir o orçamento.
+- **Renderização de Logotipo Real e Regras de Impressão no PDF (`BudgetPdfModal.jsx` e `index.css`)**:
+  - Renderização do logotipo real da empresa cadastrado no configurador de preços, remoção de altura fixa estática que gerava segunda página vazia, e inclusão de `@media print` para isolamento de página impressa sem o fundo escuro do modal.
+- **Limpeza de Componentes Órfãos e Código Morto**:
+  - Excluídos arquivos legados não referenciados (`WelcomeMessage.jsx`, `CallToAction.jsx`, `HeroImage.jsx`, `imageCompression.js`, `portfolioData.js`) e removidos mais de 70 linhas de código legado não utilizado em `Reviews.jsx`.
+- **Tradução e Humanização de Mensagens de Autenticação (`SupabaseAuthContext.jsx` e `Contact.jsx`)**:
+  - Tradução integral de mensagens de erro/sucesso para Português Brasil descritivo e acolhedor conforme as diretrizes mestres de desenvolvimento.
+
+## [1.10.0] - 2026-09-25
+
+### Adicionado & Aprimorado
+- **Motor de Precificação Inteligente por Níveis de Complexidade (`gemini.js`)**:
+  - Integração da base oficial `guia_precificacao_projetos.md` calibrando o Gemini com matrizes de 4 níveis de complexidade:
+    * Nível 1: Ajustes rápidos e artes simples (R$ 60 a R$ 150).
+    * Nível 2: Landing Pages e Identidade Visual (Piso R$ 350-500, Recomendado R$ 600-900, Premium até R$ 1.300).
+    * Nível 3: Sites corporativos e dashboards complexos (Piso R$ 800-1.200, Recomendado R$ 1.300-2.200).
+    * Nível 4: E-commerces e plataformas SaaS (Piso R$ 1.200-1.800, Recomendado R$ 2.000-4.500+).
+  - Multiplicadores automáticos de risco e urgência: taxa de urgência (+30% a +50%), gateways de pagamento Stripe/Mercado Pago (+R$ 250 a +R$ 450) e migração de banco (+R$ 200 a +R$ 500).
+- **Cards Interativos de Precificação Estratégica em 1 Clique (`BudgetModal.jsx`)**:
+  - Painel com 3 cenários comerciais reativos na Aba de "HH & Precificação": **Piso / Fechamento Rápido**, **Recomendado (Ideal de Mercado)** e **Premium (Escopo Total)**.
+  - Botões de 1 clique para aplicar instantaneamente qualquer um dos três valores recomendados pela IA ao orçamento, com recálculo automático de margens e feedback via Toast.
+- **Base de Conhecimento Oficial Clonada (`documents/guia_precificacao_projetos.md`)**:
+  - Adicionado documento de referência técnica de engenharia de software e comercial freelancer para balizar estimativas futuras.
+
+## [1.9.0] - 2026-09-25
+
+### Adicionado & Aprimorado
+- **Calibração e Treinamento da IA para Design Gráfico e Artes Visuais (`gemini.js`)**:
+  - Detecção inteligente de nicho (Design Gráfico, Identidade Visual, Banners, Social Media, Papelaria, Flyers vs. Desenvolvimento de Software/Sistemas).
+  - Precificação calibrada e acessível para a realidade do mercado brasileiro: peças pontuais de 1 a 4 horas (R$ 80 a R$ 350), pacotes de redes sociais de 6 a 12 horas (R$ 350 a R$ 1.100) e identidade visual ágil (R$ 500 a R$ 1.800).
+  - Decomposição das etapas técnicas em fluxo real de design: Briefing & Moodboard, Criação Visual/Rascunho, Refinamento e Fechamento de Arquivos em Alta Resolução (Vetor, SVG, PNG, PDF para Impressão).
+  - Copiloto comercial de vendas e quebra de objeções adaptado para design: destaque para o impacto visual imediato, percepção de autoridade da marca e diferenciação de artes profissionais contra modelos genéricos de Canva.
+- **Seletor de Tipo de Chave PIX & URL de Logotipo (`PricingSettingsModal.jsx`)**:
+  - Adicionado campo `<Select>` para escolha do tipo de chave PIX (`CNPJ`, `CPF`, `E-mail`, `Telefone`, `Aleatória`) e campo para definir URL customizada do logotipo da empresa no PDF.
+
+### Corrigido (Pontas Soltas Eliminadas)
+- **Saneamento de Payload em Atualização de Orçamentos (`budgetService.js`)**:
+  - Exclusão dos objetos relacionais `category` e `project` antes do `insert` e `update` no Supabase, eliminando o erro `Could not find the 'category' column of 'budgets' in the schema cache` que impedia salvar edições.
+- **Renderização do Nome das Etapas no PDF (`BudgetPdfModal.jsx`)**:
+  - Correção na tabela de entregáveis do documento PDF para ler `d.stage || d.title || d.name`, evitando que as etapas geradas pela IA ou cadastradas manualmente fossem exibidas em branco.
+- **Geração Automática e Persistência do Código da Proposta (`BudgetModal.jsx`)**:
+  - Geração automática de `budget_code` (`ORC-YYYY-XXX`) no momento da criação, gravando o identificador oficial permanentemente no banco de dados.
+- **Substituição de Alerta Nativo por Toast Notifier (`ManageServices.jsx`)**:
+  - Remoção de chamada `alert()` nativa e substituição por componente `toast({ variant: 'destructive', ... })` com diagnóstico descritivo.
+- **Validação Segura de Telefones para WhatsApp (`BudgetModal.jsx`, `BudgetKanban.jsx`, `ManageBudgets.jsx`)**:
+  - Verificação de comprimento mínimo (>= 8 dígitos numéricos) antes de montar e disparar links para a API do WhatsApp.
+- **Responsividade Mobile nos Modais Administrativos (`BudgetModal.jsx` e `BudgetPdfModal.jsx`)**:
+  - Ajuste de `TabsList` com `grid-cols-2 sm:grid-cols-4` e `DialogFooter` com `flex-col-reverse sm:flex-row`, além de botões com ícones e rótulos responsivos no cabeçalho do PDF.
+
+## [1.8.0] - 2026-09-25
+
+### Adicionado
+- **Gerador de Propostas Comerciais em PDF de Alta Fidelidade Visual (`BudgetPdfModal.jsx`)**:
+  - Geração e download instantâneo de PDF corporativo via `html2pdf.js` no padrão folha A4 com identidade visual do site (azul marinho degradê, tipografia executiva, contraste e acabamento premium).
+  - Suporte a impressão nativa via `window.print()` e botão para alternar visualização/ocultação de estimativas de horas técnicas.
+  - Dados completos da empresa prestadora: Logotipo/Emblema, Razão Social, Nome Fantasia, CNPJ/CPF, E-mail, WhatsApp, Endereço e Site Oficial.
+  - Dados completos do contratante: Nome do Contato, Empresa, CPF/CNPJ (opcional), E-mail, WhatsApp e Endereço.
+  - Seções detalhadas de Escopo do Projeto, Tabela de Entregáveis/Etapas, Card de Investimento com Total em BRL, Condições de Pagamento, Chave PIX destacada para liquidação de sinal, Termos e Garantias, e Linhas de Assinatura.
+- **Aba de Gestão Corporativa no Configurador Comercial (`PricingSettingsModal.jsx`)**:
+  - Nova aba "2. Minha Empresa & PDF (CNPJ/PIX)" permitindo a Rafael Pita cadastrar e alterar Razão Social, CNPJ, CPF, WhatsApp, Endereço, Chave PIX, Validade Padrão da Proposta e Cláusulas Contratuais.
+- **Campos Opcionais de Cadastro do Cliente no Orçamento (`BudgetModal.jsx`)**:
+  - Novos campos na Aba 1 de Criação de Orçamento: CPF/CNPJ do Cliente, E-mail e Endereço.
+  - Botão de acesso direto "Visualizar & Baixar PDF" na Aba 3 e no rodapé do modal.
+- **Atalhos Rápidos de PDF no Pipeline (`ManageBudgets.jsx` e `BudgetKanban.jsx`)**:
+  - Botão de visualização e download em PDF em cada card do quadro Kanban (estilo Trello) e na tabela de orçamentos.
+- **Migração de Banco de Dados Supabase / PostgreSQL (`13_add_company_and_client_fields_for_pdf.sql`)**:
+  - Execução ao vivo no banco de dados da VPS Oracle (`portfolio-db`): adição das colunas de dados corporativos em `pricing_settings` e campos de cliente/código de proposta em `budgets`.
+
 ## [1.7.0] - 2026-09-25
 
 ### Adicionado

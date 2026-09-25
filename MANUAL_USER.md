@@ -246,5 +246,66 @@ A autenticação da plataforma opera sob infraestrutura própria e segura (GoTru
 2. No bloco **Segurança & Senha**, digite a sua nova senha desejada e confirme-a no segundo campo.
 3. Clique em **Atualizar Senha**. A alteração entra em vigor imediatamente!
 
+---
 
+## 14. Geração de Propostas Comerciais em PDF & Dados da Minha Empresa
 
+O módulo de orçamentos agora conta com um gerador profissional de documentos em formato **PDF corporativo A4**, no padrão visual elegante do seu site, pronto para ser enviado a clientes exigentes e empresas corporativas.
+
+### 14.1 Configurando os Dados da sua Empresa (CNPJ, Endereço e PIX)
+1. No menu lateral, acesse **Orçamentos & Vendas** (`/admin/orcamentos`).
+2. No topo direito, clique no botão **⚙️ Configurar Meu HH**.
+3. Clique na aba **2. Minha Empresa & PDF (CNPJ/PIX)**.
+4. Preencha os dados oficiais da sua empresa:
+   - **Razão Social / Nome da Empresa**: Ex: *Rafael Pita Soluções Tecnológicas Ltda* ou seu nome completo se autônomo.
+   - **Nome Fantasia / Titular**: Ex: *Rafael Pita Solutions*.
+   - **CNPJ**: O número do seu CNPJ (aparecerá destacado no cabeçalho do documento).
+   - **CPF (Opcional)**: Caso prefira emitir como Pessoa Física.
+   - **E-mail Comercial & WhatsApp**: Para contato direto na proposta.
+   - **Endereço / Localização**: Ex: *Barra da Tijuca, Rio de Janeiro - RJ*.
+   - **Site Oficial**: Ex: *https://rafaelpitaoficial.com.br*.
+   - **Chave PIX para Recebimento**: Sua chave (CNPJ, e-mail, telefone ou aleatória) para que o cliente realize o pagamento do sinal com agilidade.
+   - **Validade Padrão da Proposta**: Dias de validade comercial (padrão: 15 dias).
+   - **Termos e Condições Padrão**: As cláusulas de entrega, garantia e sinal.
+5. Clique em **Salvar Configurações**. Todas as novas propostas herdarão esses dados automaticamente!
+
+### 14.2 Preenchendo os Dados do Cliente no Orçamento
+Ao criar ou editar um orçamento no botão **+ Novo Orçamento**:
+1. Na aba **1. Cliente & Escopo**:
+   - Preencha o **Nome do Cliente** e a **Empresa**.
+   - Preencha os campos opcionais de **CPF / CNPJ**, **E-mail Comercial** e **Endereço do Cliente**.
+2. Esses dados serão formatados em um cartão executivo exclusivo do contratante no PDF.
+
+### 14.3 Como Visualizar, Imprimir e Baixar o PDF
+Você pode abrir a proposta em PDF de três formas super rápidas:
+- **Pelo Quadro Kanban**: Basta clicar no ícone azul de documento (`📄`) no rodapé do cartão do projeto.
+- **Pela Lista de Orçamentos**: Clique no botão azul de documento (`📄`) na coluna de ações da tabela.
+- **Pelo Modal de Orçamento**: Na aba **3. Proposta & IA Pitch** ou no rodapé do modal, clique em **📄 Visualizar & Baixar PDF**.
+
+### 14.4 Recursos do Visualizador de PDF
+- **Ocultar / Mostrar Horas**: Se você não quiser que o cliente veja a quantidade estimada de horas técnicas por etapa e prefira apresentar apenas os entregáveis e o valor global fechado, basta clicar no botão **⏱️ Ocultar Horas / Horas Visíveis** no topo do modal.
+- **Imprimir**: Envia diretamente para a impressora física ou para o assistente de impressão do navegador.
+- **Baixar PDF**: Gera e faz o download instantâneo do arquivo `.pdf` vetorial de alta definição com o nome formatado (ex: `Proposta_Comercial_ORC-2026-001_Imobiliaria_Prime_Rio.pdf`).
+
+---
+
+## 15. Precificação Inteligente & Escolha de Cenários em 1 Clique
+
+Para acelerar sua negociação e garantir que você nunca cobre abaixo do custo nem perca clientes por preços fora da realidade de mercado, o sistema agora conta com um motor de precificação calibrado por inteligência artificial.
+
+### 15.1 Como Funciona a Sugestão dos 3 Cenários
+Ao clicar no botão **✨ Estimar Escopo & HH com IA** na aba 1:
+1. O sistema classifica o projeto em um dos 4 níveis oficiais:
+   - **Nível 1 (Rápido)**: Banners, pequenos ajustes e vetores (R$ 60 a R$ 150).
+   - **Nível 2 (Médio)**: Landing Pages em React/Next e Identidade Visual (R$ 350 a R$ 900+).
+   - **Nível 3 (Complexo)**: Dashboards e Sites Corporativos com painel (R$ 800 a R$ 2.200+).
+   - **Nível 4 (Avançado)**: E-commerce e Sistemas SaaS (R$ 1.200 a R$ 4.500+).
+2. Na aba **2. HH & Precificação**, surgirá um painel com os **3 Cenários Estratégicos**:
+   - 🟢 **Piso / Fechamento Rápido**: O valor mínimo seguro com desconto para clientes sensíveis a preço ou fechamento imediato à vista no PIX.
+   - 🟡 **Recomendado (Valor de Mercado)**: O equilíbrio ideal entre valor percebido, tempo investido e lucro justo.
+   - 🟣 **Premium / Suporte**: O valor ideal para escopo completo com adicionais, alta prioridade ou suporte estendido.
+
+### 15.2 Aplicando o Preço com 1 Clique
+- Basta clicar no botão correspondente (**Aplicar Piso**, **Aplicar Recomendado** ou **Aplicar Premium**).
+- O campo **Valor Final Proposto** é preenchido instantaneamente.
+- Você ainda pode alterar manualmente qualquer centavo ou conceder um desconto extra a qualquer momento!

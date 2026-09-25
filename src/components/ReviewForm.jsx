@@ -40,6 +40,7 @@ const ReviewForm = ({ onSuccess, className }) => {
 
                 // Compress and convert to WebP
                 const compressedFile = await optimizeAndConvertToWebP(file);
+                setAvatarFile(compressedFile);
                 if (import.meta.env.DEV) {
                     console.log(`Image compressed: ${(file.size / 1024).toFixed(2)}KB -> ${(compressedFile.size / 1024).toFixed(2)}KB`);
                 }

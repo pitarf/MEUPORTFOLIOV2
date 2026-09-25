@@ -5,12 +5,14 @@ import { supabase } from '@/lib/customSupabaseClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/components/ui/use-toast';
 
 const iconMap = {
     Palette, Camera, Code, BarChart3, Video, Target, Wrench, Shield
 };
 
 const ManageServices = () => {
+    const { toast } = useToast();
     const [services, setServices] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
@@ -99,9 +101,18 @@ const ManageServices = () => {
                 .eq('id', id);
 
             if (error) throw error;
+            toast({
+                title: 'Serviço excluído',
+                description: 'O serviço foi removido com sucesso.',
+            });
             fetchServices();
         } catch (error) {
             console.error('Error deleting service:', error);
+            toast({
+                variant: 'destructive',
+                title: 'Falha ao excluir serviço',
+                description: error.message || 'Não foi possível remover o serviço. Tente novamente em instantes.',
+            });
         }
     };
 
@@ -139,7 +150,13 @@ const ManageServices = () => {
             fetchServices();
         } catch (error) {
             console.error('Error saving service:', error);
-            alert('Erro ao salvar serviço. Verifique se o slug é único.');
+            toast({
+                variant: 'destructive',
+                title: 'Erro ao salvar serviço',
+                description: error.message?.includes('duplicate key') || error.message?.includes('unique')
+                    ? 'Este slug já está em uso por outro serviço. Escolha um slug diferente.'
+                    : 'Não foi possível salvar o serviço. Verifique os campos e tente novamente.'
+            });
         }
     };
 

@@ -124,7 +124,7 @@ const Subscriptions = () => {
                 </section>
 
                 {/* Benefits Section */}
-                <section className="py-20 bg-gray-900/50">
+                <section className="py-20 bg-slate-50/80 dark:bg-gray-900/50 border-y border-border/50">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
@@ -132,7 +132,7 @@ const Subscriptions = () => {
                             className="text-center mb-16"
                         >
                             <h2 className="text-4xl font-bold gradient-text mb-6">Por que assinar?</h2>
-                            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+                            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
                                 Vantagens exclusivas para quem escolhe nossos serviços recorrentes
                             </p>
                         </motion.div>
@@ -147,8 +147,8 @@ const Subscriptions = () => {
                                     className="text-center"
                                 >
                                     <div className="text-4xl mb-4">{benefit.icon}</div>
-                                    <h3 className="text-xl font-semibold text-white mb-3">{benefit.title}</h3>
-                                    <p className="text-gray-400">{benefit.description}</p>
+                                    <h3 className="text-xl font-semibold text-foreground mb-3">{benefit.title}</h3>
+                                    <p className="text-muted-foreground">{benefit.description}</p>
                                 </motion.div>
                             ))}
                         </div>
@@ -180,19 +180,19 @@ const Subscriptions = () => {
                                         <div className={`w-16 h-16 mx-auto mb-4 bg-gradient-to-r ${plan.color} rounded-full flex items-center justify-center`}>
                                             <plan.icon className="w-8 h-8 text-white" />
                                         </div>
-                                        <h3 className="text-2xl font-bold text-white mb-2">{plan.name}</h3>
-                                        <p className="text-gray-400 mb-6">{plan.description}</p>
+                                        <h3 className="text-2xl font-bold text-foreground mb-2">{plan.name}</h3>
+                                        <p className="text-muted-foreground mb-6">{plan.description}</p>
                                         <div className="mb-6">
                                             <span className="text-4xl font-bold gradient-text">{plan.price}</span>
-                                            <span className="text-gray-400">{plan.period}</span>
+                                            <span className="text-muted-foreground">{plan.period}</span>
                                         </div>
                                     </div>
 
                                     <div className="space-y-4 mb-8">
                                         {plan.features.map((feature, idx) => (
                                             <div key={idx} className="flex items-center space-x-3">
-                                                <Check className="w-5 h-5 text-green-400 flex-shrink-0" />
-                                                <span className="text-gray-300 text-sm">{feature}</span>
+                                                <Check className="w-5 h-5 text-emerald-500 flex-shrink-0" />
+                                                <span className="text-slate-700 dark:text-gray-300 text-sm">{feature}</span>
                                             </div>
                                         ))}
                                     </div>
@@ -213,7 +213,7 @@ const Subscriptions = () => {
                 </section>
 
                 {/* FAQ Section */}
-                <section className="py-20 bg-gray-900/50">
+                <section className="py-20 bg-slate-50/80 dark:bg-gray-900/50 border-y border-border/50">
                     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
@@ -221,7 +221,7 @@ const Subscriptions = () => {
                             className="text-center mb-16"
                         >
                             <h2 className="text-4xl font-bold gradient-text mb-6">Perguntas Frequentes</h2>
-                            <p className="text-xl text-gray-400">
+                            <p className="text-xl text-muted-foreground">
                                 Tire suas dúvidas sobre nossos planos de assinatura
                             </p>
                         </motion.div>
@@ -250,10 +250,10 @@ const Subscriptions = () => {
                                     initial={{ opacity: 0, y: 20 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     transition={{ delay: index * 0.1 }}
-                                    className="glass-effect p-6 rounded-xl"
+                                    className="glass-effect p-6 rounded-xl border border-border"
                                 >
-                                    <h3 className="text-lg font-semibold text-white mb-3">{faq.question}</h3>
-                                    <p className="text-gray-400">{faq.answer}</p>
+                                    <h3 className="text-lg font-semibold text-foreground mb-3">{faq.question}</h3>
+                                    <p className="text-muted-foreground">{faq.answer}</p>
                                 </motion.div>
                             ))}
                         </div>

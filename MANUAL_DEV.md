@@ -238,8 +238,54 @@ Para máxima independência e eliminação de custos de cloud externa, toda a ca
 O Nginx atua como proxy reverso com SSL Let's Encrypt para `license.rafaelpitaoficial.com.br`:
 - `/rest/v1/` ➔ Proxy para PostgREST (`127.0.0.1:3025`).
 - `/auth/v1/` ➔ Proxy para GoTrue (`127.0.0.1:9999`).
-- CORS Unificado: `proxy_hide_header` é utilizado nas diretivas de CORS para evitar conflito de cabeçalhos duplos (`Access-Control-Allow-Origin: *, <origin>`), garantindo conectividade perfeita para `@supabase/supabase-js`.
+---
 
+## 9. Motor de Geração de Propostas Comerciais em PDF (`BudgetPdfModal.jsx`)
 
+Para proporcionar um fechamento de contratos de alto impacto visual e formalização profissional, o sistema conta com um motor dedicado de renderização de documentos corporativos em folha padrão A4.
 
+### 9.1 Stack & Bibliotecas
+- **`html2pdf.js`**: Biblioteca client-side para captura do DOM e compilação em vetor PDF via `html2canvas` e `jsPDF`.
+- **Configuração de Exportação**:
+  - `margin: [10, 10, 10, 10]`: Margens de 10mm para formato executivo padrão.
+  - `image: { type: 'jpeg', quality: 0.98 }`: Renderização nítida de logotipos e vetores.
+  - `html2canvas: { scale: 2, useCORS: true, logging: false }`: Renderização em alta definição (Retina/Print DPI).
+  - `jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }`: Documento no formato A4 vertical.
 
+### 9.2 Estrutura do Documento PDF
+1. **Identidade Visual**: Cabeçalho com o emblema/logotipo corporativo da Rafael Pita Solutions, badge identificador de `#ORC-YYYY-XXX`, data de emissão e prazo de validade da proposta.
+2. **Cards de Prestador e Contratante**: Grid de 2 colunas com dados cadastrais completos (Razão Social, Nome Fantasia, CNPJ/CPF, Contato, E-mail, Localidade e Endereço).
+3. **Escopo e Entregáveis**: Tabela detalhada das etapas técnicas com possibilidade de alternar a visualização ou ocultação de horas estimadas (`showHours`).
+4. **Card de Investimento & Condições**: Bloco de destaque com degradê azul escuro/slate, valor total consolidado em R$, descrição detalhada das condições de pagamento e chave PIX para liquidação imediata do sinal.
+5. **Garantias & Assinaturas**: Cláusulas contratuais configuráveis e linhas pontilhadas de assinatura com carimbo formal das duas partes.
+
+### 9.3 Extensões no Esquema do Banco de Dados (`13_add_company_and_client_fields_for_pdf.sql`)
+- Tabela `pricing_settings`:
+  - `company_name`, `company_trade_name`, `company_cnpj`, `company_cpf`, `company_email`, `company_phone`, `company_address`, `company_logo_url`, `company_website`, `pix_key`, `pix_key_type`, `proposal_validity_days`, `proposal_terms`.
+- Tabela `budgets`:
+  - `client_document` (CPF ou CNPJ), `client_address`, `budget_code`.
+
+---
+
+## 10. Motor de Precificação Inteligente & Cenários em 1 Clique (`gemini.js` / `BudgetModal.jsx`)
+
+Para garantir orçamentos competitivos, lucrativos e sem descolamento da realidade do mercado brasileiro, a IA Gemini foi calibrada com a base técnica oficial localizada em `documents/guia_precificacao_projetos.md`.
+
+### 10.1 Matriz de Classificação por Níveis
+1. **Nível 1 (Ajustes Rápidos & Peças Únicas)**:
+   - Faixa de Preço: R$ 60,00 a R$ 150,00 (1 a 3h de esforço, 1 a 2 dias).
+2. **Nível 2 (Médios / Landing Pages / Identidade Visual)**:
+   - Faixa de Preço: Piso R$ 350-500 | Recomendado R$ 600-900 | Premium até R$ 1.300 (4 a 10h, 3 a 6 dias).
+3. **Nível 3 (Complexos / Corporativos / Dashboards)**:
+   - Faixa de Preço: Piso R$ 800-1.200 | Recomendado R$ 1.300-2.200 | Premium até R$ 3.200 (12 a 25h, 6 a 12 dias).
+4. **Nível 4 (E-commerce / Lojas Virtuais / SaaS)**:
+   - Faixa de Preço: Piso R$ 1.200-1.800 (proibido abaixo de R$ 900) | Recomendado R$ 2.000-4.500+ | Premium até R$ 7.500 (20 a 45h, 10 a 20 dias).
+
+### 10.2 Modificadores de Risco & Esforço
+- **Urgência**: +30% a +50% com compressão de prazo sugerido.
+- **Gateways de Pagamento (Stripe, Mercado Pago, Pix)**: + R$ 250,00 a R$ 450,00 e + 2 dias.
+- **Migração de Banco / Dados Legados**: + R$ 200,00 a R$ 500,00 e + 2 a 3 dias.
+
+### 10.3 Interface de Cenários em 1 Clique (`BudgetModal.jsx`)
+O retorno da IA injeta o objeto de cenários no estado local `aiScenarios`:
+- `handleApplyPricingScenario(val, label)`: Ajusta imediatamente o valor em `formData.final_price` e notifica o usuário via Toast, mantendo a flexibilidade total de edição manual.

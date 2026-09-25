@@ -127,7 +127,11 @@ const Contact = () => {
         setLoading(false);
 
         if (error) {
-            toast({ variant: "destructive", title: "Erro ao enviar", description: "Houve um problema. Tente novamente." });
+            toast({
+                variant: "destructive",
+                title: "Falha no Envio da Mensagem",
+                description: error.message || "Servidor instável no momento. Verifique sua conexão e tente novamente em alguns instantes."
+            });
             console.error(error);
         } else {
             toast({ title: successTitle, description: successDescription });

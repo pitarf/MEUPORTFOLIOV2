@@ -9,7 +9,13 @@ const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
  * @returns {string}
  */
 const cleanJsonText = (text) => {
-  return text
+  const trimmed = text.trim();
+  const firstBrace = trimmed.indexOf('{');
+  const lastBrace = trimmed.lastIndexOf('}');
+  if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+    return trimmed.slice(firstBrace, lastBrace + 1);
+  }
+  return trimmed
     .replace(/```json/gi, '')
     .replace(/```/g, '')
     .trim();
@@ -82,44 +88,76 @@ export const estimateBudgetScopeWithAI = async ({
     const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
 
     const prompt = `
-      Atue como um Engenheiro de Software Sênior e Gerente de Projetos de Tecnologia & Produção Audiovisual com mais de 15 anos de experiência em estimativas de escopo e precificação.
-      
-      Você recebeu o seguinte briefing de um cliente:
+      Atue como um Especialista Sênior em Estimativas de Projetos, Engenharia de Software e Precificação Comercial Freelancer.
+      Você deve analisar o briefing do cliente e precificar com base nas diretrizes reais do mercado brasileiro e na BASE DE CONHECIMENTO oficial:
+
+      DADOS DE ENTRADA DO PROJETO:
       - Categoria do Serviço: ${categoryTitle}
       - Briefing / Necessidade do Cliente: "${description}"
-      - Taxa Hora-Homem (HH) base do profissional: R$ ${hourlyRate}/hora
+      - Taxa Hora-Homem (HH) de Referência: R$ ${hourlyRate}/hora
       - Margem de Contingência esperada: ${contingencyMargin}%
       - Margem de Lucro pretendida: ${profitMargin}%
 
-      Sua tarefa é estimar com realismo técnico o escopo do projeto, decompondo em etapas executáveis para evitar retrabalho ou prejuízo ao profissional.
+      MATRIZ OFICIAL DE CALIBRAÇÃO E NÍVEIS DE PREÇO (MERCADO BRASILEIRO):
+      
+      🟢 NÍVEL 1: Projetos Simples & Ajustes Rápidos (1 a 2 dias úteis)
+      - Escopos: Vetorização de logo, 1 a 2 banners/artes para redes sociais, correções pontuais de CSS/responsividade em site existente, instalação de SSL, migração de hospedagem simples, troca de DNS/e-mail.
+      - Faixa de Preço: R$ 60,00 a R$ 150,00. Horas estimadas: 1 a 3h.
 
-      Retorne APENAS um objeto JSON válido (sem markdown, sem formatação extra) no formato exato:
+      🟡 NÍVEL 2: Projetos Médios (Landing Pages & Identidade Visual) (3 a 6 dias úteis)
+      - Escopos: Landing Page de Alta Conversão em React/Next.js ou WordPress, Site Institucional Simples (até 4-5 seções), Pacote de artes para mídias sociais (8 a 15 posts/stories), Identidade Visual Básica (Logo + Paleta + Tipografia + Mockups).
+      - Faixa de Preço:
+        * Piso / Fechamento Rápido: R$ 350,00 a R$ 500,00
+        * Recomendado de Mercado: R$ 600,00 a R$ 900,00
+        * Premium (com adicionais ou SEO): R$ 950,00 a R$ 1.300,00
+      - Horas estimadas: 4 a 10h.
+
+      🟠 NÍVEL 3: Projetos Complexos & Corporativos (6 a 12 dias úteis)
+      - Escopos: Site Institucional Completo (com blog, painel admin, SEO avançado, múltiplos formulários), Painel/Dashboard analítico (Power BI ou React consumindo API REST com autenticação), Automações & Webhooks (Stripe, Mercado Pago, CRM, n8n).
+      - Faixa de Preço:
+        * Piso / Fechamento Rápido: R$ 800,00 a R$ 1.200,00
+        * Recomendado de Mercado: R$ 1.300,00 a R$ 2.200,00
+        * Premium (com suporte estendido e alta disponibilidade): R$ 2.300,00 a R$ 3.200,00
+      - Horas estimadas: 12 a 25h.
+
+      🔴 NÍVEL 4: E-commerce, Lojas Virtuais & Plataformas SaaS (10 a 20 dias úteis)
+      - Escopos: Loja Virtual Completa (WooCommerce/Shopify/Custom com catálogo, frete Correios/Melhor Envio, gateways, cupons), Plataformas Web / Micro-SaaS multi-usuário com RBAC, banco relacional PostgreSQL, assinaturas recorrentes e painel.
+      - Faixa de Preço:
+        * Piso Mínimo / Entrada: R$ 1.200,00 a R$ 1.800,00 (NUNCA orçar e-commerce/SaaS completo abaixo de R$ 900,00)
+        * Recomendado de Mercado: R$ 2.000,00 a R$ 4.500,00+
+        * Premium: R$ 4.800,00 a R$ 7.500,00
+      - Horas estimadas: 20 a 45h.
+
+      MODIFICADORES DE PREÇO E RISCO:
+      - Entrega com Urgência solicitada: Adicione +30% a +50% ao preço e reduza prazo sugerido.
+      - Integração de Gateways de Pagamento (Stripe, Mercado Pago, Pix): Adicione + R$ 250,00 a R$ 450,00 e + 2 dias ao prazo.
+      - Migração de Dados / Banco Existente: Adicione + R$ 200,00 a R$ 500,00 e + 2 a 3 dias ao prazo.
+      - Stack React / Next.js com IA: Mantenha preço de mercado competitivo com prazo ultra-ágil de entrega.
+      - Se for Design Gráfico ou Arte pura: Mantenha sempre valores ágeis e acessíveis (Nível 1 ou Nível 2), evitando superestimar horas de trabalho.
+
+      Retorne APENAS um objeto JSON válido (sem blocos markdown, sem texto fora do JSON):
       {
         "complexity": "Baixa" | "Média" | "Alta" | "Muito Alta",
-        "recommendedDeadlineDays": 15,
+        "level": 1 | 2 | 3 | 4,
+        "recommendedDeadlineDays": 5,
         "deliverables": [
           {
-            "stage": "Nome da Etapa (ex: Planejamento & Arquitetura / UI UX)",
-            "hours": 8,
-            "description": "O que será executado e entregue nesta etapa específica."
-          },
-          {
-            "stage": "Nome da Etapa (ex: Desenvolvimento Frontend Responsivo)",
-            "hours": 16,
+            "stage": "Nome da Etapa",
+            "hours": 3,
             "description": "O que será executado e entregue nesta etapa específica."
           }
         ],
-        "estimatedHours": 24,
-        "contingencyHours": 4,
-        "totalHours": 28,
-        "suggestedPrice": 3950.00,
-        "minPrice": 3100.00,
-        "premiumPrice": 4800.00,
+        "estimatedHours": 6,
+        "contingencyHours": 1,
+        "totalHours": 7,
+        "minPrice": 450.00,
+        "suggestedPrice": 750.00,
+        "premiumPrice": 1100.00,
         "scopeRisks": [
-          "Risco de demora no envio de conteúdos/textos pelo cliente.",
-          "Alterações de layout fora das rodadas de aprovação combinadas."
+          "Risco de demora do cliente no envio de acessos ou materiais.",
+          "Solicitação de alterações fora do escopo aprovado no briefing."
         ],
-        "technicalNotes": "Resumo de recomendações técnicas e premissas para proteger o escopo do profissional."
+        "technicalNotes": "Resumo de justificativa técnica e comercial para o cliente."
       }
     `;
 
@@ -161,27 +199,45 @@ export const generateSalesPitchWithAI = async ({
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
 
-    const deliverablesSummary = deliverables
-      .map(d => `- ${d.stage || d.title}: ${d.hours || ''}h (${d.description || ''})`)
+    // Garante que deliverables seja um array válido mesmo se vier null do banco
+    const safeDeliverables = Array.isArray(deliverables)
+      ? deliverables
+      : (typeof deliverables === 'string' ? (() => { try { return JSON.parse(deliverables); } catch { return []; } })() : []);
+
+    const isDesignOrVisual = 
+      /design|gr[aá]fic|logo|marca|identidade\s*visual|banner|post|social\s*media|flyer|panfleto|artes|card[aá]pio|embalagem|cart[aã]o|layout|figma|vetor/i.test(`${title} ${safeDeliverables.map(d => d.stage || d.title || '').join(' ')}`);
+
+    const deliverablesSummary = safeDeliverables
+      .map(d => `- ${d.stage || d.title}: ${d.hours ? `${d.hours}h ` : ''}(${d.description || ''})`)
       .join('\n');
 
     const prompt = `
-      Atue como um Consultor Comercial de Elite e Especialista em Fechamento de Vendas B2B e Soluções Digitais de Alto Valor (High Ticket).
+      Atue como um Consultor Comercial de Elite e Especialista em Fechamento de Vendas B2B (Soluções Digitais, Design e Tecnologia).
       O profissional Rafael Pita precisa de apoio comercial para negociar e fechar este projeto:
 
       - Título do Projeto: ${title}
       - Cliente: ${clientName} ${clientCompany ? `(${clientCompany})` : ''}
+      - Nicho Detectado: ${isDesignOrVisual ? 'Design Gráfico / Identidade Visual / Artes' : 'Tecnologia / Desenvolvimento / Software'}
       - Entregáveis Principais:
       ${deliverablesSummary || 'Solução personalizada sob medida'}
       - Investimento Final Proposto: R$ ${Number(finalPrice || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
       - Prazo de Execução: ${deadlineDays} dias corridos
       - Condições de Pagamento: ${paymentTerms}
 
-      Você deve produzir:
-      1. Uma mensagem comercial pronta para WhatsApp com copywriting persuasivo (foco em ROI, segurança, autoridade e profissionalismo, sem soar desesperado por venda).
-      2. Guia de resposta para as 3 maiores objeções de clientes ("Está caro / achei concorrente mais barato", "Preciso pensar / falar com sócio", "Tem desconto à vista?").
+      DIRETRIZES DE COMUNICAÇÃO:
+      ${isDesignOrVisual ? `
+      - Tom para Design: Destaque o impacto visual imediato, a transmissão de autoridade que atrai clientes mais qualificados e a rapidez na entrega com arquivos de alta resolução prontos para gráfica e mídias digitais.
+      - Para objeção de preço em Design: Mostre que o design é a 'vitrine' da empresa; peças amadoras afastam clientes, enquanto uma identidade profissional se paga na primeira impressão. Enfatize que não são modelos genéricos de Canva, mas criação sob medida.
+      ` : `
+      - Tom para Tecnologia: Foco em retorno sobre investimento (ROI), economia de tempo da equipe, estabilidade, código moderno e segurança.
+      - Para objeção de preço em Tecnologia: Diferencie o custo de um retrabalho e a segurança de contar com código limpo e arquitetura escalável.
+      `}
 
-      Retorne APENAS um objeto JSON válido (sem markdown):
+      Você deve produzir:
+      1. Uma mensagem comercial pronta para WhatsApp com copywriting persuasivo, elegante e cordial.
+      2. Guia de resposta para as 3 maiores objeções de clientes ("Achei caro / Está fora do meu orçamento", "O concorrente faz mais barato", "Preciso pensar / avaliar").
+
+      Retorne APENAS um objeto JSON válido (sem markdown, sem texto fora do JSON):
       {
         "whatsappMessage": "Texto formatado para WhatsApp com quebras de linha e emojis corporativos sutis.",
         "emailSubject": "Proposta Comercial: [Título do Projeto] - Rafael Pita Solutions",
@@ -189,17 +245,17 @@ export const generateSalesPitchWithAI = async ({
         "objections": [
           {
             "objection": "Achei caro / Está fora do meu orçamento",
-            "strategy": "Mude o foco de custo para investimento e segurança técnica.",
+            "strategy": "Mude o foco de custo para investimento e autoridade de marca.",
             "responseScript": "Mensagem exata e cordial para enviar ao cliente."
           },
           {
             "objection": "O concorrente faz pela metade do preço",
-            "strategy": "Diferencie entregabilidade real, código limpo, suporte pós-entrega e ausência de dores de cabeça.",
+            "strategy": "Diferencie entregabilidade real, exclusividade autoral e arquivos definitivos.",
             "responseScript": "Mensagem exata e cordial para enviar ao cliente."
           },
           {
-            "objection": "Preciso pensar / avaliar com meu sócio",
-            "strategy": "Facilite a tomada de decisão com um resumo executivo e crie senso de agenda/compromisso.",
+            "objection": "Preciso pensar / avaliar com calma",
+            "strategy": "Crie senso de oportunidade e agenda sem pressionar desnecessariamente.",
             "responseScript": "Mensagem exata e cordial para enviar ao cliente."
           }
         ]
