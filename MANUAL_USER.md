@@ -310,6 +310,10 @@ Ao clicar no botão **✨ Estimar Escopo & HH com IA** na aba 1:
 - O campo **Valor Final Proposto** é preenchido instantaneamente.
 - Você ainda pode alterar manualmente qualquer centavo ou conceder um desconto extra a qualquer momento!
 
+### 15.3 Alta Confiabilidade & Resiliência do Motor de IA
+- O sistema opera conectado ao modelo de última geração **Gemini 2.5 Flash**, garantindo estimativas em menos de 2 segundos.
+- Caso os servidores da nuvem do Google enfrentem qualquer pico de tráfego, o sistema realiza uma tentativa automática e transparente em modelos secundários antes de concluir, garantindo que você nunca fique sem estimar o seu orçamento.
+
 ---
 
 ## 16. Formas de Pagamento Comerciais & Faturamento por Etapas (Splits)

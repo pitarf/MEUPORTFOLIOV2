@@ -2,6 +2,15 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.14.0] - 2026-09-25
+
+### Corrigido & Aprimorado (Resiliência e Alta Disponibilidade da IA Gemini)
+- **Atualização para o Modelo de Próxima Geração `gemini-2.5-flash` (`gemini.js`)**:
+  - Solucionado o erro `503 Service Unavailable / Model experienced high demand` que afetava o modelo legado `gemini-flash-latest` durante a estimativa de escopos de orçamentos.
+  - Implementado motor com suporte a fallback automático de modelos (`AVAILABLE_MODELS = ['gemini-2.5-flash', 'gemini-flash-latest']`), garantindo tolerância a falhas caso um modelo sofra picos temporários de demanda no Google.
+  - Forçado retorno estrito de JSON via `generationConfig: { responseMimeType: "application/json" }`, eliminando falhas de parsing de markdown no `cleanJsonText`.
+  - Tratamento aprimorado de erros não-genéricos: diagnóstico claro e específico para sobrecarga de servidores (503), limite de requisições por minuto (429) e validação de chaves de API conforme as diretrizes mestres.
+
 ## [1.13.0] - 2026-09-25
 
 ### Adicionado & Aprimorado (Portal do Cliente, Sub-sprints & Acompanhamento de Pedidos)

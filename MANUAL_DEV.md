@@ -290,6 +290,12 @@ Para garantir orçamentos competitivos, lucrativos e sem descolamento da realida
 O retorno da IA injeta o objeto de cenários no estado local `aiScenarios`:
 - `handleApplyPricingScenario(val, label)`: Ajusta imediatamente o valor em `formData.final_price` e notifica o usuário via Toast, mantendo a flexibilidade total de edição manual.
 
+### 10.4 Arquitetura de Modelos & Resiliência (`gemini.js`)
+- **Modelo Primário**: `gemini-2.5-flash` (alta velocidade, latência mínima e disponibilidade estável).
+- **Modelo de Contingência (Fallback)**: `gemini-flash-latest`.
+- **Formatação Forçada**: Configurado via `generationConfig: { responseMimeType: "application/json" }`, garantindo que a resposta seja sempre um JSON estrito, prevenindo falhas de parsing.
+- **Tolerância a Falhas**: O executor `generateWithModelFallback` captura automaticamente erros 503 (serviço sobrecarregado) e tenta o modelo secundário de forma transparente antes de notificar o usuário.
+
 ---
 
 ## 11. Arquitetura das Modalidades de Pagamento & Splits (`BudgetModal.jsx`, `BudgetPdfModal.jsx`, `gemini.js`)

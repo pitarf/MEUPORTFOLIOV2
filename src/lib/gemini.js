@@ -1,7 +1,12 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // Inicialização da API Gemini via variável de ambiente Vite
-const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY || '';
+const genAI = new GoogleGenerativeAI(apiKey);
+
+// Modelos oficiais suportados com fallback automático de alta disponibilidade
+// Prioriza gemini-2.5-flash (alta velocidade e estabilidade) e fallback para gemini-flash-latest
+const AVAILABLE_MODELS = ['gemini-2.5-flash', 'gemini-flash-latest'];
 
 /**
  * Auxiliar para limpar blocos markdown ```json ... ``` retornados pelo Gemini
@@ -9,16 +14,65 @@ const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
  * @returns {string}
  */
 const cleanJsonText = (text) => {
+  if (!text) return '{}';
   const trimmed = text.trim();
   const firstBrace = trimmed.indexOf('{');
   const lastBrace = trimmed.lastIndexOf('}');
-  if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+  if (firstBrace !== -1 && lastBrace !== -1 && lastBrace >= firstBrace) {
     return trimmed.slice(firstBrace, lastBrace + 1);
   }
   return trimmed
     .replace(/```json/gi, '')
     .replace(/```/g, '')
     .trim();
+};
+
+/**
+ * Executa geração com fallback automático entre modelos oficiais
+ * @param {string} prompt 
+ * @param {boolean} asJson 
+ * @returns {Promise<any>}
+ */
+const generateWithModelFallback = async (prompt, asJson = true) => {
+  if (!apiKey) {
+    throw new Error("Chave de API do Gemini (VITE_GEMINI_API_KEY) não configurada no arquivo de ambiente.");
+  }
+
+  let lastError = null;
+
+  for (const modelName of AVAILABLE_MODELS) {
+    try {
+      const model = genAI.getGenerativeModel({
+        model: modelName,
+        generationConfig: asJson ? { responseMimeType: "application/json" } : {}
+      });
+
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      const text = response.text();
+
+      if (asJson) {
+        return JSON.parse(cleanJsonText(text));
+      }
+      return text;
+    } catch (err) {
+      console.warn(`Tentativa com modelo '${modelName}' falhou:`, err?.message || err);
+      lastError = err;
+    }
+  }
+
+  const errMsg = lastError?.message || '';
+  if (errMsg.includes('503') || errMsg.includes('Service Unavailable') || errMsg.includes('high demand')) {
+    throw new Error("Servidores do Google Gemini momentaneamente sobrecarregados. Tente novamente em alguns segundos.");
+  }
+  if (errMsg.includes('429') || errMsg.includes('Quota exceeded') || errMsg.includes('rate-limit')) {
+    throw new Error("Limite de requisições por minuto atingido. Aguarde alguns instantes e tente novamente.");
+  }
+  if (errMsg.includes('API_KEY_INVALID') || errMsg.includes('API key not valid')) {
+    throw new Error("Chave de API do Gemini inválida ou sem permissão de acesso.");
+  }
+
+  throw new Error(`Instabilidade na IA do Google (${errMsg.slice(0, 100) || 'erro de rede'}). Tente novamente.`);
 };
 
 /**
@@ -30,41 +84,27 @@ const cleanJsonText = (text) => {
  * @returns {Promise<Object>}
  */
 export const generateProjectContent = async (title, category, client, services) => {
-  try {
-    const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
+  const prompt = `
+    Atue como um especialista em copywriting para portfólios de tecnologia, design e fotografia.
+    Crie um conteúdo curto, profissional e persuasivo para um novo projeto de portfólio.
+    O texto deve ser focado em atrair novos clientes corporativos, mostrando valor e qualidade.
 
-    const prompt = `
-      Atue como um especialista em copywriting para portfólios de tecnologia, design e fotografia.
-      Crie um conteúdo curto, profissional e persuasivo para um novo projeto de portfólio.
-      O texto deve ser focado em atrair novos clientes corporativos, mostrando valor e qualidade.
+    Detalhes do Projeto:
+    - Título: ${title}
+    - Categoria: ${category}
+    - Cliente: ${client || 'Confidencial'}
+    - Serviços: ${services || 'Desenvolvimento e Soluções Digitais'}
 
-      Detalhes do Projeto:
-      - Título: ${title}
-      - Categoria: ${category}
-      - Cliente: ${client || 'Confidencial'}
-      - Serviços: ${services || 'Desenvolvimento e Soluções Digitais'}
-
-      Retorne APENAS um objeto JSON (sem markdown, sem explicações adicionais) com as seguintes chaves:
-      {
-        "description": "Uma descrição breve e cativante do projeto (máx 2 frases).",
-        "challenge": "Qual era o desafio principal (máx 1 frase).",
-        "solution": "Como foi resolvido criativamente (máx 1 frase).",
-        "results": "O impacto ou resultado final (máx 1 frase)."
-      }
-    `;
-
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-
-    return JSON.parse(cleanJsonText(text));
-  } catch (error) {
-    console.error("Erro ao gerar conteúdo com IA:", error);
-    if (error.message && (error.message.includes('429') || error.message.includes('Quota exceeded'))) {
-      throw new Error("Limite de requisições da IA atingido. Tente novamente em alguns segundos.");
+    Retorne APENAS um objeto JSON (sem markdown, sem explicações adicionais) com as seguintes chaves:
+    {
+      "description": "Uma descrição breve e cativante do projeto (máx 2 frases).",
+      "challenge": "Qual era o desafio principal (máx 1 frase).",
+      "solution": "Como foi resolvido criativamente (máx 1 frase).",
+      "results": "O impacto ou resultado final (máx 1 frase)."
     }
-    throw new Error("Falha ao gerar conteúdo com IA. Verifique sua chave de API.");
-  }
+  `;
+
+  return await generateWithModelFallback(prompt, true);
 };
 
 /**
@@ -84,10 +124,7 @@ export const estimateBudgetScopeWithAI = async ({
   profitMargin = 20,
   contingencyMargin = 15
 }) => {
-  try {
-    const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
-
-    const prompt = `
+  const prompt = `
       Atue como um Especialista Sênior em Estimativas de Projetos, Engenharia de Software e Precificação Comercial Freelancer.
       Você deve analisar o briefing do cliente e precificar com base nas diretrizes reais do mercado brasileiro e na BASE DE CONHECIMENTO oficial:
 
@@ -161,18 +198,7 @@ export const estimateBudgetScopeWithAI = async ({
       }
     `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-
-    return JSON.parse(cleanJsonText(text));
-  } catch (error) {
-    console.error("Erro ao estimar escopo com IA:", error);
-    if (error.message && (error.message.includes('429') || error.message.includes('Quota exceeded'))) {
-      throw new Error("Limite da API Gemini atingido. Tente novamente em instantes.");
-    }
-    throw new Error("Não foi possível gerar a estimativa com IA. Verifique os dados ou preencha manualmente.");
-  }
+    return await generateWithModelFallback(prompt, true);
 };
 
 /**
@@ -196,10 +222,7 @@ export const generateSalesPitchWithAI = async ({
   deadlineDays = 15,
   paymentTerms = '50% de entrada + 50% na entrega'
 }) => {
-  try {
-    const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
-
-    // Garante que deliverables seja um array válido mesmo se vier null do banco
+  // Garante que deliverables seja um array válido mesmo se vier null do banco
     const safeDeliverables = Array.isArray(deliverables)
       ? deliverables
       : (typeof deliverables === 'string' ? (() => { try { return JSON.parse(deliverables); } catch { return []; } })() : []);
@@ -267,16 +290,5 @@ export const generateSalesPitchWithAI = async ({
       }
     `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-
-    return JSON.parse(cleanJsonText(text));
-  } catch (error) {
-    console.error("Erro ao gerar proposta com IA:", error);
-    if (error.message && (error.message.includes('429') || error.message.includes('Quota exceeded'))) {
-      throw new Error("Limite de requisições da IA atingido. Tente novamente em instantes.");
-    }
-    throw new Error("Falha ao gerar proposta comercial com IA.");
-  }
+    return await generateWithModelFallback(prompt, true);
 };

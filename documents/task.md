@@ -3,6 +3,10 @@
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
 ## CONCLUÍDO (DONE)
+- [x] **Resiliência e Migração da IA Gemini para `gemini-2.5-flash` (`gemini.js`)**:
+  - Eliminação definitiva do erro 503 (serviço sobrecarregado) que afetava a estimativa de escopo ao utilizar o modelo descontinuado/congestionado.
+  - Implementação de fallback automático de modelos de IA e ativação de `responseMimeType: "application/json"` para garantir retornos 100% estruturados.
+  - Mensagens diagnósticas claras e humanas para situações de instabilidade temporária.
 - [x] **Portal Exclusivo do Cliente & Acompanhamento de Sub-sprints (`ClientProjectTrack.jsx`, `BudgetModal.jsx`, `BudgetKanban.jsx`, `budgetService.js`)**:
   - Página de acompanhamento individual acessível por código de pedido (`/projeto/:budgetCode`) com proteção contra indexação do Google (`noindex, nofollow`).
   - Barra de progresso geral em tempo real calculada pela quantidade de sub-sprints concluídas.
