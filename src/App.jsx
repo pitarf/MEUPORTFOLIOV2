@@ -32,6 +32,7 @@ import ManageGeneralSettings from '@/pages/admin/ManageGeneralSettings';
 import PhotographyPortfolio from '@/pages/PhotographyPortfolio';
 import Profile from '@/pages/Profile';
 import StorageOptimization from '@/pages/StorageOptimization';
+import ManageBudgets from '@/pages/admin/ManageBudgets';
 import MainLayout from '@/components/MainLayout';
 import AdminLayout from '@/components/AdminLayout';
 
@@ -88,6 +89,7 @@ function App() {
                             <Route element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
                                 <Route path="/dashboard" element={<Dashboard />} />
                                 <Route path="/admin/profile" element={<Profile />} />
+                                <Route path="/admin/orcamentos" element={<ProtectedRoute adminOnly={true}><ManageBudgets /></ProtectedRoute>} />
                                 <Route path="/admin/portfolio" element={<ProtectedRoute adminOnly={true}><ManagePortfolio /></ProtectedRoute>} />
                                 <Route path="/admin/submissions" element={<ProtectedRoute adminOnly={true}><AdminSubmissions /></ProtectedRoute>} />
                                 <Route path="/admin/reviews" element={<ProtectedRoute adminOnly={true}><ManageReviews /></ProtectedRoute>} />

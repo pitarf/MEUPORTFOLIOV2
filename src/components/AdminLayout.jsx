@@ -16,6 +16,7 @@ import {
     User,
     Settings, // Added
     Image,
+    Briefcase,
     Sun,
     Moon
 } from 'lucide-react';
@@ -68,6 +69,7 @@ const AdminLayout = () => {
     const navItems = [
         { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
         ...(isAdmin ? [
+            { icon: Briefcase, label: 'Orçamentos & Vendas', path: '/admin/orcamentos' },
             { icon: FolderKanban, label: 'Portfólio', path: '/admin/portfolio' },
             { icon: Mail, label: 'Contatos', path: '/admin/submissions' }, // Changed label from 'Submissões' to 'Contatos'
             { icon: MessageSquare, label: 'Depoimentos', path: '/admin/reviews' }, // Changed icon from Star and label from 'Avaliações' to 'Depoimentos'

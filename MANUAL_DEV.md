@@ -179,4 +179,39 @@ O projeto dispõe de uma suíte de testes ponta a ponta e inspeção de front-en
    - Salva prints full-page em `tests/audit-results/screenshots/{viewport}/{rota}.png`.
    - Gera relatório em `tests/audit-results/audit-report.json`.
 
+---
+
+## 7. Módulo de Orçamentos, Precificação (HH) & Pipeline Comercial
+
+O módulo localizado em `/admin/orcamentos` fornece gestão do funil de vendas, precificação técnica orientada a Hora-Homem (HH), assistência comercial com inteligência artificial e publicação instantânea no portfólio.
+
+### 7.1 Modelagem de Dados (Supabase PostgreSQL)
+Definida na migration `migrations/12_create_budgets_and_pricing_tables.sql`:
+- **`pricing_settings`**:
+  - `hourly_rate`: Taxa horária técnica base (ex: R$ 120,00/h).
+  - `profit_margin_percent`: Margem de lucro líquido da empresa (ex: 20%).
+  - `contingency_margin_percent`: Reserva técnica de contingência/retrabalho (ex: 15%).
+  - `min_project_value`: Piso mínimo para projetos (evita prejuízo no onboarding).
+- **`budgets`**:
+  - Dados do cliente: `client_name`, `client_email`, `client_phone`, `client_company`.
+  - Dados do projeto: `title`, `category_id` (FK `categories`), `scope_description`.
+  - Precificação & Escopo: `deliverables` (JSONB com etapas e horas), `estimated_hours`, `hourly_rate_used`, `subtotal`, `profit_margin_percent`, `discount_percent`, `final_price`.
+  - Inteligência Comercial: `ai_sales_pitch` (copy para WhatsApp), `ai_objections_handling` (matriz de objeções), `ai_scope_analysis`.
+  - Pipeline de Status: `status` ('pendente' | 'em_analise' | 'em_andamento' | 'entregue' | 'pendente_pagamento' | 'concluido' | 'recusado').
+  - Mídia & Portfólio: `project_id` (FK `projects`), `project_url`, `main_image_url`, `gallery_urls`.
+
+### 7.2 Camada de IA Gemini (`src/lib/gemini.js`)
+- `estimateBudgetScopeWithAI({ description, categoryTitle, hourlyRate, profitMargin, contingencyMargin })`:
+  Analisa briefings livres e retorna a decomposição em etapas executáveis com horas por tarefa, complexidade técnica, riscos de escopo e precificação sugerida.
+- `generateSalesPitchWithAI({ title, clientName, clientCompany, deliverables, finalPrice, deadlineDays, paymentTerms })`:
+  Gera copy de alto impacto focada em ROI e benefícios para WhatsApp, além de scripts táticos para quebra das maiores objeções do cliente ("está caro", "o concorrente faz por menos", "vou pensar com sócio").
+
+### 7.3 Arquitetura de Componentes
+- `ManageBudgets.jsx`: Página controladora com KPIs financeiros, busca, filtros de categoria e alternador Kanban/Lista.
+- `BudgetKanban.jsx`: Quadro interativo estilo Trello com 6 colunas de progresso, totalizadores financeiros e navegação ágil.
+- `BudgetModal.jsx`: Modal modular com abas (Cliente/Escopo, Calculadora de HH com IA, Copiloto de Vendas para WhatsApp e Publicação no Portfólio com imagens WebP).
+- `PricingSettingsModal.jsx`: Modal de configuração ágil do valor da hora e margens comerciais.
+- `budgetService.js`: Camada de abstração do Supabase com tratamento granular de erros.
+
+
 

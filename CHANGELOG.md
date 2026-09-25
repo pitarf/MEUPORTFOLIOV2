@@ -2,6 +2,18 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.6.0] - 2026-09-25
+
+### Adicionado
+- **Módulo Administrativo de Orçamentos & Pipeline Comercial (`/admin/orcamentos`)**: Plataforma completa para gerenciar o ciclo de vida comercial dos projetos (`pendente` ➔ `em_analise` ➔ `em_andamento` ➔ `entregue` ➔ `pendente_pagamento` ➔ `concluido`).
+- **Visualização Kanban Estilo Trello (`BudgetKanban.jsx`)**: Painel de colunas interativo com cards de projetos, valores por coluna, totalizadores financeiros em tempo real, badges de status e botões de avanço/recuo de estágio em 1 clique (otimizado para Desktop e Mobile).
+- **Calculadora e Copiloto de IA para Estimativa de HH (`gemini.js` & `BudgetModal.jsx`)**: Integração com a API Google Gemini (`estimateBudgetScopeWithAI`) que decompõe briefings livres em etapas de projeto, calcula horas técnicas (HH), adiciona margem de contingência/retrabalho e sugere preço justo, piso de sobrevivência e preço âncora premium.
+- **Copiloto Comercial de Vendas & Quebra de Objeções (`generateSalesPitchWithAI`)**: Gerador de propostas persuasivas de alto impacto prontas para envio no WhatsApp/e-mail com 1 clique (foco em ROI e benefícios), acompanhado de script tático para rebater objeções de clientes ("está caro", "o concorrente faz por menos", "vou pensar").
+- **Configurador de Precificação & Hora-Homem (`PricingSettingsModal.jsx`)**: Configuração do valor da taxa-hora base (R$/h), margem de lucro líquido (%), reserva técnica de contingência (%) e piso mínimo de entrada de projeto.
+- **Conversor com 1 Clique em Portfólio Público (`convertBudgetToPortfolioProject`)**: Ao concluir um projeto, com 1 toque no botão "Publicar no Portfólio", o sistema cadastra o trabalho diretamente na tabela `projects` com foto de capa WebP, categoria e links sem necessidade de redigitar nada.
+- **Nova Migração de Banco de Dados Supabase (`migrations/12_create_budgets_and_pricing_tables.sql`)**: Tabelas `pricing_settings` e `budgets` com integridade referencial, checagem de status, RLS de segurança restrita para administradores e índices de alta performance para busca e filtros do Kanban.
+- **Alternador Kanban / Lista com Filtros**: Filtros combinados por busca textual (cliente, empresa, projeto), categoria de serviço e status, com métricas de faturamento em tempo real no topo do painel.
+
 ## [1.5.0] - 2026-09-24
 
 ### Adicionado

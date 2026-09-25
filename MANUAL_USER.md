@@ -170,3 +170,56 @@ Para garantir que seus novos trabalhos artísticos de fotografia sejam catalogad
 6. Complete os demais campos de texto e mídia normalmente e clique em **Salvar Projeto**.
 7. **Mapeamento Automático & Filtros Públicos**: O sistema salvará a subcategoria de forma invisível nas tags do seu projeto e atualizará a lista de opções automaticamente. Na galeria pública, uma nova aba de filtro contendo o nome da nova subcategoria surgirá de forma instantânea para os seus visitantes, contanto que haja pelo menos um álbum ativo nela.
 
+---
+
+## 12. Gestão de Orçamentos, Calculadora de HH com IA, Vendas e Conversão em Portfólio
+
+Para resolver suas maiores dores na emissão de propostas — **não saber como precificar com segurança** e **dificuldade em negociar/vender** —, criamos um painel comercial completo integrado ao seu site.
+
+### 12.1 Como Acessar o Painel
+1. Entre na área administrativa do seu site.
+2. No menu lateral esquerdo, clique no novo item **💼 Orçamentos & Vendas** (ou acesse diretamente `/admin/orcamentos`).
+
+### 12.2 Passo 1: Configurar Seu Valor de Hora-Homem (HH)
+1. No topo da tela de orçamentos, clique no botão **Configurar Meu HH**.
+2. Defina:
+   * **Valor da Sua Hora (R$/h)**: Quanto vale 1 hora do seu trabalho técnico e criativo (ex: R$ 120,00/h).
+   * **Margem de Lucro (%)**: Percentual de lucro líquido da sua empresa (ex: 20%).
+   * **Reserva Técnica de Contingência (%)**: Margem de segurança para imprevistos e retrabalhos normais (ex: 15%).
+   * **Valor Mínimo de Entrada**: Piso de corte para qualquer projeto (ex: R$ 500,00).
+3. Clique em **Salvar Minha Taxa**. Esses valores serão usados como base pela Inteligência Artificial em todas as suas propostas.
+
+### 12.3 Passo 2: Criar um Orçamento com Decomposição Automática de Horas por IA
+1. Clique no botão azul **Novo Orçamento**.
+2. Preencha o nome do cliente, empresa, WhatsApp e escolha a categoria (Sites, Sistemas, Fotografia, etc.).
+3. No campo **Briefing do Cliente**, cole o que o cliente pediu (pode ser o resumo do áudio dele ou um texto simples).
+4. Clique no botão mágico **✨ Estimar Escopo & HH com IA**:
+   * A IA analisará a complexidade técnica e **quebrará o projeto em etapas executáveis** (ex: Planejamento, Design, Desenvolvimento, Integrações).
+   * Ela somará as horas exatas de trabalho, aplicará sua margem de contingência e calculará o **valor final justo**.
+5. Se desejar, você pode ajustar as horas ou dar um desconto comercial direto na aba **2. HH & Precificação**.
+
+### 12.4 Passo 3: Fechar a Venda (Copiloto de Vendas para WhatsApp)
+1. Vá na aba **3. Copiloto de Vendas** e clique em **✨ Gerar Pitch com IA**.
+2. A IA produzirá:
+   * **Mensagem Persuasiva para WhatsApp**: Um texto profissional, elegante e focado no retorno financeiro do cliente.
+   * Clique em **Copiar Mensagem** ou **Enviar no WhatsApp** para abrir a conversa com o cliente imediatamente.
+   * **Guia de Quebra de Objeções**: Três respostas táticas prontas caso o cliente diga *"achei caro"*, *"o concorrente faz por menos"* ou *"vou falar com meu sócio"*. Basta ler e responder com autoridade técnica, sem queimar seu preço!
+
+### 12.5 Passo 4: Acompanhar no Quadro Kanban (Estilo Trello)
+Você pode acompanhar o progresso de cada cliente pelo quadro visual:
+* **📝 Pendente**: Orçamento criado ou rascunho inicial.
+* **💬 Em Negociação**: Proposta enviada, em conversa com o cliente.
+* **🚀 Aceito / Em Andamento**: Fechado! Projeto em execução técnica.
+* **📦 Entregue**: Trabalho finalizado e apresentado ao cliente.
+* **💰 Aguardando Pagamento**: Aguardando a quitação da última parcela/saldo.
+* **✅ Concluído & Quitado**: Projeto pago e 100% finalizado.
+* Use as setinhas `<` e `>` nos cartões para mover os projetos de coluna com apenas 1 clique, no celular ou no computador!
+
+### 12.6 Passo 5: Transformar em Portfólio com 1 Clique
+1. Abra o cartão do projeto e vá na aba **4. Entrega & Portfólio**.
+2. Faça o upload da foto de capa (ela será otimizada automaticamente em WebP de alta velocidade).
+3. Insira o link final do site/sistema se houver.
+4. Clique no botão **🚀 Publicar no Portfólio Agora**.
+5. O sistema cadastra o trabalho diretamente na vitrine pública do seu portfólio, sem que você precise preencher outro formulário!
+
+
