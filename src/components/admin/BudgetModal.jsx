@@ -26,7 +26,8 @@ import {
     MessageCircle,
     SlidersHorizontal,
     UploadCloud,
-    FileText
+    FileText,
+    CreditCard
 } from 'lucide-react';
 import { estimateBudgetScopeWithAI, generateSalesPitchWithAI } from '@/lib/gemini';
 import { createBudget, updateBudget, convertBudgetToPortfolioProject, fetchPricingSettings } from '@/services/budgetService';
@@ -47,6 +48,18 @@ export const parseAiNumber = (val, fallback = 0) => {
         return isNaN(parsed) ? fallback : parsed;
     }
     return fallback;
+};
+
+/**
+ * Detecta a modalidade de pagamento com base no texto cadastrado
+ */
+export const detectPaymentMode = (terms = '') => {
+    const t = String(terms).toLowerCase();
+    if (t.includes('etapa') || t.includes('split') || t.includes('marco')) return 'etapas_split';
+    if (t.includes('cart') || t.includes('crédito') || t.includes('juros') || t.includes('maquin')) return 'cartao_credito';
+    if (t.includes('50%') || t.includes('entrada') || t.includes('sinal')) return '50_50';
+    if (terms && terms.trim() !== '') return 'personalizado';
+    return '50_50';
 };
 
 /**
@@ -72,6 +85,7 @@ const BudgetModal = ({
     const [copiedWhatsApp, setCopiedWhatsApp] = useState(false);
     const [pdfModalOpen, setPdfModalOpen] = useState(false);
     const [aiScenarios, setAiScenarios] = useState(null);
+    const [paymentMode, setPaymentMode] = useState('50_50');
 
     // Parâmetros de Precificação Base
     const [pricingBase, setPricingBase] = useState({
@@ -127,6 +141,7 @@ const BudgetModal = ({
                     } else {
                         setAiScenarios(null);
                     }
+                    setPaymentMode(detectPaymentMode(budget.payment_terms || ''));
 
                     setFormData({
                         ...budget,
@@ -141,6 +156,7 @@ const BudgetModal = ({
                 } else {
                     // Novo Orçamento
                     setAiScenarios(null);
+                    setPaymentMode('50_50');
                     setFormData({
                         title: '',
                         client_name: '',
@@ -159,7 +175,7 @@ const BudgetModal = ({
                         profit_margin_percent: settings?.profit_margin_percent || 20,
                         discount_percent: 0,
                         final_price: 0,
-                        payment_terms: '50% de entrada + 50% na aprovação final',
+                        payment_terms: '50% na entrada (sinal) + 50% na entrega final',
                         deadline_days: 15,
                         status: 'pendente',
                         notes: '',
@@ -178,6 +194,22 @@ const BudgetModal = ({
 
         initModal();
     }, [isOpen, budget, categories]);
+
+    // Altera a modalidade de pagamento e sincroniza a descrição
+    const handlePaymentModeChange = (mode) => {
+        setPaymentMode(mode);
+        let terms = '';
+        if (mode === '50_50') {
+            terms = '50% na entrada (sinal) + 50% na entrega final';
+        } else if (mode === 'etapas_split') {
+            terms = 'Pagamento por etapas (Splits vinculados aos entregáveis)';
+        } else if (mode === 'cartao_credito') {
+            terms = 'Cartão de crédito em até 12x (juros da máquina/operadora por conta do cliente)';
+        } else {
+            terms = formData.payment_terms || '';
+        }
+        setFormData(prev => ({ ...prev, payment_terms: terms }));
+    };
 
     // Recalcular totais sempre que horas, valor hora ou margens forem alterados manualmente
     const recalculateTotals = (hours, rate, margin, discount) => {
@@ -353,6 +385,48 @@ const BudgetModal = ({
         const phoneWithCountry = cleanPhone.length <= 11 ? `55${cleanPhone}` : cleanPhone;
         const encodedText = encodeURIComponent(formData.ai_sales_pitch || `Olá ${formData.client_name}, segue nossa proposta comercial.`);
         window.open(`https://wa.me/${phoneWithCountry}?text=${encodedText}`, '_blank');
+    };
+
+    // Gera link de acompanhamento exclusivo para o cliente
+    const clientProjectCode = (formData.budget_code || formData.id || '').replace(/^#/, '');
+    const clientProjectUrl = typeof window !== 'undefined' && clientProjectCode
+        ? `${window.location.origin}/projeto/${clientProjectCode}`
+        : '';
+
+    // Copia o link direto de acompanhamento do cliente
+    const handleCopyClientLink = () => {
+        if (!clientProjectUrl) {
+            toast({
+                variant: 'destructive',
+                title: 'Código do pedido pendente',
+                description: 'Salve o orçamento primeiro para gerar o link exclusivo do cliente.'
+            });
+            return;
+        }
+        navigator.clipboard.writeText(clientProjectUrl);
+        toast({
+            title: 'Link do Projeto Copiado!',
+            description: 'Envie para o cliente acompanhar as entregas e sprints em tempo real.'
+        });
+    };
+
+    // Copia convite pronto para WhatsApp com link e código do pedido
+    const handleCopyClientWhatsAppInvite = () => {
+        if (!clientProjectUrl) {
+            toast({
+                variant: 'destructive',
+                title: 'Código do pedido pendente',
+                description: 'Salve o orçamento primeiro para gerar o link exclusivo do cliente.'
+            });
+            return;
+        }
+        const clientFirstName = formData.client_name ? formData.client_name.split(' ')[0] : 'Cliente';
+        const msg = `Olá ${clientFirstName}! 🚀\n\nVocê pode acompanhar o andamento e as etapas do seu projeto "${formData.title}" em tempo real através do seu link exclusivo:\n🔗 ${clientProjectUrl}\n\n*Código do Pedido:* ${formData.budget_code || `#ORC-${formData.id?.slice(0, 8)}`}\n\nQualquer dúvida estou à disposição!`;
+        navigator.clipboard.writeText(msg);
+        toast({
+            title: 'Mensagem Copiada com Sucesso!',
+            description: 'Cole no WhatsApp do cliente para enviar o acesso ao projeto.'
+        });
     };
 
     // Upload de Imagem de Destaque com Otimização WebP
@@ -625,6 +699,52 @@ const BudgetModal = ({
                                 </div>
                             </div>
 
+                            {/* Link de Acompanhamento Exclusivo do Cliente */}
+                            {clientProjectUrl && (
+                                <div className="p-3.5 rounded-xl border border-primary/20 bg-primary/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                                    <div className="space-y-0.5">
+                                        <div className="flex items-center gap-1.5 font-bold text-xs text-foreground">
+                                            <Share2 className="w-3.5 h-3.5 text-primary" />
+                                            Acesso do Cliente (Acompanhamento em Tempo Real)
+                                        </div>
+                                        <p className="text-[11px] text-muted-foreground">
+                                            Código do Pedido: <span className="font-mono font-bold text-foreground">{formData.budget_code || `#ORC-${formData.id?.slice(0, 8)}`}</span>
+                                        </p>
+                                    </div>
+                                    <div className="flex items-center gap-1.5 w-full sm:w-auto">
+                                        <Button
+                                            type="button"
+                                            size="sm"
+                                            variant="outline"
+                                            className="h-8 text-xs gap-1 border-primary/30 text-primary hover:bg-primary/10 flex-1 sm:flex-none"
+                                            onClick={handleCopyClientLink}
+                                        >
+                                            <Copy className="w-3.5 h-3.5" />
+                                            Copiar Link
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            size="sm"
+                                            variant="outline"
+                                            className="h-8 text-xs gap-1 border-emerald-500/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10 flex-1 sm:flex-none"
+                                            onClick={handleCopyClientWhatsAppInvite}
+                                        >
+                                            <MessageCircle className="w-3.5 h-3.5" />
+                                            Convite WhatsApp
+                                        </Button>
+                                        <a
+                                            href={clientProjectUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="h-8 px-2.5 rounded-md border border-border bg-card text-xs flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors shrink-0"
+                                            title="Abrir visão do cliente em nova aba"
+                                        >
+                                            <ExternalLink className="w-3.5 h-3.5" />
+                                        </a>
+                                    </div>
+                                </div>
+                            )}
+
                             {/* Briefing / Necessidade do Cliente */}
                             <div className="space-y-2">
                                 <div className="flex items-center justify-between">
@@ -664,7 +784,7 @@ const BudgetModal = ({
                             </div>
 
                             {/* Status e Prazos */}
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                 <div className="space-y-1">
                                     <Label className="text-xs font-semibold">Status do Pipeline</Label>
                                     <Select
@@ -694,14 +814,110 @@ const BudgetModal = ({
                                         onChange={(e) => setFormData({ ...formData, deadline_days: parseInt(e.target.value, 10) || 15 })}
                                     />
                                 </div>
-                                <div className="space-y-1">
-                                    <Label className="text-xs font-semibold">Condições de Pagamento</Label>
-                                    <Input
-                                        value={formData.payment_terms}
-                                        onChange={(e) => setFormData({ ...formData, payment_terms: e.target.value })}
-                                        placeholder="Ex: 50% entrada + 50% entrega"
-                                    />
+                            </div>
+
+                            {/* Forma e Condições de Pagamento */}
+                            <div className="p-4 rounded-xl border border-border bg-muted/20 space-y-3">
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                    <div>
+                                        <Label className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                                            <DollarSign className="w-4 h-4 text-emerald-500" />
+                                            Forma de Pagamento Oficial
+                                        </Label>
+                                        <p className="text-[11px] text-muted-foreground">
+                                            Selecione a modalidade formalizada na proposta e no PDF.
+                                        </p>
+                                    </div>
+                                    <Select
+                                        value={paymentMode}
+                                        onValueChange={handlePaymentModeChange}
+                                    >
+                                        <SelectTrigger className="w-full sm:w-[280px] h-8 text-xs font-semibold">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="50_50">💵 50% Entrada + 50% Entrega</SelectItem>
+                                            <SelectItem value="etapas_split">📊 Pagamento por Etapas (Splits)</SelectItem>
+                                            <SelectItem value="cartao_credito">💳 Cartão de Crédito (até 12x c/ juros)</SelectItem>
+                                            <SelectItem value="personalizado">✍️ Condição Personalizada</SelectItem>
+                                        </SelectContent>
+                                    </Select>
                                 </div>
+
+                                {paymentMode === 'personalizado' ? (
+                                    <div className="space-y-1">
+                                        <Input
+                                            value={formData.payment_terms}
+                                            onChange={(e) => setFormData({ ...formData, payment_terms: e.target.value })}
+                                            placeholder="Descreva a condição negociada..."
+                                            className="h-8 text-xs"
+                                        />
+                                    </div>
+                                ) : paymentMode === '50_50' ? (
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                                        <div className="p-2.5 rounded-lg border border-emerald-500/20 bg-emerald-500/5">
+                                            <div className="flex justify-between items-center text-xs">
+                                                <span className="font-semibold text-emerald-700 dark:text-emerald-400">1. Entrada / Sinal (50%)</span>
+                                                <span className="font-mono font-bold text-emerald-700 dark:text-emerald-300">
+                                                    R$ {Number(formData.final_price * 0.5).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                                </span>
+                                            </div>
+                                            <p className="text-[10px] text-muted-foreground mt-0.5">
+                                                Garante o início imediato dos trabalhos (via PIX).
+                                            </p>
+                                        </div>
+                                        <div className="p-2.5 rounded-lg border border-blue-500/20 bg-blue-500/5">
+                                            <div className="flex justify-between items-center text-xs">
+                                                <span className="font-semibold text-blue-700 dark:text-blue-400">2. Entrega Final (50%)</span>
+                                                <span className="font-mono font-bold text-blue-700 dark:text-blue-300">
+                                                    R$ {Number(formData.final_price * 0.5).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                                </span>
+                                            </div>
+                                            <p className="text-[10px] text-muted-foreground mt-0.5">
+                                                Pago na aprovação e entrega definitiva do projeto.
+                                            </p>
+                                        </div>
+                                    </div>
+                                ) : paymentMode === 'etapas_split' ? (
+                                    <div className="space-y-1.5 pt-1">
+                                        <p className="text-[11px] font-semibold text-foreground">
+                                            Divisão por Marcos / Splits ({formData.deliverables.length > 0 ? `${formData.deliverables.length} etapas` : '3 parcelas'}):
+                                        </p>
+                                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                            {(formData.deliverables.length > 0 ? formData.deliverables : [
+                                                { stage: 'Marco 1: Início & Planejamento' },
+                                                { stage: 'Marco 2: Desenvolvimento' },
+                                                { stage: 'Marco 3: Homologação & Entrega' }
+                                            ]).map((item, idx, arr) => {
+                                                const splitVal = formData.final_price / arr.length;
+                                                return (
+                                                    <div key={idx} className="p-2 rounded-lg border border-border bg-card/60 text-xs">
+                                                        <span className="text-[10px] font-bold text-muted-foreground uppercase block">
+                                                            Split {idx + 1} de {arr.length}
+                                                        </span>
+                                                        <span className="font-mono font-bold text-primary block mt-0.5">
+                                                            R$ {Number(splitVal).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                                        </span>
+                                                        <span className="text-[10px] text-muted-foreground line-clamp-1 mt-0.5">
+                                                            {item.stage || `Etapa ${idx + 1}`}
+                                                        </span>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="p-2.5 rounded-lg border border-purple-500/20 bg-purple-500/5 text-xs space-y-1">
+                                        <div className="flex items-center gap-1.5 font-semibold text-purple-700 dark:text-purple-300">
+                                            <CreditCard className="w-4 h-4" />
+                                            Parcelamento em até 12x no Cartão
+                                        </div>
+                                        <p className="text-[11px] text-muted-foreground leading-relaxed">
+                                            O cliente pode parcelar o valor integral (R$ {Number(formData.final_price).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}) no cartão via Link de Pagamento ou Maquininha. 
+                                            <b> Os juros e tarifas da máquina/operadora são cobrados diretamente do comprador no ato da transação.</b>
+                                        </p>
+                                    </div>
+                                )}
                             </div>
                         </TabsContent>
 
@@ -954,6 +1170,34 @@ const BudgetModal = ({
                                                         }}
                                                         className="h-7 text-xs text-muted-foreground"
                                                     />
+                                                    <div className="flex items-center gap-2 pt-1">
+                                                        <Select
+                                                            value={item.status || 'pendente'}
+                                                            onValueChange={(val) => {
+                                                                const updated = formData.deliverables.map((d, i) => i === index ? { ...d, status: val } : d);
+                                                                setFormData(prev => ({ ...prev, deliverables: updated }));
+                                                            }}
+                                                        >
+                                                            <SelectTrigger className="h-6 text-[10px] w-[135px] font-semibold">
+                                                                <SelectValue />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                <SelectItem value="pendente">⚪ Pendente</SelectItem>
+                                                                <SelectItem value="em_andamento">⏳ Em Andamento</SelectItem>
+                                                                <SelectItem value="concluido">✅ Concluído</SelectItem>
+                                                            </SelectContent>
+                                                        </Select>
+
+                                                        <Input
+                                                            placeholder="Link de homologação / prévia (opcional)..."
+                                                            value={item.link || ''}
+                                                            onChange={(e) => {
+                                                                const updated = formData.deliverables.map((d, i) => i === index ? { ...d, link: e.target.value } : d);
+                                                                setFormData(prev => ({ ...prev, deliverables: updated }));
+                                                            }}
+                                                            className="h-6 text-[11px] text-muted-foreground flex-1"
+                                                        />
+                                                    </div>
                                                 </div>
                                                 <Button
                                                     type="button"

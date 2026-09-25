@@ -19,7 +19,8 @@ import {
     Building2,
     Trash2,
     Edit,
-    FileText
+    FileText,
+    Share2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -472,6 +473,23 @@ const ManageBudgets = () => {
                                                         title="Ver Proposta em PDF"
                                                     >
                                                         <FileText className="w-3.5 h-3.5" />
+                                                    </Button>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        className="h-7 w-7 text-purple-600 hover:bg-purple-500/10"
+                                                        onClick={() => {
+                                                            const code = (b.budget_code || b.id || '').replace(/^#/, '');
+                                                            const origin = typeof window !== 'undefined' ? window.location.origin : '';
+                                                            const clientUrl = `${origin}/projeto/${code}`;
+                                                            const clientFirstName = b.client_name ? b.client_name.split(' ')[0] : 'Cliente';
+                                                            const message = `Olá ${clientFirstName}! 🚀\n\nAcompanhe o andamento do seu projeto "${b.title}" em tempo real através do link exclusivo:\n🔗 ${clientUrl}\n\n*Código do Pedido:* ${b.budget_code || `#ORC-${b.id?.slice(0, 8)}`}\n\nQualquer dúvida estou à disposição!`;
+                                                            navigator.clipboard.writeText(message);
+                                                            toast({ title: 'Acesso do Cliente Copiado!', description: 'Link e código do pedido copiados para o WhatsApp.' });
+                                                        }}
+                                                        title="Copiar Acesso do Cliente (Link & WhatsApp)"
+                                                    >
+                                                        <Share2 className="w-3.5 h-3.5" />
                                                     </Button>
                                                     <Button
                                                         variant="ghost"

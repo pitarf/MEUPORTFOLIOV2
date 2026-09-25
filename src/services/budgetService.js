@@ -244,6 +244,65 @@ export const deleteBudget = async (id) => {
 };
 
 /**
+ * Busca os dados de um orçamento/pedido para acompanhamento exclusivo do cliente
+ * Utiliza o código do pedido (ex: #ORC-2026-001 ou ORC-2026-001) ou UUID
+ * Retorna apenas campos públicos e pertinentes ao cliente (sem margens ou custos internos)
+ * @param {string} code Código do orçamento ou ID
+ * @returns {Promise<Object>}
+ */
+export const fetchBudgetByCode = async (code) => {
+    if (!code) return null;
+    const cleanCode = String(code).trim();
+    const upperCode = cleanCode.toUpperCase();
+    const codeWithHash = upperCode.startsWith('#') ? upperCode : `#${upperCode}`;
+    const codeWithoutHash = upperCode.replace(/^#/, '');
+
+    // Busca pelo budget_code com ou sem #, ou pelo id se for uuid
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(cleanCode);
+
+    let query = supabase
+        .from('budgets')
+        .select(`
+            id,
+            budget_code,
+            title,
+            client_name,
+            client_company,
+            client_email,
+            client_phone,
+            client_document,
+            client_address,
+            status,
+            scope_description,
+            deliverables,
+            deadline_days,
+            payment_terms,
+            discount_percent,
+            final_price,
+            notes,
+            project_url,
+            created_at,
+            updated_at,
+            category:categories(id, title, slug)
+        `);
+
+    if (isUuid) {
+        query = query.or(`budget_code.eq.${codeWithHash},budget_code.eq.${codeWithoutHash},id.eq.${cleanCode}`);
+    } else {
+        query = query.or(`budget_code.eq.${codeWithHash},budget_code.eq.${codeWithoutHash}`);
+    }
+
+    const { data, error } = await query.maybeSingle();
+
+    if (error) {
+        console.error('Erro ao buscar orçamento por código:', error);
+        throw new Error('Não foi possível carregar os dados do projeto. Verifique o código e tente novamente.');
+    }
+
+    return data;
+};
+
+/**
  * Converte um orçamento concluído diretamente em um projeto publicado do portfólio público
  * @param {Object} params
  * @param {Object} params.budget Dados do orçamento

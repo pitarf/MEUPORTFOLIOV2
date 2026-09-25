@@ -232,6 +232,11 @@ export const generateSalesPitchWithAI = async ({
       - Tom para Tecnologia: Foco em retorno sobre investimento (ROI), economia de tempo da equipe, estabilidade, código moderno e segurança.
       - Para objeção de preço em Tecnologia: Diferencie o custo de um retrabalho e a segurança de contar com código limpo e arquitetura escalável.
       `}
+      - Condições de Pagamento como Trunfo Comercial:
+        Incorpore sutilmente na mensagem e nos scripts de objeção a segurança da modalidade escolhida (${paymentTerms}):
+        * Se for 50/50: enfatize o sinal para reserva de agenda e início imediato, e o saldo somente após aprovação final (risco zero para o cliente).
+        * Se for por etapas / splits: enfatize que o pagamento acompanha cada entrega validada.
+        * Se for cartão de crédito: enfatize a facilidade de parcelar em até 12x viabilizando o fluxo de caixa.
 
       Você deve produzir:
       1. Uma mensagem comercial pronta para WhatsApp com copywriting persuasivo, elegante e cordial.

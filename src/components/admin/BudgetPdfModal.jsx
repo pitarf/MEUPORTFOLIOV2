@@ -16,9 +16,12 @@ import {
     QrCode,
     Sparkles,
     Eye,
-    EyeOff
+    EyeOff,
+    CreditCard,
+    Layers
 } from 'lucide-react';
 import html2pdf from 'html2pdf.js';
+import { detectPaymentMode } from '@/components/admin/BudgetModal';
 
 /**
  * Modal de Visualização e Emissão de Proposta Comercial em PDF Ultra-Premium
@@ -346,8 +349,67 @@ const BudgetPdfModal = ({
                                 <div className="p-4 rounded-lg bg-slate-50 border border-slate-200 space-y-2 text-xs flex flex-col justify-between">
                                     <div className="space-y-2">
                                         <div>
-                                            <span className="font-bold text-slate-800 block">Condição de Pagamento:</span>
-                                            <span className="text-slate-600">{budget.payment_terms || '50% entrada + 50% na aprovação final'}</span>
+                                            <span className="font-bold text-slate-800 block mb-1">Condição de Pagamento:</span>
+                                            {(() => {
+                                                const mode = detectPaymentMode(budget.payment_terms || '');
+                                                const total = Number(budget.final_price || 0);
+
+                                                if (mode === '50_50') {
+                                                    const half = total / 2;
+                                                    return (
+                                                        <div className="space-y-1.5">
+                                                            <div className="p-2 rounded bg-white border border-slate-200 flex items-center justify-between">
+                                                                <span className="font-semibold text-slate-700">1º Sinal (50% no início):</span>
+                                                                <span className="font-mono font-bold text-blue-700">R$ {half.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+                                                            </div>
+                                                            <div className="p-2 rounded bg-white border border-slate-200 flex items-center justify-between">
+                                                                <span className="font-semibold text-slate-700">2º Saldo (50% na aprovação):</span>
+                                                                <span className="font-mono font-bold text-slate-800">R$ {half.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                }
+
+                                                if (mode === 'etapas_split') {
+                                                    const delivs = Array.isArray(budget.deliverables) && budget.deliverables.length > 0
+                                                        ? budget.deliverables
+                                                        : [{ stage: 'Início & Planejamento' }, { stage: 'Execução & Protótipo' }, { stage: 'Entrega Final' }];
+                                                    const splitVal = total / delivs.length;
+                                                    return (
+                                                        <div className="space-y-1">
+                                                            <span className="text-[11px] text-slate-500 block">Faturamento em splits conforme marcos concluídos:</span>
+                                                            <div className="space-y-1">
+                                                                {delivs.map((d, idx) => (
+                                                                    <div key={idx} className="p-1.5 rounded bg-white border border-slate-200 flex items-center justify-between text-[11px]">
+                                                                        <span className="font-medium text-slate-700 truncate pr-2">
+                                                                            Split {idx + 1}: {d.stage || d.title || `Etapa ${idx + 1}`}
+                                                                        </span>
+                                                                        <span className="font-mono font-bold text-indigo-700 whitespace-nowrap">
+                                                                            R$ {splitVal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                                                        </span>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                }
+
+                                                if (mode === 'cartao_credito') {
+                                                    return (
+                                                        <div className="p-2.5 rounded bg-white border border-slate-200 space-y-1">
+                                                            <div className="flex items-center gap-1.5 font-bold text-slate-800">
+                                                                <CreditCard className="w-3.5 h-3.5 text-blue-600" />
+                                                                Cartão de Crédito em até 12x
+                                                            </div>
+                                                            <p className="text-[11px] text-slate-600 leading-tight">
+                                                                Pagamento via link seguro ou maquininha. Tarifas da operadora e juros do parcelamento por conta do contratante.
+                                                            </p>
+                                                        </div>
+                                                    );
+                                                }
+
+                                                return <span className="text-slate-600 block">{budget.payment_terms || 'A combinar'}</span>;
+                                            })()}
                                         </div>
                                         <div>
                                             <span className="font-bold text-slate-800 block">Prazo Estimado de Execução:</span>

@@ -289,3 +289,56 @@ Para garantir orçamentos competitivos, lucrativos e sem descolamento da realida
 ### 10.3 Interface de Cenários em 1 Clique (`BudgetModal.jsx`)
 O retorno da IA injeta o objeto de cenários no estado local `aiScenarios`:
 - `handleApplyPricingScenario(val, label)`: Ajusta imediatamente o valor em `formData.final_price` e notifica o usuário via Toast, mantendo a flexibilidade total de edição manual.
+
+---
+
+## 11. Arquitetura das Modalidades de Pagamento & Splits (`BudgetModal.jsx`, `BudgetPdfModal.jsx`, `gemini.js`)
+
+O sistema formaliza três modalidades padronizadas de faturamento para negociações comerciais, com decomposição matemática e visual tanto na interface de edição quanto no PDF exportável:
+
+### 11.1 Estrutura das Modalidades
+1. **50% de Entrada (Sinal) + 50% na Entrega Final (`50_50`)**:
+   - `1º Sinal`: `final_price * 0.50` (Faturado via PIX na aprovação da proposta para início imediato dos trabalhos).
+   - `2º Saldo`: `final_price * 0.50` (Liquidado na entrega e homologação final antes da liberação dos arquivos-fonte/acessos).
+2. **Pagamento por Etapas com Splits (`etapas_split`)**:
+   - Decompõe o valor total em parcelas/splits proporcionais aos marcos contratuais (`budget.deliverables`).
+   - Cada entrega gera um split com valor discriminado (`final_price / N_etapas`), garantindo previsibilidade de fluxo de caixa para ambas as partes.
+3. **Cartão de Crédito em até 12x (`cartao_credito`)**:
+   - Pagamento via maquininha ou link de pagamento seguro.
+   - Encargos financeiros, juros da máquina e tarifas da operadora são formalmente atribuídos por conta do cliente contratante.
+4. **Personalizado (`personalizado`)**:
+   - Permite a redação livre de condições especiais acordadas pontualmente.
+
+### 11.2 Detecção e Renderização no PDF (`BudgetPdfModal.jsx`)
+A função exportada `detectPaymentMode(terms)` analisa os termos gravados no orçamento e dispara a renderização de blocos visuais especializados no PDF:
+- **Pílulas de Sinal/Saldo**: boxes individuais com valores em reais e chave PIX para a modalidade 50/50.
+- **Tabela de Splits**: relação de parcelas com o nome de cada marco entregável e seu respectivo valor em reais.
+- **Badge de Cartão de Crédito**: detalhamento da política de parcelamento em até 12x com cláusula de encargos da operadora.
+
+---
+
+## 12. Arquitetura do Portal do Cliente & Sub-sprints em Tempo Real (`ClientProjectTrack.jsx`, `budgetService.js`)
+
+Para oferecer transparência total e acompanhamento individual sem exigir autenticação por senha complexa para cada cliente, o sistema implementa um portal seguro via código do pedido (`budget_code`).
+
+### 12.1 Rotas e Segurança de SEO (Proteção de Privacidade)
+- **Rotas Registradas**: `/projeto/:budgetCode`, `/acompanhar-projeto/:budgetCode`, e `/projeto` (com formulário de busca).
+- **Proteção Antisscraping e Anti-indexação**:
+  - Aplicação estrita de `<meta name="robots" content="noindex, nofollow" />` via `Helmet`.
+  - O Google e demais motores de busca são categoricamente impedidos de indexar nomes de clientes, escopos comerciais ou links de prévia.
+
+### 12.2 Consulta Segura de Dados (`fetchBudgetByCode`)
+- A função [budgetService.js](file:///C:/Git/React/MeuPortfolio%20v2/src/services/budgetService.js) filtra estritamente os campos expostos:
+  - Expõe: `id`, `budget_code`, `title`, `client_name`, `client_company`, `status`, `scope_description`, `deliverables`, `deadline_days`, `payment_terms`, `final_price`, `created_at`.
+  - Oculta: `hourly_rate_used`, `subtotal`, custos internos, margens de contingência e notas privadas.
+
+### 12.3 Estrutura de Sub-sprints nos Entregáveis
+O campo JSONB `deliverables` armazena a matriz de sub-sprints:
+- `stage`: Nome da sprint (ex: "Wireframes & Identidade Visual").
+- `description`: Detalhamento dos artefatos da entrega.
+- `hours`: Estimativa de esforço.
+- `status`: `'pendente'` | `'em_andamento'` | `'concluido'`.
+- `link`: URL opcional de prévia (Figma, Vercel, Staging).
+- **Cálculo Reativo de Progresso**: `progressPercent = Math.round((completedCount / totalCount) * 100)`.
+
+

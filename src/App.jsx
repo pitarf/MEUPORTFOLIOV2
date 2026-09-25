@@ -25,6 +25,7 @@ import AdminSubmissions from '@/pages/AdminSubmissions';
 import ManageReviews from '@/pages/ManageReviews';
 import Support from '@/pages/Support';
 import TrackTicket from '@/pages/TrackTicket';
+import ClientProjectTrack from '@/pages/ClientProjectTrack';
 import AdminSupport from '@/pages/AdminSupport';
 import ManageServices from '@/pages/ManageServices';
 import ManageLandingPage from '@/pages/admin/ManageLandingPage';
@@ -83,6 +84,9 @@ function App() {
                                 <Route path="/support" element={<Support />} />
                                 <Route path="/track-ticket" element={<TrackTicket />} />
                                 <Route path="/track-ticket/:ticketCode" element={<TrackTicket />} />
+                                <Route path="/projeto" element={<ClientProjectTrack />} />
+                                <Route path="/projeto/:budgetCode" element={<ClientProjectTrack />} />
+                                <Route path="/acompanhar-projeto/:budgetCode" element={<ClientProjectTrack />} />
                             </Route>
 
                             {/* Rotas Administrativas - Protegidas por Autenticação JWT do Supabase */}

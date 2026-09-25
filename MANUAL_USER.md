@@ -309,3 +309,69 @@ Ao clicar no botão **✨ Estimar Escopo & HH com IA** na aba 1:
 - Basta clicar no botão correspondente (**Aplicar Piso**, **Aplicar Recomendado** ou **Aplicar Premium**).
 - O campo **Valor Final Proposto** é preenchido instantaneamente.
 - Você ainda pode alterar manualmente qualquer centavo ou conceder um desconto extra a qualquer momento!
+
+---
+
+## 16. Formas de Pagamento Comerciais & Faturamento por Etapas (Splits)
+
+Para flexibilizar suas propostas e facilitar o fechamento de contratos, o painel de orçamentos permite selecionar e calcular automaticamente 3 modalidades oficiais de faturamento:
+
+### 16.1 As 3 Modalidades Oficiais
+Na aba **1. Cliente & Escopo** do formulário de orçamento, no campo **Forma de Pagamento**:
+1. **50% na Entrada (Sinal) + 50% na Entrega Final**:
+   - É o modelo padrão de segurança para prestação de serviços digitais.
+   - O sistema calcula automaticamente:
+     * **1º Sinal (50%)**: Valor exato em R$ para início e reserva de agenda via PIX.
+     * **2º Saldo (50%)**: Valor exato em R$ liquidado apenas após a aprovação final do projeto pelo cliente.
+2. **Pagamento por Etapas (Splits vinculados às entregas)**:
+   - Ideal para projetos médios e grandes onde o cliente deseja pagar à medida que vê o trabalho acontecer.
+   - O sistema divide o valor total automaticamente pelo número de entregáveis cadastrados na proposta (ex: Split 1 - Planejamento/Design, Split 2 - Desenvolvimento, Split 3 - Homologação/Entrega).
+   - O cliente contratante recebe previsibilidade total do desembolso.
+3. **Cartão de Crédito em até 12x (com juros da maquininha/gateway)**:
+   - Viabiliza o projeto para clientes que precisam de parcelamento longo no fluxo de caixa.
+   - O sistema emite automaticamente o aviso formal na proposta: *o parcelamento em até 12x é liberado via maquininha ou link de pagamento, ficando as tarifas e taxas de juros por conta do comprador*.
+4. **Personalizado**:
+   - Permite digitar livremente qualquer condição especial acordada com o cliente.
+
+### 16.2 Como Essas Formas Aparecem no PDF e na Negociação
+- **No PDF da Proposta**: A Seção 3 ("Investimento & Condições Comerciais") substitui textos genéricos por caixas de destaque claras com os valores exatos de cada parcela/split ou o aviso de parcelamento no cartão.
+- **No WhatsApp e Quebra de Objeções (Copiloto IA)**: O robô de copywriting comercial já redige a mensagem destacando a segurança da forma de pagamento que você escolheu, facilitando o convencimento do cliente sem atrito.
+
+---
+
+## 17. Portal Exclusivo do Cliente & Acompanhamento de Sub-sprints
+
+Seus clientes agora podem acompanhar o progresso do projeto deles em tempo real, através de um portal corporativo exclusivo, sem ver dados de outros clientes e sem acessar informações confidenciais suas (como margem de lucro ou custos de horas).
+
+### 17.1 Como Compartilhar o Acesso com o Cliente
+Você pode copiar o link do cliente e o convite de 3 formas imediatas:
+1. **Pelo Quadro Kanban**:
+   - No card do projeto, clique no ícone roxo de compartilhar (`🔗/Share`).
+   - O sistema copia uma mensagem profissional pronta para você colar no WhatsApp do cliente:
+     > *"Olá [Cliente]! 🚀 Acompanhe o andamento e as entregas do seu projeto '[Título]' em tempo real pelo seu link exclusivo: https://rafaelpitaoficial.com.br/projeto/[CODIGO] (Código do Pedido: #ORC-YYYY-XXX)"*
+2. **Pela Tabela de Orçamentos**:
+   - Clique no ícone roxo de compartilhar na coluna de ações da linha do projeto.
+3. **Pelo Modal de Edição do Orçamento**:
+   - Na aba **1. Cliente & Escopo**, veja o card **Acesso do Cliente (Acompanhamento em Tempo Real)**.
+   - Você conta com os botões **Copiar Link**, **Convite WhatsApp** e o botão de **Abrir Nova Aba** para conferir a experiência que seu cliente terá!
+
+### 17.2 Gerenciando as Sub-sprints no Painel Administrativo
+Na aba **2. HH & Precificação** do orçamento, na lista de **Etapas & Entregáveis do Projeto**:
+- Cada etapa possui um seletor visual de status:
+  * ⚪ **Pendente**: Sub-sprint aguardando início.
+  * ⏳ **Em Andamento**: Etapa que você está produzindo no momento.
+  * ✅ **Concluído**: Marco entregue e finalizado.
+- **Link de Prévia / Homologação (Opcional)**:
+  * Você pode colar o link do Figma, o link de testes no Vercel/Staging ou uma pasta de arquivos.
+  * O cliente verá um botão chamativo **"Ver Prévia da Entrega"** para testar e validar o trabalho na hora!
+
+### 17.3 O que o Cliente Vê no Portal Dele (`/projeto/:codigo`)
+Ao acessar o link:
+1. **Cabeçalho Executivo**: Título do projeto, status geral (ex: *Em Desenvolvimento Ativo*), código do pedido com botão de cópia e prazo estimado.
+2. **Barra de Progresso Dinâmica**: Um indicador visual de 0% a 100% que avança automaticamente conforme você conclui as sub-sprints.
+3. **Linha do Tempo das Sub-sprints**: Cada etapa com seu status visual e botões de acesso às prévias.
+4. **Condições Comerciais & Chave PIX**: Acompanhamento do cronograma de parcelas e chave PIX oficial para quitação de sinais ou saldos.
+5. **Botão de PDF**: Permite ao cliente visualizar ou baixar a Proposta Comercial formalizada em PDF.
+6. **Botão de WhatsApp**: Abre conversa direta com você já com o código do pedido referenciado.
+
+

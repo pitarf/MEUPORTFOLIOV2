@@ -3,6 +3,16 @@
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
 ## CONCLUÍDO (DONE)
+- [x] **Portal Exclusivo do Cliente & Acompanhamento de Sub-sprints (`ClientProjectTrack.jsx`, `BudgetModal.jsx`, `BudgetKanban.jsx`, `budgetService.js`)**:
+  - Página de acompanhamento individual acessível por código de pedido (`/projeto/:budgetCode`) com proteção contra indexação do Google (`noindex, nofollow`).
+  - Barra de progresso geral em tempo real calculada pela quantidade de sub-sprints concluídas.
+  - Linha do tempo de marcos/entregáveis com status visual (✅ Concluído, ⏳ Em Andamento, 🔒 Aguardando Início) e botões de link de prévia/homologação.
+  - Exibição das condições comerciais, chave PIX com cópia em 1 clique, visualização da proposta em PDF e botão de suporte no WhatsApp.
+  - Botões de 1 clique no Kanban e no formulário de orçamento para copiar o link direto ou a mensagem pronta de WhatsApp para o cliente.
+- [x] **Formalização das Modalidades Oficiais de Pagamento (`BudgetModal.jsx`, `BudgetPdfModal.jsx`, `gemini.js`)**:
+  - Modalidades padronizadas com cálculo dinâmico: 50% Entrada (sinal) + 50% Entrega Final, Pagamento por etapas gerando splits pelos marcos de entregáveis, Cartão de crédito em até 12x com juros da máquina/operadora por conta do contratante, e opção Personalizada.
+  - Decomposição no PDF da proposta comercial exibindo valores detalhados de cada parcela ou split e condições contratuais.
+  - Calibração do copiloto IA de vendas para utilizar a modalidade escolhida como argumento de fechamento e quebra de objeções.
 - [x] **Auditoria Cruzada e Fechamento de Pontas Soltas (Subagentes Especialistas)**: Resolução de 15 itens críticos, incluindo correção de salvamento de avatares em avaliações (`ReviewForm.jsx`), eliminação de textos brancos no modo claro (`Subscriptions.jsx`), resiliência financeira a `NaN` (`parseAiNumber`), null safety de entregáveis no Gemini, coluna de recusados no Kanban, isolamento de impressão em PDF e exclusão de arquivos órfãos.
 - [x] **Motor de Precificação Inteligente por Níveis de Complexidade (`gemini.js`)**: Calibração avançada do Gemini com a base de conhecimento oficial de 4 níveis (Nível 1 a Nível 4) e modificadores de risco (urgência, gateways Stripe/MP, migrações de dados).
 - [x] **Cenários Estratégicos de Precificação com Aplicação em 1 Clique (`BudgetModal.jsx`)**: Painel com os 3 cenários (Piso/Fechamento Rápido, Recomendado de Mercado, Premium) na aba de HH com botões de 1 clique para ajuste imediato do valor final.

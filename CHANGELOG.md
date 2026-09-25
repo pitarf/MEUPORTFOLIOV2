@@ -2,6 +2,42 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.13.0] - 2026-09-25
+
+### Adicionado & Aprimorado (Portal do Cliente, Sub-sprints & Acompanhamento de Pedidos)
+- **Portal Exclusivo de Acompanhamento do Cliente (`ClientProjectTrack.jsx`)**:
+  - Nova página acessível em `/projeto/:budgetCode` e `/acompanhar-projeto/:budgetCode` (e `/projeto` com barra de busca por código).
+  - Exibição em tempo real do status geral do projeto, contratante, código do pedido (`#ORC-YYYY-XXX`), prazo e progresso calculado automaticamente pelas sub-sprints concluídas.
+  - Linha do tempo visual de entregáveis com status individual (✅ Concluído, ⏳ Em Andamento, 🔒 Aguardando Início) e links diretos de homologação/prévia (Figma, Vercel, Staging).
+  - Visualização transparente das condições comerciais contratadas (50/50 com sinal e saldo em R$, splits por etapas ou cartão em até 12x) e chave PIX para liquidação com cópia em 1 clique.
+  - Botões de ação para o cliente: abertura da proposta oficial em PDF e contato contextualizado no WhatsApp com o código do pedido.
+  - **Proteção Absoluta de Privacidade**: aplicação de `<meta name="robots" content="noindex, nofollow" />` para impedir indexação pública de orçamentos e dados de clientes no Google.
+- **Gerenciamento de Sub-sprints no Modal de Orçamento (`BudgetModal.jsx`)**:
+  - Cada entregável agora possui seletor ágil de status da sprint (⚪ Pendente, ⏳ Em Andamento, ✅ Concluído) e campo opcional para link de homologação.
+  - Card dedicado de Acesso do Cliente na Aba 1 com botões de 1 clique para "Copiar Link", "Convite WhatsApp" com mensagem formatada e botão de prévia da visão do cliente.
+- **Ações Rápidas de Compartilhamento no Kanban e na Tabela (`BudgetKanban.jsx` & `ManageBudgets.jsx`)**:
+  - Novo botão de compartilhamento com ícone `Share2` em cada card do Kanban e em cada linha da tabela de orçamentos, copiando instantaneamente a mensagem de convite para o WhatsApp do cliente.
+- **Função de Consulta Pública Segura (`budgetService.js`)**:
+  - Implementado `fetchBudgetByCode` permitindo busca flexível por código de pedido (com ou sem `#`, ou ID), retornando apenas os dados do cliente e escopo, sem expor margens financeiras internas ou anotações confidenciais.
+
+## [1.12.0] - 2026-09-25
+
+### Adicionado & Aprimorado (Modalidades Estruturadas de Pagamento)
+- **Suporte Oficial às 3 Modalidades Comerciais de Pagamento (`BudgetModal.jsx`)**:
+  - Implementado seletor interativo na Aba 1 de Informações Básicas com as modalidades padronizadas:
+    * **50% Entrada + 50% Entrega Final**: Cálculo dinâmico do sinal via PIX para início e saldo restante na homologação definitiva.
+    * **Pagamento por Etapas (Splits)**: Decomposição automática do valor final em parcelas/splits atrelados aos marcos de entregáveis definidos.
+    * **Cartão de Crédito**: Parcelamento em até 12x via link/máquina com aviso claro de juros e tarifas da operadora por conta do contratante.
+    * **Personalizado**: Campo livre para acordos pontuais ou condições especiais negociadas.
+  - Sincronização reativa e automática do campo de texto `payment_terms` com base na modalidade escolhida e no valor total do projeto.
+- **Decomposição Executiva no Documento PDF da Proposta (`BudgetPdfModal.jsx`)**:
+  - Na Seção 3 ("Investimento & Condições Comerciais"), o PDF agora gera cards executivos inteligentes conforme a modalidade selecionada:
+    * No modelo 50/50: exibe boxes destacados com valores exatos em R$ do 1º Sinal e do 2º Saldo.
+    * No modelo por etapas: lista os splits detalhados por cada etapa do projeto.
+    * No modelo cartão: exibe badge oficial com ícone de cartão, informando o parcelamento em até 12x e condições de encargos.
+- **Inteligência Comercial no Copiloto IA de Vendas (`gemini.js`)**:
+  - Enriquecido o prompt do Gemini para usar a modalidade de pagamento escolhida como trunfo estratégico nas abordagens de WhatsApp e na resposta às objeções de preço (ex: destacando o risco zero com 50% apenas na entrega final ou a diluição dos desembolsos por entrega).
+
 ## [1.11.0] - 2026-09-25
 
 ### Corrigido & Aprimorado (Auditoria Minuciosa com Subagentes Especialistas)

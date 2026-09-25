@@ -15,6 +15,7 @@ import {
     FileText
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
 
 // Definição das colunas do Kanban e suas ordens de progressão
 export const KANBAN_COLUMNS = [
@@ -81,6 +82,24 @@ const BudgetKanban = ({
     onStatusChange,
     onViewPdf
 }) => {
+    const { toast } = useToast();
+
+    // Compartilhar acesso do cliente (copiar link e convite)
+    const handleShareClientAccess = (budget, e) => {
+        e.stopPropagation();
+        const code = (budget.budget_code || budget.id || '').replace(/^#/, '');
+        const origin = typeof window !== 'undefined' ? window.location.origin : '';
+        const clientUrl = `${origin}/projeto/${code}`;
+        const clientFirstName = budget.client_name ? budget.client_name.split(' ')[0] : 'Cliente';
+        const message = `Olá ${clientFirstName}! 🚀\n\nAcompanhe o andamento e as entregas do seu projeto "${budget.title}" em tempo real pelo seu link exclusivo:\n🔗 ${clientUrl}\n\n*Código do Pedido:* ${budget.budget_code || `#ORC-${budget.id?.slice(0, 8)}`}\n\nQualquer dúvida estou à disposição!`;
+
+        navigator.clipboard.writeText(message);
+        toast({
+            title: 'Acesso do Cliente Copiado!',
+            description: 'Link e código do pedido copiados para enviar no WhatsApp.'
+        });
+    };
+
     // Agrupa orçamentos por status com normalização de status legados
     const groupedBudgets = ORDERED_STATUSES.reduce((acc, status) => {
         acc[status] = budgets.filter(b => {
@@ -245,6 +264,14 @@ const BudgetKanban = ({
                                                                 <Sparkles className="w-3 h-3" />
                                                             </span>
                                                         )}
+                                                        <button
+                                                            type="button"
+                                                            onClick={(e) => handleShareClientAccess(budget, e)}
+                                                            className="p-1 rounded text-purple-600 hover:bg-purple-500/10 transition-colors"
+                                                            title="Copiar Acesso do Cliente (Link & WhatsApp)"
+                                                        >
+                                                            <Share2 className="w-3.5 h-3.5" />
+                                                        </button>
                                                     </div>
 
                                                     {/* Botões de Mover Card no Trello */}
