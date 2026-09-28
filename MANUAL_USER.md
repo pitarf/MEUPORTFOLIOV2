@@ -378,4 +378,71 @@ Ao acessar o link:
 5. **Botão de PDF**: Permite ao cliente visualizar ou baixar a Proposta Comercial formalizada em PDF.
 6. **Botão de WhatsApp**: Abre conversa direta com você já com o código do pedido referenciado.
 
+---
+
+## 18. Prospecção Ativa de Advogados (Google Meu Negócio) & Gerador de Landing Pages
+
+Se você deseja prospectar advogados na sua cidade ou em qualquer lugar do Brasil que possuem ficha cadastrada no Google Meu Negócio mas **ainda não têm site**, você agora dispõe de um módulo comercial exclusivo para transformar esses contatos frios em contratos fechados!
+
+### 18.1 Como Acessar o Painel de Prospecção
+1. Faça login na sua área administrativa.
+2. No menu lateral, clique no novo item **⚖️ Prospecção Advogados** (ou acesse `/admin/prospeccao-advogados`).
+
+### 18.2 Os 4 Modelos Jurídicos Prontos de Alta Conversão
+No topo do painel, você tem acesso imediato aos 4 modelos com visual corporativo de luxo, fotos ultra-realistas de IA e copy de alta conversão:
+- **🏛️ Geral / Full-Service**: Para escritórios generalistas ou multidisciplinares (Civil, Imobiliário, Família, Trabalhista e Consumidor).
+- **🛡️ Direito do Consumidor**: Focado em liminares para limpar nome sujo no SPC/Serasa, golpes do Pix, fraudes bancárias e voos cancelados.
+- **🤝 Direito de Família & Sucessões**: Abordagem acolhedora e discreta para divórcios consensuais/litigiosos, guarda de filhos, pensão e inventários rápidos em cartório.
+- **💼 Direito do Trabalho**: Rigor técnico para rescisão indireta, cálculo de horas extras, assédio moral e vínculos PJ/MEI.
+
+### 18.3 Como Cadastrar um Advogado do Google em 30 Segundos
+1. Quando encontrar um escritório no Google sem site, anote o nome, a cidade e o WhatsApp de atendimento.
+2. No painel, clique em **+ Novo Advogado Prospectado**.
+3. Preencha:
+   - **Nome do Advogado ou Escritório**: Ex: *Dr. Marcelo Tavares Advocacia*.
+   - **Nicho Jurídico**: Selecione o nicho principal da atuação dele.
+   - **WhatsApp (com DDD)**: O número comercial encontrado no Google.
+   - **Cidade & Estado**: Ex: *Rio de Janeiro - RJ*.
+   - **Número OAB (Opcional)**: Caso esteja visível na fachada ou perfil.
+4. Clique em **Criar Link e Pitch**.
+5. O sistema gera automaticamente uma página completa e exclusiva para ele (ex: `/advocacia/dr-marcelo-tavares-rio-de-janeiro`), com todos os botões de contato apontando diretamente para o WhatsApp real dele!
+
+### 18.4 O Segredo da Abordagem: Copiar o Script de WhatsApp em 1 Clique
+No cartão do advogado cadastrado:
+1. Clique no botão amarelo **Copiar Pitch WA** (ou no botão verde **Abrir no WhatsApp** para iniciar a conversa imediatamente).
+2. O sistema copia uma mensagem fria de abordagem que não soa vendedora nem agressiva:
+   > *"Olá, Dr. Marcelo, tudo bem? Me chamo Rafael Pita.*
+   > 
+   > *Encontrei o perfil do seu escritório no Google enquanto pesquisava referências de advocacia aqui no Rio de Janeiro. Notei que vocês têm ótimas avaliações, mas ainda não possuem um site próprio e moderno conectado ao perfil.*
+   > 
+   > *Hoje, quando um cliente em potencial pesquisa no Google, mais de 80% das decisões de contratação são tomadas em menos de 2 minutos pelo celular, direto no WhatsApp.*
+   > 
+   > *Para demonstrar como o escritório pode dobrar o volume de contatos qualificados sem ferir o Provimento 205/2021 da OAB, eu tomei a liberdade de montar uma demonstração exclusiva com o nome e a estrutura de vocês:*
+   > 
+   > *👉 https://rafaelpitaoficial.com.br/advocacia/dr-marcelo-tavares-rio-de-janeiro*
+   > 
+   > *É um modelo ultra-rápido, com visual executivo de luxo e botão direto para o seu WhatsApp.*
+   > 
+   > *O que achou da estrutura? Se fizer sentido, podemos colocar no ar com o seu domínio próprio ainda esta semana!"*
+3. O advogado abrirá no celular dele uma página impecável com o nome dele e o WhatsApp dele funcionando. O impacto visual e a taxa de resposta são ordens de grandeza superiores a qualquer e-mail ou ligação tradicional!
+
+### 18.5 Segurança e Privacidade Ética
+- Todas as páginas geradas sob `/advocacia/:slug` possuem bloqueio automático de indexação (`noindex, nofollow`). Isso assegura que os rascunhos de prospecção não aparecerão no Google nem violarão as regras de publicidade jurídica até que o cliente contrate e autorize a publicação em seu domínio próprio.
+
+### 18.7 Padrão Corporativo de Elite (Estilo Summit Financial Partners)
+Com base na referência visual de consultoria de prestígio, a página adota um design sóbrio, limpo e de altíssima autoridade:
+- **Topo Utilitário com Dados Oficiais**: Faixa superior com endereço corporativo, horário de funcionamento e canais de contato.
+- **Navbar Branca Executiva**: Menu claro com logo dourada e botão de ação direta.
+- **Hero em Azul-Marinho Profundo**: Retrato de alta resolução do advogado em sua mesa de atendimento, acompanhado de chamada estratégica e botões de ação.
+- **Pilares de Confiança Imediata**: 4 cartões com garantias éticas da OAB e privacidade LGPD.
+- **Grade com Especialidades**: Cards brancos limpos com ícones finos em ouro e link "Saiba Mais".
+- **Sobre o Escritório com Reunião Real**: Fotografia de consultoria com clientes em sala de reuniões, checklist com diferenciais e métricas de autoridade em grade 2x2.
+- **Processo em Passos Conectados**: Círculos numerados que guiam o cliente do diagnóstico ao monitoramento.
+- **Depoimentos com 5 Estrelas**: Prova social de assistidos reais com classificação máxima.
+- **Chamada Panorâmica Pré-Rodapé**: Faixa corporativa elegante convidando o visitante a agendar sua consulta jurídica.
+- **Contatos Genéricos nos Modelos de Demonstração**: As páginas modelos de demonstração (`/modelo-advocacia/*`) contam com telefone `(00) 90000-0000`, e-mail `contato@seuescritorio.adv.br` e Instagram `@seu.escritorio.adv` padronizados, resguardando total anonimato até a personalização para o cliente final.
+
+
+
+
 

@@ -347,4 +347,48 @@ O campo JSONB `deliverables` armazena a matriz de sub-sprints:
 - `link`: URL opcional de prévia (Figma, Vercel, Staging).
 - **Cálculo Reativo de Progresso**: `progressPercent = Math.round((completedCount / totalCount) * 100)`.
 
+---
 
+## 13. Arquitetura do Gerador de Landing Pages Jurídicas & Prospecção Ativa (`LegalLandingPage.jsx`, `legalProspectService.js`, `legalTemplates.js`, `ManageLegalProspects.jsx`)
+
+Para apoiar a prospecção ativa de escritórios de advocacia cadastrados no Google Meu Negócio sem website, o sistema implementa uma infraestrutura completa de landing pages dinâmicas e persuasivas em conformidade ética com a OAB.
+
+### 13.1 Conformidade com o Provimento nº 205/2021 da OAB
+- **Vedação de Mercantilização**: Nenhuma copy promete "causa ganha", taxas de sucesso absolutas ou mercantilização da justiça.
+- **Foco Informativo e Educacional**: Ênfase em esclarecimento de direitos, análise prévia de viabilidade técnica, acolhimento sigiloso e conformidade com o Código de Ética e Disciplina da OAB.
+- **Disclaimer Legal Obrigatório**: Rodapé institucional em todas as páginas com menção explícita ao Provimento nº 205/2021.
+
+### 13.2 Modelagem de Dados & Nichos (`legalTemplates.js`)
+O sistema disponibiliza 4 templates completos e calibrados:
+1. `geral`: Full-Service / Institucional (Civil, Imobiliário, Sucessões, Trabalhista e Consumidor).
+2. `consumidor`: Defesa do Consumidor (Negativação indevida, golpes Pix, cancelamento de voos, planos de saúde).
+3. `familia`: Direito de Família e Sucessões (Divórcio amigável/litigioso, guarda, alimentos, inventários).
+4. `trabalhista`: Direito do Trabalho (Rescisão indireta, horas extras, insalubridade, PJ sem vínculo).
+
+### 13.3 Gerenciamento de Prospects (`legalProspectService.js`)
+- Persistência com fallback seguro no `localStorage` sob a chave `rp_legal_prospects`.
+- Geração automática de slugs sem acentos (ex: `dr-marcelo-tavares-rj`).
+- `generateWhatsAppPitch(prospect, previewUrl)`: Gera o texto de abordagem fria e persuasiva já com o link pronto e personalizado para envio via WhatsApp Web.
+
+### 13.5 Diretrizes de Design & Micro-Interações (Glassmorphism, Ouro Metálico & Framer Motion)
+- **Eliminação de Cores Sólidas**: Proibido o uso de blocos lisos estáticos. Cada cartão, barra e container utiliza múltiplas camadas de profundidade:
+  - Fundo translúcido: `backdrop-blur-2xl bg-white/[0.04]` a `bg-white/[0.08]`.
+  - Bordas com iluminação: `border border-white/10 hover:border-amber-400/40`.
+  - Sombras com glow dourado: `shadow-[0_20px_50px_rgba(245,158,11,0.18)]`.
+  - Orbes de iluminação ambiente: esferas radiais com Framer Motion (`blur-[120px]` a `blur-[160px]`).
+### 13.6 Arquitetura Corporativa de Alta Autoridade (Padrão Summit Financial)
+- **TopBar Utilitária (`LegalTopBar.jsx`)**: Faixa superior em Dark Navy (`#071326`) para exibição de dados institucionais (endereço, horário comercial, telefone e canais de contato).
+- **Navbar Branca de Alto Contraste (`LegalNavbar.jsx`)**: Fundo branco puro com borda inferior sutil, tipografia executiva e botão de agendamento em Dark Navy.
+- **Hero Executivo com Retrato na Mesa (`LegalHero.jsx`)**: Composição fotográfica hiper-realista com o advogado sentado em sua mesa de escritório, laptop e arquivos de processos, contrastando com o fundo azul-marinho profundo (`#0A192F`) e tipografia serif imponente.
+- **Barra de Pilares de Confiança (`LegalTrustBar.jsx`)**: 4 blocos de credibilidade (Padrão Ético, Advocacia Independente, Estratégias Comprovadas e Sigilo LGPD) em fundo off-white (`#F8F9FA`).
+- **Cards de Especialidades Forenses (`LegalPracticeAreas.jsx`)**: 5 cards brancos verticais com ícones finos em ouro e links diretos "Saiba Mais".
+- **Sobre o Escritório em Split de 3 Partes (`LegalAbout.jsx`)**: Fotografia de consultoria com clientes (`/images/legal/reuniao.jpg`) + checklist de garantias + 4 métricas verticais de autoridade.
+- **Rito Processual Conectado (`LegalMethodology.jsx`)**: Linha do tempo em 4 etapas conectadas por círculos escuros com badges numéricas douradas.
+- **Depoimentos de Clientes (`LegalReviews.jsx`)**: 3 cards editoriais brancos com aspas douradas e classificação de 5 estrelas.
+### 13.7 Padronização & Anonimização de Dados de Demonstração (Modelos Públicos)
+Para assegurar que as páginas modelos (`/modelo-advocacia/*`) operem estritamente como mostruários neutros para prospecção sem expor contatos reais ou regionais:
+- **Telefone / WhatsApp**: Padrão genérico `(00) 90000-0000` / `5500900000000`.
+- **E-mail Corporativo**: Domínio demonstrativo neutro `contato@seuescritorio.adv.br`.
+- **Instagram**: Handle e URL padronizados `@seu.escritorio.adv` (`https://instagram.com/seu.escritorio.adv`).
+- **Endereço & Registro**: `Av. Principal, 1000 - Centro Empresarial, Cidade - UF` e inscrição `OAB/UF 00.000`.
+- **Auto-migração de Cache**: O serviço `legalProspectService.js` detecta e atualiza automaticamente chaves antigas de `DEFAULT_PROSPECTS` no `localStorage` do visitante.

@@ -2,6 +2,148 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.19.0] - 2026-09-26
+
+### Aprimorado (Anonimização & Padronização de Contatos das Páginas Modelos de Advocacia)
+- **Neutralização de Telefones, WhatsApp, E-mails e Redes Sociais (`src/data/legalTemplates.js`)**:
+  - Todos os dados de contato de pessoas reais e números regionais foram substituídos por informações de demonstração genéricas em todos os 4 nichos (`geral`, `consumidor`, `familia`, `trabalhista`):
+    - **Telefone / WhatsApp**: `(00) 90000-0000` / `5500900000000`
+    - **E-mail**: `contato@seuescritorio.adv.br`
+    - **Instagram**: `@seu.escritorio.adv` (com link normalizado para `https://instagram.com/seu.escritorio.adv`)
+    - **Endereço**: `Av. Principal, 1000 - Centro Empresarial, Cidade - UF`
+    - **OAB**: `OAB/UF 00.000`
+- **Serviço de Demonstração & Migração de Cache Local (`src/services/legalProspectService.js`)**:
+  - Atualizado `DEFAULT_PROSPECTS` para todos os 4 perfis modelos utilizarem os dados neutros.
+  - Implementada rotina de auto-migração no `getAll()` para limpar automaticamente registros anteriores do `localStorage` dos navegadores caso ainda contivessem telefones ou e-mails prévios.
+- **Componentes Estruturais (`LegalTopBar.jsx` e `LegalFooter.jsx`)**:
+  - Removidos fallbacks fixos regionais de Aracaju/Sergipe, substituindo-os pelo endereço corporativo neutro.
+  - Normalizados os links sociais de Instagram para aceitarem tanto handle com arroba (`@seu.escritorio.adv`) quanto URLs absolutas.
+- **Validação com Playwright**:
+  - Capturadas screenshots de auditoria do rodapé e navbar comprovando a correta exibição dos dados genéricos.
+
+## [1.18.0] - 2026-09-26
+
+### Aprimorado (Transição 100% Automática do Carrossel Hero, Background Fixo no Diagnóstico & Refinamento de Banners)
+- **Remoção de Imagem Fixa do Banner Pré-Rodapé (`LegalCinematicBanner.jsx`)**:
+  - Removido o efeito de fundo infinito/parallax da faixa de CTA pré-rodapé, convertendo para um fundo corporativo Dark Navy profundo (`bg-gradient-to-r from-[#071326] via-[#0A192F] to-[#071326]`) com suave luz ambiente dourada.
+  - O efeito de imagem de fundo fixa com revelação ao scroll (`bg-fixed`) foi mantido **exclusivamente na seção de cima** (na ferramenta interativa de Diagnóstico Jurídico `LegalDiagnosisCalculator.jsx`), garantindo hierarquia visual balanceada sem repetição excessiva.
+- **Carrossel Automático Ininterrupto (`LegalHero.jsx`)**:
+  - Removido o bloqueio `isPaused` sob hover da seção inteira que congelava os slides enquanto o cursor do mouse estava na tela.
+  - Implementado ciclo automático ininterrupto a cada 4.5 segundos com crossfade suave contínuo entre as 4 fotografias full width.
+  - Adicionada **barra de progresso animada contínua** em ouro nos bullets da base, permitindo ao usuário acompanhar o tempo exato da próxima transição.
+  - Validado e auditado via Playwright (`tools/verify-hero-autoplay.js`), comprovando a troca automática dos 3 primeiros slides no tempo programado.
+- **Efeito Parallax de Background Fixo com Revelação ao Scroll (`LegalDiagnosisCalculator.jsx` e `LegalCinematicBanner.jsx`)**:
+  - Implementado `bg-fixed bg-cover bg-center` com a fotografia cinematográfica do Tribunal de Justiça (`tribunal.jpg`) na seção de Diagnóstico Interativo de 60 Segundos.
+  - A imagem permanece fixa na janela durante a rolagem da página, sendo revelada continuamente como uma janela arquitetônica enquanto o card em glassmorphism translúcido flutua por cima.
+  - Overlay em degradê de alta precisão (`bg-gradient-to-b from-[#070F1E]/95 via-[#070F1E]/82 to-[#070F1E]/95`) garantindo 100% de legibilidade dos botões e textos.
+  - Efeito replicado no banner pré-rodapé com a vista noturna da metrópole (`skyline.jpg`).
+- **Carrossel Full Width no Fundo do Hero (`LegalHero.jsx`)**:
+  - Implementação de carrossel cinematográfico de imagens em tela cheia (100% full width) com crossfade contínuo e animação sutil (Ken Burns effect).
+  - Ciclo rotativo entre 4 fotografias executivas hiper-realistas:
+    1. Dr. Jorge Santos em sua mesa de escritório (`hero_desk.jpg`);
+    2. Reunião de alinhamento com clientes na sala envidraçada (`reuniao.jpg`);
+    3. Fachada imponente do Tribunal de Justiça (`tribunal.jpg`);
+    4. Sede corporativa da banca de advocacia (`sede.jpg`).
+  - Overlay em degradê escuro multidirecional de alto contraste (`from-[#070F1E]/95 via-[#070F1E]/80 to-[#070F1E]/50`), garantindo legibilidade absoluta de textos, botões e selos.
+  - Indicadores interativos de posição (bullets dourados com barra ativa) e setas direcionais em glassmorphism translúcido.
+  - Pausa inteligente da rotação ao passar o cursor do mouse (`onMouseEnter`/`onMouseLeave`).
+- **Correção Crítica de Alinhamento e Quebra de Linhas no Menu (`LegalNavbar.jsx`)**:
+  - Diagnosticado no print do usuário em resoluções de laptop (1200px) que links em caixa alta quebravam em 2 linhas verticais desalinhadas (`SOBRE \n NÓS`, `NOSSO \n PROCESSO`, `DIAGNÓSTICO \n (60S)`).
+  - Adicionado `whitespace-nowrap` estrito em todos os links e convertida a navegação para Title Case amigável ("Início", "Sobre Nós", "Especialidades", "Como Funciona", "Diagnóstico (60s)", "Depoimentos", "Contato"), garantindo alinhamento horizontal perfeito em uma única linha.
+  - Ajustado espaçamento responsivo (`gap-3.5 xl:gap-6`) para suportar perfeitamente viewports intermediárias e laptops de 1200px a 1366px.
+  - Logo modernizada com tipografia geométrica `Plus Jakarta Sans` sem ALL CAPS forçado.
+- **Transição para Tipografia Moderna "User-Friendly" (Plus Jakarta Sans)**:
+  - Substituição definitiva de fontes serifadas pesadas e rígidas pela família **Plus Jakarta Sans** (pesos 400, 500, 600, 700, 800) em headlines, números de métricas, cards e botões.
+  - Design muito mais moderno, amigável, arejado e alinhado aos padrões visuais de produtos digitais de alta tecnologia e consultorias contemporâneas.
+- **Auditoria Visual Automatizada Playwright em Múltiplas Resoluções**:
+  - Script atualizado e executado em Laptop 1200x800, Desktop 1440x900 e Mobile 390x844, com capturas salvas em `tests/audit-results/legal/`.
+- **Hero & Headline com Altura de Linha Respirada (`LegalHero.jsx`)**:
+  - Ajustado `leading` para eliminar qualquer colisão vertical entre linhas de texto. Headline monumental com degradê âmbar no destaque "Futuro Seguro" e moldura com selo oficial de inscrição na OAB.
+- **Descompressão de Áreas de Atuação (`LegalPracticeAreas.jsx`)**:
+  - Reestruturado o grid de 5 colunas espremidas para layout editorial respirado 3 + 2, com padding generoso (`p-8`), ícones requintados em dourado fosco e títulos em linha única sem quebras truncadas.
+- **Rebalanceamento de Sobre Nós & Grade de Métricas (`LegalAbout.jsx`)**:
+  - Eliminada a coluna espremida na lateral; implementada grade 2x2 com cards de métricas arejados e confortáveis com números destacados e ícones de prestígio.
+- **Metodologia com Alinhamento Preciso (`LegalMethodology.jsx`)**:
+  - Alinhamento vertical da linha conectora ao eixo central dos círculos de atendimento com degradê metálico suave nas extremidades.
+- **Botão Flutuante de WhatsApp Não-Invasivo (`LegalFloatingWhatsApp.jsx`)**:
+  - Desativado popup automático que obstruía cards do site; tooltip reativo ativado apenas sob intenção de hover do visitante.
+
+## [1.17.0] - 2026-09-26
+
+### Adicionado & Aprimorado (Redesign Executivo Inspirado na Referência Summit Financial)
+- **Nova Arquitetura Visual de Alta Autoridade & Confiança**:
+  - Implementação fiel da referência corporativa: TopBar utilitária escura + Navbar branca de alto contraste + Hero em Dark Navy com o Dr. Jorge Santos em sua mesa executiva.
+  - Seções centrais em fundo branco limpo e off-white de máxima legibilidade, eliminando poluição visual e garantindo autoridade institucional instantânea.
+- **Novos Componentes Modulares Implementados**:
+  - `LegalTopBar.jsx`: Faixa utilitária escura no topo com endereço físico em Sergipe, horário de atendimento (Seg a Sex: 08h às 18h), telefone comercial e links sociais.
+  - `LegalNavbar.jsx`: Navbar branca corporativa com balança estilizada em ouro, links de navegação limpos e botão em Dark Navy "Agendar Consulta".
+  - `LegalHero.jsx`: Fundo Dark Navy profundo (`#0A192F`), tag dourada de confiança com traço de destaque, headline monumental serif, botões duplos e foto executiva hiper-realista do advogado em sua mesa de trabalho (`/images/legal/hero_desk.jpg`).
+  - `LegalTrustBar.jsx`: Barra de 4 pilares de confiança (Padrão Ético OAB, Advocacia Independente, Estratégias Comprovadas e Sigilo & Privacidade LGPD).
+  - `LegalPracticeAreas.jsx`: Grade com 5 especialidades forenses em cards brancos limpos com ícones finos em ouro e links diretos "Saiba Mais".
+  - `LegalAbout.jsx`: Seção "Sobre o Escritório" em split de 3 partes: foto de reunião de consultoria com clientes (`/images/legal/reuniao.jpg`) + textos corporativos com checklist de diferenciais + 4 métricas verticais de autoridade.
+  - `LegalMethodology.jsx`: Rito processual transparente com 4 círculos conectados e badges numéricas douradas (1. Diagnóstico, 2. Planejamento, 3. Execução, 4. Acompanhamento).
+  - `LegalReviews.jsx`: Seção "Clientes" com 3 cards de depoimentos reais em estilo editorial com aspas douradas e 5 estrelas.
+  - `LegalCinematicBanner.jsx`: Banner pré-rodapé com vista panorâmica noturna e chamada direta para agendamento de consulta sem compromisso.
+  - `LegalFooter.jsx`: Rodapé corporativo completo com 4 colunas institucionais e conformidade ética com o Provimento CFOAB nº 205/2021.
+
+## [1.16.0] - 2026-09-25
+
+### Aprimorado (Redesign Visual com Glassmorphism, Gradientes Metálicos & Fluidez Framer Motion)
+- **Eliminação Definitiva de Cores Sólidas e Blocos Chapados**:
+  - Toda a esteira de Landing Pages Jurídicas e demonstrações foi convertida para **Glassmorphism translúcido de alta densidade** (`backdrop-blur-2xl bg-white/[0.04]`), bordas finas com iluminação de borda (`border-white/10 hover:border-amber-400/40`), sombras volumétricas com glow dourado (`shadow-[0_20px_50px_rgba(245,158,11,0.18)]`) e orbes de luz neon pulsantes em background.
+- **Gradientes Metálicos Ricos de Ouro Líquido**:
+  - Aplicação de gradientes multi-stop de ouro polido (`bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-500 bg-clip-text text-transparent` e `bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500`) em headlines, números de métricas, botões principais de ação e badges de autoridade.
+- **Fluidez & Micro-Interações com Framer Motion**:
+  - Animações refinadas de elevação táctil no hover (`whileHover={{ y: -8, scale: 1.02 }}` e `whileTap={{ scale: 0.98 }}`), expansão fluida em acordeões de FAQ (`AnimatePresence`), transições de progresso no Diagnóstico de 60 Segundos e efeitos de shimmer em botões.
+- **Refatoração Completa dos Componentes Jurídicos**:
+  - `LegalNavbar.jsx`: Cápsula flutuante moderna em vidro fosco (`rounded-full backdrop-blur-2xl`), logo geométrica em anel dourado e links em pílula.
+  - `LegalHero.jsx`: Fundo panorâmico do skyline noturno em tela cheia, tipografia monumental Stratech e os **4 Overlapping Cards conectados** suspensos na transição do Hero.
+  - `LegalAbout.jsx`: Split corporativo de 3 colunas (Sede envidraçada à noite + textos corporativos com botão dourado + 4 diferenciais com ícones em anel de ouro).
+  - `LegalPracticeAreas.jsx`: Grade no estilo "Featured Projects" com fotos arquitetônicas de torres e tribunais, setas de navegação e selo circular da balança.
+  - `LegalCinematicBanner.jsx`: **Novo Banner Cinematográfico Full-Width** com foto do Tribunal de Justiça, espelho d'água, compromisso ético e botão de ação direta.
+  - `LegalDiagnosisCalculator.jsx`: Terminal interativo em vidro 3D estilo BizNext com barra de progresso em ouro e dossiê pronto para WhatsApp.
+  - `LegalMethodology.jsx`: Linha do tempo em cards de vidro fosco com badges numéricas metálicas e linha conectora luminosa.
+  - `LegalFaq.jsx`: Acordeão em glassmorphism com destaque âmbar suave para dúvidas ativas.
+  - `LegalLeadForm.jsx`: Protocolo institucional seguro em vidro translúcido com inputs em frosted glass.
+  - `LegalMetricsBar.jsx`: Barra de autoridade em pílula de vidro com números em ouro metálico.
+  - `LegalFooter.jsx`: Rodapé corporativo com divisor em gradiente dourado e links de navegação forense.
+  - `LegalFloatingWhatsApp.jsx`: Botão flutuante em ouro líquido com tooltip inteligente em frosted glass.
+
+## [1.15.0] - 2026-09-25
+
+### Adicionado & Aprimorado (Gerador de Landing Pages Jurídicas Ultra-Conversivas & Prospecção Ativa)
+- **Novo Layout Corporativo de Elite Inspirado em Referências Internacionais (Stratech, SkyStructure & BizNext)**:
+  - **Hero Imersivo com Overlapping Cards**: Fundo Deep Midnight Navy (`#070E1B`), headline monumental em caixa alta com destaque em Ouro Âmbar (`#E5A93C`), badge flutuante de vidro de "+14 Anos de Tradição Forense" e **linha dos 4 Overlapping Cards suspensos** com ícones de linha dourada (Line Art Gold).
+  - **Seção "About Us / Sobre o Escritório" em Split 3 Colunas (Stratech Golden Luxury)**: Fotografia arquitetônica da sede moderna com vidro e iluminação noturna à esquerda, texto de autoridade no centro com botão dourado de contato, e lista de 4 diferenciais com ícones redondos dourados à direita.
+  - **Seção "Áreas de Atuação" em Formato Featured Projects**: 4 cards horizontais com fotografias arquitetônicas, títulos encorpados em maiúsculas e o selo circular dourado com a balança no canto inferior direito.
+  - **Diagnóstico Jurídico Interativo de 60 Segundos (BizNext Dark Glassmorphism)**: Triagem dinâmica em 3 etapas com cards translúcidos, barra de progresso em gradiente e geração de dossiê para WhatsApp.
+  - **Barra Inferior de 4 Métricas Forenses (Stratech Bottom Bar)**: 4 colunas horizontais com ícones dourados finos (`🏆 +1.800 Casos`, `⭐ 98% Satisfação`, `🏛️ +14 Anos Forenses`, `🛡️ 100% Sigilo OAB`).
+  - **Navbar com Monograma Geométrico Dourado**: Estilo Stratech com tipografia limpa e botão de ação sólido dourado.
+- **Conformidade Ética Absoluta com a OAB (Provimento nº 205/2021)**:
+  - Copy persuasiva sem mercantilização ou promessas de causa ganha, focada em análise de viabilidade, transparência técnica e sigilo profissional.
+  - Disclaimer ético explícito no rodapé de todas as landing pages.
+- **Fotografia Jurídica Hiper-realista com IA (`public/images/legal/`)**:
+  - Geração de 4 retratos executivos cinematográficos em alta definição com trajes sob medida e escritórios de luxo para cada nicho.
+- **Componentes Modulares Exclusivos de Alta Conversão (`src/components/legal/`)**:
+  - `LegalNavbar`: Header executivo com balança estilizadora, OAB, endereço físico e botão WhatsApp direto.
+  - `LegalHero`: Headline imponente, subheadline persuasiva, prova social 5.0 estrelas, moldura dourada e micro-garantias éticas.
+  - `LegalPainPoints`: Cards interativos para identificação imediata das dores e problemas do cliente.
+  - `LegalPracticeAreas`: Escopo minucioso de atuação com checkmarks e direcionamento contextualizado ao WhatsApp.
+  - `LegalMethodology`: Passo a passo transparente em 3 etapas (Triagem Sigilosa -> Análise Documental -> Ação Estratégica).
+  - `LegalAbout`: Perfil e histórico do profissional com selos de segurança e ética.
+  - `LegalFaq`: Acordeão interativo com respostas completas para 8-10 dúvidas frequentes sem juridiquês.
+  - `LegalLeadForm`: Formulário de triagem rápida que formata a mensagem e abre diretamente a conversa no WhatsApp do advogado.
+  - `LegalFloatingWhatsApp`: Botão flutuante com balão de status "Atendimento Online" para máxima conversão.
+  - `LegalFooter`: Rodapé corporativo completo com dados de contato e disclaimer da OAB.
+- **Painel Administrativo de Prospecção Ativa (`ManageLegalProspects.jsx`)**:
+  - Rota protegida `/admin/prospeccao-advogados` com atalho no menu lateral (`AdminLayout.jsx`).
+  - Cadastro rápido de advogados sem site encontrados no Google Meu Negócio.
+  - Acesso instantâneo aos 4 modelos limpos para demonstrações rápidas.
+  - Botão de 1 clique para copiar o link da demonstração personalizada (`/advocacia/:slug`).
+  - Gerador de Script Persuasivo de Abordagem para WhatsApp: mensagem fria, respeitosa e ultra-convincente pronta para envio direto pelo WhatsApp Web.
+- **Proteção e Privacidade Garantidas**:
+  - As páginas de demonstração utilizam `<meta name="robots" content="noindex, nofollow" />`, impedindo indexação nos motores de busca conforme as diretrizes acordadas.
+
 ## [1.14.0] - 2026-09-25
 
 ### Corrigido & Aprimorado (Resiliência e Alta Disponibilidade da IA Gemini)

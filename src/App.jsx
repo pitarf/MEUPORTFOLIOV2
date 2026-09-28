@@ -34,6 +34,8 @@ import PhotographyPortfolio from '@/pages/PhotographyPortfolio';
 import Profile from '@/pages/Profile';
 import StorageOptimization from '@/pages/StorageOptimization';
 import ManageBudgets from '@/pages/admin/ManageBudgets';
+import ManageLegalProspects from '@/pages/admin/ManageLegalProspects';
+import LegalLandingPage from '@/pages/legal/LegalLandingPage';
 import MainLayout from '@/components/MainLayout';
 import AdminLayout from '@/components/AdminLayout';
 
@@ -89,11 +91,17 @@ function App() {
                                 <Route path="/acompanhar-projeto/:budgetCode" element={<ClientProjectTrack />} />
                             </Route>
 
+                            {/* Rotas Especiais de Demonstração & Landing Pages de Advocacia (Layout Dedicado Próprio) */}
+                            <Route path="/advocacia" element={<LegalLandingPage />} />
+                            <Route path="/advocacia/:slug" element={<LegalLandingPage />} />
+                            <Route path="/modelo-advocacia/:niche" element={<LegalLandingPage />} />
+
                             {/* Rotas Administrativas - Protegidas por Autenticação JWT do Supabase */}
                             <Route element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
                                 <Route path="/dashboard" element={<Dashboard />} />
                                 <Route path="/admin/profile" element={<Profile />} />
                                 <Route path="/admin/orcamentos" element={<ProtectedRoute adminOnly={true}><ManageBudgets /></ProtectedRoute>} />
+                                <Route path="/admin/prospeccao-advogados" element={<ProtectedRoute adminOnly={true}><ManageLegalProspects /></ProtectedRoute>} />
                                 <Route path="/admin/portfolio" element={<ProtectedRoute adminOnly={true}><ManagePortfolio /></ProtectedRoute>} />
                                 <Route path="/admin/submissions" element={<ProtectedRoute adminOnly={true}><AdminSubmissions /></ProtectedRoute>} />
                                 <Route path="/admin/reviews" element={<ProtectedRoute adminOnly={true}><ManageReviews /></ProtectedRoute>} />
