@@ -11,26 +11,34 @@ export default function LegalTopBar({ lawyer }) {
         
         {/* Esquerda: Endereço & Horário de Atendimento */}
         <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2">
-            <MapPin className="w-3.5 h-3.5 text-[#C6923C]" />
+          <a
+            href={lawyer.google_maps_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lawyer.address || `${lawyer.city || ''} ${lawyer.state || ''}`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 hover:text-[#C6923C] transition-colors"
+            title="Abrir localização no Google Maps"
+          >
+            <MapPin className="w-3.5 h-3.5 text-[#C6923C] flex-shrink-0" />
             <span>{lawyer.address || 'Av. Principal, 1000 - Centro Empresarial, Cidade - UF'}</span>
-          </div>
+          </a>
 
           <div className="flex items-center gap-2">
-            <Clock className="w-3.5 h-3.5 text-[#C6923C]" />
+            <Clock className="w-3.5 h-3.5 text-[#C6923C] flex-shrink-0" />
             <span>Atendimento Seg a Sex: 08h às 18h</span>
           </div>
         </div>
 
         {/* Direita: Telefone & Redes Sociais */}
         <div className="flex items-center gap-5">
-          {lawyer.phone && (
+          {(lawyer.phone || lawyer.whatsapp) && (
             <a
-              href={`tel:${lawyer.whatsapp || lawyer.phone}`}
+              href={lawyer.whatsapp ? `https://wa.me/${lawyer.whatsapp}` : `tel:${lawyer.phone}`}
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center gap-1.5 hover:text-white transition-colors font-mono"
             >
               <Phone className="w-3.5 h-3.5 text-[#C6923C]" />
-              <span>{lawyer.phone}</span>
+              <span>{lawyer.phone || (String(lawyer.whatsapp).length >= 10 ? `(${String(lawyer.whatsapp).replace(/\D/g, '').slice(2, 4)}) ${String(lawyer.whatsapp).replace(/\D/g, '').slice(4, 9)}-${String(lawyer.whatsapp).replace(/\D/g, '').slice(9)}` : lawyer.whatsapp)}</span>
             </a>
           )}
 

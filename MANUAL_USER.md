@@ -477,3 +477,12 @@ Cada escritório encontrado na lista exibe a nota de avaliação no Google, o te
    * **Salvar**: Guarda o lead no seu CRM interno de prospecção para acompanhamento comercial.
    * **Colar Ficha do Maps**: Permite colar dados de qualquer escritório que você encontrar navegando no Google Maps para incluí-lo na lista.
 
+### 19.3 Demonstração Personalizada em Tempo Real para Cada Advogado
+Ao clicar no botão **Demo** ou quando o advogado abre o link recebido no WhatsApp:
+1. **Nome do Advogado / Escritório**: Injetado automaticamente na barra do topo, no logotipo da navbar, na foto principal do Hero, na seção "Sobre Nós" e no rodapé.
+2. **Endereço do Google Maps**: O endereço comercial capturado no Google Maps aparece na barra de utilidades e no rodapé do site dele.
+3. **WhatsApp Real**: Todos os botões ("Agendar Consulta", "Fale no WhatsApp", botão flutuante no canto e ferramenta de diagnóstico) direcionam direto para o WhatsApp oficial dele.
+4. **Instagram Inteligente**: Se o Instagram do advogado foi localizado, ele ganha o link direto; se **não foi encontrado, fica em branco** — os ícones de Instagram somem automaticamente do topo e do rodapé para garantir um layout 100% limpo, sem links quebrados nem perfis fictícios!
+5. **Endereço Interativo com Google Maps**: Ao clicar no endereço exibido no topo ou no rodapé do site, o Google Maps abre diretamente na localização oficial e precisa cadastrada.
+6. **Depoimentos Contextualizados**: Os depoimentos da página adaptam automaticamente o nome do advogado, a cidade real dele e histórias de sucesso focadas na especialidade do escritório (Trabalhista, Consumidor, Família ou Geral).
+

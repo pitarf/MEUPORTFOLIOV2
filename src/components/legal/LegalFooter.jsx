@@ -91,21 +91,23 @@ export default function LegalFooter({ lawyer, nicheInfo }) {
               Áreas de Atuação
             </h4>
             <ul className="space-y-2 text-slate-400 font-normal">
-              <li>
-                <a href="#atuacao" className="hover:text-[#C6923C] transition-colors">Direito Trabalhista</a>
-              </li>
-              <li>
-                <a href="#atuacao" className="hover:text-[#C6923C] transition-colors">Distrato de Lotes & Imobiliário</a>
-              </li>
-              <li>
-                <a href="#atuacao" className="hover:text-[#C6923C] transition-colors">Família & Inventários</a>
-              </li>
-              <li>
-                <a href="#atuacao" className="hover:text-[#C6923C] transition-colors">Defesa do Consumidor</a>
-              </li>
-              <li>
-                <a href="#atuacao" className="hover:text-[#C6923C] transition-colors">Direito Empresarial & Contratos</a>
-              </li>
+              {nicheInfo?.practiceAreas && nicheInfo.practiceAreas.length > 0 ? (
+                nicheInfo.practiceAreas.slice(0, 5).map((area, idx) => (
+                  <li key={idx}>
+                    <a href="#atuacao" className="hover:text-[#C6923C] transition-colors line-clamp-1">
+                      {area.title}
+                    </a>
+                  </li>
+                ))
+              ) : (
+                <>
+                  <li><a href="#atuacao" className="hover:text-[#C6923C] transition-colors">Direito Trabalhista</a></li>
+                  <li><a href="#atuacao" className="hover:text-[#C6923C] transition-colors">Distrato de Lotes & Imobiliário</a></li>
+                  <li><a href="#atuacao" className="hover:text-[#C6923C] transition-colors">Família & Inventários</a></li>
+                  <li><a href="#atuacao" className="hover:text-[#C6923C] transition-colors">Defesa do Consumidor</a></li>
+                  <li><a href="#atuacao" className="hover:text-[#C6923C] transition-colors">Direito Empresarial & Contratos</a></li>
+                </>
+              )}
             </ul>
           </div>
 
@@ -117,13 +119,26 @@ export default function LegalFooter({ lawyer, nicheInfo }) {
             <ul className="space-y-2.5 text-slate-400 font-light">
               <li className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-[#C6923C] flex-shrink-0 mt-0.5" />
-                <span>{lawyer.address || 'Av. Principal, 1000 - Centro Empresarial, Cidade - UF'}</span>
+                <a
+                  href={lawyer.google_maps_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lawyer.address || `${lawyer.city || ''} ${lawyer.state || ''}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                  title="Abrir no Google Maps"
+                >
+                  {lawyer.address || 'Av. Principal, 1000 - Centro Empresarial, Cidade - UF'}
+                </a>
               </li>
-              {lawyer.phone && (
+              {(lawyer.phone || lawyer.whatsapp) && (
                 <li className="flex items-center gap-2.5 font-mono">
                   <Phone className="w-4 h-4 text-[#C6923C] flex-shrink-0" />
-                  <a href={`tel:${lawyer.whatsapp || lawyer.phone}`} className="hover:text-white transition-colors">
-                    {lawyer.phone}
+                  <a
+                    href={lawyer.whatsapp ? `https://wa.me/${lawyer.whatsapp}` : `tel:${lawyer.phone}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-white transition-colors"
+                  >
+                    {lawyer.phone || (String(lawyer.whatsapp).length >= 10 ? `(${String(lawyer.whatsapp).replace(/\D/g, '').slice(2, 4)}) ${String(lawyer.whatsapp).replace(/\D/g, '').slice(4, 9)}-${String(lawyer.whatsapp).replace(/\D/g, '').slice(9)}` : lawyer.whatsapp)}
                   </a>
                 </li>
               )}

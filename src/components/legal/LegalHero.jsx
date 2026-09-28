@@ -203,7 +203,7 @@ export default function LegalHero({ lawyer, nicheInfo, heroImage }) {
               </p>
 
               <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400">
-                <span>Atendimento Nacional</span>
+                <span>{lawyer.city && lawyer.state ? `${lawyer.city} - ${lawyer.state}` : 'Atendimento Nacional'}</span>
                 <span className="text-emerald-400 font-semibold flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                   Plantão Ativo

@@ -3,6 +3,23 @@
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
 ## CONCLUÍDO (DONE)
+- [x] **Auditoria com Subagentes & Sincronização Exata de Nomes e Endereços no Google Maps (`googleMapsProspectService.js`, `RadarGoogleMaps.jsx`, `LegalReviews.jsx`, `LegalAbout.jsx`, `LegalPracticeAreas.jsx`, `LegalTopBar.jsx`, `LegalFooter.jsx`)**:
+  - Subagentes especializados auditaram minuciosamente as discrepâncias de nomes, endereços e links do Google Maps em todo o sistema.
+  - Implementada função centralizadora `buildGoogleMapsUrl(lawyer)` unindo Nome + Endereço Detalhado + Cidade/UF com `api=1&query=`, garantindo que o Google Maps abra com precisão milimétrica no local exato do card.
+  - Links do Google Maps sincronizados em 100% dos botões (botão "📍 Maps", link do nome, avaliação em estrelas, endereço e modal de proposta no Radar).
+  - Depoimentos (`LegalReviews.jsx`) dinamizados por nicho e cidade real do advogado (`lawyer.city - lawyer.state`), eliminando menções residuais a Sergipe ou ao modelo geral.
+  - Endereços físicos interativos com abertura direta no Google Maps no TopBar e no Rodapé.
+  - Especialidades forenses (`LegalPracticeAreas.jsx`) sincronizadas com `nicheInfo.practiceAreas`.
+  - Tratamento inteligente contra duplicações ("Advocacia Advocacia") e sanitização de OAB regular por estado.
+  - Build do Vite aprovado e rotas validadas com sucesso.
+- [x] **Personalização Dinâmica da Landing Page por Advogado do Radar Google Maps (`LegalLandingPage.jsx`, `googleMapsProspectService.js`, `RadarGoogleMaps.jsx`)**:
+  - Landing page em `/advocacia/:slug` atualizada para ler dinamicamente os dados do advogado localizado no Google Maps via `googleMapsProspectService.getBySlug(slug)`.
+  - **Nome**: Exibido no topo, logotipo da navbar, headline do Hero, seção Sobre Nós, formulário de diagnóstico/protocolo e rodapé.
+  - **Endereço**: Exibido na TopBar utilitária e no rodapé conforme os dados extraídos do Google Maps ou cidade/estado.
+  - **WhatsApp**: Todos os botões de ação ("Agendar Consulta", "Fale no WhatsApp", botão flutuante e envio de diagnóstico) direcionam para a API oficial do WhatsApp com o número do advogado.
+  - **Instagram**: Regra "se tiver achado exibe, senão deixa em branco" aplicada à risca — quando não encontrado, o campo é mantido vazio e os ícones de Instagram são omitidos da barra superior e do rodapé.
+  - **Sincronização de Slugs**: Botão "Demo" no Radar Google Maps sincronizado com o link gerado na mensagem de proposta via WhatsApp.
+  - Build do Vite executado e rotas validadas com sucesso com código HTTP 200.
 - [x] **Radar Google Maps de Prospecção & Disparo de Propostas de R$ 300 (`RadarGoogleMaps.jsx`, `googleMapsProspectService.js`, `AdminLayout.jsx`, `src/App.jsx`)**:
   - Implementada nova página administrativa `/admin/radar-google-maps` no menu lateral do painel para busca de advogados e escritórios no Brasil com avaliações consideráveis (4.5★ a 5.0★) e sem website cadastrado.
   - Indicadores em tempo real: total de escritórios sem site mapeados, nota média no Google e projeção de faturamento imediato (R$ 300 por fechamento).

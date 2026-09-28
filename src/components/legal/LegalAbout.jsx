@@ -58,7 +58,9 @@ export default function LegalAbout({ lawyer, nicheInfo }) {
                 </div>
                 <div>
                   <span className="text-xs font-bold text-[#0A192F] block">Atendimento Dedicado</span>
-                  <span className="text-[11px] text-slate-500 font-light block leading-tight">Presencial ou Online em todo o território nacional</span>
+                  <span className="text-[11px] text-slate-500 font-light block leading-tight">
+                    {lawyer.city && lawyer.state ? `Presencial em ${lawyer.city} (${lawyer.state}) e Online em todo o país` : 'Presencial ou Online em todo o território nacional'}
+                  </span>
                 </div>
               </div>
             </div>
@@ -79,14 +81,14 @@ export default function LegalAbout({ lawyer, nicheInfo }) {
             </div>
 
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
-              Na {lawyer.name ? `${lawyer.name} Advocacia` : 'nossa advocacia'}, acreditamos que o sucesso de uma demanda jurídica nasce da clareza técnica, do planejamento estratégico e de uma relação de absoluta confiança mútua entre cliente e advogado.
+              Na {lawyer.name ? (/advocacia|consultoria|associad|sociedade/i.test(lawyer.name) ? lawyer.name : `${lawyer.name} Advocacia`) : 'nossa advocacia'}, acreditamos que o sucesso de uma demanda jurídica nasce da clareza técnica, do planejamento estratégico e de uma relação de absoluta confiança mútua entre cliente e advogado.
             </p>
 
             {/* Checklist com Ícones Dourados em 2 Colunas Arejadas */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm text-slate-700 pt-1">
               <div className="flex items-start gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-[#C6923C] flex-shrink-0 mt-0.5" />
-                <span>Mais de 14 anos de prática forense ininterrupta</span>
+                <span>Mais de {lawyer.experienceYears || '14'} anos de prática forense ininterrupta</span>
               </div>
               <div className="flex items-start gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-[#C6923C] flex-shrink-0 mt-0.5" />

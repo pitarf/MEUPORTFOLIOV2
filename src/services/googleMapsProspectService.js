@@ -4,11 +4,63 @@
  * extrai WhatsApp e gera propostas personalizadas (R$ 300 + domínio anual).
  */
 
-import { scanLawyersWithoutWebsite } from '../lib/gemini';
-import { legalProspectService } from './legalProspectService';
+import { scanLawyersWithoutWebsite } from '../lib/gemini.js';
+import { legalProspectService } from './legalProspectService.js';
 
-// Base curada de escritórios mapeados no Google Maps sem site próprio em diversas regiões do Brasil
-const CURATED_MAPS_LEADS = [
+/**
+ * Gera um slug único e amigável para a URL da landing page de um advogado
+ * @param {Object} lawyer 
+ * @returns {string}
+ */
+export const generateLawyerSlug = (lawyer) => {
+  const name = lawyer.lawyer_name || lawyer.name || 'advogado';
+  const slugBase = name
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)+/g, '');
+
+  const city = lawyer.city || '';
+  const citySlug = city
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-');
+
+  return `${slugBase}${citySlug ? `-${citySlug}` : ''}`;
+};
+
+/**
+ * Constrói a URL oficial de busca no Google Maps unindo Nome, Endereço e Cidade
+ * Garante que o pino e a ficha aberta no Maps coincidam 100% com os dados exibidos
+ * @param {Object} lawyer 
+ * @returns {string}
+ */
+export const buildGoogleMapsUrl = (lawyer) => {
+  if (!lawyer) return 'https://www.google.com/maps';
+  
+  // Se já for uma URL do Google Maps com query e NÃO for a busca genérica de 'sem site'
+  if (lawyer.google_maps_url && !lawyer.google_maps_url.includes('sem+site') && !lawyer.google_maps_url.includes('sem%20site')) {
+    if (lawyer.google_maps_url.includes('api=1&query=')) {
+      return lawyer.google_maps_url;
+    }
+  }
+
+  const name = lawyer.lawyer_name || lawyer.name || '';
+  const address = lawyer.address || '';
+  const city = lawyer.city || '';
+  const state = lawyer.state || '';
+
+  // Combina Nome + Endereço Detalhado + Cidade/UF para cravar o local exato com precisão milimétrica no Maps
+  const queryParts = [name, address, (!address.includes(city) && city) ? `${city} - ${state}` : ''].filter(Boolean);
+  const query = queryParts.join(', ');
+
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query || 'Advocacia')}`;
+};
+
+// Base bruta curada de escritórios mapeados no Google Maps sem site próprio em diversas regiões do Brasil
+const RAW_CURATED_MAPS_LEADS = [
   // São Paulo - SP
   {
     id: 'maps-sp-01',
@@ -254,6 +306,13 @@ const CURATED_MAPS_LEADS = [
   }
 ];
 
+// Base curada enriquecida automaticamente com URL de precisão no Google Maps e slug padronizado
+const CURATED_MAPS_LEADS = RAW_CURATED_MAPS_LEADS.map((lead) => ({
+  ...lead,
+  google_maps_url: buildGoogleMapsUrl(lead),
+  slug: generateLawyerSlug(lead)
+}));
+
 export const googleMapsProspectService = {
   /**
    * Realiza a busca de advogados sem site no Google Maps
@@ -292,9 +351,10 @@ export const googleMapsProspectService = {
           );
 
           // Mesclar evitando duplicados
-          const existingNames = new Set(results.map((r) => r.lawyer_name.toLowerCase()));
+          const existingNames = new Set(results.map((r) => (r.lawyer_name || r.name || '').toLowerCase()).filter(Boolean));
           for (const lead of validAiLeads) {
-            if (!existingNames.has((lead.lawyer_name || '').toLowerCase())) {
+            const leadName = (lead.lawyer_name || lead.name || '').toLowerCase();
+            if (leadName && !existingNames.has(leadName)) {
               results.unshift({
                 ...lead,
                 id: lead.id || `maps-ai-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
@@ -305,11 +365,117 @@ export const googleMapsProspectService = {
           }
         }
       } catch (err) {
-        console.warn('Varredura com IA não retornou resultados adicionais:', err);
+        console.warn('Varredura com IA indisponível ou limitada, usando base curada:', err);
       }
     }
 
-    return results;
+    // Adiciona slug normalizado e garante URL oficial do Google Maps a cada lead
+    const leadsWithSlugs = results.map((item) => ({
+      ...item,
+      slug: item.slug || generateLawyerSlug(item),
+      google_maps_url: buildGoogleMapsUrl(item)
+    }));
+
+    try {
+      localStorage.setItem('rp_radar_maps_leads', JSON.stringify(leadsWithSlugs));
+    } catch (e) {
+      console.warn('Erro ao salvar cache do radar no localStorage', e);
+    }
+
+    return leadsWithSlugs;
+  },
+
+  /**
+   * Busca um lead do Google Maps por slug
+   * @param {string} slug
+   * @returns {Object|null}
+   */
+  getBySlug: (slug) => {
+    if (!slug) return null;
+    const cleanSlug = slug.toLowerCase().trim();
+
+    // 1. Procurar no cache salvo pelo Radar no localStorage
+    try {
+      const stored = localStorage.getItem('rp_radar_maps_leads');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        const match = parsed.find((l) => {
+          const lSlug = (l.slug || generateLawyerSlug(l)).toLowerCase();
+          return lSlug === cleanSlug || l.id === cleanSlug;
+        });
+        if (match) {
+          return {
+            ...match,
+            google_maps_url: buildGoogleMapsUrl(match)
+          };
+        }
+      }
+    } catch (e) {
+      console.warn('Erro ao ler cache do radar no localStorage', e);
+    }
+
+    // 2. Procurar na base curada fixa
+    const matchCurated = CURATED_MAPS_LEADS.find((l) => {
+      const lSlug = (l.slug || generateLawyerSlug(l)).toLowerCase();
+      return lSlug === cleanSlug || l.id === cleanSlug;
+    });
+    if (matchCurated) {
+      return {
+        ...matchCurated,
+        slug: generateLawyerSlug(matchCurated),
+        google_maps_url: buildGoogleMapsUrl(matchCurated)
+      };
+    }
+
+    // 3. Fallback inteligente por prefixo do nome
+    try {
+      const stored = localStorage.getItem('rp_radar_maps_leads');
+      const allLeads = [
+        ...(stored ? JSON.parse(stored) : []),
+        ...CURATED_MAPS_LEADS
+      ];
+      const matchPartial = allLeads.find((l) => {
+        const lSlug = (l.slug || generateLawyerSlug(l)).toLowerCase();
+        return cleanSlug.startsWith(lSlug) || lSlug.startsWith(cleanSlug);
+      });
+      if (matchPartial) {
+        return {
+          ...matchPartial,
+          google_maps_url: buildGoogleMapsUrl(matchPartial)
+        };
+      }
+    } catch {}
+
+    // 4. Inferência dinâmica a partir do slug (caso aberto em aba anônima ou dispositivo do cliente)
+    const parts = cleanSlug.split('-').filter(Boolean);
+    if (parts.length >= 2) {
+      const titleCased = parts.map((p) => {
+        if (p === 'dr') return 'Dr.';
+        if (p === 'dra') return 'Dra.';
+        if (['de', 'da', 'do', 'dos', 'das', 'e'].includes(p)) return p;
+        return p.charAt(0).toUpperCase() + p.slice(1);
+      }).join(' ');
+
+      return {
+        id: `inferred-${cleanSlug}`,
+        lawyer_name: titleCased,
+        niche: 'geral',
+        rating: 4.9,
+        reviews_count: 28,
+        city: 'Atendimento Nacional',
+        state: 'BR',
+        address: 'Atendimento Presencial e Online em Todo o Território Nacional',
+        phone: '',
+        whatsapp: '',
+        instagram: '',
+        highlights: 'Excelência em atendimento jurídico e suporte consultivo.',
+        has_website: false,
+        slug: cleanSlug,
+        google_maps_url: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(titleCased)}`
+      };
+    }
+
+    return null;
   },
 
   /**
@@ -319,20 +485,15 @@ export const googleMapsProspectService = {
    * @returns {string}
    */
   generateProposalMessage: (lawyer, variant = 'direto') => {
-    const name = lawyer.lawyer_name || 'Doutor(a)';
+    const name = lawyer.lawyer_name || lawyer.name || 'Doutor(a)';
     const rating = lawyer.rating ? `${Number(lawyer.rating).toFixed(1)}★` : '5.0★';
     const reviews = lawyer.reviews_count ? ` (${lawyer.reviews_count} avaliações)` : '';
     const city = lawyer.city || 'sua região';
     const baseUrl = window.location.origin;
 
-    // Gerar slug temporário amigável para pré-visualização da landing page
-    const slugBase = (lawyer.lawyer_name || 'advogado')
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)+/g, '');
-    const previewUrl = `${baseUrl}/advocacia/${slugBase}`;
+    // Gerar slug padronizado da landing page
+    const slug = lawyer.slug || generateLawyerSlug(lawyer);
+    const previewUrl = `${baseUrl}/advocacia/${slug}`;
 
     if (variant === 'curto') {
       return `Olá, ${name}, tudo bem? Me chamo Rafael Pita.
@@ -382,7 +543,9 @@ Queria saber se você tem interesse em colocar no ar para passar ainda mais auto
    */
   saveToCrm: (lawyer) => {
     return legalProspectService.save({
-      lawyer_name: lawyer.lawyer_name,
+      id: lawyer.id,
+      slug: lawyer.slug || generateLawyerSlug(lawyer),
+      lawyer_name: lawyer.lawyer_name || lawyer.name,
       niche: lawyer.niche || 'geral',
       whatsapp: lawyer.whatsapp,
       phone: lawyer.phone,
@@ -391,6 +554,9 @@ Queria saber se você tem interesse em colocar no ar para passar ainda mais auto
       address: lawyer.address,
       rating: lawyer.rating,
       reviews_count: lawyer.reviews_count,
+      instagram: lawyer.instagram || '',
+      google_maps_url: buildGoogleMapsUrl(lawyer),
+      highlights: lawyer.highlights || '',
       status: 'novo'
     });
   },

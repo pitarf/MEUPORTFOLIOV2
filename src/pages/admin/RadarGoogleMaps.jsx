@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
-import { googleMapsProspectService } from '../../services/googleMapsProspectService';
+import { googleMapsProspectService, generateLawyerSlug, buildGoogleMapsUrl } from '../../services/googleMapsProspectService';
 import { LEGAL_NICHES } from '../../data/legalTemplates';
 
 /**
@@ -188,7 +188,7 @@ export default function RadarGoogleMaps() {
       rating: Number(manualData.rating || 5.0),
       reviews_count: Number(manualData.reviews_count || 10),
       has_website: false,
-      google_maps_url: googleMapsProspectService.getGoogleMapsWebSearchUrl(manualData.city, manualData.state)
+      google_maps_url: buildGoogleMapsUrl(manualData)
     };
 
     setResults((prev) => [newLead, ...prev]);
@@ -461,17 +461,12 @@ export default function RadarGoogleMaps() {
             const isSaved = savedIds.has(lawyer.id);
             const isCopied = copiedId === lawyer.id;
 
-            // Link dinâmico para a demonstração
-            const slugBase = (lawyer.lawyer_name || 'advogado')
-              .toLowerCase()
-              .normalize('NFD')
-              .replace(/[\u0300-\u036f]/g, '')
-              .replace(/[^a-z0-9]+/g, '-')
-              .replace(/(^-|-$)+/g, '');
+            // Link dinâmico para a demonstração sincronizado com o radar e o WhatsApp
+            const slugBase = lawyer.slug || generateLawyerSlug(lawyer);
             const demoUrl = `/advocacia/${slugBase}`;
 
-            // Link oficial ou de busca do Google Maps
-            const mapsUrl = lawyer.google_maps_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${lawyer.lawyer_name} ${lawyer.city || ''} ${lawyer.state || ''}`)}`;
+            // Link oficial ou de busca do Google Maps baseado na correspondência precisa de Nome e Endereço
+            const mapsUrl = buildGoogleMapsUrl(lawyer);
 
             return (
               <div
@@ -499,7 +494,7 @@ export default function RadarGoogleMaps() {
                           className="hover:underline inline-flex items-center gap-1.5"
                           title="Abrir perfil deste advogado no Google Maps"
                         >
-                          <span>{lawyer.lawyer_name}</span>
+                          <span>{lawyer.lawyer_name || lawyer.name}</span>
                           <ExternalLink className="w-3.5 h-3.5 text-muted-foreground opacity-60 group-hover:opacity-100" />
                         </a>
                       </h3>
@@ -649,7 +644,7 @@ export default function RadarGoogleMaps() {
                   Proposta Comercial de Impacto
                 </span>
                 <h3 className="text-lg font-bold text-foreground">
-                  {selectedLawyerForProposal.lawyer_name}
+                  {selectedLawyerForProposal.lawyer_name || selectedLawyerForProposal.name}
                 </h3>
                 <div className="flex items-center gap-2 pt-1 flex-wrap">
                   <span className="text-xs text-muted-foreground">
@@ -657,7 +652,7 @@ export default function RadarGoogleMaps() {
                   </span>
                   <span className="text-xs text-muted-foreground">•</span>
                   <a
-                    href={selectedLawyerForProposal.google_maps_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${selectedLawyerForProposal.lawyer_name} ${selectedLawyerForProposal.city || ''} ${selectedLawyerForProposal.state || ''}`)}`}
+                    href={buildGoogleMapsUrl(selectedLawyerForProposal)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400 hover:underline font-medium"

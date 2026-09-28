@@ -312,6 +312,7 @@ export const scanLawyersWithoutWebsite = async (city = 'São Paulo', state = 'SP
     - Status de Website: SEM SITE PRÓPRIO REGISTRADO
 
     Retorne uma lista com 6 a 10 perfis de advogados/escritórios com dados verossímeis e realistas da região indicada.
+    IMPORTANTE: O campo "address" DEVE conter o logradouro completo (Avenida/Rua, Número, Bairro, Cidade - UF). O campo "google_maps_url" DEVE utilizar a query oficial do Google Maps combinando o Nome e o Endereço completo para fincar a localização com precisão: "https://www.google.com/maps/search/?api=1&query=[NOME_ESCRITORIO]+[ENDERECO]".
     
     Retorne APENAS um objeto JSON com a chave "lawyers" contendo um array (sem markdown, sem explicações):
     {
@@ -326,8 +327,8 @@ export const scanLawyersWithoutWebsite = async (city = 'São Paulo', state = 'SP
           "whatsapp": "55XXXXXXXXXXX",
           "city": "${city}",
           "state": "${state}",
-          "address": "Endereço comercial ou bairro realista em ${city} - ${state}",
-          "google_maps_url": "https://www.google.com/maps/search/Nome+Do+Escritorio+${city}",
+          "address": "Av. Principal, 1000 - Bairro Nobre, ${city} - ${state}",
+          "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Dr+Nome+Advogado+Av+Principal+1000+${city}",
           "highlights": "Pontos elogiados pelos clientes no Google (ex: Atendimento ágil, clareza nas explicações e dedicação)",
           "has_website": false
         }

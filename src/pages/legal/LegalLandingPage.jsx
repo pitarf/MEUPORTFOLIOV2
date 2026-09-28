@@ -2,6 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { LEGAL_NICHES } from '../../data/legalTemplates';
 import { legalProspectService } from '../../services/legalProspectService';
+import { googleMapsProspectService, buildGoogleMapsUrl } from '../../services/googleMapsProspectService';
 
 import LegalTopBar from '../../components/legal/LegalTopBar';
 import LegalNavbar from '../../components/legal/LegalNavbar';
@@ -47,25 +48,39 @@ export default function LegalLandingPage() {
         };
       }
 
-      // Procura prospect cadastrado
-      const prospect = legalProspectService.getBySlug(slug);
+      // Procura prospect cadastrado no CRM ou no Radar do Google Maps
+      const prospect = legalProspectService.getBySlug(slug) || googleMapsProspectService.getBySlug(slug);
       if (prospect) {
         const targetNiche = prospect.niche || 'geral';
         const info = LEGAL_NICHES[targetNiche] || LEGAL_NICHES.geral;
         
+        const rawName = prospect.lawyer_name || prospect.name || info.defaultLawyer.name;
+        const rawAddress = prospect.address || (prospect.city && prospect.state ? `${prospect.city} - ${prospect.state}` : info.defaultLawyer.address);
+        const rawPhone = prospect.phone || prospect.whatsapp || info.defaultLawyer.phone;
+        const rawWhatsapp = (prospect.whatsapp || prospect.phone || '').toString().replace(/\D/g, '') || info.defaultLawyer.whatsapp;
+        // Se foi encontrado o Instagram, formata; se não foi encontrado, deixa em branco ('') para ocultar os ícones
+        const rawInstagram = prospect.instagram && prospect.instagram.trim() !== '' ? prospect.instagram.trim() : '';
+
+        // Sanitização de OAB para nunca exibir "00.000" fictício quando o lead vem do Google Maps
+        const rawOab = prospect.oab_number || prospect.oab || (prospect.state ? `Inscrição Regular OAB/${prospect.state}` : 'Inscrição Regular OAB');
+        const mapsUrl = buildGoogleMapsUrl(prospect);
+
         return {
           lawyerData: {
-            name: prospect.lawyer_name || info.defaultLawyer.name,
-            oab: prospect.oab_number || info.defaultLawyer.oab,
+            name: rawName,
+            oab: rawOab,
             role: info.badge,
             city: prospect.city || info.defaultLawyer.city,
             state: prospect.state || info.defaultLawyer.state,
-            address: prospect.address || info.defaultLawyer.address,
-            phone: prospect.phone || prospect.whatsapp || info.defaultLawyer.phone,
-            whatsapp: (prospect.whatsapp || '').replace(/\D/g, '') || info.defaultLawyer.whatsapp,
-            email: prospect.email || info.defaultLawyer.email,
-            instagram: info.defaultLawyer.instagram,
-            experienceYears: info.defaultLawyer.experienceYears
+            address: rawAddress,
+            phone: rawPhone,
+            whatsapp: rawWhatsapp,
+            email: prospect.email || '',
+            instagram: rawInstagram,
+            experienceYears: prospect.experienceYears || info.defaultLawyer.experienceYears,
+            google_maps_url: mapsUrl,
+            rating: prospect.rating || 4.9,
+            reviews_count: prospect.reviews_count || 48
           },
           nicheInfo: info,
           heroImage: prospect.custom_hero_url || info.heroImage
@@ -128,7 +143,7 @@ export default function LegalLandingPage() {
       <LegalMethodology lawyer={lawyerData} nicheInfo={nicheInfo} />
 
       {/* 8. Depoimentos de Clientes (3 Cards Limpos com 5 Estrelas) */}
-      <LegalReviews lawyer={lawyerData} />
+      <LegalReviews lawyer={lawyerData} nicheInfo={nicheInfo} />
 
       {/* 9. Diagnóstico Jurídico Interativo de 60 Segundos */}
       <LegalDiagnosisCalculator lawyer={lawyerData} nicheInfo={nicheInfo} />

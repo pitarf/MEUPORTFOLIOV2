@@ -7,42 +7,51 @@ import { Briefcase, Building2, Users, ShieldAlert, Scale, ArrowRight } from 'luc
  * Fundo branco limpo, cabeçalho serif elegante e 5 cards verticais com ícones finos em ouro.
  */
 export default function LegalPracticeAreas({ lawyer, nicheInfo }) {
-  // 5 Especialidades Estruturadas (Adaptadas com base no perfil de Jorge Santos / nicho)
-  const areas = [
-    {
-      title: 'Direito do Trabalho',
-      desc: 'Atuação especializada em horas extras, rescisões indiretas, assédio moral e equiparação salarial.',
-      icon: Briefcase
-    },
-    {
-      title: 'Direito Imobiliário & Lotes',
-      desc: 'Segurança jurídica em distratos de lotes, atraso na entrega de imóveis, usucapião e inventários.',
-      icon: Building2
-    },
-    {
-      title: 'Direito de Família & Sucessões',
-      desc: 'Condução discreta e humanizada de divórcios, partilha de bens, guarda de filhos e inventários.',
-      icon: Users
-    },
-    {
-      title: 'Defesa do Consumidor',
-      desc: 'Ações contra negativações indevidas no SPC/Serasa, fraudes do Pix, golpes bancários e planos de saúde.',
-      icon: ShieldAlert
-    },
-    {
-      title: 'Direito Empresarial',
-      desc: 'Assessoria societária contínua, blindagem de patrimônio e defesa em associações de proteção veicular.',
-      icon: Scale
-    }
-  ];
+  // Especialidades Estruturadas (Adaptadas dinamicamente ao nicho do advogado)
+  const defaultIcons = [Briefcase, Building2, Users, ShieldAlert, Scale];
+
+  const areas = (nicheInfo?.practiceAreas && nicheInfo.practiceAreas.length > 0)
+    ? nicheInfo.practiceAreas.map((pa, idx) => ({
+        title: pa.title,
+        desc: pa.summary || pa.desc || 'Atuação técnica focada em defender seus direitos com agilidade e respaldo legal.',
+        icon: defaultIcons[idx % defaultIcons.length]
+      }))
+    : [
+        {
+          title: 'Direito do Trabalho',
+          desc: 'Atuação especializada em horas extras, rescisões indiretas, assédio moral e equiparação salarial.',
+          icon: Briefcase
+        },
+        {
+          title: 'Direito Imobiliário & Lotes',
+          desc: 'Segurança jurídica em distratos de lotes, atraso na entrega de imóveis, usucapião e inventários.',
+          icon: Building2
+        },
+        {
+          title: 'Direito de Família & Sucessões',
+          desc: 'Condução discreta e humanizada de divórcios, partilha de bens, guarda de filhos e inventários.',
+          icon: Users
+        },
+        {
+          title: 'Defesa do Consumidor',
+          desc: 'Ações contra negativações indevidas no SPC/Serasa, fraudes do Pix, golpes bancários e planos de saúde.',
+          icon: ShieldAlert
+        },
+        {
+          title: 'Direito Empresarial',
+          desc: 'Assessoria societária contínua, blindagem de patrimônio e defesa em associações de proteção veicular.',
+          icon: Scale
+        }
+      ];
 
   const topAreas = areas.slice(0, 3);
   const bottomAreas = areas.slice(3);
 
   const renderCard = (area, idx) => {
     const IconComponent = area.icon;
+    const cleanLawyerName = lawyer?.name ? (/^dr[a]?\./i.test(lawyer.name.trim()) ? lawyer.name : `Dr(a). ${lawyer.name}`) : 'Doutor(a)';
     const areaWhatsappUrl = `https://wa.me/${lawyer.whatsapp}?text=${encodeURIComponent(
-      `Olá, Dr(a). ${lawyer.name}, gostaria de consultar o escritório sobre a área de "${area.title}".`
+      `Olá, ${cleanLawyerName}, gostaria de consultar o escritório sobre a área de "${area.title}".`
     )}`;
 
     return (

@@ -406,3 +406,29 @@ Para alimentar ativamente o funil de aquisição de novos clientes sem depender 
    - Botão direto para WhatsApp com mensagem pré-formatada e link para a demonstração `/advocacia/:slug`.
 4. **Hiperlinks Diretos para Ficha no Google Maps**:
    - Cada escritório possui link para a URL do Maps no nome, badge de nota em estrelas, endereço e no botão "📍 Maps", facilitando a validação das avaliações reais pelo operador antes do envio.
+
+### 13.9 Personalização Dinâmica em Tempo Real da Landing Page (`LegalLandingPage.jsx`)
+Para que a demonstração seja hiper-personalizada para cada advogado encontrado no Google Maps sem exigir cadastro prévio ou trabalho manual:
+1. **Resolução de Dados em Cascata (`getBySlug`)**:
+   - Consulta primeiramente `legalProspectService.getBySlug(slug)` (CRM persistente).
+   - Se não encontrado, consulta `googleMapsProspectService.getBySlug(slug)` (cache do radar, base curada ou inferência dinâmica a partir do slug).
+2. **Injeção de Campos Obrigatórios**:
+   - **Nome do Advogado**: Atualiza Navbar, Hero, TopBar, Seção Sobre, Título da aba e Rodapé.
+   - **Endereço Comercial**: Injeta endereço real extraído do Google Maps na TopBar e no Rodapé.
+   - **WhatsApp**: Botões "Agendar Consulta", "Fale no WhatsApp", WhatsApp Flutuante e formulário de diagnóstico apontam para `https://wa.me/{whatsapp}` com o número exato do lead.
+3. **Tratamento Condicional de Redes Sociais (Instagram)**:
+   - Se o Instagram foi identificado na busca/varredura, o link correspondente é renderizado no topo e no rodapé.
+   - Se NÃO foi identificado (vazio/falsy), o campo é mantido como string vazia `''`, acionando a renderização condicional (`{lawyer.instagram && ...}`) que **omite os ícones de Instagram** do topo e do rodapé, prevenindo links quebrados.
+
+### 13.10 Sincronização Exata de Nomes, Endereços e Localizações no Google Maps (`buildGoogleMapsUrl`)
+Para assegurar correspondência de 100% entre o que o operador visualiza nos cards do Radar e o local exato aberto no Google Maps:
+1. **Função Centralizadora `buildGoogleMapsUrl(lawyer)`**:
+   - Concatena `[lawyer_name || name, address, city - state]` com parâmetros oficiais da API do Google Maps (`https://www.google.com/maps/search/?api=1&query=...`).
+   - Evita queries de texto livre que caíam em homônimos ou pins genéricos no centro da cidade.
+   - Consumida em 100% dos pontos da aplicação: botão "📍 Maps", link do nome, estrelas de avaliação, endereço físico nos cards e cabeçalho do modal.
+2. **Dinamização Contextual de Prova Social (`LegalReviews.jsx`)**:
+   - Os depoimentos foram refatorados para ler a cidade (`lawyer.city - lawyer.state`), o nome do escritório e a especialidade do lead, extinguindo referências estáticas que vinculavam escritórios de SP/RJ a cidades de Sergipe.
+3. **Endereço Físico como Hiperlink Oficial**:
+   - Tanto a barra de utilidades superior (`LegalTopBar.jsx`) quanto o rodapé (`LegalFooter.jsx`) contam com o endereço como link interativo direto para a localização no Google Maps.
+4. **Resiliência de Canais de Contato**:
+   - Caso um lead possua apenas WhatsApp, os componentes de topo e rodapé formatam e exibem automaticamente o contato sem suprimir o canal telefônico.

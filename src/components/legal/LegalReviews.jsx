@@ -1,31 +1,98 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Star, Quote } from 'lucide-react';
 
 /**
  * Seção de Depoimentos no Estilo Exato da Summit Financial (Imagem de Referência)
- * 3 cards brancos limpos com aspas douradas, depoimento, identificação do cliente e 5 estrelas.
+ * 3 cards brancos limpos com aspas douradas, depoimento contextualizado por nicho e cidade do advogado.
  */
-export default function LegalReviews({ lawyer }) {
-  const reviews = [
-    {
-      quote:
-        'O Dr. Jorge Santos e sua equipe conduziram meu caso com extrema rapidez e profissionalismo. Consegui a reversão da negativação indevida e a indenização em tempo recorde.',
-      name: 'Carlos Eduardo M.',
-      city: 'Aracaju - SE'
-    },
-    {
-      quote:
-        'Excelente atendimento no processo de distrato imobiliário do meu lote. Fui informado de cada andamento pelo WhatsApp com total transparência e segurança jurídica.',
-      name: 'Mariana Siqueira',
-      city: 'Nossa Senhora do Socorro - SE'
-    },
-    {
-      quote:
-        'A clareza técnica e a honestidade do Dr. Jorge me deram total tranquilidade durante uma ação trabalhista complexa. Recomendo o escritório a todos que buscam advogados sérios.',
-      name: 'Roberto Tavares',
-      city: 'Lagarto - SE'
+export default function LegalReviews({ lawyer, nicheInfo }) {
+  const lawyerShortName = lawyer?.name || 'O escritório';
+  const lawyerCity = lawyer?.city || 'São Paulo';
+  const lawyerState = lawyer?.state || 'SP';
+  const regionLocation = `${lawyerCity} - ${lawyerState}`;
+
+  const reviews = useMemo(() => {
+    const nicheKey = nicheInfo?.id || 'geral';
+
+    if (nicheKey === 'trabalhista') {
+      return [
+        {
+          quote: `${lawyerShortName} e sua equipe conduziram minha ação trabalhista com extrema agilidade e precisão. Todas as verbas rescisórias e horas devidas foram calculadas e recebidas com segurança.`,
+          name: 'Carlos Eduardo M.',
+          city: regionLocation
+        },
+        {
+          quote: 'Atendimento impecável! Fui orientado sobre cada etapa pelo WhatsApp, sem rodeios e com total transparência nos honorários. Excelente atuação na audiência.',
+          name: 'Mariana Siqueira',
+          city: regionLocation
+        },
+        {
+          quote: `A clareza técnica e a firmeza de ${lawyerShortName} me deram total tranquilidade durante o processo de rescisão indireta. Recomendo de olhos fechados.`,
+          name: 'Roberto Tavares',
+          city: regionLocation
+        }
+      ];
     }
-  ];
+
+    if (nicheKey === 'consumidor') {
+      return [
+        {
+          quote: `${lawyerShortName} resolveu uma cobrança abusiva e negativação indevida no meu nome em tempo recorde. Consegui a exclusão dos órgãos de proteção e a indenização devida.`,
+          name: 'Carlos Eduardo M.',
+          city: regionLocation
+        },
+        {
+          quote: 'Tive um problema grave de cancelamento de voo e estorno negado. O escritório acolheu meu caso de imediato e resolveu tudo com total profissionalismo.',
+          name: 'Juliana Cavalcanti',
+          city: regionLocation
+        },
+        {
+          quote: `A equipe de ${lawyerShortName} foi extremamente competente na revisão do meu contrato bancário. Transparência do início ao fim.`,
+          name: 'Roberto Tavares',
+          city: regionLocation
+        }
+      ];
+    }
+
+    if (nicheKey === 'familia') {
+      return [
+        {
+          quote: `${lawyerShortName} conduziu meu divórcio e partilha com absoluta sensibilidade e discrição. O acordo foi homologado com rapidez e sem desgastes emocionais.`,
+          name: 'Patrícia Alencar',
+          city: regionLocation
+        },
+        {
+          quote: 'Excelente suporte na regularização de inventário e partilha de bens. Comunicação direta, humana e muito segura em todas as reuniões.',
+          name: 'Marcos Vinícius',
+          city: regionLocation
+        },
+        {
+          quote: `A condução do processo de guarda e pensão por ${lawyerShortName} assegurou a melhor proteção aos meus filhos. Gratidão pelo trabalho impecável.`,
+          name: 'Fernanda Rocha',
+          city: regionLocation
+        }
+      ];
+    }
+
+    // Modelo Geral
+    return [
+      {
+        quote: `${lawyerShortName} e sua equipe conduziram minha demanda com extrema rapidez e profissionalismo. Fui acolhido com clareza técnica e transparência absoluta.`,
+        name: 'Carlos Eduardo M.',
+        city: regionLocation
+      },
+      {
+        quote: 'Excelente atendimento estratégico. Informações claras sobre cada andamento pelo WhatsApp com total segurança jurídica e honestidade.',
+        name: 'Mariana Siqueira',
+        city: regionLocation
+      },
+      {
+        quote: `A seriedade e a dedicação de ${lawyerShortName} me deram total tranquilidade durante todo o processo. Recomendo a todos que buscam advocacia de alto nível.`,
+        name: 'Roberto Tavares',
+        city: regionLocation
+      }
+    ];
+  }, [lawyerShortName, regionLocation, nicheInfo]);
 
   return (
     <section id="depoimentos" className="bg-white py-20 sm:py-24 text-slate-800 border-t border-slate-100">

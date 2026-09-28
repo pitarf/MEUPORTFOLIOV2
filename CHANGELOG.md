@@ -2,6 +2,41 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.22.0] - 2026-09-28
+
+### Corrigido (Auditoria com Subagentes & Sincronização Exata de Nomes, Endereços e Google Maps)
+- **Construção Unificada de URL no Google Maps (`buildGoogleMapsUrl` em `googleMapsProspectService.js`)**:
+  - Eliminado o problema de o Google Maps abrir advogados homônimos ou cair em locais genéricos distantes do endereço do card. A nova função unifica Nome Oficial + Logradouro Comercial + Cidade/UF sob a API padronizada do Google Maps (`api=1&query=...`), cravando a localização no ponto exato cadastrado.
+  - Aplicado a 100% dos links: botão "📍 Maps", link do nome do advogado, badge de avaliação, endereço físico, modal de proposta e cadastro manual de leads.
+- **Dinamização Geográfica e de Nicho nos Depoimentos (`LegalReviews.jsx`)**:
+  - Eliminadas referências fixas que citavam outro advogado ("Dr. Jorge Santos") e cidades fixas de Sergipe ("Aracaju - SE", "Lagarto - SE") para leads de outros estados.
+  - Os depoimentos agora adaptam dinamicamente o nome do advogado, a cidade real (`lawyer.city - lawyer.state`) e as histórias de sucesso ao nicho exato do escritório (Trabalhista, Consumidor, Família ou Geral).
+- **Endereço Clicável com Conexão Oficial ao Maps (`LegalTopBar.jsx` e `LegalFooter.jsx`)**:
+  - O endereço comercial na barra de utilidades e no rodapé agora é um link interativo que abre a rota exata no Google Maps.
+  - Adicionado suporte resiliente de exibição de telefone/WhatsApp caso o telefone fixo não esteja preenchido.
+- **Eliminação de Redundâncias de Nomes & Textos ("Advocacia Advocacia") (`LegalAbout.jsx`)**:
+  - Tratamento inteligente da expressão `Na {lawyer.name}`: se o nome já contiver "Advocacia", "Consultoria" ou "Associados", evita duplicar a palavra.
+  - Dinamização dos anos de experiência forense e indicação de atendimento presencial na comarca do cliente aliada ao atendimento online nacional.
+- **Sincronização de Especialidades por Nicho (`LegalPracticeAreas.jsx` e `LegalFooter.jsx`)**:
+  - Grade de especialidades consome diretamente `nicheInfo.practiceAreas`, adaptando os tópicos e subespecialidades à atuação real do lead.
+- **Sanitização de OAB**:
+  - Substituição da inscrição fictícia `OAB/UF 00.000` por `Inscrição Regular OAB/{UF}` contextualizada com o estado do advogado.
+
+## [1.21.0] - 2026-09-28
+
+### Adicionado (Personalização Dinâmica em Tempo Real da Landing Page por Advogado do Radar Google Maps)
+- **Injeção Dinâmica dos Dados do Lead na Landing Page (`LegalLandingPage.jsx`)**:
+  - Resolução automática em tempo real para qualquer advogado localizado pelo Radar Google Maps ou cadastrado no CRM através de `googleMapsProspectService.getBySlug(slug)`:
+    - **Nome do Escritório / Advogado**: Renderizado na barra de topo, logotipo da navbar, headline do Hero, seção institucional "Sobre Nós", formulário de diagnóstico/protocolo e rodapé corporativo.
+    - **Endereço Comercial**: Injetado na TopBar utilitária e no rodapé a partir do endereço real do Google Maps ou formato `{cidade} - {UF}`.
+    - **WhatsApp & Telefone**: Todos os botões de ação ("Agendar Consulta", "Fale no WhatsApp", WhatsApp Flutuante e botão de envio do diagnóstico) direcionam para a API do WhatsApp com o número real do advogado (`wa.me/55...`).
+    - **Instagram sob Demanda ("Se achar exibe, senão deixa em branco")**: Se o perfil do Instagram foi localizado no Google Maps/varredura, os ícones da barra superior e do rodapé direcionam para o perfil; caso contrário, o campo é mantido em branco (`''`) e os ícones são completamente omitidos, preservando a seriedade visual do escritório.
+    - **Fallback de Inferência Elegante**: Caso o link seja aberto em outro dispositivo ou aba anônima sem histórico local, o sistema infere os títulos a partir do próprio slug com segurança sem quebrar o layout.
+- **Sincronização de Slugs no Radar Google Maps (`RadarGoogleMaps.jsx`)**:
+  - O botão "Demo" de cada card no painel agora utiliza `generateLawyerSlug(lawyer)` de forma 100% idêntica ao link gerado no texto da proposta comercial enviada por WhatsApp.
+- **Validação de Produção**:
+  - Build do Vite executado com sucesso e rotas testadas com código de status HTTP 200.
+
 ## [1.20.0] - 2026-09-28
 
 ### Adicionado (Radar Google Maps de Prospecção de Advogados no Brasil & Disparo de Propostas de R$ 300)
