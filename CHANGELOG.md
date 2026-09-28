@@ -2,6 +2,32 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.20.0] - 2026-09-28
+
+### Adicionado (Radar Google Maps de Prospecção de Advogados no Brasil & Disparo de Propostas de R$ 300)
+- **Nova Página no Painel Administrativo (`RadarGoogleMaps.jsx` sob `/admin/radar-google-maps`)**:
+  - Módulo completo de busca de advogados e escritórios no Brasil com avaliações consideráveis (4.5★ a 5.0★) no Google Maps que não possuem website próprio.
+  - Indicadores executivos no topo: total de escritórios sem site mapeados, média de avaliação e projeção de receita imediata (R$ 300 por fechamento).
+  - Filtros inteligentes por Cidade/Município, Estado (UF), Especialidade (Geral, Trabalhista, Família, Consumidor) e Avaliação Mínima.
+  - Pílulas de capitais brasileiras para busca com 1 clique (São Paulo, Rio de Janeiro, Belo Horizonte, Curitiba, Salvador, Brasília, Aracaju, Goiânia, Porto Alegre, Fortaleza).
+  - Modal de inserção rápida para colar fichas encontradas diretamente no Google Maps.
+- **Serviço Especializado de Prospecção (`googleMapsProspectService.js`)**:
+  - Base curada de mais de 30 escritórios em capitais e polos regionais com nota alta e sem site oficial cadastrado.
+  - Integração com Gemini AI (`scanLawyersWithoutWebsite`) para varreduras dinâmicas em qualquer cidade do país com identificação de dores e pontos elogiados por clientes.
+  - Gerador automatizado de mensagens comerciais com proposta de **R$ 300 (implementação única) + anuidade do domínio próprio (Registro.br)**.
+  - 3 variações de texto: Padrão do Usuário (Direto & Amigável), Consultivo/Autoridade e Curto para WhatsApp.
+  - Ações em 1 clique por card: "Enviar no WhatsApp" (abre conversa direta), "Copiar Mensagem", "Ver Demonstração" e "Salvar no CRM".
+  - **Links Diretos para o Google Maps**:
+    - Nome do advogado/escritório com link e ícone externo para a ficha oficial no Maps.
+    - Badge de avaliação com nota em estrelas clicável abrindo as avaliações no Google.
+    - Endereço físico com link direto para a localização no Google Maps.
+    - Novo botão dedicado "📍 Maps" na grade de ações rápidas de cada lead e atalho dentro do modal da proposta.
+- **Integração no Menu do Painel (`AdminLayout.jsx` e `src/App.jsx`)**:
+  - Adicionado novo item de menu "Radar Google Maps" com ícone de bússola (`Compass`).
+  - Adicionado botão de atalho direto no cabeçalho do gerenciador de prospecção (`ManageLegalProspects.jsx`).
+- **Validação de Build**:
+  - Executado build de produção com Vite validado com sucesso sem erros.
+
 ## [1.19.0] - 2026-09-26
 
 ### Aprimorado (Anonimização & Padronização de Contatos das Páginas Modelos de Advocacia)

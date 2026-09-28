@@ -3,6 +3,15 @@
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
 ## CONCLUÍDO (DONE)
+- [x] **Radar Google Maps de Prospecção & Disparo de Propostas de R$ 300 (`RadarGoogleMaps.jsx`, `googleMapsProspectService.js`, `AdminLayout.jsx`, `src/App.jsx`)**:
+  - Implementada nova página administrativa `/admin/radar-google-maps` no menu lateral do painel para busca de advogados e escritórios no Brasil com avaliações consideráveis (4.5★ a 5.0★) e sem website cadastrado.
+  - Indicadores em tempo real: total de escritórios sem site mapeados, nota média no Google e projeção de faturamento imediato (R$ 300 por fechamento).
+  - Filtros por Cidade, UF, Nicho e Avaliação Mínima, com atalhos para as principais capitais brasileiras.
+  - Gerador automatizado da proposta comercial de **R$ 300 (implementação única) + valor anual do domínio (Registro.br)** com 3 variações de copy (Padrão do Usuário Direto, Consultivo e Curto).
+  - Ações em 1 clique: envio direto no WhatsApp com mensagem preenchida, cópia da proposta, visualização da landing page demonstrativa e salvamento no CRM.
+  - Links diretos para a ficha do Google Maps integrados no nome do advogado, estrelas de avaliação, endereço físico, botão "📍 Maps" de cada card e no cabeçalho do modal.
+  - Modal para inserção manual rápida ou colagem de fichas do Google Maps.
+  - Build do Vite executado com sucesso e documentação atualizada.
 - [x] **Anonimização & Padronização de Contatos das Páginas Modelos (`legalTemplates.js`, `legalProspectService.js`, `LegalTopBar.jsx`, `LegalFooter.jsx`)**:
   - Todos os números de telefone, WhatsApp, contas de Instagram, e-mails e endereços físicos reais/regionais foram substituídos por dados genéricos de demonstração em todos os 4 nichos:
     - **Telefone / WhatsApp**: `(00) 90000-0000` / `5500900000000`

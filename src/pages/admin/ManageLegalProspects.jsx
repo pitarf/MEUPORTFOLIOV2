@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Scale,
   Plus,
@@ -13,7 +14,8 @@ import {
   UserCheck,
   MapPin,
   Briefcase,
-  Share2
+  Share2,
+  Compass
 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { legalProspectService } from '../../services/legalProspectService';
@@ -192,13 +194,23 @@ export default function ManageLegalProspects() {
           </p>
         </div>
 
-        <button
-          onClick={handleOpenCreate}
-          className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-semibold text-sm transition-all shadow-lg shadow-amber-500/20 hover:scale-[1.02]"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Novo Advogado Prospectado</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <Link
+            to="/admin/radar-google-maps"
+            className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm transition-all shadow-md shadow-blue-600/20 hover:scale-[1.02]"
+          >
+            <Compass className="w-4 h-4" />
+            <span>Radar Google Maps (R$ 300)</span>
+          </Link>
+
+          <button
+            onClick={handleOpenCreate}
+            className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-semibold text-sm transition-all shadow-lg shadow-amber-500/20 hover:scale-[1.02]"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Novo Advogado Manual</span>
+          </button>
+        </div>
       </div>
 
       {/* Modelos Base Prontos para Demonstração Rápida */}

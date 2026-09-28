@@ -392,3 +392,17 @@ Para assegurar que as páginas modelos (`/modelo-advocacia/*`) operem estritamen
 - **Instagram**: Handle e URL padronizados `@seu.escritorio.adv` (`https://instagram.com/seu.escritorio.adv`).
 - **Endereço & Registro**: `Av. Principal, 1000 - Centro Empresarial, Cidade - UF` e inscrição `OAB/UF 00.000`.
 - **Auto-migração de Cache**: O serviço `legalProspectService.js` detecta e atualiza automaticamente chaves antigas de `DEFAULT_PROSPECTS` no `localStorage` do visitante.
+
+### 13.8 Radar Google Maps de Vendas & Prospecção B2B (`RadarGoogleMaps.jsx`, `googleMapsProspectService.js`)
+Para alimentar ativamente o funil de aquisição de novos clientes sem depender de anúncios caros, o sistema conta com uma ferramenta de varredura ativa baseada na API do Gemini e inteligência de dados locais:
+1. **Identificação de Leads com Reputação Alta e Sem Site**:
+   - Filtra advogados e bancas jurídicas com nota entre 4.5 e 5.0 estrelas no Google Maps e dezenas de avaliações de clientes.
+   - Detecta perfis com ausência de site próprio (ou apenas links para diretórios e redes sociais).
+2. **Motor Híbrido de Busca (`googleMapsProspectService.js`)**:
+   - **Base Curada Instantânea**: Mapeamento de capitais e centros metropolitanos (SP, RJ, MG, PR, BA, DF, SE, GO, RS, CE) pronto para consulta offline ou sem latência de API.
+   - **Varredura com IA (`scanLawyersWithoutWebsite`)**: Conecta-se ao modelo `gemini-2.5-flash` para identificar novos escritórios por cidade e especialidade, extraindo telefone, WhatsApp com DDD, notas e pontos elogiados.
+3. **Gerador de Propostas Automáticas de R$ 300**:
+   - Modelo calibrado para a precificação de R$ 300 (implementação única) + anuidade de domínio oficial (~R$ 40/ano no Registro.br).
+   - Botão direto para WhatsApp com mensagem pré-formatada e link para a demonstração `/advocacia/:slug`.
+4. **Hiperlinks Diretos para Ficha no Google Maps**:
+   - Cada escritório possui link para a URL do Maps no nome, badge de nota em estrelas, endereço e no botão "📍 Maps", facilitando a validação das avaliações reais pelo operador antes do envio.

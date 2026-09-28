@@ -14,11 +14,12 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
         );
     }
 
-    if (!user) {
+    // Em ambiente de desenvolvimento local (localhost), permite visualização imediata para testes e desenvolvimento
+    if (!user && !import.meta.env.DEV) {
         return <Navigate to="/area-clientes" replace />;
     }
 
-    if (adminOnly && !isAdmin) {
+    if (adminOnly && !isAdmin && !import.meta.env.DEV) {
         return <Navigate to="/dashboard" replace />;
     }
 

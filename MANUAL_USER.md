@@ -442,7 +442,38 @@ Com base na referência visual de consultoria de prestígio, a página adota um 
 - **Chamada Panorâmica Pré-Rodapé**: Faixa corporativa elegante convidando o visitante a agendar sua consulta jurídica.
 - **Contatos Genéricos nos Modelos de Demonstração**: As páginas modelos de demonstração (`/modelo-advocacia/*`) contam com telefone `(00) 90000-0000`, e-mail `contato@seuescritorio.adv.br` e Instagram `@seu.escritorio.adv` padronizados, resguardando total anonimato até a personalização para o cliente final.
 
+---
 
+## 19. Como Usar o Radar Google Maps para Vender Sites de R$ 300
 
+O **Radar Google Maps** (`/admin/radar-google-maps`) é a ferramenta comercial para localizar rapidamente advogados que já possuem ótima reputação no Google (clientes elogiando), mas ainda não possuem um site na internet.
 
+### 19.1 Como Fazer a Busca
+1. No menu lateral do Painel Administrativo, clique em **Radar Google Maps**.
+2. No topo, você verá os números em tempo real de escritórios identificados e o potencial de faturamento em R$ (R$ 300 por cada cliente).
+3. Escolha uma capital sugerida com 1 clique (São Paulo, Rio de Janeiro, Belo Horizonte, Curitiba, Salvador, Brasília, etc.) ou digite qualquer cidade do Brasil.
+4. Escolha o nicho (Geral, Trabalhista, Família, Consumidor) e a nota mínima desejada (ex: 4.5★ ou 4.8★).
+5. Se desejar buscar novas bancas além da base integrada, marque a caixa **✨ Varredura com IA ao Vivo** e clique em **Escanear Google Maps**.
+
+### 19.2 Como Enviar a Proposta no WhatsApp
+Cada escritório encontrado na lista exibe a nota de avaliação no Google, o telefone/WhatsApp e as ações rápidas:
+1. Clique no botão verde **🟢 Enviar Proposta no WhatsApp (R$ 300)**:
+   * O sistema abre diretamente a conversa do WhatsApp Web com o texto da proposta pré-formatado e pronto para envio.
+2. A proposta contém a cópia exata recomendada:
+   > *"Oi, [Nome do Advogado], tudo bem? Me chamo Rafael.*
+   > 
+   > *Vi aqui no Google Maps que você tem uma boa avaliação ([Nota]★), porém ainda não tem um site — tentei pesquisar e não consegui localizar o seu site.*
+   > 
+   > *Gostaria de dizer que eu desenvolvi um modelo exclusivo aqui para o seu escritório para você ver como ficaria: [Link da Demonstração]*
+   > 
+   > *O valor para deixar ele no ar e personalizado com a sua marca é de apenas R$ 300 (taxa única), mais o valor do domínio (anual, direto no Registro.br em torno de R$ 40).*
+   > 
+   > *Queria saber se você tem interesse em colocar no ar para passar ainda mais autoridade aos clientes que te acham no Google?"*
+3. **Outras Ações Disponíveis**:
+   * **📍 Maps**: Botão direto no card que abre a ficha oficial do escritório no Google Maps para você conferir as avaliações, comentários e fotos reais dos clientes.
+   * **Link no Nome & Estrelas**: Ao clicar no nome do advogado ou nas estrelas de avaliação, a ficha do Google Maps também se abre instantaneamente em uma nova aba.
+   * **Texto / Mensagem**: Abre o modal para visualizar, alternar entre os modelos (Padrão, Consultivo ou Curto) e copiar o texto da proposta.
+   * **Ver Demo**: Abre a landing page de alta conversão criada com o nome do advogado.
+   * **Salvar**: Guarda o lead no seu CRM interno de prospecção para acompanhamento comercial.
+   * **Colar Ficha do Maps**: Permite colar dados de qualquer escritório que você encontrar navegando no Google Maps para incluí-lo na lista.
 

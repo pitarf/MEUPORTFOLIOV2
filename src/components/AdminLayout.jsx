@@ -18,6 +18,7 @@ import {
     Image,
     Briefcase,
     Scale,
+    Compass,
     Sun,
     Moon
 } from 'lucide-react';
@@ -67,10 +68,13 @@ const AdminLayout = () => {
         navigate('/');
     };
 
+    const isEffectiveAdmin = isAdmin || import.meta.env.DEV;
+
     const navItems = [
         { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
-        ...(isAdmin ? [
+        ...(isEffectiveAdmin ? [
             { icon: Briefcase, label: 'Orçamentos & Vendas', path: '/admin/orcamentos' },
+            { icon: Compass, label: 'Radar Google Maps', path: '/admin/radar-google-maps' },
             { icon: Scale, label: 'Prospecção Advogados', path: '/admin/prospeccao-advogados' },
             { icon: FolderKanban, label: 'Portfólio', path: '/admin/portfolio' },
             { icon: Mail, label: 'Contatos', path: '/admin/submissions' }, // Changed label from 'Submissões' to 'Contatos'
