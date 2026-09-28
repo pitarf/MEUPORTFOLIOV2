@@ -80,6 +80,11 @@ export const LEGAL_NICHES = {
         title: 'Direito do Consumidor Especializado',
         summary: 'Combate rigoroso a práticas abusivas cometidas por grandes corporações, concessionárias, bancos e companhias aéreas.',
         items: ['Remoção de negativação indevida (SPC/Serasa)', 'Golpes bancários e fraudes Pix', 'Problemas com voos e extravio de bagagem', 'Reajustes abusivos de planos de saúde']
+      },
+      {
+        title: 'Direito Empresarial & Contratos Societários',
+        summary: 'Assessoria jurídica estratégica para empresas, blindagem do patrimônio dos sócios, elaboração de acordos societários e mitigação de riscos contratuais.',
+        items: ['Acordos de sócios e reestruturação societária', 'Blindagem e planejamento patrimonial', 'Cobrança empresarial e recuperação de créditos', 'Compliance e consultoria preventiva']
       }
     ],
     methodology: [
@@ -213,6 +218,11 @@ export const LEGAL_NICHES = {
         title: 'Planos de Saúde & Medicamentos',
         summary: 'Ações ágeis com pedido de liminar para garantir tratamentos essenciais prescritos por médicos e suspender reajustes por faixa etária.',
         items: ['Cobertura de cirurgias e internações', 'Fornecimento de remédios de alto custo', 'Home care e tratamentos contínuos', 'Revisão de aumento abusivo de mensalidade']
+      },
+      {
+        title: 'Juros Abusivos & Revisão Contratual Bancária',
+        summary: 'Ações revisionais para expurgar tarifas ilegais, juros extorsivos em financiamentos de veículos, empréstimos consignados (RMC) e cláusulas abusivas.',
+        items: ['Recálculo pericial de contratos de financiamento', 'Eliminação da taxa de abertura de crédito (TAC) indevida', 'Repetição de indébito (devolução em dobro)', 'Suspensão de busca e apreensão de veículos']
       }
     ],
     methodology: [
@@ -338,6 +348,11 @@ export const LEGAL_NICHES = {
         title: 'Inventário, Testamentos & Sucessões',
         summary: 'Transmissão segura de patrimônio aos herdeiros, evitando bloqueios desnecessários e reduzindo o impacto tributário do ITCMD.',
         items: ['Inventário extrajudicial rápido em cartório', 'Inventário judicial e arrolamento de bens', 'Planejamento sucessório familiar', 'Elaboração e validação de testamentos']
+      },
+      {
+        title: 'União Estável, Pacto Antenupcial & Blindagem',
+        summary: 'Estruturação jurídica preventiva para formalização de união estável, escolha segura de regime de bens, contratos de namoro e proteção patrimonial da família.',
+        items: ['Escritura pública de união estável', 'Pacto antenupcial customizado', 'Planejamento de proteção patrimonial familiar', 'Alteração judicial de regime de bens']
       }
     ],
     methodology: [
@@ -463,6 +478,11 @@ export const LEGAL_NICHES = {
         title: 'Acidentes de Trabalho & Doenças Ocupacionais',
         summary: 'Proteção e reparação para colaboradores que sofreram lesões ou desenvolveram patologias físicas ou psicológicas em decorrência das funções exercidas.',
         items: ['Estabilidade provisória de 12 meses no emprego', 'Indenização por danos materiais (pensionamento vitalício)', 'Danos morais e estéticos decorrentes da lesão', 'Restabelecimento de benefício junto ao INSS']
+      },
+      {
+        title: 'Assédio Moral, Sexual & Metas Abusivas',
+        summary: 'Reparação jurídica rigorosa para trabalhadores submetidos a humilhações públicas, cobranças desmedidas de metas, isolamento, constrangimentos ou retaliações.',
+        items: ['Indenização por danos morais na Justiça do Trabalho', 'Rescisão indireta por quebra da dignidade humana', 'Proteção e reparação da integridade psicológica', 'Salvaguarda contra perseguição no ambiente de trabalho']
       }
     ],
     methodology: [

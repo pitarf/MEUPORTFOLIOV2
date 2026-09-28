@@ -381,7 +381,7 @@ O sistema disponibiliza 4 templates completos e calibrados:
 - **Navbar Branca de Alto Contraste (`LegalNavbar.jsx`)**: Fundo branco puro com borda inferior sutil, tipografia executiva e botão de agendamento em Dark Navy.
 - **Hero Executivo com Retrato na Mesa (`LegalHero.jsx`)**: Composição fotográfica hiper-realista com o advogado sentado em sua mesa de escritório, laptop e arquivos de processos, contrastando com o fundo azul-marinho profundo (`#0A192F`) e tipografia serif imponente.
 - **Barra de Pilares de Confiança (`LegalTrustBar.jsx`)**: 4 blocos de credibilidade (Padrão Ético, Advocacia Independente, Estratégias Comprovadas e Sigilo LGPD) em fundo off-white (`#F8F9FA`).
-- **Cards de Especialidades Forenses (`LegalPracticeAreas.jsx`)**: 5 cards brancos verticais com ícones finos em ouro e links diretos "Saiba Mais".
+- **Cards de Especialidades Forenses (`LegalPracticeAreas.jsx`)**: 5 cards brancos verticais organizados em grade simétrica ultra-elegante (3 cards na linha superior e 2 cards centralizados na linha inferior com `max-w-4xl mx-auto`), com ícones finos em ouro e links diretos para o WhatsApp sobre a matéria.
 - **Sobre o Escritório em Split de 3 Partes (`LegalAbout.jsx`)**: Fotografia de consultoria com clientes (`/images/legal/reuniao.jpg`) + checklist de garantias + 4 métricas verticais de autoridade.
 - **Rito Processual Conectado (`LegalMethodology.jsx`)**: Linha do tempo em 4 etapas conectadas por círculos escuros com badges numéricas douradas.
 - **Depoimentos de Clientes (`LegalReviews.jsx`)**: 3 cards editoriais brancos com aspas douradas e classificação de 5 estrelas.
@@ -432,3 +432,12 @@ Para assegurar correspondência de 100% entre o que o operador visualiza nos car
    - Tanto a barra de utilidades superior (`LegalTopBar.jsx`) quanto o rodapé (`LegalFooter.jsx`) contam com o endereço como link interativo direto para a localização no Google Maps.
 4. **Resiliência de Canais de Contato**:
    - Caso um lead possua apenas WhatsApp, os componentes de topo e rodapé formatam e exibem automaticamente o contato sem suprimir o canal telefônico.
+
+### 13.11 Matriz de 5 Especialidades Forenses e Balanceamento Visual 3 + 2 (`LegalPracticeAreas.jsx`, `legalTemplates.js`)
+Para conferir solidez e simetria matemática à vitrine de serviços jurídicos:
+1. **Composição em Todos os 4 Nichos**: Cada nicho (`trabalhista`, `consumidor`, `familia`, `geral`) conta com rigorosamente 5 especialidades documentadas com título técnico, resumo executivo e 4 tópicos aprofundados.
+2. **Divisão Estrutural da Grade**:
+   - `topAreas = areas.slice(0, 3)`: Renderizada em `grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8`.
+   - `bottomAreas = areas.slice(3)`: Renderizada em `max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 mt-8`.
+3. **Harmonia de Espaçamento**: Previne o desequilíbrio causado por layouts de 4 cards (onde a linha inferior continha apenas 1 card deslocado para a esquerda). A disposição 3 + 2 garante centralização óptica impecável em telas desktop e fluidez total em dispositivos móveis.
+

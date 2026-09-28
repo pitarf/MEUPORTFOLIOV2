@@ -3,6 +3,15 @@
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
 ## CONCLUÍDO (DONE)
+- [x] **5ª Especialidade Jurídica & Grade Simétrica Balanceada 3 + 2 (`legalTemplates.js`, `LegalPracticeAreas.jsx`)**:
+  - Eliminado o desbalanceamento estético da seção de especialidades (onde 4 cards deixavam 1 card isolado e 2 espaços vazios na linha inferior).
+  - Adicionada a 5ª área de atuação estratégica com títulos, resumos e 4 subitens em todos os 4 nichos jurídicos:
+    - *Trabalhista*: Assédio Moral, Sexual & Metas Abusivas.
+    - *Consumidor*: Juros Abusivos & Revisão Contratual Bancária.
+    - *Família*: União Estável, Pacto Antenupcial & Blindagem.
+    - *Geral*: Direito Empresarial & Contratos Societários.
+  - Grade visual perfeitamente equilibrada no estilo Summit Financial Partners: 3 cards respirados na linha superior (`grid-cols-1 md:grid-cols-2 lg:grid-cols-3`) e 2 cards centralizados na linha inferior (`max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2`).
+  - Build do Vite executado e 100% aprovado.
 - [x] **Auditoria com Subagentes & Sincronização Exata de Nomes e Endereços no Google Maps (`googleMapsProspectService.js`, `RadarGoogleMaps.jsx`, `LegalReviews.jsx`, `LegalAbout.jsx`, `LegalPracticeAreas.jsx`, `LegalTopBar.jsx`, `LegalFooter.jsx`)**:
   - Subagentes especializados auditaram minuciosamente as discrepâncias de nomes, endereços e links do Google Maps em todo o sistema.
   - Implementada função centralizadora `buildGoogleMapsUrl(lawyer)` unindo Nome + Endereço Detalhado + Cidade/UF com `api=1&query=`, garantindo que o Google Maps abra com precisão milimétrica no local exato do card.

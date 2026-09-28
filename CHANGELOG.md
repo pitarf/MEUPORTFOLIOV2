@@ -2,6 +2,20 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.23.0] - 2026-09-28
+
+### Adicionado & Melhorado (5ª Especialidade Jurídica & Grade Simétrica Balanceada 3 + 2)
+- **Adição da 5ª Especialidade Forense de Alto Impacto em Todos os Nichos (`src/data/legalTemplates.js`)**:
+  - **Trabalhista (`trabalhista`)**: *"Assédio Moral, Sexual & Metas Abusivas"* (reparação por danos morais na Justiça do Trabalho, rescisão indireta, proteção psicológica e salvaguarda contra perseguição).
+  - **Consumidor (`consumidor`)**: *"Juros Abusivos & Revisão Contratual Bancária"* (expurgo de taxas ilegais, juros extorsivos, repetição do indébito/devolução em dobro e prevenção de busca e apreensão).
+  - **Família (`familia`)**: *"União Estável, Pacto Antenupcial & Blindagem"* (escritura pública de união estável, pacto antenupcial customizado, planejamento patrimonial preventivo e alteração de regime de bens).
+  - **Geral (`geral`)**: *"Direito Empresarial & Contratos Societários"* (acordo de sócios, blindagem patrimonial, recuperação de créditos e compliance preventivo).
+- **Equilíbrio Visual e Harmonia Simétrica (`LegalPracticeAreas.jsx`)**:
+  - Superado o layout anterior de 4 cards (onde 1 card ficava isolado na linha de baixo, gerando 2 espaços vazios).
+  - A seção agora exibe uma composição harmoniosa de **3 cards no topo** (`grid-cols-1 md:grid-cols-2 lg:grid-cols-3`) e **2 cards na base perfeitamente centralizados** (`max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2`), seguindo com rigor a referência visual de consultoria de prestígio (Summit Financial Partners).
+- **Validação Completa**:
+  - Build de produção verificado com sucesso sem alertas ou erros de compilação.
+
 ## [1.22.0] - 2026-09-28
 
 ### Corrigido (Auditoria com Subagentes & Sincronização Exata de Nomes, Endereços e Google Maps)

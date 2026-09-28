@@ -435,7 +435,7 @@ Com base na referência visual de consultoria de prestígio, a página adota um 
 - **Navbar Branca Executiva**: Menu claro com logo dourada e botão de ação direta.
 - **Hero em Azul-Marinho Profundo**: Retrato de alta resolução do advogado em sua mesa de atendimento, acompanhado de chamada estratégica e botões de ação.
 - **Pilares de Confiança Imediata**: 4 cartões com garantias éticas da OAB e privacidade LGPD.
-- **Grade com Especialidades**: Cards brancos limpos com ícones finos em ouro e link "Saiba Mais".
+- **Grade com 5 Especialidades Simétricas**: 5 cards brancos verticais elegantes com ícones finos em ouro distribuídos harmoniosamente em 3 cards no topo e 2 centralizados na linha de baixo (evitando espaços vazios e garantindo simetria perfeita).
 - **Sobre o Escritório com Reunião Real**: Fotografia de consultoria com clientes em sala de reuniões, checklist com diferenciais e métricas de autoridade em grade 2x2.
 - **Processo em Passos Conectados**: Círculos numerados que guiam o cliente do diagnóstico ao monitoramento.
 - **Depoimentos com 5 Estrelas**: Prova social de assistidos reais com classificação máxima.
