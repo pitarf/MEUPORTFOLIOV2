@@ -2,6 +2,18 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.26.2] - 2026-09-30
+
+### Corrigido (Import Faltante de MessageCircle em LegalAbout.jsx & Varredura AST com Babel)
+- **Correção da Tela Branca na Landing Page (`LegalAbout.jsx`)**:
+  - Identificado erro em tempo de execução: `ReferenceError: MessageCircle is not defined`.
+  - O ícone `MessageCircle` era utilizado no botão CTA de WhatsApp do Sobre Nós, mas não constava na instrução de importação de `lucide-react`.
+  - Adicionado `MessageCircle` ao import de `LegalAbout.jsx`.
+- **Auditoria Preventiva de AST via Babel**:
+  - Executado analisador sintático sobre todos os arquivos `.jsx` de `components/legal` e `pages/legal`, confirmando que 100% dos componentes e ícones estão devidamente declarados e importados.
+- **Validação de Build**:
+  - `npm run build` testado e aprovado com código 0 (`index-72defcd5.js`).
+
 ## [1.26.1] - 2026-09-30
 
 ### Corrigido & Otimizado (Correção de Roteamento SPA na Vercel & URLs de Demonstração Portáteis)

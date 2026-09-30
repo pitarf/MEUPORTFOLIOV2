@@ -3,6 +3,9 @@
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
 ## CONCLUÍDO (DONE)
+- [x] **Correção do Import de MessageCircle em LegalAbout.jsx & Auditoria AST (`LegalAbout.jsx`)**:
+  - Solucionado o `ReferenceError: MessageCircle is not defined` que causava tela branca na página de demonstração jurídica.
+  - Auditoria completa via Babel AST executada em todos os arquivos de `src/components/legal` e `src/pages/legal`, atestando 0 erros ou componentes indefinidos.
 - [x] **Correção de Roteamento SPA na Vercel & URLs de Demonstração Portáteis (`vercel.json`, `LegalLandingPage.jsx`, `googleMapsProspectService.js`, `api/places-search.js`)**:
   - Ajustado rewrite do `vercel.json` removendo lookahead incompatível que gerava 404 ao carregar rotas internas da Vercel.
   - Implementada geração portátil de URL de demonstração (`buildDemoUrl`) com parâmetros na query string.

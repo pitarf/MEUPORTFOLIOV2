@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle2, Award, Users, Scale, Star, ArrowRight } from 'lucide-react';
+import { CheckCircle2, Award, Users, Scale, Star, ArrowRight, MessageCircle } from 'lucide-react';
 
 /**
  * Seção "Sobre Nós" no Estilo Exato da Summit Financial (Imagem de Referência)
