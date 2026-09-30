@@ -494,6 +494,23 @@ Para conferir a atmosfera de uma boutique jurídica acolhedora, sofisticada e de
 3. **Mídias Dedicadas de Alta Definição**:
    - Inseridas imagens em alta resolução geradas sob medida: `advogada_hero.jpg` (advogada brasileira contemporânea em mesa executiva com vista panorâmica) e `advogada_sobre.jpg` (sala de reuniões acolhedora em atendimento com cliente).
 
+### 13.18 Rota Curta /adv/:slug, Nuvem Supabase de 5 Dias & Smart Slug Parsing
+Para eliminar links longos e assustadores no WhatsApp e assegurar máxima taxa de abertura e conversão:
+1. **Rota Curta Oficial (`/adv/:slug`)**:
+   - Criada no `App.jsx` a rota direta `/adv/:slug`, reduzindo o link de 280 caracteres para apenas 45 caracteres (ex: `https://rafaelpitaoficial.com.br/adv/roseli-hanna`).
+   - Removido o prefixo `www.` e eliminada a query string que expunha endereços postais com caracteres de escape URL (`%C3%B4`, `%2C`).
+2. **Persistência de Demonstrações na Nuvem (Supabase VPS)**:
+   - Os dados da proposta são sincronizados automaticamente na tabela `budgets` com `scope_description: 'demonstracao_legal'`, `budget_code: slug`, `deadline_days: 5` e os dados completos em `ai_scope_analysis`.
+   - Permite que qualquer celular ou computador de terceiro carregue a demonstração oficial e personalizada em tempo real diretamente da nuvem.
+3. **Smart Slug Parsing de Contingência**:
+   - Caso a nuvem esteja inacessível ou o link seja aberto offline, a `LegalLandingPage.jsx` analisa o próprio slug (ex: `roseli-hanna`), formata o nome "Roseli Hanna", detecta o gênero feminino e carrega a paleta Dra. Roseli e fotos femininas de forma autônoma.
+4. **Painel de Demonstrações & Opção de Excluir Possível Cliente (`RadarGoogleMaps.jsx`)**:
+   - Exibe a lista das demonstrações ativas na nuvem com contador de dias restantes (validade de 5 dias corridos).
+   - Botão vermelho de lixeira com confirmação para excluir o registro da nuvem com 1 clique.
+5. **Atualização da Taxa de Domínio (R$ 60 ao ano) e Quebra de Objeção Comercial**:
+   - Ajustada a cópia comercial para a média nacional de R$ 60 ao ano.
+   - Incluído aviso explícito nas mensagens informando que fotos reais, textos e áreas de atuação são 100% personalizáveis.
+
 
 
 

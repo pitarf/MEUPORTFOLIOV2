@@ -2,6 +2,25 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.26.6] - 2026-09-30
+
+### Adicionado & Aprimorado (Links Curtos /adv/:slug, Nuvem Supabase de 5 Dias, Exclusão de Leads e Domínio a R$ 60)
+- **Rota Curta Oficial e Smart Slug Parsing (`/adv/:slug`)**:
+  - Implementada a rota enxuta `/adv/:slug` no `App.jsx`, reduzindo drasticamente o link de 280 caracteres para apenas 45 caracteres (ex: `https://rafaelpitaoficial.com.br/adv/roseli-hanna`).
+  - Removido o prefixo `www.` e eliminada a query string pesada de endereço postal com caracteres de escape (`%C3%B4`, `%2C`).
+  - A landing page (`LegalLandingPage.jsx`) agora possui Smart Slug Parsing, extraindo o nome do cliente e detectando o gênero feminino e a paleta vinho/champagne mesmo se aberta em dispositivos sem cache.
+- **Armazenamento de Demonstrações na Nuvem (Validade de 5 Dias)**:
+  - Integração nativa com a VPS Supabase (`budgets`) para sincronizar os dados completos do prospect na nuvem com prazo de validade de 5 dias corridos.
+  - O link limpo funciona em qualquer celular ou navegador sem depender do dispositivo do operador.
+- **Gestão no Painel & Opção de Excluir Possível Cliente (`RadarGoogleMaps.jsx`)**:
+  - Nova seção dedicada no Radar com contador de demonstrações ativas, visualização do link curto gerado, indicador de dias restantes e botão vermelho de lixeira para excluir o possível cliente da nuvem com 1 clique.
+- **Ajuste da Anuidade do Domínio (R$ 60 ao ano)**:
+  - Atualizadas todas as mensagens de proposta no WhatsApp e os cards do painel administrativo de R$ 40 para a média nacional de R$ 60 ao ano.
+- **Quebra de Objeção Comercial (Flexibilidade Total de Fotos e Textos)**:
+  - Todas as copys de abordagem no WhatsApp agora esclarecem explicitamente que textos, áreas de atuação e fotos são 100% personalizáveis com as fotos reais e biografia do advogado.
+- **Conformidade de Estilo**:
+  - Regra de formatação aplicada estritamente, com zero ocorrências de travessão em todas as mensagens e código.
+
 ## [1.26.5] - 2026-09-30
 
 ### Aprimorado (Redesenho Delicado, Tipografia Playfair Display & Substituição Integral de Fotos por Advogadas)

@@ -26,8 +26,20 @@ import LegalFloatingWhatsApp from '../../components/legal/LegalFloatingWhatsApp'
 export default function LegalLandingPage() {
   const { slug, niche } = useParams();
   const [searchParams] = useSearchParams();
+  const [cloudData, setCloudData] = React.useState(null);
 
-  // Determina se é por prospect cadastrado, parâmetros portáteis da URL ou por nicho direto
+  // Busca demonstração salva na nuvem pelo slug caso o visitante abra em dispositivo externo
+  useEffect(() => {
+    if (slug && !LEGAL_NICHES[slug]) {
+      googleMapsProspectService.getCloudDemo(slug).then((res) => {
+        if (res) {
+          setCloudData(res);
+        }
+      });
+    }
+  }, [slug]);
+
+  // Determina se é por prospect cadastrado, nuvem Supabase, parâmetros portáteis ou por nicho direto
   const { lawyerData, nicheInfo, heroImage } = useMemo(() => {
     // 1. Caso seja rota de nicho direto (ex: /modelo-advocacia/trabalhista)
     if (niche && LEGAL_NICHES[niche]) {
@@ -39,7 +51,37 @@ export default function LegalLandingPage() {
       };
     }
 
-    // 2. Prioridade 1: Dados passados via query string (Permite que a demo funcione no celular do cliente via WhatsApp)
+    // 2. Prioridade 1: Dados recuperados da nuvem (Supabase VPS)
+    if (cloudData) {
+      const targetNiche = cloudData.niche || 'geral';
+      const info = LEGAL_NICHES[targetNiche] || LEGAL_NICHES.geral;
+      const cleanPhone = (cloudData.whatsapp || cloudData.phone || '').toString().replace(/\D/g, '');
+      const rawAddress = cloudData.address || (cloudData.city ? `${cloudData.city} - ${cloudData.state || 'SP'}` : info.defaultLawyer.address);
+
+      return {
+        lawyerData: {
+          name: cloudData.name || cloudData.lawyer_name || info.defaultLawyer.name,
+          oab: cloudData.state ? `Inscrição Regular OAB/${cloudData.state}` : 'Inscrição Regular OAB',
+          role: info.badge,
+          city: cloudData.city || info.defaultLawyer.city,
+          state: cloudData.state || info.defaultLawyer.state,
+          address: rawAddress,
+          phone: cloudData.phone || info.defaultLawyer.phone,
+          whatsapp: cleanPhone || info.defaultLawyer.whatsapp,
+          email: cloudData.email || '',
+          instagram: cloudData.instagram || '',
+          experienceYears: info.defaultLawyer.experienceYears,
+          google_maps_url: cloudData.google_maps_url || '',
+          rating: Number(cloudData.rating || 5.0),
+          reviews_count: Number(cloudData.reviews_count || 48),
+          isExpired: cloudData.isExpired
+        },
+        nicheInfo: info,
+        heroImage: cloudData.custom_hero_url || info.heroImage
+      };
+    }
+
+    // 3. Prioridade 2: Dados passados via query string (Permite que a demo funcione via parâmetros curtos)
     const paramNome = searchParams.get('nome') || searchParams.get('name') || searchParams.get('n');
     const paramTel = searchParams.get('tel') || searchParams.get('whatsapp') || searchParams.get('w');
     const paramCidade = searchParams.get('cidade') || searchParams.get('city') || searchParams.get('c');
@@ -91,10 +133,8 @@ export default function LegalLandingPage() {
       };
     }
 
-
-    // 2. Caso seja por slug de prospect (ex: /advocacia/dr-jorge-santos-aracaju)
+    // 4. Prioridade 3: Caso seja por slug de prospect local ou Smart Slug Parsing
     if (slug) {
-      // Se o slug for o próprio nome do nicho
       if (LEGAL_NICHES[slug]) {
         const info = LEGAL_NICHES[slug];
         return {
@@ -104,7 +144,7 @@ export default function LegalLandingPage() {
         };
       }
 
-      // Procura prospect cadastrado no CRM ou no Radar do Google Maps
+      // Procura prospect cadastrado no CRM local ou no Radar
       const prospect = legalProspectService.getBySlug(slug) || googleMapsProspectService.getBySlug(slug);
       if (prospect) {
         const targetNiche = prospect.niche || 'geral';
@@ -114,10 +154,8 @@ export default function LegalLandingPage() {
         const rawAddress = prospect.address || (prospect.city && prospect.state ? `${prospect.city} - ${prospect.state}` : info.defaultLawyer.address);
         const rawPhone = prospect.phone || prospect.whatsapp || info.defaultLawyer.phone;
         const rawWhatsapp = (prospect.whatsapp || prospect.phone || '').toString().replace(/\D/g, '') || info.defaultLawyer.whatsapp;
-        // Se foi encontrado o Instagram, formata; se não foi encontrado, deixa em branco ('') para ocultar os ícones
         const rawInstagram = prospect.instagram && prospect.instagram.trim() !== '' ? prospect.instagram.trim() : '';
 
-        // Sanitização de OAB para nunca exibir "00.000" fictício quando o lead vem do Google Maps
         const rawOab = prospect.oab_number || prospect.oab || (prospect.state ? `Inscrição Regular OAB/${prospect.state}` : 'Inscrição Regular OAB');
         const mapsUrl = buildGoogleMapsUrl(prospect);
 
@@ -142,6 +180,37 @@ export default function LegalLandingPage() {
           heroImage: prospect.custom_hero_url || info.heroImage
         };
       }
+
+      // Smart Slug Parsing de Fallback (Extrai nome formatado diretamente da URL limpa)
+      const parsedName = slug
+        .split('-')
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+        .join(' ');
+
+      const info = LEGAL_NICHES.geral;
+      const shortCity = paramCidade || info.defaultLawyer.city;
+      const shortUf = paramUf || info.defaultLawyer.state;
+
+      return {
+        lawyerData: {
+          name: parsedName,
+          oab: shortUf ? `Inscrição Regular OAB/${shortUf}` : 'Inscrição Regular OAB',
+          role: info.badge,
+          city: shortCity,
+          state: shortUf,
+          address: `${shortCity} - ${shortUf}`,
+          phone: paramTel || info.defaultLawyer.phone,
+          whatsapp: paramTel ? paramTel.replace(/\D/g, '') : info.defaultLawyer.whatsapp,
+          email: '',
+          instagram: '',
+          experienceYears: info.defaultLawyer.experienceYears,
+          google_maps_url: '',
+          rating: 5.0,
+          reviews_count: 48
+        },
+        nicheInfo: info,
+        heroImage: info.heroImage
+      };
     }
 
     // Fallback padrão: Modelo Geral
@@ -151,7 +220,7 @@ export default function LegalLandingPage() {
       nicheInfo: defaultInfo,
       heroImage: defaultInfo.heroImage
     };
-  }, [slug, niche]);
+  }, [slug, niche, cloudData, searchParams]);
 
   // Detecção automática de gênero (Dra. / Vinho Nobre vs Dr. / Navy Clássico)
   const gender = lawyerData.gender || detectLawyerGender(lawyerData.name);

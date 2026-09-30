@@ -526,3 +526,19 @@ Agora o sistema identifica automaticamente se o profissional prospectado é uma 
    * Os títulos da página agora utilizam a fonte nobre e suave **Playfair Display**, trazendo charme, leveza e alta classe.
    * A fotografia principal e a imagem de reunião foram substituídas por fotos exclusivas em alta definição de uma advogada em seu escritório boutique e em atendimento acolhedor com clientes.
    * Os botões de WhatsApp ganharam acabamento acetinado em degradê ouro champanhe com formato em pílula delicada (`rounded-full`), harmonizando 100% com o padrão visual de luxo.
+
+### 19.8 Links Curtos /adv/:slug, Demonstrações na Nuvem por 5 Dias & Exclusão de Possível Cliente
+Para passar máxima confiança pelo WhatsApp sem assustar o cliente com links quilométricos:
+1. **Link Curto e Limpo de Demonstração**:
+   * O link enviado na mensagem agora tem apenas ~45 caracteres: `https://rafaelpitaoficial.com.br/adv/roseli-hanna`.
+   * Foram removidos endereços compridos, códigos de escape (`%C3%B4`, `%2C`) e o `www.`, deixando o link enxuto, atraente e confiável.
+2. **Armazenamento Automático na Nuvem com Validade de 5 Dias**:
+   * Ao clicar em "Copiar Proposta" ou "Enviar Proposta no WhatsApp", o sistema salva os dados do lead diretamente no banco de dados na nuvem com prazo de validade de 5 dias corridos.
+   * Quando o advogado abre o link no celular dele, a página busca os dados oficiais da nuvem em tempo real.
+3. **Quebra de Objeção Comercial (Personalização Total)**:
+   * A mensagem de WhatsApp agora deixa claro que todos os textos, fotos reais e áreas de atuação podem ser 100% alterados para incluir as fotos e a biografia do advogado.
+4. **Gerenciamento e Opção de Excluir Possível Cliente**:
+   * No topo do Radar Google Maps, há o quadro "Demonstrações Ativas na Nuvem" mostrando quantas propostas estão no ar e quantos dias restam para expirar.
+   * Você pode clicar no botão vermelho com ícone de lixeira para **Excluir Possível Cliente** e remover os dados do banco imediatamente com 1 toque.
+5. **Atualização da Taxa de Domínio (Média Nacional de R$ 60 ao ano)**:
+   * As propostas agora informam com precisão a taxa anual de domínio próprio em média R$ 60 ao ano.

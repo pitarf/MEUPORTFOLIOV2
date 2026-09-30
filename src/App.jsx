@@ -95,6 +95,7 @@ function App() {
                             {/* Rotas Especiais de Demonstração & Landing Pages de Advocacia (Layout Dedicado Próprio) */}
                             <Route path="/advocacia" element={<LegalLandingPage />} />
                             <Route path="/advocacia/:slug" element={<LegalLandingPage />} />
+                            <Route path="/adv/:slug" element={<LegalLandingPage />} />
                             <Route path="/modelo-advocacia/:niche" element={<LegalLandingPage />} />
                             
                             {/* Acesso Direto ao Radar Google Maps de Prospecção */}

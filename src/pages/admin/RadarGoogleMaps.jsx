@@ -20,7 +20,8 @@ import {
   Send,
   Building,
   PhoneCall,
-  Trash2
+  Trash2,
+  Clock
 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
@@ -135,19 +136,67 @@ export default function RadarGoogleMaps() {
     handleSearch(cityObj.name, cityObj.uf);
   };
 
-  // Copiar proposta
-  const handleCopyProposal = (lawyer, variant = 'direto') => {
+  // Estados de demonstrações ativas salvas na nuvem (Supabase VPS)
+  const [cloudDemos, setCloudDemos] = useState([]);
+  const [loadingCloudDemos, setLoadingCloudDemos] = useState(false);
+
+  // Carrega demonstrações ativas da nuvem
+  const loadCloudDemos = async () => {
+    setLoadingCloudDemos(true);
+    try {
+      const list = await googleMapsProspectService.listCloudDemos();
+      setCloudDemos(list);
+    } catch (e) {
+      console.warn('Erro ao carregar demos da nuvem:', e);
+    } finally {
+      setLoadingCloudDemos(false);
+    }
+  };
+
+  useEffect(() => {
+    loadCloudDemos();
+  }, []);
+
+  // Excluir possível cliente da nuvem com 1 clique
+  const handleDeleteCloudDemo = async (id, name) => {
+    const ok = window.confirm(`Deseja realmente excluir a demonstração e o possível cliente "${name}" da nuvem?`);
+    if (!ok) return;
+
+    const success = await googleMapsProspectService.deleteCloudDemo(id);
+    if (success) {
+      toast({
+        title: 'Possível cliente excluído!',
+        description: `A demonstração de ${name} foi removida da nuvem com sucesso.`
+      });
+      loadCloudDemos();
+    } else {
+      toast({
+        variant: 'destructive',
+        title: 'Erro ao excluir',
+        description: 'Não foi possível remover da nuvem.'
+      });
+    }
+  };
+
+  // Copiar proposta e salvar na nuvem automaticamente por 5 dias
+  const handleCopyProposal = async (lawyer, variant = 'direto') => {
     const text = googleMapsProspectService.generateProposalMessage(lawyer, variant);
     navigator.clipboard.writeText(text);
     setCopiedId(lawyer.id);
+    
+    // Salva na nuvem para garantir que o link limpo funcione no celular do cliente
+    googleMapsProspectService.saveCloudDemo(lawyer).then(() => {
+      loadCloudDemos();
+    });
+
     toast({
       title: 'Proposta copiada com sucesso!',
-      description: 'Mensagem com o valor de R$ 300 + taxa de domínio pronta para envio.'
+      description: 'Mensagem com link curto e valor de R$ 300 + domínio pronta para envio.'
     });
     setTimeout(() => setCopiedId(null), 3000);
   };
 
-  // Abrir WhatsApp Web diretamente com a mensagem pronta
+  // Abrir WhatsApp Web diretamente com a mensagem pronta e salvar na nuvem
   const handleSendWhatsApp = (lawyer, variant = 'direto') => {
     const cleanNumber = (lawyer.whatsapp || lawyer.phone || '').replace(/\D/g, '');
     if (!cleanNumber || cleanNumber.length < 10) {
@@ -159,6 +208,11 @@ export default function RadarGoogleMaps() {
       return;
     }
 
+    // Salva na nuvem para garantir que a cliente abra a demo personalizada
+    googleMapsProspectService.saveCloudDemo(lawyer).then(() => {
+      loadCloudDemos();
+    });
+
     const fullNumber = cleanNumber.startsWith('55') ? cleanNumber : `55${cleanNumber}`;
     const message = googleMapsProspectService.generateProposalMessage(lawyer, variant);
     const encoded = encodeURIComponent(message);
@@ -169,6 +223,9 @@ export default function RadarGoogleMaps() {
   // Salvar no CRM interno (legalProspectService)
   const handleSaveToCrm = (lawyer) => {
     googleMapsProspectService.saveToCrm(lawyer);
+    googleMapsProspectService.saveCloudDemo(lawyer).then(() => {
+      loadCloudDemos();
+    });
     setSavedIds((prev) => new Set([...prev, lawyer.id]));
     toast({
       title: 'Advogado salvo no CRM de Prospecção!',
@@ -447,6 +504,118 @@ export default function RadarGoogleMaps() {
 
       </div>
 
+      {/* Seção de Demonstrações Ativas na Nuvem (Validade de 5 Dias) */}
+      {cloudDemos.length > 0 && (
+        <div className="bg-card border rounded-2xl p-6 shadow-sm space-y-4 border-amber-500/20 bg-amber-500/[0.02]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center font-bold">
+                  <Globe className="w-4 h-4" />
+                </div>
+                <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
+                  <span>Demonstrações Ativas na Nuvem</span>
+                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 font-mono font-semibold">
+                    {cloudDemos.length} ativas
+                  </span>
+                </h2>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Modelos exclusivos salvos com links curtos oficiais. Cada proposta permanece disponível por 5 dias corridos.
+              </p>
+            </div>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={loadCloudDemos}
+              disabled={loadingCloudDemos}
+              className="gap-1.5 text-xs self-start sm:self-auto"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${loadingCloudDemos ? 'animate-spin' : ''}`} />
+              <span>Atualizar Nuvem</span>
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {cloudDemos.map((demo) => {
+              const demoUrl = `https://rafaelpitaoficial.com.br/adv/${demo.slug}`;
+
+              return (
+                <div
+                  key={demo.id}
+                  className="p-4 rounded-xl border bg-background/80 hover:border-amber-500/40 transition-all flex flex-col justify-between space-y-3"
+                >
+                  <div className="space-y-1.5">
+                    <div className="flex items-start justify-between gap-2">
+                      <h3 className="text-sm font-bold text-foreground line-clamp-1">
+                        {demo.name}
+                      </h3>
+                      <span className={`text-[10px] font-mono px-2 py-0.5 rounded-md font-semibold flex items-center gap-1 ${
+                        demo.isExpired
+                          ? 'bg-muted text-muted-foreground border'
+                          : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
+                      }`}>
+                        <Clock className="w-3 h-3" />
+                        {demo.isExpired ? 'Expirada' : `${demo.daysLeft} dias restantes`}
+                      </span>
+                    </div>
+
+                    <p className="text-xs text-muted-foreground">
+                      {demo.city ? `${demo.city} - ${demo.state || 'SP'}` : 'Localização não informada'}
+                    </p>
+
+                    <div className="pt-1">
+                      <span className="text-[11px] font-mono text-primary bg-primary/5 px-2 py-1 rounded-md border border-primary/10 block truncate">
+                        {demoUrl}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-2 border-t">
+                    <a
+                      href={`/adv/${demo.slug}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium hover:bg-muted transition-colors text-foreground"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5 text-primary" />
+                      <span>Abrir Demo</span>
+                    </a>
+
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        navigator.clipboard.writeText(demoUrl);
+                        toast({
+                          title: 'Link copiado!',
+                          description: demoUrl
+                        });
+                      }}
+                      className="px-2.5 py-1.5 h-auto text-xs"
+                      title="Copiar Link Curto"
+                    >
+                      <Copy className="w-3.5 h-3.5" />
+                    </Button>
+
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleDeleteCloudDemo(demo.id, demo.name)}
+                      className="px-2.5 py-1.5 h-auto text-xs text-destructive hover:bg-destructive hover:text-destructive-foreground border-destructive/20"
+                      title="Excluir Possível Cliente da Nuvem"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </Button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Grade de Resultados com Cards dos Advogados */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
@@ -458,7 +627,7 @@ export default function RadarGoogleMaps() {
           </h2>
 
           <span className="text-xs text-muted-foreground hidden sm:block">
-            Proposta padronizada: <strong>R$ 300</strong> implementação + domínio anual
+            Proposta padronizada: <strong>R$ 300</strong> implementação + domínio anual (~R$ 60/ano)
           </span>
         </div>
 
@@ -629,7 +798,10 @@ export default function RadarGoogleMaps() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setSelectedLawyerForProposal(lawyer)}
+                      onClick={() => {
+                        setSelectedLawyerForProposal(lawyer);
+                        googleMapsProspectService.saveCloudDemo(lawyer).then(() => loadCloudDemos());
+                      }}
                       className="text-[11px] px-1.5 h-8 gap-1"
                       title="Ver e personalizar o texto da proposta"
                     >
@@ -788,7 +960,7 @@ export default function RadarGoogleMaps() {
                 <strong className="text-foreground font-bold">R$ 300,00 (único)</strong>
               </div>
               <div className="text-muted-foreground text-[11px]">
-                + Domínio Anual (~R$ 40/ano)
+                + Domínio Anual (~R$ 60/ano)
               </div>
             </div>
 

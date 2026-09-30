@@ -6,29 +6,29 @@
 
 import { scanLawyersWithoutWebsite } from '../lib/gemini.js';
 import { legalProspectService } from './legalProspectService.js';
+import { supabase } from '@/lib/customSupabaseClient';
 
 /**
- * Gera um slug único e amigável para a URL da landing page de um advogado
+ * Gera um slug único, limpo e amigável para a URL da landing page de um advogado
+ * Remove termos redundantes como dr, dra, advogada para manter o link extremamente curto
  * @param {Object} lawyer 
  * @returns {string}
  */
 export const generateLawyerSlug = (lawyer) => {
-  const name = lawyer.lawyer_name || lawyer.name || 'advogado';
-  const slugBase = name
+  const rawName = lawyer.lawyer_name || lawyer.name || 'advogado';
+  // Remove títulos e palavras redundantes para manter o slug conciso e elegante
+  const cleanName = rawName
+    .replace(/\b(dr|dra|doutor|doutora|advogado|advogada|advocacia|escritorio|associados)\b/gi, '')
+    .trim() || rawName;
+
+  const slugBase = cleanName
     .toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)+/g, '');
 
-  const city = lawyer.city || '';
-  const citySlug = city
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9]+/g, '-');
-
-  return `${slugBase}${citySlug ? `-${citySlug}` : ''}`;
+  return slugBase || 'advocacia';
 };
 
 /**
@@ -60,33 +60,29 @@ export const buildGoogleMapsUrl = (lawyer) => {
 };
 
 /**
- * Constrói a URL de demonstração com parâmetros portáteis
- * Permite que a demo funcione perfeitamente no celular do cliente via WhatsApp
- * ou em abas anônimas sem depender de cache ou localStorage do operador
+ * Constrói a URL de demonstração curta e limpa oficial
+ * Utiliza o prefixo enxuto /adv/:slug sem poluição de query strings pesadas
  * @param {Object} lawyer 
  * @param {string} baseUrl
  * @returns {string}
  */
 export const buildDemoUrl = (lawyer, baseUrl = '') => {
-  if (!lawyer) return `${baseUrl}/advocacia`;
+  if (!lawyer) return 'https://rafaelpitaoficial.com.br/adv';
+  
+  let host = baseUrl;
+  if (!host && typeof window !== 'undefined') {
+    host = window.location.origin;
+  }
+  
+  // Se for o domínio do projeto, usa a versão canônica sem www para reduzir caracteres
+  if (host && host.includes('rafaelpitaoficial.com.br')) {
+    host = 'https://rafaelpitaoficial.com.br';
+  } else if (!host) {
+    host = 'https://rafaelpitaoficial.com.br';
+  }
+
   const slug = lawyer.slug || lawyer.landing_page_slug || generateLawyerSlug(lawyer);
-  const params = new URLSearchParams();
-
-  const name = lawyer.lawyer_name || lawyer.name;
-  if (name) params.set('nome', name);
-
-  const phone = (lawyer.whatsapp || lawyer.phone || '').toString().replace(/\D/g, '');
-  if (phone) params.set('tel', phone);
-
-  if (lawyer.city) params.set('cidade', lawyer.city);
-  if (lawyer.state) params.set('uf', lawyer.state);
-  if (lawyer.address) params.set('end', lawyer.address);
-  if (lawyer.niche && lawyer.niche !== 'todos') params.set('nicho', lawyer.niche);
-  if (lawyer.rating) params.set('nota', String(lawyer.rating));
-  if (lawyer.reviews_count) params.set('rev', String(lawyer.reviews_count));
-
-  const query = params.toString();
-  return `${baseUrl}/advocacia/${slug}${query ? `?${query}` : ''}`;
+  return `${host}/adv/${slug}`;
 };
 
 
@@ -342,6 +338,13 @@ export const googleMapsProspectService = {
    * @param {string} variant - 'direto', 'autoridade' ou 'curto'
    * @returns {string}
    */
+  /**
+   * Gera a mensagem de proposta comercial de R$ 300 + anuidade do domínio
+   * Sem uso de travessão, com menção à personalização completa de fotos e textos
+   * @param {Object} lawyer - Dados do advogado
+   * @param {string} variant - 'direto', 'autoridade' ou 'curto'
+   * @returns {string}
+   */
   generateProposalMessage: (lawyer, variant = 'direto') => {
     const name = lawyer.lawyer_name || lawyer.name || 'Doutor(a)';
     const rating = lawyer.rating ? `${Number(lawyer.rating).toFixed(1)}★` : '5.0★';
@@ -349,7 +352,7 @@ export const googleMapsProspectService = {
     const city = lawyer.city || 'sua região';
     const baseUrl = window.location.origin;
 
-    // Gerar URL portátil e padronizada da landing page de demonstração
+    // Gerar URL limpa e oficial da landing page de demonstração
     const previewUrl = buildDemoUrl(lawyer, baseUrl);
 
     if (variant === 'curto') {
@@ -357,10 +360,12 @@ export const googleMapsProspectService = {
 
 Vi seu perfil no Google Maps com ótima avaliação (${rating}${reviews}), porém notei que ainda não tem um site oficial cadastrado.
 
-Fiz um protótipo sob medida para você ver como ficaria:
+Fiz um modelo sob medida para você ver como ficaria:
 👉 ${previewUrl}
 
-Cobro apenas R$ 300 (taxa única de implementação) + o valor do domínio oficial anual (R$ 40/ano no Registro.br).
+(Lembrando que todos os textos, áreas de atuação e as fotos podem ser 100% alterados para colocar suas fotos reais e biografia. A ideia aqui é apenas ilustrar como o seu escritório pode se posicionar com alto padrão).
+
+Cobro apenas R$ 300 (taxa única de implementação), mais a anuidade do domínio próprio (em média R$ 60 ao ano).
 
 Se tiver interesse em colocar no ar com o seu nome essa semana, é só me dar um retorno por aqui!`;
     }
@@ -374,23 +379,209 @@ Muitos clientes em potencial procuram um site oficial para validar autoridade an
 
 👉 ${previewUrl}
 
-A implementação completa fica em apenas R$ 300 (pagamento único), mais a taxa anual do domínio próprio no Registro.br (cerca de R$ 40 ao ano).
+(Lembrando que fotos reais, biografia, textos e especialidades são 100% personalizáveis com a sua identidade oficial. A proposta é demonstrar visualmente o potencial de autoridade da sua banca).
+
+A implementação completa fica em apenas R$ 300 (pagamento único), mais a taxa anual do domínio próprio (em média R$ 60 ao ano).
 
 Teria interesse em subir essa página oficial para converter mais contatos que te encontram no Google Maps?`;
     }
 
-    // Padrão solicitado pelo usuário:
+    // Padrão solicitado:
     return `Oi, ${name}, tudo bem? Me chamo Rafael.
 
-Vi aqui no Google Maps que você tem uma boa avaliação (${rating}${reviews}), porém ainda não tem um site — tentei pesquisar e não consegui localizar o seu site.
+Vi aqui no Google Maps que você tem uma excelente avaliação (${rating}${reviews}), porém ainda não tem um site oficial conectado ao perfil.
 
-Gostaria de dizer que eu desenvolvi um modelo exclusivo aqui para o seu escritório para você ver como ficaria:
+Gostaria de dizer que desenvolvi um modelo exclusivo aqui para o seu escritório para você ver como ficaria:
 
 👉 ${previewUrl}
 
-O valor para deixar ele no ar e personalizado com a sua marca é de apenas R$ 300 (taxa única), mais o valor do domínio (anual, direto no Registro.br em torno de R$ 40).
+(Lembrando que todos os textos, áreas de atuação e as fotos podem ser 100% alterados para colocar suas fotos reais e biografia. A ideia aqui é apenas ilustrar como o seu escritório pode se posicionar com alto padrão).
+
+O valor para deixar ele no ar e personalizado com a sua marca é de apenas R$ 300 (taxa única), mais o valor do domínio (anual, em média R$ 60 ao ano).
 
 Queria saber se você tem interesse em colocar no ar para passar ainda mais autoridade aos clientes que te acham no Google?`;
+  },
+
+  /**
+   * Salva uma demonstração de cliente temporária na nuvem (Supabase VPS)
+   * Validade padrão de 5 dias corridos
+   * @param {Object} lawyer 
+   * @returns {Promise<Object>}
+   */
+  saveCloudDemo: async (lawyer) => {
+    try {
+      const slug = lawyer.slug || lawyer.landing_page_slug || generateLawyerSlug(lawyer);
+      const name = lawyer.lawyer_name || lawyer.name || 'Advogado(a)';
+      const phone = (lawyer.whatsapp || lawyer.phone || '').toString().replace(/\D/g, '');
+      const rawAddress = lawyer.address || (lawyer.city ? `${lawyer.city} - ${lawyer.state || 'SP'}` : '');
+      const now = new Date();
+      const expiresAt = new Date(now.getTime() + 5 * 24 * 60 * 60 * 1000).toISOString();
+
+      const payload = {
+        slug,
+        name,
+        lawyer_name: name,
+        city: lawyer.city || '',
+        state: lawyer.state || '',
+        address: rawAddress,
+        phone: lawyer.phone || '',
+        whatsapp: phone,
+        rating: Number(lawyer.rating || 5.0),
+        reviews_count: Number(lawyer.reviews_count || 48),
+        niche: lawyer.niche || 'geral',
+        instagram: lawyer.instagram || '',
+        google_maps_url: buildGoogleMapsUrl(lawyer),
+        expires_at: expiresAt,
+        created_at: now.toISOString()
+      };
+
+      // Verifica se já existe demonstração para este slug
+      const { data: existing } = await supabase
+        .from('budgets')
+        .select('id')
+        .eq('scope_description', 'demonstracao_legal')
+        .eq('budget_code', slug)
+        .maybeSingle();
+
+      if (existing?.id) {
+        const { data: updated, error: updateError } = await supabase
+          .from('budgets')
+          .update({
+            title: `[DEMO-LEGAL] ${name}`,
+            client_name: name,
+            client_phone: phone,
+            client_address: rawAddress,
+            ai_scope_analysis: payload,
+            deadline_days: 5,
+            updated_at: now.toISOString()
+          })
+          .eq('id', existing.id)
+          .select()
+          .single();
+
+        if (updateError) throw updateError;
+        return { success: true, id: updated.id, slug, expiresAt };
+      }
+
+      const { data: created, error: insertError } = await supabase
+        .from('budgets')
+        .insert([{
+          budget_code: slug,
+          title: `[DEMO-LEGAL] ${name}`,
+          client_name: name,
+          client_phone: phone,
+          client_address: rawAddress,
+          scope_description: 'demonstracao_legal',
+          status: 'pendente',
+          deadline_days: 5,
+          ai_scope_analysis: payload
+        }])
+        .select()
+        .single();
+
+      if (insertError) throw insertError;
+      return { success: true, id: created.id, slug, expiresAt };
+    } catch (err) {
+      console.warn('Aviso: falha ao salvar demo na nuvem, fallback local continuará ativo:', err);
+      return { success: false, error: err.message };
+    }
+  },
+
+  /**
+   * Busca os dados da demonstração salva na nuvem pelo slug
+   * Verifica se ainda está dentro do prazo de validade de 5 dias
+   * @param {string} slug 
+   * @returns {Promise<Object|null>}
+   */
+  getCloudDemo: async (slug) => {
+    try {
+      if (!slug) return null;
+      const { data, error } = await supabase
+        .from('budgets')
+        .select('id, budget_code, client_name, client_phone, client_address, ai_scope_analysis, created_at')
+        .eq('scope_description', 'demonstracao_legal')
+        .eq('budget_code', slug)
+        .maybeSingle();
+
+      if (error || !data) return null;
+
+      const payload = data.ai_scope_analysis || {};
+      const expiresAt = payload.expires_at ? new Date(payload.expires_at) : null;
+      const isExpired = expiresAt && expiresAt.getTime() < Date.now();
+
+      return {
+        id: data.id,
+        slug: data.budget_code,
+        ...payload,
+        isExpired
+      };
+    } catch (err) {
+      console.warn('Erro ao consultar demo na nuvem:', err);
+      return null;
+    }
+  },
+
+  /**
+   * Lista todas as demonstrações ativas salvas na nuvem
+   * @returns {Promise<Array>}
+   */
+  listCloudDemos: async () => {
+    try {
+      const { data, error } = await supabase
+        .from('budgets')
+        .select('id, budget_code, client_name, client_phone, client_address, ai_scope_analysis, created_at')
+        .eq('scope_description', 'demonstracao_legal')
+        .order('created_at', { ascending: false });
+
+      if (error || !data) return [];
+
+      return data.map((item) => {
+        const payload = item.ai_scope_analysis || {};
+        const expiresAt = payload.expires_at ? new Date(payload.expires_at) : null;
+        const now = new Date();
+        const diffMs = expiresAt ? expiresAt.getTime() - now.getTime() : 0;
+        const daysLeft = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+        const isExpired = diffMs <= 0;
+
+        return {
+          id: item.id,
+          slug: item.budget_code,
+          name: payload.name || item.client_name,
+          phone: payload.whatsapp || item.client_phone,
+          city: payload.city || '',
+          state: payload.state || '',
+          rating: payload.rating || 5.0,
+          reviews_count: payload.reviews_count || 0,
+          created_at: item.created_at,
+          expires_at: payload.expires_at,
+          daysLeft,
+          isExpired
+        };
+      });
+    } catch (err) {
+      console.warn('Erro ao listar demonstrações na nuvem:', err);
+      return [];
+    }
+  },
+
+  /**
+   * Exclui uma demonstração da nuvem com 1 clique (Opção de Excluir Possível Cliente)
+   * @param {string} id 
+   * @returns {Promise<boolean>}
+   */
+  deleteCloudDemo: async (id) => {
+    try {
+      const { error } = await supabase
+        .from('budgets')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      return true;
+    } catch (err) {
+      console.error('Erro ao excluir possível cliente da nuvem:', err);
+      return false;
+    }
   },
 
   /**

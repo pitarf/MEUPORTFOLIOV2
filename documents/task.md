@@ -3,6 +3,14 @@
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
 ## CONCLUÍDO (DONE)
+- [x] **Links Curtos /adv/:slug, Nuvem Supabase de 5 Dias, Exclusão de Leads e Domínio a R$ 60 (`App.jsx`, `googleMapsProspectService.js`, `LegalLandingPage.jsx`, `RadarGoogleMaps.jsx`, `legalProspectService.js`)**:
+  - Implementada rota curta `/adv/:slug` no `App.jsx`, reduzindo o link de 280 caracteres para 45 caracteres oficiais sem query string pesada (ex: `https://rafaelpitaoficial.com.br/adv/roseli-hanna`).
+  - Desenvolvida persistência de demonstrações na nuvem (Supabase VPS) com prazo de validade de 5 dias e rotina de consulta assíncrona.
+  - Smart Slug Parsing implementado na `LegalLandingPage.jsx`, garantindo que nomes femininos ativem o tema Dra. e fotos de advogadas mesmo se abertos em celulares externos sem cache.
+  - Criada no Radar Google Maps a seção "Demonstrações Ativas na Nuvem" com visualização do link, dias restantes e botão vermelho "Excluir Possível Cliente" para apagar do banco com 1 clique.
+  - Atualizadas todas as copys de abordagem no WhatsApp com o valor anual de domínio em média R$ 60 ao ano e a quebra de objeção comercial esclarecendo que fotos e textos são 100% personalizáveis.
+  - Regra de formatação aplicada estritamente, com zero ocorrências de travessão.
+  - Build do Vite executado e 100% aprovado sem erros (código 0).
 - [x] **Redesenho Delicado, Tipografia Playfair Display & Identidade Boutique Jurídica Feminina (`tailwind.config.js`, `genderDetection.js`, componentes em `src/components/legal/`)**:
   - Reconfiguração da fonte `serif` no Tailwind para mapear diretamente para `Playfair Display`.
   - Títulos femininos adaptados para `font-serif font-normal` com nuances em itálico e tons de ameixa/vinho profundo aveludado (`#2C0822`).

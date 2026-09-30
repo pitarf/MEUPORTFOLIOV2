@@ -175,6 +175,7 @@ export const legalProspectService = {
 
   /**
    * Gera script de abordagem fria ultra persuasivo para WhatsApp
+   * Sem uso de travessão, com menção à personalização completa de fotos e textos e anuidade a R$ 60
    */
   generateWhatsAppPitch: (prospect, previewUrl) => {
     const nicheInfo = LEGAL_NICHES[prospect.niche] || LEGAL_NICHES.geral;
@@ -191,7 +192,9 @@ Para demonstrar como o escritório pode dobrar o volume de contatos qualificados
 
 👉 ${previewUrl}
 
-É um modelo ultra-rápido, com visual executivo de luxo e botão direto para o seu WhatsApp.
+(Lembrando que todos os textos, áreas de atuação e as fotos podem ser 100% alterados para colocar suas fotos reais e biografia. A ideia aqui é apenas ilustrar como o seu escritório pode se posicionar com alto padrão).
+
+A implementação completa fica em apenas R$ 300 (taxa única de implementação), mais a anuidade do domínio próprio (em média R$ 60 ao ano).
 
 O que achou da estrutura? Se fizer sentido, podemos colocar no ar com o seu domínio próprio ainda esta semana!`;
   }
