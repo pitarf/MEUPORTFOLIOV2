@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { LEGAL_NICHES } from '../../data/legalTemplates';
 import { legalProspectService } from '../../services/legalProspectService';
 import { googleMapsProspectService, buildGoogleMapsUrl } from '../../services/googleMapsProspectService';
@@ -24,8 +24,9 @@ import LegalFloatingWhatsApp from '../../components/legal/LegalFloatingWhatsApp'
  */
 export default function LegalLandingPage() {
   const { slug, niche } = useParams();
+  const [searchParams] = useSearchParams();
 
-  // Determina se é por prospect cadastrado ou por nicho direto
+  // Determina se é por prospect cadastrado, parâmetros portáteis da URL ou por nicho direto
   const { lawyerData, nicheInfo, heroImage } = useMemo(() => {
     // 1. Caso seja rota de nicho direto (ex: /modelo-advocacia/trabalhista)
     if (niche && LEGAL_NICHES[niche]) {
@@ -36,6 +37,59 @@ export default function LegalLandingPage() {
         heroImage: info.heroImage
       };
     }
+
+    // 2. Prioridade 1: Dados passados via query string (Permite que a demo funcione no celular do cliente via WhatsApp)
+    const paramNome = searchParams.get('nome') || searchParams.get('name') || searchParams.get('n');
+    const paramTel = searchParams.get('tel') || searchParams.get('whatsapp') || searchParams.get('w');
+    const paramCidade = searchParams.get('cidade') || searchParams.get('city') || searchParams.get('c');
+    const paramUf = searchParams.get('uf') || searchParams.get('state');
+    const paramEnd = searchParams.get('end') || searchParams.get('address');
+    const paramNicho = searchParams.get('nicho') || searchParams.get('niche');
+    const paramNota = searchParams.get('nota') || searchParams.get('rating');
+    const paramReviews = searchParams.get('rev') || searchParams.get('reviews');
+
+    if (paramNome) {
+      const targetNiche = paramNicho || 'geral';
+      const info = LEGAL_NICHES[targetNiche] || LEGAL_NICHES.geral;
+      const cleanPhone = (paramTel || '').toString().replace(/\D/g, '');
+      const rawWhatsapp = cleanPhone.length >= 10 && !cleanPhone.startsWith('55') ? `55${cleanPhone}` : cleanPhone;
+      
+      const syntheticLead = {
+        lawyer_name: paramNome,
+        name: paramNome,
+        address: paramEnd || (paramCidade ? `${paramCidade} - ${paramUf || 'SP'}` : info.defaultLawyer.address),
+        city: paramCidade || info.defaultLawyer.city,
+        state: paramUf || info.defaultLawyer.state,
+        phone: paramTel || info.defaultLawyer.phone,
+        whatsapp: rawWhatsapp || info.defaultLawyer.whatsapp,
+        rating: Number(paramNota || 5.0),
+        reviews_count: Number(paramReviews || 48)
+      };
+
+      const mapsUrl = buildGoogleMapsUrl(syntheticLead);
+
+      return {
+        lawyerData: {
+          name: paramNome,
+          oab: paramUf ? `Inscrição Regular OAB/${paramUf}` : 'Inscrição Regular OAB',
+          role: info.badge,
+          city: paramCidade || info.defaultLawyer.city,
+          state: paramUf || info.defaultLawyer.state,
+          address: paramEnd || (paramCidade ? `${paramCidade} - ${paramUf || 'SP'}` : info.defaultLawyer.address),
+          phone: paramTel || info.defaultLawyer.phone,
+          whatsapp: rawWhatsapp || info.defaultLawyer.whatsapp,
+          email: '',
+          instagram: '',
+          experienceYears: info.defaultLawyer.experienceYears,
+          google_maps_url: mapsUrl,
+          rating: Number(paramNota || 5.0),
+          reviews_count: Number(paramReviews || 48)
+        },
+        nicheInfo: info,
+        heroImage: info.heroImage
+      };
+    }
+
 
     // 2. Caso seja por slug de prospect (ex: /advocacia/dr-jorge-santos-aracaju)
     if (slug) {

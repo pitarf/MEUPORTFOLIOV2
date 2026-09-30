@@ -507,6 +507,8 @@ Agora o Radar conta com consulta direta à base de dados oficial do Google Maps 
    * Cada resultado traz o selo verde **Google Places Oficial**, garantindo que o nome, endereço, telefone e ficha são 100% autênticos.
 4. **Envio Imediato da Proposta de R$ 300**:
    * Basta clicar em **Enviar Proposta no WhatsApp** para iniciar o contato comercial com o modelo pronto e o link personalizado!
+5. **Visualização Portátil e Confiável (Botão Demo & WhatsApp)**:
+   * Ao clicar no botão **Demo** no painel ou quando o advogado clica no link recebido no WhatsApp, a página de demonstração carrega perfeitamente em qualquer smartphone ou computador com o nome dele, WhatsApp e endereço oficial, sem depender de cache local!
 
 
 

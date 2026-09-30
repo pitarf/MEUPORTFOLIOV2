@@ -31,16 +31,18 @@ export default async function handler(req, res) {
 
         // Obtém parâmetros da requisição (seja via GET query ou POST body)
         const params = req.method === 'POST' ? req.body : req.query;
-        let query = params.query || '';
-        const city = params.city || '';
-        const state = params.state || 'SP';
+        let query = (params.query || '').trim();
+        const city = (params.city || '').trim();
+        const state = (params.state || '').trim().toUpperCase();
         const onlyWithoutWebsite = params.onlyWithoutWebsite !== false && params.onlyWithoutWebsite !== 'false';
         const minRating = Number(params.minRating || 4.0);
 
-        // Se a query for genérica, enriquece para buscar advogados
-        if (!query.trim()) {
+        // Se a query não for fornecida explicitamente, compõe com inteligência geográfica
+        if (!query) {
             if (city) {
-                query = `advogado em ${city} ${state}`;
+                query = `advogado em ${city}${state ? ` ${state}` : ''}`;
+            } else if (state) {
+                query = `advogado em ${state}`;
             } else {
                 query = 'advogados em São Paulo SP';
             }
@@ -49,13 +51,15 @@ export default async function handler(req, res) {
         }
 
         const placesUrl = 'https://places.googleapis.com/v1/places:searchText';
+        const headers = {
+            'Content-Type': 'application/json',
+            'X-Goog-Api-Key': apiKey,
+            'X-Goog-FieldMask': 'places.id,places.displayName,places.formattedAddress,places.nationalPhoneNumber,places.internationalPhoneNumber,places.websiteUri,places.rating,places.userRatingCount,places.googleMapsUri,places.addressComponents'
+        };
+
         const response = await fetch(placesUrl, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Goog-Api-Key': apiKey,
-                'X-Goog-FieldMask': 'places.id,places.displayName,places.formattedAddress,places.nationalPhoneNumber,places.internationalPhoneNumber,places.websiteUri,places.rating,places.userRatingCount,places.googleMapsUri,places.addressComponents'
-            },
+            headers,
             body: JSON.stringify({
                 textQuery: query,
                 pageSize: 20
@@ -73,7 +77,36 @@ export default async function handler(req, res) {
         }
 
         const data = await response.json();
-        const rawPlaces = data.places || [];
+        let rawPlaces = data.places || [];
+
+        // Busca complementar inteligente: se a primeira busca retornar poucos ou nenhum lead sem site
+        const initialWithoutSite = rawPlaces.filter(p => !p.websiteUri);
+        if (initialWithoutSite.length < 4 && city) {
+            try {
+                const complementaryQuery = `escritorio de advocacia em ${city}${state ? ` ${state}` : ''}`;
+                const compRes = await fetch(placesUrl, {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify({
+                        textQuery: complementaryQuery,
+                        pageSize: 20
+                    })
+                });
+                if (compRes.ok) {
+                    const compData = await compRes.json();
+                    const existingIds = new Set(rawPlaces.map(p => p.id));
+                    (compData.places || []).forEach(p => {
+                        if (!existingIds.has(p.id)) {
+                            rawPlaces.push(p);
+                            existingIds.add(p.id);
+                        }
+                    });
+                }
+            } catch (compErr) {
+                console.warn('[Busca Complementar Ignorada]:', compErr);
+            }
+        }
+
 
         // Filtra e formata os dados
         const formattedLeads = rawPlaces
@@ -114,13 +147,22 @@ export default async function handler(req, res) {
                     if (stateComp) detectedState = stateComp.shortText || stateComp.longText;
                 }
 
-                // Cria slug limpo para a landing page
-                const slug = name
+                // Cria slug limpo para a landing page (incluindo cidade se disponível)
+                const nameSlug = name
                     .toLowerCase()
                     .normalize('NFD')
                     .replace(/[\u0300-\u036f]/g, '')
                     .replace(/[^a-z0-9]+/g, '-')
                     .replace(/(^-|-$)/g, '');
+
+                const citySlug = detectedCity
+                    .toLowerCase()
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/(^-|-$)/g, '');
+
+                const fullSlug = citySlug ? `${nameSlug}-${citySlug}` : nameSlug;
 
                 return {
                     id: `gplaces_${place.id}`,
@@ -140,7 +182,8 @@ export default async function handler(req, res) {
                     instagram: '',
                     google_maps_url: place.googleMapsUri || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name + ' ' + (place.formattedAddress || ''))}`,
                     source: 'google_places_api',
-                    landing_page_slug: slug,
+                    slug: fullSlug,
+                    landing_page_slug: fullSlug,
                     created_at: new Date().toISOString()
                 };
             });

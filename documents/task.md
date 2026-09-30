@@ -3,6 +3,11 @@
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
 ## CONCLUÍDO (DONE)
+- [x] **Correção de Roteamento SPA na Vercel & URLs de Demonstração Portáteis (`vercel.json`, `LegalLandingPage.jsx`, `googleMapsProspectService.js`, `api/places-search.js`)**:
+  - Ajustado rewrite do `vercel.json` removendo lookahead incompatível que gerava 404 ao carregar rotas internas da Vercel.
+  - Implementada geração portátil de URL de demonstração (`buildDemoUrl`) com parâmetros na query string.
+  - `LegalLandingPage.jsx` atualizada para hidratar os dados do advogado diretamente da URL caso o lead seja acessado do celular de terceiros via WhatsApp.
+  - Sincronização dos formatos de slugs em `api/places-search.js`.
 - [x] **Integração Oficial com Google Places API em Tempo Real & Serverless Vercel (`api/places-search.js`, `vite.config.js`, `googleMapsProspectService.js`, `RadarGoogleMaps.jsx`)**:
   - Implementada Serverless Function oficial para Vercel consultando a Places API (New) com a chave do usuário protegida no backend.
   - Filtro automático de estabelecimentos: identifica em tempo real advogados reais e verificados no Google Maps que não possuem website oficial cadastrado.

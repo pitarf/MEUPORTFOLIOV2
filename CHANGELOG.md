@@ -2,6 +2,21 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.26.1] - 2026-09-30
+
+### Corrigido & Otimizado (Correção de Roteamento SPA na Vercel & URLs de Demonstração Portáteis)
+- **Correção Crítica no Roteamento da Vercel (`vercel.json`)**:
+  - Removido o regex negativo lookahead `(?!api/)` que era incompatível com o roteador da Vercel e causava erro 404 em rotas internas como `/advocacia/...`.
+  - Restaurado o rewrite padrão de SPA, onde o runtime da Vercel resolve automaticamente funções em `/api/*`.
+- **Arquitetura de Demonstração Portátil (`LegalLandingPage.jsx`, `googleMapsProspectService.js`, `RadarGoogleMaps.jsx`)**:
+  - Implementada a função `buildDemoUrl(lawyer, baseUrl)` gerando URLs com parâmetros estruturados (`nome`, `tel`, `cidade`, `uf`, `end`, `nota`, `rev`).
+  - Habilitado suporte em `LegalLandingPage.jsx` via `useSearchParams()` para extrair prioritariamente os dados passados na URL.
+  - **Benefício Crucial**: A demonstração agora funciona tanto no painel quanto **no celular do próprio cliente quando ele clica no link do WhatsApp**, sem depender de cache ou `localStorage` da máquina do operador.
+- **Sincronização Rigorosa de Slugs (`api/places-search.js`)**:
+  - `api/places-search.js` atualizado para gerar e retornar `slug` com o formato idêntico ao gerado no frontend (`nome-cidade`).
+- **Validação de Build**:
+  - `npm run build` testado e aprovado com código 0 (`index-94b5ea41.js`).
+
 ## [1.26.0] - 2026-09-30
 
 ### Adicionado & Integrado (Integração Oficial com Google Places API em Tempo Real & Serverless Vercel)

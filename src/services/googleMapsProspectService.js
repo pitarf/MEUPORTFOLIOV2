@@ -59,6 +59,37 @@ export const buildGoogleMapsUrl = (lawyer) => {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query || 'Advocacia')}`;
 };
 
+/**
+ * Constrói a URL de demonstração com parâmetros portáteis
+ * Permite que a demo funcione perfeitamente no celular do cliente via WhatsApp
+ * ou em abas anônimas sem depender de cache ou localStorage do operador
+ * @param {Object} lawyer 
+ * @param {string} baseUrl
+ * @returns {string}
+ */
+export const buildDemoUrl = (lawyer, baseUrl = '') => {
+  if (!lawyer) return `${baseUrl}/advocacia`;
+  const slug = lawyer.slug || lawyer.landing_page_slug || generateLawyerSlug(lawyer);
+  const params = new URLSearchParams();
+
+  const name = lawyer.lawyer_name || lawyer.name;
+  if (name) params.set('nome', name);
+
+  const phone = (lawyer.whatsapp || lawyer.phone || '').toString().replace(/\D/g, '');
+  if (phone) params.set('tel', phone);
+
+  if (lawyer.city) params.set('cidade', lawyer.city);
+  if (lawyer.state) params.set('uf', lawyer.state);
+  if (lawyer.address) params.set('end', lawyer.address);
+  if (lawyer.niche && lawyer.niche !== 'todos') params.set('nicho', lawyer.niche);
+  if (lawyer.rating) params.set('nota', String(lawyer.rating));
+  if (lawyer.reviews_count) params.set('rev', String(lawyer.reviews_count));
+
+  const query = params.toString();
+  return `${baseUrl}/advocacia/${slug}${query ? `?${query}` : ''}`;
+};
+
+
 // Base bruta de leads locais (limpa de quaisquer dados fictícios/alucinados)
 const RAW_CURATED_MAPS_LEADS = [];
 
@@ -318,9 +349,8 @@ export const googleMapsProspectService = {
     const city = lawyer.city || 'sua região';
     const baseUrl = window.location.origin;
 
-    // Gerar slug padronizado da landing page
-    const slug = lawyer.slug || generateLawyerSlug(lawyer);
-    const previewUrl = `${baseUrl}/advocacia/${slug}`;
+    // Gerar URL portátil e padronizada da landing page de demonstração
+    const previewUrl = buildDemoUrl(lawyer, baseUrl);
 
     if (variant === 'curto') {
       return `Olá, ${name}, tudo bem? Me chamo Rafael Pita.

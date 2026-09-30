@@ -24,7 +24,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
-import { googleMapsProspectService, generateLawyerSlug, buildGoogleMapsUrl } from '../../services/googleMapsProspectService';
+import { googleMapsProspectService, generateLawyerSlug, buildGoogleMapsUrl, buildDemoUrl } from '../../services/googleMapsProspectService';
 import { LEGAL_NICHES } from '../../data/legalTemplates';
 
 /**
@@ -88,6 +88,7 @@ export default function RadarGoogleMaps() {
     const searchState = overrideUf !== undefined ? overrideUf : state;
 
     setLoading(true);
+    setResults([]);
     try {
       const data = await googleMapsProspectService.search({
         city: searchCity,
@@ -389,10 +390,10 @@ export default function RadarGoogleMaps() {
         {/* Barra Inferior: Capitais Rápidas + Botão de Busca */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
           
-          {/* Pílulas de Capitais */}
+          {/* Pílulas de Capitais e Cidades Estratégicas */}
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-xs text-muted-foreground mr-1">Capitais:</span>
-            {POPULAR_CITIES.slice(0, 6).map((c) => (
+            <span className="text-xs text-muted-foreground mr-1">Cidades:</span>
+            {POPULAR_CITIES.map((c) => (
               <button
                 key={c.name}
                 type="button"
@@ -503,9 +504,8 @@ export default function RadarGoogleMaps() {
             const isSaved = savedIds.has(lawyer.id);
             const isCopied = copiedId === lawyer.id;
 
-            // Link dinâmico para a demonstração sincronizado com o radar e o WhatsApp
-            const slugBase = lawyer.slug || generateLawyerSlug(lawyer);
-            const demoUrl = `/advocacia/${slugBase}`;
+            // Link dinâmico para a demonstração com parâmetros portáteis
+            const demoUrl = buildDemoUrl(lawyer);
 
             // Link oficial ou de busca do Google Maps baseado na correspondência precisa de Nome e Endereço
             const mapsUrl = buildGoogleMapsUrl(lawyer);
