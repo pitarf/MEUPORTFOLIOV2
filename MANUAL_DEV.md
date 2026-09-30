@@ -511,6 +511,21 @@ Para eliminar links longos e assustadores no WhatsApp e assegurar máxima taxa d
    - Ajustada a cópia comercial para a média nacional de R$ 60 ao ano.
    - Incluído aviso explícito nas mensagens informando que fotos reais, textos e áreas de atuação são 100% personalizáveis.
 
+### 13.19 Fotos de Hero Widescreen 16:9 para Mulheres, Enquadramento Lateral & Blindagem de Imagens
+Para garantir máxima fidelidade visual em qualquer dispositivo (celulares, tablets e monitores ultrawide) e eliminar sobreposições de texto no rosto da advogada:
+1. **Padrão de Imagens Widescreen 16:9 (1376x768)**:
+   - Todas as fotos femininas do carrossel em `public/images/legal/` foram geradas e padronizadas na proporção widescreen 16:9 real:
+     - `advogada_hero.jpg`: Retrato de advogada brasileira em blazer vinho nobre à direita da mesa executiva; lado esquerdo livre com iluminação de biblioteca jurídica e sem logotipos.
+     - `advogada_sobre.jpg`: Reunião de atendimento consultivo com a advogada à direita e profundidade panorâmica à esquerda.
+     - `advogada_tribunal.jpg`: Advogada caminhando imponente no corredor do tribunal clássico à direita, com colunas de mármore dourado.
+     - `advogada_sede.jpg`: Recepção boutique acolhedora com a advogada à direita e poltronas em veludo vinho.
+2. **Enquadramento Lateral com Ponto Focal à Direita (`LegalHero.jsx`)**:
+   - Aplicação das classes Tailwind `object-right lg:object-[75%_center]` na tag de imagem do carrossel.
+   - Gradiente adaptativo lateral de alto contraste (`from-[#170311]/95 via-[#1A0414]/75 to-transparent`), garantindo legibilidade perfeita da headline e botões à esquerda enquanto o rosto da advogada fica limpo e nítido à direita.
+3. **Blindagem de Gênero em Todas as Camadas (`LegalLandingPage.jsx`)**:
+   - A resolução de `activeHeroImage` força o uso estrito de `theme.heroDefaultImg` para leads femininos, bloqueando o vazamento de imagens de nichos masculinos (`geral.jpg`, `trabalhista.jpg`, `hero_desk.jpg`).
+
+
 
 
 

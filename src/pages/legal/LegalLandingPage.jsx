@@ -227,9 +227,10 @@ export default function LegalLandingPage() {
   const theme = LEGAL_THEMES[gender] || LEGAL_THEMES.male;
 
   // Imagem de Hero adaptada à estética e gênero do profissional
-  const activeHeroImage = (heroImage && !heroImage.includes('hero_desk.jpg'))
-    ? heroImage
-    : theme.heroDefaultImg;
+  const isFemale = gender === 'female';
+  const activeHeroImage = isFemale
+    ? ((heroImage && heroImage.includes('advogada')) ? heroImage : theme.heroDefaultImg)
+    : ((heroImage && !heroImage.includes('hero_desk.jpg')) ? heroImage : theme.heroDefaultImg);
 
   // Atualização dinâmica de Título e Proteção NoIndex (SEO off para páginas demo de prospecção)
   useEffect(() => {

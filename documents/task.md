@@ -3,6 +3,13 @@
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
 ## CONCLUÍDO (DONE)
+- [x] **Fotos de Hero Widescreen 16:9 Femininas, Enquadramento Lateral & Blindagem de Imagens Masculinas (`LegalHero.jsx`, `LegalLandingPage.jsx`, `public/images/legal/`)**:
+  - Geração e substituição das 4 imagens em proporção widescreen 16:9 real (1376x768): `advogada_hero.jpg`, `advogada_sobre.jpg`, `advogada_tribunal.jpg` e `advogada_sede.jpg`.
+  - Enquadramento lateral com a advogada posicionada no lado direito e espaço livre no lado esquerdo com estante jurídica desfocada e iluminação quente.
+  - Eliminação de logotipos espúrios, nomes falsos de escritórios ou canecas com dizeres em inglês.
+  - Adicionadas classes `object-right lg:object-[75%_center]` e gradiente adaptativo de alto contraste para garantir visibilidade do rosto e legibilidade do texto da hero.
+  - Blindagem completa em `LegalLandingPage.jsx` contra vazamento de imagens de nichos masculinos em páginas femininas.
+  - Build do Vite executado e 100% aprovado sem erros (código 0).
 - [x] **Links Curtos /adv/:slug, Nuvem Supabase de 5 Dias, Exclusão de Leads e Domínio a R$ 60 (`App.jsx`, `googleMapsProspectService.js`, `LegalLandingPage.jsx`, `RadarGoogleMaps.jsx`, `legalProspectService.js`)**:
   - Implementada rota curta `/adv/:slug` no `App.jsx`, reduzindo o link de 280 caracteres para 45 caracteres oficiais sem query string pesada (ex: `https://rafaelpitaoficial.com.br/adv/roseli-hanna`).
   - Desenvolvida persistência de demonstrações na nuvem (Supabase VPS) com prazo de validade de 5 dias e rotina de consulta assíncrona.

@@ -2,6 +2,22 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.26.7] - 2026-09-30
+
+### Aprimorado (Fotos de Hero Widescreen 16:9 para Mulheres, Enquadramento Lateral & Blindagem de Imagens Masculinas)
+- **Geração e Substituição de Imagens Widescreen 16:9 em `public/images/legal/`**:
+  - `advogada_hero.jpg` (1376x768): Retrato widescreen de advogada brasileira em blazer vinho nobre e sorriso confiante à direita da mesa executiva; lado esquerdo livre com estante desfocada e iluminação quente de biblioteca jurídica, sem logotipos ou textos espúrios.
+  - `advogada_sobre.jpg` (1376x768): Reunião de atendimento consultivo com a advogada posicionada à direita e vista panorâmica com profundidade arquitetônica à esquerda.
+  - `advogada_tribunal.jpg` (1376x768): Advogada caminhando imponente no lado direito do corredor de tribunal clássico, com colunas e piso de mármore dourado.
+  - `advogada_sede.jpg` (1376x768): Recepção boutique acolhedora com a advogada recebendo o cliente à direita e poltronas em veludo vinho.
+- **Enquadramento Lateral e Posicionamento Facial (`LegalHero.jsx`)**:
+  - Adicionadas classes `object-right lg:object-[75%_center]` e gradiente de alto contraste adaptativo (`from-[#170311]/95 via-[#1A0414]/75 to-transparent`).
+  - Garante que a headline, os badges e os botões de ação fiquem perfeitamente legíveis à esquerda, enquanto o rosto e a postura da advogada permanecem totalmente visíveis, iluminados e sem sobreposição em smartphones e desktops widescreen.
+- **Blindagem Contra Vazamento de Imagens Masculinas (`LegalLandingPage.jsx`)**:
+  - Refatorada a resolução de `activeHeroImage` para forçar o uso exclusivo de fotos femininas quando o profissional for do gênero feminino, impedindo que fotos de nichos gerais masculinos (`geral.jpg`, `trabalhista.jpg`, etc.) sobrescrevam os slides femininos.
+- **Otimização de Transição Tailwind**:
+  - Ajustada a propriedade de transição suave do carrossel para remover advertências de compilação. Build 100% limpo com código 0.
+
 ## [1.26.6] - 2026-09-30
 
 ### Adicionado & Aprimorado (Links Curtos /adv/:slug, Nuvem Supabase de 5 Dias, Exclusão de Leads e Domínio a R$ 60)

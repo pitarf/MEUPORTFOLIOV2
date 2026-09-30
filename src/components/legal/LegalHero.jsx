@@ -11,7 +11,7 @@ export default function LegalHero({ lawyer, nicheInfo, heroImage, theme }) {
   const honorific = theme?.honorific || 'Dr(a).';
 
   const primaryHeroImage = isFemale
-    ? (heroImage || '/images/legal/advogada_hero.jpg')
+    ? ((heroImage && heroImage.includes('advogada')) ? heroImage : '/images/legal/advogada_hero.jpg')
     : (heroImage || '/images/legal/hero_desk.jpg');
 
   const slides = isFemale
@@ -127,9 +127,10 @@ export default function LegalHero({ lawyer, nicheInfo, heroImage, theme }) {
               <img
                 src={slide.image}
                 alt={slide.title}
-                className={`w-full h-full object-cover object-center filter brightness-[0.7] contrast-[1.08] transition-transform duration-[4500ms] ease-out ${
+                className={`w-full h-full object-cover ${isFemale ? 'object-right lg:object-[75%_center]' : 'object-center'} filter brightness-[0.78] contrast-[1.05] transition-transform ease-out ${
                   isActive ? 'scale-105' : 'scale-100'
                 }`}
+                style={{ transitionDuration: '4500ms' }}
                 loading={idx === 0 ? 'eager' : 'lazy'}
               />
             </div>
@@ -137,8 +138,8 @@ export default function LegalHero({ lawyer, nicheInfo, heroImage, theme }) {
         })}
 
         {/* Gradientes de Alto Contraste Adaptativos (Vinho Profundo para Mulher / Navy para Homem) */}
-        <div className={`absolute inset-0 bg-gradient-to-r ${isFemale ? 'from-[#170311]/95 via-[#1A0414]/80 to-[#12020D]/55' : 'from-[#070F1E]/95 via-[#070F1E]/80 to-[#070F1E]/50'} z-20 pointer-events-none`} />
-        <div className={`absolute inset-0 bg-gradient-to-t ${isFemale ? 'from-[#1E0518] via-transparent to-[#150310]/60' : 'from-[#0A192F] via-transparent to-[#070F1E]/60'} z-20 pointer-events-none`} />
+        <div className={`absolute inset-0 bg-gradient-to-r ${isFemale ? 'from-[#170311]/95 via-[#1A0414]/75 to-transparent' : 'from-[#070F1E]/95 via-[#070F1E]/80 to-[#070F1E]/50'} z-20 pointer-events-none`} />
+        <div className={`absolute inset-0 bg-gradient-to-t ${isFemale ? 'from-[#1E0518] via-transparent to-[#150310]/50' : 'from-[#0A192F] via-transparent to-[#070F1E]/60'} z-20 pointer-events-none`} />
       </div>
 
       {/* 2. CONTEÚDO PRINCIPAL SOBRE O CARROSSEL */}

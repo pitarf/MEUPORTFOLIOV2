@@ -542,3 +542,16 @@ Para passar máxima confiança pelo WhatsApp sem assustar o cliente com links qu
    * Você pode clicar no botão vermelho com ícone de lixeira para **Excluir Possível Cliente** e remover os dados do banco imediatamente com 1 toque.
 5. **Atualização da Taxa de Domínio (Média Nacional de R$ 60 ao ano)**:
    * As propostas agora informam com precisão a taxa anual de domínio próprio em média R$ 60 ao ano.
+
+### 19.9 Fotos de Hero Widescreen 16:9 para Mulheres e Enquadramento Lateral Perfeito
+Para que a apresentação visual cause máximo impacto em telas de celular e monitores de computador:
+1. **Fotos em Alta Resolução e Proporção Widescreen 16:9**:
+   * O carrossel da tela principal (Hero) e as seções informativas utilizam imagens em proporção 16:9 real (1376x768 pixels), preenchendo a tela com elegância e equilíbrio visual.
+   * As imagens foram geradas sob medida retratando uma advogada brasileira em trajes executivos em vinho nobre, reunião consultiva com clientes, caminhada no tribunal de justiça e atendimento na recepção boutique.
+   * Zero nomes falsos, canecas com logos inventados ou inscrições em inglês.
+2. **Enquadramento Lateral com Rosto Livre**:
+   * A foto posiciona a advogada estrategicamente no lado direito da tela.
+   * O lado esquerdo conta com iluminação suave e biblioteca desfocada, garantindo que o título em dourado, a frase de impacto e os botões de agendamento fiquem 100% legíveis sem cobrir o rosto da profissional em nenhum tamanho de tela.
+3. **Exibição Fiel por Gênero**:
+   * O sistema impede que qualquer imagem de advogado masculino apareça na demonstração de uma advogada, garantindo uma experiência totalmente personalizada do início ao fim da página.
+
