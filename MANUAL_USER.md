@@ -522,3 +522,7 @@ Agora o sistema identifica automaticamente se o profissional prospectado é uma 
 3. **Navegação no Topo Mais Arejada**:
    * O link "Início" foi removido da barra superior para deixar a leitura leve e desobstruída. Ao tocar ou clicar no logotipo e na balança dourada, a página rola suavemente até o topo.
    * O telefone do topo agora é apresentado com a máscara padrão brasileira com DDD (ex: `(19) 99116-4333`), facilitando a identificação imediata da cidade pelo cliente.
+4. **Tipografia Nobre Editorial (Playfair Display) e Fotos de Boutique**:
+   * Os títulos da página agora utilizam a fonte nobre e suave **Playfair Display**, trazendo charme, leveza e alta classe.
+   * A fotografia principal e a imagem de reunião foram substituídas por fotos exclusivas em alta definição de uma advogada em seu escritório boutique e em atendimento acolhedor com clientes.
+   * Os botões de WhatsApp ganharam acabamento acetinado em degradê ouro champanhe com formato em pílula delicada (`rounded-full`), harmonizando 100% com o padrão visual de luxo.

@@ -10,40 +10,79 @@ export default function LegalHero({ lawyer, nicheInfo, heroImage, theme }) {
   const isFemale = theme?.gender === 'female';
   const honorific = theme?.honorific || 'Dr(a).';
 
-  const slides = [
-    {
-      image: '/images/legal/hero_desk.jpg',
-      tag: isFemale ? 'ADVOCACIA HUMANIZADA & ESTRATÉGICA' : 'ORIENTAÇÃO JURÍDICA ESTRATÉGICA',
-      title: 'Decisões Jurídicas Estratégicas para o seu',
-      highlight: 'Futuro Seguro',
-      desc: 'Apoiamos pessoas físicas e empresas com estratégias sob medida para resguardar direitos, blindar patrimônio e alcançar soluções céleres e eficazes perante os tribunais.',
-      badge: 'Atendimento Executivo e Personalizado'
-    },
-    {
-      image: '/images/legal/reuniao.jpg',
-      tag: 'ADVOCACIA CONSULTIVA & CONTENCIOSA',
-      title: 'Assessoria Especializada perante os',
-      highlight: 'Tribunais Superiores',
-      desc: 'Conduzimos cada caso com rigor técnico multidisciplinar, transparência absoluta e foco intransigente na obtenção dos melhores resultados.',
-      badge: 'Reuniões Presenciais e Online'
-    },
-    {
-      image: '/images/legal/tribunal.jpg',
-      tag: 'DEFESA E SEGURANÇA PATRIMONIAL',
-      title: 'Solidez e Firmeza na Proteção dos',
-      highlight: 'Seus Interesses',
-      desc: 'Atuação combativa em causas cíveis, trabalhistas, imobiliárias e empresariais, com estratégia fundamentada na mais recente jurisprudência.',
-      badge: 'Prática Forense Dedicada'
-    },
-    {
-      image: '/images/legal/sede.jpg',
-      tag: 'COMPROMISSO ÉTICO E TRANSPARÊNCIA',
-      title: 'Estrutura Completa a Serviço da',
-      highlight: 'Sua Tranquilidade',
-      desc: 'Uma advocacia moderna, ágil e focada em antecipar riscos para que você e sua empresa tomem decisões com total amparo legal.',
-      badge: 'Sigilo Absoluto e Rigor OAB'
-    }
-  ];
+  const primaryHeroImage = isFemale
+    ? (heroImage || '/images/legal/advogada_hero.jpg')
+    : (heroImage || '/images/legal/hero_desk.jpg');
+
+  const slides = isFemale
+    ? [
+        {
+          image: primaryHeroImage,
+          tag: 'BOUTIQUE JURÍDICA & ATENDIMENTO HUMANIZADO',
+          title: 'Decisões Jurídicas Estratégicas para o seu',
+          highlight: 'Futuro Seguro',
+          desc: 'Apoiamos pessoas físicas e empresas com estratégias sob medida para resguardar direitos, blindar patrimônio e alcançar soluções céleres e eficazes perante os tribunais.',
+          badge: 'Atendimento Exclusivo e Dedicado'
+        },
+        {
+          image: '/images/legal/advogada_sobre.jpg',
+          tag: 'ADVOCACIA CONSULTIVA & ESTRATÉGICA',
+          title: 'Assessoria Especializada perante os',
+          highlight: 'Tribunais Superiores',
+          desc: 'Conduzimos cada caso com rigor técnico multidisciplinar, acolhimento e foco intransigente na obtenção dos melhores resultados.',
+          badge: 'Reuniões Presenciais e Online'
+        },
+        {
+          image: '/images/legal/advogada_tribunal.jpg',
+          tag: 'DEFESA E SEGURANÇA PATRIMONIAL',
+          title: 'Solidez e Firmeza na Proteção dos',
+          highlight: 'Seus Interesses',
+          desc: 'Atuação combativa em causas cíveis, trabalhistas, imobiliárias e de família, com estratégia fundamentada na mais recente jurisprudência.',
+          badge: 'Prática Forense Especializada'
+        },
+        {
+          image: '/images/legal/advogada_sede.jpg',
+          tag: 'COMPROMISSO ÉTICO E TRANSPARÊNCIA',
+          title: 'Estrutura Completa a Serviço da',
+          highlight: 'Sua Tranquilidade',
+          desc: 'Uma advocacia moderna, ágil e focada em antecipar riscos para que você tome decisões com total amparo legal.',
+          badge: 'Sigilo Absoluto e Rigor OAB'
+        }
+      ]
+    : [
+        {
+          image: primaryHeroImage,
+          tag: 'ORIENTAÇÃO JURÍDICA ESTRATÉGICA',
+          title: 'Decisões Jurídicas Estratégicas para o seu',
+          highlight: 'Futuro Seguro',
+          desc: 'Apoiamos pessoas físicas e empresas com estratégias sob medida para resguardar direitos, blindar patrimônio e alcançar soluções céleres e eficazes perante os tribunais.',
+          badge: 'Atendimento Executivo e Personalizado'
+        },
+        {
+          image: '/images/legal/reuniao.jpg',
+          tag: 'ADVOCACIA CONSULTIVA & CONTENCIOSA',
+          title: 'Assessoria Especializada perante os',
+          highlight: 'Tribunais Superiores',
+          desc: 'Conduzimos cada caso com rigor técnico multidisciplinar, transparência absoluta e foco intransigente na obtenção dos melhores resultados.',
+          badge: 'Reuniões Presenciais e Online'
+        },
+        {
+          image: '/images/legal/tribunal.jpg',
+          tag: 'DEFESA E SEGURANÇA PATRIMONIAL',
+          title: 'Solidez e Firmeza na Proteção dos',
+          highlight: 'Seus Interesses',
+          desc: 'Atuação combativa em causas cíveis, trabalhistas, imobiliárias e empresariais, com estratégia fundamentada na mais recente jurisprudência.',
+          badge: 'Prática Forense Dedicada'
+        },
+        {
+          image: '/images/legal/sede.jpg',
+          tag: 'COMPROMISSO ÉTICO E TRANSPARÊNCIA',
+          title: 'Estrutura Completa a Serviço da',
+          highlight: 'Sua Tranquilidade',
+          desc: 'Uma advocacia moderna, ágil e focada em antecipar riscos para que você e sua empresa tomem decisões com total amparo legal.',
+          badge: 'Sigilo Absoluto e Rigor OAB'
+        }
+      ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -117,16 +156,16 @@ export default function LegalHero({ lawyer, nicheInfo, heroImage, theme }) {
               </span>
             </div>
 
-            {/* Headline Monumental Sans Moderna, Limpa e Amigável */}
+            {/* Headline Monumental Sans Moderna ou Serif Nobre Feminina */}
             <motion.h1
               key={`title-${currentIndex}`}
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="text-3xl sm:text-4xl lg:text-5xl xl:text-[3.5rem] font-sans font-extrabold text-white leading-[1.18] tracking-tight max-w-3xl"
+              className={`text-3xl sm:text-4xl lg:text-5xl xl:text-[3.4rem] ${isFemale ? 'font-serif font-normal leading-[1.15] tracking-normal' : 'font-sans font-extrabold leading-[1.18] tracking-tight'} text-white max-w-3xl`}
             >
               {currentSlide.title}{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-[#C6923C]">
+              <span className={`text-transparent bg-clip-text ${isFemale ? 'italic font-serif bg-gradient-to-r from-[#FCECD0] via-[#E8C280] to-[#D8A756]' : 'bg-gradient-to-r from-amber-200 via-amber-400 to-[#C6923C]'}`}>
                 {currentSlide.highlight}
               </span>
             </motion.h1>
@@ -137,7 +176,7 @@ export default function LegalHero({ lawyer, nicheInfo, heroImage, theme }) {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-base sm:text-lg text-slate-200 font-normal leading-relaxed max-w-2xl"
+              className={`text-base sm:text-lg ${isFemale ? 'text-stone-200 font-light' : 'text-slate-200 font-normal'} leading-relaxed max-w-2xl`}
             >
               {currentSlide.desc}
             </motion.p>
@@ -150,9 +189,9 @@ export default function LegalHero({ lawyer, nicheInfo, heroImage, theme }) {
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-7 py-4 rounded-xl bg-gradient-to-r from-[#D8A756] via-[#C6923C] to-[#B5812B] hover:from-[#C6923C] hover:to-[#A37020] text-white font-bold text-xs sm:text-sm tracking-wide shadow-xl shadow-amber-950/40 transition-all flex items-center justify-center gap-2.5 whitespace-nowrap group"
+                className={`px-7 py-4 ${isFemale ? 'rounded-full bg-gradient-to-r from-[#D8A756] via-[#E5BF7C] to-[#C79540] text-[#1A0314] font-semibold shadow-lg shadow-[#D8A756]/25 hover:shadow-[#D8A756]/40' : 'rounded-xl bg-gradient-to-r from-[#D8A756] via-[#C6923C] to-[#B5812B] hover:from-[#C6923C] hover:to-[#A37020] text-white font-bold shadow-xl shadow-amber-950/40'} text-xs sm:text-sm tracking-wide transition-all flex items-center justify-center gap-2.5 whitespace-nowrap group`}
               >
-                <MessageCircle className="w-5 h-5 fill-white text-white group-hover:scale-110 transition-transform" />
+                <MessageCircle className={`w-5 h-5 ${isFemale ? 'fill-[#1A0314] text-[#1A0314]' : 'fill-white text-white'} group-hover:scale-110 transition-transform`} />
                 <span>Agendar Consulta no WhatsApp</span>
               </motion.a>
 
@@ -160,7 +199,7 @@ export default function LegalHero({ lawyer, nicheInfo, heroImage, theme }) {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 href="#atuacao"
-                className="px-7 py-4 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs sm:text-sm tracking-wide border border-white/25 hover:border-white transition-all flex items-center justify-center gap-2 whitespace-nowrap backdrop-blur-md"
+                className={`px-7 py-4 ${isFemale ? 'rounded-full bg-white/10 hover:bg-white/15 text-white font-medium border border-[#D8A756]/40' : 'rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold border border-white/25 hover:border-white'} text-xs sm:text-sm tracking-wide transition-all flex items-center justify-center gap-2 whitespace-nowrap backdrop-blur-md`}
               >
                 <span>Nossas Especialidades</span>
                 <ArrowRight className="w-4 h-4 text-white" />

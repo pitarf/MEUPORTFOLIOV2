@@ -18,7 +18,9 @@ module.exports = {
         extend: {
             fontFamily: {
                 sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
-                serif: ['"Plus Jakarta Sans"', 'Georgia', 'sans-serif'],
+                serif: ['"Playfair Display"', 'Georgia', 'serif'],
+                playfair: ['"Playfair Display"', 'Georgia', 'serif'],
+                cinzel: ['"Cinzel"', 'serif'],
                 display: ['"Plus Jakarta Sans"', 'sans-serif'],
             },
             colors: {

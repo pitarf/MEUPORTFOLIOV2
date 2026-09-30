@@ -3,6 +3,14 @@
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
 ## CONCLUÍDO (DONE)
+- [x] **Redesenho Delicado, Tipografia Playfair Display & Identidade Boutique Jurídica Feminina (`tailwind.config.js`, `genderDetection.js`, componentes em `src/components/legal/`)**:
+  - Reconfiguração da fonte `serif` no Tailwind para mapear diretamente para `Playfair Display`.
+  - Títulos femininos adaptados para `font-serif font-normal` com nuances em itálico e tons de ameixa/vinho profundo aveludado (`#2C0822`).
+  - Geração e integração de novas fotos em alta resolução: `advogada_hero.jpg` e `advogada_sobre.jpg` (substituindo fotos masculinas de terno).
+  - Migração de fundos cinza frio para nuances quentes e acolhedoras em nude/blush/champagne (`#FAF4F7`, `#FCF9F7`).
+  - Botões de ação e WhatsApp reprojetados com formato em pílula suave (`rounded-full`) e degradê ouro champagne acetinado (`#D8A756` / `#E5BF7C`).
+  - Círculos de atendimento na metodologia formatados com anel champagne e interior vinho acetinado.
+  - Build do Vite executado e 100% aprovado sem erros (código 0).
 - [x] **Detecção Inteligente de Gênero & Paleta Executiva Feminina Vinho Nobre (`genderDetection.js`, `LegalLandingPage.jsx`, componentes em `src/components/legal/`)**:
   - Detecção automática baseada no nome (ex: `Roseli`, `Natálie`, `Paula`, `Sandra`, `Dra.`, `Advogada`) com dicionário de nomes próprios e regras morfológicas.
   - Implementação da paleta feminina em Vinho Nobre Real / Borgonha Noturno (`#220619`, `#14030F`, `#12020D`) com Dourado Champagne (`#D8A756`).

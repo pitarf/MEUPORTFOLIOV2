@@ -107,9 +107,18 @@ export const LEGAL_THEMES = {
     article: 'a',
     articleCap: 'A',
     roleLabel: 'Advogada Especialista',
-    roleTag: 'Advocacia & Assessoria Jurídica',
+    roleTag: 'Boutique Jurídica & Assessoria Estratégica',
     welcomeLabel: 'Boutique Jurídica de Excelência',
     headlinePrefix: 'Defesa Estratégica & Atendimento Humanizado',
+    
+    // Imagens Temáticas de Alta Resolução para Mulheres
+    heroDefaultImg: '/images/legal/advogada_hero.jpg',
+    aboutImg: '/images/legal/advogada_sobre.jpg',
+
+    // Tipografia Nobre Editorial
+    headingFontClass: 'font-serif font-medium tracking-normal text-[#2C0822]',
+    subheadingFontClass: 'font-sans font-light text-stone-600 leading-relaxed',
+    badgeTextClass: 'font-sans font-medium text-[11px] uppercase tracking-widest text-[#C89445]',
     
     // Cores Principais
     primaryAccent: '#D8A756',      // Ouro Champagne Nobre
@@ -117,19 +126,30 @@ export const LEGAL_THEMES = {
     wineDeep: '#220619',           // Borgonha Profundo (Fundo Dark)
     wineDarker: '#14030F',         // Vinho Ultra Noturno (Topo/Rodapé)
     wineMiddle: '#2C0920',         // Vinho Acetinado
-    wineSoftBg: '#FDF7FA',         // Nuance Suave para Seções Claras
-    wineBorderSoft: '#F2DFEB',     // Bordas delicadas com toque vinho
+    wineSoftBg: '#FAF4F7',         // Nuance Suave para Seções Claras
+    wineBorderSoft: '#EEDCE7',     // Bordas delicadas com toque vinho
     wineHighlight: '#9A1E58',      // Púrpura Vinho vibrante
     
+    // Fundos de Seções Harmonizados (Nude / Champagne Suave)
+    sectionBgBase: 'bg-[#FCF9F7]',
+    sectionBgAlt: 'bg-[#FAF4F7]',
+    cardBgClass: 'bg-white/95 border border-[#EEDCE7] shadow-[0_10px_30px_rgba(44,8,34,0.04)] rounded-2xl sm:rounded-3xl hover:border-[#D8A756]/50 transition-all duration-300',
+    
     // Classes Utilitárias Tailwind
-    topBarBgClass: 'bg-[#14030F] border-b border-white/10',
+    topBarBgClass: 'bg-[#14030F] border-b border-[#D8A756]/20',
     heroBgClass: 'bg-gradient-to-b from-[#1C0515] via-[#26081D] to-[#12030E]',
     bannerBgClass: 'bg-gradient-to-r from-[#1C0515] via-[#2D0A22] to-[#12030E]',
-    footerBgClass: 'bg-[#12020D] text-slate-300',
-    cardBorderHover: 'hover:border-[#9A1E58]/40',
-    badgeClass: 'bg-[#D8A756]/15 text-[#D8A756] border-[#D8A756]/30',
-    sectionSubtleBg: 'bg-[#FAF5F8]',
-    logoGradient: 'from-[#E0B266] via-[#D8A756] to-[#B37F2C]'
+    footerBgClass: 'bg-[#12020D] text-stone-300',
+    cardBorderHover: 'hover:border-[#D8A756]/60',
+    badgeClass: 'bg-[#D8A756]/15 text-[#C89445] border-[#D8A756]/30',
+    sectionSubtleBg: 'bg-[#FAF4F7]',
+    logoGradient: 'from-[#F3D79E] via-[#D8A756] to-[#B37F2C]',
+
+    // Ações & Botões Refinados
+    ctaPrimaryClass: 'bg-gradient-to-r from-[#D8A756] via-[#E5BF7C] to-[#C79540] text-[#1A0314] font-semibold tracking-wide shadow-lg shadow-[#D8A756]/20 hover:shadow-[#D8A756]/35',
+    ctaSecondaryClass: 'bg-white/10 hover:bg-white/15 text-white border border-[#D8A756]/40 backdrop-blur-md',
+    ctaWhatsappClass: 'bg-gradient-to-r from-[#1F6E43] to-[#144E2E] hover:from-[#1b5f3a] hover:to-[#103e25] text-white font-medium tracking-wide shadow-md shadow-emerald-900/20',
+    methodologyCircleClass: 'bg-gradient-to-br from-[#2D0A22] to-[#1A0314] text-[#D8A756] border-2 border-[#D8A756]/40 shadow-lg shadow-[#2D0A22]/20'
   },
 
   // Paleta Masculina: Navy Clássico Imperial, Azul Noite & Ouro Nobre
@@ -143,6 +163,15 @@ export const LEGAL_THEMES = {
     welcomeLabel: 'Bancada Jurídica de Prestígio',
     headlinePrefix: 'Autoridade Jurídica & Rigor Estratégico',
     
+    // Imagens Temáticas Masculinas
+    heroDefaultImg: '/images/legal/hero_desk.jpg',
+    aboutImg: '/images/legal/reuniao.jpg',
+
+    // Tipografia
+    headingFontClass: 'font-sans font-extrabold tracking-tight text-[#0A192F]',
+    subheadingFontClass: 'font-sans font-normal text-slate-600 leading-relaxed',
+    badgeTextClass: 'font-sans font-bold text-xs uppercase tracking-widest text-[#C6923C]',
+
     // Cores Principais
     primaryAccent: '#C6923C',      // Dourado Real
     primaryAccentDark: '#B37F2C',  // Dourado Clássico
@@ -153,6 +182,11 @@ export const LEGAL_THEMES = {
     wineBorderSoft: '#E2E8F0',     // Bordas neutras
     wineHighlight: '#1E3A8A',      // Azul Royal
     
+    // Fundos de Seções
+    sectionBgBase: 'bg-white',
+    sectionBgAlt: 'bg-[#FAFBFD]',
+    cardBgClass: 'bg-white border border-slate-200/80 shadow-md rounded-2xl hover:border-amber-400/80 transition-all duration-300',
+
     // Classes Utilitárias Tailwind
     topBarBgClass: 'bg-[#071326] border-b border-white/10',
     heroBgClass: 'bg-gradient-to-b from-[#071326] via-[#0A192F] to-[#050C18]',
@@ -161,6 +195,12 @@ export const LEGAL_THEMES = {
     cardBorderHover: 'hover:border-[#C6923C]/40',
     badgeClass: 'bg-[#C6923C]/15 text-[#C6923C] border-[#C6923C]/30',
     sectionSubtleBg: 'bg-[#F8FAFC]',
-    logoGradient: 'from-[#D8A756] to-[#C6923C]'
+    logoGradient: 'from-[#D8A756] to-[#C6923C]',
+
+    // Ações & Botões
+    ctaPrimaryClass: 'bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 text-black font-extrabold shadow-lg',
+    ctaSecondaryClass: 'bg-white/10 hover:bg-white/15 text-white border border-white/20 backdrop-blur-md',
+    ctaWhatsappClass: 'bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold',
+    methodologyCircleClass: 'bg-[#0A192F] text-amber-300 border border-amber-400/30'
   }
 };

@@ -6,9 +6,10 @@ import { Scale, MapPin, Phone, Mail, Clock, Instagram, MessageCircle, ShieldChec
  */
 export default function LegalFooter({ lawyer, nicheInfo, theme }) {
   const currentYear = new Date().getFullYear();
+  const isFemale = theme?.gender === 'female';
 
   return (
-    <footer className={`${theme?.footerBgClass || 'bg-[#05101E]'} text-slate-300 text-xs font-sans border-t border-white/10 pt-16 pb-10 transition-colors`}>
+    <footer className={`${theme?.footerBgClass || 'bg-[#05101E]'} text-stone-300 text-xs font-sans border-t border-white/10 pt-16 pb-10 transition-colors`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* 4 Colunas Institucionais */}
@@ -17,14 +18,14 @@ export default function LegalFooter({ lawyer, nicheInfo, theme }) {
           {/* Coluna 1: Identidade e Resumo (4 colunas) */}
           <div className="lg:col-span-4 space-y-4">
             <div className="flex items-center gap-3">
-              <div className={`w-9 h-9 rounded-md bg-gradient-to-br ${theme?.logoGradient || 'from-[#D8A756] to-[#C6923C]'} flex items-center justify-center shadow-sm`}>
-                <Scale className="w-5 h-5 text-white" />
+              <div className={`w-9 h-9 ${isFemale ? 'rounded-xl' : 'rounded-md'} bg-gradient-to-br ${theme?.logoGradient || 'from-[#D8A756] to-[#C6923C]'} flex items-center justify-center shadow-sm`}>
+                <Scale className={`w-5 h-5 ${isFemale ? 'text-[#1A0314]' : 'text-white'}`} />
               </div>
               <div>
-                <span className="font-sans text-base font-bold text-white block">
+                <span className={`${isFemale ? 'font-serif text-lg font-medium text-white' : 'font-sans text-base font-bold text-white'} block`}>
                   {lawyer.name}
                 </span>
-                <span className="text-[10px] font-mono tracking-widest text-[#C6923C] uppercase font-semibold">
+                <span className={`text-[10px] font-mono tracking-widest ${isFemale ? 'text-[#D8A756]' : 'text-[#C6923C]'} uppercase font-semibold`}>
                   {lawyer.oab || theme?.roleTag || 'Advocacia & Consultoria'}
                 </span>
               </div>

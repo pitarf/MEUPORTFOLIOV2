@@ -177,15 +177,16 @@ export default function LegalDiagnosisCalculator({ lawyer, nicheInfo, theme }) {
     );
   };
 
-  const whatsappDossierUrl = `https://wa.me/${lawyer.whatsapp}?text=${encodeURIComponent(getDossierMessage())}`;
+  const isFemale = theme?.gender === 'female';
+  const bgImage = isFemale ? "bg-[url('/images/legal/advogada_tribunal.jpg')]" : "bg-[url('/images/legal/tribunal.jpg')]";
 
   return (
     <section 
       id="diagnostico" 
-      className="py-28 text-white relative overflow-hidden bg-[url('/images/legal/tribunal.jpg')] bg-fixed bg-cover bg-center"
+      className={`py-28 text-white relative overflow-hidden ${bgImage} bg-fixed bg-cover bg-center`}
     >
       {/* Overlay Escuro com Revelação Suave ao Scroll e Alto Contraste */}
-      <div className={`absolute inset-0 ${theme?.gender === 'female' ? 'bg-gradient-to-b from-[#1C0515]/95 via-[#23061A]/85 to-[#12020D]/95' : 'bg-gradient-to-b from-[#070F1E]/95 via-[#070F1E]/82 to-[#070F1E]/95'} backdrop-blur-[1px] pointer-events-none`} />
+      <div className={`absolute inset-0 ${isFemale ? 'bg-gradient-to-b from-[#1C0515]/95 via-[#23061A]/85 to-[#12020D]/95' : 'bg-gradient-to-b from-[#070F1E]/95 via-[#070F1E]/82 to-[#070F1E]/95'} backdrop-blur-[1px] pointer-events-none`} />
       
       {/* Luz ambiente de fundo */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-gradient-to-tr from-amber-500/15 via-blue-600/10 to-transparent rounded-full blur-[160px] pointer-events-none" />
@@ -368,11 +369,11 @@ export default function LegalDiagnosisCalculator({ lawyer, nicheInfo, theme }) {
                   href={whatsappDossierUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full sm:flex-1 py-4 px-6 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 text-black font-black text-xs sm:text-sm uppercase tracking-wider shadow-2xl flex items-center justify-center gap-2 group transition-all"
+                  className={`w-full sm:flex-1 py-4 px-6 ${isFemale ? 'rounded-full bg-gradient-to-r from-[#D8A756] via-[#E5BF7C] to-[#C79540] text-[#1A0314] font-bold shadow-lg shadow-[#D8A756]/25' : 'rounded-xl bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 text-black font-black shadow-2xl'} text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 group transition-all`}
                 >
-                  <MessageCircle className="w-5 h-5 text-black" />
-                  <span>TRANSMITIR DIAGNÓSTICO {theme?.gender === 'female' ? 'À DRA.' : 'AO DR.'} {lawyer.name}</span>
-                  <ArrowRight className="w-4 h-4 text-black group-hover:translate-x-1.5 transition-transform" />
+                  <MessageCircle className={`w-5 h-5 ${isFemale ? 'fill-[#1A0314] text-[#1A0314]' : 'text-black'}`} />
+                  <span>TRANSMITIR DIAGNÓSTICO {isFemale ? 'À DRA.' : 'AO DR.'} {lawyer.name}</span>
+                  <ArrowRight className={`w-4 h-4 ${isFemale ? 'text-[#1A0314]' : 'text-black'} group-hover:translate-x-1.5 transition-transform`} />
                 </motion.a>
 
                 <button

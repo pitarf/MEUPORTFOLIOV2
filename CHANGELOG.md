@@ -2,6 +2,26 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.26.5] - 2026-09-30
+
+### Aprimorado (Redesenho Delicado, Tipografia Playfair Display & Substituição Integral de Fotos por Advogadas)
+- **Substituição Completa de Fotos do Carrossel por Mulheres (`LegalHero.jsx`, `LegalAbout.jsx`, `LegalDiagnosisCalculator.jsx`)**:
+  - Eliminadas 100% das fotos masculinas de terno no carrossel de slides quando o lead for feminino.
+  - `advogada_hero.jpg`: Retrato de alta resolução de advogada brasileira em mesa executiva com flores brancas e vista panorâmica.
+  - `advogada_sobre.jpg`: Fotografia de reunião acolhedora e elegante entre advogada e cliente em sala de reuniões boutique.
+  - `advogada_tribunal.jpg`: Fotografia cinematográfica de advogada caminhando com pasta de recursos em tribunal nobre.
+  - `advogada_sede.jpg`: Recepção de escritório boutique luxuoso com advogada recepcionando cliente.
+  - Fundo da ferramenta interativa de diagnóstico atualizado com a imagem feminina de tribunal.
+- **Tipografia Nobre Editorial (`Playfair Display` & `Cinzel`)**:
+  - Reconfigurado o `tailwind.config.js` para mapear a família `serif` diretamente para `Playfair Display`.
+  - Títulos da landing page feminina agora utilizam `font-serif font-normal` com destaques elegantes em itálico e tons de ameixa/vinho profundo aveludado (`#2C0822`), abandonando a rigidez sans-serif preta corporativa masculina.
+- **Fundos Aquecidos e Cartões Delicados**:
+  - Eliminados fundos cinza-hospitalares (`#FAFBFD`). Adotadas nuances em nude e blush suave (`#FAF4F7`, `#FCF9F7`), bordas em champanhe rosado (`#EEDCE7`) e cantos arredondados fluidos (`rounded-3xl`).
+- **Botões e Ações de Luxo (Ouro Champagne Acetinado)**:
+  - Substituídos os botões de WhatsApp verdes estridentes por CTAs em degradê Ouro Champagne Nobre (`#D8A756` / `#E5BF7C`) com cantos em pílula suave (`rounded-full`), harmonizando perfeitamente com a identidade visual de luxo.
+- **Validação de Build**:
+  - `npm run build` testado e aprovado com código 0 (`index-f11cb057.js`).
+
 ## [1.26.4] - 2026-09-30
 
 ### Adicionado & Aprimorado (Detecção Inteligente de Gênero & Paleta Executiva Feminina Vinho Nobre)

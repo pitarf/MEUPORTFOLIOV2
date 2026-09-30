@@ -21,12 +21,12 @@ export default function LegalCinematicBanner({ lawyer, theme }) {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           
           {/* Lado Esquerdo: Texto de Chamada */}
-          <div className="space-y-1 max-w-2xl">
-            <h2 className="text-2xl sm:text-3xl font-sans font-extrabold text-white tracking-tight">
+          <div className="space-y-1.5 max-w-2xl">
+            <h2 className={`text-2xl sm:text-3xl lg:text-[2.2rem] ${theme?.gender === 'female' ? 'font-serif font-normal tracking-normal' : 'font-sans font-extrabold tracking-tight'} text-white`}>
               Pronto para Assumir o Controle do Seu Caso Jurídico?
             </h2>
-            <p className="text-sm text-slate-200 font-normal">
-              Agende hoje mesmo uma consulta sem compromisso e receba orientação estratégica dos nossos advogados.
+            <p className={`text-sm ${theme?.gender === 'female' ? 'text-stone-300 font-light' : 'text-slate-200 font-normal'}`}>
+              Agende hoje mesmo uma consulta sem compromisso e receba orientação estratégica e humanizada.
             </p>
           </div>
 
@@ -38,9 +38,9 @@ export default function LegalCinematicBanner({ lawyer, theme }) {
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-[#C6923C] hover:bg-[#B5812B] text-white font-semibold text-xs sm:text-sm tracking-wide shadow-lg shadow-amber-950/40 transition-all whitespace-nowrap"
+              className={`inline-flex items-center gap-2.5 px-8 py-4 ${theme?.gender === 'female' ? 'rounded-full bg-gradient-to-r from-[#D8A756] via-[#E5BF7C] to-[#C79540] text-[#1A0314] font-semibold shadow-lg shadow-[#D8A756]/25 hover:shadow-[#D8A756]/40' : 'rounded-xl bg-[#C6923C] hover:bg-[#B5812B] text-white font-semibold shadow-lg shadow-amber-950/40'} text-xs sm:text-sm tracking-wide transition-all whitespace-nowrap`}
             >
-              <MessageCircle className="w-4 h-4 text-white" />
+              <MessageCircle className={`w-4 h-4 ${theme?.gender === 'female' ? 'fill-[#1A0314] text-[#1A0314]' : 'text-white'}`} />
               <span>Agendar uma Consulta</span>
             </motion.a>
           </div>

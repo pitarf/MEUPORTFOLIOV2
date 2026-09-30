@@ -6,8 +6,10 @@ import { Star, Quote, ShieldCheck, MessageCircle, ArrowRight } from 'lucide-reac
  * Seção de Depoimentos no Estilo Exato da Summit Financial (Imagem de Referência)
  * 3 cards brancos limpos com aspas douradas, depoimento contextualizado por nicho e cidade do advogado.
  */
-export default function LegalReviews({ lawyer, nicheInfo }) {
-  const lawyerShortName = lawyer?.name || 'O escritório';
+export default function LegalReviews({ lawyer, nicheInfo, theme }) {
+  const isFemale = theme?.gender === 'female';
+  const honorific = theme?.honorific || 'Dr(a).';
+  const lawyerShortName = lawyer?.name ? `${honorific} ${lawyer.name}` : 'O escritório';
   const lawyerCity = lawyer?.city || 'São Paulo';
   const lawyerState = lawyer?.state || 'SP';
   const regionLocation = `${lawyerCity} - ${lawyerState}`;
@@ -96,22 +98,22 @@ export default function LegalReviews({ lawyer, nicheInfo }) {
   }, [lawyerShortName, regionLocation, nicheInfo]);
 
   return (
-    <section id="depoimentos" className="bg-white py-20 sm:py-24 text-slate-800 border-t border-slate-100">
+    <section id="depoimentos" className={`${isFemale ? 'bg-[#FCF9F7] border-[#EEDCE7] text-stone-800' : 'bg-white border-slate-100 text-slate-800'} py-20 sm:py-24 border-t`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Cabeçalho Centralizado */}
         <div className="text-center max-w-2xl mx-auto mb-16">
           <div className="flex items-center justify-center gap-2 mb-2">
-            <span className="w-8 h-[2px] bg-[#C6923C]" />
-            <span className="text-xs font-semibold text-[#C6923C] uppercase tracking-widest">
+            <span className={`w-8 h-[2px] ${isFemale ? 'bg-[#D8A756]' : 'bg-[#C6923C]'}`} />
+            <span className={`text-xs font-semibold ${isFemale ? 'text-[#C89445] tracking-widest' : 'text-[#C6923C] uppercase tracking-widest'}`}>
               DEPOIMENTOS DOS CLIENTES
             </span>
-            <span className="w-8 h-[2px] bg-[#C6923C]" />
+            <span className={`w-8 h-[2px] ${isFemale ? 'bg-[#D8A756]' : 'bg-[#C6923C]'}`} />
           </div>
-          <h2 className="text-3xl sm:text-4xl font-sans font-extrabold text-[#0A192F] tracking-tight">
+          <h2 className={`text-3xl sm:text-4xl lg:text-[2.5rem] ${isFemale ? 'font-serif font-normal text-[#2C0822] tracking-normal' : 'font-sans font-extrabold text-[#0A192F] tracking-tight'}`}>
             A Confiança de Quem Teve Seus Direitos Defendidos
           </h2>
-          <p className="text-base text-slate-600 mt-3 font-normal leading-relaxed">
+          <p className={`text-base ${isFemale ? 'text-stone-600 font-light' : 'text-slate-600 font-normal'} mt-3 leading-relaxed`}>
             A satisfação dos nossos clientes é o maior testemunho do nosso rigor técnico e comprometimento ético.
           </p>
         </div>
@@ -121,25 +123,25 @@ export default function LegalReviews({ lawyer, nicheInfo }) {
           {reviews.map((r, idx) => (
             <div
               key={idx}
-              className="bg-white rounded-2xl border border-slate-200/90 p-8 shadow-sm hover:shadow-xl hover:border-amber-400/50 transition-all duration-300 flex flex-col justify-between"
+              className={`${isFemale ? 'bg-white/95 rounded-3xl border border-[#EEDCE7] shadow-[0_10px_30px_rgba(44,8,34,0.04)] hover:border-[#D8A756]/60' : 'bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-amber-400/50'} p-8 transition-all duration-300 flex flex-col justify-between`}
             >
               <div>
                 {/* Aspas em Ouro */}
-                <span className="text-4xl font-serif font-bold text-[#C6923C] block leading-none mb-3">
+                <span className={`text-4xl font-serif font-bold ${isFemale ? 'text-[#D8A756]' : 'text-[#C6923C]'} block leading-none mb-3`}>
                   “
                 </span>
 
-                <p className="text-sm text-slate-600 leading-relaxed font-normal italic">
+                <p className={`text-sm ${isFemale ? 'text-stone-600 font-light' : 'text-slate-600 font-normal'} leading-relaxed italic`}>
                   {r.quote}
                 </p>
               </div>
 
-              <div className="mt-8 pt-4 border-t border-slate-100 flex items-center justify-between">
+              <div className={`mt-8 pt-4 border-t ${isFemale ? 'border-[#F2E4ED]' : 'border-slate-100'} flex items-center justify-between`}>
                 <div>
-                  <span className="font-bold text-sm text-[#0A192F] block">
+                  <span className={`text-sm ${isFemale ? 'font-serif font-medium text-[#2C0822]' : 'font-bold text-[#0A192F]'} block`}>
                     — {r.name}
                   </span>
-                  <span className="text-[11px] text-slate-500 font-mono">
+                  <span className={`text-[11px] ${isFemale ? 'text-stone-500 font-light' : 'text-slate-500 font-mono'}`}>
                     {r.city}
                   </span>
                 </div>
@@ -147,7 +149,7 @@ export default function LegalReviews({ lawyer, nicheInfo }) {
                 {/* 5 Estrelas Douradas */}
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-3.5 h-3.5 fill-[#C6923C] text-[#C6923C]" />
+                    <Star key={i} className={`w-3.5 h-3.5 ${isFemale ? 'fill-[#D8A756] text-[#D8A756]' : 'fill-[#C6923C] text-[#C6923C]'}`} />
                   ))}
                 </div>
               </div>
@@ -157,17 +159,17 @@ export default function LegalReviews({ lawyer, nicheInfo }) {
 
         {/* Bloco de CTA Pós-Depoimentos */}
         <div className="mt-14 max-w-2xl mx-auto text-center">
-          <div className="inline-flex flex-col sm:flex-row items-center justify-between gap-5 w-full bg-[#FAFBFD] border border-amber-300/70 rounded-2xl p-6 sm:p-7 shadow-md">
+          <div className={`inline-flex flex-col sm:flex-row items-center justify-between gap-5 w-full ${isFemale ? 'bg-[#FAF4F7] border border-[#D8A756]/40 rounded-3xl shadow-[0_10px_30px_rgba(44,8,34,0.06)]' : 'bg-[#FAFBFD] border border-amber-300/70 rounded-2xl shadow-md'} p-6 sm:p-7`}>
             <div className="flex items-center gap-3.5 text-left">
-              <div className="w-11 h-11 rounded-xl bg-amber-500/10 border border-amber-400/40 flex items-center justify-center text-[#C6923C] flex-shrink-0">
+              <div className={`w-11 h-11 rounded-xl ${isFemale ? 'bg-[#D8A756]/15 border border-[#D8A756]/30 text-[#D8A756]' : 'bg-amber-500/10 border border-amber-400/40 text-[#C6923C]'} flex items-center justify-center flex-shrink-0`}>
                 <ShieldCheck className="w-6 h-6" />
               </div>
               <div>
-                <span className="text-sm font-bold text-[#0A192F] block leading-tight">
+                <span className={`text-sm ${isFemale ? 'font-serif font-medium text-[#2C0822]' : 'font-bold text-[#0A192F]'} block leading-tight`}>
                   Deseja a mesma tranquilidade para o seu caso?
                 </span>
-                <span className="text-xs text-slate-500 block mt-0.5 font-normal">
-                  Inicie sua consulta estratégica com o Dr(a). {lawyer?.name || 'nosso escritório'}.
+                <span className={`text-xs ${isFemale ? 'text-stone-500 font-light' : 'text-slate-500 font-normal'} block mt-0.5`}>
+                  Inicie sua consulta estratégica com {theme?.article === 'a' ? 'a Dra.' : 'o Dr.'} {lawyer?.name || 'nosso escritório'}.
                 </span>
               </div>
             </div>
@@ -176,15 +178,15 @@ export default function LegalReviews({ lawyer, nicheInfo }) {
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               href={`https://wa.me/${lawyer?.whatsapp}?text=${encodeURIComponent(
-                `Olá, Dr(a). ${lawyer?.name}, vi os depoimentos de clientes no site e gostaria de agendar uma consulta para o meu caso.`
+                `Olá, ${honorific} ${lawyer?.name}, vi os depoimentos de clientes no site e gostaria de agendar uma consulta para o meu caso.`
               )}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-6 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-emerald-500/25 transition-all flex items-center gap-2 whitespace-nowrap flex-shrink-0 group"
+              className={`px-8 py-4 ${isFemale ? 'rounded-full bg-gradient-to-r from-[#D8A756] via-[#E5BF7C] to-[#C79540] text-[#1A0314] font-semibold shadow-lg shadow-[#D8A756]/20 hover:shadow-[#D8A756]/35' : 'rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold shadow-md hover:shadow-emerald-500/25'} text-xs uppercase tracking-wider transition-all flex items-center gap-2 whitespace-nowrap flex-shrink-0 group`}
             >
-              <MessageCircle className="w-4 h-4 fill-white text-white group-hover:scale-110 transition-transform" />
+              <MessageCircle className={`w-4 h-4 ${isFemale ? 'fill-[#1A0314] text-[#1A0314]' : 'fill-white text-white'} group-hover:scale-110 transition-transform`} />
               <span>Consultar no WhatsApp</span>
-              <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className={`w-4 h-4 ${isFemale ? 'text-[#1A0314]' : 'text-white'} group-hover:translate-x-1 transition-transform`} />
             </motion.a>
           </div>
         </div>

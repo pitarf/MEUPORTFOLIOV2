@@ -481,6 +481,19 @@ Para conferir máxima atratividade visual, delicadeza e requinte ao público fem
    - A página `LegalLandingPage.jsx` calcula o tema ativo e o distribui a todos os componentes filhos (`theme={theme}`).
    - Ajusta dinamicamente a seleção de texto global (`selection:bg-[#9A1E58]`), cabeçalho, overlays, textos de botões ("Falar com a Especialista", "TRANSMITIR DIAGNÓSTICO À DRA.") e mensagens de WhatsApp contextualizadas ("Olá, Dra. {nome}...").
 
+### 13.17 Tipografia Editorial Playfair Display & Redesenho Delicado Feminino
+Para conferir a atmosfera de uma boutique jurídica acolhedora, sofisticada e de alta autoridade:
+1. **Configuração de Fontes no Tailwind (`tailwind.config.js`)**:
+   - A família `serif` foi vinculada a `'Playfair Display', Georgia, serif`.
+   - Permite que qualquer componente utilize a nobreza e o refinamento clássico de Playfair Display com a simples classe `font-serif`.
+2. **Harmonização Visual e Cromática Delicada**:
+   - Os títulos abandonam o peso bruto `font-extrabold` sans-serif e adotam `font-serif font-normal` com nuances em itálico e coloração ameixa profunda (`#2C0822`).
+   - Fundos migrados para tons aquecidos de nude e blush (`#FAF4F7`, `#FCF9F7`), eliminando a frieza do cinza corporativo.
+   - Cantos com acabamento orgânico (`rounded-3xl` e `rounded-full` nos botões), bordas em champanhe rosado (`#EEDCE7`).
+   - Círculos de etapas do processo em degradê vinho acetinado com anel champanhe e número dourado.
+3. **Mídias Dedicadas de Alta Definição**:
+   - Inseridas imagens em alta resolução geradas sob medida: `advogada_hero.jpg` (advogada brasileira contemporânea em mesa executiva com vista panorâmica) e `advogada_sobre.jpg` (sala de reuniões acolhedora em atendimento com cliente).
+
 
 
 

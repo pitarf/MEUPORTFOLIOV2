@@ -157,6 +157,11 @@ export default function LegalLandingPage() {
   const gender = lawyerData.gender || detectLawyerGender(lawyerData.name);
   const theme = LEGAL_THEMES[gender] || LEGAL_THEMES.male;
 
+  // Imagem de Hero adaptada à estética e gênero do profissional
+  const activeHeroImage = (heroImage && !heroImage.includes('hero_desk.jpg'))
+    ? heroImage
+    : theme.heroDefaultImg;
+
   // Atualização dinâmica de Título e Proteção NoIndex (SEO off para páginas demo de prospecção)
   useEffect(() => {
     const hasPrefix = /^(dr\.|dra\.|doutor|doutora)/i.test(lawyerData.name.trim());
@@ -190,7 +195,7 @@ export default function LegalLandingPage() {
       <LegalNavbar lawyer={lawyerData} nicheInfo={nicheInfo} theme={theme} />
 
       {/* 3. Hero Section em Dark Navy / Vinho Nobre com Foto Executiva na Mesa e Botões Duplos */}
-      <LegalHero lawyer={lawyerData} nicheInfo={nicheInfo} heroImage={heroImage} theme={theme} />
+      <LegalHero lawyer={lawyerData} nicheInfo={nicheInfo} heroImage={activeHeroImage} theme={theme} />
 
       {/* 4. Barra de 4 Pilares de Confiança (Fiduciary, Independent, Strategies, Privacy) */}
       <LegalTrustBar theme={theme} />
