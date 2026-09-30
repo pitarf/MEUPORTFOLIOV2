@@ -6,11 +6,14 @@ import { MessageCircle, ArrowRight, ShieldCheck, Scale, Award, ChevronLeft, Chev
  * Hero Section com Carrossel Cinematográfico Full Width em Background
  * Imagens em tela cheia com crossfade suave, overlay de alto contraste e tipografia moderna.
  */
-export default function LegalHero({ lawyer, nicheInfo, heroImage }) {
+export default function LegalHero({ lawyer, nicheInfo, heroImage, theme }) {
+  const isFemale = theme?.gender === 'female';
+  const honorific = theme?.honorific || 'Dr(a).';
+
   const slides = [
     {
       image: '/images/legal/hero_desk.jpg',
-      tag: 'ORIENTAÇÃO JURÍDICA ESTRATÉGICA',
+      tag: isFemale ? 'ADVOCACIA HUMANIZADA & ESTRATÉGICA' : 'ORIENTAÇÃO JURÍDICA ESTRATÉGICA',
       title: 'Decisões Jurídicas Estratégicas para o seu',
       highlight: 'Futuro Seguro',
       desc: 'Apoiamos pessoas físicas e empresas com estratégias sob medida para resguardar direitos, blindar patrimônio e alcançar soluções céleres e eficazes perante os tribunais.',
@@ -63,7 +66,7 @@ export default function LegalHero({ lawyer, nicheInfo, heroImage }) {
   const currentSlide = slides[currentIndex];
 
   const whatsappUrl = `https://wa.me/${lawyer.whatsapp}?text=${encodeURIComponent(
-    `Olá, Dr(a). ${lawyer.name}, gostaria de agendar uma consulta jurídica estratégica.`
+    `Olá, ${honorific} ${lawyer.name}, gostaria de agendar uma consulta jurídica estratégica.`
   )}`;
 
   return (
@@ -94,9 +97,9 @@ export default function LegalHero({ lawyer, nicheInfo, heroImage }) {
           );
         })}
 
-        {/* Gradientes de Alto Contraste para Legibilidade Perfeita */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#070F1E]/95 via-[#070F1E]/80 to-[#070F1E]/50 z-20 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0A192F] via-transparent to-[#070F1E]/60 z-20 pointer-events-none" />
+        {/* Gradientes de Alto Contraste Adaptativos (Vinho Profundo para Mulher / Navy para Homem) */}
+        <div className={`absolute inset-0 bg-gradient-to-r ${isFemale ? 'from-[#170311]/95 via-[#1A0414]/80 to-[#12020D]/55' : 'from-[#070F1E]/95 via-[#070F1E]/80 to-[#070F1E]/50'} z-20 pointer-events-none`} />
+        <div className={`absolute inset-0 bg-gradient-to-t ${isFemale ? 'from-[#1E0518] via-transparent to-[#150310]/60' : 'from-[#0A192F] via-transparent to-[#070F1E]/60'} z-20 pointer-events-none`} />
       </div>
 
       {/* 2. CONTEÚDO PRINCIPAL SOBRE O CARROSSEL */}
@@ -184,16 +187,16 @@ export default function LegalHero({ lawyer, nicheInfo, heroImage }) {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.7 }}
-              className="backdrop-blur-2xl bg-[#070F1E]/80 border border-white/15 p-6 rounded-2xl shadow-2xl max-w-sm space-y-4"
+              className={`backdrop-blur-2xl ${isFemale ? 'bg-[#1C0516]/85 border-[#9A1E58]/30 shadow-pink-950/20' : 'bg-[#070F1E]/80 border-white/15 shadow-2xl'} p-6 rounded-2xl max-w-sm space-y-4`}
             >
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#D8A756] to-[#C6923C] flex items-center justify-center text-white shadow-md">
+                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${theme?.logoGradient || 'from-[#D8A756] to-[#C6923C]'} flex items-center justify-center text-white shadow-md`}>
                   <Scale className="w-6 h-6" />
                 </div>
                 <div>
                   <h3 className="font-bold text-white text-base leading-snug">{lawyer.name}</h3>
                   <span className="text-[11px] text-[#D8A756] font-mono uppercase tracking-wider block">
-                    Advocacia Estratégica
+                    {theme?.roleTag || 'Advocacia Estratégica'}
                   </span>
                 </div>
               </div>

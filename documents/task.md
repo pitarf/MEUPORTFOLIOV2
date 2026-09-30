@@ -3,6 +3,16 @@
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
 ## CONCLUÍDO (DONE)
+- [x] **Detecção Inteligente de Gênero & Paleta Executiva Feminina Vinho Nobre (`genderDetection.js`, `LegalLandingPage.jsx`, componentes em `src/components/legal/`)**:
+  - Detecção automática baseada no nome (ex: `Roseli`, `Natálie`, `Paula`, `Sandra`, `Dra.`, `Advogada`) com dicionário de nomes próprios e regras morfológicas.
+  - Implementação da paleta feminina em Vinho Nobre Real / Borgonha Noturno (`#220619`, `#14030F`, `#12020D`) com Dourado Champagne (`#D8A756`).
+  - Preservação da paleta masculina em Navy Clássico Imperial (`#0A192F`, `#071326`) com Dourado Real (`#C6923C`).
+  - Concordância estrita de pronomes e títulos em todos os componentes ("Dra.", "Advogada Especialista", "cliente e advogada", "TRANSMITIR DIAGNÓSTICO À DRA.").
+  - Build do Vite executado e 100% aprovado sem erros (código 0).
+- [x] **Arejamento da Navbar Jurídica & Formatação Amigável de Telefone (`LegalNavbar.jsx`, `LegalTopBar.jsx`)**:
+  - Removido o botão "Início" duplicado; clique na marca e no ícone da balança agora rola suavemente para o início da página.
+  - Espaçamentos horizontais ampliados (`gap-5 xl:gap-8`) e simplificação do termo "Diagnóstico" para maior equilíbrio óptico.
+  - Telefone na barra superior formatado com máscara de DDD brasileiro `(19) 99116-4333`.
 - [x] **Correção do Import de MessageCircle em LegalAbout.jsx & Auditoria AST (`LegalAbout.jsx`)**:
   - Solucionado o `ReferenceError: MessageCircle is not defined` que causava tela branca na página de demonstração jurídica.
   - Auditoria completa via Babel AST executada em todos os arquivos de `src/components/legal` e `src/pages/legal`, atestando 0 erros ou componentes indefinidos.

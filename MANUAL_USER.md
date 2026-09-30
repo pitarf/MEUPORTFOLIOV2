@@ -510,6 +510,15 @@ Agora o Radar conta com consulta direta à base de dados oficial do Google Maps 
 5. **Visualização Portátil e Confiável (Botão Demo & WhatsApp)**:
    * Ao clicar no botão **Demo** no painel ou quando o advogado clica no link recebido no WhatsApp, a página de demonstração carrega perfeitamente em qualquer smartphone ou computador com o nome dele, WhatsApp e endereço oficial, sem depender de cache local!
 
-
-
-
+### 19.7 Detecção Inteligente de Gênero & Paleta Feminina Elegante (Vinho Nobre & Dourado Champagne)
+Agora o sistema identifica automaticamente se o profissional prospectado é uma advogada ou um advogado, adaptando as cores e o vocabulário para máxima empatia e conversão:
+1. **Como Funciona a Identificação**:
+   * O sistema analisa o nome do lead (ex: `Roseli Hanna`, `Natálie Terciotti`, `Paula`, `Sandra`, `Dra. Amanda`).
+   * Quando detecta que se trata de uma mulher, o site aplica automaticamente uma paleta sofisticada em **Vinho Nobre / Borgonha Profundo com Dourado Champagne**, mantendo todo o rigor corporativo, mas com um toque delicado, moderno e atraente.
+   * Para homens ou escritórios de banca geral, mantém-se a paleta executiva clássica em **Dark Navy (Azul Noite Profundo) com Dourado Real**.
+2. **Concordância Gramatical e Títulos Automáticos**:
+   * Para advogadas, o site passa a se referir a ela como **"Dra."**, **"Advogada Especialista"**, com botões como *"Falar com a Especialista no WhatsApp"* e *"Transmitir Diagnóstico à Dra."*.
+   * A seleção de texto do mouse ganha um tom exclusivo em púrpura/vinho nobre.
+3. **Navegação no Topo Mais Arejada**:
+   * O link "Início" foi removido da barra superior para deixar a leitura leve e desobstruída. Ao tocar ou clicar no logotipo e na balança dourada, a página rola suavemente até o topo.
+   * O telefone do topo agora é apresentado com a máscara padrão brasileira com DDD (ex: `(19) 99116-4333`), facilitando a identificação imediata da cidade pelo cliente.

@@ -4,7 +4,7 @@ import { ShieldCheck, Users, TrendingUp, Lock } from 'lucide-react';
 /**
  * Barra de Pilares de Confiança (Logo Abaixo do Hero na Referência Summit)
  */
-export default function LegalTrustBar() {
+export default function LegalTrustBar({ theme }) {
   const pillars = [
     {
       icon: ShieldCheck,

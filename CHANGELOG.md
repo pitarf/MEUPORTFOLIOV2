@@ -2,6 +2,41 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.26.4] - 2026-09-30
+
+### Adicionado & Aprimorado (Detecção Inteligente de Gênero & Paleta Executiva Feminina Vinho Nobre)
+- **Motor de Detecção de Gênero (`src/utils/genderDetection.js`)**:
+  - Algoritmo que detecta se o profissional é mulher ou homem a partir do nome ou razão social (ex: `Roseli Hanna - Advogada`, `Natálie Terciotti`, `Paula`, `Sandra`, `Dra.`, `Sociedade Individual de Advogada`).
+  - Dicionário extensivo com centenas de primeiros nomes brasileiros femininos e heurísticas de sufixos (`-a`, `-ele`, `-elly`, `-any`, `-ane`).
+- **Paleta Executiva Feminina ("Vinho Nobre & Ouro Champagne")**:
+  - Tema feminino de alta conversão: Vinho Profundo (`#220619`), Vinho Noturno (`#14030F` / `#12020D`) e Ouro Champagne (`#D8A756`).
+  - Mantém o Navy Clássico Imperial (`#0A192F` / `#071326`) e Dourado Real (`#C6923C`) para homens.
+- **Harmonização de Textos e Concordância de Gênero em Todos os Componentes**:
+  - `LegalLandingPage.jsx`: Injeção dinâmica do tema (`theme`) e seleção de texto tonalizada (`#9A1E58` para mulheres).
+  - `LegalHero.jsx`: Overlays adaptativos, identificação como "Dra." e "Advogada Especialista".
+  - `LegalNavbar.jsx`: Balança dourada estilizada com gradiente refinado para mulheres e rolagem suave ao topo ao clicar na logo.
+  - `LegalTopBar.jsx`: Fundo adaptativo Vinho Noturno e máscara brasileira no telefone `(19) 99116-4333`.
+  - `LegalAbout.jsx`: Ajuste de concordância ("cliente e advogada", "Falar com a Especialista", "Dra.").
+  - `LegalMethodology.jsx`: Pronome e contato ajustados ("Triagem sigilosa com a Dra.").
+  - `LegalDiagnosisCalculator.jsx`: Fundo em degradê vinho nobre, texto do WhatsApp e botão de envio ("TRANSMITIR DIAGNÓSTICO À DRA.").
+  - `LegalFaq.jsx`: Card de atendimento contextualizado ("A Dra. presta esclarecimentos preliminares").
+  - `LegalFloatingWhatsApp.jsx`: Tooltip com fundo vinho acetinado e chamada "Converse diretamente com a Dra.".
+  - `LegalCinematicBanner.jsx` e `LegalFooter.jsx`: Fundo e detalhes adaptados à paleta.
+- **Validação de Build**:
+  - `npm run build` testado e aprovado com código 0 (`index-1cca152e.js`).
+
+## [1.26.3] - 2026-09-30
+
+### Melhorado (Arejamento da Navbar Jurídica & Formatação Amigável de Telefone no Topo)
+- **Descongestão e Respiro Visual da Navbar (`LegalNavbar.jsx`)**:
+  - Removido o link redundante de texto "Início", que ficava colado ao nome do advogado.
+  - O logotipo (balança dourada estilizada + nome do advogado) agora funciona com clique interativo e rolagem suave (`smooth scroll`) para o topo da página.
+  - Encurtado o rótulo "Diagnóstico (60s)" para "Diagnóstico" e ampliados os espaçamentos horizontais (`gap-5 xl:gap-8`), conferindo estética executiva e arejada.
+- **Formatação de Telefone no TopBar (`LegalTopBar.jsx`)**:
+  - Implementada função auxiliar `formatPhoneDisplay` para aplicar máscara brasileira com DDD (ex: `(19) 99116-4333`) mesmo quando o dado bruto vier no padrão internacional com DDI 55.
+- **Validação de Build**:
+  - `npm run build` testado e aprovado com código 0 (`index-19d95cf7.js`).
+
 ## [1.26.2] - 2026-09-30
 
 ### Corrigido (Import Faltante de MessageCircle em LegalAbout.jsx & Varredura AST com Babel)

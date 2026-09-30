@@ -4,20 +4,20 @@ import { Scale, MapPin, Phone, Mail, Clock, Instagram, MessageCircle, ShieldChec
 /**
  * Rodapé Corporativo de Alto Padrão no Estilo Exato da Summit Financial (Imagem de Referência)
  */
-export default function LegalFooter({ lawyer, nicheInfo }) {
+export default function LegalFooter({ lawyer, nicheInfo, theme }) {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#05101E] text-slate-300 text-xs font-sans border-t border-slate-800 pt-16 pb-10">
+    <footer className={`${theme?.footerBgClass || 'bg-[#05101E]'} text-slate-300 text-xs font-sans border-t border-white/10 pt-16 pb-10 transition-colors`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* 4 Colunas Institucionais */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-slate-800">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-white/10">
           
           {/* Coluna 1: Identidade e Resumo (4 colunas) */}
           <div className="lg:col-span-4 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-md bg-[#C6923C] flex items-center justify-center shadow-sm">
+              <div className={`w-9 h-9 rounded-md bg-gradient-to-br ${theme?.logoGradient || 'from-[#D8A756] to-[#C6923C]'} flex items-center justify-center shadow-sm`}>
                 <Scale className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -25,7 +25,7 @@ export default function LegalFooter({ lawyer, nicheInfo }) {
                   {lawyer.name}
                 </span>
                 <span className="text-[10px] font-mono tracking-widest text-[#C6923C] uppercase font-semibold">
-                  {lawyer.oab || 'Advocacia & Consultoria'}
+                  {lawyer.oab || theme?.roleTag || 'Advocacia & Consultoria'}
                 </span>
               </div>
             </div>

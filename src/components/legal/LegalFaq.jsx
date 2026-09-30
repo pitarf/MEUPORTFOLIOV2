@@ -6,16 +6,18 @@ import { ChevronDown, MessageCircle, HelpCircle, ArrowRight, Sparkles } from 'lu
  * FAQ com Split Editorial de 2 Colunas no Estilo Corporativo Summit Financial
  * Acordeão fluido à direita e Card de Conversão Direta no WhatsApp à esquerda.
  */
-export default function LegalFaq({ lawyer, nicheInfo }) {
+export default function LegalFaq({ lawyer, nicheInfo, theme }) {
   const faqList = nicheInfo?.faq || [];
   const [openIndex, setOpenIndex] = useState(0);
+  const honorific = theme?.honorific || 'Dr(a).';
+  const articleCap = theme?.articleCap || 'O';
 
   const toggleFaq = (idx) => {
     setOpenIndex(openIndex === idx ? null : idx);
   };
 
   const whatsappFaqUrl = `https://wa.me/${lawyer?.whatsapp}?text=${encodeURIComponent(
-    `Olá, Dr(a). ${lawyer?.name}, consultei a seção de dúvidas do site mas gostaria de esclarecer uma situação pontual do meu caso.`
+    `Olá, ${honorific} ${lawyer?.name}, consultei a seção de dúvidas do site mas gostaria de esclarecer uma situação pontual do meu caso.`
   )}`;
 
   return (
@@ -52,7 +54,7 @@ export default function LegalFaq({ lawyer, nicheInfo }) {
                   Ficou com alguma dúvida específica sobre o seu caso?
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-600 mt-2 font-normal leading-relaxed">
-                  O Dr(a). {lawyer?.name || 'nosso time'} presta esclarecimentos preliminares diretamente pelo canal oficial do WhatsApp com sigilo ético.
+                  {articleCap} {honorific} {lawyer?.name || 'nosso time'} presta esclarecimentos preliminares diretamente pelo canal oficial do WhatsApp com sigilo ético.
                 </p>
               </div>
 

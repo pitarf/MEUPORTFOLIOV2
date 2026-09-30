@@ -468,14 +468,19 @@ Para alimentar o Radar de Prospecção exclusivamente com advogados reais e veri
    - Ao executar a busca com "Google Places API Oficial (Ao Vivo)" ativo, os dados reais são adicionados ao histórico do CRM/Radar local.
    - Cada card retornado recebe a badge visual `Google Places Oficial` atestando a autenticidade cadastral dos dados.
 
-### 13.15 Arquitetura de Demonstração Portátil & Roteamento SPA na Vercel (`buildDemoUrl`, `LegalLandingPage.jsx`)
-Para assegurar que a demonstração de cada advogado abra com 100% de confiabilidade em qualquer contexto (tanto no navegador do operador quanto no celular do cliente via WhatsApp):
-1. **Roteamento SPA na Vercel (`vercel.json`)**:
-   - Assegurado o rewrite oficial `"source": "/(.*)", "destination": "/index.html"`. Expressões negativas com lookahead foram removidas por causarem falhas de resolução no roteador de borda da Vercel.
-2. **URLs de Demonstração Portáteis (`buildDemoUrl`)**:
-   - A função `buildDemoUrl(lawyer, baseUrl)` anexa parâmetros leves de consulta (`nome`, `tel`, `cidade`, `uf`, `end`, `nicho`, `nota`, `rev`) à URL da landing page (`/advocacia/:slug?nome=...`).
-3. **Hidratação Desacoplada no Frontend (`LegalLandingPage.jsx`)**:
-   - O hook `useSearchParams()` extrai os dados diretamente da URL, permitindo que a landing page monte o nome do advogado, WhatsApp e endereço em tempo de carregamento no dispositivo de qualquer pessoa, sem depender de `localStorage` local.
+### 13.16 Detecção Inteligente de Gênero & Paleta Executiva Feminina Vinho Nobre (`genderDetection.js`)
+Para conferir máxima atratividade visual, delicadeza e requinte ao público feminino sem abrir mão da sobriedade executiva Summit Financial:
+1. **Algoritmo de Detecção de Gênero (`detectLawyerGender`)**:
+   - Analisa prefixos e termos declarativos: `Dra.`, `Doutora`, `Advogada`, `Sociedade Individual de Advogada`.
+   - Remove tokens profissionais e consulta o primeiro nome próprio em um dicionário extensivo de nomes femininos do Brasil (ex: `Roseli`, `Natálie`, `Paula`, `Sandra`, `Fernanda`, `Camila`, etc.).
+   - Utiliza heurísticas de terminação morfológica (`-a`, `-ele`, `-elly`, `-any`, `-ane`) excluindo exceções masculinas (`Lucas`, `Luca`, `Joshua`).
+2. **Tokens de Design por Gênero (`LEGAL_THEMES`)**:
+   - **Feminino (`female`)**: Vinho Nobre Real / Borgonha Profundo (`#220619`), Vinho Noturno (`#14030F` / `#12020D`) e Ouro Champagne (`#D8A756`).
+   - **Masculino (`male`)**: Navy Clássico Imperial (`#0A192F` / `#071326`) e Dourado Real (`#C6923C`).
+3. **Propagação de Tema e Concordância Gramatical**:
+   - A página `LegalLandingPage.jsx` calcula o tema ativo e o distribui a todos os componentes filhos (`theme={theme}`).
+   - Ajusta dinamicamente a seleção de texto global (`selection:bg-[#9A1E58]`), cabeçalho, overlays, textos de botões ("Falar com a Especialista", "TRANSMITIR DIAGNÓSTICO À DRA.") e mensagens de WhatsApp contextualizadas ("Olá, Dra. {nome}...").
+
 
 
 

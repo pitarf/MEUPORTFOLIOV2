@@ -6,7 +6,8 @@ import { MessageSquare, FileText, Compass, Activity, MessageCircle, ArrowRight }
  * Seção de Processo / Metodologia no Estilo Exato da Summit Financial (Imagem de Referência)
  * Fundo claro com 4 círculos conectados, badges numéricas douradas e textos explicativos.
  */
-export default function LegalMethodology({ lawyer, nicheInfo }) {
+export default function LegalMethodology({ lawyer, nicheInfo, theme }) {
+  const honorific = theme?.honorific || 'Dr(a).';
   const steps = [
     {
       num: 1,
@@ -105,7 +106,7 @@ export default function LegalMethodology({ lawyer, nicheInfo }) {
               Inicie o Passo 1 Agora: Agende seu Diagnóstico
             </h4>
             <p className="text-xs sm:text-sm text-slate-500 font-normal">
-              Triagem sigilosa diretamente com o Dr(a). {lawyer?.name || 'nosso escritório'} pelo WhatsApp oficial.
+              Triagem sigilosa diretamente com {theme?.article === 'a' ? 'a Dra.' : 'o Dr.'} {lawyer?.name || 'nosso escritório'} pelo WhatsApp oficial.
             </p>
           </div>
 
@@ -113,7 +114,7 @@ export default function LegalMethodology({ lawyer, nicheInfo }) {
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             href={`https://wa.me/${lawyer?.whatsapp}?text=${encodeURIComponent(
-              `Olá, Dr(a). ${lawyer?.name}, li sobre o método de atendimento do escritório e gostaria de iniciar o Passo 1 (Diagnóstico).`
+              `Olá, ${honorific} ${lawyer?.name}, li sobre o método de atendimento do escritório e gostaria de iniciar o Passo 1 (Diagnóstico).`
             )}`}
             target="_blank"
             rel="noopener noreferrer"

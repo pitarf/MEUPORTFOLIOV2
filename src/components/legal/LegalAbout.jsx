@@ -6,9 +6,11 @@ import { CheckCircle2, Award, Users, Scale, Star, ArrowRight, MessageCircle } fr
  * Seção "Sobre Nós" no Estilo Exato da Summit Financial (Imagem de Referência)
  * Foto de Reunião Corporativa à esquerda + Texto com Checklist ao centro + 4 Métricas Verticais à direita.
  */
-export default function LegalAbout({ lawyer, nicheInfo }) {
+export default function LegalAbout({ lawyer, nicheInfo, theme }) {
+  const honorific = theme?.honorific || 'Dr(a).';
+  const roleLabel = theme?.roleLabel || 'Especialista';
   const whatsappUrl = `https://wa.me/${lawyer.whatsapp}?text=${encodeURIComponent(
-    `Olá, Dr(a). ${lawyer.name}, li sobre a história e os diferenciais do escritório e gostaria de conversar.`
+    `Olá, ${honorific} ${lawyer.name}, li sobre a história e os diferenciais do escritório e gostaria de conversar.`
   )}`;
 
   const stats = [
@@ -81,7 +83,7 @@ export default function LegalAbout({ lawyer, nicheInfo }) {
             </div>
 
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
-              Na {lawyer.name ? (/advocacia|consultoria|associad|sociedade/i.test(lawyer.name) ? lawyer.name : `${lawyer.name} Advocacia`) : 'nossa advocacia'}, acreditamos que o sucesso de uma demanda jurídica nasce da clareza técnica, do planejamento estratégico e de uma relação de absoluta confiança mútua entre cliente e advogado.
+              Na {lawyer.name ? (/advocacia|consultoria|associad|sociedade/i.test(lawyer.name) ? lawyer.name : `${lawyer.name} Advocacia`) : 'nossa advocacia'}, acreditamos que o sucesso de uma demanda jurídica nasce da clareza técnica, do planejamento estratégico e de uma relação de absoluta confiança mútua entre cliente e {theme?.gender === 'female' ? 'advogada' : 'advogado'}.
             </p>
 
             {/* Checklist com Ícones Dourados em 2 Colunas Arejadas */}
@@ -134,7 +136,7 @@ export default function LegalAbout({ lawyer, nicheInfo }) {
                 className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/35 transition-all group"
               >
                 <MessageCircle className="w-4 h-4 fill-white text-white group-hover:scale-110 transition-transform" />
-                <span>Falar com o Especialista no WhatsApp</span>
+                <span>Falar com {theme?.article === 'a' ? 'a Especialista' : 'o Especialista'} no WhatsApp</span>
                 <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" />
               </motion.a>
             </div>

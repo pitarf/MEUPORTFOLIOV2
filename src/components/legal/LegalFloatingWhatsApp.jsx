@@ -5,11 +5,12 @@ import { MessageCircle, X, Sparkles } from 'lucide-react';
 /**
  * Botão Flutuante de WhatsApp em Glassmorphism & Gradiente Dourado
  */
-export default function LegalFloatingWhatsApp({ lawyer }) {
+export default function LegalFloatingWhatsApp({ lawyer, theme }) {
   const [isHovered, setIsHovered] = useState(false);
+  const honorific = theme?.honorific || 'Dr(a).';
 
   const whatsappUrl = `https://wa.me/${lawyer.whatsapp}?text=${encodeURIComponent(
-    `Olá, Dr(a). ${lawyer.name}, vi o seu site e gostaria de esclarecer uma dúvida com o escritório.`
+    `Olá, ${honorific} ${lawyer.name}, vi o seu site e gostaria de esclarecer uma dúvida com o escritório.`
   )}`;
 
   return (
@@ -26,7 +27,7 @@ export default function LegalFloatingWhatsApp({ lawyer }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="mb-3 max-w-xs backdrop-blur-2xl bg-[#070D1A]/95 border border-amber-400/50 text-white p-4 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.7),0_0_25px_rgba(245,158,11,0.15)] relative pointer-events-none"
+            className={`mb-3 max-w-xs backdrop-blur-2xl ${theme?.gender === 'female' ? 'bg-[#1C0515]/95 border-amber-400/50' : 'bg-[#070D1A]/95 border-amber-400/50'} text-white p-4 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.7),0_0_25px_rgba(245,158,11,0.15)] relative pointer-events-none`}
           >
             <div className="flex items-center gap-2 mb-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-sm shadow-emerald-400" />
@@ -36,7 +37,7 @@ export default function LegalFloatingWhatsApp({ lawyer }) {
             </div>
 
             <p className="text-xs text-gray-300 leading-relaxed font-light">
-              Precisa de orientação jurídica preliminar? Converse diretamente com o Dr(a). {lawyer.name}.
+              Precisa de orientação jurídica preliminar? Converse diretamente com {theme?.article === 'a' ? 'a Dra.' : 'o Dr.'} {lawyer.name}.
             </p>
           </motion.div>
         )}

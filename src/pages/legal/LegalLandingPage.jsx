@@ -3,6 +3,7 @@ import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { LEGAL_NICHES } from '../../data/legalTemplates';
 import { legalProspectService } from '../../services/legalProspectService';
 import { googleMapsProspectService, buildGoogleMapsUrl } from '../../services/googleMapsProspectService';
+import { detectLawyerGender, LEGAL_THEMES } from '../../utils/genderDetection';
 
 import LegalTopBar from '../../components/legal/LegalTopBar';
 import LegalNavbar from '../../components/legal/LegalNavbar';
@@ -152,9 +153,15 @@ export default function LegalLandingPage() {
     };
   }, [slug, niche]);
 
+  // Detecção automática de gênero (Dra. / Vinho Nobre vs Dr. / Navy Clássico)
+  const gender = lawyerData.gender || detectLawyerGender(lawyerData.name);
+  const theme = LEGAL_THEMES[gender] || LEGAL_THEMES.male;
+
   // Atualização dinâmica de Título e Proteção NoIndex (SEO off para páginas demo de prospecção)
   useEffect(() => {
-    document.title = `${lawyerData.name} | ${nicheInfo.badge} - Atendimento Especializado`;
+    const hasPrefix = /^(dr\.|dra\.|doutor|doutora)/i.test(lawyerData.name.trim());
+    const displayTitleName = hasPrefix ? lawyerData.name : `${theme.honorific} ${lawyerData.name}`;
+    document.title = `${displayTitleName} | ${nicheInfo.badge} - Atendimento Especializado`;
 
     // Injeta meta tag robots noindex para não poluir os motores de busca com demonstrações
     let metaRobots = document.querySelector('meta[name="robots"]');
@@ -171,49 +178,49 @@ export default function LegalLandingPage() {
         metaRobots.setAttribute('content', 'index, follow');
       }
     };
-  }, [lawyerData, nicheInfo]);
+  }, [lawyerData, nicheInfo, theme]);
 
   return (
-    <div className="min-h-screen bg-white text-slate-800 font-sans selection:bg-[#C6923C] selection:text-white">
+    <div className={`min-h-screen bg-white text-slate-800 font-sans ${theme.gender === 'female' ? 'selection:bg-[#9A1E58]' : 'selection:bg-[#C6923C]'} selection:text-white`}>
       
       {/* 1. Barra Utilitária Superior (Topo Escuro com Endereço, Horário e Telefone) */}
-      <LegalTopBar lawyer={lawyerData} />
+      <LegalTopBar lawyer={lawyerData} theme={theme} />
 
       {/* 2. Navbar Branca Corporativa com Links e Botão de Agendamento */}
-      <LegalNavbar lawyer={lawyerData} nicheInfo={nicheInfo} />
+      <LegalNavbar lawyer={lawyerData} nicheInfo={nicheInfo} theme={theme} />
 
-      {/* 3. Hero Section em Dark Navy com Foto Executiva na Mesa e Botões Duplos */}
-      <LegalHero lawyer={lawyerData} nicheInfo={nicheInfo} heroImage={heroImage} />
+      {/* 3. Hero Section em Dark Navy / Vinho Nobre com Foto Executiva na Mesa e Botões Duplos */}
+      <LegalHero lawyer={lawyerData} nicheInfo={nicheInfo} heroImage={heroImage} theme={theme} />
 
       {/* 4. Barra de 4 Pilares de Confiança (Fiduciary, Independent, Strategies, Privacy) */}
-      <LegalTrustBar />
+      <LegalTrustBar theme={theme} />
 
       {/* 5. Especialidades Forenses (Grade com 5 Cards Limpos e Ícones em Ouro) */}
-      <LegalPracticeAreas lawyer={lawyerData} nicheInfo={nicheInfo} />
+      <LegalPracticeAreas lawyer={lawyerData} nicheInfo={nicheInfo} theme={theme} />
 
       {/* 6. Sobre Nós (Foto de Reunião com Clientes + Checklist + 4 Métricas Verticais) */}
-      <LegalAbout lawyer={lawyerData} nicheInfo={nicheInfo} />
+      <LegalAbout lawyer={lawyerData} nicheInfo={nicheInfo} theme={theme} />
 
       {/* 7. Nosso Processo (4 Círculos Conectados com Badges Numéricas Douradas) */}
-      <LegalMethodology lawyer={lawyerData} nicheInfo={nicheInfo} />
+      <LegalMethodology lawyer={lawyerData} nicheInfo={nicheInfo} theme={theme} />
 
       {/* 8. Depoimentos de Clientes (3 Cards Limpos com 5 Estrelas) */}
-      <LegalReviews lawyer={lawyerData} nicheInfo={nicheInfo} />
+      <LegalReviews lawyer={lawyerData} nicheInfo={nicheInfo} theme={theme} />
 
       {/* 9. Diagnóstico Jurídico Interativo de 60 Segundos */}
-      <LegalDiagnosisCalculator lawyer={lawyerData} nicheInfo={nicheInfo} />
+      <LegalDiagnosisCalculator lawyer={lawyerData} nicheInfo={nicheInfo} theme={theme} />
 
       {/* 10. Esclarecimentos & Perguntas Frequentes (Com Card de Suporte no WhatsApp) */}
-      <LegalFaq lawyer={lawyerData} nicheInfo={nicheInfo} />
+      <LegalFaq lawyer={lawyerData} nicheInfo={nicheInfo} theme={theme} />
 
       {/* 11. Banner de Pré-Rodapé (Chamada à Ação Panorâmica com Skyline e Botão Dourado) */}
-      <LegalCinematicBanner lawyer={lawyerData} />
+      <LegalCinematicBanner lawyer={lawyerData} theme={theme} />
 
-      {/* 11. Rodapé Corporativo Completo de 4 Colunas */}
-      <LegalFooter lawyer={lawyerData} nicheInfo={nicheInfo} />
+      {/* 12. Rodapé Corporativo Completo de 4 Colunas */}
+      <LegalFooter lawyer={lawyerData} nicheInfo={nicheInfo} theme={theme} />
 
-      {/* 12. Botão Flutuante de Contato Rápido no WhatsApp */}
-      <LegalFloatingWhatsApp lawyer={lawyerData} />
+      {/* 13. Botão Flutuante de Contato Rápido no WhatsApp */}
+      <LegalFloatingWhatsApp lawyer={lawyerData} theme={theme} />
 
     </div>
   );

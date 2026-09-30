@@ -5,9 +5,10 @@ import { Scale, MessageCircle, ChevronDown, Sparkles } from 'lucide-react';
 /**
  * Navbar Branca Corporativa de Alta Autoridade no Estilo Summit Financial (Imagem de Referência)
  */
-export default function LegalNavbar({ lawyer, nicheInfo }) {
+export default function LegalNavbar({ lawyer, nicheInfo, theme }) {
+  const honorific = theme?.honorific || 'Dr(a).';
   const whatsappUrl = `https://wa.me/${lawyer.whatsapp}?text=${encodeURIComponent(
-    `Olá, Dr(a). ${lawyer.name}, vi o site do escritório e gostaria de agendar uma consulta jurídica.`
+    `Olá, ${honorific} ${lawyer.name}, vi o site do escritório e gostaria de agendar uma consulta jurídica.`
   )}`;
 
   return (
@@ -15,9 +16,17 @@ export default function LegalNavbar({ lawyer, nicheInfo }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           
-          {/* Logo Corporativa Moderna com Balança Dourada Estilizada */}
-          <a href="#inicio" className="flex items-center gap-3 group flex-shrink-0">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#D8A756] to-[#C6923C] flex items-center justify-center shadow-md shadow-amber-500/10">
+          {/* Logo Corporativa Moderna com Balança Dourada Estilizada (Clique leva ao Início) */}
+          <a
+            href="#inicio"
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="flex items-center gap-3 group flex-shrink-0 cursor-pointer pr-4 hover:opacity-90 transition-opacity"
+            title="Ir para o início"
+          >
+            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${theme?.logoGradient || 'from-[#D8A756] to-[#C6923C]'} flex items-center justify-center shadow-md shadow-amber-500/10 group-hover:scale-105 transition-transform`}>
               <Scale className="w-5 h-5 text-white" />
             </div>
 
@@ -26,16 +35,13 @@ export default function LegalNavbar({ lawyer, nicheInfo }) {
                 {lawyer.name}
               </span>
               <span className="text-[10px] font-mono tracking-wider text-[#C6923C] uppercase font-semibold block">
-                {lawyer.oab || 'Advocacia & Consultoria'}
+                {lawyer.oab || theme?.roleTag || 'Advocacia & Consultoria'}
               </span>
             </div>
           </a>
 
-          {/* Links Centrais de Navegação Amigável e sem Quebras */}
-          <nav className="hidden lg:flex items-center gap-3.5 xl:gap-6 text-[13px] xl:text-sm font-medium text-slate-600">
-            <a href="#inicio" className="text-[#C6923C] font-semibold transition-colors whitespace-nowrap py-1">
-              Início
-            </a>
+          {/* Links Centrais de Navegação Arejados e Elegantes */}
+          <nav className="hidden lg:flex items-center gap-5 xl:gap-8 text-sm font-medium text-slate-600">
             <a href="#sobre" className="hover:text-[#C6923C] transition-colors whitespace-nowrap py-1">
               Sobre Nós
             </a>
@@ -47,7 +53,7 @@ export default function LegalNavbar({ lawyer, nicheInfo }) {
             </a>
             <a href="#diagnostico" className="hover:text-[#C6923C] transition-colors flex items-center gap-1.5 whitespace-nowrap py-1">
               <Sparkles className="w-3.5 h-3.5 text-[#C6923C]" />
-              <span>Diagnóstico (60s)</span>
+              <span>Diagnóstico</span>
             </a>
             <a href="#depoimentos" className="hover:text-[#C6923C] transition-colors whitespace-nowrap py-1">
               Depoimentos

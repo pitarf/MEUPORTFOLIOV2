@@ -4,9 +4,25 @@ import { MapPin, Clock, Phone, Facebook, Instagram, Linkedin, MessageCircle } fr
 /**
  * TopBar Utilitária Executiva no Estilo Summit Financial (Topo da Referência)
  */
-export default function LegalTopBar({ lawyer }) {
+// Função auxiliar para formatar números com máscara amigável (DDD)
+const formatPhoneDisplay = (raw) => {
+  if (!raw) return '';
+  const digits = String(raw).replace(/\D/g, '');
+  const clean = (digits.startsWith('55') && digits.length >= 12) ? digits.slice(2) : digits;
+  if (clean.length === 11) {
+    return `(${clean.slice(0, 2)}) ${clean.slice(2, 7)}-${clean.slice(7)}`;
+  }
+  if (clean.length === 10) {
+    return `(${clean.slice(0, 2)}) ${clean.slice(2, 6)}-${clean.slice(6)}`;
+  }
+  return raw;
+};
+
+export default function LegalTopBar({ lawyer, theme }) {
+  const displayPhone = formatPhoneDisplay(lawyer.phone || lawyer.whatsapp);
+
   return (
-    <div className="bg-[#071326] text-gray-300 text-xs py-2.5 border-b border-white/10 hidden md:block">
+    <div className={`${theme?.topBarBgClass || 'bg-[#071326] border-b border-white/10'} text-gray-300 text-xs py-2.5 hidden md:block transition-colors`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         
         {/* Esquerda: Endereço & Horário de Atendimento */}
@@ -30,7 +46,7 @@ export default function LegalTopBar({ lawyer }) {
 
         {/* Direita: Telefone & Redes Sociais */}
         <div className="flex items-center gap-5">
-          {(lawyer.phone || lawyer.whatsapp) && (
+          {displayPhone && (
             <a
               href={lawyer.whatsapp ? `https://wa.me/${lawyer.whatsapp}` : `tel:${lawyer.phone}`}
               target="_blank"
@@ -38,7 +54,7 @@ export default function LegalTopBar({ lawyer }) {
               className="flex items-center gap-1.5 hover:text-white transition-colors font-mono"
             >
               <Phone className="w-3.5 h-3.5 text-[#C6923C]" />
-              <span>{lawyer.phone || (String(lawyer.whatsapp).length >= 10 ? `(${String(lawyer.whatsapp).replace(/\D/g, '').slice(2, 4)}) ${String(lawyer.whatsapp).replace(/\D/g, '').slice(4, 9)}-${String(lawyer.whatsapp).replace(/\D/g, '').slice(9)}` : lawyer.whatsapp)}</span>
+              <span>{displayPhone}</span>
             </a>
           )}
 

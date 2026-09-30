@@ -6,7 +6,7 @@ import { Briefcase, Building2, Users, ShieldAlert, Scale, ArrowRight, MessageCir
  * Seção de Especialidades Forenses no Estilo Exato da Summit Financial (Imagem de Referência)
  * Fundo branco limpo, cabeçalho serif elegante e 5 cards verticais com ícones finos em ouro.
  */
-export default function LegalPracticeAreas({ lawyer, nicheInfo }) {
+export default function LegalPracticeAreas({ lawyer, nicheInfo, theme }) {
   // Especialidades Estruturadas (Adaptadas dinamicamente ao nicho do advogado)
   const defaultIcons = [Briefcase, Building2, Users, ShieldAlert, Scale];
 
@@ -49,7 +49,8 @@ export default function LegalPracticeAreas({ lawyer, nicheInfo }) {
 
   const renderCard = (area, idx) => {
     const IconComponent = area.icon;
-    const cleanLawyerName = lawyer?.name ? (/^dr[a]?\./i.test(lawyer.name.trim()) ? lawyer.name : `Dr(a). ${lawyer.name}`) : 'Doutor(a)';
+    const honorific = theme?.honorific || 'Dr(a).';
+    const cleanLawyerName = lawyer?.name ? (/^dr[a]?\./i.test(lawyer.name.trim()) ? lawyer.name : `${honorific} ${lawyer.name}`) : honorific;
     const areaWhatsappUrl = `https://wa.me/${lawyer.whatsapp}?text=${encodeURIComponent(
       `Olá, ${cleanLawyerName}, gostaria de consultar o escritório sobre a área de "${area.title}".`
     )}`;
