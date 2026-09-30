@@ -441,3 +441,33 @@ Para conferir solidez e simetria matemática à vitrine de serviços jurídicos:
    - `bottomAreas = areas.slice(3)`: Renderizada em `max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 mt-8`.
 3. **Harmonia de Espaçamento**: Previne o desequilíbrio causado por layouts de 4 cards (onde a linha inferior continha apenas 1 card deslocado para a esquerda). A disposição 3 + 2 garante centralização óptica impecável em telas desktop e fluidez total em dispositivos móveis.
 
+### 13.12 Arquitetura de Conversão & Rede Ubíqua de CTAs para WhatsApp
+Para maximizar a taxa de geração de leads e assegurar que nenhum visitante abandone a página por ausência de um canal direto de contato:
+1. **Fim dos Becos Sem Saída Cognitivos**: Cada bloco temático (Apresentação, Especialidades, Metodologia, Prova Social e FAQ) termina com um gatilho de ação contextualizado.
+2. **Contextualização das Mensagens (`wa.me/?text=...`)**:
+   - *Especialidades*: `"Olá, Dr(a). {nome}, gostaria de saber se o escritório atende à minha demanda jurídica específica."`
+   - *Metodologia*: `"Olá, Dr(a). {nome}, li sobre o método de atendimento do escritório e gostaria de iniciar o Passo 1 (Diagnóstico)."`
+   - *Depoimentos*: `"Olá, Dr(a). {nome}, vi os depoimentos de clientes no site e gostaria de agendar uma consulta para o meu caso."`
+   - *FAQ*: `"Olá, Dr(a). {nome}, consultei a seção de dúvidas do site mas gostaria de esclarecer uma situação pontual do meu caso."`
+3. **Sinalizadores de Presença Ativa**:
+   - Botão flutuante (`LegalFloatingWhatsApp.jsx`) com efeito `animate-ping` e pílula expansível com `animate-pulse`, gerando gatilho de urgência e acessibilidade com 1 toque em smartphones.
+   - Navbar com botão em verde WhatsApp `#25D366` e ícone fill para clique rápido em qualquer altura do scroll.
+
+### 13.14 Integração Oficial com Google Places API em Tempo Real & Serverless Vercel (`api/places-search.js`)
+Para alimentar o Radar de Prospecção exclusivamente com advogados reais e verificados sem custo adicional de intermediários:
+1. **Serverless Function Segura (`api/places-search.js`)**:
+   - Hospedada na Vercel e protegida por variáveis de ambiente de backend (`GOOGLE_PLACES_API_KEY`).
+   - A chave de API nunca é exposta no bundle cliente do React (cumprindo a Regra 6 das Diretrizes Mestres).
+   - Executa buscas no endpoint oficial `https://places.googleapis.com/v1/places:searchText` (Google Places API New).
+   - Filtra em tempo real os estabelecimentos que **não possuem website** (`!place.websiteUri`) e que possuem nota qualificada (>= 4.0★ ou 4.5★).
+   - Formata os dados com endereço físico completo, cidade, estado, telefone normalizado para WhatsApp (com DDI 55), avaliações e link oficial de geolocalização.
+2. **Ambiente Local sem Bloqueio de CORS (`vite.config.js`)**:
+   - Middleware configurado no servidor de desenvolvimento do Vite que intercepta requisições locais a `/api/places-search` e executa a mesma lógica da Serverless Function, lendo a chave do `.env`.
+   - Permite testar localmente em `npm run dev` com dados 100% reais sem erros de política de mesma origem (CORS).
+3. **Persistência Sanitizada no Frontend (`RadarGoogleMaps.jsx`, `googleMapsProspectService.js`)**:
+   - Ao executar a busca com "Google Places API Oficial (Ao Vivo)" ativo, os dados reais são adicionados ao histórico do CRM/Radar local.
+   - Cada card retornado recebe a badge visual `Google Places Oficial` atestando a autenticidade cadastral dos dados.
+
+
+
+

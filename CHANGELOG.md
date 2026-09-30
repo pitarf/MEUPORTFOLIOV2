@@ -2,6 +2,54 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.26.0] - 2026-09-30
+
+### Adicionado & Integrado (Integração Oficial com Google Places API em Tempo Real & Serverless Vercel)
+- **Integração Nativa com Google Places API (New) (`api/places-search.js`)**:
+  - Implementada Serverless Function oficial para Vercel protegendo a chave `GOOGLE_PLACES_API_KEY` no ambiente backend, sem exposição pública no frontend (em conformidade com a Regra 6 de Segurança).
+  - Consulta ao vivo do endpoint `https://places.googleapis.com/v1/places:searchText` com FieldMask otimizado.
+  - Filtro automático de estabelecimentos: identifica advogados e escritórios reais com avaliações altas que **não possuem website** (`!place.websiteUri`).
+  - Normalização automática de números telefônicos para WhatsApp com DDI 55.
+  - Extração de endereço completo, cidade, estado e link oficial de geolocalização no Google Maps.
+- **Suporte Local no Vite Dev Server (`vite.config.js`)**:
+  - Configurado middleware no Vite dev server para atender requisições locais a `/api/places-search` usando as variáveis do `.env`, eliminando problemas de CORS do Google Maps no navegador durante o desenvolvimento.
+- **Configuração de Rotas e Ambiente (`vercel.json`, `.env.example`, `.env`)**:
+  - Adicionado rewrite específico no `vercel.json` para rotear chamadas de `/api/*` diretamente para Serverless Functions sem conflito com o SPA fallback.
+  - Variável `GOOGLE_PLACES_API_KEY` documentada no `.env.example` e configurada localmente.
+- **Painel do Radar Google Maps Atualizado (`RadarGoogleMaps.jsx`, `googleMapsProspectService.js`)**:
+  - Adicionada opção de "Google Places API Oficial (Ao Vivo)" com indicador em tempo real.
+  - Badge visual `Google Places Oficial` nos cards de advogados retornados da API.
+  - Adicionadas cidades estratégicas para busca com 1 clique (Campinas, Valinhos, São Paulo, etc.).
+- **Validação de Build**:
+  - `npm run build` testado e aprovado com código 0 (`index-5b72b7cb.js`).
+
+## [1.25.0] - 2026-09-30
+
+### Removido & Corrigido (Limpeza Imediata de Dados Fictícios & Arquitetura Real para Google Maps via MCP)
+- **Eliminação Total de Dados Fictícios e Alucinações (`googleMapsProspectService.js`, `gemini.js`, `RadarGoogleMaps.jsx`)**:
+  - Removida integralmente a base de dados estática simulada (`RAW_CURATED_MAPS_LEADS`), que continha nomes, telefones e endereços fictícios gerados por IA.
+  - Desativada a geração sintética em `scanLawyersWithoutWebsite` (`gemini.js`) para impedir que a IA invente pessoas que não existem no Google Maps.
+  - Implementada rotina `sanitizeStoredLeads` para expurgar automaticamente do `localStorage` do navegador qualquer lead legado falso salvo anteriormente.
+  - Adicionado botão **"Limpar Histórico"** na interface do Radar para o operador reiniciar a base limpa a qualquer momento.
+  - Empty state reformulado com direcionamento explícito para captura de fichas reais e link oficial de pesquisa no Google Maps.
+- **Pesquisa e Mapeamento de Servidores MCP para Google Maps e Google Places**:
+  - Mapeadas as melhores soluções oficiais e da comunidade de MCP para scraping e busca oficial de empresas locais sem website (Outscraper MCP, Google Maps Platform MCP, Apify Google Maps Actor MCP).
+
+## [1.24.0] - 2026-09-28
+
+### Adicionado & Otimizado (Rede de CTAs de Alta Conversão com Foco Total em WhatsApp)
+- **Eliminação de "Becos Sem Saída" e Inserção de CTAs em Todas as Seções Informativas**:
+  - **Sobre o Escritório (`LegalAbout.jsx`)**: Substituído o botão passivo "Conheça Nossa Equipe" por um CTA de impacto com cor oficial do WhatsApp (`#25D366`), ícone fill e chamada direta: *"Falar com o Especialista no WhatsApp"*.
+  - **Como Funciona / Metodologia (`LegalMethodology.jsx`)**: Adicionado container de conversão imediatamente após a grade dos 4 passos com sinalizador de atendimento ativo e botão: *"Inicie o Passo 1 Agora: Agende seu Diagnóstico"*.
+  - **Depoimentos de Clientes (`LegalReviews.jsx`)**: Inserido card de credibilidade pós-prova social com escudo dourado e botão verde de WhatsApp: *"Deseja a mesma tranquilidade para o seu caso? Consultar no WhatsApp"*.
+  - **Especialidades Forenses (`LegalPracticeAreas.jsx`)**: Adicionado bloco conclusivo na base da grade dos 5 cards com CTA para demandas personalizadas não listadas.
+  - **Seção de Perguntas Frequentes Integrada (`LegalFaq.jsx` e `LegalLandingPage.jsx`)**: A seção de FAQ foi harmonizada no estilo executivo claro e incorporada à landing page, trazendo card fixo de suporte: *"Ficou com alguma dúvida? Tirar Dúvida no WhatsApp"*.
+  - **Hero Section (`LegalHero.jsx`)**: O botão de agendamento principal foi atualizado para *"Agendar Consulta no WhatsApp"* com ícone vibrante.
+  - **Navbar Corporativa (`LegalNavbar.jsx`)**: O botão de agendamento superior foi atualizado para *"Agendar no WhatsApp"* com gradiente verde de alta conversão.
+  - **Botão Flutuante (`LegalFloatingWhatsApp.jsx`)**: Atualizado com cor oficial do WhatsApp (`#25D366`), badge animado de pulso com status "Online Agora" e pílula flutuante visível tanto no desktop quanto em telas móveis.
+- **Validação de Produção**:
+  - `npm run build` executado e aprovado com código 0.
+
 ## [1.23.0] - 2026-09-28
 
 ### Adicionado & Melhorado (5ª Especialidade Jurídica & Grade Simétrica Balanceada 3 + 2)

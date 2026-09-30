@@ -147,10 +147,10 @@ export default function LegalHero({ lawyer, nicheInfo, heroImage }) {
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-7 py-4 rounded-xl bg-[#C6923C] hover:bg-[#B5812B] text-white font-semibold text-xs sm:text-sm tracking-wide shadow-xl shadow-amber-950/40 transition-all flex items-center justify-center gap-2.5 whitespace-nowrap"
+                className="px-7 py-4 rounded-xl bg-gradient-to-r from-[#D8A756] via-[#C6923C] to-[#B5812B] hover:from-[#C6923C] hover:to-[#A37020] text-white font-bold text-xs sm:text-sm tracking-wide shadow-xl shadow-amber-950/40 transition-all flex items-center justify-center gap-2.5 whitespace-nowrap group"
               >
-                <MessageCircle className="w-4 h-4 text-white" />
-                <span>Agendar uma Consulta</span>
+                <MessageCircle className="w-5 h-5 fill-white text-white group-hover:scale-110 transition-transform" />
+                <span>Agendar Consulta no WhatsApp</span>
               </motion.a>
 
               <motion.a

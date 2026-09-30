@@ -57,17 +57,17 @@ export default function LegalNavbar({ lawyer, nicheInfo }) {
             </a>
           </nav>
 
-          {/* Botão de Agendamento Moderno e Elegante */}
+          {/* Botão de Agendamento Moderno e Elegante no WhatsApp */}
           <motion.a
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-shrink-0 px-4 sm:px-5 py-2.5 rounded-lg bg-[#0A192F] hover:bg-[#132A4A] text-white font-semibold text-xs xl:text-sm shadow-sm transition-all flex items-center gap-2 whitespace-nowrap"
+            className="flex-shrink-0 px-4 sm:px-5 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs xl:text-sm shadow-md shadow-emerald-500/20 hover:shadow-emerald-500/35 transition-all flex items-center gap-2 whitespace-nowrap group"
           >
-            <MessageCircle className="w-4 h-4 text-[#D8A756]" />
-            <span>Agendar Consulta</span>
+            <MessageCircle className="w-4 h-4 fill-white text-white group-hover:scale-110 transition-transform" />
+            <span>Agendar no WhatsApp</span>
           </motion.a>
 
         </div>

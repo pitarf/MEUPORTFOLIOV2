@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
-import { Star, Quote } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Star, Quote, ShieldCheck, MessageCircle, ArrowRight } from 'lucide-react';
 
 /**
  * Seção de Depoimentos no Estilo Exato da Summit Financial (Imagem de Referência)
@@ -152,6 +153,40 @@ export default function LegalReviews({ lawyer, nicheInfo }) {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Bloco de CTA Pós-Depoimentos */}
+        <div className="mt-14 max-w-2xl mx-auto text-center">
+          <div className="inline-flex flex-col sm:flex-row items-center justify-between gap-5 w-full bg-[#FAFBFD] border border-amber-300/70 rounded-2xl p-6 sm:p-7 shadow-md">
+            <div className="flex items-center gap-3.5 text-left">
+              <div className="w-11 h-11 rounded-xl bg-amber-500/10 border border-amber-400/40 flex items-center justify-center text-[#C6923C] flex-shrink-0">
+                <ShieldCheck className="w-6 h-6" />
+              </div>
+              <div>
+                <span className="text-sm font-bold text-[#0A192F] block leading-tight">
+                  Deseja a mesma tranquilidade para o seu caso?
+                </span>
+                <span className="text-xs text-slate-500 block mt-0.5 font-normal">
+                  Inicie sua consulta estratégica com o Dr(a). {lawyer?.name || 'nosso escritório'}.
+                </span>
+              </div>
+            </div>
+
+            <motion.a
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              href={`https://wa.me/${lawyer?.whatsapp}?text=${encodeURIComponent(
+                `Olá, Dr(a). ${lawyer?.name}, vi os depoimentos de clientes no site e gostaria de agendar uma consulta para o meu caso.`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-6 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-emerald-500/25 transition-all flex items-center gap-2 whitespace-nowrap flex-shrink-0 group"
+            >
+              <MessageCircle className="w-4 h-4 fill-white text-white group-hover:scale-110 transition-transform" />
+              <span>Consultar no WhatsApp</span>
+              <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" />
+            </motion.a>
+          </div>
         </div>
 
       </div>

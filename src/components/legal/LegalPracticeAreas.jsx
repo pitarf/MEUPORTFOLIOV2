@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Briefcase, Building2, Users, ShieldAlert, Scale, ArrowRight } from 'lucide-react';
+import { Briefcase, Building2, Users, ShieldAlert, Scale, ArrowRight, MessageCircle } from 'lucide-react';
 
 /**
  * Seção de Especialidades Forenses no Estilo Exato da Summit Financial (Imagem de Referência)
@@ -119,6 +119,27 @@ export default function LegalPracticeAreas({ lawyer, nicheInfo }) {
         {/* Grade Inferior: 2 Cards Centralizados com o mesmo Respiro */}
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
           {bottomAreas.map((area, idx) => renderCard(area, idx + 3))}
+        </div>
+
+        {/* CTA Conclusivo da Seção de Especialidades */}
+        <div className="mt-14 max-w-2xl mx-auto text-center pt-8 border-t border-slate-200">
+          <p className="text-sm text-slate-600 mb-4 font-normal">
+            Não encontrou a sua demanda específica listada acima? Avaliamos seu cenário com sigilo profissional.
+          </p>
+          <motion.a
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            href={`https://wa.me/${lawyer?.whatsapp}?text=${encodeURIComponent(
+              `Olá, Dr(a). ${lawyer?.name}, gostaria de saber se o escritório atende à minha demanda jurídica específica.`
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-[#0A192F] hover:bg-[#132A4A] text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-xl transition-all group"
+          >
+            <MessageCircle className="w-4 h-4 text-emerald-400 fill-emerald-400 group-hover:scale-110 transition-transform" />
+            <span>Consultar Demanda Específica no WhatsApp</span>
+            <ArrowRight className="w-4 h-4 text-[#C6923C] group-hover:translate-x-1 transition-transform" />
+          </motion.a>
         </div>
 
       </div>

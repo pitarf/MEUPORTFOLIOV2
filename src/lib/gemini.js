@@ -294,48 +294,11 @@ export const generateSalesPitchWithAI = async ({
 };
 
 /**
- * Realiza uma varredura inteligente de advogados no Google Maps sem site próprio
- * @param {string} city 
- * @param {string} state 
- * @param {string} niche 
+ * Varredura simulada desativada para garantir conformidade rigorosa com dados reais.
+ * A busca no Google Maps agora opera exclusivamente via fichas reais ou MCP do Google Places.
  * @returns {Promise<Array>}
  */
-export const scanLawyersWithoutWebsite = async (city = 'São Paulo', state = 'SP', niche = 'todos') => {
-  const prompt = `
-    Você é um especialista em inteligência de mercado e prospecção B2B de alta conversão.
-    Sua missão é identificar e listar escritórios de advocacia e advogados autônomos na região de ${city} - ${state} (Brasil) que possuam excelente reputação no Google Maps / Google Meu Negócio (nota entre 4.6 e 5.0 estrelas e avaliações positivas de clientes), mas que NÃO POSSUAM WEBSITE PRÓPRIO (possuem apenas ficha no Google ou página padrão do Facebook/Instagram).
-
-    Filtros aplicados:
-    - Região: ${city} - ${state}
-    - Especialidade / Nicho: ${niche === 'todos' ? 'Geral / Trabalhista / Família / Consumidor' : niche}
-    - Reputação: Alta (4.6★ ou superior)
-    - Status de Website: SEM SITE PRÓPRIO REGISTRADO
-
-    Retorne uma lista com 6 a 10 perfis de advogados/escritórios com dados verossímeis e realistas da região indicada.
-    IMPORTANTE: O campo "address" DEVE conter o logradouro completo (Avenida/Rua, Número, Bairro, Cidade - UF). O campo "google_maps_url" DEVE utilizar a query oficial do Google Maps combinando o Nome e o Endereço completo para fincar a localização com precisão: "https://www.google.com/maps/search/?api=1&query=[NOME_ESCRITORIO]+[ENDERECO]".
-    
-    Retorne APENAS um objeto JSON com a chave "lawyers" contendo um array (sem markdown, sem explicações):
-    {
-      "lawyers": [
-        {
-          "id": "lead-1",
-          "lawyer_name": "Dr. Nome do Advogado ou Escritório",
-          "niche": "geral", // "geral", "trabalhista", "familia" ou "consumidor"
-          "rating": 4.9,
-          "reviews_count": 42,
-          "phone": "(XX) 9XXXX-XXXX",
-          "whatsapp": "55XXXXXXXXXXX",
-          "city": "${city}",
-          "state": "${state}",
-          "address": "Av. Principal, 1000 - Bairro Nobre, ${city} - ${state}",
-          "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Dr+Nome+Advogado+Av+Principal+1000+${city}",
-          "highlights": "Pontos elogiados pelos clientes no Google (ex: Atendimento ágil, clareza nas explicações e dedicação)",
-          "has_website": false
-        }
-      ]
-    }
-  `;
-
-  const response = await generateWithModelFallback(prompt, true);
-  return response?.lawyers || [];
+export const scanLawyersWithoutWebsite = async () => {
+  return [];
 };
+

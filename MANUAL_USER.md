@@ -486,3 +486,28 @@ Ao clicar no botão **Demo** ou quando o advogado abre o link recebido no WhatsA
 5. **Endereço Interativo com Google Maps**: Ao clicar no endereço exibido no topo ou no rodapé do site, o Google Maps abre diretamente na localização oficial e precisa cadastrada.
 6. **Depoimentos Contextualizados**: Os depoimentos da página adaptam automaticamente o nome do advogado, a cidade real dele e histórias de sucesso focadas na especialidade do escritório (Trabalhista, Consumidor, Família ou Geral).
 
+### 19.4 Rede Completa de Botões de Ação (CTAs) para o WhatsApp
+Para que a landing page cumpra o seu papel principal de fechar clientes e gerar consultas imediatas:
+- **Navbar & Hero**: O visitante encontra logo de cara o botão em destaque verde/dourado "Agendar no WhatsApp".
+- **Sobre o Escritório**: O botão leva direto ao especialista via WhatsApp com mensagem de apresentação.
+- **Especialidades**: Abaixo dos 5 cartões, há um botão convidando quem tem dúvidas sobre matérias específicas a consultar no WhatsApp.
+- **Como Funciona**: Ao terminar de ler os 4 passos, o cliente clica direto em "Inicie o Passo 1 Agora: Agende seu Diagnóstico no WhatsApp".
+- **Depoimentos**: Logo após ler a aprovação de clientes satisfeitos, o visitante tem um botão de confiança para iniciar o caso dele.
+- **Perguntas Frequentes (FAQ)**: Inclui um card lateral direto com o Dr(a). para tirar dúvidas residuais no WhatsApp.
+- **WhatsApp Flutuante Inteligente**: Permanece fixo no canto inferior direito com sinal luminoso verde e pílula visível tanto no computador quanto no celular.
+
+### 19.6 Busca ao Vivo no Google Maps via Google Places API Oficial
+Agora o Radar conta com consulta direta à base de dados oficial do Google Maps em tempo real:
+1. **Ativação Simples**: Deixe a opção **"Google Places API (Ao Vivo)"** marcada na barra de filtros.
+2. **Pesquise por Qualquer Cidade ou Nicho**:
+   * Digite a cidade (ex: *Campinas*, *Valinhos*, *Belo Horizonte*) e o estado (*SP*, *MG*).
+   * Ou clique em uma das capitais/cidades sugeridas com 1 toque.
+3. **Filtro Automático de Escritórios Sem Site**:
+   * O sistema consulta os servidores do Google Maps e traz **exclusivamente os advogados que têm boa reputação (nota e avaliações) mas NÃO POSSUEM SITE cadastrado**.
+   * Cada resultado traz o selo verde **Google Places Oficial**, garantindo que o nome, endereço, telefone e ficha são 100% autênticos.
+4. **Envio Imediato da Proposta de R$ 300**:
+   * Basta clicar em **Enviar Proposta no WhatsApp** para iniciar o contato comercial com o modelo pronto e o link personalizado!
+
+
+
+

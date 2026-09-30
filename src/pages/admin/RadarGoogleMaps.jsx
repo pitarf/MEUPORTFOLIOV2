@@ -19,7 +19,8 @@ import {
   ShieldCheck,
   Send,
   Building,
-  PhoneCall
+  PhoneCall,
+  Trash2
 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
@@ -39,7 +40,7 @@ export default function RadarGoogleMaps() {
   const [state, setState] = useState('');
   const [niche, setNiche] = useState('todos');
   const [minRating, setMinRating] = useState('4.5');
-  const [useAi, setUseAi] = useState(false);
+  const [useLiveApi, setUseLiveApi] = useState(true);
   const [loading, setLoading] = useState(false);
 
   // Lista de resultados
@@ -68,6 +69,8 @@ export default function RadarGoogleMaps() {
   // Capitais sugeridas para busca com 1 clique
   const POPULAR_CITIES = [
     { name: 'São Paulo', uf: 'SP' },
+    { name: 'Campinas', uf: 'SP' },
+    { name: 'Valinhos', uf: 'SP' },
     { name: 'Rio de Janeiro', uf: 'RJ' },
     { name: 'Belo Horizonte', uf: 'MG' },
     { name: 'Curitiba', uf: 'PR' },
@@ -91,19 +94,21 @@ export default function RadarGoogleMaps() {
         state: searchState,
         niche,
         minRating: Number(minRating),
-        useAi
+        liveApi: useLiveApi
       });
       setResults(data);
 
       if (data.length === 0) {
         toast({
-          title: 'Nenhum lead encontrado com estes filtros',
-          description: 'Tente diminuir a nota mínima ou ativar a varredura profunda com IA.'
+          title: 'Nenhum lead sem site encontrado com estes filtros',
+          description: 'Dica: diminua a avaliação mínima para 4.0★ ou pesquise outras cidades da região.'
         });
       } else {
         toast({
-          title: `${data.length} advogados sem site identificados!`,
-          description: 'Contatos e propostas geradas com sucesso.'
+          title: `${data.length} advogados reais sem site identificados!`,
+          description: useLiveApi
+            ? 'Dados extraídos em tempo real via Google Places API Oficial.'
+            : 'Leads carregados do histórico salvo.'
         });
       }
     } catch (err) {
@@ -170,7 +175,7 @@ export default function RadarGoogleMaps() {
     });
   };
 
-  // Salvar cadastro manual
+  // Salvar cadastro manual / ficha colada
   const handleSaveManual = (e) => {
     e.preventDefault();
     if (!manualData.lawyer_name || !manualData.whatsapp) {
@@ -182,20 +187,22 @@ export default function RadarGoogleMaps() {
       return;
     }
 
-    const newLead = {
-      ...manualData,
-      id: `maps-manual-${Date.now()}`,
-      rating: Number(manualData.rating || 5.0),
-      reviews_count: Number(manualData.reviews_count || 10),
-      has_website: false,
-      google_maps_url: buildGoogleMapsUrl(manualData)
-    };
-
-    setResults((prev) => [newLead, ...prev]);
+    const updated = googleMapsProspectService.addRealLead(manualData);
+    setResults(updated);
     setIsManualModalOpen(false);
     toast({
-      title: 'Escritório adicionado à lista do Radar!',
-      description: 'Proposta de R$ 300 gerada com sucesso.'
+      title: 'Escritório real adicionado à lista!',
+      description: 'Lead registrado e proposta de R$ 300 gerada com sucesso.'
+    });
+  };
+
+  // Limpar todos os leads do radar
+  const handleClearAllLeads = () => {
+    googleMapsProspectService.clearAllLeads();
+    setResults([]);
+    toast({
+      title: 'Histórico do Radar limpo!',
+      description: 'Todos os registros foram removidos com sucesso.'
     });
   };
 
@@ -289,6 +296,19 @@ export default function RadarGoogleMaps() {
               <PlusCircle className="w-3.5 h-3.5 text-primary" />
               <span>Colar Ficha do Maps</span>
             </Button>
+
+            {results.length > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleClearAllLeads}
+                className="gap-1.5 text-xs text-rose-500 hover:text-rose-600 hover:bg-rose-500/10"
+                title="Limpar todos os leads e remover histórico"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Limpar Histórico</span>
+              </Button>
+            )}
           </div>
         </div>
 
@@ -390,16 +410,16 @@ export default function RadarGoogleMaps() {
 
           {/* Ações de Busca */}
           <div className="flex items-center gap-3 self-end sm:self-auto">
-            <label className="flex items-center gap-2 text-xs text-muted-foreground cursor-pointer select-none">
+            <label className="flex items-center gap-2 text-xs text-muted-foreground cursor-pointer select-none" title="Busca advogados reais e sem site em tempo real pela API oficial do Google">
               <input
                 type="checkbox"
-                checked={useAi}
-                onChange={(e) => setUseAi(e.target.checked)}
+                checked={useLiveApi}
+                onChange={(e) => setUseLiveApi(e.target.checked)}
                 className="w-4 h-4 rounded text-primary border-gray-300 focus:ring-primary"
               />
-              <span className="flex items-center gap-1 font-medium">
-                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                <span>Varredura com IA ao Vivo</span>
+              <span className="flex items-center gap-1.5 font-medium text-foreground">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Google Places API (Ao Vivo)</span>
               </span>
             </label>
 
@@ -411,7 +431,7 @@ export default function RadarGoogleMaps() {
               {loading ? (
                 <>
                   <RefreshCw className="w-4 h-4 animate-spin" />
-                  <span>Escaneando...</span>
+                  <span>Consultando API Oficial...</span>
                 </>
               ) : (
                 <>
@@ -442,16 +462,38 @@ export default function RadarGoogleMaps() {
         </div>
 
         {results.length === 0 && !loading && (
-          <div className="text-center py-16 bg-card border rounded-2xl p-8 space-y-4">
-            <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mx-auto text-muted-foreground">
-              <Compass className="w-6 h-6" />
+          <div className="text-center py-16 bg-card border rounded-2xl p-8 space-y-5">
+            <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto text-primary">
+              <ShieldCheck className="w-7 h-7" />
             </div>
-            <h3 className="text-base font-semibold text-foreground">
-              Nenhum escritório localizado para esses filtros
-            </h3>
-            <p className="text-xs text-muted-foreground max-w-md mx-auto">
-              Experimente buscar por cidades como "São Paulo", "Rio de Janeiro", "Curitiba" ou selecione "Todos os Nichos".
-            </p>
+            <div className="space-y-1.5 max-w-md mx-auto">
+              <h3 className="text-lg font-bold text-foreground">
+                Base Limpa de Dados Fictícios
+              </h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Todos os dados simulados foram removidos com sucesso. O Radar agora opera estritamente com fichas 100% reais do Google Maps.
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+              <Button
+                onClick={() => setIsManualModalOpen(true)}
+                className="gap-2 text-xs"
+              >
+                <PlusCircle className="w-4 h-4" />
+                <span>Colar Ficha Real do Google Maps</span>
+              </Button>
+
+              <a
+                href={googleMapsProspectService.getGoogleMapsWebSearchUrl(city, state, niche)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-md border border-input bg-background hover:bg-muted text-foreground text-xs font-medium transition-colors"
+              >
+                <ExternalLink className="w-3.5 h-3.5 text-primary" />
+                <span>Pesquisar Advogados no Google Maps</span>
+              </a>
+            </div>
           </div>
         )}
 
@@ -484,6 +526,12 @@ export default function RadarGoogleMaps() {
                         <span className="text-[10px] uppercase font-mono font-bold tracking-wider px-2 py-0.5 rounded-md bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20">
                           Sem Site Oficial
                         </span>
+                        {lawyer.source === 'google_places_api' && (
+                          <span className="text-[10px] uppercase font-mono font-bold tracking-wider px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                            Google Places Oficial
+                          </span>
+                        )}
                       </div>
 
                       <h3 className="font-bold text-base text-foreground leading-snug pt-1 group-hover:text-primary transition-colors">

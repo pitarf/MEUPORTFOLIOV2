@@ -131,10 +131,11 @@ export default function LegalAbout({ lawyer, nicheInfo }) {
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-md bg-[#0A192F] hover:bg-[#132A4A] text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all"
+                className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/35 transition-all group"
               >
-                <span>Conheça Nossa Equipe</span>
-                <ArrowRight className="w-4 h-4 text-[#C6923C]" />
+                <MessageCircle className="w-4 h-4 fill-white text-white group-hover:scale-110 transition-transform" />
+                <span>Falar com o Especialista no WhatsApp</span>
+                <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" />
               </motion.a>
             </div>
           </div>

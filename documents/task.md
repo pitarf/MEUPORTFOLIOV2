@@ -3,6 +3,27 @@
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
 ## CONCLUÍDO (DONE)
+- [x] **Integração Oficial com Google Places API em Tempo Real & Serverless Vercel (`api/places-search.js`, `vite.config.js`, `googleMapsProspectService.js`, `RadarGoogleMaps.jsx`)**:
+  - Implementada Serverless Function oficial para Vercel consultando a Places API (New) com a chave do usuário protegida no backend.
+  - Filtro automático de estabelecimentos: identifica em tempo real advogados reais e verificados no Google Maps que não possuem website oficial cadastrado.
+  - Middleware no Vite dev server adicionado para contornar bloqueios de CORS e permitir testes locais idênticos à produção.
+  - Painel do Radar atualizado com toggle "Google Places API Oficial (Ao Vivo)" e badges visuais de procedência da API.
+  - Variáveis configuradas na Vercel (`GOOGLE_PLACES_API_KEY`) e `.env.example` atualizado.
+- [x] **Limpeza Imediata de Dados Fictícios & Pesquisa de MCPs para Google Maps (`googleMapsProspectService.js`, `gemini.js`, `RadarGoogleMaps.jsx`)**:
+  - Eliminada 100% da lista simulada que continha pessoas e telefones inventados.
+  - Desativada a geração de dados sintéticos no Gemini para impedir qualquer alucinação futura.
+  - Implementada sanitização de cache no `localStorage` e botão "Limpar Histórico" no painel.
+  - Pesquisa aprofundada de servidores MCP especializados em extração e busca oficial do Google Maps/Google Places (Outscraper MCP, Google Maps Platform MCP, Apify MCP).
+- [x] **Rede de CTAs de Alta Conversão com Foco em WhatsApp (`LegalAbout.jsx`, `LegalMethodology.jsx`, `LegalReviews.jsx`, `LegalPracticeAreas.jsx`, `LegalFaq.jsx`, `LegalFloatingWhatsApp.jsx`, `LegalNavbar.jsx`, `LegalHero.jsx`)**:
+  - Eliminados todos os "becos sem saída" na navegação do visitante; todas as seções informativas agora oferecem gatilhos de conversão imediatos para o WhatsApp oficial do advogado.
+  - *Sobre Nós*: Botão passivo substituído por CTA ativo em verde esmeralda com o ícone do WhatsApp: "Falar com o Especialista no WhatsApp".
+  - *Como Funciona (Metodologia)*: Adicionado card de conversão pós-processo com sinal de "Atendimento Imediato Aberto" e botão para agendar o Passo 1 (Diagnóstico).
+  - *Depoimentos*: Adicionado card de confiança com selo ético e botão "Consultar no WhatsApp".
+  - *Especialidades*: Inserido CTA para demandas personalizadas que não constem na grade de 5 especialidades.
+  - *FAQ*: Seção de perguntas frequentes integrada com card dedicado de suporte no WhatsApp.
+  - *WhatsApp Flutuante*: Badge pulsante "Online Agora" e pílula expansível para celulares e desktop.
+  - *Navbar & Hero*: Botões atualizados com indicação explícita de direcionamento ao WhatsApp.
+  - Build do Vite executado e 100% aprovado sem erros.
 - [x] **5ª Especialidade Jurídica & Grade Simétrica Balanceada 3 + 2 (`legalTemplates.js`, `LegalPracticeAreas.jsx`)**:
   - Eliminado o desbalanceamento estético da seção de especialidades (onde 4 cards deixavam 1 card isolado e 2 espaços vazios na linha inferior).
   - Adicionada a 5ª área de atuação estratégica com títulos, resumos e 4 subitens em todos os 4 nichos jurídicos:

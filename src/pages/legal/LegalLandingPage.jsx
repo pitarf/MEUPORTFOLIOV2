@@ -13,6 +13,7 @@ import LegalAbout from '../../components/legal/LegalAbout';
 import LegalMethodology from '../../components/legal/LegalMethodology';
 import LegalReviews from '../../components/legal/LegalReviews';
 import LegalDiagnosisCalculator from '../../components/legal/LegalDiagnosisCalculator';
+import LegalFaq from '../../components/legal/LegalFaq';
 import LegalCinematicBanner from '../../components/legal/LegalCinematicBanner';
 import LegalFooter from '../../components/legal/LegalFooter';
 import LegalFloatingWhatsApp from '../../components/legal/LegalFloatingWhatsApp';
@@ -148,7 +149,10 @@ export default function LegalLandingPage() {
       {/* 9. Diagnóstico Jurídico Interativo de 60 Segundos */}
       <LegalDiagnosisCalculator lawyer={lawyerData} nicheInfo={nicheInfo} />
 
-      {/* 10. Banner de Pré-Rodapé (Chamada à Ação Panorâmica com Skyline e Botão Dourado) */}
+      {/* 10. Esclarecimentos & Perguntas Frequentes (Com Card de Suporte no WhatsApp) */}
+      <LegalFaq lawyer={lawyerData} nicheInfo={nicheInfo} />
+
+      {/* 11. Banner de Pré-Rodapé (Chamada à Ação Panorâmica com Skyline e Botão Dourado) */}
       <LegalCinematicBanner lawyer={lawyerData} />
 
       {/* 11. Rodapé Corporativo Completo de 4 Colunas */}

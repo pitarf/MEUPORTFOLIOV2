@@ -42,19 +42,39 @@ export default function LegalFloatingWhatsApp({ lawyer }) {
         )}
       </AnimatePresence>
 
-      {/* Botão de Contato com Efeito de Pulso Suave */}
-      <motion.a
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.94 }}
-        href={whatsappUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-300 via-amber-500 to-yellow-600 text-black shadow-[0_10px_30px_rgba(245,158,11,0.35)] flex items-center justify-center group relative overflow-hidden"
-        aria-label="Falar no WhatsApp"
-      >
-        <span className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-        <MessageCircle className="w-7 h-7 text-black stroke-[2.2] transition-transform group-hover:scale-110" />
-      </motion.a>
+      {/* Botão de Contato com Efeito de Pulso Suave e Pílula Mobile */}
+      <div className="flex items-center gap-3">
+        {/* Pílula de Chamada para Ação no Mobile e Desktop */}
+        <motion.a
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hidden sm:flex items-center gap-2 py-2 px-3.5 rounded-full bg-white/95 backdrop-blur-md border border-slate-200 shadow-lg shadow-black/5 text-[#0A192F] hover:text-[#C6923C] text-xs font-bold transition-all hover:scale-105"
+        >
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span>Falar no WhatsApp</span>
+        </motion.a>
+
+        <motion.a
+          whileHover={{ scale: 1.08 }}
+          whileTap={{ scale: 0.94 }}
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-14 h-14 rounded-2xl bg-[#25D366] hover:bg-[#20bd5a] text-white shadow-[0_10px_25px_rgba(37,211,102,0.4)] flex items-center justify-center group relative overflow-visible"
+          aria-label="Falar no WhatsApp"
+        >
+          {/* Badge de Atendimento Ativo */}
+          <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-4 w-4 bg-emerald-600 border-2 border-white" />
+          </span>
+
+          <MessageCircle className="w-7 h-7 fill-white text-white stroke-[2.2] transition-transform group-hover:scale-110" />
+        </motion.a>
+      </div>
     </div>
   );
 }
