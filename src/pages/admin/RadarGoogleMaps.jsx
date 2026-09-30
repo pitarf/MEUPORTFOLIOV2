@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import {
   Compass,
   Search,
@@ -27,6 +27,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { googleMapsProspectService, generateLawyerSlug, buildGoogleMapsUrl, buildDemoUrl } from '../../services/googleMapsProspectService';
 import { LEGAL_NICHES } from '../../data/legalTemplates';
+import { cleanLawyerName } from '../../utils/lawyerNameFormatter';
 
 /**
  * Radar Google Maps de Prospecção Ativa para Advogados
@@ -35,6 +36,7 @@ import { LEGAL_NICHES } from '../../data/legalTemplates';
  */
 export default function RadarGoogleMaps() {
   const { toast } = useToast();
+  const resultsRef = useRef(null);
 
   // Estados de busca e filtros
   const [city, setCity] = useState('');
@@ -99,6 +101,11 @@ export default function RadarGoogleMaps() {
         liveApi: useLiveApi
       });
       setResults(data);
+      if (data.length > 0) {
+        setTimeout(() => {
+          resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 150);
+      }
 
       if (data.length === 0) {
         toast({
@@ -504,130 +511,28 @@ export default function RadarGoogleMaps() {
 
       </div>
 
-      {/* Seção de Demonstrações Ativas na Nuvem (Validade de 5 Dias) */}
-      {cloudDemos.length > 0 && (
-        <div className="bg-card border rounded-2xl p-6 shadow-sm space-y-4 border-amber-500/20 bg-amber-500/[0.02]">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center font-bold">
-                  <Globe className="w-4 h-4" />
-                </div>
-                <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
-                  <span>Demonstrações Ativas na Nuvem</span>
-                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 font-mono font-semibold">
-                    {cloudDemos.length} ativas
-                  </span>
-                </h2>
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Modelos exclusivos salvos com links curtos oficiais. Cada proposta permanece disponível por 5 dias corridos.
-              </p>
-            </div>
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={loadCloudDemos}
-              disabled={loadingCloudDemos}
-              className="gap-1.5 text-xs self-start sm:self-auto"
-            >
-              <RefreshCw className={`w-3.5 h-3.5 ${loadingCloudDemos ? 'animate-spin' : ''}`} />
-              <span>Atualizar Nuvem</span>
-            </Button>
+      {/* Grade de Resultados com Cards dos Advogados (Exibida Imediatamente após os Filtros) */}
+      <div ref={resultsRef} className="space-y-4 pt-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-card border rounded-2xl p-4 sm:p-5 shadow-sm">
+          <div className="space-y-1">
+            <h2 className="text-xl font-bold text-foreground flex items-center gap-2.5 flex-wrap">
+              <span>Resultados no Google Maps</span>
+              {city && (
+                <span className="text-xs px-3 py-1 rounded-full bg-primary/10 text-primary font-semibold border border-primary/20">
+                  {city} {state ? `(${state})` : ''}
+                </span>
+              )}
+              <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono font-bold border border-emerald-500/20">
+                {results.length} escritórios sem site
+              </span>
+            </h2>
+            <p className="text-xs text-muted-foreground">
+              Advogados reais de boa avaliação identificados no Google Maps que não possuem website oficial cadastrado.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {cloudDemos.map((demo) => {
-              const demoUrl = `https://rafaelpitaoficial.com.br/adv/${demo.slug}`;
-
-              return (
-                <div
-                  key={demo.id}
-                  className="p-4 rounded-xl border bg-background/80 hover:border-amber-500/40 transition-all flex flex-col justify-between space-y-3"
-                >
-                  <div className="space-y-1.5">
-                    <div className="flex items-start justify-between gap-2">
-                      <h3 className="text-sm font-bold text-foreground line-clamp-1">
-                        {demo.name}
-                      </h3>
-                      <span className={`text-[10px] font-mono px-2 py-0.5 rounded-md font-semibold flex items-center gap-1 ${
-                        demo.isExpired
-                          ? 'bg-muted text-muted-foreground border'
-                          : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
-                      }`}>
-                        <Clock className="w-3 h-3" />
-                        {demo.isExpired ? 'Expirada' : `${demo.daysLeft} dias restantes`}
-                      </span>
-                    </div>
-
-                    <p className="text-xs text-muted-foreground">
-                      {demo.city ? `${demo.city} - ${demo.state || 'SP'}` : 'Localização não informada'}
-                    </p>
-
-                    <div className="pt-1">
-                      <span className="text-[11px] font-mono text-primary bg-primary/5 px-2 py-1 rounded-md border border-primary/10 block truncate">
-                        {demoUrl}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 pt-2 border-t">
-                    <a
-                      href={`/adv/${demo.slug}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium hover:bg-muted transition-colors text-foreground"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5 text-primary" />
-                      <span>Abrir Demo</span>
-                    </a>
-
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        navigator.clipboard.writeText(demoUrl);
-                        toast({
-                          title: 'Link copiado!',
-                          description: demoUrl
-                        });
-                      }}
-                      className="px-2.5 py-1.5 h-auto text-xs"
-                      title="Copiar Link Curto"
-                    >
-                      <Copy className="w-3.5 h-3.5" />
-                    </Button>
-
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleDeleteCloudDemo(demo.id, demo.name)}
-                      className="px-2.5 py-1.5 h-auto text-xs text-destructive hover:bg-destructive hover:text-destructive-foreground border-destructive/20"
-                      title="Excluir Possível Cliente da Nuvem"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </Button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* Grade de Resultados com Cards dos Advogados */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
-            <span>Resultados Encontrados</span>
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-primary/10 text-primary font-mono font-semibold">
-              {results.length} escritórios
-            </span>
-          </h2>
-
-          <span className="text-xs text-muted-foreground hidden sm:block">
-            Proposta padronizada: <strong>R$ 300</strong> implementação + domínio anual (~R$ 60/ano)
+          <span className="text-xs text-muted-foreground self-start sm:self-auto font-medium">
+            Proposta padronizada: <strong className="text-emerald-600 dark:text-emerald-400">R$ 300</strong> implementação + domínio anual (~R$ 60/ano)
           </span>
         </div>
 
@@ -711,7 +616,7 @@ export default function RadarGoogleMaps() {
                           className="hover:underline inline-flex items-center gap-1.5"
                           title="Abrir perfil deste advogado no Google Maps"
                         >
-                          <span>{lawyer.lawyer_name || lawyer.name}</span>
+                          <span>{cleanLawyerName(lawyer.lawyer_name || lawyer.name)}</span>
                           <ExternalLink className="w-3.5 h-3.5 text-muted-foreground opacity-60 group-hover:opacity-100" />
                         </a>
                       </h3>
@@ -852,6 +757,118 @@ export default function RadarGoogleMaps() {
           })}
         </div>
       </div>
+
+      {/* Seção de Demonstrações Ativas na Nuvem (Validade de 5 Dias - Abaixo dos Resultados) */}
+      {cloudDemos.length > 0 && (
+        <div className="bg-card border rounded-2xl p-6 shadow-sm space-y-4 border-amber-500/20 bg-amber-500/[0.02] mt-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center font-bold">
+                  <Globe className="w-4 h-4" />
+                </div>
+                <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
+                  <span>Demonstrações Ativas na Nuvem</span>
+                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 font-mono font-semibold">
+                    {cloudDemos.length} ativas
+                  </span>
+                </h2>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Modelos exclusivos salvos com links curtos oficiais. Cada proposta permanece disponível por 5 dias corridos.
+              </p>
+            </div>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={loadCloudDemos}
+              disabled={loadingCloudDemos}
+              className="gap-1.5 text-xs self-start sm:self-auto"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${loadingCloudDemos ? 'animate-spin' : ''}`} />
+              <span>Atualizar Nuvem</span>
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {cloudDemos.map((demo) => {
+              const demoUrl = `https://rafaelpitaoficial.com.br/adv/${demo.slug}`;
+
+              return (
+                <div
+                  key={demo.id}
+                  className="p-4 rounded-xl border bg-background/80 hover:border-amber-500/40 transition-all flex flex-col justify-between space-y-3"
+                >
+                  <div className="space-y-1.5">
+                    <div className="flex items-start justify-between gap-2">
+                      <h3 className="text-sm font-bold text-foreground line-clamp-1">
+                        {cleanLawyerName(demo.name)}
+                      </h3>
+                      <span className={`text-[10px] font-mono px-2 py-0.5 rounded-md font-semibold flex items-center gap-1 ${
+                        demo.isExpired
+                          ? 'bg-muted text-muted-foreground border'
+                          : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
+                      }`}>
+                        <Clock className="w-3 h-3" />
+                        {demo.isExpired ? 'Expirada' : `${demo.daysLeft} dias restantes`}
+                      </span>
+                    </div>
+
+                    <p className="text-xs text-muted-foreground">
+                      {demo.city ? `${demo.city} - ${demo.state || 'SP'}` : 'Localização não informada'}
+                    </p>
+
+                    <div className="pt-1">
+                      <span className="text-[11px] font-mono text-primary bg-primary/5 px-2 py-1 rounded-md border border-primary/10 block truncate">
+                        {demoUrl}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-2 border-t">
+                    <a
+                      href={`/adv/${demo.slug}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium hover:bg-muted transition-colors text-foreground"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5 text-primary" />
+                      <span>Abrir Demo</span>
+                    </a>
+
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        navigator.clipboard.writeText(demoUrl);
+                        toast({
+                          title: 'Link copiado!',
+                          description: demoUrl
+                        });
+                      }}
+                      className="px-2.5 py-1.5 h-auto text-xs"
+                      title="Copiar Link Curto"
+                    >
+                      <Copy className="w-3.5 h-3.5" />
+                    </Button>
+
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleDeleteCloudDemo(demo.id, demo.name)}
+                      className="px-2.5 py-1.5 h-auto text-xs text-destructive hover:bg-destructive hover:text-destructive-foreground border-destructive/20"
+                      title="Excluir Possível Cliente da Nuvem"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </Button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Modal de Pré-visualização & Edição da Proposta (R$ 300 + Domínio) */}
       {selectedLawyerForProposal && (

@@ -7,6 +7,7 @@
 import { scanLawyersWithoutWebsite } from '../lib/gemini.js';
 import { legalProspectService } from './legalProspectService.js';
 import { supabase } from '@/lib/customSupabaseClient';
+import { cleanLawyerName } from '../utils/lawyerNameFormatter.js';
 
 /**
  * Gera um slug único, limpo e amigável para a URL da landing page de um advogado
@@ -16,10 +17,11 @@ import { supabase } from '@/lib/customSupabaseClient';
  */
 export const generateLawyerSlug = (lawyer) => {
   const rawName = lawyer.lawyer_name || lawyer.name || 'advogado';
+  const cleaned = cleanLawyerName(rawName);
   // Remove títulos e palavras redundantes para manter o slug conciso e elegante
-  const cleanName = rawName
+  const cleanName = cleaned
     .replace(/\b(dr|dra|doutor|doutora|advogado|advogada|advocacia|escritorio|associados)\b/gi, '')
-    .trim() || rawName;
+    .trim() || cleaned;
 
   const slugBase = cleanName
     .toLowerCase()
@@ -177,11 +179,16 @@ export const googleMapsProspectService = {
         throw new Error(result.message || 'Falha ao processar dados da API.');
       }
 
-      const leadsFromApi = (result.data || []).map((lead) => ({
-        ...lead,
-        niche: niche,
-        status: 'novo'
-      }));
+      const leadsFromApi = (result.data || []).map((lead) => {
+        const cleanName = cleanLawyerName(lead.name || lead.lawyer_name);
+        return {
+          ...lead,
+          name: cleanName,
+          lawyer_name: cleanName,
+          niche: niche,
+          status: 'novo'
+        };
+      });
 
       // Persiste no histórico local sanitizado sem sobrescrever leads já salvos
       if (leadsFromApi.length > 0) {
@@ -257,11 +264,15 @@ export const googleMapsProspectService = {
   addRealLead: (leadData) => {
     try {
       const current = sanitizeStoredLeads();
+      const rawName = leadData.lawyer_name || leadData.name || '';
+      const cleanName = cleanLawyerName(rawName);
       const newLead = {
         ...leadData,
+        name: cleanName,
+        lawyer_name: cleanName,
         id: leadData.id || `maps-real-${Date.now()}`,
-        slug: leadData.slug || generateLawyerSlug(leadData),
-        google_maps_url: buildGoogleMapsUrl(leadData),
+        slug: leadData.slug || generateLawyerSlug({ ...leadData, name: cleanName }),
+        google_maps_url: buildGoogleMapsUrl({ ...leadData, name: cleanName }),
         rating: Number(leadData.rating || 5.0),
         reviews_count: Number(leadData.reviews_count || 10),
         has_website: false,
@@ -346,7 +357,8 @@ export const googleMapsProspectService = {
    * @returns {string}
    */
   generateProposalMessage: (lawyer, variant = 'direto') => {
-    const name = lawyer.lawyer_name || lawyer.name || 'Doutor(a)';
+    const rawName = lawyer.lawyer_name || lawyer.name || 'Doutor(a)';
+    const name = cleanLawyerName(rawName) || 'Doutor(a)';
     const rating = lawyer.rating ? `${Number(lawyer.rating).toFixed(1)}★` : '5.0★';
     const reviews = lawyer.reviews_count ? ` (${lawyer.reviews_count} avaliações)` : '';
     const city = lawyer.city || 'sua região';
@@ -411,7 +423,8 @@ Queria saber se você tem interesse em colocar no ar para passar ainda mais auto
   saveCloudDemo: async (lawyer) => {
     try {
       const slug = lawyer.slug || lawyer.landing_page_slug || generateLawyerSlug(lawyer);
-      const name = lawyer.lawyer_name || lawyer.name || 'Advogado(a)';
+      const rawLawyerName = lawyer.lawyer_name || lawyer.name || 'Advogado(a)';
+      const name = cleanLawyerName(rawLawyerName) || 'Advogado(a)';
       const phone = (lawyer.whatsapp || lawyer.phone || '').toString().replace(/\D/g, '');
       const rawAddress = lawyer.address || (lawyer.city ? `${lawyer.city} - ${lawyer.state || 'SP'}` : '');
       const now = new Date();

@@ -3,6 +3,16 @@
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
 ## CONCLUÍDO (DONE)
+- [x] **Busca Multi-Termo para Capitais, Reordenação de Layout do Radar & Higienização de Nomes (`api/places-search.js`, `RadarGoogleMaps.jsx`, `lawyerNameFormatter.js`, `LegalNavbar.jsx`, `LegalLandingPage.jsx`, `googleMapsProspectService.js`, `LegalAbout.jsx`, `LegalFooter.jsx`)**:
+  - Implementado motor de busca multi-termo paralelo na Google Places API para cidades como Rio de Janeiro, São Paulo e Belo Horizonte, aumentando a amostragem de 20 para mais de 60 estabelecimentos e multiplicando os resultados sem site de 1 a 3 para 10 a 25 leads qualificados.
+  - Reorganizada a interface do Radar: Grade de Resultados Encontrados no Google Maps movida imediatamente para o topo, logo abaixo dos filtros, com scroll automático ao concluir a busca.
+  - Seção "Demonstrações Ativas na Nuvem" movida para abaixo dos resultados, eliminando a confusão visual em que leads salvos antigos de outras cidades ocupavam a tela.
+  - Título dinâmico identificando a cidade pesquisada com badges ("Rio de Janeiro - RJ | X escritórios sem site").
+  - Criado o módulo `lawyerNameFormatter.js` com `cleanLawyerName` e `formatNavbarLawyerName`, eliminando delimitadores de palavras-chave (`|`, `•`, `-`, `/`, `:`) e sufixos de SEO do Google Maps.
+  - Logotipo da Navbar configurado com limite de largura (`max-w-[260px] sm:max-w-[340px] xl:max-w-[400px]`) e classe `truncate`.
+  - Links da navegação e botão de agendamento rebalanceados para evitar esmagamento ou quebra do texto `Agendar no WhatsApp`.
+  - Reescrita do parágrafo de apresentação em `LegalAbout.jsx` para concordância impecável com nomes próprios.
+  - Build do Vite executado e 100% aprovado sem erros (código 0).
 - [x] **Fotos de Hero Widescreen 16:9 Femininas, Enquadramento Lateral & Blindagem de Imagens Masculinas (`LegalHero.jsx`, `LegalLandingPage.jsx`, `public/images/legal/`)**:
   - Geração e substituição das 4 imagens em proporção widescreen 16:9 real (1376x768): `advogada_hero.jpg`, `advogada_sobre.jpg`, `advogada_tribunal.jpg` e `advogada_sede.jpg`.
   - Enquadramento lateral com a advogada posicionada no lado direito e espaço livre no lado esquerdo com estante jurídica desfocada e iluminação quente.

@@ -555,3 +555,23 @@ Para que a apresentação visual cause máximo impacto em telas de celular e mon
 3. **Exibição Fiel por Gênero**:
    * O sistema impede que qualquer imagem de advogado masculino apareça na demonstração de uma advogada, garantindo uma experiência totalmente personalizada do início ao fim da página.
 
+### 19.10 Higienização Automática de Nomes do Google Maps e Navbar Equilibrada
+Muitos escritórios no Google cadastram seus nomes com listas quilométricas de palavras-chave para tentar aparecer em mais pesquisas (por exemplo: *"Dra Teresinha Ravena de Sousa - Advogada | Divórcios | Inventários | Direito Civil"*). Agora o sistema trata isso de forma 100% inteligente:
+1. **Filtro Automático de Títulos Exagerados**:
+   * O sistema corta automaticamente barras (`|`), traços (`-`), marcadores e termos de busca repetitivos.
+   * O nome da profissional é limpo para a sua forma nobre e executiva: *"Dra. Teresinha Ravena de Sousa"*.
+2. **Navbar Elegante e Protegida contra Estouro**:
+   * O logotipo agora possui limite de largura e reticências automáticas caso o nome do advogado seja muito extenso.
+   * O menu de navegação e o botão *"Agendar no WhatsApp"* mantêm o espaçamento perfeito em qualquer tela, sem cortes e sem empurrar os botões para fora.
+3. **Abordagens Mais Pessoais e Humanizadas no WhatsApp**:
+   * Ao clicar para disparar a proposta ou copiar o texto, a mensagem se dirige ao profissional pelo nome limpo (*"Oi, Dra. Teresinha Ravena de Sousa, tudo bem?"*), transmitindo respeito e profissionalismo sem parecer um robô que copiou a razão social inteira do Google.
+
+### 19.11 Busca Potencializada para Capitais e Foco Direto nos Resultados
+Para que a prospecção seja rápida e você encontre dezenas de escritórios reais sem site em qualquer cidade:
+1. **Resultados Imediatos Logo Abaixo dos Filtros**:
+   * A lista de escritórios encontrados no Google Maps agora aparece em primeiro lugar, logo abaixo da barra de busca.
+   * Ao clicar em qualquer cidade (como Rio de Janeiro, São Paulo, Belo Horizonte) ou em "Escanear Google Maps", a tela rola suavemente até os novos resultados encontrados.
+2. **Motor Multi-Busca para Grandes Cidades**:
+   * O sistema consulta termos variados em paralelo (advogados, escritórios de advocacia, consultoria jurídica e advogadas) em uma única busca, garantindo uma lista farta de oportunidades mesmo em capitais onde a concorrência é alta.
+3. **Demonstrações Salvas na Nuvem no Lugar Certo**:
+   * As propostas que você salvou anteriormente na nuvem continuam disponíveis por 5 dias corridos, posicionadas logo após os resultados da pesquisa para não se misturarem com os novos escritórios da cidade pesquisada.

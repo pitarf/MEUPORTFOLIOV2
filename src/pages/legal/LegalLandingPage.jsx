@@ -4,6 +4,7 @@ import { LEGAL_NICHES } from '../../data/legalTemplates';
 import { legalProspectService } from '../../services/legalProspectService';
 import { googleMapsProspectService, buildGoogleMapsUrl } from '../../services/googleMapsProspectService';
 import { detectLawyerGender, LEGAL_THEMES } from '../../utils/genderDetection';
+import { cleanLawyerName } from '../../utils/lawyerNameFormatter';
 
 import LegalTopBar from '../../components/legal/LegalTopBar';
 import LegalNavbar from '../../components/legal/LegalNavbar';
@@ -57,10 +58,11 @@ export default function LegalLandingPage() {
       const info = LEGAL_NICHES[targetNiche] || LEGAL_NICHES.geral;
       const cleanPhone = (cloudData.whatsapp || cloudData.phone || '').toString().replace(/\D/g, '');
       const rawAddress = cloudData.address || (cloudData.city ? `${cloudData.city} - ${cloudData.state || 'SP'}` : info.defaultLawyer.address);
+      const rawName = cloudData.name || cloudData.lawyer_name || info.defaultLawyer.name;
 
       return {
         lawyerData: {
-          name: cloudData.name || cloudData.lawyer_name || info.defaultLawyer.name,
+          name: cleanLawyerName(rawName),
           oab: cloudData.state ? `Inscrição Regular OAB/${cloudData.state}` : 'Inscrição Regular OAB',
           role: info.badge,
           city: cloudData.city || info.defaultLawyer.city,
@@ -96,10 +98,11 @@ export default function LegalLandingPage() {
       const info = LEGAL_NICHES[targetNiche] || LEGAL_NICHES.geral;
       const cleanPhone = (paramTel || '').toString().replace(/\D/g, '');
       const rawWhatsapp = cleanPhone.length >= 10 && !cleanPhone.startsWith('55') ? `55${cleanPhone}` : cleanPhone;
+      const cleanName = cleanLawyerName(paramNome);
       
       const syntheticLead = {
-        lawyer_name: paramNome,
-        name: paramNome,
+        lawyer_name: cleanName,
+        name: cleanName,
         address: paramEnd || (paramCidade ? `${paramCidade} - ${paramUf || 'SP'}` : info.defaultLawyer.address),
         city: paramCidade || info.defaultLawyer.city,
         state: paramUf || info.defaultLawyer.state,
@@ -113,7 +116,7 @@ export default function LegalLandingPage() {
 
       return {
         lawyerData: {
-          name: paramNome,
+          name: cleanName,
           oab: paramUf ? `Inscrição Regular OAB/${paramUf}` : 'Inscrição Regular OAB',
           role: info.badge,
           city: paramCidade || info.defaultLawyer.city,
@@ -151,6 +154,7 @@ export default function LegalLandingPage() {
         const info = LEGAL_NICHES[targetNiche] || LEGAL_NICHES.geral;
         
         const rawName = prospect.lawyer_name || prospect.name || info.defaultLawyer.name;
+        const cleanName = cleanLawyerName(rawName);
         const rawAddress = prospect.address || (prospect.city && prospect.state ? `${prospect.city} - ${prospect.state}` : info.defaultLawyer.address);
         const rawPhone = prospect.phone || prospect.whatsapp || info.defaultLawyer.phone;
         const rawWhatsapp = (prospect.whatsapp || prospect.phone || '').toString().replace(/\D/g, '') || info.defaultLawyer.whatsapp;
@@ -161,7 +165,7 @@ export default function LegalLandingPage() {
 
         return {
           lawyerData: {
-            name: rawName,
+            name: cleanName,
             oab: rawOab,
             role: info.badge,
             city: prospect.city || info.defaultLawyer.city,
@@ -182,10 +186,11 @@ export default function LegalLandingPage() {
       }
 
       // Smart Slug Parsing de Fallback (Extrai nome formatado diretamente da URL limpa)
-      const parsedName = slug
+      const rawSlugName = slug
         .split('-')
         .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
         .join(' ');
+      const parsedName = cleanLawyerName(rawSlugName);
 
       const info = LEGAL_NICHES.geral;
       const shortCity = paramCidade || info.defaultLawyer.city;

@@ -57,56 +57,61 @@ export default async function handler(req, res) {
             'X-Goog-FieldMask': 'places.id,places.displayName,places.formattedAddress,places.nationalPhoneNumber,places.internationalPhoneNumber,places.websiteUri,places.rating,places.userRatingCount,places.googleMapsUri,places.addressComponents'
         };
 
-        const response = await fetch(placesUrl, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify({
-                textQuery: query,
-                pageSize: 20
-            })
-        });
+        // Queries paralelas inteligentes para maximizar o volume de escritórios sem site encontrados na cidade
+        const queriesToRun = city ? [
+            query,
+            `escritorio de advocacia em ${city}${state ? ` ${state}` : ''}`,
+            `advocacia em ${city}${state ? ` ${state}` : ''}`,
+            `advogada em ${city}${state ? ` ${state}` : ''}`,
+            `consultoria juridica em ${city}${state ? ` ${state}` : ''}`
+        ] : [query];
 
-        if (!response.ok) {
-            const errorDetails = await response.text();
-            console.error('[Google Places API Error]:', errorDetails);
-            return res.status(response.status).json({
-                success: false,
-                message: `Erro na API do Google Places (${response.status}): ${response.statusText}`,
-                details: errorDetails
-            });
-        }
+        const searchPromises = queriesToRun.map(q =>
+            fetch(placesUrl, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify({
+                    textQuery: q,
+                    pageSize: 20
+                })
+            }).then(r => r.ok ? r.json() : { places: [] }).catch(() => ({ places: [] }))
+        );
 
-        const data = await response.json();
-        let rawPlaces = data.places || [];
+        const resultsArrays = await Promise.all(searchPromises);
+        let rawPlaces = [];
+        const seenIds = new Set();
 
-        // Busca complementar inteligente: se a primeira busca retornar poucos ou nenhum lead sem site
-        const initialWithoutSite = rawPlaces.filter(p => !p.websiteUri);
-        if (initialWithoutSite.length < 4 && city) {
-            try {
-                const complementaryQuery = `escritorio de advocacia em ${city}${state ? ` ${state}` : ''}`;
-                const compRes = await fetch(placesUrl, {
-                    method: 'POST',
-                    headers,
-                    body: JSON.stringify({
-                        textQuery: complementaryQuery,
-                        pageSize: 20
-                    })
-                });
-                if (compRes.ok) {
-                    const compData = await compRes.json();
-                    const existingIds = new Set(rawPlaces.map(p => p.id));
-                    (compData.places || []).forEach(p => {
-                        if (!existingIds.has(p.id)) {
-                            rawPlaces.push(p);
-                            existingIds.add(p.id);
-                        }
-                    });
+        for (const resData of resultsArrays) {
+            for (const place of (resData.places || [])) {
+                if (place && place.id && !seenIds.has(place.id)) {
+                    seenIds.add(place.id);
+                    rawPlaces.push(place);
                 }
-            } catch (compErr) {
-                console.warn('[Busca Complementar Ignorada]:', compErr);
             }
         }
 
+
+// Higieniza nomes do Google Maps removendo poluição de SEO
+function sanitizePlacesName(rawName) {
+    if (!rawName || typeof rawName !== 'string') return 'Escritório de Advocacia';
+    let name = rawName.trim();
+    const separators = [' | ', ' - ', ' – ', ' — ', ' • ', ' / ', ': '];
+    for (const sep of separators) {
+        if (name.includes(sep)) {
+            name = name.split(sep)[0].trim();
+        }
+    }
+    if (name.includes('|')) name = name.split('|')[0].trim();
+    if (name.includes('•')) name = name.split('•')[0].trim();
+    name = name.replace(/\s*[-–—,]\s*(advogada?|advocacia|escritorio|consultoria|direito|juridico|oab).*$/i, '').trim();
+    if (/^[A-Za-zÀ-ÖØ-öø-ÿ\s\.]+\s+(advogada|advogado)$/i.test(name)) {
+        name = name.replace(/\s+(advogada|advogado)$/i, '').trim();
+    }
+    name = name.replace(/\b(dra?)\b(?!\.)/i, (m) => (m.toLowerCase() === 'dra' ? 'Dra.' : 'Dr.'));
+    name = name.replace(/\b(Dra|Dr)\s+\./gi, '$1.');
+    name = name.replace(/[-–—/\\|:,;.]+$/, '').trim();
+    return name || rawName;
+}
 
         // Filtra e formata os dados
         const formattedLeads = rawPlaces
@@ -122,7 +127,8 @@ export default async function handler(req, res) {
                 return true;
             })
             .map(place => {
-                const name = place.displayName?.text || 'Escritório de Advocacia';
+                const rawName = place.displayName?.text || 'Escritório de Advocacia';
+                const name = sanitizePlacesName(rawName);
                 const rawPhone = place.nationalPhoneNumber || place.internationalPhoneNumber || '';
                 
                 // Normaliza o número para o link do WhatsApp
@@ -152,15 +158,16 @@ export default async function handler(req, res) {
                     .toLowerCase()
                     .normalize('NFD')
                     .replace(/[\u0300-\u036f]/g, '')
+                    .replace(/\b(dr|dra|doutor|doutora|advogado|advogada)\b/g, '')
                     .replace(/[^a-z0-9]+/g, '-')
-                    .replace(/(^-|-$)/g, '');
+                    .replace(/(^-|-$)+/g, '');
 
                 const citySlug = detectedCity
                     .toLowerCase()
                     .normalize('NFD')
                     .replace(/[\u0300-\u036f]/g, '')
                     .replace(/[^a-z0-9]+/g, '-')
-                    .replace(/(^-|-$)/g, '');
+                    .replace(/(^-|-$)+/g, '');
 
                 const fullSlug = citySlug ? `${nameSlug}-${citySlug}` : nameSlug;
 
@@ -169,6 +176,7 @@ export default async function handler(req, res) {
                     place_id: place.id,
                     name: name,
                     lawyer_name: name,
+                    raw_business_name: rawName,
                     specialty: 'Direito Geral e Consultoria',
                     city: detectedCity,
                     state: detectedState,

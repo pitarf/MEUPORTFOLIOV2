@@ -525,8 +525,24 @@ Para garantir máxima fidelidade visual em qualquer dispositivo (celulares, tabl
 3. **Blindagem de Gênero em Todas as Camadas (`LegalLandingPage.jsx`)**:
    - A resolução de `activeHeroImage` força o uso estrito de `theme.heroDefaultImg` para leads femininos, bloqueando o vazamento de imagens de nichos masculinos (`geral.jpg`, `trabalhista.jpg`, `hero_desk.jpg`).
 
+### 13.20 Higienização Inteligente de Nomes do Google Maps & Proteção Visual da Navbar (`lawyerNameFormatter.js`)
+Para erradicar a exibição de nomes desproporcionais e poluídos com palavras-chave de busca do Google Meu Negócio:
+1. **Utilitário `cleanLawyerName` e `formatNavbarLawyerName` (`src/utils/lawyerNameFormatter.js`)**:
+   - Detecta e corta delimitadores como `|`, `•`, `-`, `/`, `:`, eliminando listas de áreas (ex: `| Divórcios | Inventários | Direito Civil`) e sufixos residuais.
+   - Corrige pontuação de honoríficos (`Dra` -> `Dra.` e `Dr` -> `Dr.`).
+   - `formatNavbarLawyerName`: Synthetiza nomes com múltiplos sobrenomes para o formato executivo compacto (Prefixo + Primeiro Nome + Último Sobrenome) caso ultrapassem 32 caracteres.
+2. **Proteção Visual contra Estouro na Navbar (`LegalNavbar.jsx`)**:
+   - O contêiner de marca possui contenção estrita (`max-w-[260px] sm:max-w-[340px] xl:max-w-[400px]`) e classe `truncate`.
+   - Links do menu ajustados para `gap-3.5 xl:gap-6 2xl:gap-8` e botão de WhatsApp configurado com preenchimento responsivo e `whitespace-nowrap`, garantindo integridade visual em qualquer viewport.
+3. **Propagação Unificada no Sistema**:
+   - Integrado em `LegalLandingPage.jsx`, `googleMapsProspectService.js` (geração de slugs e mensagens de proposta) e `api/places-search.js`.
 
-
-
-
+### 13.21 Buscas Paralelas Multi-Termo na Google Places API & Reordenação do Radar (`api/places-search.js`, `RadarGoogleMaps.jsx`)
+Para assegurar ampla cobertura geográfica em capitais e metrópoles:
+1. **Disparo de Queries Paralelas na Google Places API (`api/places-search.js`)**:
+   - Quando o usuário busca por uma cidade (ex: Rio de Janeiro), a API dispara até 5 requisições paralelas combinadas: `advogado`, `escritorio de advocacia`, `advocacia`, `advogada` e `consultoria juridica` concatenadas à cidade e UF.
+   - Amostragem ampliada de 20 para 60+ estabelecimentos por chamada, eliminando duplicatas por `place.id` e identificando muito mais advogados sem website cadastrado.
+2. **Reordenação e Auto-Scroll no Radar (`RadarGoogleMaps.jsx`)**:
+   - A Grade de Resultados foi movida para o topo, imediatamente abaixo da barra de filtros, com scroll suave automático acionado após o término da busca (`resultsRef.current?.scrollIntoView`).
+   - A seção "Demonstrações Ativas na Nuvem" foi posicionada abaixo dos resultados, mantendo o histórico de propostas organizadas sem poluir a visão inicial da busca regional.
 

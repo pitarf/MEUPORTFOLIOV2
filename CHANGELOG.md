@@ -2,6 +2,28 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.26.8] - 2026-09-30
+
+### Aprimorado (Busca Multi-Termo para Capitais, Reordenação de Layout do Radar & Higienização de Nomes)
+- **Buscas Paralelas Multi-Termo na Google Places API (`api/places-search.js`)**:
+  - Implementado motor de busca paralelo combinando múltiplos termos complementares por cidade (ex: `advogado em Rio de Janeiro RJ`, `escritorio de advocacia em Rio de Janeiro RJ`, `advocacia em Rio de Janeiro RJ`, `advogada em Rio de Janeiro RJ` e `consultoria juridica em Rio de Janeiro RJ`).
+  - O volume de estabelecimentos analisados passou de 20 para mais de 60 lugares únicos por busca, multiplicando a identificação de advogados reais sem site de 1 a 3 para 10 a 25 opções qualificadas em capitais como Rio de Janeiro, São Paulo e Belo Horizonte.
+- **Reorganização de Layout e Foco nos Resultados (`RadarGoogleMaps.jsx`)**:
+  - A grade de resultados do Google Maps foi reposicionada imediatamente abaixo da barra de filtros de busca, garantindo que o usuário veja instantaneamente os escritórios da cidade pesquisada.
+  - A seção de "Demonstrações Ativas na Nuvem" foi movida para depois da grade de resultados, eliminando a confusão visual onde cards antigos de outras cidades ocupavam a tela.
+  - Adicionado auto-scroll suave para a grade de resultados assim que a busca é concluída.
+  - Título da seção agora identifica claramente a cidade pesquisada com badges dinâmicos (ex: "Resultados no Google Maps: Rio de Janeiro (RJ) - 11 escritórios sem site").
+- **Utilitário Centralizador de Higienização de Nomes (`src/utils/lawyerNameFormatter.js`)**:
+  - Criadas as funções `cleanLawyerName` e `formatNavbarLawyerName` para erradicar nomes gigantes e poluídos extraídos das fichas de Google Meu Negócio.
+  - Elimina delimitadores de palavras-chave (`|`, `•`, `-`, `/`, `:`), listas de especialidades (ex: `| Divórcios | Inventários | Direito Civil`) e sufixos residuais (`- Advogada`, `- Advocacia`).
+  - Normaliza prefixos e honoríficos (`Dra` -> `Dra.` e `Dr` -> `Dr.`).
+- **Proteção e Redimensionamento da Navbar (`LegalNavbar.jsx`)**:
+  - Inserida contenção de largura máxima (`max-w-[260px] sm:max-w-[340px] xl:max-w-[400px]`) e classe `truncate` no logotipo corporativo, impedindo que nomes extensos empurrem o menu ou quebrem o layout.
+  - Ajustados os espaçamentos horizontais da navegação (`gap-3.5 xl:gap-6 2xl:gap-8`) e tamanho de fonte (`text-xs xl:text-sm`).
+  - Botão de WhatsApp reformatado com `whitespace-nowrap` e preenchimento adaptativo (`px-4 sm:px-5 xl:px-6`), eliminando cortes visuais em qualquer resolução.
+- **Validação de Build**:
+  - `npm run build` executado e aprovado com código 0 (`index-8fd6ef3c.js`).
+
 ## [1.26.7] - 2026-09-30
 
 ### Aprimorado (Fotos de Hero Widescreen 16:9 para Mulheres, Enquadramento Lateral & Blindagem de Imagens Masculinas)

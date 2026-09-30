@@ -86,7 +86,11 @@ export default function LegalAbout({ lawyer, nicheInfo, theme }) {
             </div>
 
             <p className={`text-sm sm:text-base ${isFemale ? 'text-stone-600 font-light' : 'text-slate-600 font-normal'} leading-relaxed`}>
-              Na {lawyer.name ? (/advocacia|consultoria|associad|sociedade/i.test(lawyer.name) ? lawyer.name : `${lawyer.name} Advocacia`) : 'nossa advocacia'}, acreditamos que o sucesso de uma demanda jurídica nasce da clareza técnica, do planejamento estratégico e de uma relação de absoluta confiança mútua entre cliente e {theme?.gender === 'female' ? 'advogada' : 'advogado'}.
+              {lawyer.name ? (
+                /^(dr\.|dra\.|doutor|doutora)/i.test(lawyer.name)
+                  ? `No escritório liderado por ${lawyer.name}, acreditamos que o sucesso de uma demanda jurídica nasce da clareza técnica, do planejamento estratégico e de uma relação de absoluta confiança mútua entre cliente e ${theme?.gender === 'female' ? 'advogada' : 'advogado'}.`
+                  : `Na ${/advocacia|consultoria|associad|sociedade/i.test(lawyer.name) ? lawyer.name : `${lawyer.name} Advocacia`}, acreditamos que o sucesso de uma demanda jurídica nasce da clareza técnica, do planejamento estratégico e de uma relação de absoluta confiança mútua entre cliente e ${theme?.gender === 'female' ? 'advogada' : 'advogado'}.`
+              ) : `Em nossa advocacia, acreditamos que o sucesso de uma demanda jurídica nasce da clareza técnica, do planejamento estratégico e de uma relação de absoluta confiança mútua entre cliente e ${theme?.gender === 'female' ? 'advogada' : 'advogado'}.`}
             </p>
 
             {/* Checklist com Ícones Dourados em 2 Colunas Arejadas */}
