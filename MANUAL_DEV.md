@@ -546,3 +546,19 @@ Para assegurar ampla cobertura geográfica em capitais e metrópoles:
    - A Grade de Resultados foi movida para o topo, imediatamente abaixo da barra de filtros, com scroll suave automático acionado após o término da busca (`resultsRef.current?.scrollIntoView`).
    - A seção "Demonstrações Ativas na Nuvem" foi posicionada abaixo dos resultados, mantendo o histórico de propostas organizadas sem poluir a visão inicial da busca regional.
 
+### 13.22 Roteiro Cadenciado, Recuperação em 2 Etapas & Cenários de Resposta (`googleMapsProspectService.js`, `RadarGoogleMaps.jsx`)
+Para superar a taxa de rejeição por desconfiança de links externos e romper o filtro de secretárias:
+1. **Estrutura Cadenciada de 5 Etapas (`getPitchSteps` / `generateProposalMessage`)**:
+   - **Passo 1 (Abertura / Anti-Spam)**: Pergunta se o canal fala com a assessoria ou com o titular, sem envio de links externos. Evita denúncias de spam no WhatsApp e desativa defesas da recepção.
+   - **Passo 2 (Oportunidade / Permissão)**: Elogia a reputação do escritório no Google Maps, alerta a perda de clientes na cidade para a concorrência e solicita autorização expressa para envio do protótipo visual.
+   - **Passo 3 (Demonstração / Proposta)**: Envia o link da Landing Page personalizada (`/adv/:slug`), destacando a conformidade com as normas éticas da OAB, personalização total de textos/fotos e proposta acessível de R$ 300 (implementação única) mais anuidade de domínio.
+   - **Passo 4 (Resgate Parte 1 / Pergunta Canal)**: Pergunta natural se este é o canal adequado para tratar da presença digital e novos clientes ou se recomendam outro contato. Desarma defesas com taxa recorde de resposta.
+   - **Passo 5 (Resgate Parte 2 / Link Pós-Retorno)**: Disparada quando o cliente responde "sou eu" ou "é aqui", apresentando a demonstração já pronta e alertando sobre clientes da comarca escapando para a concorrência.
+2. **Nova Aba "Banco de Respostas & Scripts Salvos" no Painel**:
+   - Criada visualização separada no Radar Google Maps acessada via alternador no topo, exibindo 7 cartões com scripts pré-formatados prontos para cópia com 1 clique.
+3. **Modal Estratégico com 8 Abas Diretas & Cenários de Resposta**:
+   - O modal de proposta permite alternar com 1 toque entre todas as 8 variantes (Passos 1, 2, 3, 4, 5, Novo Contato, Sem Interesse e Mensagem Direta), integrando a caixa interativa de reação do cliente.
+4. **Ações Integradas nos Cards do Radar (`RadarGoogleMaps.jsx`)**:
+   - Cada card de prospecto conta com botões rápidos numerados ("1. Abertura", "2. Oportunidade", "3. Demo") e o atalho de "Recuperar" no cabeçalho.
+   - Cards de demonstrações ativas da nuvem contam com os 4 botões diretos ("1. Abertura", "2. Oportunidade", "3. Demo", "4. Resgate").
+

@@ -32,11 +32,121 @@ import { cleanLawyerName } from '../../utils/lawyerNameFormatter';
 /**
  * Radar Google Maps de Prospecção Ativa para Advogados
  * Busca advogados com alta reputação no Google Maps sem site,
- * extrai WhatsApp e gera proposta personalizada de R$ 300 + taxa anual de domínio.
+/**
+ * Banco oficial de Scripts e Respostas Rápidas salvos para prospecção no WhatsApp
  */
+const SAVED_PITCH_SCRIPTS = [
+  {
+    id: 'passo1',
+    title: '1. Abertura (Anti-Spam)',
+    badge: 'Filtro Secretária',
+    badgeColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+    objective: 'Quebra de gelo sem envio de link. Identifica se o canal fala com a assessoria ou com o advogado titular para romper o filtro sem risco de bloqueio.',
+    text: `Olá, bom dia! Tudo bem?
+
+Por gentileza, este canal é o contato direto com o(a) Dr(a). [Nome do Advogado] ou falo com a equipe do escritório?`
+  },
+  {
+    id: 'passo2',
+    title: '2. Oportunidade & Permissão',
+    badge: 'Permissão',
+    badgeColor: 'bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-500/20',
+    objective: 'Elogio sincero à reputação no Google Maps, alerta de perda de clientes na região para a concorrência e solicitação de autorização expressa para envio da demonstração.',
+    text: `Aqui é o Rafael. Estava analisando os escritórios de advocacia em [Cidade] e vi que vocês possuem uma excelente reputação e ótimas avaliações no Google (5.0★)!
+
+Porém, notei que ainda não possuem um site próprio de atendimento rápido conectado ao perfil, e hoje muitos clientes em potencial da região acabam fechando com outros escritórios por não encontrarem uma página oficial.
+
+Desenvolvi um protótipo exclusivo para o escritório de vocês para mostrar na prática como reter esses clientes.
+
+Me autoriza a enviar o link rápido de demonstração para vocês darem uma olhada sem nenhum compromisso?`
+  },
+  {
+    id: 'passo3',
+    title: '3. Demonstração Oficial',
+    badge: 'Link + Proposta',
+    badgeColor: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
+    objective: 'Entrega da Landing Page personalizada sob demanda, com menção à personalização de fotos/textos, respeito ao Código de Ética da OAB e proposta de R$ 300 mais domínio anual.',
+    text: `Perfeito, Dr(a). [Nome]! Montei esta prévia personalizada pensando exatamente no posicionamento de vocês:
+
+👉 https://rafaelpitaoficial.com.br/adv/[slug-do-advogado]
+
+O objetivo é transformar quem pesquisa por advogados em [Cidade] no Google em contatos diretos no WhatsApp de vocês, com alto padrão visual e total respeito ao Código de Ética da OAB.
+
+Todos os textos, fotos e áreas de atuação podem ser 100% personalizados com a identidade oficial do escritório.
+
+Para colocar no ar com domínio próprio e configurado, o valor é de apenas R$ 300 (taxa única de implementação) mais a anuidade do domínio próprio (em média R$ 60 ao ano).
+
+Depois me conte o que achou da estrutura!`
+  },
+  {
+    id: 'recuperacao1',
+    title: '4. Resgate Parte 1 (Pergunta do Canal Certo)',
+    badge: 'Desarmador',
+    badgeColor: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20',
+    objective: 'Para quem não respondeu. Pergunta de forma despretensiosa se aquele é o canal adequado ou se recomendam outro. Desarma defesas imediatamente com taxa recorde de resposta.',
+    text: `Olá, tudo bem? 
+
+Mandei uma mensagem aqui anteriormente, mas nem sei se este é o melhor contato para tratar sobre a presença digital e novos clientes do escritório... 
+
+Caso não seja, teria algum outro canal ou pessoa responsável que você pudesse me indicar?`
+  },
+  {
+    id: 'recuperacao2',
+    title: '5. Resgate Parte 2 (Confirmou "É Comigo / Sou Eu")',
+    badge: 'Pós-Retorno',
+    badgeColor: 'bg-purple-700/10 text-purple-700 dark:text-purple-300 border-purple-700/20',
+    objective: 'Disparada assim que o cliente responde "sou eu", "é aqui" ou "pode falar". Reapresenta a demonstração já pronta e alerta sobre clientes da comarca escapando para a concorrência.',
+    text: `Perfeito, Dr(a). [Nome]! 
+
+Quis apenas retomar o contato porque verifiquei que vocês possuem excelente avaliação no Google Maps em [Cidade], mas ainda não têm um site oficial cadastrado.
+
+Hoje, potenciais clientes que pesquisam por advogados na sua região acabam fechando com outros escritórios por não encontrarem uma página de contato rápido de vocês.
+
+Cheguei a desenhar um modelo exclusivo para o escritório de vocês verem na prática como resolver isso:
+
+👉 https://rafaelpitaoficial.com.br/adv/[slug-do-advogado]
+
+(Lembrando que todos os textos, áreas de atuação e fotos podem ser 100% personalizados com a identidade oficial de vocês).
+
+Para subir com domínio próprio e configurado, o valor é de apenas R$ 300 (taxa única de implementação) mais a anuidade do domínio (em média R$ 60 ao ano).
+
+Depois me dê um retorno sobre o que achou da estrutura!`
+  },
+  {
+    id: 'recuperacao_indicado',
+    title: '6. Resposta: Passou Outro Contato (Abordagem da Indicação)',
+    badge: 'Novo Contato',
+    badgeColor: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20',
+    objective: 'Aborda a secretária, sócio ou responsável indicado com respaldo de quem indicou.',
+    text: `Olá! Tudo bem?
+
+Falei anteriormente no canal principal do escritório do(a) Dr(a). [Nome] e me indicaram falar com você sobre a presença digital e captação de clientes.
+
+Desenvolvi um protótipo visual exclusivo para o escritório em [Cidade]:
+👉 https://rafaelpitaoficial.com.br/adv/[slug-do-advogado]
+
+Gostaria de saber se você teria 2 minutinhos para dar uma olhada sem nenhum compromisso?`
+  },
+  {
+    id: 'recuperacao_recusa',
+    title: '7. Resposta: "Sem Interesse" (Saída Elegante)',
+    badge: 'Porta Aberta',
+    badgeColor: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+    objective: 'Agradece educadamente, preserva a autoridade e deixa as portas abertas para futuras contratações.',
+    text: `Sem problemas! Agradeço pelo retorno e pela atenção.
+
+Caso em algum momento decidam estruturar uma página rápida para converter quem pesquisa pelo escritório no Google em [Cidade], fico à disposição. 
+
+Um abraço e excelente trabalho para toda a equipe!`
+  }
+];
+
 export default function RadarGoogleMaps() {
   const { toast } = useToast();
   const resultsRef = useRef(null);
+
+  // Aba ativa: 'radar' (busca e leads) ou 'scripts' (banco de respostas salvas)
+  const [activeTab, setActiveTab] = useState('radar');
 
   // Estados de busca e filtros
   const [city, setCity] = useState('');
@@ -53,7 +163,7 @@ export default function RadarGoogleMaps() {
 
   // Modal de Proposta
   const [selectedLawyerForProposal, setSelectedLawyerForProposal] = useState(null);
-  const [proposalVariant, setProposalVariant] = useState('direto'); // 'direto', 'autoridade', 'curto'
+  const [proposalVariant, setProposalVariant] = useState('passo1');
 
   // Modal de Adição Manual
   const [isManualModalOpen, setIsManualModalOpen] = useState(false);
@@ -333,6 +443,40 @@ export default function RadarGoogleMaps() {
         </div>
       </div>
 
+      {/* Alternador de Abas Principais da Página */}
+      <div className="flex items-center gap-2 border-b pb-3">
+        <button
+          type="button"
+          onClick={() => setActiveTab('radar')}
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all ${
+            activeTab === 'radar'
+              ? 'bg-primary text-primary-foreground shadow-sm'
+              : 'bg-muted/40 hover:bg-muted text-muted-foreground'
+          }`}
+        >
+          <Compass className="w-4 h-4" />
+          <span>Radar de Prospecção</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab('scripts')}
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all ${
+            activeTab === 'scripts'
+              ? 'bg-purple-600 text-white shadow-sm'
+              : 'bg-muted/40 hover:bg-muted text-muted-foreground'
+          }`}
+        >
+          <MessageCircle className="w-4 h-4" />
+          <span>Banco de Respostas & Scripts Salvos</span>
+          <span className="text-[10px] bg-white/20 px-1.5 py-0.2 rounded-full font-mono">
+            {SAVED_PITCH_SCRIPTS.length}
+          </span>
+        </button>
+      </div>
+
+      {activeTab === 'radar' ? (
+        <>
       {/* Caixa de Filtros de Busca */}
       <div className="bg-card border rounded-2xl p-6 shadow-sm space-y-5">
         <div className="flex items-center justify-between border-b pb-4">
@@ -671,21 +815,94 @@ export default function RadarGoogleMaps() {
                   </div>
                 </div>
 
-                {/* Bloco de Ações e Proposta */}
-                <div className="space-y-2.5 pt-3 border-t">
-                  
-                  {/* Botão Principal: Enviar no WhatsApp com a Proposta de R$ 300 */}
-                  <button
-                    type="button"
-                    onClick={() => handleSendWhatsApp(lawyer, 'direto')}
-                    className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs transition-colors shadow-sm"
-                  >
-                    <MessageCircle className="w-4 h-4" />
-                    <span>Enviar Proposta no WhatsApp (R$ 300)</span>
-                  </button>
+                {/* Roteiro Cadenciado de Abordagem WhatsApp (3 Etapas + Recuperação) */}
+                <div className="space-y-2 pt-3 border-t">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="font-semibold text-foreground flex items-center gap-1.5">
+                      <MessageCircle className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                      Roteiro em 3 Passos:
+                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        type="button"
+                        onClick={() => handleSendWhatsApp(lawyer, 'recuperacao')}
+                        className="text-[10px] text-purple-600 dark:text-purple-400 hover:underline font-semibold flex items-center gap-0.5"
+                        title="Enviar mensagem de recuperação para quem já recebeu mensagem antes e não respondeu"
+                      >
+                        <RefreshCw className="w-2.5 h-2.5" />
+                        <span>Recuperar</span>
+                      </button>
+                      <span className="text-muted-foreground">•</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedLawyerForProposal(lawyer);
+                          setProposalVariant('passo1');
+                          googleMapsProspectService.saveCloudDemo(lawyer).then(() => loadCloudDemos());
+                        }}
+                        className="text-[10px] text-primary hover:underline font-medium"
+                        title="Ver os textos completos e dicas de cada etapa"
+                      >
+                        Ver Roteiro
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 3 Botões de Disparo Cadenciado */}
+                  <div className="grid grid-cols-3 gap-1.5">
+                    
+                    {/* Passo 1: Abertura e Filtro da Secretária */}
+                    <button
+                      type="button"
+                      onClick={() => handleSendWhatsApp(lawyer, 'passo1')}
+                      title="Passo 1: Abertura e quebra de gelo com a secretária (anti-spam, sem link)"
+                      className="flex flex-col items-center justify-center p-2 rounded-xl border border-emerald-500/30 bg-emerald-500/5 hover:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 transition-all text-center group"
+                    >
+                      <div className="flex items-center gap-1 text-[11px] font-bold">
+                        <span className="w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[9px]">1</span>
+                        <span>Abertura</span>
+                      </div>
+                      <span className="text-[9px] text-muted-foreground mt-0.5 truncate max-w-full">
+                        Anti-Spam
+                      </span>
+                    </button>
+
+                    {/* Passo 2: Oportunidade e Concorrência */}
+                    <button
+                      type="button"
+                      onClick={() => handleSendWhatsApp(lawyer, 'passo2')}
+                      title="Passo 2: Alerta perda de clientes para concorrentes e pede permissão para enviar demonstração"
+                      className="flex flex-col items-center justify-center p-2 rounded-xl border border-sky-500/30 bg-sky-500/5 hover:bg-sky-500/15 text-sky-700 dark:text-sky-300 transition-all text-center group"
+                    >
+                      <div className="flex items-center gap-1 text-[11px] font-bold">
+                        <span className="w-4 h-4 rounded-full bg-sky-600 text-white flex items-center justify-center text-[9px]">2</span>
+                        <span>Oportunidade</span>
+                      </div>
+                      <span className="text-[9px] text-muted-foreground mt-0.5 truncate max-w-full">
+                        Permissão
+                      </span>
+                    </button>
+
+                    {/* Passo 3: Envio da Demonstração e Proposta */}
+                    <button
+                      type="button"
+                      onClick={() => handleSendWhatsApp(lawyer, 'passo3')}
+                      title="Passo 3: Envia a Landing Page personalizada e a proposta de R$ 300"
+                      className="flex flex-col items-center justify-center p-2 rounded-xl border border-amber-500/30 bg-amber-500/5 hover:bg-amber-500/15 text-amber-700 dark:text-amber-300 transition-all text-center group"
+                    >
+                      <div className="flex items-center gap-1 text-[11px] font-bold">
+                        <span className="w-4 h-4 rounded-full bg-amber-600 text-white flex items-center justify-center text-[9px]">3</span>
+                        <span>Demo</span>
+                      </div>
+                      <span className="text-[9px] text-muted-foreground mt-0.5 truncate max-w-full">
+                        Link + R$ 300
+                      </span>
+                    </button>
+
+                  </div>
 
                   {/* Linha de 4 Ações Rápidas */}
-                  <div className="grid grid-cols-4 gap-1.5">
+                  <div className="grid grid-cols-4 gap-1.5 pt-1">
                     
                     {/* Link Direto do Google Maps */}
                     <a
@@ -699,19 +916,20 @@ export default function RadarGoogleMaps() {
                       <span className="truncate">Maps</span>
                     </a>
 
-                    {/* Ver Proposta / Copiar */}
+                    {/* Ver Proposta / Roteiro Completo */}
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => {
                         setSelectedLawyerForProposal(lawyer);
+                        setProposalVariant('passo1');
                         googleMapsProspectService.saveCloudDemo(lawyer).then(() => loadCloudDemos());
                       }}
                       className="text-[11px] px-1.5 h-8 gap-1"
-                      title="Ver e personalizar o texto da proposta"
+                      title="Ver e copiar os textos de cada etapa do roteiro"
                     >
                       <Copy className="w-3 h-3 text-muted-foreground" />
-                      <span className="truncate">Texto</span>
+                      <span className="truncate">Textos</span>
                     </Button>
 
                     {/* Ver Demonstração Criada */}
@@ -826,6 +1044,47 @@ export default function RadarGoogleMaps() {
                     </div>
                   </div>
 
+                  {/* Roteiro Cadenciado Rápido na Nuvem (3 Passos + Recuperação) */}
+                  <div className="pt-2 border-t space-y-1.5">
+                    <span className="text-[10px] font-semibold text-muted-foreground block">
+                      Disparo Cadenciado (WhatsApp):
+                    </span>
+                    <div className="grid grid-cols-4 gap-1">
+                      <button
+                        type="button"
+                        onClick={() => handleSendWhatsApp({ ...demo, lawyer_name: demo.name }, 'passo1')}
+                        title="Passo 1: Abertura e quebra de gelo"
+                        className="py-1 px-1 rounded-lg border border-emerald-500/30 bg-emerald-500/5 hover:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold text-center"
+                      >
+                        1. Abertura
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleSendWhatsApp({ ...demo, lawyer_name: demo.name }, 'passo2')}
+                        title="Passo 2: Alerta perda de clientes e pede permissão"
+                        className="py-1 px-1 rounded-lg border border-sky-500/30 bg-sky-500/5 hover:bg-sky-500/15 text-sky-700 dark:text-sky-300 text-[10px] font-bold text-center"
+                      >
+                        2. Oportunidade
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleSendWhatsApp({ ...demo, lawyer_name: demo.name }, 'passo3')}
+                        title="Passo 3: Envia link da demonstração e proposta R$ 300"
+                        className="py-1 px-1 rounded-lg border border-amber-500/30 bg-amber-500/5 hover:bg-amber-500/15 text-amber-700 dark:text-amber-300 text-[10px] font-bold text-center"
+                      >
+                        3. Demo
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleSendWhatsApp({ ...demo, lawyer_name: demo.name }, 'recuperacao')}
+                        title="Passo 4: Follow-up cordial para resgatar quem não respondeu"
+                        className="py-1 px-1 rounded-lg border border-purple-500/30 bg-purple-500/5 hover:bg-purple-500/15 text-purple-700 dark:text-purple-300 text-[10px] font-bold text-center"
+                      >
+                        4. Resgate
+                      </button>
+                    </div>
+                  </div>
+
                   <div className="flex items-center gap-2 pt-2 border-t">
                     <a
                       href={`/adv/${demo.slug}`}
@@ -869,16 +1128,102 @@ export default function RadarGoogleMaps() {
           </div>
         </div>
       )}
+        </>
+      ) : (
+        /* Aba 2: Banco de Respostas & Scripts Salvos */
+        <div className="space-y-6 animate-in fade-in duration-200">
+          <div className="bg-card border rounded-2xl p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <div className="flex items-center gap-2 text-xs font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wider mb-1">
+                <MessageCircle className="w-4 h-4" />
+                <span>Banco de Respostas Salvas & Roteiro Completo</span>
+              </div>
+              <h2 className="text-xl font-bold text-foreground">
+                Scripts Estratégicos de Prospecção e Resgate
+              </h2>
+              <p className="text-xs text-muted-foreground mt-1 max-w-2xl leading-relaxed">
+                Consulte e copie com 1 clique todas as mensagens do roteiro cadenciado, perguntas de resgate e respostas para cada reação do cliente no WhatsApp.
+              </p>
+            </div>
 
-      {/* Modal de Pré-visualização & Edição da Proposta (R$ 300 + Domínio) */}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setActiveTab('radar')}
+              className="gap-2 text-xs"
+            >
+              <Compass className="w-4 h-4 text-primary" />
+              <span>Voltar ao Radar de Busca</span>
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {SAVED_PITCH_SCRIPTS.map((script, idx) => (
+              <div
+                key={script.id}
+                className="bg-card border rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4"
+              >
+                <div className="space-y-2.5">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <span className={`text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border ${script.badgeColor}`}>
+                        {script.badge}
+                      </span>
+                      <h3 className="font-bold text-sm text-foreground pt-1.5">
+                        {script.title}
+                      </h3>
+                    </div>
+                    <span className="text-xs font-mono font-bold text-muted-foreground">
+                      #{idx + 1}
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    {script.objective}
+                  </p>
+
+                  <div className="pt-1">
+                    <textarea
+                      readOnly
+                      rows={6}
+                      value={script.text}
+                      className="w-full p-3 rounded-xl border bg-muted/40 text-xs text-foreground font-mono leading-relaxed outline-none resize-none select-all"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-end gap-2 pt-2 border-t">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      navigator.clipboard.writeText(script.text);
+                      toast({
+                        title: 'Script copiado!',
+                        description: `${script.title} copiado para a área de transferência.`
+                      });
+                    }}
+                    className="w-full gap-2 text-xs font-semibold"
+                  >
+                    <Copy className="w-3.5 h-3.5" />
+                    <span>Copiar Este Script</span>
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Roteiro Cadenciado & Edição da Proposta */}
       {selectedLawyerForProposal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-card border rounded-2xl max-w-xl w-full p-6 shadow-xl space-y-5 animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-card border rounded-2xl max-w-xl w-full p-6 shadow-xl space-y-4 animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
             
-            <div className="flex items-start justify-between border-b pb-4">
+            <div className="flex items-start justify-between border-b pb-3">
               <div>
                 <span className="text-[10px] font-mono uppercase tracking-wider text-primary font-bold">
-                  Proposta Comercial de Impacto
+                  Roteiro Estratégico de Abordagem WhatsApp
                 </span>
                 <h3 className="text-lg font-bold text-foreground">
                   {selectedLawyerForProposal.lawyer_name || selectedLawyerForProposal.name}
@@ -909,80 +1254,222 @@ export default function RadarGoogleMaps() {
               </button>
             </div>
 
-            {/* Alternador de Variações de Copy */}
+            {/* Alternador de Passos do Roteiro */}
             <div className="space-y-2">
               <label className="text-xs font-medium text-muted-foreground block">
-                Modelo da Mensagem:
+                Selecione a Etapa do Contato:
               </label>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => setProposalVariant('passo1')}
+                  className={`text-xs py-2 px-1 rounded-lg border font-medium transition-all text-center ${
+                    proposalVariant === 'passo1'
+                      ? 'bg-emerald-600 text-white border-emerald-600 font-bold shadow-sm'
+                      : 'bg-muted/40 hover:bg-muted text-muted-foreground'
+                  }`}
+                >
+                  <div className="text-[11px]">1. Abertura</div>
+                  <div className="text-[9px] opacity-80">Anti-Spam</div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setProposalVariant('passo2')}
+                  className={`text-xs py-2 px-1 rounded-lg border font-medium transition-all text-center ${
+                    proposalVariant === 'passo2'
+                      ? 'bg-sky-600 text-white border-sky-600 font-bold shadow-sm'
+                      : 'bg-muted/40 hover:bg-muted text-muted-foreground'
+                  }`}
+                >
+                  <div className="text-[11px]">2. Oportunidade</div>
+                  <div className="text-[9px] opacity-80">Permissão</div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setProposalVariant('passo3')}
+                  className={`text-xs py-2 px-1 rounded-lg border font-medium transition-all text-center ${
+                    proposalVariant === 'passo3'
+                      ? 'bg-amber-600 text-white border-amber-600 font-bold shadow-sm'
+                      : 'bg-muted/40 hover:bg-muted text-muted-foreground'
+                  }`}
+                >
+                  <div className="text-[11px]">3. Demo</div>
+                  <div className="text-[9px] opacity-80">Link + R$ 300</div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setProposalVariant('recuperacao1')}
+                  className={`text-xs py-2 px-1 rounded-lg border font-medium transition-all text-center ${
+                    proposalVariant === 'recuperacao1' || proposalVariant === 'recuperacao'
+                      ? 'bg-purple-600 text-white border-purple-600 font-bold shadow-sm'
+                      : 'bg-muted/40 hover:bg-muted text-muted-foreground'
+                  }`}
+                >
+                  <div className="text-[11px]">4. Resgate 1</div>
+                  <div className="text-[9px] opacity-80">Canal Certo?</div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setProposalVariant('recuperacao2')}
+                  className={`text-xs py-2 px-1 rounded-lg border font-medium transition-all text-center ${
+                    proposalVariant === 'recuperacao2'
+                      ? 'bg-purple-700 text-white border-purple-700 font-bold shadow-sm'
+                      : 'bg-muted/40 hover:bg-muted text-muted-foreground'
+                  }`}
+                >
+                  <div className="text-[11px]">5. "É Comigo"</div>
+                  <div className="text-[9px] opacity-80">Link Pós-Retorno</div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setProposalVariant('recuperacao_indicado')}
+                  className={`text-xs py-2 px-1 rounded-lg border font-medium transition-all text-center ${
+                    proposalVariant === 'recuperacao_indicado'
+                      ? 'bg-indigo-600 text-white border-indigo-600 font-bold shadow-sm'
+                      : 'bg-muted/40 hover:bg-muted text-muted-foreground'
+                  }`}
+                >
+                  <div className="text-[11px]">6. Novo Contato</div>
+                  <div className="text-[9px] opacity-80">Indicação</div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setProposalVariant('recuperacao_recusa')}
+                  className={`text-xs py-2 px-1 rounded-lg border font-medium transition-all text-center ${
+                    proposalVariant === 'recuperacao_recusa'
+                      ? 'bg-rose-600 text-white border-rose-600 font-bold shadow-sm'
+                      : 'bg-muted/40 hover:bg-muted text-muted-foreground'
+                  }`}
+                >
+                  <div className="text-[11px]">7. "Sem Interesse"</div>
+                  <div className="text-[9px] opacity-80">Saída Elegante</div>
+                </button>
+
                 <button
                   type="button"
                   onClick={() => setProposalVariant('direto')}
-                  className={`text-xs py-2 px-3 rounded-lg border font-medium transition-colors ${
+                  className={`text-xs py-2 px-1 rounded-lg border font-medium transition-all text-center ${
                     proposalVariant === 'direto'
-                      ? 'bg-primary text-primary-foreground border-primary font-bold'
+                      ? 'bg-primary text-primary-foreground border-primary font-bold shadow-sm'
                       : 'bg-muted/40 hover:bg-muted text-muted-foreground'
                   }`}
                 >
-                  Padrão (Direto)
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setProposalVariant('autoridade')}
-                  className={`text-xs py-2 px-3 rounded-lg border font-medium transition-colors ${
-                    proposalVariant === 'autoridade'
-                      ? 'bg-primary text-primary-foreground border-primary font-bold'
-                      : 'bg-muted/40 hover:bg-muted text-muted-foreground'
-                  }`}
-                >
-                  Consultivo
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setProposalVariant('curto')}
-                  className={`text-xs py-2 px-3 rounded-lg border font-medium transition-colors ${
-                    proposalVariant === 'curto'
-                      ? 'bg-primary text-primary-foreground border-primary font-bold'
-                      : 'bg-muted/40 hover:bg-muted text-muted-foreground'
-                  }`}
-                >
-                  Curto (WhatsApp)
+                  <div className="text-[11px]">Direta</div>
+                  <div className="text-[9px] opacity-80">Completa</div>
                 </button>
               </div>
             </div>
 
+            {/* Dica Estratégica do Passo Selecionado */}
+            <div className="p-3 rounded-xl bg-primary/5 border border-primary/20 text-xs text-foreground space-y-1">
+              <div className="font-semibold text-primary flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>
+                  {proposalVariant === 'passo1' && 'Estratégia do Passo 1: Quebra de Gelo & Filtro da Secretária'}
+                  {proposalVariant === 'passo2' && 'Estratégia do Passo 2: Alerta de Concorrência & Micro-Compromisso'}
+                  {proposalVariant === 'passo3' && 'Estratégia do Passo 3: Entrega do Link com Proposta Transparente'}
+                  {(proposalVariant === 'recuperacao1' || proposalVariant === 'recuperacao') && 'Estratégia de Resgate (Parte 1): Pergunta do Canal Certo'}
+                  {proposalVariant === 'recuperacao2' && 'Estratégia de Resgate (Parte 2): Entrega da Demonstração após Confirmação'}
+                  {proposalVariant === 'recuperacao_indicado' && 'Resposta para Novo Contato Indicado'}
+                  {proposalVariant === 'recuperacao_recusa' && 'Saída Elegante para Declínio de Interesse'}
+                  {proposalVariant === 'direto' && 'Estratégia Direta: Abordagem completa em mensagem única'}
+                </span>
+              </div>
+              <p className="text-muted-foreground text-[11px] leading-relaxed">
+                {proposalVariant === 'passo1' && 'Sem links e sem texto longo. Evita bloqueio do WhatsApp e passa pela secretária solicitando o contato do titular.'}
+                {proposalVariant === 'passo2' && 'Reconhece a boa avaliação no Google, alerta clientes escapando na cidade e pede permissão para enviar a prévia.'}
+                {proposalVariant === 'passo3' && 'Envia a página oficial com o nome deles, respeitando as normas da OAB e com taxa de R$ 300 mais anuidade do domínio.'}
+                {(proposalVariant === 'recuperacao1' || proposalVariant === 'recuperacao') && 'Pergunta com total naturalidade se este é o contato certo para tratar do assunto ou se indicam outro. Zero pressão de venda, desarma defesas.'}
+                {proposalVariant === 'recuperacao2' && 'Usada assim que a pessoa responde "é comigo", "sou eu" ou "pode falar". Entrega o protótipo e alerta a concorrência local.'}
+                {proposalVariant === 'recuperacao_indicado' && 'Mensagem pronta para abordar com respeito o novo contato ou sócio indicado pela equipe.'}
+                {proposalVariant === 'recuperacao_recusa' && 'Agradece cordialmente e deixa as portas abertas para o futuro, mantendo a reputação profissional impecável.'}
+                {proposalVariant === 'direto' && 'Recomendado apenas quando o contato já demonstrar abertura prévia.'}
+              </p>
+            </div>
+
+            {/* Cenários de Resposta para a Recuperação */}
+            {(['recuperacao', 'recuperacao1', 'recuperacao2', 'recuperacao_indicado', 'recuperacao_recusa'].includes(proposalVariant)) && (
+              <div className="p-2.5 rounded-xl bg-purple-500/5 border border-purple-500/20 space-y-1.5">
+                <span className="text-[11px] font-semibold text-purple-700 dark:text-purple-300 block">
+                  Como o cliente respondeu ao Resgate?
+                </span>
+                <div className="grid grid-cols-3 gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setProposalVariant('recuperacao2')}
+                    className={`text-[10px] py-1.5 px-2 rounded-lg border font-medium transition-all text-center ${
+                      proposalVariant === 'recuperacao2'
+                        ? 'bg-purple-600 text-white border-purple-600 font-bold'
+                        : 'bg-background hover:bg-muted text-foreground'
+                    }`}
+                  >
+                    1. "Sou eu / É aqui"
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setProposalVariant('recuperacao_indicado')}
+                    className={`text-[10px] py-1.5 px-2 rounded-lg border font-medium transition-all text-center ${
+                      proposalVariant === 'recuperacao_indicado'
+                        ? 'bg-purple-600 text-white border-purple-600 font-bold'
+                        : 'bg-background hover:bg-muted text-foreground'
+                    }`}
+                  >
+                    2. Passou outro contato
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setProposalVariant('recuperacao_recusa')}
+                    className={`text-[10px] py-1.5 px-2 rounded-lg border font-medium transition-all text-center ${
+                      proposalVariant === 'recuperacao_recusa'
+                        ? 'bg-purple-600 text-white border-purple-600 font-bold'
+                        : 'bg-background hover:bg-muted text-foreground'
+                    }`}
+                  >
+                    3. "Sem interesse"
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* Caixa de Texto da Mensagem */}
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-muted-foreground block">
-                Texto Formatado para Envio:
-              </label>
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-medium text-muted-foreground">Texto Formatado para Envio:</span>
+                <span className="text-[10px] text-muted-foreground font-mono">Clique para selecionar tudo</span>
+              </div>
               <textarea
                 readOnly
-                rows={9}
+                rows={7}
                 value={googleMapsProspectService.generateProposalMessage(
                   selectedLawyerForProposal,
                   proposalVariant
                 )}
-                className="w-full p-4 rounded-xl border bg-muted/40 text-xs text-foreground font-mono leading-relaxed outline-none resize-none select-all"
+                className="w-full p-3.5 rounded-xl border bg-muted/40 text-xs text-foreground font-mono leading-relaxed outline-none resize-none select-all"
               />
             </div>
 
             {/* Destaque das Condições de Preço */}
-            <div className="bg-primary/5 border border-primary/20 rounded-xl p-3 flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2">
-                <DollarSign className="w-4 h-4 text-primary" />
-                <span className="text-muted-foreground">Valor de Implementação:</span>
-                <strong className="text-foreground font-bold">R$ 300,00 (único)</strong>
+            {(proposalVariant === 'passo3' || proposalVariant === 'recuperacao2') && (
+              <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 flex items-center justify-between text-xs">
+                <div className="flex items-center gap-2">
+                  <DollarSign className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                  <span className="text-muted-foreground">Proposta transparente:</span>
+                  <strong className="text-foreground font-bold">R$ 300 (implementação única)</strong>
+                </div>
+                <div className="text-muted-foreground text-[11px]">
+                  + Domínio (~R$ 60/ano)
+                </div>
               </div>
-              <div className="text-muted-foreground text-[11px]">
-                + Domínio Anual (~R$ 60/ano)
-              </div>
-            </div>
+            )}
 
             {/* Ações do Modal */}
-            <div className="flex items-center justify-end gap-3 pt-2">
+            <div className="flex items-center justify-end gap-2.5 pt-2 border-t">
               <Button
                 variant="outline"
                 size="sm"
@@ -998,7 +1485,7 @@ export default function RadarGoogleMaps() {
                 className="gap-1.5"
               >
                 <Copy className="w-3.5 h-3.5" />
-                <span>Copiar Texto</span>
+                <span>Copiar Este Passo</span>
               </Button>
 
               <Button
@@ -1010,7 +1497,7 @@ export default function RadarGoogleMaps() {
                 className="gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold"
               >
                 <MessageCircle className="w-3.5 h-3.5" />
-                <span>Abrir WhatsApp Web</span>
+                <span>Enviar no WhatsApp</span>
               </Button>
             </div>
 

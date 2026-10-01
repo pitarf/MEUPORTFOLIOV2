@@ -3,6 +3,11 @@
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
 ## CONCLUÍDO (DONE)
+- [x] **Roteiro Cadenciado, Recuperação em 2 Etapas & Nova Aba de Respostas Salvas no Radar Google Maps (`googleMapsProspectService.js`, `RadarGoogleMaps.jsx`)**:
+  - Criada nova aba "Banco de Respostas & Scripts Salvos" no painel com 7 modelos completos formatados (Abertura, Oportunidade, Demonstração R$ 300, Resgate Canal Certo, Resgate Pós-Retorno, Resposta para Contato Indicado e Saída Elegante para Declínios).
+  - Modal de abordagem expandido com 8 abas diretas e botões de reação do cliente para disparos e cópias rápidas.
+  - Cards de leads e demonstrações na nuvem equipados com disparos cadenciados individuais diretamente no WhatsApp Web.
+  - Build do Vite executado e 100% aprovado sem erros (código 0).
 - [x] **Busca Multi-Termo para Capitais, Reordenação de Layout do Radar & Higienização de Nomes (`api/places-search.js`, `RadarGoogleMaps.jsx`, `lawyerNameFormatter.js`, `LegalNavbar.jsx`, `LegalLandingPage.jsx`, `googleMapsProspectService.js`, `LegalAbout.jsx`, `LegalFooter.jsx`)**:
   - Implementado motor de busca multi-termo paralelo na Google Places API para cidades como Rio de Janeiro, São Paulo e Belo Horizonte, aumentando a amostragem de 20 para mais de 60 estabelecimentos e multiplicando os resultados sem site de 1 a 3 para 10 a 25 leads qualificados.
   - Reorganizada a interface do Radar: Grade de Resultados Encontrados no Google Maps movida imediatamente para o topo, logo abaixo dos filtros, com scroll automático ao concluir a busca.

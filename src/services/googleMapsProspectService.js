@@ -367,6 +367,81 @@ export const googleMapsProspectService = {
     // Gerar URL limpa e oficial da landing page de demonstração
     const previewUrl = buildDemoUrl(lawyer, baseUrl);
 
+    if (variant === 'passo1') {
+      return `Olá, bom dia! Tudo bem?
+
+Por gentileza, este canal é o contato direto com o(a) Dr(a). ${name} ou falo com a equipe do escritório?`;
+    }
+
+    if (variant === 'passo2') {
+      return `Aqui é o Rafael. Estava analisando os escritórios de advocacia em ${city} e vi que vocês possuem uma excelente reputação e ótimas avaliações no Google (${rating}${reviews})!
+
+Porém, notei que ainda não possuem um site próprio de atendimento rápido conectado ao perfil, e hoje muitos clientes em potencial da região acabam fechando com outros escritórios por não encontrarem uma página oficial.
+
+Desenvolvi um protótipo exclusivo para o escritório de vocês para mostrar na prática como reter esses clientes.
+
+Me autoriza a enviar o link rápido de demonstração para vocês darem uma olhada sem nenhum compromisso?`;
+    }
+
+    if (variant === 'passo3') {
+      return `Perfeito, Dr(a). ${name}! Montei esta prévia personalizada pensando exatamente no posicionamento de vocês:
+
+👉 ${previewUrl}
+
+O objetivo é transformar quem pesquisa por advogados em ${city} no Google em contatos diretos no WhatsApp de vocês, com alto padrão visual e total respeito ao Código de Ética da OAB.
+
+Todos os textos, fotos e áreas de atuação podem ser 100% personalizados com a identidade oficial do escritório.
+
+Para colocar no ar com domínio próprio e configurado, o valor é de apenas R$ 300 (taxa única de implementação) mais a anuidade do domínio próprio (em média R$ 60 ao ano).
+
+Depois me conte o que achou da estrutura!`;
+    }
+
+    if (variant === 'recuperacao' || variant === 'recuperacao1' || variant === 'followup') {
+      return `Olá, tudo bem? 
+
+Mandei uma mensagem aqui anteriormente, mas nem sei se este é o melhor contato para tratar sobre a presença digital e novos clientes do escritório... 
+
+Caso não seja, teria algum outro canal ou pessoa responsável que você pudesse me indicar?`;
+    }
+
+    if (variant === 'recuperacao2' || variant === 'recuperacao_confirmou') {
+      return `Perfeito, Dr(a). ${name}! 
+
+Quis apenas retomar o contato porque verifiquei que vocês possuem excelente avaliação no Google Maps em ${city}, mas ainda não têm um site oficial cadastrado.
+
+Hoje, potenciais clientes que pesquisam por advogados na sua região acabam fechando com outros escritórios por não encontrarem uma página de contato rápido de vocês.
+
+Cheguei a desenhar um modelo exclusivo para o escritório de vocês verem na prática como resolver isso:
+
+👉 ${previewUrl}
+
+(Lembrando que todos os textos, áreas de atuação e fotos podem ser 100% personalizados com a identidade oficial de vocês).
+
+Para subir com domínio próprio e configurado, o valor é de apenas R$ 300 (taxa única de implementação) mais a anuidade do domínio (em média R$ 60 ao ano).
+
+Depois me dê um retorno sobre o que achou da estrutura!`;
+    }
+
+    if (variant === 'recuperacao_indicado') {
+      return `Olá! Tudo bem?
+
+Falei anteriormente no canal principal do escritório do(a) Dr(a). ${name} e me indicaram falar com você sobre a presença digital e captação de clientes.
+
+Desenvolvi um protótipo visual exclusivo para o escritório em ${city}:
+👉 ${previewUrl}
+
+Gostaria de saber se você teria 2 minutinhos para dar uma olhada sem nenhum compromisso?`;
+    }
+
+    if (variant === 'recuperacao_recusa') {
+      return `Sem problemas! Agradeço pelo retorno e pela atenção.
+
+Caso em algum momento decidam estruturar uma página rápida para converter quem pesquisa pelo escritório no Google em ${city}, fico à disposição. 
+
+Um abraço e excelente trabalho para toda a equipe!`;
+    }
+
     if (variant === 'curto') {
       return `Olá, ${name}, tudo bem? Me chamo Rafael Pita.
 
@@ -398,20 +473,60 @@ A implementação completa fica em apenas R$ 300 (pagamento único), mais a taxa
 Teria interesse em subir essa página oficial para converter mais contatos que te encontram no Google Maps?`;
     }
 
-    // Padrão solicitado:
-    return `Oi, ${name}, tudo bem? Me chamo Rafael.
+    // Padrão: Passo 1 do Roteiro Cadenciado
+    return `Olá, bom dia! Tudo bem?
 
-Vi aqui no Google Maps que você tem uma excelente avaliação (${rating}${reviews}), porém ainda não tem um site oficial conectado ao perfil.
+Por gentileza, este canal é o contato direto com o(a) Dr(a). ${name} ou falo com a equipe do escritório?`;
+  },
 
-Gostaria de dizer que desenvolvi um modelo exclusivo aqui para o seu escritório para você ver como ficaria:
-
-👉 ${previewUrl}
-
-(Lembrando que todos os textos, áreas de atuação e as fotos podem ser 100% alterados para colocar suas fotos reais e biografia. A ideia aqui é apenas ilustrar como o seu escritório pode se posicionar com alto padrão).
-
-O valor para deixar ele no ar e personalizado com a sua marca é de apenas R$ 300 (taxa única), mais o valor do domínio (anual, em média R$ 60 ao ano).
-
-Queria saber se você tem interesse em colocar no ar para passar ainda mais autoridade aos clientes que te acham no Google?`;
+  /**
+   * Retorna os 3 passos estruturados do roteiro cadenciado de prospecção
+   * @param {Object} lawyer - Dados do prospecto
+   * @returns {Array<{step: number, title: string, subtitle: string, variant: string, message: string}>}
+   */
+  getPitchSteps: (lawyer) => {
+    return [
+      {
+        step: 1,
+        title: 'Passo 1: Abertura',
+        subtitle: 'Filtro da secretária / quebra de gelo',
+        badge: 'Anti-spam',
+        variant: 'passo1',
+        message: googleMapsProspectService.generateProposalMessage(lawyer, 'passo1')
+      },
+      {
+        step: 2,
+        title: 'Passo 2: Oportunidade',
+        subtitle: 'Alerta concorrência e pede autorização',
+        badge: 'Permissão',
+        variant: 'passo2',
+        message: googleMapsProspectService.generateProposalMessage(lawyer, 'passo2')
+      },
+      {
+        step: 3,
+        title: 'Passo 3: Demonstração',
+        subtitle: 'Envia o link da Landing Page e proposta de R$ 300',
+        badge: 'Link + Proposta',
+        variant: 'passo3',
+        message: googleMapsProspectService.generateProposalMessage(lawyer, 'passo3')
+      },
+      {
+        step: 4,
+        title: 'Passo 4: Resgate (Parte 1)',
+        subtitle: 'Pergunta se é o contato certo ou se há outro',
+        badge: 'Canal Certo',
+        variant: 'recuperacao1',
+        message: googleMapsProspectService.generateProposalMessage(lawyer, 'recuperacao1')
+      },
+      {
+        step: 5,
+        title: 'Passo 5: Resgate (Parte 2)',
+        subtitle: 'Envio da demonstração após confirmação',
+        badge: 'Link + Proposta',
+        variant: 'recuperacao2',
+        message: googleMapsProspectService.generateProposalMessage(lawyer, 'recuperacao2')
+      }
+    ];
   },
 
   /**

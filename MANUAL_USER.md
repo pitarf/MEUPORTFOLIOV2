@@ -575,3 +575,25 @@ Para que a prospecção seja rápida e você encontre dezenas de escritórios re
    * O sistema consulta termos variados em paralelo (advogados, escritórios de advocacia, consultoria jurídica e advogadas) em uma única busca, garantindo uma lista farta de oportunidades mesmo em capitais onde a concorrência é alta.
 3. **Demonstrações Salvas na Nuvem no Lugar Certo**:
    * As propostas que você salvou anteriormente na nuvem continuam disponíveis por 5 dias corridos, posicionadas logo após os resultados da pesquisa para não se misturarem com os novos escritórios da cidade pesquisada.
+
+### 19.12 Roteiro Cadenciado em 3 Passos & Mensagem de Recuperação (Máxima Conversão)
+Para que os advogados realmente respondam suas mensagens no WhatsApp e você não seja bloqueado nem ignorado:
+1. **Por que a Mensagem Única com Link Falhava?**:
+   * Advogados e secretárias recebem dezenas de golpes diários no WhatsApp. Links desconhecidos enviados de primeira geram desconfiança imediata de vírus e caem no filtro da secretária.
+2. **O Novo Roteiro em 5 Etapas & Cenários de Resgate**:
+   * **1. Abertura (Anti-Spam)**: Pergunta cordial para saber se o canal fala com a assessoria ou com o(a) Dr(a). titular. Não tem link externo. Gera resposta rápida e passa pela recepção.
+   * **2. Oportunidade (Permissão)**: Reconhece as ótimas avaliações no Google Maps, alerta que clientes da cidade estão fechando com a concorrência por falta de site oficial e pede autorização para mandar o modelo.
+   * **3. Demonstração (Link + R$ 300)**: Envia o link da Landing Page personalizada sob demanda (quando o prospect pediu para ver), reforçando a conformidade com as normas da OAB, a personalização de fotos/textos e a proposta transparente de R$ 300 (implementação) mais o domínio anual.
+   * **4. Resgate Parte 1 (Pergunta do Canal Certo)**: Para quem não respondeu, manda uma pergunta super despretensiosa: *"Mandei uma mensagem aqui anteriormente, mas nem sei se é o melhor contato... Caso não seja, teria algum outro que pudesse me indicar?"*. Desarma defesas imediatamente!
+   * **5. Resgate Parte 2 (Link Pós-Confirmação)**: Quando responderem *"é comigo mesmo"* ou *"pode falar por aqui"*, você clica em Resgate 2 para entregar a página pronta e alertar sobre clientes escapando para concorrentes.
+   * **Respostas Prontas para Cada Cenário**: No modal, você tem botões prontos caso indiquem outro contato ou recusem cordialmente.
+3. **A Nova Aba "Banco de Respostas & Scripts Salvos"**:
+   * No topo da página do Radar Google Maps, há duas abas: **Radar de Prospecção** e **Banco de Respostas & Scripts Salvos**.
+   * Ao clicar na segunda aba, você visualiza os 7 cartões salvos com todas as etapas do roteiro e as respostas para cada reação do cliente, com botão de cópia de 1 clique para usar rapidamente a qualquer momento.
+4. **Botões Rápidos no Card do Lead e na Nuvem**:
+   * No card de cada advogado, você tem os botões coloridos de etapas ("1. Abertura", "2. Oportunidade", "3. Demo") e o link de "Recuperar" no topo do card.
+   * Na seção de Demonstrações Ativas na Nuvem, você conta com os 4 botões numerados ("1. Abertura", "2. Oportunidade", "3. Demo", "4. Resgate"). Basta clicar para abrir o WhatsApp com a mensagem pronta de resgate!
+   * Clicando em "Ver Roteiro" ou "Textos", você abre o modal completo com 8 abas diretas para ler, personalizar e disparar com facilidade.
+
+
+

@@ -2,6 +2,25 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.26.9] - 2026-10-01
+
+### Aprimorado (Roteiro Cadenciado, Recuperação em 2 Etapas & Cenários de Resposta no Radar Google Maps)
+* **Nova Estratégia de Prospecção Ativa em Etapas & Recuperação Estruturada (`googleMapsProspectService.js`)**:
+  * Substituída a mensagem única com link direto por um roteiro progressivo, eliminando a rejeição por medo de golpes, spam ou bloqueio da secretária.
+  * **Passo 1 (Abertura / Anti-Spam)**: Pergunta educada para identificar se o canal fala com a assessoria ou com o titular, sem links externos.
+  * **Passo 2 (Oportunidade / Permissão)**: Elogio à reputação do escritório no Google, alerta da perda de clientes na região para a concorrência e pedido explícito de autorização para envio da demonstração.
+  * **Passo 3 (Demonstração / Oferta)**: Envio do link da Landing Page personalizada sob demanda, com menção à adaptação completa de textos/fotos, respeito ao Código de Ética da OAB e proposta de R$ 300 (implementação única) mais anuidade de domínio.
+  * **Passo 4 (Resgate Parte 1 / Pergunta do Canal Certo)**: Pergunta despretensiosa e cordial se aquele é o canal adequado para tratar da presença digital e novos clientes ou se recomendam outro contato. Desarma defesas e tem taxa de resposta recorde.
+  * **Passo 5 (Resgate Parte 2 / Entrega Pós-Confirmação)**: Disparada quando o cliente responde "sou eu", "é aqui" ou "pode falar", reapresentando a demonstração já pronta e alertando sobre clientes da comarca escapando para a concorrência.
+  * **Scripts para Cenários Adicionais**: Mensagem pronta para abordar novo contato indicado pela equipe (`recuperacao_indicado`) e mensagem de saída cordial para recusas temporárias (`recuperacao_recusa`).
+* **Nova Aba "Banco de Respostas & Scripts Salvos" no Radar (`RadarGoogleMaps.jsx`)**:
+  * Adicionado alternador superior na página permitindo alternar entre o "Radar de Prospecção" e a nova aba "Banco de Respostas & Scripts Salvos".
+  * Apresenta 7 cartões completos com textos formatados, crachás estratégicos, objetivo comercial detalhado e botão de cópia de 1 clique para todos os scripts de abertura, proposta, resgate em 2 etapas e respostas para contatos indicados ou declínios.
+* **Modal com 8 Abas Diretas de Roteiro e Cenários de Resposta (`RadarGoogleMaps.jsx`)**:
+  * Todas as etapas salvas (1. Abertura, 2. Oportunidade, 3. Demo, 4. Resgate 1, 5. "É Comigo", 6. Novo Contato, 7. "Sem Interesse" e Direta) integradas com seleção direta e caixinha de reação do cliente.
+* **Cards de Leads e Nuvem com Ações Imediatas (`RadarGoogleMaps.jsx`)**:
+  * Disparos cadenciados individuais diretamente no WhatsApp Web nos cards do radar e nas demonstrações salvas na nuvem.
+
 ## [1.26.8] - 2026-09-30
 
 ### Aprimorado (Busca Multi-Termo para Capitais, Reordenação de Layout do Radar & Higienização de Nomes)
