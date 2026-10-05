@@ -415,6 +415,22 @@ export const updateSubscription = async (id, updateData) => {
         throw error;
     }
 
+    // Sincroniza dados vivos em faturas pendentes abertas desta assinatura
+    if (payload.covered_websites !== undefined) {
+        try {
+            await supabase
+                .from('maintenance_invoices')
+                .update({
+                    covered_websites: payload.covered_websites,
+                    updated_at: new Date().toISOString()
+                })
+                .eq('subscription_id', id)
+                .eq('status', 'pendente');
+        } catch (invoiceSyncErr) {
+            console.warn('Aviso ao sincronizar faturas pendentes com dados da assinatura:', invoiceSyncErr.message);
+        }
+    }
+
     return data;
 };
 

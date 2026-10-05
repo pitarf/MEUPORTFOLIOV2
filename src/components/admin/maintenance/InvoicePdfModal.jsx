@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import html2pdf from 'html2pdf.js';
 import { fetchPricingSettings } from '@/services/budgetService';
+import { getSubscriptionById } from '@/services/maintenanceService';
 import {
     formatCurrencyBRL,
     formatDateBR,
@@ -56,6 +57,37 @@ const InvoicePdfModal = ({
     const [downloading, setDownloading] = useState(false);
     const [copiedPix, setCopiedPix] = useState(false);
     const [companySettings, setCompanySettings] = useState(initialPricingSettings);
+    const [liveSubscription, setLiveSubscription] = useState(invoice?.subscription || null);
+
+    // Sincroniza liveSubscription com a prop invoice
+    useEffect(() => {
+        setLiveSubscription(invoice?.subscription || null);
+    }, [invoice?.subscription]);
+
+    // Busca os dados atualizados em tempo real da assinatura no banco quando o modal abre
+    useEffect(() => {
+        if (!isOpen || !invoice) return;
+
+        const subId = invoice.subscription_id || invoice.subscription?.id;
+        if (!subId) return;
+
+        let isMounted = true;
+        const fetchFreshSubscription = async () => {
+            try {
+                const freshSub = await getSubscriptionById(subId);
+                if (isMounted && freshSub) {
+                    setLiveSubscription(freshSub);
+                }
+            } catch (err) {
+                console.warn('Aviso ao sincronizar dados da assinatura no PDF:', err.message);
+            }
+        };
+
+        fetchFreshSubscription();
+        return () => {
+            isMounted = false;
+        };
+    }, [isOpen, invoice?.id, invoice?.subscription_id, invoice?.subscription?.id]);
 
     // Carrega configuracoes corporativas caso nao tenham sido injetadas
     useEffect(() => {
@@ -87,7 +119,8 @@ const InvoicePdfModal = ({
 
     if (!invoice) return null;
 
-    const subscription = invoice.subscription || {};
+    // Prioriza sempre os dados vivos e mais recentes da assinatura vinculada
+    const subscription = liveSubscription || invoice.subscription || {};
     const isPaid = invoice.status === 'pago';
     const statusMeta = getInvoiceStatusMeta(invoice.status);
 
@@ -123,8 +156,8 @@ const InvoicePdfModal = ({
     // Codigo da Fatura
     const invoiceCode = invoice.invoice_code || `FAT-${new Date().getFullYear()}-001`;
 
-    // Websites Cobertos pela Manutencao
-    const rawCoveredWebsites = invoice.covered_websites || subscription.covered_websites || '';
+    // Websites Cobertos pela Manutencao: SEMPRE prioriza os dados vivos e mais atuais da assinatura
+    const rawCoveredWebsites = subscription.covered_websites || invoice.covered_websites || '';
     const coveredWebsitesList = parseCoveredWebsites(rawCoveredWebsites);
 
     // PIX dados

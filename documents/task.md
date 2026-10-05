@@ -2,6 +2,10 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Sincronização Dinâmica em Tempo Real e Atualização em Cascata para Faturas em PDF (`InvoicePdfModal.jsx`, `maintenanceService.js`)**:
+  - Corrigida a divergência entre a assinatura atualizada e a fatura em PDF: o PDF agora busca em tempo real os dados mais recentes da assinatura vinculada via `getSubscriptionById` e prioriza os dados vivos (`subscription.covered_websites || invoice.covered_websites`).
+  - Implementada sincronização automática em cascata no `updateSubscription`: sempre que o usuário editar uma assinatura, todas as faturas com status `pendente` dessa assinatura têm suas colunas `covered_websites` e dados cadastrais atualizados instantaneamente no banco de dados.
+  - Sincronizada a fatura `FAT-2026-GR3N` no banco de dados da VPS Oracle com a nova lista de 4 websites da Brasil Ltda (`detetivebuscas.com`, `consultasbrasil.net`, `smsfacil.net`, `smshoje.com`), refletindo de imediato tanto na visualização em tela quanto no arquivo impresso e baixado em PDF.
 - [x] **Idempotência de Faturas Mensais e Prevenção de Duplicidades (`maintenanceService.js`, `SubscriptionDetailsModal.jsx`)**:
   - Implementada regra de negócio fundamental: assinaturas recorrentes mantêm apenas uma fatura pendente ativa por ciclo. Cliques repetidos em "PIX" reutilizam e asseguram a fatura pendente existente, em vez de gerar cobranças redundantes.
   - Criada e executada rotina de exclusão das 3 faturas duplicadas de teste da Brasil Ltda (`FAT-2026-3CY7`, `FAT-2026-AH9K`, `FAT-2026-ZKGZ`), preservando apenas a fatura oficial `FAT-2026-GR3N`.

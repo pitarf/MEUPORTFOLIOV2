@@ -2,6 +2,17 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.34.0] - 2026-10-05
+
+### Aprimorado (Sincronização Dinâmica em Tempo Real e Atualização em Cascata de Faturas em PDF)
+* **Resolução Dinâmica de Dados na Fatura em PDF (`InvoicePdfModal.jsx`)**:
+  * Implementado hook reativo que busca em tempo real os dados mais atualizados da assinatura vinculada via `getSubscriptionById` no momento em que o modal de PDF é aberto.
+  * Invertida a precedência de campos: o PDF agora prioriza categoricamente os dados vivos da assinatura (`subscription.covered_websites || invoice.covered_websites`), garantindo que qualquer alteração de sites, nome, documento, WhatsApp ou plano reflita imediatamente na pré-visualização e no arquivo PDF baixado.
+* **Atualização em Cascata no Banco de Dados (`src/services/maintenanceService.js`)**:
+  * No método `updateSubscription`, adicionada propagação automática das alterações de `covered_websites` para todas as faturas no status `pendente` daquela assinatura.
+* **Sincronização da Fatura `FAT-2026-GR3N` (Brasil Ltda)**:
+  * Atualizada a coluna `covered_websites` da fatura no banco de dados para os 4 sites cadastrados: `https://detetivebuscas.com/`, `https://consultasbrasil.net/`, `https://smsfacil.net/` e `https://smshoje.com/`.
+
 ## [1.33.0] - 2026-10-05
 
 ### Aprimorado (Idempotência de Faturas Mensais e Prevenção de Duplicidades)
