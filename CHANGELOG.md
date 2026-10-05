@@ -2,6 +2,26 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.30.0] - 2026-10-05
+
+### Adicionado (Visualização, Pré-visualização e Emissão em PDF de Faturas de Manutenção)
+* **Novo Componente: `InvoicePdfModal.jsx`**:
+  * Modal executivo de alta fidelidade para pré-visualização, impressão e download em PDF de faturas de manutenção e recibos de quitação.
+  * Estruturado com folha A4 corporativa (`html2pdf.js`, escala 2x, useCORS e quebra de página controlada) com cores e contrastes garantidos independentemente do modo de tema ativo.
+  * Cabeçalho corporativo com logo/monograma da Rafael Pita Solutions, dados de contato, website e CNPJ.
+  * Identificação fiscal e contratual completa: Prestador de Serviços vs Contratante/Assinante com CPF/CNPJ, WhatsApp, e-mail e código da assinatura (`SUB-XXXX`).
+  * Discriminação detalhada dos serviços de sustentação tecnológica: plano contratado, ciclo de cobrança, período de competência calculado e cobertura inclusa (hospedagem, segurança, monitoramento contínuo e suporte técnico prioritário).
+  * Painel de Liquidação Dinâmico:
+    * Se pendente: QR Code PIX em alta definição, código PIX Copia e Cola selecionável e chave PIX institucional.
+    * Se quitada: Comprovante de Quitação Digital em verde esmeralda com data e horário da liquidação e código de autenticação eletrônica.
+  * Termos de serviço e rodapé oficial de auditoria digital com carimbo de data e hora.
+  * Barra de ações com atalhos para: Baixar PDF, Imprimir (nativa do sistema) e Copiar PIX.
+* **Integração Completa no Ecossistema de Cobranças**:
+  * **Histórico de Faturas (`SubscriptionDetailsModal.jsx`):** Adicionado botão "PDF" em cada linha de fatura para emissão individual imediata.
+  * **Modal de PIX (`InvoicePixModal.jsx`):** Adicionado botão de ação "Visualizar / Baixar Fatura em PDF".
+  * **Listagem Administrativa (`ManageMaintenanceSubscriptions.jsx`):** Acesso rápido a "Visualizar Fatura (PDF)" nas ações da tabela desktop e nos cards mobile.
+  * **Portal do Assinante (`ClientSubscriptionPortal.jsx`):** Disponibilizado para os clientes visualizarem e baixarem o PDF tanto das faturas em aberto quanto dos recibos de pagamentos quitados.
+
 ## [1.29.0] - 2026-10-04
 
 ### Adicionado (Gestão de Assinaturas de Manutenção, Gateway PushinPay e Portal do Cliente Sem Senha)
@@ -13,6 +33,7 @@ Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
   * Edição flexível de valores com reajuste imediato ou agendamento para data futura, com botão de 1 clique "Avisar no WhatsApp" contendo mensagem pré-formatada.
   * Emissão de faturas individuais com integração PIX via PushinPay, exibição de QR Code e código Copia e Cola, além de envio direto no WhatsApp.
   * Baixa manual de pagamentos para quitação de faturas recebidas fora do gateway, com avanço automático da data de vencimento em 1 mês e efetivação de reajustes programados.
+  * Recurso de Desfazer Baixa (Estorno / Reabertura): Disponível tanto no modal de faturas e chamados quanto nas ações rápidas da listagem e no modal de QR Code, permitindo reabrir faturas quitadas por engano e restaurar instantaneamente a data de vencimento e histórico da assinatura.
   * Modal de detalhes com histórico completo de faturas geradas, status de liquidação e chamados de suporte abertos pelo cliente.
 * **Portal Público do Assinante Sem Senha (`/minha-assinatura` e `/area-cliente-assinaturas`)**:
   * Acesso prático e seguro para o cliente informando apenas E-mail ou CPF/CNPJ, sem necessidade de memorizar senhas.

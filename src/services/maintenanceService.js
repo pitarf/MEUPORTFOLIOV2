@@ -762,6 +762,96 @@ export const confirmManualPayment = async (invoiceId, options = {}) => {
     };
 };
 
+/**
+ * Desfaz a confirmacao manual de pagamento de uma fatura (Estorno / Reabertura).
+ * Retorna a fatura para o status 'pendente', limpa o 'paid_at', restaura a data de proximo
+ * vencimento da assinatura para a data da fatura reaberta e recalcula o ultimo pagamento.
+ *
+ * @param {string} invoiceId ID da fatura a ter a baixa desfeita
+ * @param {Object} [options]
+ * @param {string} [options.reason] Motivo do estorno / cancelamento da baixa
+ * @returns {Promise<Object>} Objeto com a fatura reaberta e a assinatura atualizada
+ */
+export const undoManualPayment = async (invoiceId, options = {}) => {
+    if (!invoiceId) throw new Error('ID da fatura nao informado.');
+
+    const invoice = await getInvoiceById(invoiceId);
+    if (!invoice) throw new Error(`Fatura nao encontrada: ${invoiceId}`);
+
+    if (invoice.status !== 'pago') {
+        throw new Error('Apenas faturas pagas ou baixadas podem ter o pagamento desfeito.');
+    }
+
+    const subscription = invoice.subscription;
+
+    // 1. Atualiza a fatura de volta para 'pendente' e remove a data de pagamento
+    const invoiceUpdatePayload = {
+        status: 'pendente',
+        paid_at: null,
+        updated_at: new Date().toISOString()
+    };
+
+    if (options.reason) {
+        invoiceUpdatePayload.notes = invoice.notes
+            ? `${invoice.notes}\n[Baixa Desfeita]: ${options.reason}`
+            : `[Baixa Desfeita]: ${options.reason}`;
+    }
+
+    const { data: updatedInvoice, error: invoiceError } = await supabase
+        .from('maintenance_invoices')
+        .update(invoiceUpdatePayload)
+        .eq('id', invoiceId)
+        .select()
+        .single();
+
+    if (invoiceError) {
+        console.error('Erro ao estornar fatura:', invoiceError);
+        throw invoiceError;
+    }
+
+    // 2. Se houver assinatura vinculada, restaura a data de vencimento e ultimo pagamento
+    let updatedSubscription = null;
+    if (subscription?.id) {
+        // Busca se ainda ha outras faturas pagas anteriores para manter o last_payment_date consistente
+        const { data: otherPaidInvoices } = await supabase
+            .from('maintenance_invoices')
+            .select('paid_at')
+            .eq('subscription_id', subscription.id)
+            .eq('status', 'pago')
+            .neq('id', invoiceId)
+            .order('paid_at', { ascending: false })
+            .limit(1);
+
+        const previousLastPaymentDate = otherPaidInvoices && otherPaidInvoices.length > 0
+            ? otherPaidInvoices[0].paid_at
+            : null;
+
+        const subUpdatePayload = {
+            next_due_date: invoice.due_date,
+            last_payment_date: previousLastPaymentDate,
+            updated_at: new Date().toISOString()
+        };
+
+        const { data: subData, error: subError } = await supabase
+            .from('maintenance_subscriptions')
+            .update(subUpdatePayload)
+            .eq('id', subscription.id)
+            .select()
+            .single();
+
+        if (subError) {
+            console.error('Erro ao reverter ciclo da assinatura:', subError);
+        } else {
+            updatedSubscription = subData;
+        }
+    }
+
+    return {
+        invoice: updatedInvoice,
+        subscription: updatedSubscription || subscription
+    };
+};
+
 /* ==========================================================================
    4. PORTAL DO CLIENTE E CONSULTA PUBLICA (SEM SENHA)
    ========================================================================== */

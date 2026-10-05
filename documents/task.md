@@ -2,10 +2,19 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Visualização, Pré-visualização e Emissão em PDF de Faturas de Manutenção (`InvoicePdfModal.jsx`)**:
+  - Criado componente `InvoicePdfModal.jsx` estilizado na identidade visual executiva corporativa Rafael Pita Solutions em formato A4 (`html2pdf.js`).
+  - Inclui dados completos do emissor, contratante, código `FAT-XXXX`, período de competência, discriminação detalhada dos serviços de sustentação tecnológica e hospedagem, e quadro de liquidação (QR Code PIX e chave Copia e Cola para faturas pendentes ou selo de quitação digital para faturas quitadas).
+  - Barra de ações superior com botões "Baixar PDF", "Imprimir", "Copiar PIX" e fechar.
+  - Integrado em todos os pontos-chave do sistema: histórico de faturas do modal de detalhes (`SubscriptionDetailsModal`), modal de PIX (`InvoicePixModal`), ações rápidas da listagem de assinaturas (`ManageMaintenanceSubscriptions`) e no Portal do Assinante (`ClientSubscriptionPortal`).
 - [x] **Central de Notificações e Modelos do WhatsApp para Assinaturas (`SubscriptionShareModal.jsx`, `whatsappMessages.js`)**:
   - Criado modal com abas para disparo e cópia de 2 modelos de mensagens: 1ª Mensagem (Boas-Vindas e apresentação do novo sistema com histórico e recibos) e Lembrete Mensal Padrão (cobrança recorrente com Pix).
   - Implementado gerador de URLs públicas com auto-login do cliente via parâmetro `?lookup=...`.
   - Integrados botões de disparo rápido nas visões desktop e mobile do painel administrativo.
+- [x] **Recurso de Desfazer Baixa / Estorno de Pagamento de Assinaturas (`maintenanceService.js`, `ManageMaintenanceSubscriptions.jsx`, `SubscriptionDetailsModal.jsx`, `InvoicePixModal.jsx`)**:
+  - Implementada função `undoManualPayment`: reverte faturas para o status pendente, limpa o `paid_at`, restaura a data de vencimento da assinatura para a data da fatura reaberta e recalcula o último pagamento.
+  - Integrado botão "Desfazer Baixa" nas faturas pagas do modal 360º de Detalhes, no modal de QR Code PIX e no menu de ações rápidas da listagem de assinaturas.
+  - Testado e validado em tempo real no banco de dados da assinatura `brasiltda2012@gmail.com`.
 - [x] **Reorganização e Arquitetura da Barra Lateral Administrativa (`AdminLayout.jsx`)**:
   - Implementado sistema de navegação hierárquica em categorias lógicas com acordeão expansível animado via Framer Motion.
   - Agrupadas as 14 rotas em 5 blocos coesos: Comercial & Recorrência, Prospecção Ativa, Gestão de Conteúdo, Atendimento e Sistema & Ajustes.

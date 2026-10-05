@@ -6,6 +6,7 @@ import {
     Briefcase,
     FileText,
     Repeat,
+    ShieldCheck,
     Target,
     Compass,
     Scale,
@@ -232,6 +233,11 @@ const AdminLayout = () => {
                                 label: 'Assinaturas & PIX',
                                 path: '/admin/assinaturas',
                                 icon: Repeat
+                            },
+                            {
+                                label: 'Portal do Assinante',
+                                path: '/minha-assinatura',
+                                icon: ShieldCheck
                             }
                         ]
                     },

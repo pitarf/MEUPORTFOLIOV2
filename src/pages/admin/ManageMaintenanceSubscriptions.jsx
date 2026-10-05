@@ -12,6 +12,7 @@ import {
     Users,
     AlertTriangle,
     CheckCircle2,
+    RotateCcw,
     Clock,
     RefreshCw,
     QrCode,
@@ -58,6 +59,7 @@ import {
     deleteSubscription,
     generateInvoiceForSubscription,
     confirmManualPayment,
+    undoManualPayment,
     fetchInvoices
 } from '@/services/maintenanceService';
 import {
@@ -75,6 +77,7 @@ import PriceAdjustmentModal from '@/components/admin/maintenance/PriceAdjustment
 import InvoicePixModal from '@/components/admin/maintenance/InvoicePixModal';
 import SubscriptionDetailsModal from '@/components/admin/maintenance/SubscriptionDetailsModal';
 import SubscriptionShareModal from '@/components/admin/maintenance/SubscriptionShareModal';
+import InvoicePdfModal from '@/components/admin/maintenance/InvoicePdfModal';
 
 /**
  * Painel Administrativo de Assinaturas de Manutencao Recorrente
@@ -115,6 +118,9 @@ const ManageMaintenanceSubscriptions = () => {
     const [shareModalOpen, setShareModalOpen] = useState(false);
     const [shareSubscription, setShareSubscription] = useState(null);
     const [shareLatestInvoice, setShareLatestInvoice] = useState(null);
+
+    const [pdfModalOpen, setPdfModalOpen] = useState(false);
+    const [currentInvoicePdf, setCurrentInvoicePdf] = useState(null);
 
     const [deleteDialogState, setDeleteDialogState] = useState({
         isOpen: false,
@@ -255,6 +261,43 @@ const ManageMaintenanceSubscriptions = () => {
     };
 
     /**
+     * Abre a fatura da assinatura no modal de visualizacao e download em PDF
+     */
+    const handleOpenSubscriptionPdf = async (subscription) => {
+        setActionLoadingId(subscription.id);
+        try {
+            const invoices = await fetchInvoices({ subscriptionId: subscription.id });
+            const targetInvoice = invoices?.find((inv) => inv.status !== 'cancelado') || invoices?.[0] || null;
+            if (!targetInvoice) {
+                toast({
+                    title: 'Gerando fatura do ciclo...',
+                    description: 'Nenhuma fatura encontrada. Gerando cobrança para visualização...'
+                });
+                const generated = await generateInvoiceForSubscription(subscription.id);
+                setCurrentInvoicePdf({
+                    ...generated,
+                    subscription
+                });
+            } else {
+                setCurrentInvoicePdf({
+                    ...targetInvoice,
+                    subscription
+                });
+            }
+            setPdfModalOpen(true);
+        } catch (err) {
+            console.error('Erro ao abrir PDF da fatura:', err);
+            toast({
+                variant: 'destructive',
+                title: 'Erro ao abrir fatura',
+                description: err.message || 'Não foi possível carregar a fatura para o PDF.'
+            });
+        } finally {
+            setActionLoadingId(null);
+        }
+    };
+
+    /**
      * Gera fatura do ciclo via PushinPay e abre o modal de visualizacao do QR Code
      */
     const handleGeneratePixInvoice = async (subscription) => {
@@ -320,6 +363,49 @@ const ManageMaintenanceSubscriptions = () => {
                 variant: 'destructive',
                 title: 'Erro na confirmação',
                 description: err.message || 'Falha ao confirmar o pagamento manual.'
+            });
+        } finally {
+            setActionLoadingId(null);
+        }
+    };
+
+    /**
+     * Desfaz o pagamento da fatura paga mais recente, restaurando o vencimento
+     */
+    const handleUndoLastPaymentQuick = async (subscription) => {
+        setActionLoadingId(subscription.id);
+        try {
+            const invoices = await fetchInvoices({
+                subscriptionId: subscription.id,
+                status: 'pago'
+            });
+
+            if (!invoices || invoices.length === 0) {
+                toast({
+                    variant: 'destructive',
+                    title: 'Nenhuma fatura paga',
+                    description: 'Não há faturas quitadas para ter o pagamento desfeito nesta assinatura.'
+                });
+                return;
+            }
+
+            const latestPaidInvoice = invoices[0];
+            await undoManualPayment(latestPaidInvoice.id, {
+                reason: 'Baixa desfeita manualmente pelo painel administrativo'
+            });
+
+            toast({
+                title: 'Baixa desfeita com sucesso!',
+                description: `Fatura ${latestPaidInvoice.invoice_code} reaberta e vencimento restaurado para ${formatDateBR(latestPaidInvoice.due_date)}.`
+            });
+
+            await loadData();
+        } catch (err) {
+            console.error('Erro ao desfazer pagamento:', err);
+            toast({
+                variant: 'destructive',
+                title: 'Erro ao desfazer baixa',
+                description: err.message || 'Falha ao reverter o pagamento da assinatura.'
             });
         } finally {
             setActionLoadingId(null);
@@ -656,6 +742,19 @@ const ManageMaintenanceSubscriptions = () => {
                                                 type="button"
                                                 size="sm"
                                                 variant="outline"
+                                                disabled={isActionBusy}
+                                                onClick={() => handleOpenSubscriptionPdf(sub)}
+                                                className="col-span-2 text-xs flex items-center justify-center gap-1 text-primary border-primary/30 hover:bg-primary/10 font-medium"
+                                                title="Visualizar e Baixar Fatura em PDF"
+                                            >
+                                                <FileText className="w-3.5 h-3.5" />
+                                                Visualizar Fatura (PDF)
+                                            </Button>
+
+                                            <Button
+                                                type="button"
+                                                size="sm"
+                                                variant="outline"
                                                 onClick={() => handleOpenShareModal(sub)}
                                                 className="col-span-2 text-xs flex items-center justify-center gap-1.5 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/10 font-bold"
                                             >
@@ -848,6 +947,14 @@ const ManageMaintenanceSubscriptions = () => {
                                                                     </DropdownMenuItem>
 
                                                                     <DropdownMenuItem
+                                                                        onClick={() => handleOpenSubscriptionPdf(sub)}
+                                                                        className="cursor-pointer text-primary focus:text-primary focus:bg-primary/10 font-semibold"
+                                                                    >
+                                                                        <FileText className="w-4 h-4 mr-2" />
+                                                                        Visualizar Fatura (PDF)
+                                                                    </DropdownMenuItem>
+
+                                                                    <DropdownMenuItem
                                                                         onClick={() => {
                                                                             setDetailsSubscription(sub);
                                                                             setDetailsModalOpen(true);
@@ -856,6 +963,14 @@ const ManageMaintenanceSubscriptions = () => {
                                                                     >
                                                                         <FileText className="w-4 h-4 mr-2 text-primary" />
                                                                         Faturas & Chamados
+                                                                    </DropdownMenuItem>
+
+                                                                    <DropdownMenuItem
+                                                                        onClick={() => handleUndoLastPaymentQuick(sub)}
+                                                                        className="cursor-pointer text-amber-600 focus:text-amber-600 focus:bg-amber-500/10"
+                                                                    >
+                                                                        <RotateCcw className="w-4 h-4 mr-2 text-amber-500" />
+                                                                        Desfazer Última Baixa
                                                                     </DropdownMenuItem>
 
                                                                     <DropdownMenuItem
@@ -926,6 +1041,14 @@ const ManageMaintenanceSubscriptions = () => {
                     await confirmManualPayment(invId);
                     await loadData();
                 }}
+                onUndoPayment={async (invId) => {
+                    await undoManualPayment(invId);
+                    await loadData();
+                }}
+                onOpenPdfModal={(inv) => {
+                    setCurrentInvoicePdf(inv);
+                    setPdfModalOpen(true);
+                }}
             />
 
             <SubscriptionDetailsModal
@@ -936,6 +1059,10 @@ const ManageMaintenanceSubscriptions = () => {
                     setCurrentInvoicePix(inv);
                     setPixModalOpen(true);
                 }}
+                onOpenInvoicePdf={(inv) => {
+                    setCurrentInvoicePdf(inv);
+                    setPdfModalOpen(true);
+                }}
                 onPaymentConfirmed={loadData}
             />
 
@@ -944,6 +1071,12 @@ const ManageMaintenanceSubscriptions = () => {
                 onClose={() => setShareModalOpen(false)}
                 subscription={shareSubscription}
                 latestInvoice={shareLatestInvoice}
+            />
+
+            <InvoicePdfModal
+                isOpen={pdfModalOpen}
+                onClose={() => setPdfModalOpen(false)}
+                invoice={currentInvoicePdf}
             />
 
             {/* Dialogo de Confirmacao de Exclusao */}

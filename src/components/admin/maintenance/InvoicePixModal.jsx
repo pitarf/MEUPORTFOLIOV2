@@ -23,7 +23,9 @@ import {
     Calendar,
     DollarSign,
     CheckCircle2,
-    Loader2
+    RotateCcw,
+    Loader2,
+    FileText
 } from 'lucide-react';
 import { generatePortalUrl } from '@/utils/whatsappMessages';
 
@@ -36,16 +38,21 @@ import { generatePortalUrl } from '@/utils/whatsappMessages';
  * @param {Function} props.onClose Callback ao fechar
  * @param {Object|null} props.invoice Dados da fatura gerada
  * @param {Function} [props.onConfirmPayment] Callback opcional para liquidar na tela
+ * @param {Function} [props.onUndoPayment] Callback opcional para desfazer pagamento/baixa
+ * @param {Function} [props.onOpenPdfModal] Callback opcional para abrir modal de visualizacao e download em PDF
  */
 const InvoicePixModal = ({
     isOpen,
     onClose,
     invoice = null,
-    onConfirmPayment = null
+    onConfirmPayment = null,
+    onUndoPayment = null,
+    onOpenPdfModal = null
 }) => {
     const { toast } = useToast();
     const [copied, setCopied] = useState(false);
     const [confirming, setConfirming] = useState(false);
+    const [undoing, setUndoing] = useState(false);
 
     if (!invoice) return null;
 
@@ -124,6 +131,23 @@ const InvoicePixModal = ({
             console.error(err);
         } finally {
             setConfirming(false);
+        }
+    };
+
+    const handleUndoPaymentClick = async () => {
+        if (!onUndoPayment) return;
+        setUndoing(true);
+        try {
+            await onUndoPayment(invoice.id);
+            toast({
+                title: 'Baixa desfeita!',
+                description: `Fatura ${invoice.invoice_code} reaberta e ciclo da assinatura restaurado.`
+            });
+            onClose();
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setUndoing(false);
         }
     };
 
@@ -225,8 +249,22 @@ const InvoicePixModal = ({
                         </div>
                     )}
 
-                    {/* Botao Enviar no WhatsApp */}
+                    {/* Botao Enviar no WhatsApp e Visualizar PDF */}
                     <div className="flex flex-col gap-2 pt-1">
+                        {onOpenPdfModal && (
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => {
+                                    onOpenPdfModal(invoice);
+                                }}
+                                className="w-full border-primary/30 text-primary hover:bg-primary/10 font-semibold py-2.5 flex items-center justify-center gap-2 shadow-sm"
+                            >
+                                <FileText className="w-4 h-4" />
+                                Visualizar / Baixar Fatura em PDF
+                            </Button>
+                        )}
+
                         <Button
                             type="button"
                             onClick={handleSendWhatsapp}
@@ -250,6 +288,23 @@ const InvoicePixModal = ({
                                     <CheckCircle2 className="w-4 h-4 mr-2" />
                                 )}
                                 Confirmar Pagamento Manualmente
+                            </Button>
+                        )}
+
+                        {invoice.status === 'pago' && onUndoPayment && (
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={handleUndoPaymentClick}
+                                disabled={undoing}
+                                className="w-full border-amber-500/30 text-amber-600 hover:bg-amber-500/10 font-medium"
+                            >
+                                {undoing ? (
+                                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                ) : (
+                                    <RotateCcw className="w-4 h-4 mr-2 text-amber-500" />
+                                )}
+                                Desfazer Baixa (Reabrir Fatura)
                             </Button>
                         )}
                     </div>

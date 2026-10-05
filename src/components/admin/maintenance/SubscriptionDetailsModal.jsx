@@ -12,7 +12,8 @@ import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/lib/customSupabaseClient';
 import {
     fetchInvoices,
-    confirmManualPayment
+    confirmManualPayment,
+    undoManualPayment
 } from '@/services/maintenanceService';
 import {
     formatCurrencyBRL,
@@ -29,6 +30,7 @@ import {
     LifeBuoy,
     QrCode,
     CheckCircle2,
+    RotateCcw,
     Calendar,
     DollarSign,
     User,
@@ -45,6 +47,7 @@ import {
  * @param {Function} props.onClose Callback ao fechar
  * @param {Object|null} props.subscription Assinatura em exibicao
  * @param {Function} props.onOpenInvoicePix Callback para abrir modal de QR Code PIX de uma fatura
+ * @param {Function} [props.onOpenInvoicePdf] Callback para abrir modal de PDF da fatura
  * @param {Function} props.onPaymentConfirmed Callback ao confirmar pagamento
  */
 const SubscriptionDetailsModal = ({
@@ -52,6 +55,7 @@ const SubscriptionDetailsModal = ({
     onClose,
     subscription = null,
     onOpenInvoicePix,
+    onOpenInvoicePdf,
     onPaymentConfirmed
 }) => {
     const { toast } = useToast();
@@ -130,6 +134,42 @@ const SubscriptionDetailsModal = ({
                 variant: 'destructive',
                 title: 'Erro ao confirmar',
                 description: err.message || 'Falha ao processar confirmação manual.'
+            });
+        } finally {
+            setActionLoading(false);
+        }
+    };
+
+    const handleUndoPaymentInvoice = async (invoiceId) => {
+        setActionLoading(true);
+        try {
+            await undoManualPayment(invoiceId, {
+                reason: 'Baixa desfeita manualmente pelo painel administrativo'
+            });
+
+            toast({
+                title: 'Baixa desfeita com sucesso!',
+                description: 'A fatura retornou para pendente e o vencimento da assinatura foi restaurado.'
+            });
+
+            // Atualiza lista local
+            setInvoices((prev) =>
+                prev.map((inv) =>
+                    inv.id === invoiceId
+                        ? { ...inv, status: 'pendente', paid_at: null }
+                        : inv
+                )
+            );
+
+            if (onPaymentConfirmed) {
+                onPaymentConfirmed();
+            }
+        } catch (err) {
+            console.error('Erro ao desfazer baixa:', err);
+            toast({
+                variant: 'destructive',
+                title: 'Erro ao desfazer baixa',
+                description: err.message || 'Falha ao reverter pagamento da fatura.'
             });
         } finally {
             setActionLoading(false);
@@ -265,6 +305,18 @@ const SubscriptionDetailsModal = ({
                                                                 type="button"
                                                                 size="sm"
                                                                 variant="outline"
+                                                                onClick={() => onOpenInvoicePdf && onOpenInvoicePdf({ ...inv, subscription })}
+                                                                title="Visualizar e Baixar Fatura em PDF"
+                                                                className="text-xs text-primary border-primary/30 hover:bg-primary/10"
+                                                            >
+                                                                <FileText className="w-3.5 h-3.5 mr-1" />
+                                                                PDF
+                                                            </Button>
+
+                                                            <Button
+                                                                type="button"
+                                                                size="sm"
+                                                                variant="outline"
                                                                 onClick={() => onOpenInvoicePix && onOpenInvoicePix({ ...inv, subscription })}
                                                                 title="Visualizar QR Code PIX"
                                                             >
@@ -272,18 +324,31 @@ const SubscriptionDetailsModal = ({
                                                                 PIX
                                                             </Button>
 
-                                                            {!isPaid && (
+                                                            {!isPaid ? (
                                                                 <Button
                                                                     type="button"
                                                                     size="sm"
                                                                     variant="outline"
                                                                     disabled={actionLoading}
                                                                     onClick={() => handleConfirmPaymentInvoice(inv.id)}
-                                                                    className="text-emerald-600 hover:bg-emerald-500/10 border-emerald-500/30"
+                                                                    className="text-emerald-600 hover:bg-emerald-500/10 border-emerald-500/30 text-xs"
                                                                     title="Confirmar pagamento manualmente"
                                                                 >
                                                                     <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
                                                                     Baixar
+                                                                </Button>
+                                                            ) : (
+                                                                <Button
+                                                                    type="button"
+                                                                    size="sm"
+                                                                    variant="outline"
+                                                                    disabled={actionLoading}
+                                                                    onClick={() => handleUndoPaymentInvoice(inv.id)}
+                                                                    className="text-amber-600 hover:bg-amber-500/10 border-amber-500/30 text-xs"
+                                                                    title="Desfazer baixa e reabrir cobrança"
+                                                                >
+                                                                    <RotateCcw className="w-3.5 h-3.5 mr-1 text-amber-500" />
+                                                                    Desfazer Baixa
                                                                 </Button>
                                                             )}
                                                         </div>

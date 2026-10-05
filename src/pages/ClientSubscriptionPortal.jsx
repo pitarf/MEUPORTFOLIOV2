@@ -60,6 +60,7 @@ import {
     getInvoiceStatusMeta,
     getTicketStatusMeta
 } from '@/utils/maintenanceFormatters';
+import InvoicePdfModal from '@/components/admin/maintenance/InvoicePdfModal';
 
 /**
  * Portal Publico do Assinante : Acesso sem senha para clientes de manutencao continua.
@@ -80,6 +81,23 @@ const ClientSubscriptionPortal = () => {
 
     // Modal de recibo de fatura paga
     const [receiptInvoice, setReceiptInvoice] = useState(null);
+
+    // Modal de visualização e emissão em PDF da fatura ou recibo
+    const [clientPdfModalOpen, setClientPdfModalOpen] = useState(false);
+    const [clientPdfInvoice, setClientPdfInvoice] = useState(null);
+
+    /**
+     * Abre a fatura selecionada no modal corporativo de PDF
+     */
+    const handleOpenClientInvoicePdf = (inv) => {
+        if (!inv) return;
+        const sub = portalData?.subscriptions?.find((s) => s.id === inv.subscription_id) || portalData?.subscriptions?.[0] || null;
+        setClientPdfInvoice({
+            ...inv,
+            subscription: sub
+        });
+        setClientPdfModalOpen(true);
+    };
 
     // Modal de abertura de chamado
     const [ticketModalOpen, setTicketModalOpen] = useState(false);
@@ -670,14 +688,27 @@ const ClientSubscriptionPortal = () => {
                                                         </span>
                                                     </div>
 
-                                                    <Button
-                                                        type="button"
-                                                        onClick={() => setSelectedPixInvoice(isSelected ? null : inv)}
-                                                        className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 flex items-center justify-center gap-2 shadow-sm"
-                                                    >
-                                                        <QrCode className="w-4 h-4" />
-                                                        {isSelected ? 'Ocultar QR Code PIX' : 'Pagar com PIX'}
-                                                    </Button>
+                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                                        <Button
+                                                            type="button"
+                                                            variant="outline"
+                                                            onClick={() => handleOpenClientInvoicePdf(inv)}
+                                                            className="w-full border-primary/30 text-primary hover:bg-primary/10 font-semibold py-2.5 flex items-center justify-center gap-1.5 text-xs shadow-sm"
+                                                            title="Visualizar e Baixar Fatura em PDF"
+                                                        >
+                                                            <FileText className="w-4 h-4" />
+                                                            Fatura em PDF
+                                                        </Button>
+
+                                                        <Button
+                                                            type="button"
+                                                            onClick={() => setSelectedPixInvoice(isSelected ? null : inv)}
+                                                            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 flex items-center justify-center gap-1.5 shadow-sm text-xs"
+                                                        >
+                                                            <QrCode className="w-4 h-4" />
+                                                            {isSelected ? 'Ocultar PIX' : 'Pagar com PIX'}
+                                                        </Button>
+                                                    </div>
 
                                                     {/* Painel do QR Code e Copia e Cola Expansivel */}
                                                     <AnimatePresence>
@@ -811,16 +842,28 @@ const ClientSubscriptionPortal = () => {
                                                                 </span>
                                                             </td>
                                                             <td className="py-3 px-4 text-right">
-                                                                <Button
-                                                                    type="button"
-                                                                    variant="ghost"
-                                                                    size="sm"
-                                                                    onClick={() => setReceiptInvoice(inv)}
-                                                                    className="h-8 text-xs text-primary hover:text-primary font-medium"
-                                                                >
-                                                                    <FileText className="w-3.5 h-3.5 mr-1" />
-                                                                    Ver Recibo
-                                                                </Button>
+                                                                <div className="flex items-center justify-end gap-1.5">
+                                                                    <Button
+                                                                        type="button"
+                                                                        variant="outline"
+                                                                        size="sm"
+                                                                        onClick={() => handleOpenClientInvoicePdf(inv)}
+                                                                        className="h-8 text-xs text-primary border-primary/30 hover:bg-primary/10 font-semibold"
+                                                                        title="Visualizar e Baixar Recibo em PDF"
+                                                                    >
+                                                                        <FileText className="w-3.5 h-3.5 mr-1" />
+                                                                        PDF
+                                                                    </Button>
+                                                                    <Button
+                                                                        type="button"
+                                                                        variant="ghost"
+                                                                        size="sm"
+                                                                        onClick={() => setReceiptInvoice(inv)}
+                                                                        className="h-8 text-xs text-muted-foreground hover:text-foreground font-medium"
+                                                                    >
+                                                                        Recibo
+                                                                    </Button>
+                                                                </div>
                                                             </td>
                                                         </tr>
                                                     ))}
@@ -1070,7 +1113,18 @@ const ClientSubscriptionPortal = () => {
                         </div>
                     )}
 
-                    <DialogFooter className="pt-2">
+                    <DialogFooter className="pt-2 flex flex-col sm:flex-row gap-2">
+                        <Button
+                            type="button"
+                            onClick={() => {
+                                handleOpenClientInvoicePdf(receiptInvoice);
+                                setReceiptInvoice(null);
+                            }}
+                            className="w-full sm:w-auto bg-primary text-primary-foreground font-semibold flex items-center justify-center gap-1.5"
+                        >
+                            <FileText className="w-4 h-4" />
+                            Visualizar / Baixar PDF
+                        </Button>
                         <Button
                             type="button"
                             variant="outline"
@@ -1081,6 +1135,7 @@ const ClientSubscriptionPortal = () => {
                         </Button>
                         <Button
                             type="button"
+                            variant="ghost"
                             onClick={() => setReceiptInvoice(null)}
                             className="w-full sm:w-auto"
                         >
@@ -1189,6 +1244,13 @@ const ClientSubscriptionPortal = () => {
                     </form>
                 </DialogContent>
             </Dialog>
+
+            {/* Modal de Visualizacao e Emissao em PDF da Fatura / Recibo */}
+            <InvoicePdfModal
+                isOpen={clientPdfModalOpen}
+                onClose={() => setClientPdfModalOpen(false)}
+                invoice={clientPdfInvoice}
+            />
         </>
     );
 };
