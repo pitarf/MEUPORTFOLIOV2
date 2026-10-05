@@ -1,5 +1,6 @@
 import { supabase } from '../lib/customSupabaseClient.js';
-import { createCashInPix } from './pushinPayService.js';
+import { createCashInPix, fetchPushinPaySettings } from './pushinPayService.js';
+import { generatePixPayload } from '../utils/pixPayloadGenerator.js';
 
 /**
  * Servico de Gestao de Assinaturas, Categorias, Faturas PIX e Atendimento
@@ -297,6 +298,7 @@ export const createSubscription = async (subscriptionData) => {
         billing_cycle = 'mensal',
         status = 'ativo',
         next_due_date = null,
+        covered_websites = '',
         notes = ''
     } = subscriptionData;
 
@@ -330,6 +332,7 @@ export const createSubscription = async (subscriptionData) => {
         category_id: category_id || null,
         plan_title: plan_title.trim(),
         plan_description: plan_description ? plan_description.trim() : null,
+        covered_websites: covered_websites ? covered_websites.trim() : null,
         current_price: Number(current_price),
         next_price: next_price !== null && next_price !== undefined ? Number(next_price) : null,
         next_price_effective_date: next_price_effective_date || null,
@@ -551,7 +554,8 @@ export const getInvoiceById = async (id) => {
                     client_phone,
                     plan_title,
                     billing_day,
-                    current_price
+                    current_price,
+                    covered_websites
                 )
             `)
             .eq('id', id)
@@ -592,7 +596,38 @@ export const generateInvoiceForSubscription = async (subscriptionId, options = {
         throw new Error(`Assinatura nao encontrada para o ID: ${subscriptionId}`);
     }
 
-    // 2. Determina a data de vencimento
+    // 2. Protecao contra duplicidade: Se ja existe uma fatura pendente e nao foi forcada nova emissao,
+    // reaproveita a mesma fatura para o ciclo, garantindo que possua o QR Code PIX ativo.
+    if (!options.forceNew) {
+        const { data: existingInvoices } = await supabase
+            .from('maintenance_invoices')
+            .select(`
+                *,
+                subscription:maintenance_subscriptions (
+                    id,
+                    subscription_code,
+                    client_name,
+                    client_document,
+                    client_email,
+                    client_phone,
+                    plan_title,
+                    billing_day,
+                    current_price,
+                    covered_websites
+                )
+            `)
+            .eq('subscription_id', subscriptionId)
+            .eq('status', 'pendente')
+            .order('created_at', { ascending: false })
+            .limit(1);
+
+        if (existingInvoices && existingInvoices.length > 0) {
+            const existing = existingInvoices[0];
+            return await ensureInvoicePix(existing.id);
+        }
+    }
+
+    // 3. Determina a data de vencimento
     const dueDate = options.dueDate || subscription.next_due_date || calculateNextDueDate(subscription.billing_day);
 
     // 3. Determina o valor da fatura
@@ -621,14 +656,32 @@ export const generateInvoiceForSubscription = async (subscriptionId, options = {
             description: `${subscription.plan_title} (${subscription.client_name})`
         });
     } catch (gatewayError) {
-        console.warn('Aviso: Gateway PushinPay retornou erro na emissao, usando geracao de contingencia:', gatewayError.message);
-        // Em caso de falha de conexao com a gateway, gera fatura pendente para nao travar a operacao
-        pushinPayResult = {
-            id: 'err_fallback_' + Date.now().toString(36),
-            qr_code: null,
-            qr_code_base64: null,
-            status: 'pending'
-        };
+        console.warn('Aviso: Gateway PushinPay retornou erro na emissao, usando geracao de contingencia com PIX BR Code:', gatewayError.message);
+        try {
+            const settings = await fetchPushinPaySettings();
+            const defaultKey = settings?.default_pix_key || '55812208000105';
+            const brCodePayload = generatePixPayload({
+                pixKey: defaultKey,
+                amount: invoiceAmount,
+                receiverName: 'Rafael Pita Solutions',
+                receiverCity: 'Aracaju',
+                txid: invoiceCode.replace(/[^a-zA-Z0-9]/g, '')
+            });
+            pushinPayResult = {
+                id: 'emv_brcode_' + Date.now().toString(36),
+                qr_code: brCodePayload,
+                qr_code_base64: null,
+                status: 'pending'
+            };
+        } catch (brCodeErr) {
+            console.error('Erro ao gerar contingencia BR Code:', brCodeErr);
+            pushinPayResult = {
+                id: 'err_fallback_' + Date.now().toString(36),
+                qr_code: null,
+                qr_code_base64: null,
+                status: 'pending'
+            };
+        }
     }
 
     // 6. Insere a fatura no banco de dados
@@ -641,6 +694,7 @@ export const generateInvoiceForSubscription = async (subscriptionId, options = {
         pushinpay_id: pushinPayResult?.id || null,
         pix_qr_code: pushinPayResult?.qr_code || null,
         pix_qr_code_base64: pushinPayResult?.qr_code_base64 || null,
+        covered_websites: subscription.covered_websites || null,
         notes: options.notes ? options.notes.trim() : null
     };
 
@@ -656,7 +710,8 @@ export const generateInvoiceForSubscription = async (subscriptionId, options = {
                 client_document,
                 client_email,
                 client_phone,
-                plan_title
+                plan_title,
+                covered_websites
             )
         `)
         .single();
@@ -667,6 +722,114 @@ export const generateInvoiceForSubscription = async (subscriptionId, options = {
     }
 
     return createdInvoice;
+};
+
+/**
+ * Garante que a fatura possua um QR Code e codigo Copia e Cola PIX valido.
+ * Se a fatura ja possuir pix_qr_code valido, retorna a fatura sem reemissao.
+ * Caso contrario, tenta emitir via PushinPay ou gera imediatamente o payload PIX EMV oficial (BR Code)
+ * com base na chave cadastrada, salvando os dados no banco de dados.
+ *
+ * @param {string} invoiceId ID da fatura
+ * @returns {Promise<Object>} Fatura atualizada com os dados do PIX
+ */
+export const ensureInvoicePix = async (invoiceId) => {
+    if (!invoiceId) throw new Error('ID da fatura nao informado.');
+
+    const invoice = await getInvoiceById(invoiceId);
+    if (!invoice) throw new Error(`Fatura nao encontrada para o ID: ${invoiceId}`);
+
+    // Se ja possui codigo Pix valido, retorna diretamente
+    if (invoice.pix_qr_code && invoice.pix_qr_code.trim() !== '' && !invoice.pushinpay_id?.startsWith('err_fallback_')) {
+        return invoice;
+    }
+
+    const settings = await fetchPushinPaySettings();
+    let pushinPayResult = null;
+
+    try {
+        pushinPayResult = await createCashInPix({
+            amount: Number(invoice.amount),
+            invoiceId: invoice.id,
+            invoiceCode: invoice.invoice_code,
+            description: `${invoice.subscription?.plan_title || 'Manutencao'} (${invoice.invoice_code})`
+        });
+    } catch (gatewayError) {
+        console.warn('Aviso: PushinPay indisponivel, utilizando geracao de contingencia BR Code:', gatewayError.message);
+    }
+
+    let finalPixCode = pushinPayResult?.qr_code || null;
+    let finalPixBase64 = pushinPayResult?.qr_code_base64 || null;
+    let finalPushinPayId = pushinPayResult?.id || null;
+
+    // Se a PushinPay nao retornou codigo (ou falhou), gera via BR Code EMV padrao
+    if (!finalPixCode) {
+        const defaultKey = settings?.default_pix_key || '55812208000105';
+        finalPixCode = generatePixPayload({
+            pixKey: defaultKey,
+            amount: Number(invoice.amount),
+            receiverName: 'Rafael Pita Solutions',
+            receiverCity: 'Aracaju',
+            txid: invoice.invoice_code.replace(/[^a-zA-Z0-9]/g, '')
+        });
+        finalPushinPayId = 'emv_brcode_' + Date.now().toString(36);
+    }
+
+    // Atualiza a fatura no banco de dados
+    const { data: updatedInvoice, error } = await supabase
+        .from('maintenance_invoices')
+        .update({
+            pushinpay_id: finalPushinPayId,
+            pix_qr_code: finalPixCode,
+            pix_qr_code_base64: finalPixBase64,
+            updated_at: new Date().toISOString()
+        })
+        .eq('id', invoice.id)
+        .select(`
+            *,
+            subscription:maintenance_subscriptions (
+                id,
+                subscription_code,
+                client_name,
+                client_document,
+                client_email,
+                client_phone,
+                plan_title,
+                billing_day,
+                current_price,
+                covered_websites
+            )
+        `)
+        .single();
+
+    if (error) {
+        console.error('Erro ao atualizar fatura com PIX gerado:', error);
+        throw error;
+    }
+
+    return updatedInvoice;
+};
+
+/**
+ * Exclui uma fatura do sistema caso necessario (ex: fatura gerada por engano).
+ *
+ * @param {string} invoiceId ID da fatura
+ * @returns {Promise<boolean>} Sucesso da exclusao
+ */
+export const deleteInvoice = async (invoiceId) => {
+    if (!invoiceId) throw new Error('ID da fatura nao informado.');
+
+    const { error } = await supabase
+        .from('maintenance_invoices')
+        .delete()
+        .eq('id', invoiceId);
+
+    if (error) {
+        console.error('Erro ao excluir fatura:', error);
+        throw error;
+    }
+
+    return true;
 };
 
 /**

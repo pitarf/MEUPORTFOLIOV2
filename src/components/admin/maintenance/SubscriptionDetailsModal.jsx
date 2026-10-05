@@ -13,7 +13,8 @@ import { supabase } from '@/lib/customSupabaseClient';
 import {
     fetchInvoices,
     confirmManualPayment,
-    undoManualPayment
+    undoManualPayment,
+    deleteInvoice
 } from '@/services/maintenanceService';
 import {
     formatCurrencyBRL,
@@ -22,7 +23,10 @@ import {
     maskPhone,
     getSubscriptionStatusMeta,
     getInvoiceStatusMeta,
-    getTicketStatusMeta
+    getTicketStatusMeta,
+    parseCoveredWebsites,
+    ensureUrlProtocol,
+    extractDomain
 } from '@/utils/maintenanceFormatters';
 import {
     FileText,
@@ -36,7 +40,10 @@ import {
     User,
     Building2,
     Clock,
-    Loader2
+    Loader2,
+    Globe,
+    ExternalLink,
+    Trash2
 } from 'lucide-react';
 
 /**
@@ -176,6 +183,31 @@ const SubscriptionDetailsModal = ({
         }
     };
 
+    const handleDeleteInvoice = async (invoiceId) => {
+        if (!window.confirm('Tem certeza de que deseja excluir esta fatura pendente?')) return;
+        setActionLoading(true);
+        try {
+            await deleteInvoice(invoiceId);
+            toast({
+                title: 'Fatura excluída!',
+                description: 'A fatura pendente foi removida com sucesso.'
+            });
+            setInvoices((prev) => prev.filter((inv) => inv.id !== invoiceId));
+            if (onPaymentConfirmed) {
+                onPaymentConfirmed();
+            }
+        } catch (err) {
+            console.error('Erro ao excluir fatura:', err);
+            toast({
+                variant: 'destructive',
+                title: 'Erro ao excluir fatura',
+                description: err.message || 'Falha ao remover a fatura.'
+            });
+        } finally {
+            setActionLoading(false);
+        }
+    };
+
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
@@ -222,6 +254,35 @@ const SubscriptionDetailsModal = ({
                             </span>
                         </div>
                     </div>
+
+                    {/* Sites Cobertos pela Manutencao */}
+                    {parseCoveredWebsites(subscription.covered_websites).length > 0 && (
+                        <div className="p-3 rounded-xl bg-primary/5 border border-primary/20 space-y-1.5">
+                            <span className="text-xs font-semibold text-primary flex items-center gap-1.5">
+                                <Globe className="w-3.5 h-3.5" />
+                                Sites & Aplicações Atendidos ({parseCoveredWebsites(subscription.covered_websites).length}):
+                            </span>
+                            <div className="flex flex-wrap gap-2 pt-0.5">
+                                {parseCoveredWebsites(subscription.covered_websites).map((siteUrl, sIdx) => {
+                                    const safeUrl = ensureUrlProtocol(siteUrl);
+                                    return (
+                                        <a
+                                            key={sIdx}
+                                            href={safeUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono font-medium bg-card hover:bg-muted text-foreground border border-border shadow-2xs hover:border-primary/50 transition-colors"
+                                            title={`Abrir ${siteUrl} em nova aba`}
+                                        >
+                                            <Globe className="w-3 h-3 text-primary" />
+                                            {siteUrl}
+                                            <ExternalLink className="w-3 h-3 text-muted-foreground ml-0.5" />
+                                        </a>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
 
                     {/* Alternador de Abas */}
                     <div className="flex items-center border-b border-border gap-2">
@@ -325,18 +386,32 @@ const SubscriptionDetailsModal = ({
                                                             </Button>
 
                                                             {!isPaid ? (
-                                                                <Button
-                                                                    type="button"
-                                                                    size="sm"
-                                                                    variant="outline"
-                                                                    disabled={actionLoading}
-                                                                    onClick={() => handleConfirmPaymentInvoice(inv.id)}
-                                                                    className="text-emerald-600 hover:bg-emerald-500/10 border-emerald-500/30 text-xs"
-                                                                    title="Confirmar pagamento manualmente"
-                                                                >
-                                                                    <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
-                                                                    Baixar
-                                                                </Button>
+                                                                <>
+                                                                    <Button
+                                                                        type="button"
+                                                                        size="sm"
+                                                                        variant="outline"
+                                                                        disabled={actionLoading}
+                                                                        onClick={() => handleConfirmPaymentInvoice(inv.id)}
+                                                                        className="text-emerald-600 hover:bg-emerald-500/10 border-emerald-500/30 text-xs"
+                                                                        title="Confirmar pagamento manualmente"
+                                                                    >
+                                                                        <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
+                                                                        Baixar
+                                                                    </Button>
+
+                                                                    <Button
+                                                                        type="button"
+                                                                        size="sm"
+                                                                        variant="ghost"
+                                                                        disabled={actionLoading}
+                                                                        onClick={() => handleDeleteInvoice(inv.id)}
+                                                                        className="text-red-500 hover:text-red-600 hover:bg-red-500/10 text-xs px-2"
+                                                                        title="Excluir fatura pendente"
+                                                                    >
+                                                                        <Trash2 className="w-3.5 h-3.5" />
+                                                                    </Button>
+                                                                </>
                                                             ) : (
                                                                 <Button
                                                                     type="button"

@@ -23,8 +23,8 @@ import {
     updateSubscription,
     calculateNextDueDate
 } from '@/services/maintenanceService';
-import { maskCpfCnpj, maskPhone } from '@/utils/maintenanceFormatters';
-import { Loader2, User, FileText, Calendar, DollarSign } from 'lucide-react';
+import { maskCpfCnpj, maskPhone, parseCoveredWebsites } from '@/utils/maintenanceFormatters';
+import { Loader2, User, FileText, Calendar, DollarSign, Globe } from 'lucide-react';
 
 /**
  * Modal de cadastro e edicao de assinaturas de manutencao.
@@ -62,6 +62,7 @@ const SubscriptionFormModal = ({
         billing_cycle: 'mensal',
         status: 'ativo',
         next_due_date: '',
+        covered_websites: '',
         notes: ''
     });
 
@@ -76,6 +77,7 @@ const SubscriptionFormModal = ({
                 category_id: subscription.category_id || (categories[0]?.id || ''),
                 plan_title: subscription.plan_title || '',
                 plan_description: subscription.plan_description || '',
+                covered_websites: subscription.covered_websites || '',
                 current_price: subscription.current_price !== undefined ? String(subscription.current_price) : '',
                 billing_day: subscription.billing_day || 10,
                 billing_cycle: subscription.billing_cycle || 'mensal',
@@ -94,6 +96,7 @@ const SubscriptionFormModal = ({
                 category_id: categories[0]?.id || '',
                 plan_title: 'Manutenção Contínua & Suporte',
                 plan_description: 'Atualizações de segurança, hospedagem, monitoramento preventivo e suporte técnico contínuo.',
+                covered_websites: '',
                 current_price: '250',
                 billing_day: defaultDay,
                 billing_cycle: 'mensal',
@@ -159,6 +162,7 @@ const SubscriptionFormModal = ({
                 category_id: formData.category_id || null,
                 plan_title: formData.plan_title.trim(),
                 plan_description: formData.plan_description.trim() || null,
+                covered_websites: formData.covered_websites.trim() || null,
                 current_price: priceNum,
                 billing_day: Number(formData.billing_day),
                 billing_cycle: formData.billing_cycle,
@@ -194,6 +198,8 @@ const SubscriptionFormModal = ({
             setLoading(false);
         }
     };
+
+    const parsedWebsites = parseCoveredWebsites(formData.covered_websites);
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
@@ -315,6 +321,40 @@ const SubscriptionFormModal = ({
                                     value={formData.plan_description}
                                     onChange={(e) => setFormData({ ...formData, plan_description: e.target.value })}
                                 />
+                            </div>
+
+                            <div className="space-y-1.5 md:col-span-2">
+                                <div className="flex items-center justify-between">
+                                    <Label htmlFor="covered_websites" className="flex items-center gap-1.5 font-bold text-foreground">
+                                        <Globe className="w-3.5 h-3.5 text-primary" />
+                                        Sites & Aplicações Cobertos pela Manutenção
+                                    </Label>
+                                    <span className="text-[11px] text-muted-foreground font-medium">
+                                        Aparecerão nas faturas em PDF e no portal
+                                    </span>
+                                </div>
+                                <Textarea
+                                    id="covered_websites"
+                                    rows={2}
+                                    placeholder={"Informe os links ou domínios (um por linha ou separados por vírgula):\nEx: https://consultasbrasil.net\nhttps://painel.consultasbrasil.net"}
+                                    value={formData.covered_websites}
+                                    onChange={(e) => setFormData({ ...formData, covered_websites: e.target.value })}
+                                    className="font-mono text-xs"
+                                />
+                                {parsedWebsites.length > 0 && (
+                                    <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                                        <span className="text-[11px] text-muted-foreground font-medium">Sites identificados:</span>
+                                        {parsedWebsites.map((site, idx) => (
+                                            <span
+                                                key={idx}
+                                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-mono bg-primary/10 text-primary border border-primary/20"
+                                            >
+                                                <Globe className="w-3 h-3" />
+                                                {site}
+                                            </span>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

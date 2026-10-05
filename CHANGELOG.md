@@ -2,6 +2,55 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.33.0] - 2026-10-05
+
+### Aprimorado (Idempotência de Faturas Mensais e Prevenção de Duplicidades)
+* **Regra de Unicidade de Fatura Pendente por Ciclo (`src/services/maintenanceService.js`)**:
+  * Atualizada a função `generateInvoiceForSubscription`: antes de emitir uma nova fatura, verifica se a assinatura já possui uma fatura com status `pendente`.
+  * Se já existir fatura pendente, reutiliza e sincroniza a fatura existente com `ensureInvoicePix`, eliminando completamente a geração de faturas repetidas a cada clique.
+  * Adicionado parâmetro opcional `options.forceNew` caso o administrador queira gerar uma cobrança avulsa extra intencionalmente.
+* **Limpeza e Higienização da Base de Dados**:
+  * Excluídas do banco de dados na VPS Oracle as 3 faturas extras duplicadas da Brasil Ltda (`FAT-2026-3CY7`, `FAT-2026-AH9K`, `FAT-2026-ZKGZ`).
+  * Mantida e consolidada apenas a fatura oficial `FAT-2026-GR3N` com QR Code e chave Copia e Cola ativos.
+* **Nova Função `deleteInvoice` & Gestão no Modal 360º (`SubscriptionDetailsModal.jsx`)**:
+  * Adicionado botão de lixeira para faturas pendentes permitindo a exclusão imediata com confirmação.
+
+## [1.32.0] - 2026-10-05
+
+### Corrigido e Aprimorado (Auto-recuperação, Resiliência e Contingência de PIX BR Code)
+* **Resolução do QR Code da Fatura `FAT-2026-GR3N` (Brasil Ltda)**:
+  * Sincronizada a fatura com o gateway PushinPay, gerando o QR Code dinâmico e a chave Copia e Cola oficiais no valor de R$ 500,00, persistidos no banco de dados da VPS Oracle.
+* **Gerador Nativo de PIX EMV BR Code Oficial (`src/utils/pixPayloadGenerator.js`)**:
+  * Implementado algoritmo oficial de codificação TLV e checksum CRC16 CCITT em estrita conformidade com o Banco Central do Brasil.
+  * Garante que faturas geradas durante instabilidade ou sem conexão com gateway externo recebam um código PIX 100% válido vinculado à chave PIX cadastrada (CNPJ).
+* **Serviço de Manutenção (`src/services/maintenanceService.js`)**:
+  * Nova função `ensureInvoicePix(invoiceId)`: verifica faturas existentes e, se estiverem sem código PIX, aciona a emissão no gateway ou gera a contingência BR Code automaticamente salvando no banco.
+  * Aprimorado `generateInvoiceForSubscription`: caso ocorra falha de conexão na emissão, aplica contingência imediata com BR Code evitando faturas órfãs sem QR Code.
+* **Modal de Pagamento PIX (`InvoicePixModal.jsx`)**:
+  * Detecção reativa de faturas sem código com disparo transparente de `ensureInvoicePix` em segundo plano, exibindo spinner de progresso "Gerando QR Code PIX oficial...".
+  * Adicionado botão de sincronização manual com feedback visual via toast notification.
+* **Listagem Administrativa & Portal do Assinante**:
+  * Ao clicar no botão "PIX" em `ManageMaintenanceSubscriptions.jsx`, o sistema agora reaproveita a fatura pendente ativa com garantia de código PIX em vez de gerar cobranças redundantes.
+  * No `ClientSubscriptionPortal.jsx`, adicionada auto-recuperação transparente ao expandir o painel "Pagar com PIX".
+
+## [1.31.0] - 2026-10-05
+
+### Adicionado (Vínculo e Exibição de Sites Atendidos nas Assinaturas e Faturas)
+* **Coluna `covered_websites` no Banco de Dados (VPS Oracle)**:
+  * Adicionada a coluna `covered_websites TEXT` nas tabelas `maintenance_subscriptions` e `maintenance_invoices` na VPS Oracle (`portfolio-db`).
+  * Schema cache do PostgREST recarregado e validado.
+* **Utilitário de Formatação (`src/utils/maintenanceFormatters.js`)**:
+  * Implementadas funções `parseCoveredWebsites`, `ensureUrlProtocol` e `extractDomain` para dividir listas de URLs separadas por vírgula ou quebra de linha e formatar visualmente domínios limpos.
+* **Formulário de Assinatura (`SubscriptionFormModal.jsx`)**:
+  * Adicionado campo "Sites & Aplicações Cobertos pela Manutenção" com pré-visualização reativa de badges/chips em tempo real das URLs digitadas.
+* **Fatura em PDF Executiva (`InvoicePdfModal.jsx`)**:
+  * Incorporado bloco de destaque corporativo "Aplicações & Websites Cobertos nesta Fatura" tanto no quadro de identificação do contratante quanto na discriminação analítica de serviços.
+* **Painel Administrativo & Detalhes 360º (`ManageMaintenanceSubscriptions.jsx` e `SubscriptionDetailsModal.jsx`)**:
+  * Exibição de badges de domínios atendidos nas linhas da tabela desktop e nos cards da visão mobile.
+  * Links diretos clicáveis no modal 360º de Detalhes com abertura em nova guia (`target="_blank"`).
+* **Portal do Assinante (`ClientSubscriptionPortal.jsx`)**:
+  * Apresentação dos sites e aplicações atendidos diretamente nos cards dos planos do cliente com atalhos de navegação.
+
 ## [1.30.0] - 2026-10-05
 
 ### Adicionado (Visualização, Pré-visualização e Emissão em PDF de Faturas de Manutenção)

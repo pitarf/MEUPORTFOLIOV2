@@ -24,7 +24,8 @@ import {
     FileText,
     ArrowRight,
     ExternalLink,
-    Pencil
+    Pencil,
+    Globe
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -49,7 +50,8 @@ import { useToast } from '@/components/ui/use-toast';
 import {
     fetchClientPortalData,
     createClientTicket,
-    updateClientProfile
+    updateClientProfile,
+    ensureInvoicePix
 } from '@/services/maintenanceService';
 import {
     formatCurrencyBRL,
@@ -58,7 +60,9 @@ import {
     maskPhone,
     getSubscriptionStatusMeta,
     getInvoiceStatusMeta,
-    getTicketStatusMeta
+    getTicketStatusMeta,
+    parseCoveredWebsites,
+    ensureUrlProtocol
 } from '@/utils/maintenanceFormatters';
 import InvoicePdfModal from '@/components/admin/maintenance/InvoicePdfModal';
 
@@ -353,6 +357,38 @@ const ClientSubscriptionPortal = () => {
         window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
     };
 
+    /**
+     * Alterna a exibicao do PIX da fatura, garantindo a emissao do QR Code caso necessario
+     */
+    const handleTogglePixInvoice = async (inv) => {
+        if (!inv) return;
+        if (selectedPixInvoice?.id === inv.id) {
+            setSelectedPixInvoice(null);
+            return;
+        }
+
+        // Se a fatura estiver sem codigo PIX, recupera automaticamente
+        if (!inv.pix_qr_code || inv.pix_qr_code.trim() === '') {
+            try {
+                const updated = await ensureInvoicePix(inv.id);
+                const resolved = updated || inv;
+                setSelectedPixInvoice(resolved);
+                setPortalData((prev) => {
+                    if (!prev) return prev;
+                    return {
+                        ...prev,
+                        pendingInvoices: (prev.pendingInvoices || []).map((p) => p.id === inv.id ? { ...p, ...resolved } : p)
+                    };
+                });
+            } catch (err) {
+                console.warn('Aviso ao sincronizar PIX no portal:', err.message);
+                setSelectedPixInvoice(inv);
+            }
+        } else {
+            setSelectedPixInvoice(inv);
+        }
+    };
+
     return (
         <>
             <Helmet>
@@ -607,6 +643,34 @@ const ClientSubscriptionPortal = () => {
                                                                 {sub.plan_description}
                                                             </p>
                                                         )}
+
+                                                        {sub.covered_websites && parseCoveredWebsites(sub.covered_websites).length > 0 && (
+                                                            <div className="mt-2.5 pt-2 border-t border-border/50 space-y-1">
+                                                                <span className="text-[11px] font-semibold text-primary flex items-center gap-1">
+                                                                    <Globe className="w-3 h-3" />
+                                                                    Sites Atendidos ({parseCoveredWebsites(sub.covered_websites).length}):
+                                                                </span>
+                                                                <div className="flex flex-wrap gap-1">
+                                                                    {parseCoveredWebsites(sub.covered_websites).map((siteUrl, sIdx) => {
+                                                                        const safeUrl = ensureUrlProtocol(siteUrl);
+                                                                        return (
+                                                                            <a
+                                                                                key={sIdx}
+                                                                                href={safeUrl}
+                                                                                target="_blank"
+                                                                                rel="noopener noreferrer"
+                                                                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-mono bg-primary/10 text-primary hover:bg-primary/20 transition-colors border border-primary/20"
+                                                                                title={`Acessar ${siteUrl}`}
+                                                                            >
+                                                                                <Globe className="w-2.5 h-2.5" />
+                                                                                {siteUrl}
+                                                                                <ExternalLink className="w-2.5 h-2.5 opacity-70" />
+                                                                            </a>
+                                                                        );
+                                                                    })}
+                                                                </div>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
 
@@ -702,7 +766,7 @@ const ClientSubscriptionPortal = () => {
 
                                                         <Button
                                                             type="button"
-                                                            onClick={() => setSelectedPixInvoice(isSelected ? null : inv)}
+                                                            onClick={() => handleTogglePixInvoice(inv)}
                                                             className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 flex items-center justify-center gap-1.5 shadow-sm text-xs"
                                                         >
                                                             <QrCode className="w-4 h-4" />

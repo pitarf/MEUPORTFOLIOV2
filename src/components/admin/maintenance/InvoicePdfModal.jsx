@@ -20,7 +20,8 @@ import {
     CheckCircle,
     Info,
     Layers,
-    Receipt
+    Receipt,
+    Globe
 } from 'lucide-react';
 import html2pdf from 'html2pdf.js';
 import { fetchPricingSettings } from '@/services/budgetService';
@@ -29,7 +30,9 @@ import {
     formatDateBR,
     maskCpfCnpj,
     maskPhone,
-    getInvoiceStatusMeta
+    getInvoiceStatusMeta,
+    parseCoveredWebsites,
+    extractDomain
 } from '@/utils/maintenanceFormatters';
 
 /**
@@ -119,6 +122,10 @@ const InvoicePdfModal = ({
 
     // Codigo da Fatura
     const invoiceCode = invoice.invoice_code || `FAT-${new Date().getFullYear()}-001`;
+
+    // Websites Cobertos pela Manutencao
+    const rawCoveredWebsites = invoice.covered_websites || subscription.covered_websites || '';
+    const coveredWebsitesList = parseCoveredWebsites(rawCoveredWebsites);
 
     // PIX dados
     const pixCode = invoice.pix_qr_code || '';
@@ -362,6 +369,21 @@ const InvoicePdfModal = ({
                                             <strong>Código do Contrato:</strong> {subscription.subscription_code}
                                         </p>
                                     )}
+
+                                    {coveredWebsitesList.length > 0 && (
+                                        <div className="pt-1 mt-1 border-t border-slate-200">
+                                            <span className="text-slate-700 font-semibold block text-[11px]">
+                                                Sites Cobertos ({coveredWebsitesList.length}):
+                                            </span>
+                                            <div className="flex flex-wrap gap-1 pt-0.5">
+                                                {coveredWebsitesList.map((site, sIdx) => (
+                                                    <span key={sIdx} className="text-blue-700 font-mono text-[10px] bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">
+                                                        {extractDomain(site)}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -392,6 +414,28 @@ const InvoicePdfModal = ({
                                                 <p className="text-slate-600 text-[11px] leading-relaxed">
                                                     {subscription.plan_description || 'Serviços de sustentação tecnológica, hospedagem e monitoramento contínuo da aplicação web.'}
                                                 </p>
+
+                                                {/* Destaque das Aplicacoes e Websites Cobertos */}
+                                                {coveredWebsitesList.length > 0 && (
+                                                    <div className="p-2.5 rounded-lg bg-blue-50/80 border border-blue-200/90 my-2 space-y-1">
+                                                        <div className="text-[11px] font-bold text-blue-900 uppercase tracking-wider flex items-center gap-1.5">
+                                                            <Globe className="w-3.5 h-3.5 text-blue-600" />
+                                                            Aplicações & Websites Cobertos nesta Fatura:
+                                                        </div>
+                                                        <div className="flex flex-wrap gap-1.5 pt-0.5">
+                                                            {coveredWebsitesList.map((siteUrl, sIdx) => (
+                                                                <span
+                                                                    key={sIdx}
+                                                                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-mono font-semibold bg-white text-blue-950 border border-blue-300 shadow-2xs"
+                                                                >
+                                                                    <Globe className="w-3 h-3 text-blue-600" />
+                                                                    {siteUrl}
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                )}
+
                                                 <ul className="text-[11px] text-slate-500 list-disc list-inside space-y-0.5 pt-1">
                                                     <li>Monitoramento e estabilidade do ambiente web</li>
                                                     <li>Correções preventivas, corretivas e ajustes de segurança</li>

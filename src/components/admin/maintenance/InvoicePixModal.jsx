@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Dialog,
     DialogContent,
@@ -25,9 +25,11 @@ import {
     CheckCircle2,
     RotateCcw,
     Loader2,
-    FileText
+    FileText,
+    RefreshCw
 } from 'lucide-react';
 import { generatePortalUrl } from '@/utils/whatsappMessages';
+import { ensureInvoicePix } from '@/services/maintenanceService';
 
 /**
  * Modal para exibicao e compartilhamento do QR Code PIX e chave Copia e Cola.
@@ -53,13 +55,78 @@ const InvoicePixModal = ({
     const [copied, setCopied] = useState(false);
     const [confirming, setConfirming] = useState(false);
     const [undoing, setUndoing] = useState(false);
+    const [localInvoice, setLocalInvoice] = useState(invoice);
+    const [loadingPix, setLoadingPix] = useState(false);
 
-    if (!invoice) return null;
+    // Sincroniza estado quando a prop invoice mudar
+    useEffect(() => {
+        setLocalInvoice(invoice);
+    }, [invoice]);
 
-    const subscription = invoice.subscription || {};
-    const pixCode = invoice.pix_qr_code || '';
-    const qrImageBase64 = invoice.pix_qr_code_base64;
-    const statusMeta = getInvoiceStatusMeta(invoice.status);
+    // Auto-recupera ou emite PIX automaticamente caso a fatura esteja pendente e sem codigo
+    useEffect(() => {
+        if (!isOpen || !localInvoice) return;
+
+        const needsPix = (!localInvoice.pix_qr_code || localInvoice.pix_qr_code.trim() === '' || localInvoice.pushinpay_id?.startsWith('err_fallback_')) && localInvoice.status !== 'cancelado';
+
+        if (needsPix && !loadingPix) {
+            let active = true;
+            const autoGenerate = async () => {
+                setLoadingPix(true);
+                try {
+                    const updated = await ensureInvoicePix(localInvoice.id);
+                    if (active && updated) {
+                        setLocalInvoice(updated);
+                        toast({
+                            title: 'PIX Gerado com Sucesso',
+                            description: 'O QR Code e a chave Copia e Cola foram preparados para esta fatura.'
+                        });
+                    }
+                } catch (err) {
+                    console.error('Falha ao auto-gerar PIX:', err);
+                } finally {
+                    if (active) setLoadingPix(false);
+                }
+            };
+            autoGenerate();
+            return () => { active = false; };
+        }
+    }, [isOpen, localInvoice?.id, localInvoice?.pix_qr_code]);
+
+    if (!invoice && !localInvoice) return null;
+
+    const activeInvoice = localInvoice || invoice;
+    const subscription = activeInvoice.subscription || {};
+    const pixCode = activeInvoice.pix_qr_code || '';
+    const qrImageBase64 = activeInvoice.pix_qr_code_base64;
+    const statusMeta = getInvoiceStatusMeta(activeInvoice.status);
+
+    /**
+     * Sincroniza ou regenera manualmente os dados do PIX
+     */
+    const handleManualRegeneratePix = async () => {
+        if (!activeInvoice) return;
+        setLoadingPix(true);
+        try {
+            const updated = await ensureInvoicePix(activeInvoice.id);
+            if (updated) {
+                setLocalInvoice(updated);
+                toast({
+                    title: 'PIX Sincronizado!',
+                    description: 'QR Code e chave Copia e Cola atualizados com sucesso.'
+                });
+            }
+        } catch (err) {
+            console.error('Erro ao sincronizar PIX:', err);
+            toast({
+                variant: 'destructive',
+                title: 'Erro ao gerar PIX',
+                description: err.message || 'Não foi possível emitir a cobrança.'
+            });
+        } finally {
+            setLoadingPix(false);
+        }
+    };
 
     /**
      * Copia o codigo Pix Copia e Cola para a area de transferencia do usuario
@@ -100,9 +167,9 @@ const InvoicePixModal = ({
 
         const clientFirstName = (subscription.client_name || 'Cliente').split(' ')[0];
         const planName = subscription.plan_title || 'Manutenção';
-        const formattedAmount = formatCurrencyBRL(invoice.amount);
-        const formattedDate = formatDateBR(invoice.due_date);
-        const invoiceCode = invoice.invoice_code || 'FAT-PIX';
+        const formattedAmount = formatCurrencyBRL(activeInvoice.amount);
+        const formattedDate = formatDateBR(activeInvoice.due_date);
+        const invoiceCode = activeInvoice.invoice_code || 'FAT-PIX';
 
         const portalUrl = generatePortalUrl(subscription.client_email || subscription.client_document);
 
@@ -121,10 +188,10 @@ const InvoicePixModal = ({
         if (!onConfirmPayment) return;
         setConfirming(true);
         try {
-            await onConfirmPayment(invoice.id);
+            await onConfirmPayment(activeInvoice.id);
             toast({
                 title: 'Pagamento confirmado!',
-                description: `Fatura ${invoice.invoice_code} liquidada com sucesso.`
+                description: `Fatura ${activeInvoice.invoice_code} liquidada com sucesso.`
             });
             onClose();
         } catch (err) {
@@ -138,10 +205,10 @@ const InvoicePixModal = ({
         if (!onUndoPayment) return;
         setUndoing(true);
         try {
-            await onUndoPayment(invoice.id);
+            await onUndoPayment(activeInvoice.id);
             toast({
                 title: 'Baixa desfeita!',
-                description: `Fatura ${invoice.invoice_code} reaberta e ciclo da assinatura restaurado.`
+                description: `Fatura ${activeInvoice.invoice_code} reaberta e ciclo da assinatura restaurado.`
             });
             onClose();
         } catch (err) {
@@ -164,8 +231,21 @@ const InvoicePixModal = ({
                             {statusMeta.label}
                         </span>
                     </div>
-                    <DialogDescription>
-                        Fatura <strong>{invoice.invoice_code}</strong> para {subscription.client_name || 'Cliente'}
+                    <DialogDescription className="flex items-center justify-between">
+                        <span>
+                            Fatura <strong>{activeInvoice.invoice_code}</strong> para {subscription.client_name || 'Cliente'}
+                        </span>
+                        {activeInvoice.status !== 'pago' && (
+                            <button
+                                type="button"
+                                onClick={handleManualRegeneratePix}
+                                disabled={loadingPix}
+                                title="Sincronizar QR Code PIX"
+                                className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors p-1 rounded hover:bg-muted"
+                            >
+                                <RefreshCw className={`w-3 h-3 ${loadingPix ? 'animate-spin text-emerald-500' : ''}`} />
+                            </button>
+                        )}
                     </DialogDescription>
                 </DialogHeader>
 
@@ -177,7 +257,7 @@ const InvoicePixModal = ({
                                 <DollarSign className="w-3.5 h-3.5 text-emerald-500" /> Valor da Fatura
                             </span>
                             <span className="text-lg font-bold text-foreground">
-                                {formatCurrencyBRL(invoice.amount)}
+                                {formatCurrencyBRL(activeInvoice.amount)}
                             </span>
                         </div>
                         <div>
@@ -185,14 +265,20 @@ const InvoicePixModal = ({
                                 <Calendar className="w-3.5 h-3.5 text-primary" /> Vencimento
                             </span>
                             <span className="text-lg font-bold text-foreground">
-                                {formatDateBR(invoice.due_date)}
+                                {formatDateBR(activeInvoice.due_date)}
                             </span>
                         </div>
                     </div>
 
                     {/* QR Code Container */}
-                    <div className="flex flex-col items-center justify-center p-4 rounded-xl border border-border/80 bg-white dark:bg-zinc-950">
-                        {qrImageBase64 ? (
+                    <div className="flex flex-col items-center justify-center p-4 rounded-xl border border-border/80 bg-white dark:bg-zinc-950 min-h-[260px] relative">
+                        {loadingPix ? (
+                            <div className="w-52 h-52 flex flex-col items-center justify-center text-primary text-center p-4">
+                                <Loader2 className="w-10 h-10 animate-spin mb-3 text-emerald-500" />
+                                <span className="text-xs font-semibold text-foreground">Gerando QR Code PIX oficial...</span>
+                                <span className="text-[11px] text-muted-foreground mt-1">Conectando aos servidores de pagamento</span>
+                            </div>
+                        ) : qrImageBase64 ? (
                             <img
                                 src={qrImageBase64.startsWith('data:') ? qrImageBase64 : `data:image/png;base64,${qrImageBase64}`}
                                 alt="QR Code PIX para pagamento"
@@ -208,6 +294,16 @@ const InvoicePixModal = ({
                             <div className="w-52 h-52 flex flex-col items-center justify-center text-muted-foreground text-center p-4 bg-muted/30 rounded-lg">
                                 <QrCode className="w-12 h-12 mb-2 opacity-50" />
                                 <span className="text-xs">QR Code não disponível para esta fatura</span>
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={handleManualRegeneratePix}
+                                    className="mt-3 text-xs gap-1.5"
+                                >
+                                    <RefreshCw className="w-3.5 h-3.5" />
+                                    Gerar Agora
+                                </Button>
                             </div>
                         )}
                         <span className="text-xs text-muted-foreground mt-2 text-center">
@@ -256,7 +352,7 @@ const InvoicePixModal = ({
                                 type="button"
                                 variant="outline"
                                 onClick={() => {
-                                    onOpenPdfModal(invoice);
+                                    onOpenPdfModal(activeInvoice);
                                 }}
                                 className="w-full border-primary/30 text-primary hover:bg-primary/10 font-semibold py-2.5 flex items-center justify-center gap-2 shadow-sm"
                             >
@@ -274,7 +370,7 @@ const InvoicePixModal = ({
                             Enviar PIX no WhatsApp
                         </Button>
 
-                        {invoice.status !== 'pago' && onConfirmPayment && (
+                        {activeInvoice.status !== 'pago' && onConfirmPayment && (
                             <Button
                                 type="button"
                                 variant="outline"
@@ -291,7 +387,7 @@ const InvoicePixModal = ({
                             </Button>
                         )}
 
-                        {invoice.status === 'pago' && onUndoPayment && (
+                        {activeInvoice.status === 'pago' && onUndoPayment && (
                             <Button
                                 type="button"
                                 variant="outline"

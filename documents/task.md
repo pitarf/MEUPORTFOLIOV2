@@ -2,6 +2,25 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Idempotência de Faturas Mensais e Prevenção de Duplicidades (`maintenanceService.js`, `SubscriptionDetailsModal.jsx`)**:
+  - Implementada regra de negócio fundamental: assinaturas recorrentes mantêm apenas uma fatura pendente ativa por ciclo. Cliques repetidos em "PIX" reutilizam e asseguram a fatura pendente existente, em vez de gerar cobranças redundantes.
+  - Criada e executada rotina de exclusão das 3 faturas duplicadas de teste da Brasil Ltda (`FAT-2026-3CY7`, `FAT-2026-AH9K`, `FAT-2026-ZKGZ`), preservando apenas a fatura oficial `FAT-2026-GR3N`.
+  - Criada a função `deleteInvoice` no `maintenanceService.js` e adicionado botão de lixeira no modal 360º de Detalhes (`SubscriptionDetailsModal.jsx`) para que o administrador possa excluir faturas pendentes quando desejar.
+  - Testado via script autônomo com múltiplas chamadas consecutivas, comprovando 100% de idempotência (`inv1.id === inv2.id`).
+- [x] **Auto-recuperação, Resiliência e Contingência com PIX BR Code Oficial (`pixPayloadGenerator.js`, `ensureInvoicePix`, `InvoicePixModal.jsx`)**:
+  - Identificada causa do aviso "QR Code não disponível": faturas geradas durante oscilação ou antes da sincronização de credenciais ficavam com valores nulos persistidos no banco.
+  - Sincronizada a fatura `FAT-2026-GR3N` (Brasil Ltda) no banco de dados com a PushinPay gerando QR Code oficial e código Copia e Cola válidos em nome de Rafael Gonçalves Pita no valor de R$ 500,00.
+  - Desenvolvido gerador nativo de PIX EMV BR Code oficial do Banco Central (`pixPayloadGenerator.js`) com cálculo de CRC16 CCITT, permitindo gerar chaves Copia e Cola e QR Code válidos em qualquer circunstância com a chave PIX padrão cadastrada (CNPJ).
+  - Implementada função `ensureInvoicePix` no `maintenanceService.js` para auto-recuperar faturas que estejam sem código PIX no banco.
+  - Atualizado `InvoicePixModal.jsx` com verificação reativa: caso a fatura abra sem código, dispara auto-geração imediata com indicador de progresso e botão de sincronização manual.
+  - Atualizado `ManageMaintenanceSubscriptions.jsx` no botão "PIX" para reutilizar a fatura pendente ativa com garantia de código PIX em vez de gerar faturas redundantes.
+  - Atualizado `ClientSubscriptionPortal.jsx` com auto-recuperação de PIX ao clicar em "Pagar com PIX".
+- [x] **Vínculo e Exibição de Sites e Aplicações Atendidos nas Assinaturas e Faturas (`maintenanceService.js`, `InvoicePdfModal.jsx`, `SubscriptionFormModal.jsx`, etc.)**:
+  - Criadas as colunas `covered_websites TEXT` nas tabelas `maintenance_subscriptions` e `maintenance_invoices` na VPS Oracle com cache do PostgREST atualizado.
+  - Criado utilitário `src/utils/maintenanceFormatters.js` com funções `parseCoveredWebsites`, `ensureUrlProtocol` e `extractDomain` para sanitização de URLs separadas por vírgula ou quebra de linha.
+  - Atualizado formulário de cadastro e edição de assinaturas (`SubscriptionFormModal.jsx`) com campo textual e preview dinâmico de chips dos sites detectados em tempo real.
+  - Atualizado o gerador de faturas em PDF (`InvoicePdfModal.jsx`) com bloco institucional em destaque listando todos os domínios atendidos, tanto no cabeçalho contratual quanto na discriminação dos serviços de manutenção.
+  - Integrada a visualização dos sites cobertos no modal de detalhes 360º (`SubscriptionDetailsModal.jsx`), na tabela e cards do painel administrativo (`ManageMaintenanceSubscriptions.jsx`) e no Portal do Assinante (`ClientSubscriptionPortal.jsx`) com links clicáveis diretamente para os sites atendidos.
 - [x] **Visualização, Pré-visualização e Emissão em PDF de Faturas de Manutenção (`InvoicePdfModal.jsx`)**:
   - Criado componente `InvoicePdfModal.jsx` estilizado na identidade visual executiva corporativa Rafael Pita Solutions em formato A4 (`html2pdf.js`).
   - Inclui dados completos do emissor, contratante, código `FAT-XXXX`, período de competência, discriminação detalhada dos serviços de sustentação tecnológica e hospedagem, e quadro de liquidação (QR Code PIX e chave Copia e Cola para faturas pendentes ou selo de quitação digital para faturas quitadas).

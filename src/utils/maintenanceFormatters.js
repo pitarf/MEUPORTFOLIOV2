@@ -214,3 +214,57 @@ export const getTicketStatusMeta = (status) => {
             };
     }
 };
+
+/**
+ * Converte string ou lista de websites cobertos em um array de URLs limpas.
+ * Suporta separacao por quebras de linha, virgulas ou ponto-e-virgula.
+ *
+ * @param {string|Array} raw Entrada de sites
+ * @returns {Array<string>} Lista de sites normalizados
+ */
+export const parseCoveredWebsites = (raw) => {
+    if (!raw) return [];
+    if (Array.isArray(raw)) {
+        return raw.map((s) => String(s).trim()).filter(Boolean);
+    }
+    if (typeof raw !== 'string') return [];
+
+    return raw
+        .split(/[\n,;]+/)
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0);
+};
+
+/**
+ * Garante que a URL possua protocolo (http ou https) para navegacao segura.
+ *
+ * @param {string} url URL bruta
+ * @returns {string} URL com https://
+ */
+export const ensureUrlProtocol = (url) => {
+    if (!url) return '';
+    const clean = url.trim();
+    if (/^https?:\/\//i.test(clean)) {
+        return clean;
+    }
+    return `https://${clean}`;
+};
+
+/**
+ * Extrai o dominio simplificado para exibicao compacta em badges.
+ * Exemplo: 'https://painel.meusite.com.br/dashboard' -> 'painel.meusite.com.br'
+ *
+ * @param {string} url URL completa
+ * @returns {string} Dominio limpo
+ */
+export const extractDomain = (url) => {
+    if (!url) return '';
+    try {
+        const full = ensureUrlProtocol(url);
+        const parsed = new URL(full);
+        return parsed.hostname || url.trim();
+    } catch {
+        return url.replace(/^https?:\/\//i, '').split('/')[0] || url.trim();
+    }
+};
+

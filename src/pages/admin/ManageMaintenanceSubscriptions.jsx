@@ -24,7 +24,8 @@ import {
     MessageCircle,
     Building2,
     Eye,
-    Loader2
+    Loader2,
+    Globe
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -58,6 +59,7 @@ import {
     fetchMaintenanceCategories,
     deleteSubscription,
     generateInvoiceForSubscription,
+    ensureInvoicePix,
     confirmManualPayment,
     undoManualPayment,
     fetchInvoices
@@ -68,7 +70,9 @@ import {
     maskCpfCnpj,
     maskPhone,
     getCleanWhatsappNumber,
-    getSubscriptionStatusMeta
+    getSubscriptionStatusMeta,
+    parseCoveredWebsites,
+    extractDomain
 } from '@/utils/maintenanceFormatters';
 
 import SubscriptionFormModal from '@/components/admin/maintenance/SubscriptionFormModal';
@@ -298,19 +302,32 @@ const ManageMaintenanceSubscriptions = () => {
     };
 
     /**
-     * Gera fatura do ciclo via PushinPay e abre o modal de visualizacao do QR Code
+     * Abre a fatura pendente da assinatura ou gera uma nova, garantindo QR Code PIX
      */
     const handleGeneratePixInvoice = async (subscription) => {
         setActionLoadingId(subscription.id);
         try {
-            const invoice = await generateInvoiceForSubscription(subscription.id);
-            toast({
-                title: 'Fatura PIX gerada!',
-                description: `Código: ${invoice.invoice_code} no valor de ${formatCurrencyBRL(invoice.amount)}.`
+            // 1. Verifica se ja existe fatura pendente para esta assinatura
+            const invoices = await fetchInvoices({
+                subscriptionId: subscription.id,
+                status: 'pendente'
             });
 
+            let targetInvoice = null;
+            if (invoices && invoices.length > 0) {
+                // Ja existe fatura pendente: garante que ela possua QR Code PIX ativo
+                targetInvoice = await ensureInvoicePix(invoices[0].id);
+            } else {
+                // Nao existe pendente: gera nova fatura para o ciclo atual
+                targetInvoice = await generateInvoiceForSubscription(subscription.id);
+                toast({
+                    title: 'Fatura PIX gerada!',
+                    description: `Código: ${targetInvoice.invoice_code} no valor de ${formatCurrencyBRL(targetInvoice.amount)}.`
+                });
+            }
+
             setCurrentInvoicePix({
-                ...invoice,
+                ...targetInvoice,
                 subscription
             });
             setPixModalOpen(true);
@@ -673,6 +690,21 @@ const ManageMaintenanceSubscriptions = () => {
                                             <div className="font-semibold text-foreground">
                                                 {sub.plan_title}
                                             </div>
+
+                                            {sub.covered_websites && parseCoveredWebsites(sub.covered_websites).length > 0 && (
+                                                <div className="flex flex-wrap gap-1 pt-1 pb-0.5">
+                                                    {parseCoveredWebsites(sub.covered_websites).map((site, idx) => (
+                                                        <span
+                                                            key={idx}
+                                                            className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20"
+                                                        >
+                                                            <Globe className="w-2.5 h-2.5" />
+                                                            {extractDomain(site)}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            )}
+
                                             <div className="flex items-center justify-between text-muted-foreground">
                                                 <span>Mensal: <strong>{formatCurrencyBRL(sub.current_price)}</strong></span>
                                                 <span>Vencimento: <strong>{formatDateBR(sub.next_due_date)}</strong> (Dia {sub.billing_day})</span>
@@ -834,6 +866,21 @@ const ManageMaintenanceSubscriptions = () => {
                                                         <span className="text-[11px] font-mono text-muted-foreground/80 mt-1 block">
                                                             {sub.subscription_code}
                                                         </span>
+
+                                                        {sub.covered_websites && parseCoveredWebsites(sub.covered_websites).length > 0 && (
+                                                            <div className="flex flex-wrap items-center gap-1 mt-1.5">
+                                                                {parseCoveredWebsites(sub.covered_websites).map((site, idx) => (
+                                                                    <span
+                                                                        key={idx}
+                                                                        className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20"
+                                                                        title={site}
+                                                                    >
+                                                                        <Globe className="w-2.5 h-2.5" />
+                                                                        {extractDomain(site)}
+                                                                    </span>
+                                                                ))}
+                                                            </div>
+                                                        )}
                                                     </td>
 
                                                     {/* Valor Mensal */}
