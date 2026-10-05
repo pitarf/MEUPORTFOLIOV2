@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { Lock, User, Eye, EyeOff } from 'lucide-react';
+import { Lock, User, Eye, EyeOff, ShieldCheck, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate, Navigate, Link } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 
 const ClientArea = () => {
@@ -134,6 +134,26 @@ const ClientArea = () => {
                                     Clique aqui
                                 </button>
                             </p>
+                        </div>
+
+                        {/* Banner de Atalho para o Portal do Assinante Sem Senha */}
+                        <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700/70 text-left">
+                            <div className="p-4 rounded-xl bg-gradient-to-br from-blue-500/10 to-indigo-500/10 border border-blue-500/20 space-y-2">
+                                <div className="flex items-center gap-2 text-sm font-bold text-foreground">
+                                    <ShieldCheck className="w-4 h-4 text-primary" />
+                                    <span>Cliente de Manutenção Mensal?</span>
+                                </div>
+                                <p className="text-xs text-muted-foreground leading-relaxed">
+                                    Acesse o Portal do Assinante sem precisar de senha para emitir QR Code PIX, consultar faturas e abrir chamados técnicos.
+                                </p>
+                                <Link
+                                    to="/minha-assinatura"
+                                    className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline pt-1"
+                                >
+                                    Acessar Portal do Assinante
+                                    <ArrowRight className="w-3.5 h-3.5" />
+                                </Link>
+                            </div>
                         </div>
                     </motion.div>
                 </div>

@@ -117,3 +117,7 @@ dist
 
 # Playwright audit screenshots
 tests/audit-results/
+tools/*.png
+tools/*.json
+tools/consultas-captures/
+

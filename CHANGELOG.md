@@ -2,6 +2,125 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.29.0] - 2026-10-04
+
+### Adicionado (Gestão de Assinaturas de Manutenção, Gateway PushinPay e Portal do Cliente Sem Senha)
+* **Novo Módulo Administrativo: Gestão de Assinaturas de Manutenção (`/admin/assinaturas`)**:
+  * Adicionado no menu lateral do painel administrativo (`AdminLayout.jsx`) com ícone de recorrência e indicadores em tempo real.
+  * Cockpit com 4 KPIs executivos: Total de Assinaturas Ativas, Receita Recorrente Mensal (MRR em R$), Vencimentos nos Próximos 7 Dias e Assinaturas Atrasadas/Inadimplentes.
+  * Ferramentas de busca por cliente, empresa, documento, e-mail, plano ou código, com filtros por status ('ativo', 'pendente', 'atrasado', 'pausado', 'cancelado') e categorias de serviço.
+  * Cadastro completo de assinaturas com validação de dados, cálculo automático do vencimento a partir do dia fixo (1 a 31) e máscaras para CPF/CNPJ e WhatsApp.
+  * Edição flexível de valores com reajuste imediato ou agendamento para data futura, com botão de 1 clique "Avisar no WhatsApp" contendo mensagem pré-formatada.
+  * Emissão de faturas individuais com integração PIX via PushinPay, exibição de QR Code e código Copia e Cola, além de envio direto no WhatsApp.
+  * Baixa manual de pagamentos para quitação de faturas recebidas fora do gateway, com avanço automático da data de vencimento em 1 mês e efetivação de reajustes programados.
+  * Modal de detalhes com histórico completo de faturas geradas, status de liquidação e chamados de suporte abertos pelo cliente.
+* **Portal Público do Assinante Sem Senha (`/minha-assinatura` e `/area-cliente-assinaturas`)**:
+  * Acesso prático e seguro para o cliente informando apenas E-mail ou CPF/CNPJ, sem necessidade de memorizar senhas.
+  * Onboarding Inteligente: O administrador pode cadastrar a assinatura informando apenas o e-mail. Na primeira visita ao portal, um banner e modal amigáveis convidam o cliente a registrar seu CPF/CNPJ, atualizando automaticamente os contratos e faturas.
+  * Saudação personalizada com os dados cadastrais do cliente e sua respectiva empresa.
+  * Cards informativos de cada plano contratado com status, escopo incluso, dia de vencimento e valores.
+  * Painel de faturas em aberto com destaque para liquidação imediata via PIX, modal com QR Code, botão de cópia com feedback instantâneo e comprovante de pagamento.
+  * Histórico de faturas quitadas com emissão de recibo digital simples.
+  * Abertura de chamados de suporte com protocolo automático (`TICK-2026-XXXX`), seleção do plano vinculado e canal direto para o WhatsApp do suporte.
+* **Gateway Interno PushinPay (`src/services/pushinPayService.js`)**:
+  * Emissão de cobranças PIX dinâmicas (`POST /api/pix/cashIn`) com conversão rigorosa para centavos inteiros sem ponto decimal.
+  * Modo de simulação e contingência ativado automaticamente quando o token da API não estiver preenchido, garantindo que o sistema continue operacional e utilize a chave PIX padrão.
+  * Consulta ativa de status (`GET /api/transactions/{id}`) para polling e confirmação de pagamento.
+* **Esquema Relacional PostgreSQL e PostgREST na VPS**:
+  * Migração idempotente executada com sucesso na VPS Oracle (`portfolio-db`):
+    * `maintenance_categories`: categorias segmentadas por tipo de serviço com cores e ícones.
+    * `maintenance_subscriptions`: contratos recorrentes com ciclo de cobrança e datas de reajuste.
+    * `maintenance_invoices`: faturas com código único, status de liquidação e dados do PIX.
+    * `maintenance_settings`: configurações de credenciais, chave PIX padrão e templates.
+    * `support_tickets`: colunas `client_document` e `subscription_id` adicionadas para rastreamento de chamados.
+  * Grants completos de leitura e escrita concedidos para as roles `anon` e `authenticator` do PostgREST.
+* **Reorganização Estrutural da Barra Lateral Administrativa (`AdminLayout.jsx`)**:
+  * Substituída a listagem plana desordenada por uma arquitetura hierárquica dividida em seções lógicas e subníveis expansíveis (acordeão com animação suave via Framer Motion).
+  * Categorias agrupadas: **Vendas & Clientes** (Orçamentos e Assinaturas), **Prospecção Ativa** (Radar Google Maps e Leads Advogados), **Conteúdo & Portfólio** (Projetos, Serviços, Depoimentos e Fotografia), **Atendimento & Suporte** (Mensagens e Chamados) e **Sistema & Ajustes** (Configurações, Storage e Minha Conta).
+  * Sincronização inteligente de rota: o grupo correspondente à página atual é expandido automaticamente ao carregar ou navegar, com indicador ativo discreto e linhas guias verticais.
+  * Modo colapsado refinado com ícones e rótulos contextuais, além de responsividade mobile otimizada.
+
+## [1.28.0] - 2026-10-02
+
+### Adicionado (NEXUSSTORE, StartOFF, Consultas Brasil e VORIXA AI no Portfólio via Playwright e Supabase)
+* **Novo Projeto Cadastrado: VORIXA AI / VORTIXIA (`projects` Supabase / ID 62)**:
+  * Projeto: **VORIXA AI (VORTIXIA): Estúdio de Criação Audiovisual com Modelos Virtuais e Vídeos Virais**.
+  * Categoria: **Desenvolvimento de Sites** (`category_id: 3`).
+  * Cliente: **VORIXA AI / VORTIXIA Studio**.
+  * Stack Tecnológica: Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4, PostgreSQL & Prisma ORM, Motores fal.ai e Kling 3.0, Editor de Fluxo (@xyflow/react), Gateway VorexPay (PIX Imediato), Sincronia Labial (Sync Audio LipSync) e Catálogo de Master Prompts.
+  * URL de Produção: `https://vortixia.com.br/`.
+  * Capturas em Alta Definição (10 Mídias Integradas): Home Widescreen 16:9 ("Crie seu modelo virtual ultra-realista"), Estúdio Neural de Criação Cinemática, Apresentadora Virtual com Enquadramento de TV, Produto Comercial de Luxo Perfume Aura Eclipse, Ensaio Editorial de Alta Moda Futurista, Hypercar Cyberpunk em Metrópole Noturna, Street Dancer Urbano com Efeitos de Partículas, Planos Comerciais e Créditos, Tela de Login e versão Mobile iPhone 14.
+  * Capa na Galeria: Imagem principal widescreen integrada como primeira imagem da galeria com visualizador de zoom em tela cheia.
+  * Economia e Desempenho: Redução de até 90% nos custos de gravação e produção audiovisual com geração de vídeo e voz sincronizada em português em menos de 2 minutos.
+* **Novo Projeto Cadastrado: Consultas Brasil (`projects` Supabase / ID 61)**:
+  * Projeto: **Consultas Brasil: Plataforma Inteligente de Dados Cadastrais com PIX e SEO Avançado**.
+  * Categoria: **Desenvolvimento de Sites** (`category_id: 3`).
+  * Cliente: **Consultas Brasil Data Intelligence**.
+  * Stack Tecnológica: Next.js 16 (App Router + Turbopack), React 19, TypeScript, Tailwind CSS v4, PostgreSQL & Prisma ORM, Gateway PushinPay (PIX com resposta menor que 100ms), DirectData API V2 & V3 e SEO Semântico Avançado com Google Search Console.
+  * URL de Produção: `https://consultasbrasil.net/`.
+  * Capturas em Alta Definição (8 Imagens Integradas): Home Widescreen 16:9 com Consulta de CPF, CNPJ, Telefone, Placa e Nome, Seção de Módulos e Tipos de Consultas Online, Fluxo em 3 Passos de Como Fazer uma Consulta, Tabela de Preços e Recarga Instantânea via PIX sem mensalidade, FAQ Estruturado com Accordion, Tela de Login com Autenticação e versões Mobile iPhone 14 (Home e Módulos).
+  * Capa na Galeria: Imagem principal widescreen integrada como primeira imagem da galeria com visualizador de zoom em tela cheia.
+  * Arquitetura de Conversão & SEO: Otimização semântica completa de H1, entidades cadastrais, dados estruturados e cache inteligente de consultas repetidas sem bitributação.
+* **Novo Projeto Cadastrado: StartOFF (`projects` Supabase / ID 60)**:
+  * Projeto: **StartOFF: Sistema Corporativo de Gestão de Férias com IA e Concorrência de Turnos**.
+  * Categoria: **Desenvolvimento de Sites** (`category_id: 3`).
+  * Cliente: **StartOFF / Transpetro Petrobras**.
+  * Stack Tecnológica: React 19, Vite, Tailwind CSS, Node.js & Express 5, Sequelize ORM, PostgreSQL, Algoritmo de IA Heurística para Datas e Controle de Concorrência de Turnos e Papéis.
+  * URL de Produção: `https://startoff.rafaelpitaoficial.com.br/`.
+  * Capturas em Alta Definição (7 Imagens Integradas): Dashboard Principal com Cockpit de Saldo e Calendário Widescreen 16:9, Tela de Solicitação Inteligente com Motor de IA sugerindo datas com maior atratividade e emendas de feriados, Calendário da Equipe com visão mensal e marcações de colaboradores, Painel de Gestão da Equipe com aprovação e reprovação de solicitações pendentes, Módulo de Bloqueio de Períodos Críticos e Recessos, Tela de Login Corporativo e versão Mobile iPhone 14.
+  * Capa na Galeria: Imagem principal widescreen integrada como primeira imagem da galeria com visualizador de zoom em tela cheia.
+  * Inteligência de Concorrência: Eliminação total de conflitos de escala entre colaboradores do mesmo papel (motoristas, operadores e líderes de turno) em turnos sobrepostos.
+* **Novo Projeto Cadastrado: NEXUSSTORE (`projects` Supabase / ID 59)**:
+  * Projeto: **NEXUSSTORE: E-commerce de Assinaturas Digitais com Fulfillment Automático**.
+  * Categoria: **Desenvolvimento de Sites** (`category_id: 3`).
+  * Cliente: **NEXUSSTORE**.
+  * Stack Tecnológica: Next.js 14 (App Router), React 18, Tailwind CSS, Prisma ORM, PostgreSQL na VPS, Gateway PushinPay (PIX Imediato), Fulfillment Multi-Fornecedor API (SellAuth e Premium Supermarket) e Brevo E-mails Transacionais.
+  * URL de Produção: `https://nexussstore.vercel.app/`.
+  * Capturas em Alta Definição (7 Imagens Integradas): Hero Widescreen 16:9 de Assinaturas e IAs com destaques e promoções, Vitrine de Produtos e Softwares (Canva, ChatGPT, Prime, Netflix), Diferenciais Competitivos e Segurança do Cliente, Landing Page de Alta Conversão Canva Pro, Painel do Cliente e Resgate Instantâneo (/acesso), e versões mobile iPhone 14 (Hero e Vitrine).
+  * Capa na Galeria: Imagem principal widescreen integrada como primeira imagem da galeria completa com visualizador de zoom em tela cheia.
+  * Automação de Compra e Ativação: Checkout via PIX com webhook em tempo real e entrega automática em menos de 45 segundos pós-pagamento.
+
+## [1.27.0] - 2026-10-01
+
+### Adicionado (Vantage App, Jorge Santos Advocacia, Advogado Online Aracaju & BCont no Portfólio via Playwright)
+* **Novo Projeto Cadastrado: Preço Certo by BCONT (`projects` Supabase / ID 58)**:
+  * Projeto: **Preço Certo by BCONT: Precificação com Inteligência Fiscal, Comercial e de Compras**.
+  * Categoria: **Desenvolvimento de Sites** (`category_id: 3`).
+  * Cliente: **BCONT (Thiago Souza & Equipe)**.
+  * Stack Tecnológica: React 19, TypeScript, TanStack Start, Tailwind CSS, Supabase (PostgreSQL + RLS), Inteligência Fiscal Condicional, Simulação da Reforma Tributária (IBS/CBS), Gateway Asaas API v3 (PIX + Cartão de Crédito) e Auditoria Raio-X em Lote via Excel.
+  * URL de Produção: `https://precocerto.bcontdigital.com.br/`.
+  * Capturas em Alta Definição: Hero Widescreen 16:9, Diagnóstico Estratégico (O que é o Preço Certo vs Erros de Planilhas), Público-Alvo Segmentado (Comércio, Distribuidoras, Indústrias e Serviços), Jornada de Formação de Preço em 4 Passos, Planos Comerciais com Alternador Mensal/Anual (Start, Gestão e Pro), FAQ Interativo com Accordion, Tela de Login Corporativo e versões mobile iPhone 14 (Hero e Planos).
+  * Capa na Galeria: Imagem principal widescreen integrada como primeira imagem da galeria com visualizador de zoom em tela cheia.
+* **Novo Projeto Cadastrado: BCont Contábil OS (`projects` Supabase / ID 57)**:
+  * Projeto: **BCont Contábil OS: Inteligência, Gestão e Conciliação Contábil**.
+  * Categoria: **Desenvolvimento de Sites** (`category_id: 3`).
+  * Cliente: **BCont Contabilidade Digital (Paula & Equipe)**.
+  * Stack Tecnológica: React 19, TypeScript, TanStack Start, Tailwind CSS, Supabase (PostgreSQL + RLS), Google Gemini AI, Conciliação Bancária OFX Inteligente (1:1 e N:1 por somatório), Matriz de Obrigações Tributárias e DRE Gerencial em Tempo Real.
+  * URL de Produção: `https://painel.bcontdigital.com.br/`.
+  * Capturas em Alta Definição (16 Imagens Integradas): Painel Operacional ao vivo (Capa Widescreen), Home Landing Page Hero Widescreen, DRE Gerencial em tempo real com gráfico e indicadores verticais, Motor de Conciliação Bancária com somatório N:1 e tolerâncias, Análise Fiscal de Certidões CNDs com IA Gemini e 21 débitos identificados, Produtividade Operacional por Colaborador com taxa de conclusão, Matriz dinâmica de Regras de Obrigações Tributárias, Importação de Plano de Contas em lote, Cadastro de Empresas por Setor/Responsável, Disparo de E-mails com Domínio Próprio, Seção de Recursos e Arquitetura Modular da Home, Fluxo de IA com Supervisão Humana, Destaque da Conciliação Bancária, Tela de Autenticação Segura com RLS e versões mobile iPhone 14 (Hero e Cockpit).
+  * Capa na Galeria: Imagem principal widescreen (Painel Operacional) integrada como primeira imagem da galeria completa com visualizador de zoom em tela cheia.
+* **Novo Projeto Cadastrado: Advogado Online Aracaju (`projects` Supabase / ID 56)**:
+  * Projeto: **Advogado Online Aracaju: Landing Page de Alta Conversão**.
+  * Categoria: **Desenvolvimento de Sites** (`category_id: 3`).
+  * Cliente: **Jorge Santos Advocacia (Aracaju/SE)**.
+  * Stack Tecnológica: Landing Page de Alta Conversão, SEO Jurídico Local (Aracaju/SE), Copywriting Persuasivo, FAQ Interativo, Design Mobile-First e WhatsApp Direct.
+  * URL de Produção: `https://advogadoonlinearacaju.com.br`.
+  * Capturas em Alta Definição: Hero Widescreen 16:9, Áreas de Atuação Jurídica, Diferenciais e Como Funciona o Atendimento, FAQ com Accordion e versões mobile iPhone 14.
+* **Novo Projeto Cadastrado: Jorge Santos Advocacia (`projects` Supabase / ID 55)**:
+  * Projeto: **Jorge Santos Advocacia: Portal Jurídico Especializado**.
+  * Categoria: **Desenvolvimento de Sites** (`category_id: 3`).
+  * Cliente: **Dr. Jorge Santos (Aracaju/SE)**.
+  * Stack Tecnológica: WordPress, Elementor Pro, SEO Jurídico Local (Aracaju/SE), Landing Pages Especializadas (Trabalhista, Divórcio, Inventário, Empresarial e Imobiliário), Cache de Performance e WhatsApp Direct.
+  * URL de Produção: `https://advogadoemaracaju.com.br`.
+  * Capturas em Alta Definição: Home Hero Widescreen 16:9, O Escritório, Áreas de Atuação, Landing Page Trabalhista, Divórcio, Inventário e versões mobile iPhone 14.
+* **Novo Projeto Cadastrado: Vantage App (`projects` Supabase / ID 54)**:
+  * Projeto: **Vantage App: Plataforma SaaS de Fidelidade Gastronômica**.
+  * Categoria: **Desenvolvimento de Sites** (`category_id: 3`).
+  * Cliente: **Vantage App (Thiago & Mafer)**.
+  * Stack Tecnológica: Next.js 16 (App Router), React 19, Tailwind CSS, Prisma ORM, PostgreSQL, PWA Mobile-First, QR Code Dinâmico Criptografado HMAC-SHA256, Bento Grid e Analytics em Tempo Real.
+  * URL de Produção: `https://vantageapp.rafaelpitaoficial.com.br`.
+  * Capturas em Alta Definição: Hero Widescreen 16:9 autenticado, marketplace Explorar restaurantes com notas e selos de fidelidade, Minha Conta / Segurança do cliente VIP, Dashboard Master com DRE, Portal B2B com QR Code diário e Carteira de Fidelidade Apple Wallet.
+
 ## [1.26.9] - 2026-10-01
 
 ### Aprimorado (Roteiro Cadenciado, Recuperação em 2 Etapas & Cenários de Resposta no Radar Google Maps)

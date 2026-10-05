@@ -34,6 +34,8 @@ import PhotographyPortfolio from '@/pages/PhotographyPortfolio';
 import Profile from '@/pages/Profile';
 import StorageOptimization from '@/pages/StorageOptimization';
 import ManageBudgets from '@/pages/admin/ManageBudgets';
+import ManageMaintenanceSubscriptions from '@/pages/admin/ManageMaintenanceSubscriptions';
+import ClientSubscriptionPortal from '@/pages/ClientSubscriptionPortal';
 import ManageLegalProspects from '@/pages/admin/ManageLegalProspects';
 import RadarGoogleMaps from '@/pages/admin/RadarGoogleMaps';
 import LegalLandingPage from '@/pages/legal/LegalLandingPage';
@@ -79,6 +81,8 @@ function App() {
                                 <Route path="/portfolio/:categorySlug/:projectSlug" element={<ProjectPage />} />
                                 <Route path="/area-clientes" element={<ClientArea />} />
                                 <Route path="/assinaturas" element={<Subscriptions />} />
+                                <Route path="/minha-assinatura" element={<ClientSubscriptionPortal />} />
+                                <Route path="/area-cliente-assinaturas" element={<ClientSubscriptionPortal />} />
                                 <Route path="/portfolio-fotografia" element={<PhotographyLanding />} />
                                 <Route path="/portfolio-fotografia/galeria" element={<PhotographyPortfolio />} />
                                 {isPhotoSubdomain && <Route path="/galeria" element={<PhotographyPortfolio />} />}
@@ -107,6 +111,7 @@ function App() {
                                 <Route path="/dashboard" element={<Dashboard />} />
                                 <Route path="/admin/profile" element={<Profile />} />
                                 <Route path="/admin/orcamentos" element={<ProtectedRoute adminOnly={true}><ManageBudgets /></ProtectedRoute>} />
+                                <Route path="/admin/assinaturas" element={<ProtectedRoute adminOnly={true}><ManageMaintenanceSubscriptions /></ProtectedRoute>} />
                                 <Route path="/admin/radar-google-maps" element={<ProtectedRoute adminOnly={true}><RadarGoogleMaps /></ProtectedRoute>} />
                                 <Route path="/admin/prospeccao-advogados" element={<ProtectedRoute adminOnly={true}><ManageLegalProspects /></ProtectedRoute>} />
                                 <Route path="/admin/portfolio" element={<ProtectedRoute adminOnly={true}><ManagePortfolio /></ProtectedRoute>} />

@@ -135,9 +135,10 @@ const ProjectPage = () => {
     };
     const mainImageAspectRatio = project.main_image_aspect_ratio || '16:9';
 
-    const allGalleryImages = project.main_image_url 
-        ? [project.main_image_url, ...(project.gallery_urls || [])] 
-        : (project.gallery_urls || []);
+    const allGalleryImages = Array.from(new Set([
+        ...(project.main_image_url ? [project.main_image_url] : []),
+        ...(project.gallery_urls || [])
+    ]));
 
     return (
         <>
@@ -283,20 +284,20 @@ const ProjectPage = () => {
                     </motion.div>
                 )}
 
-                {project.gallery_urls && project.gallery_urls.length > 0 && (
+                {allGalleryImages && allGalleryImages.length > 0 && (
                     <motion.div variants={sectionVariants} initial="hidden" animate="visible" className="mt-20">
                         <h2 className="text-4xl font-bold mb-8 text-center gradient-text">Galeria de Imagens</h2>
                         <div className={cn("grid gap-4",
                             project.gallery_aspect_ratio === '16:9' ? "grid-cols-1 md:grid-cols-2" : "grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
                         )}>
-                            {project.gallery_urls.map((url, index) => (
+                            {allGalleryImages.map((url, index) => (
                                 <motion.div
                                     key={index}
                                     variants={itemVariants}
                                     className={cn("relative group overflow-hidden rounded-lg cursor-pointer",
                                         aspectRatioClasses[project.gallery_aspect_ratio || '16:9'] || 'aspect-[4/5]'
                                     )}
-                                    onClick={() => openModal(project.main_image_url ? index + 1 : index)}
+                                    onClick={() => openModal(index)}
                                 >
                                     <img
                                         src={url}

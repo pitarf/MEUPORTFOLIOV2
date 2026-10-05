@@ -6,7 +6,7 @@ Este documento detalha o funcionamento técnico da infraestrutura de SEO Dinâmi
 
 ## 1. Arquitetura de Temas (Claro e Escuro)
 
-O projeto foi reestruturado para suportar a alternância entre o **Tema Claro (Light Mode)** — padrão comercial corporativo focado em legibilidade e conversão — e o **Tema Escuro (Dark Mode)**, preservando a imersão visual original.
+O projeto foi reestruturado para suportar a alternância entre o **Tema Claro (Light Mode)**  -  padrão comercial corporativo focado em legibilidade e conversão  -  e o **Tema Escuro (Dark Mode)**, preservando a imersão visual original.
 
 ### 1.1 Contexto de Tema (`ThemeContext.jsx`)
 O [ThemeContext.jsx](file:///C:/Git/React/MeuPortfolio%20v2/src/contexts/ThemeContext.jsx) gerencia o estado global de temas. Ele é inicializado por padrão como `'light'`. Suas atribuições principais são:
@@ -562,3 +562,43 @@ Para superar a taxa de rejeição por desconfiança de links externos e romper o
    - Cada card de prospecto conta com botões rápidos numerados ("1. Abertura", "2. Oportunidade", "3. Demo") e o atalho de "Recuperar" no cabeçalho.
    - Cards de demonstrações ativas da nuvem contam com os 4 botões diretos ("1. Abertura", "2. Oportunidade", "3. Demo", "4. Resgate").
 
+### 13.23 Esteira Automatizada de Captura Visual com Playwright e Cadastro de Projetos (`tools/capture_authenticated.cjs`)
+Para alimentar o portfólio corporativo com projetos recém-desenvolvidos com fidelidade visual máxima:
+1. **Script Autônomo com Playwright Chromium**:
+   - Inicializa instância headless do Playwright, navegando pelas rotas da aplicação em produção tanto em modo anônimo quanto em sessões autenticadas.
+   - Captura em alta definição em proporção 16:9 widescreen para a capa principal Desktop (`1920x1080`) e proporção mobile nativa (`414x896` com escala retina x2).
+   - Realiza stream de bytes diretamente para o bucket do Firebase Storage (`project-images/`), obtendo URLs públicas com token de acesso persistente.
+2. **Projetos Integrados com Sucesso**:
+   - **Vantage App (ID 54)**: Plataforma SaaS de fidelidade gastronômica com capturas autenticadas da Home Hero, marketplace Explorar, Minha Conta, Dashboard Master com DRE, Portal B2B do Restaurante com QR Code diário e Carteira de Fidelidade Apple Wallet.
+   - **Jorge Santos Advocacia (ID 55)**: Portal jurídico especializado em Aracaju/SE com páginas dedicadas para Direito Trabalhista, Divórcio, Inventário, O Escritório e Áreas de Atuação.
+   - **Advogado Online Aracaju (ID 56)**: Landing page de alta conversão para captação direta de clientes jurídicos em Aracaju com copy persuasiva, seções de áreas de atuação, diferenciais, FAQ e WhatsApp Direct.
+   - **Preço Certo by BCONT (ID 58)**: Plataforma SaaS de engenharia de preços e inteligência tributária em `https://precocerto.bcontdigital.com.br/`. Apresenta galeria com 9 telas em alta definição cobrindo o Hero Widescreen com proposta de valor, diagnóstico estratégico contra os erros clássicos de planilhas de markup, público-alvo segmentado por segmento, jornada da formação de preços em 4 passos, planos comerciais com alternador dinâmico de assinatura, FAQ interativo, tela de login corporativo e versões mobile iPhone 14.
+    - **BCont Contábil OS (ID 57)**: Plataforma SaaS de inteligência contábil e conciliação em `https://painel.bcontdigital.com.br/`. Apresenta galeria unificada com 16 imagens em alta resolução combinando telas reais de dentro do sistema (Cockpit do Painel Operacional ao vivo como capa, DRE Gerencial em tempo real, conciliação bancária N:1, leitura de CNDs com IA Google Gemini, produtividade por colaborador, matriz de regras tributárias, importação de plano de contas e governança com RLS) e seções de arquitetura da Home comercial (recursos modulares, fluxo explicativo da IA com supervisão humana, destaque da conciliação bancária, tela de login e versões mobile iPhone 14).
+    - **NEXUSSTORE (ID 59)**: E-commerce de assinaturas digitais, licenças e créditos de IA em `https://nexussstore.vercel.app/`. Galeria com 7 capturas em alta resolução cobrindo o Hero Widescreen 16:9 de Assinaturas e IAs, vitrine interativa de produtos e softwares (Canva, ChatGPT, Prime, Netflix), diferenciais competitivos da plataforma, landing page de alta conversão do Canva Pro (`/canva`), painel do cliente para resgate instantâneo de credenciais (`/acesso`) e versões mobile iPhone 14 (Hero e Vitrine). Conta com stack Next.js 14, Tailwind CSS, Prisma ORM, PostgreSQL na VPS, motor de checkout PIX via PushinPay, fulfillment multi-fornecedor com fallback inteligente via API (SellAuth e Premium Supermarket) e entregas automáticas por e-mail com o Brevo.
+    - **StartOFF (ID 60)**: Sistema corporativo de gestão de férias e escalas para operações marítimas e industriais da Transpetro Petrobras em `https://startoff.rafaelpitaoficial.com.br/`. Galeria com 7 capturas em alta resolução cobrindo o Dashboard Principal Widescreen 16:9 com saldo e calendário, tela de solicitação com recomendador inteligente de IA que avalia atratividade e emendas com feriados, calendário corporativo mensal com colaboradores alocados, painel de gestão com aprovação de demandas pendentes, tela de bloqueio de períodos críticos, tela de login corporativo e versão mobile iPhone 14. Conta com stack React 19, Vite, Tailwind CSS, Node.js, Express 5, Sequelize ORM e PostgreSQL, eliminando sobreposição de funções essenciais (motoristas, operadores e líderes de turno).
+    - **Consultas Brasil (ID 61)**: Plataforma SaaS de inteligência cadastral e background check em `https://consultasbrasil.net/`. Galeria com 8 capturas em alta resolução cobrindo a Home Widescreen 16:9 com busca de CPF, CNPJ, telefone, placa e nome, grade de módulos e modalidades com preços transparentes, jornada em 3 passos de como realizar consultas, tabela de recargas pré-pagas via PIX sem mensalidade, perguntas frequentes com accordion, tela de login corporativo e versões mobile iPhone 14 (Home e Módulos). Desenvolvida em Next.js 16 (App Router + Turbopack), React 19, TypeScript, Tailwind CSS v4, PostgreSQL e Prisma ORM, equipada com gateway PushinPay com confirmação em menos de 100ms e arquitetura semântica avançada de SEO.
+### 13.24 Módulo de Gestão de Assinaturas de Manutenção & Gateway PushinPay (`ManageMaintenanceSubscriptions.jsx`, `ClientSubscriptionPortal.jsx`, `pushinPayService.js`, `maintenanceService.js`)
+Para gerenciar contratos contínuos de clientes, faturamento recorrente via PIX e atendimento técnico:
+1. **Modelagem de Dados e Esquema Relacional no PostgreSQL (`portfolio-db` na VPS)**:
+   - Migração `14_create_maintenance_subscriptions_and_invoices.sql` executada via SSH no PostgreSQL 15 da VPS.
+   - Tabelas criadas:
+     - `maintenance_categories`: categorias com nomes únicos, cores e ícones (`Manutenção Web & Hospedagem`, `Suporte Técnico & Infraestrutura`, etc.).
+     - `maintenance_subscriptions`: contratos recorrentes com `subscription_code` único (`SUB-2026-XXXX`), `client_name`, `client_document` higienizado (somente dígitos), `client_email`, `client_phone`, `billing_day` (1 a 31), `current_price`, `next_price` com vigência programada e `next_due_date`.
+     - `maintenance_invoices`: faturas com `invoice_code` único (`FAT-2026-XXXX`), valor em centavos convertido para BRL, status de liquidação, `pushinpay_id`, `pix_qr_code` e `pix_qr_code_base64`.
+     - `maintenance_settings`: credenciais da PushinPay, chave PIX padrão e templates de mensagens.
+     - `support_tickets`: colunas `client_document` e `subscription_id` adicionadas para rastreamento de chamados técnicos.
+   - Grants de permissão completos aplicados para as roles `anon` e `authenticator` do PostgREST.
+2. **Integração com o Gateway PushinPay (`src/services/pushinPayService.js`)**:
+   - Emissão de cobrança via endpoint oficial `POST /api/pix/cashIn` com conversão obrigatória em centavos inteiros (`Math.round(valor * 100)`).
+   - Modo de simulação e contingência ativado automaticamente na ausência de token, mantendo o sistema em funcionamento e gerando cobranças com a chave Pix padrão de fallback.
+   - Consulta e polling de transações via `GET /api/transactions/{id}`.
+3. **Módulo Administrativo (`/admin/assinaturas`)**:
+   - Painel com 4 KPIs: Total de Assinaturas Ativas, MRR (Receita Recorrente Mensal), Vencimentos em 7 Dias e Atrasadas.
+   - Modais modulares para criação/edição de assinaturas, configuração de credenciais, reajuste de valores com aviso no WhatsApp, visualização de faturas com PIX Copia e Cola e histórico detalhado.
+   - Baixa manual de pagamentos que avança o vencimento para o mês subsequente e efetiva reajustes agendados.
+4. **Portal do Assinante Sem Senha (`/minha-assinatura`)**:
+   - Acesso ágil por E-mail ou CPF/CNPJ com persistência em localStorage.
+   - Visualização de planos contratados, faturas pendentes com botão "Pagar com PIX" (código Copia e Cola e QR Code) e histórico de faturas pagas com recibo.
+   - Abertura de chamados de suporte técnico com geração de protocolo (`TICK-2026-XXXX`) e canal direto para o WhatsApp de suporte.
+5. **Automação de Mensagens para WhatsApp (`src/utils/whatsappMessages.js`)**:
+   - Geradores de links formatados com sanitização de números (DDI 55) para avisos de reajuste de valor, cobrança de fatura PIX e abertura de chamados.

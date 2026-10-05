@@ -1,7 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { Check, Star, Zap, Crown } from 'lucide-react';
+import { Check, Star, Zap, Crown, ShieldCheck, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
 
@@ -119,6 +120,32 @@ const Subscriptions = () => {
                             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
                                 Economize tempo e dinheiro com nossos planos recorrentes. Soluções flexíveis para suas necessidades contínuas.
                             </p>
+
+                            {/* Banner do Portal do Assinante */}
+                            <div className="mt-8 inline-block max-w-2xl mx-auto">
+                                <div className="p-4 sm:p-5 rounded-2xl bg-card/80 border border-primary/30 backdrop-blur shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4 text-left">
+                                    <div className="flex items-start gap-3">
+                                        <div className="p-2.5 rounded-xl bg-primary/10 text-primary flex-shrink-0 mt-0.5">
+                                            <ShieldCheck className="w-5 h-5" />
+                                        </div>
+                                        <div>
+                                            <h3 className="font-bold text-sm text-foreground">
+                                                Já é nosso cliente de Manutenção?
+                                            </h3>
+                                            <p className="text-xs text-muted-foreground mt-0.5">
+                                                Acesse o Portal do Assinante sem senha para pagar faturas com PIX, obter recibos e abrir chamados.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <Link
+                                        to="/minha-assinatura"
+                                        className="w-full sm:w-auto flex-shrink-0 px-4 py-2 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-sm"
+                                    >
+                                        Acessar Portal
+                                        <ArrowRight className="w-3.5 h-3.5" />
+                                    </Link>
+                                </div>
+                            </div>
                         </motion.div>
                     </div>
                 </section>

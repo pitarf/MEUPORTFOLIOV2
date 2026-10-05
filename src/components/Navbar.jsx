@@ -3,7 +3,7 @@ import { useSiteConfig } from '@/contexts/SiteConfigContext';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Zap, ChevronDown, User, Ticket, FileText, Sun, Moon } from 'lucide-react';
+import { Menu, X, Zap, ChevronDown, User, Ticket, FileText, Sun, Moon, ShieldCheck } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
@@ -75,6 +75,7 @@ const Navbar = () => {
     ];
 
     const clientNavItems = [
+        { name: t('nav_subscriptions', 'Minhas Assinaturas'), path: '/minha-assinatura', icon: <ShieldCheck className="w-4 h-4 mr-2 text-emerald-500" /> },
         { name: t('nav_login', 'Login / Projetos'), path: '/area-clientes', icon: <User className="w-4 h-4 mr-2" /> },
         { name: t('nav_track_ticket', 'Rastrear Chamado'), path: '/track-ticket', icon: <Ticket className="w-4 h-4 mr-2" /> },
     ];

@@ -2,7 +2,62 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
-## CONCLUÍDO (DONE)
+- [x] **Reorganização e Arquitetura da Barra Lateral Administrativa (`AdminLayout.jsx`)**:
+  - Implementado sistema de navegação hierárquica em categorias lógicas com acordeão expansível animado via Framer Motion.
+  - Agrupadas as 14 rotas em 5 blocos coesos: Comercial & Recorrência, Prospecção Ativa, Gestão de Conteúdo, Atendimento e Sistema & Ajustes.
+  - Sincronização automática com a URL ativa, abrindo o respectivo grupo e mantendo guias visuais verticais elegantes.
+- [x] **Módulo de Assinaturas de Manutenção, Gateway PushinPay e Portal do Cliente Sem Senha (`ManageMaintenanceSubscriptions.jsx`, `ClientSubscriptionPortal.jsx`, `pushinPayService.js`, `maintenanceService.js`)**:
+  - Implementado painel administrativo de gestão de assinaturas recorrentes com KPIs de MRR, assinaturas ativas, vencimentos e inadimplência.
+  - Criado esquema relacional na VPS Oracle com migração SQL (`maintenance_categories`, `maintenance_subscriptions`, `maintenance_invoices`, `maintenance_settings` e `support_tickets`).
+  - Desenvolvida integração com o gateway PushinPay para geração de cobranças PIX dinâmicas em centavos inteiros com QR Code base64 e código Copia e Cola, com modo de contingência e chave Pix padrão.
+  - Implementado recurso de edição de valor da assinatura com reajuste imediato ou agendamento para data futura, acompanhado de botão de 1 clique "Avisar no WhatsApp" com texto formatado.
+  - Criado o Portal Público do Assinante sem senha em `/minha-assinatura`, permitindo acesso com E-mail ou CPF/CNPJ para quitação de faturas PIX em aberto, histórico com recibos e abertura de chamados técnicos vinculados ao contrato.
+  - Bateria de testes automatizados com 44 testes 100% aprovados e verificação estrita de zero caracteres de travessão.
+- [x] **Inclusão do Projeto VORIXA AI (VORTIXIA) no Portfólio via Playwright (Supabase `projects` / ID 62)**:
+  - Estúdio SaaS de Criação Audiovisual com IA Generativa, Modelos Virtuais e LipSync cadastrado no banco de dados Supabase na categoria de Desenvolvimento de Sites (`category_id: 3`).
+  - Script autônomo com Playwright Chromium para navegação e captura de telas em alta resolução em `https://vortixia.com.br/` (Desktop 16:9 e Mobile iPhone 14) executado com sucesso.
+  - Upload automático de 10 mídias de alta fidelidade para o Firebase Storage cobrindo Home Widescreen 16:9, Estúdio Neural de Criação Cinemática, Apresentadora Virtual com Enquadramento de TV, Produto Comercial Perfume Aura Eclipse, Ensaio Editorial de Alta Moda Futurista, Hypercar Cyberpunk, Street Dancer com Efeitos de Partículas, Planos Comerciais e Créditos, Tela de Login e versão Mobile iPhone 14, com capa adicionada à galeria.
+  - Dados cadastrados: cliente (VORIXA AI / VORTIXIA Studio), stack tecnológica (Next.js 16 App Router, React 19, TypeScript, Tailwind CSS v4, PostgreSQL com Prisma ORM, Motores fal.ai e Kling 3.0, Editor de Fluxo @xyflow/react, Gateway VorexPay e Sync Audio LipSync), desafio, solução, resultados e link de produção `https://vortixia.com.br/`.
+- [x] **Inclusão do Projeto Consultas Brasil no Portfólio via Playwright (Supabase `projects` / ID 61)**:
+  - Plataforma SaaS de Inteligência Cadastral e Background Check cadastrada no banco de dados Supabase na categoria de Desenvolvimento de Sites (`category_id: 3`).
+  - Script autônomo com Playwright Chromium para navegação e captura de telas em alta resolução em `https://consultasbrasil.net/` (Desktop 16:9 e Mobile iPhone 14) executado com sucesso.
+  - Upload automático de 8 capturas para o Firebase Storage cobrindo Home Widescreen 16:9 com busca por CPF, CNPJ, Telefone, Placa e Nome, Seção de Módulos e Tipos de Consultas, Fluxo de Como Funciona em 3 Passos, Tabela de Preços e Recarga Instantânea via PIX sem mensalidade, FAQ Estruturado com Accordion, Tela de Login com Autenticação e versões Mobile iPhone 14 (Home e Módulos), com capa adicionada à galeria.
+  - Dados cadastrados: cliente (Consultas Brasil Data Intelligence), stack tecnológica (Next.js 16 App Router com Turbopack, React 19, TypeScript, Tailwind CSS v4, PostgreSQL com Prisma ORM, Gateway PushinPay com PIX abaixo de 100ms, DirectData API V2 e V3, e SEO Semântico Avançado com Google Search Console), desafio, solução, resultados e link de produção `https://consultasbrasil.net/`.
+- [x] **Inclusão do Projeto StartOFF no Portfólio via Playwright (Supabase `projects` / ID 60)**:
+  - Sistema Corporativo de Gestão de Férias e Escalas com IA e regras da Transpetro Petrobras cadastrado no banco de dados Supabase na categoria de Desenvolvimento de Sites (`category_id: 3`).
+  - Script autônomo com Playwright Chromium para navegação e captura de telas em alta resolução com massa de dados rica (Desktop 16:9 e Mobile iPhone 14) executado com sucesso.
+  - Upload automático de 7 capturas para o Firebase Storage cobrindo Dashboard Principal Widescreen 16:9, Tela de Solicitação Inteligente com Motor de IA sugerindo datas com maior atratividade e emendas de feriados, Calendário da Equipe com visão mensal e marcações de colaboradores, Painel de Gestão da Equipe com aprovação e reprovação de solicitações pendentes, Módulo de Bloqueio de Períodos Críticos e Recessos, Tela de Login Corporativo e versão Mobile iPhone 14, com capa adicionada à galeria.
+  - Dados cadastrados: cliente (StartOFF / Transpetro Petrobras), stack tecnológica (React 19, Vite, Tailwind CSS, Node.js & Express 5, Sequelize ORM, PostgreSQL, Algoritmo de IA Heurística para Datas e Controle de Concorrência de Turnos e Papéis), desafio, solução, resultados e link de produção `https://startoff.rafaelpitaoficial.com.br/`.
+- [x] **Inclusão do Projeto NEXUSSTORE no Portfólio via Playwright (Supabase `projects` / ID 59)**:
+  - E-commerce de Assinaturas Digitais e Inteligência Artificial cadastrado no banco de dados Supabase na categoria de Desenvolvimento de Sites (`category_id: 3`).
+  - Script autônomo com Playwright Chromium para navegação e captura de telas em alta resolução em `https://nexussstore.vercel.app/` (Desktop 16:9 e Mobile iPhone 14) executado com sucesso.
+  - Upload automático de 7 capturas para o Firebase Storage cobrindo Hero Widescreen 16:9 de Assinaturas e IAs, Vitrine de Produtos e Softwares, Diferenciais Competitivos, Landing Page de Alta Conversão Canva Pro, Painel do Cliente e Resgate Instantâneo (/acesso), e versões mobile iPhone 14 (Hero e Vitrine), com capa adicionada à galeria.
+  - Dados cadastrados: cliente (NEXUSSTORE), stack tecnológica (Next.js 14 App Router, React 18, Tailwind CSS, Prisma ORM, PostgreSQL na VPS, Gateway PushinPay PIX, Fulfillment Multi-Fornecedor API e Brevo Transacional), desafio, solução, resultados e link de produção `https://nexussstore.vercel.app/`.
+- [x] **Inclusão do Projeto Preço Certo by BCONT no Portfólio via Playwright (Supabase `projects` / ID 58)**:
+  - Plataforma SaaS de Engenharia de Preços e Inteligência Fiscal cadastrada no banco de dados Supabase na categoria de Desenvolvimento de Sites (`category_id: 3`).
+  - Script autônomo com Playwright Chromium para navegação e captura de telas em alta resolução em `https://precocerto.bcontdigital.com.br/` (Desktop 16:9 e Mobile iPhone 14) executado com sucesso.
+  - Upload automático de 9 capturas para o Firebase Storage cobrindo Hero Widescreen, Diagnóstico Estratégico, Público-Alvo Segmentado, Jornada de Formação de Preço em 4 Passos, Planos Comerciais com Alternador Mensal/Anual, FAQ Interativo, Tela de Login Corporativo e versões mobile iPhone 14 (Hero e Planos), com capa adicionada à galeria.
+  - Dados cadastrados: cliente (BCONT: Thiago Souza & Equipe), stack tecnológica (React 19, TypeScript, TanStack Start, Tailwind CSS, Supabase PostgreSQL com RLS, Inteligência Fiscal Condicional, Simulação da Reforma Tributária, Gateway Asaas v3), desafio, solução, resultados e link de produção `https://precocerto.bcontdigital.com.br/`.
+- [x] **Inclusão do Projeto BCont Contábil OS no Portfólio via Playwright (Supabase `projects` / ID 57)**:
+  - Sistema Operacional Contábil SaaS cadastrado no banco de dados Supabase na categoria de Desenvolvimento de Sites (`category_id: 3`).
+  - Upload automático de 16 capturas em alta resolução para o Firebase Storage unindo telas internas do sistema e seções conceituais da Home: Painel Operacional ao vivo (Capa Widescreen), Home Landing Page Widescreen, DRE Gerencial analítica, Motor de Conciliação Bancária com somatório N:1, Leitura de CNDs com IA Gemini, Produtividade Operacional por Colaborador, Matriz de Obrigações Tributárias, Plano de Contas em Lote, Cadastro de Empresas, Disparo de E-mails com Domínio Próprio, Módulos por Setor da Home, Fluxo de IA com Supervisão Humana, Destaque da Conciliação, Tela de Autenticação Segura com RLS e versões mobile iPhone 14 (Hero e Cockpit).
+  - Dados cadastrados: cliente (BCont Contabilidade Digital: Paula & Equipe), stack tecnológica (React 19, TypeScript, TanStack Start, Tailwind CSS, Supabase PostgreSQL com RLS, Google Gemini AI, Conciliação OFX Inteligente, DRE Gerencial), desafio, solução, resultados e link de produção `https://painel.bcontdigital.com.br/`.
+- [x] **Inclusão do Projeto Advogado Online Aracaju no Portfólio via Playwright (Supabase `projects` / ID 56)**:
+  - Landing Page de Alta Conversão cadastrada no banco de dados Supabase na categoria de Desenvolvimento de Sites (`category_id: 3`).
+  - Script autônomo com Playwright Chromium para navegação e captura de telas em alta resolução (Desktop 16:9 e Mobile iPhone 14) executado com sucesso.
+  - Upload automático de 6 capturas para o Firebase Storage cobrindo Hero Widescreen, Áreas de Atuação Jurídica, Diferenciais de Atendimento, FAQ Interativo e versões mobile iPhone 14.
+  - Dados cadastrados: cliente (Jorge Santos Advocacia - Aracaju/SE), stack tecnológica (Landing Page, SEO Jurídico Local, Copywriting Persuasivo, WhatsApp Direct), desafio, solução, resultados e link de produção `https://advogadoonlinearacaju.com.br`.
+- [x] **Inclusão do Projeto Jorge Santos Advocacia no Portfólio via Playwright (Supabase `projects` / ID 55)**:
+  - Portal Jurídico Especializado cadastrado no banco de dados Supabase na categoria de Desenvolvimento de Sites (`category_id: 3`).
+  - Script autônomo com Playwright Chromium para navegação e captura de telas em alta resolução (Desktop 16:9 e Mobile iPhone 14) executado com sucesso.
+  - Upload automático de 8 capturas para o Firebase Storage cobrindo a Home Hero Widescreen, O Escritório, Áreas de Atuação, Landing Page Trabalhista, Divórcio, Inventário e versões mobile iPhone 14.
+  - Dados cadastrados: cliente (Dr. Jorge Santos - Aracaju/SE), stack tecnológica (WordPress, Elementor Pro, SEO Jurídico Local, WhatsApp Direct), desafio, solução, resultados e link de produção `https://advogadoemaracaju.com.br`.
+- [x] **Inclusão do Vantage App no Portfólio via Automação Playwright (`tools/capture_and_upload.cjs`, Supabase `projects`)**:
+  - Plataforma SaaS de Fidelidade Gastronômica cadastrada com sucesso no banco de dados Supabase (`projects` / ID 54) na categoria de Desenvolvimento de Sites (`category_id: 3`).
+  - Script autônomo com Playwright Chromium para captura de telas em alta resolução (Desktop 16:9 e Mobile iPhone 14) executado com sucesso.
+  - Upload automático de 8 telas para o Firebase Storage (`project-images/`) cobrindo capa principal (Hero), marketplace de estabelecimentos, página de restaurante, carteira de fidelidade tipo Apple Wallet, planos B2B, painel administrativo e interface mobile PWA.
+  - Dados completos preenchidos: cliente (Thiago & Mafer), stack tecnológica (Next.js 16, React 19, Tailwind CSS, Prisma, PostgreSQL, PWA, QR Code HMAC-SHA256), desafio, solução, resultados e link de produção ativo `https://vantageapp.rafaelpitaoficial.com.br`.
+  - Build do Vite executado e 100% aprovado com 51 projetos indexados no sitemap (código 0).
 - [x] **Roteiro Cadenciado, Recuperação em 2 Etapas & Nova Aba de Respostas Salvas no Radar Google Maps (`googleMapsProspectService.js`, `RadarGoogleMaps.jsx`)**:
   - Criada nova aba "Banco de Respostas & Scripts Salvos" no painel com 7 modelos completos formatados (Abertura, Oportunidade, Demonstração R$ 300, Resgate Canal Certo, Resgate Pós-Retorno, Resposta para Contato Indicado e Saída Elegante para Declínios).
   - Modal de abordagem expandido com 8 abas diretas e botões de reação do cliente para disparos e cópias rápidas.
@@ -103,7 +158,7 @@ Roadmap de acompanhamento para a reestruturação visual de alta conversão, com
   - **Nome**: Exibido no topo, logotipo da navbar, headline do Hero, seção Sobre Nós, formulário de diagnóstico/protocolo e rodapé.
   - **Endereço**: Exibido na TopBar utilitária e no rodapé conforme os dados extraídos do Google Maps ou cidade/estado.
   - **WhatsApp**: Todos os botões de ação ("Agendar Consulta", "Fale no WhatsApp", botão flutuante e envio de diagnóstico) direcionam para a API oficial do WhatsApp com o número do advogado.
-  - **Instagram**: Regra "se tiver achado exibe, senão deixa em branco" aplicada à risca — quando não encontrado, o campo é mantido vazio e os ícones de Instagram são omitidos da barra superior e do rodapé.
+  - **Instagram**: Regra "se tiver achado exibe, senão deixa em branco" aplicada à risca  -  quando não encontrado, o campo é mantido vazio e os ícones de Instagram são omitidos da barra superior e do rodapé.
   - **Sincronização de Slugs**: Botão "Demo" no Radar Google Maps sincronizado com o link gerado na mensagem de proposta via WhatsApp.
   - Build do Vite executado e rotas validadas com sucesso com código HTTP 200.
 - [x] **Radar Google Maps de Prospecção & Disparo de Propostas de R$ 300 (`RadarGoogleMaps.jsx`, `googleMapsProspectService.js`, `AdminLayout.jsx`, `src/App.jsx`)**:

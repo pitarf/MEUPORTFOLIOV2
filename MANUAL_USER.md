@@ -174,7 +174,7 @@ Para garantir que seus novos trabalhos artísticos de fotografia sejam catalogad
 
 ## 12. Gestão de Orçamentos, Calculadora de HH com IA, Vendas e Conversão em Portfólio
 
-Para resolver suas maiores dores na emissão de propostas — **não saber como precificar com segurança** e **dificuldade em negociar/vender** —, criamos um painel comercial completo integrado ao seu site.
+Para resolver suas maiores dores na emissão de propostas  -  **não saber como precificar com segurança** e **dificuldade em negociar/vender**  - , criamos um painel comercial completo integrado ao seu site.
 
 ### 12.1 Como Acessar o Painel
 1. Entre na área administrativa do seu site.
@@ -462,7 +462,7 @@ Cada escritório encontrado na lista exibe a nota de avaliação no Google, o te
 2. A proposta contém a cópia exata recomendada:
    > *"Oi, [Nome do Advogado], tudo bem? Me chamo Rafael.*
    > 
-   > *Vi aqui no Google Maps que você tem uma boa avaliação ([Nota]★), porém ainda não tem um site — tentei pesquisar e não consegui localizar o seu site.*
+   > *Vi aqui no Google Maps que você tem uma boa avaliação ([Nota]★), porém ainda não tem um site  -  tentei pesquisar e não consegui localizar o seu site.*
    > 
    > *Gostaria de dizer que eu desenvolvi um modelo exclusivo aqui para o seu escritório para você ver como ficaria: [Link da Demonstração]*
    > 
@@ -482,7 +482,7 @@ Ao clicar no botão **Demo** ou quando o advogado abre o link recebido no WhatsA
 1. **Nome do Advogado / Escritório**: Injetado automaticamente na barra do topo, no logotipo da navbar, na foto principal do Hero, na seção "Sobre Nós" e no rodapé.
 2. **Endereço do Google Maps**: O endereço comercial capturado no Google Maps aparece na barra de utilidades e no rodapé do site dele.
 3. **WhatsApp Real**: Todos os botões ("Agendar Consulta", "Fale no WhatsApp", botão flutuante no canto e ferramenta de diagnóstico) direcionam direto para o WhatsApp oficial dele.
-4. **Instagram Inteligente**: Se o Instagram do advogado foi localizado, ele ganha o link direto; se **não foi encontrado, fica em branco** — os ícones de Instagram somem automaticamente do topo e do rodapé para garantir um layout 100% limpo, sem links quebrados nem perfis fictícios!
+4. **Instagram Inteligente**: Se o Instagram do advogado foi localizado, ele ganha o link direto; se **não foi encontrado, fica em branco**  -  os ícones de Instagram somem automaticamente do topo e do rodapé para garantir um layout 100% limpo, sem links quebrados nem perfis fictícios!
 5. **Endereço Interativo com Google Maps**: Ao clicar no endereço exibido no topo ou no rodapé do site, o Google Maps abre diretamente na localização oficial e precisa cadastrada.
 6. **Depoimentos Contextualizados**: Os depoimentos da página adaptam automaticamente o nome do advogado, a cidade real dele e histórias de sucesso focadas na especialidade do escritório (Trabalhista, Consumidor, Família ou Geral).
 
@@ -595,5 +595,176 @@ Para que os advogados realmente respondam suas mensagens no WhatsApp e você nã
    * Na seção de Demonstrações Ativas na Nuvem, você conta com os 4 botões numerados ("1. Abertura", "2. Oportunidade", "3. Demo", "4. Resgate"). Basta clicar para abrir o WhatsApp com a mensagem pronta de resgate!
    * Clicando em "Ver Roteiro" ou "Textos", você abre o modal completo com 8 abas diretas para ler, personalizar e disparar com facilidade.
 
+### 19.13 Novos Projetos de Elite no Portfólio (Vantage App e Capturas com Playwright)
+Seu portfólio agora conta com o projeto **Vantage App: Plataforma SaaS de Fidelidade Gastronômica**, integrado com padrão visual de elite:
+1. **Destaque na Categoria Desenvolvimento de Sites**:
+   * O projeto ocupa posição nobre no portfólio corporativo, apresentando a solução completa desenvolvida para restaurantes e clientes gastronômicos.
+   * Descrição executiva, desafios do projeto, soluções arquiteturais (Next.js 16, React 19, PWA, QR Code dinâmico anti-fraude) e resultados alcançados.
+2. **Capturas em Alta Definição (Desktop e Mobile)**:
+   * O sistema capturou automaticamente todas as telas principais em resolução máxima (Hero Widescreen 16:9, marketplace, carteira de fidelidade tipo Apple Wallet, página de restaurante, planos B2B de assinatura e painel de controle administrativo).
+   * Todas as imagens são hospedadas no Firebase Storage e carregam instantaneamente para os visitantes.
+3. **Link Direto para o Sistema Online**:
+   * Os visitantes e potenciais clientes podem clicar no botão "Ver Projeto Online" para testar diretamente a plataforma no ar em `https://vantageapp.rafaelpitaoficial.com.br`.
 
+### 19.14 Portal Jurídico Especializado no Portfólio (Jorge Santos Advocacia)
+Seu portfólio agora conta com o projeto **Jorge Santos Advocacia: Portal Jurídico Especializado**, representando autoridade máxima em Direito para Sergipe:
+1. **Autoridade em Direito & Landing Pages Especializadas**:
+   * Apresenta o portal institucional completo e páginas segmentadas de alta conversão para Direito Trabalhista, Divórcio, Inventário, Empresarial e Imobiliário em Aracaju.
+   * Solução construída em WordPress e Elementor Pro com foco em SEO local e integração imediata de contato via WhatsApp.
+2. **Capturas em Alta Definição (Desktop e Mobile)**:
+   * Imagens capturadas em 16:9 Widescreen e em smartphone iPhone 14, exibindo a apresentação do escritório, equipe jurídica e páginas temáticas com selo ético da OAB.
+3. **Link Direto para o Site Oficial**:
+   * Visitantes podem navegar no portal real no ar em https://advogadoemaracaju.com.br.
 
+### 19.15 Landing Page de Alta Conversão no Portfólio (Advogado Online Aracaju)
+Seu portfólio agora conta com o projeto **Advogado Online Aracaju: Landing Page de Alta Conversão**, demonstrando excelência em captação de clientes jurídicos:
+1. **Foco Comercial & Copywriting Persuasivo**:
+   * Apresenta uma página de aterrissagem ultra-rápida, com arquitetura enxuta voltada para geração de conversas qualificadas no WhatsApp.
+   * Seções claras de áreas de atuação, diferenciais da advocacia preventiva, fluxo de atendimento e FAQ estruturado.
+2. **Capturas em Alta Resolução (Desktop e Mobile)**:
+   * Imagens capturadas em 16:9 Widescreen e em smartphone iPhone 14, exibindo a clareza da proposta de valor, contraste visual executivo e chamadas estratégicas para ação.
+3. **Link Direto para a Landing Page Online**:
+   * Visitantes podem testar a página no ar em https://advogadoonlinearacaju.com.br.
+
+### 19.16 Sistema Operacional de Gestão e Conciliação Contábil (BCont Contábil OS)
+Seu portfólio agora conta com o projeto **BCont Contábil OS: Inteligência, Gestão e Conciliação Contábil**, representando automação e inteligência artificial de ponta para escritórios contábeis:
+1. **Soluções Operacionais & Conciliação com IA**:
+   * Apresenta o sistema SaaS completo desenvolvido para a operação contábil (`https://painel.bcontdigital.com.br/`), integrando cockpit de tarefas por setor com proteção RLS no banco de dados, matriz tributária, conciliação bancária inteligente OFX (matching 1:1 e somatório N:1) e auditoria de CNDs com Google Gemini.
+   * Desenvolvida em React 19, TypeScript, TanStack Start e Tailwind CSS com design corporativo e exportação pronta para os sistemas SCI e Domínio.
+2. **Capa Integrada Diretamente na Galeria de Fotos**:
+   * A imagem de capa widescreen principal (Painel Operacional ao Vivo) faz parte da galeria de fotos do projeto como primeira imagem, permitindo que o visitante clique e veja a capa em tela cheia com zoom junto de todas as outras 15 capturas.
+3. **Galeria Completa com 16 Capturas em Alta Resolução**:
+   * O projeto conta com 16 imagens integradas:
+     * **Painel Operacional ao Vivo (Capa Principal)**: Visão executiva completa do cockpit com tarefas pendentes, 58 empresas ativas, 49 obrigações a entregar, certidões com pendência e performance financeira da competência.
+     * **Home Landing Page Hero Widescreen**: Apresentação visual da proposta de valor comercial da plataforma.
+     * **Demonstrativo de Resultado do Exercício (DRE)**: Análise analítica com receitas brutas, deduções, margem líquida, carga tributária efetiva e evolução gráfica de faturamento.
+     * **Motor de Conciliação Bancária N:1**: Algoritmo de inteligência cruzando extratos com somatórios de múltiplos pagamentos com percentual de confiança e tolerância.
+     * **Análise de Certidões CNDs com IA Gemini**: Leitura automatizada de débitos federais da Receita Federal com extração de 21 apontamentos tributários e situação fiscal.
+     * **Produtividade Operacional por Colaborador**: Métricas apuradas com taxa global de conclusão, demandas em aberto e ranking por setor.
+     * **Matriz de Obrigações Tributárias**: Modal de configuração de periodicidade, regimes tributários e atividades econômicas (Comércio, Indústria, Serviço).
+     * **Importação de Plano de Contas em Lote**: Interface de mapeamento de colunas e importação inteligente de arquivos contábeis do Domínio e SCI.
+     * **Cadastro e Governança de Empresas**: Formulário corporativo com segmentação por setor responsável e vínculo de colaboradores com RLS.
+     * **Disparo de E-mails com Domínio Próprio**: Autenticação e confirmação de envios com assinatura digital oficial do escritório.
+     * **Recursos & Arquitetura Modular da Home**: Detalhamento dos módulos operacionais, fiscais e contábeis.
+     * **Fluxo de IA com Supervisão Humana**: Seção explicativa com rigor ético e controle do contador.
+     * **Destaque da Conciliação na Home**: Visão macro do motor de conciliação 1:1 e somatório N:1.
+     * **Tela de Login & Autenticação Segura**: Portal de acesso restrito com segurança PostgreSQL e RLS.
+     * **Mobile Hero & Cockpit Preview (iPhone 14 Retina)**: Versões do sistema adaptadas para smartphones.
+4. **Link Direto para o Sistema Online**:
+   * Visitantes e clientes podem explorar a plataforma oficial em pleno funcionamento em https://painel.bcontdigital.com.br/.
+
+### 19.17 Plataforma de Engenharia de Preços e Margem (Preço Certo by BCONT)
+Seu portfólio agora conta com o projeto **Preço Certo by BCONT: Precificação com Inteligência Fiscal, Comercial e de Compras**, trazendo uma solução completa para gestão de margem e precificação estratégica:
+1. **Engenharia de Preços & Inteligência Fiscal**:
+   * Apresenta o software SaaS desenvolvido em parceria com a BCONT Contabilidade Digital (`https://precocerto.bcontdigital.com.br/`).
+   * Substitui planilhas comuns por motor de markup inverso, inteligência fiscal condicional (Simples Nacional por RBT12, Lucro Presumido e Lucro Real não cumulativo), central de compras para determinação do custo teto com fornecedores e simulação da Reforma Tributária (IBS/CBS).
+2. **Capa Integrada Diretamente na Galeria de Fotos**:
+   * A imagem de capa widescreen principal faz parte da galeria de fotos do projeto como primeira imagem, permitindo que o visitante clique e veja a capa em tela cheia com zoom junto de todas as outras 8 capturas.
+3. **Galeria com 9 Capturas em Alta Resolução**:
+   * O projeto conta com 9 telas registradas:
+     * **Hero Widescreen 16:9 (Capa Principal)**: Headline executiva destacando a metodologia e decisões com fornecedores.
+     * **Diagnóstico Estratégico**: Comparativo visual entre os erros clássicos de planilhas de markup e a blindagem matemática da metodologia BCont.
+     * **Público-Alvo Segmentado**: Cards explicativos para Comércio, Distribuidoras, Indústrias e Serviços.
+     * **Jornada de Formação em 4 Passos**: Fluxo guiado para parametrização fiscal, custos, venda e lucratividade líquida.
+     * **Planos Comerciais (Start, Gestão e Pro)**: Tabela de preços e funcionalidades com alternador mensal e anual.
+     * **FAQ Interativo com Accordion**: Respostas objetivas para dúvidas comerciais e técnicas.
+     * **Tela de Login Corporativo**: Ambiente de autenticação seguro.
+     * **Mobile Hero & Planos (iPhone 14 Retina)**: Experiência mobile adaptada e responsiva.
+4. **Link Direto para a Plataforma Online**:
+### 19.18 E-commerce de Assinaturas Digitais com Fulfillment Automático (NEXUSSTORE)
+Seu portfólio agora conta com o projeto **NEXUSSTORE: E-commerce de Assinaturas Digitais com Fulfillment Automático**, trazendo automação de alto nível para venda e entrega instantânea de produtos digitais:
+1. **Automação de Vendas & Entrega Instantânea**:
+   * Apresenta a plataforma de e-commerce desenvolvida para comercialização de assinaturas digitais, licenças e créditos de inteligência artificial (`https://nexussstore.vercel.app/`).
+   * Elimina completamente o trabalho manual de entrega: após a confirmação imediata via PIX pelo gateway PushinPay, o sistema aciona APIs de fornecedores parceiros (SellAuth e Premium Supermarket) com fallback inteligente e libera o acesso ao cliente em menos de 45 segundos.
+2. **Capa Integrada Diretamente na Galeria de Fotos**:
+   * A imagem de capa widescreen principal faz parte da galeria de fotos do projeto como primeira imagem, permitindo que o visitante clique e veja a capa em tela cheia com zoom junto de todas as outras 6 capturas.
+3. **Galeria com 7 Capturas em Alta Resolução**:
+   * O projeto conta com 7 telas registradas:
+     * **Hero Widescreen 16:9 (Capa Principal)**: Headline moderna de assinaturas e IAs com ofertas em destaque e badges de ativação imediata.
+     * **Vitrine de Produtos e Softwares**: Grade com Canva Pro, ChatGPT Plus, Prime Video, Netflix e softwares com cálculo de desconto em tempo real.
+     * **Diferenciais Competitivos da Loja**: Seção explicativa sobre entrega imediata, suporte dedicado, garantia total e pagamentos seguros.
+     * **Landing Page de Alta Conversão Canva Pro**: Página dedicada (`/canva`) focada em converter visitantes com benefícios detalhados e planos especiais.
+     * **Painel do Cliente e Resgate Instantâneo**: Tela de autoatendimento (`/acesso`) onde o cliente consulta o status do pedido, código PIX e resgata credenciais.
+     * **Mobile Hero & Vitrine (iPhone 14 Retina)**: Interface mobile fluida e rápida para compras diretamente pelo celular.
+4. **Link Direto para o E-commerce Online**:
+   * Visitantes e clientes podem navegar na loja oficial em https://nexussstore.vercel.app/.
+
+### 19.19 Sistema Corporativo de Gestão de Férias e Escalas com IA (StartOFF)
+Seu portfólio agora conta com o projeto **StartOFF: Sistema Corporativo de Gestão de Férias com IA e Concorrência de Turnos**, concebido para operações críticas marítimas e industriais com identidade e regras corporativas da Transpetro:
+1. **Inteligência de Escala & Sugestão de Férias por IA**:
+   * Apresenta o software web empresarial desenvolvido para gestão de equipes (`https://startoff.rafaelpitaoficial.com.br/`).
+   * Substitui controles descentralizados por um motor com cálculo automático de saldos de férias, validação em tempo real de períodos bloqueados (recessos e paradas de manutenção) e algoritmo de IA heurística que sugere as melhores datas de saída para o colaborador (emendas inteligentes com feriados e fins de semana com nota de conveniência de até 80 pontos).
+   * Sistema anti-concorrência: bloqueia automaticamente pedidos que deixem turnos de funções críticas sem operadores ou motoristas suficientes.
+2. **Capa Integrada Diretamente na Galeria de Fotos**:
+   * A imagem de capa widescreen principal (Dashboard com Cockpit e Calendário) faz parte da galeria de fotos do projeto como primeira imagem, permitindo visualização com zoom em tela cheia junto de todas as outras 6 capturas.
+3. **Galeria com 7 Capturas em Alta Resolução**:
+   * O projeto conta com 7 telas registradas:
+     * **Dashboard Principal Widescreen 16:9 (Capa Principal)**: Visão executiva do colaborador com saldo de férias (25 dias), status de solicitações e calendário interativo mensal de escala.
+     * **Sugestão Inteligente por IA (Nova Solicitação)**: Interface onde o colaborador informa a duração desejada e recebe opções otimizadas com cálculo de feriados e pontuação de atratividade.
+     * **Calendário Corporativo da Equipe**: Grade visual exibindo as férias aprovadas de todos os colaboradores do turno.
+     * **Painel de Gestão da Equipe**: Cockpit do gestor com aprovação e reprovação de solicitações pendentes e histórico.
+     * **Módulo de Períodos Bloqueados**: Tela de controle para definição de datas restritas para a operação.
+     * **Tela de Login Corporativo**: Ambiente de autenticação padrão Transpetro com segurança de acesso.
+     * **Versão Mobile (iPhone 14 Retina)**: Experiência rápida de login e consulta de férias pelo celular.
+4. **Link Direto para o Sistema Online**:
+   * Visitantes e clientes podem explorar a plataforma oficial em https://startoff.rafaelpitaoficial.com.br/.
+
+### 19.20 Plataforma Inteligente de Dados Cadastrais com PIX e SEO (Consultas Brasil)
+Seu portfólio agora conta com o projeto **Consultas Brasil: Plataforma Inteligente de Dados Cadastrais com PIX e SEO Avançado**, representando inteligência de dados, modelo pré-pago sem mensalidades e arquitetura de alto rendimento no Google:
+1. **Inteligência de Dados & Recargas PIX Instantâneas**:
+   * Apresenta o SaaS moderno desenvolvido para consultas cadastrais (`https://consultasbrasil.net/`).
+   * Elimina assinaturas mensais fixas e contratos burocráticos: o cliente recarrega créditos a partir de R$ 0,50 via PIX imediato pelo gateway PushinPay (confirmação em menos de 100ms) e consome apenas os módulos necessários (CPF, CNPJ, telefone, placa veicular e nome).
+   * Integração oficial com APIs DirectData V2 e V3, suporte a consultas completas com veículos, histórico profissional, score e parentesco.
+2. **Capa Integrada Diretamente na Galeria de Fotos**:
+   * A imagem de capa widescreen principal (Home com Formulário de Busca e Relatório Consolidado) faz parte da galeria de fotos do projeto como primeira imagem, permitindo visualização com zoom em tela cheia junto de todas as outras 7 capturas.
+3. **Galeria com 8 Capturas em Alta Resolução**:
+   * O projeto conta com 8 telas registradas:
+     * **Home Widescreen 16:9 (Capa Principal)**: Headline executiva otimizada para SEO ("Consulta CPF, CNPJ, Telefone, Placa e Nome Online"), formulário de busca e mockup de relatório unificado.
+     * **Modalidades e Tipos de Consulta**: Grade interativa com cards direcionados por entidade com botões de ação específicos.
+     * **Como Fazer uma Consulta Online**: Fluxo transparente em 3 passos para o usuário sem experiência.
+     * **Preços e Recarga Instantânea via PIX**: Tabela com valores avulsos por módulo, destacando que não há mensalidade obrigatória e recargas caem em segundos.
+     * **Perguntas Frequentes Estruturadas**: Respostas rápidas em accordion cobrindo conformidade com a LGPD, segurança e funcionamento das consultas.
+     * **Tela de Login com Google OAuth**: Acesso ágil ao painel administrativo de créditos.
+     * **Mobile Home & Módulos (iPhone 14 Retina)**: Experiência mobile-first impecável para consultas rápidas na palma da mão.
+4. **Link Direto para o Portal Online**:
+   * Visitantes e clientes podem navegar na plataforma oficial em https://consultasbrasil.net/.
+
+### 19.21 Estúdio de Criação Audiovisual com Modelos Virtuais e IA Generativa (VORIXA AI / VORTIXIA)
+Seu portfólio agora conta com o projeto **VORIXA AI / VORTIXIA: Estúdio de Criação Audiovisual com Modelos Virtuais, Cinema e IA Generativa**, trazendo o estado da arte da computação visual e produção comercial automatizada:
+1. **Inteligência Audiovisual & Geração de Vídeo e Cinema**:
+   * Apresenta o estúdio web de IA de última geração (`https://vortixia.com.br/`).
+   * Substitui semanas de gravação física, aluguel de estúdio e contratação de elenco por uma esteira com modelos virtuais fotorrealistas e dublagem labial sincronizada (Sync Audio LipSync).
+   * Integração com os mais poderosos motores generativos do mundo (fal.ai, Kling 3.0, Wan 2.1 e fluxos de nós visuais), entregando campanhas para alta costura, produtos de luxo e comerciais em resolução 4K.
+2. **Capa Integrada Diretamente na Galeria de Fotos**:
+   * A imagem de capa widescreen principal (Hero Widescreen do Estúdio) faz parte da galeria de fotos do projeto como primeira imagem, permitindo visualização com zoom em tela cheia junto de todas as outras 9 mídias artísticas e capturas.
+3. **Galeria com 10 Capturas e Mídias em Alta Resolução**:
+   * O projeto conta com 10 mídias registradas no Firebase Storage:
+     * **Hero Widescreen 16:9 (Capa Principal)**: Headline futurista do estúdio audiovisual apresentando a plataforma de geração cinematográfica.
+     * **Estúdio Neural de Fluxos Visuais**: Interface do estúdio com tela de nós, preview de modelos 3D neurais e parametrização de cena.
+     * **Apresentadora Virtual com Enquadramento de Telejornal**: Modelo virtual realista com dublagem sincronizada e iluminação de transmissão.
+     * **Comercial de Luxo Perfume Aura Eclipse**: Renderização de produto comercial com iluminação volumétrica e refração de vidro.
+     * **Ensaio Editorial de Alta Costura Futurista**: Direção de arte editorial de moda com texturas de tecidos e estética cyberpunk.
+     * **Hypercar Cyberpunk em Metrópole Noturna**: Cenário urbano cinematográfico com traçado neon e reflexos realistas no asfalto.
+     * **Street Dancer Urbano com Partículas de Luz**: Captura de movimento dinâmico com iluminação volumétrica e efeitos visuais.
+     * **Planos Comerciais e Pacotes de Créditos**: Seção de preços com planos Starter, Creator e Studio com recarga PIX imediata.
+     * **Tela de Autenticação Segura**: Ambiente de login com segurança e design escuro imersivo.
+     * **Mobile Home (iPhone 14 Retina)**: Experiência mobile fluida e responsiva para criação de conteúdos em smartphones.
+4. **Link Direto para a Plataforma Online**:
+   * Visitantes e clientes podem explorar a plataforma oficial em https://vortixia.com.br/.
+
+### 19.22 Gestão de Assinaturas de Manutenção & Portal do Cliente Sem Senha
+Seu sistema agora conta com um módulo completo para controle de faturamento recorrente, automação de cobranças PIX e área de autoatendimento para seus clientes:
+1. **Painel Administrativo de Assinaturas (`/admin/assinaturas`)**:
+   * Acessível diretamente pelo menu lateral do painel ("Assinaturas & Manutenção").
+   * Visão executiva com métricas em tempo real: Total de Assinaturas Ativas, Receita Recorrente Mensal (MRR), Vencimentos Próximos nos próximos 7 dias e Clientes com mensalidade atrasada.
+   * Filtros rápidos por status ('ativo', 'pendente', 'atrasado', 'pausado', 'cancelado') e categorias de serviços (Manutenção Web, Suporte Técnico, Gestão de Tráfego, Automações).
+   * Cadastro de nova assinatura com dia fixo de vencimento no mês (1 a 31), valor da mensalidade e máscaras de documento e WhatsApp.
+   * Reajuste de valor com aviso no WhatsApp: permite atualizar o valor da mensalidade ou agendar um novo valor para a próxima fatura, com botão de 1 clique que monta a mensagem personalizada e abre o WhatsApp Web para envio imediato.
+   * Emissão de faturas PIX instantâneas com QR Code dinâmico e código Copia e Cola gerados via gateway PushinPay.
+   * Baixa manual de pagamentos para clientes que pagarem por outros meios, avançando automaticamente a data de vencimento para o mês seguinte.
+2. **Portal Público do Assinante Sem Senha (`/minha-assinatura`)**:
+   * Acesso simplificado sem necessidade de senhas: o cliente acessa apenas digitando seu E-mail ou CPF/CNPJ cadastrado.
+   * Visualização dos contratos ativos e do escopo de serviços contratado.
+   * Seção de Faturas Pendentes com botão "Pagar com PIX", exibindo o QR Code na tela e botão de cópia rápida da chave Copia e Cola.
+   * Histórico de mensalidades quitadas com emissão de recibo digital de comprovação.
+   * Abertura de chamados de suporte técnico vinculados à assinatura com protocolo exclusivo (`TICK-2026-XXXX`) e canal direto para contato no WhatsApp de suporte.

@@ -13,6 +13,7 @@ export const translations = {
         nav_track_ticket: 'Rastrear Chamado',
         nav_quote: 'Orçamento',
         nav_login: 'Login / Projetos',
+        nav_subscriptions: 'Minhas Assinaturas',
 
         // Portfolio Page
         portfolio_title: 'Nosso Portfólio',
@@ -68,6 +69,7 @@ export const translations = {
         nav_track_ticket: 'Track Ticket',
         nav_quote: 'Get Quote',
         nav_login: 'Login / Projects',
+        nav_subscriptions: 'My Subscriptions',
 
         // Portfolio Page
         portfolio_title: 'Our Portfolio',
