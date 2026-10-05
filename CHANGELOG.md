@@ -34,6 +34,12 @@ Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
     * `maintenance_settings`: configurações de credenciais, chave PIX padrão e templates.
     * `support_tickets`: colunas `client_document` e `subscription_id` adicionadas para rastreamento de chamados.
   * Grants completos de leitura e escrita concedidos para as roles `anon` e `authenticator` do PostgREST.
+* **Central de Notificações e Compartilhamento WhatsApp (`SubscriptionShareModal.jsx`, `whatsappMessages.js`)**:
+  * Criado modal dedicado com 3 abas para envio ágil de links e cobranças diretamente pelo WhatsApp Web.
+  * **1ª Mensagem (Apresentação & Boas-Vindas do Sistema):** Explica a migração para o sistema oficial, detalha vantagens como transparência, histórico de pagamentos, emissão de recibos e suporte técnico, com link de acesso direto e Pix da primeira fatura.
+  * **2ª Mensagem (Lembrete Mensal Padrão):** Formato conciso para os meses subsequentes com dados da fatura, Pix Copia e Cola e link do portal.
+  * **Acesso Direto com Auto-Login:** URLs geradas com parâmetro `?lookup=...` permitindo que o cliente abra a sua área logada sem precisar preencher dados.
+  * Botões de 1 clique "Copiar Mensagem", "Copiar Apenas o Link" e "Abrir no WhatsApp Web" com sanitização automática do número telefônico.
 * **Reorganização Estrutural da Barra Lateral Administrativa (`AdminLayout.jsx`)**:
   * Substituída a listagem plana desordenada por uma arquitetura hierárquica dividida em seções lógicas e subníveis expansíveis (acordeão com animação suave via Framer Motion).
   * Categorias agrupadas: **Vendas & Clientes** (Orçamentos e Assinaturas), **Prospecção Ativa** (Radar Google Maps e Leads Advogados), **Conteúdo & Portfólio** (Projetos, Serviços, Depoimentos e Fotografia), **Atendimento & Suporte** (Mensagens e Chamados) e **Sistema & Ajustes** (Configurações, Storage e Minha Conta).

@@ -215,3 +215,160 @@ export const formatWhatsAppTicketMessage = ({
         'Rafael Pita : Suporte Tecnico'
     ].join('\n');
 };
+
+/**
+ * Gera URL publica do Portal do Assinante com parametro de acesso automatico.
+ *
+ * @param {string} [identifier] E-mail ou documento para auto-login
+ * @returns {string} URL completa do portal
+ */
+export const generatePortalUrl = (identifier = '') => {
+    const origin = typeof window !== 'undefined' && window.location.origin
+        ? window.location.origin
+        : 'https://rafaelpitaoficial.com.br';
+
+    if (!identifier || !identifier.trim()) {
+        return `${origin}/minha-assinatura`;
+    }
+
+    return `${origin}/minha-assinatura?lookup=${encodeURIComponent(identifier.trim())}`;
+};
+
+/**
+ * 1ª Mensagem : Apresentacao do Novo Sistema & Boas-Vindas do Assinante.
+ * Explica o funcionamento do portal sem senha, acompanhamento de historico,
+ * recibos de pagamentos e suporte prioritario.
+ *
+ * @param {Object} params
+ * @param {string} params.clientName Nome do cliente
+ * @param {string} params.planTitle Titulo do plano
+ * @param {number|string} params.amount Valor mensal
+ * @param {number|string} params.billingDay Dia de vencimento
+ * @param {string|Date} [params.dueDate] Proximo vencimento
+ * @param {string} [params.pixCode] Pix Copia e Cola da fatura atual
+ * @param {string} [params.clientEmail] E-mail do cliente
+ * @param {string} [params.portalUrl] Link do portal
+ * @returns {string} Mensagem completa de onboarding
+ */
+export const formatWhatsAppOnboardingMessage = ({
+    clientName = 'Cliente',
+    planTitle = 'Manutenção Contínua',
+    amount = 0,
+    billingDay = 10,
+    dueDate = '',
+    pixCode = '',
+    clientEmail = '',
+    portalUrl = ''
+} = {}) => {
+    const formattedAmount = formatCurrencyBRL(amount);
+    const formattedDueDate = dueDate ? formatDateBR(dueDate) : `dia ${billingDay}`;
+    const directUrl = portalUrl || generatePortalUrl(clientEmail);
+
+    const lines = [
+        `Olá, ${clientName}! Tudo bem?`,
+        '',
+        `Passando para compartilhar uma novidade muito bacana: agora a gestão e sustentação do seu projeto (${planTitle}) está oficialmente integrada ao nosso novo sistema de assinaturas e suporte!`,
+        '',
+        'Pensando em trazer ainda mais comodidade, agilidade e total transparência para o seu dia a dia, preparamos o seu *Portal do Assinante*:',
+        '',
+        '✓ *Acesso sem complicação:* você entra a qualquer momento sem precisar memorizar senhas (basta informar seu e-mail ou documento).',
+        '✓ *Histórico completo:* consulte todos os pagamentos realizados e emita seus recibos de quitação em PDF quando precisar.',
+        '✓ *Faturas & PIX:* visualize suas faturas em aberto e pague com compensação imediata via PIX Copia e Cola ou QR Code.',
+        '✓ *Suporte técnico:* abra chamados com protocolo para solicitar ajustes, melhorias ou suporte prioritário.',
+        '',
+        '*Resumo do seu Contrato:*',
+        `• Serviço: ${planTitle}`,
+        `• Valor Mensal: ${formattedAmount}`,
+        `• Vencimento: Todo dia ${billingDay}`
+    ];
+
+    if (dueDate) {
+        lines.push(`• Próximo Vencimento: ${formattedDueDate}`);
+    }
+
+    if (pixCode) {
+        lines.push('');
+        lines.push('*Fatura do ciclo atual disponível:*');
+        lines.push(`Valor: ${formattedAmount} | Vencimento: ${formattedDueDate}`);
+        lines.push('');
+        lines.push('*Pix Copia e Cola:*');
+        lines.push('```' + pixCode + '```');
+    }
+
+    lines.push('');
+    lines.push('🔗 *Acesse sua área exclusiva agora pelo link:*');
+    lines.push(directUrl);
+    lines.push('');
+    lines.push('Qualquer dúvida ou caso queira alinhar novas demandas, estou à sua inteira disposição!');
+    lines.push('');
+    lines.push('Abraços,');
+    lines.push('Rafael Pita : Soluções em Tecnologia');
+
+    return lines.join('\n');
+};
+
+/**
+ * 2ª Mensagem : Lembrete Padrão Mensal de Fatura & Cobrança Recorrente.
+ * Enviada a cada mês com os dados da fatura, Pix e atalho para o portal.
+ *
+ * @param {Object} params
+ * @param {string} params.clientName Nome do cliente
+ * @param {string} params.planTitle Titulo do plano
+ * @param {number|string} params.amount Valor da fatura
+ * @param {number|string} params.billingDay Dia do vencimento
+ * @param {string|Date} params.dueDate Data de vencimento
+ * @param {string} [params.pixCode] Codigo Pix Copia e Cola
+ * @param {string} [params.invoiceCode] Codigo da fatura (ex: FAT-2026-001)
+ * @param {string} [params.clientEmail] E-mail do cliente
+ * @param {string} [params.portalUrl] Link do portal
+ * @returns {string} Mensagem de lembrete mensal
+ */
+export const formatWhatsAppMonthlyReminderMessage = ({
+    clientName = 'Cliente',
+    planTitle = 'Manutenção Contínua',
+    amount = 0,
+    billingDay = 10,
+    dueDate = '',
+    pixCode = '',
+    invoiceCode = '',
+    clientEmail = '',
+    portalUrl = ''
+} = {}) => {
+    const formattedAmount = formatCurrencyBRL(amount);
+    const formattedDueDate = dueDate ? formatDateBR(dueDate) : `dia ${billingDay}`;
+    const codeTag = invoiceCode ? ` (${invoiceCode})` : '';
+    const directUrl = portalUrl || generatePortalUrl(clientEmail);
+
+    const lines = [
+        `Olá, ${clientName}! Tudo bem?`,
+        '',
+        `Passando para enviar o lembrete da sua fatura mensal referente à sustentação e manutenção (${planTitle})${codeTag}.`,
+        '',
+        '*Dados da Fatura:*',
+        `• Valor: ${formattedAmount}`,
+        `• Vencimento: ${formattedDueDate}`
+    ];
+
+    if (pixCode) {
+        lines.push('');
+        lines.push('Para sua praticidade, você pode pagar diretamente via PIX:');
+        lines.push('');
+        lines.push('*Pix Copia e Cola:*');
+        lines.push('```' + pixCode + '```');
+        lines.push('');
+        lines.push('(Basta copiar o código acima e colar na opção Pix Copia e Cola no app do seu banco)');
+    }
+
+    lines.push('');
+    lines.push('📄 *Acompanhe suas faturas e histórico de recibos:*');
+    lines.push(directUrl);
+    lines.push('');
+    lines.push('Após a compensação, o recibo de quitação fica disponível automaticamente no portal.');
+    lines.push('Se já efetuou o pagamento, por gentileza desconsidere esta mensagem.');
+    lines.push('');
+    lines.push('Muito obrigado pela parceria!');
+    lines.push('Rafael Pita : Suporte e Desenvolvimento');
+
+    return lines.join('\n');
+};
+

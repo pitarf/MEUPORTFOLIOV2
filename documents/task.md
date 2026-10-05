@@ -2,6 +2,10 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Central de Notificações e Modelos do WhatsApp para Assinaturas (`SubscriptionShareModal.jsx`, `whatsappMessages.js`)**:
+  - Criado modal com abas para disparo e cópia de 2 modelos de mensagens: 1ª Mensagem (Boas-Vindas e apresentação do novo sistema com histórico e recibos) e Lembrete Mensal Padrão (cobrança recorrente com Pix).
+  - Implementado gerador de URLs públicas com auto-login do cliente via parâmetro `?lookup=...`.
+  - Integrados botões de disparo rápido nas visões desktop e mobile do painel administrativo.
 - [x] **Reorganização e Arquitetura da Barra Lateral Administrativa (`AdminLayout.jsx`)**:
   - Implementado sistema de navegação hierárquica em categorias lógicas com acordeão expansível animado via Framer Motion.
   - Agrupadas as 14 rotas em 5 blocos coesos: Comercial & Recorrência, Prospecção Ativa, Gestão de Conteúdo, Atendimento e Sistema & Ajustes.

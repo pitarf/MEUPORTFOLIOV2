@@ -74,6 +74,7 @@ import PushinPayConfigModal from '@/components/admin/maintenance/PushinPayConfig
 import PriceAdjustmentModal from '@/components/admin/maintenance/PriceAdjustmentModal';
 import InvoicePixModal from '@/components/admin/maintenance/InvoicePixModal';
 import SubscriptionDetailsModal from '@/components/admin/maintenance/SubscriptionDetailsModal';
+import SubscriptionShareModal from '@/components/admin/maintenance/SubscriptionShareModal';
 
 /**
  * Painel Administrativo de Assinaturas de Manutencao Recorrente
@@ -110,6 +111,10 @@ const ManageMaintenanceSubscriptions = () => {
 
     const [detailsModalOpen, setDetailsModalOpen] = useState(false);
     const [detailsSubscription, setDetailsSubscription] = useState(null);
+
+    const [shareModalOpen, setShareModalOpen] = useState(false);
+    const [shareSubscription, setShareSubscription] = useState(null);
+    const [shareLatestInvoice, setShareLatestInvoice] = useState(null);
 
     const [deleteDialogState, setDeleteDialogState] = useState({
         isOpen: false,
@@ -232,6 +237,22 @@ const ManageMaintenanceSubscriptions = () => {
             return true;
         });
     }, [subscriptions, statusFilter, categoryFilter, searchTerm]);
+
+    /**
+     * Abre o modal de compartilhamento e notificacao no WhatsApp com mensagens formatadas
+     */
+    const handleOpenShareModal = async (subscription) => {
+        setShareSubscription(subscription);
+        try {
+            const invoices = await fetchInvoices({ subscriptionId: subscription.id });
+            const pending = invoices?.find((inv) => inv.status !== 'pago' && inv.status !== 'cancelado') || invoices?.[0] || null;
+            setShareLatestInvoice(pending);
+        } catch (err) {
+            console.warn('Aviso ao buscar fatura para compartilhamento:', err.message);
+            setShareLatestInvoice(null);
+        }
+        setShareModalOpen(true);
+    };
 
     /**
      * Gera fatura do ciclo via PushinPay e abre o modal de visualizacao do QR Code
@@ -630,6 +651,17 @@ const ManageMaintenanceSubscriptions = () => {
                                                 <Eye className="w-3.5 h-3.5 text-primary" />
                                                 Detalhes
                                             </Button>
+
+                                            <Button
+                                                type="button"
+                                                size="sm"
+                                                variant="outline"
+                                                onClick={() => handleOpenShareModal(sub)}
+                                                className="col-span-2 text-xs flex items-center justify-center gap-1.5 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/10 font-bold"
+                                            >
+                                                <MessageCircle className="w-3.5 h-3.5 text-emerald-500" />
+                                                WhatsApp (Apresentação / Lembretes)
+                                            </Button>
                                         </div>
                                     </div>
                                 );
@@ -775,6 +807,19 @@ const ManageMaintenanceSubscriptions = () => {
                                                                 Baixar
                                                             </Button>
 
+                                                            {/* Botao Notificar WhatsApp */}
+                                                            <Button
+                                                                type="button"
+                                                                size="sm"
+                                                                variant="outline"
+                                                                onClick={() => handleOpenShareModal(sub)}
+                                                                className="h-8 px-2.5 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-500/10 border-emerald-500/30 font-medium"
+                                                                title="Compartilhar no WhatsApp: Apresentação do sistema ou lembrete mensal"
+                                                            >
+                                                                <MessageCircle className="w-3.5 h-3.5 mr-1 text-emerald-500" />
+                                                                WhatsApp
+                                                            </Button>
+
                                                             {/* Dropdown com mais acoes */}
                                                             <DropdownMenu>
                                                                 <DropdownMenuTrigger asChild>
@@ -782,7 +827,15 @@ const ManageMaintenanceSubscriptions = () => {
                                                                         <MoreVertical className="w-4 h-4 text-muted-foreground" />
                                                                     </Button>
                                                                 </DropdownMenuTrigger>
-                                                                <DropdownMenuContent align="end" className="w-48">
+                                                                <DropdownMenuContent align="end" className="w-52">
+                                                                    <DropdownMenuItem
+                                                                        onClick={() => handleOpenShareModal(sub)}
+                                                                        className="cursor-pointer text-emerald-600 dark:text-emerald-400 font-semibold"
+                                                                    >
+                                                                        <MessageCircle className="w-4 h-4 mr-2 text-emerald-500" />
+                                                                        Notificar no WhatsApp
+                                                                    </DropdownMenuItem>
+
                                                                     <DropdownMenuItem
                                                                         onClick={() => {
                                                                             setPriceSubscription(sub);
@@ -884,6 +937,13 @@ const ManageMaintenanceSubscriptions = () => {
                     setPixModalOpen(true);
                 }}
                 onPaymentConfirmed={loadData}
+            />
+
+            <SubscriptionShareModal
+                isOpen={shareModalOpen}
+                onClose={() => setShareModalOpen(false)}
+                subscription={shareSubscription}
+                latestInvoice={shareLatestInvoice}
             />
 
             {/* Dialogo de Confirmacao de Exclusao */}

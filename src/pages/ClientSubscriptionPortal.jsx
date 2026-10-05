@@ -102,17 +102,27 @@ const ClientSubscriptionPortal = () => {
     });
 
     /**
-     * Tenta carregar credencial salva no localStorage ao iniciar a pagina
+     * Tenta carregar credencial a partir de parametros da URL ou do localStorage
      */
     useEffect(() => {
         try {
+            const urlParams = new URLSearchParams(window.location.search);
+            const queryLookup = urlParams.get('lookup') || urlParams.get('email') || urlParams.get('doc');
+
+            if (queryLookup && queryLookup.trim()) {
+                const cleanLookup = queryLookup.trim();
+                setLookupInput(cleanLookup);
+                handlePerformLookup(cleanLookup, false);
+                return;
+            }
+
             const savedLookup = localStorage.getItem('rp_maintenance_client_lookup');
             if (savedLookup) {
                 setLookupInput(savedLookup);
                 handlePerformLookup(savedLookup, false);
             }
         } catch (err) {
-            console.warn('Nao foi possivel recuperar sessao anterior:', err);
+            console.warn('Nao foi possivel recuperar sessao ou parametro de URL:', err);
         }
     }, []);
 

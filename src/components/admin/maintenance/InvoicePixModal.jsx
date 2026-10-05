@@ -25,6 +25,7 @@ import {
     CheckCircle2,
     Loader2
 } from 'lucide-react';
+import { generatePortalUrl } from '@/utils/whatsappMessages';
 
 /**
  * Modal para exibicao e compartilhamento do QR Code PIX e chave Copia e Cola.
@@ -96,7 +97,7 @@ const InvoicePixModal = ({
         const formattedDate = formatDateBR(invoice.due_date);
         const invoiceCode = invoice.invoice_code || 'FAT-PIX';
 
-        const portalUrl = `${window.location.origin}/minha-assinatura`;
+        const portalUrl = generatePortalUrl(subscription.client_email || subscription.client_document);
 
         const text = `Olá ${clientFirstName}, tudo bem?\n\nSegue a fatura de manutenção mensal (${planName}) referente ao ciclo atual:\n\n*Fatura:* ${invoiceCode}\n*Valor:* ${formattedAmount}\n*Vencimento:* ${formattedDate}\n\n*Chave PIX Copia e Cola:*\n\`${pixCode}\`\n\nVocê também pode visualizar o QR Code e recibos no seu Portal do Assinante:\n${portalUrl}\n\nApós o pagamento, a baixa é processada automaticamente. Agradecemos pela parceria!`;
 
