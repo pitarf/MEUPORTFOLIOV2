@@ -41,8 +41,9 @@ const AdminSupport = () => {
         if (filters.status !== 'todos') {
             query = query.eq('status', filters.status);
         }
-        if (filters.search) {
-            query = query.or(`subject.ilike.%${filters.search}%,ticket_code.ilike.%${filters.search}%,email.ilike.%${filters.search}%`);
+        if (filters.search && filters.search.trim()) {
+            const cleanSearch = filters.search.trim();
+            query = query.or(`subject.ilike.%${cleanSearch}%,ticket_code.ilike.%${cleanSearch}%,client_name.ilike.%${cleanSearch}%,client_email.ilike.%${cleanSearch}%,name.ilike.%${cleanSearch}%,email.ilike.%${cleanSearch}%`);
         }
 
         query = query.eq('is_archived', filters.showArchived);
@@ -50,9 +51,14 @@ const AdminSupport = () => {
         const { data, error } = await query.order('created_at', { ascending: false });
 
         if (error) {
-            toast({ variant: 'destructive', title: 'Erro ao buscar chamados.' });
+            console.error('Falha ao carregar chamados:', error);
+            toast({
+                variant: 'destructive',
+                title: 'Falha ao buscar chamados',
+                description: error.message || 'Servidor instável. Tente novamente em alguns instantes.'
+            });
         } else {
-            setTickets(data);
+            setTickets(data || []);
         }
         setLoading(false);
     }, [toast, filters]);
@@ -72,7 +78,11 @@ const AdminSupport = () => {
     const handleUpdateTicket = async (ticketId, updateData) => {
         const { error } = await supabase.from('support_tickets').update(updateData).eq('id', ticketId);
         if (error) {
-            toast({ variant: 'destructive', title: 'Erro ao atualizar chamado.' });
+            toast({
+                variant: 'destructive',
+                title: 'Falha ao atualizar chamado',
+                description: error.message || 'Não foi possível salvar as alterações no chamado.'
+            });
         } else {
             toast({ title: 'Chamado atualizado com sucesso!' });
             if (selectedTicket?.id === ticketId) {
@@ -85,7 +95,11 @@ const AdminSupport = () => {
     const handleDeleteTicket = async (ticketId) => {
         const { error } = await supabase.from('support_tickets').delete().eq('id', ticketId);
         if (error) {
-            toast({ variant: 'destructive', title: 'Erro ao excluir chamado.' });
+            toast({
+                variant: 'destructive',
+                title: 'Falha ao excluir chamado',
+                description: error.message || 'Não foi possível remover o chamado.'
+            });
         } else {
             toast({ title: 'Chamado excluído com sucesso!' });
             setSelectedTicket(null);
@@ -96,9 +110,18 @@ const AdminSupport = () => {
     const handleAddNote = async () => {
         if (!newNote.trim() || !selectedTicket) return;
         setIsSubmittingNote(true);
-        const { data, error } = await supabase.from('ticket_updates').insert([{ ticket_id: selectedTicket.id, note: newNote }]).select().single();
+        const { data, error } = await supabase
+            .from('ticket_updates')
+            .insert([{ ticket_id: selectedTicket.id, note: newNote.trim() }])
+            .select()
+            .single();
+
         if (error) {
-            toast({ variant: 'destructive', title: 'Erro ao adicionar nota.' });
+            toast({
+                variant: 'destructive',
+                title: 'Falha ao adicionar nota',
+                description: error.message || 'Não foi possível registrar a nota no chamado.'
+            });
         } else {
             toast({ title: 'Nota adicionada com sucesso!' });
             setSelectedTicket(prev => ({ ...prev, ticket_updates: [...(prev.ticket_updates || []), data] }));
@@ -152,7 +175,7 @@ const AdminSupport = () => {
                                     {ticketsByStatus[status]?.map(ticket => (
                                         <motion.div key={ticket.id} layoutId={`ticket-${ticket.id}`} onClick={() => setSelectedTicket(ticket)} className={`p-4 rounded-lg cursor-pointer glass-effect border-l-4 ${getStatusColor(ticket.status)} hover:bg-muted/50 transition-colors`}>
                                             <p className="font-bold truncate">{ticket.subject}</p>
-                                            <p className="text-sm text-muted-foreground">{ticket.name || ticket.email}</p>
+                                            <p className="text-sm text-muted-foreground">{ticket.client_name || ticket.name || ticket.client_email || ticket.email || 'Cliente'}</p>
                                             <p className="text-xs text-muted-foreground mt-2">{ticket.ticket_code}</p>
                                         </motion.div>
                                     ))}
@@ -170,7 +193,7 @@ const AdminSupport = () => {
                         <>
                             <DialogHeader>
                                 <DialogTitle className="text-2xl">{selectedTicket.subject}</DialogTitle>
-                                <DialogDescription><span className="font-mono">{selectedTicket.ticket_code}</span> - por {selectedTicket.name} ({selectedTicket.email})</DialogDescription>
+                                <DialogDescription><span className="font-mono">{selectedTicket.ticket_code}</span> : por {selectedTicket.client_name || selectedTicket.name || 'Cliente'} ({selectedTicket.client_email || selectedTicket.email || 'Sem e-mail'})</DialogDescription>
                             </DialogHeader>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
                                 <div><Label>Status</Label><Select value={selectedTicket.status} onValueChange={(value) => handleUpdateTicket(selectedTicket.id, { status: value })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{statuses.map(s => <SelectItem key={s} value={s} className="capitalize">{s}</SelectItem>)}</SelectContent></Select></div>
@@ -178,7 +201,7 @@ const AdminSupport = () => {
                             </div>
                             <div className="flex-grow overflow-y-auto pr-2 space-y-4 glass-effect p-4 rounded-lg">
                                 <h3 className="font-bold text-lg">Descrição Original</h3>
-                                <p className="text-foreground whitespace-pre-wrap bg-muted p-3 rounded-md">{selectedTicket.description}</p>
+                                <p className="text-foreground whitespace-pre-wrap bg-muted p-3 rounded-md">{selectedTicket.message || selectedTicket.description || 'Sem descrição.'}</p>
                                 <h3 className="font-bold text-lg mt-4">Histórico de Atualizações</h3>
                                 <div className="space-y-4">
                                     {(selectedTicket.ticket_updates || []).sort((a, b) => new Date(a.created_at) - new Date(b.created_at)).map(update => (

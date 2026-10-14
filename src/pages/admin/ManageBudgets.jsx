@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
     PlusCircle,
     Settings,
@@ -20,7 +20,12 @@ import {
     Trash2,
     Edit,
     FileText,
-    Share2
+    Share2,
+    CheckSquare,
+    Square,
+    Check,
+    X,
+    Layers
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -31,6 +36,8 @@ import {
     fetchBudgets,
     updateBudgetStatus,
     deleteBudget,
+    deleteBudgetsBulk,
+    updateBudgetsStatusBulk,
     fetchPricingSettings
 } from '@/services/budgetService';
 import BudgetKanban from '@/components/admin/BudgetKanban';
@@ -186,12 +193,13 @@ const ManageBudgets = () => {
         }
     };
 
-    // Confirmação e Deleção
+    // Confirmação e Deleção Individual
     const handleConfirmDelete = async () => {
         if (!deleteModalState.budgetId) return;
         try {
             await deleteBudget(deleteModalState.budgetId);
             setBudgets(prev => prev.filter(b => b.id !== deleteModalState.budgetId));
+            setSelectedBudgetIds(prev => prev.filter(id => id !== deleteModalState.budgetId));
             toast({ title: 'Orçamento removido com sucesso!' });
         } catch (err) {
             toast({
@@ -201,6 +209,89 @@ const ManageBudgets = () => {
             });
         } finally {
             setDeleteModalState({ isOpen: false, budgetId: null, budgetTitle: '' });
+        }
+    };
+
+    // Estados e Handlers de Ação em Massa
+    const [selectedBudgetIds, setSelectedBudgetIds] = useState([]);
+    const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
+    const [bulkActionLoading, setBulkActionLoading] = useState(false);
+
+    // Limpa a seleção quando o usuário altera os filtros de busca
+    useEffect(() => {
+        setSelectedBudgetIds([]);
+    }, [searchTerm, selectedCategory, selectedStatus]);
+
+    const allVisibleSelected = useMemo(() => {
+        if (filteredBudgets.length === 0) return false;
+        return filteredBudgets.every(b => selectedBudgetIds.includes(b.id));
+    }, [filteredBudgets, selectedBudgetIds]);
+
+    const isSomeVisibleSelected = useMemo(() => {
+        return filteredBudgets.some(b => selectedBudgetIds.includes(b.id)) && !allVisibleSelected;
+    }, [filteredBudgets, selectedBudgetIds, allVisibleSelected]);
+
+    const handleToggleSelectAll = () => {
+        if (allVisibleSelected) {
+            setSelectedBudgetIds([]);
+        } else {
+            const allIds = filteredBudgets.map(b => b.id);
+            setSelectedBudgetIds(allIds);
+        }
+    };
+
+    const handleToggleSelectOne = (id) => {
+        setSelectedBudgetIds(prev =>
+            prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
+        );
+    };
+
+    const handleConfirmBulkDelete = async () => {
+        if (selectedBudgetIds.length === 0) return;
+        setBulkActionLoading(true);
+        try {
+            await deleteBudgetsBulk(selectedBudgetIds);
+            const count = selectedBudgetIds.length;
+            setBudgets(prev => prev.filter(b => !selectedBudgetIds.includes(b.id)));
+            setSelectedBudgetIds([]);
+            toast({
+                title: 'Exclusão em massa realizada!',
+                description: `${count} orçamentos foram removidos com sucesso.`
+            });
+        } catch (err) {
+            toast({
+                variant: 'destructive',
+                title: 'Falha ao excluir em massa',
+                description: err.message
+            });
+        } finally {
+            setBulkActionLoading(false);
+            setBulkDeleteModalOpen(false);
+        }
+    };
+
+    const handleBulkStatusChange = async (newStatus) => {
+        if (selectedBudgetIds.length === 0 || !newStatus) return;
+        setBulkActionLoading(true);
+        try {
+            const count = selectedBudgetIds.length;
+            // Atualização otimista
+            setBudgets(prev => prev.map(b => selectedBudgetIds.includes(b.id) ? { ...b, status: newStatus } : b));
+            await updateBudgetsStatusBulk(selectedBudgetIds, newStatus);
+            toast({
+                title: 'Status atualizado em massa!',
+                description: `${count} orçamentos foram movidos para "${newStatus}".`
+            });
+            setSelectedBudgetIds([]);
+        } catch (err) {
+            toast({
+                variant: 'destructive',
+                title: 'Falha ao alterar status em lote',
+                description: err.message
+            });
+            loadData();
+        } finally {
+            setBulkActionLoading(false);
         }
     };
 
@@ -386,6 +477,18 @@ const ManageBudgets = () => {
                         <table className="w-full text-xs text-left">
                             <thead className="bg-muted/50 border-b border-border text-muted-foreground uppercase font-semibold text-[10px]">
                                 <tr>
+                                    <th className="py-3 px-3 w-10 text-center">
+                                        <input
+                                            type="checkbox"
+                                            checked={allVisibleSelected}
+                                            ref={(el) => {
+                                                if (el) el.indeterminate = isSomeVisibleSelected;
+                                            }}
+                                            onChange={handleToggleSelectAll}
+                                            className="w-4 h-4 rounded border-border text-primary cursor-pointer accent-primary"
+                                            title={allVisibleSelected ? "Desmarcar todos" : "Selecionar todos os visíveis"}
+                                        />
+                                    </th>
                                     <th className="py-3 px-4">Projeto & Cliente</th>
                                     <th className="py-3 px-4">Categoria</th>
                                     <th className="py-3 px-4">Horas (HH)</th>
@@ -398,7 +501,7 @@ const ManageBudgets = () => {
                             <tbody className="divide-y divide-border">
                                 {filteredBudgets.length === 0 ? (
                                     <tr>
-                                        <td colSpan={7} className="py-12 text-center text-muted-foreground">
+                                        <td colSpan={8} className="py-12 text-center text-muted-foreground">
                                             Nenhum orçamento encontrado com os filtros aplicados.
                                         </td>
                                     </tr>
@@ -410,8 +513,18 @@ const ManageBudgets = () => {
                                                 setSelectedBudget(b);
                                                 setBudgetModalOpen(true);
                                             }}
-                                            className="hover:bg-muted/40 transition-colors cursor-pointer"
+                                            className={`hover:bg-muted/40 transition-colors cursor-pointer ${
+                                                selectedBudgetIds.includes(b.id) ? 'bg-primary/5 dark:bg-primary/10' : ''
+                                            }`}
                                         >
+                                            <td className="py-3 px-3 text-center" onClick={(e) => e.stopPropagation()}>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedBudgetIds.includes(b.id)}
+                                                    onChange={() => handleToggleSelectOne(b.id)}
+                                                    className="w-4 h-4 rounded border-border text-primary cursor-pointer accent-primary"
+                                                />
+                                            </td>
                                             <td className="py-3 px-4">
                                                 <div className="font-bold text-foreground">{b.title}</div>
                                                 <div className="text-muted-foreground text-[11px] flex items-center gap-1">
@@ -568,7 +681,7 @@ const ManageBudgets = () => {
                 />
             )}
 
-            {/* Alerta de Confirmação de Exclusão */}
+            {/* Alerta de Confirmação de Exclusão Individual */}
             <AlertDialog
                 open={deleteModalState.isOpen}
                 onOpenChange={(open) => !open && setDeleteModalState({ isOpen: false, budgetId: null, budgetTitle: '' })}
@@ -591,6 +704,124 @@ const ManageBudgets = () => {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
+
+            {/* Modal de Confirmação de Exclusão em Massa */}
+            <AlertDialog
+                open={bulkDeleteModalOpen}
+                onOpenChange={setBulkDeleteModalOpen}
+            >
+                <AlertDialogContent className="bg-card border-border text-foreground">
+                    <AlertDialogHeader>
+                        <AlertDialogTitle className="text-destructive flex items-center gap-2">
+                            <Trash2 className="w-5 h-5 text-destructive" />
+                            Excluir {selectedBudgetIds.length} Orçamentos em Massa?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription className="space-y-2">
+                            <p>
+                                Tem certeza que deseja excluir permanentemente os <strong>{selectedBudgetIds.length}</strong> orçamentos selecionados?
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                                Esta operação removerá definitivamente todos os orçamentos marcados da base de dados e não poderá ser desfeita.
+                            </p>
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel disabled={bulkActionLoading}>Cancelar</AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={handleConfirmBulkDelete}
+                            disabled={bulkActionLoading}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90 gap-1.5"
+                        >
+                            {bulkActionLoading ? (
+                                <>
+                                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                    Excluindo...
+                                </>
+                            ) : (
+                                <>
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                    Sim, Excluir ({selectedBudgetIds.length})
+                                </>
+                            )}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
+            {/* Barra Flutuante de Ações em Massa */}
+            <AnimatePresence>
+                {selectedBudgetIds.length > 0 && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 35, scale: 0.96 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 35, scale: 0.96 }}
+                        transition={{ duration: 0.2, ease: 'easeOut' }}
+                        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center justify-between gap-3 px-4 py-3 rounded-2xl bg-zinc-950/95 text-white dark:bg-zinc-900/95 dark:text-zinc-100 shadow-2xl border border-zinc-800/80 backdrop-blur-lg max-w-2xl w-[94vw] sm:w-auto"
+                    >
+                        <div className="flex items-center gap-2.5 pr-3 border-r border-zinc-800">
+                            <span className="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs font-bold shadow-sm">
+                                {selectedBudgetIds.length}
+                            </span>
+                            <span className="text-xs font-semibold whitespace-nowrap text-zinc-200">
+                                {selectedBudgetIds.length === 1 ? '1 selecionado' : `${selectedBudgetIds.length} selecionados`}
+                            </span>
+                        </div>
+
+                        <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+                            {/* Selecionar todos os filtrados se nem todos estiverem selecionados */}
+                            {!allVisibleSelected && filteredBudgets.length > selectedBudgetIds.length && (
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={handleToggleSelectAll}
+                                    className="h-8 px-2 text-[11px] text-zinc-300 hover:text-white hover:bg-zinc-800"
+                                >
+                                    Todos ({filteredBudgets.length})
+                                </Button>
+                            )}
+
+                            {/* Alterar Status em Massa */}
+                            <Select onValueChange={handleBulkStatusChange} disabled={bulkActionLoading}>
+                                <SelectTrigger className="h-8 text-xs bg-zinc-900 border-zinc-700 text-zinc-100 w-36 focus:ring-primary">
+                                    <SelectValue placeholder="Mudar Status..." />
+                                </SelectTrigger>
+                                <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-100">
+                                    <SelectItem value="pendente">Pendente</SelectItem>
+                                    <SelectItem value="em_negociacao">Em Negociação</SelectItem>
+                                    <SelectItem value="aprovado">Aprovado</SelectItem>
+                                    <SelectItem value="em_desenvolvimento">Em Desenvolvimento</SelectItem>
+                                    <SelectItem value="concluido">Concluído</SelectItem>
+                                    <SelectItem value="rejeitado">Rejeitado</SelectItem>
+                                </SelectContent>
+                            </Select>
+
+                            {/* Excluir em Massa */}
+                            <Button
+                                variant="destructive"
+                                size="sm"
+                                onClick={() => setBulkDeleteModalOpen(true)}
+                                disabled={bulkActionLoading}
+                                className="h-8 px-3 text-xs gap-1.5 bg-red-600 hover:bg-red-700 text-white font-medium shadow-sm"
+                            >
+                                <Trash2 className="w-3.5 h-3.5" />
+                                Excluir ({selectedBudgetIds.length})
+                            </Button>
+
+                            {/* Desmarcar Todos */}
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => setSelectedBudgetIds([])}
+                                disabled={bulkActionLoading}
+                                className="h-8 w-8 text-zinc-400 hover:text-white hover:bg-zinc-800"
+                                title="Desmarcar todos"
+                            >
+                                <X className="w-4 h-4" />
+                            </Button>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };

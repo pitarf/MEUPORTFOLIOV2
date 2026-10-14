@@ -481,7 +481,7 @@ const ManageMaintenanceSubscriptions = () => {
                             className="flex items-center gap-1.5"
                         >
                             <Settings className="w-4 h-4" />
-                            Configurações & PushinPay
+                            Gateways & Cobrança (Asaas / PushinPay)
                         </Button>
 
                         <Button

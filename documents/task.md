@@ -2,6 +2,61 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Carrossel Mobile de Depoimentos e Avaliações de Clientes (`LegalReviews.jsx`)**:
+  - Implementado carrossel touch-first para smartphones (`< md`): os cards de avaliações agora deslizam suavemente com suporte a gestos de toque (swipe via Embla Carousel), permitindo visualizar 1 depoimento por vez com vislumbre do próximo (`basis-[90%]`).
+  - Cada card conta com aspas douradas estilizadas, depoimento contextualizado por nicho e cidade, nome do cliente e as 5 estrelas douradas de satisfação.
+  - Adicionados botões de navegação anterior/próximo (`ChevronLeft` / `ChevronRight`), indicadores interativos de bolinhas (*dots*) sincronizados em tempo real e contador formatado (`01 / 03`).
+  - No desktop (`md:` em diante), a grade horizontal de 3 cards foi 100% preservada.
+
+- [x] **Carrossel Mobile de Etapas do Rito de Atendimento (`LegalMethodology.jsx`)**:
+  - Implementado carrossel touch-first exclusivo para celular (`< md`): os 4 passos do processo ("Diagnóstico", "Planejamento", "Execução" e "Acompanhamento") são apresentados individualmente (1 card por vez) com visualização em destaque, evitando a quebra de texto ou compressão dos círculos no mobile.
+  - Navegação suave por gestos de swipe, botões de anterior/próximo (`ChevronLeft` / `ChevronRight`), indicadores circulares animados em ouro e contador de etapas (`01 / 04`).
+  - No desktop (`md:` em diante), mantida a linha do tempo horizontal contínua conectada com 4 círculos e numeração no topo.
+
+- [x] **Carrossel Mobile de Cards na Seção de Especialidades (`LegalPracticeAreas.jsx`)**:
+  - Implementado carrossel touch-first exclusivo para celular (`< md`): os 5 cards de especialidades agora são exibidos em formato de carrossel deslizável com suporte a gestos de arrasto por toque (swipe), botões de navegação anterior/próximo (`ChevronLeft` / `ChevronRight`), indicadores de bolinhas (dots) animados em gradiente ouro e contador numérico de slides (`01 / 05`).
+  - Cada card ocupa 88% da largura da tela com vislumbre (peek) do card seguinte para instigar o toque, garantindo que todo o conteúdo fique legível e navegável sem que o usuário precise rolar uma lista longa vertical.
+  - A visualização em tablets e desktops (`md:`) permanece com a grade de 3 + 2 cards.
+
+- [x] **Ajuste de Responsividade Mobile-First nas Landing Pages Jurídicas (`LegalNavbar.jsx`, `LegalHero.jsx`, `LegalLandingPage.jsx`, `LegalAbout.jsx`, `LegalTopBar.jsx`)**:
+  - Eliminado o vazamento lateral (overflow-x) e deslocamento de conteúdo no mobile que empurrava a logo para fora da tela e causava faixa em branco à direita.
+  - No `LegalNavbar.jsx`: o botão de agendamento no WhatsApp agora se adapta dinamicamente (exibe "WhatsApp" com espaçamento otimizado no mobile e "Agendar no WhatsApp" a partir de telas sm/desktop), e o container da logo passa a ser flexível (`min-w-0 flex-1`) com truncamento inteligente, assegurando que caiba perfeitamente mesmo em telas estreitas de 320px a 390px.
+  - No `LegalHero.jsx`: contenção estrita (`w-full max-w-full overflow-hidden`), botões de ação ocupando 100% da largura em mobile (`w-full sm:w-auto`) com alinhamento centralizado impecável.
+  - No `LegalLandingPage.jsx`, `LegalTopBar.jsx` e `LegalAbout.jsx`: blindagem global com `w-full max-w-full overflow-x-hidden` impedindo qualquer elemento flutuante ou com blur de estourar a largura do viewport.
+
+- [x] **Integração Completa com a API v3 do Gateway Asaas (`asaasService.js`, `PushinPayConfigModal.jsx`, `maintenanceService.js`, `portfolio_db`)**:
+  - Desenvolvido serviço completo de integração oficial com a API v3 do Asaas (`src/services/asaasService.js`) cobrindo:
+    - Gestão de Clientes: cadastro inteligente (`findOrCreateCustomer`), busca por CPF/CNPJ ou e-mail, consulta, atualização e remoção.
+    - Cobranças & PIX: criação de cobranças (`PIX`, `BOLETO`, `CREDIT_CARD`), consulta de status, obtenção de QR Code PIX oficial (imagem Base64 e Copia e Cola), estorno, cancelamento e confirmação de recebimento em dinheiro.
+    - Assinaturas Recorrentes: criação com mapeamento de ciclos (`MONTHLY`, `QUARTERLY`, `SEMIANNUALLY`, `YEARLY`), consulta, listagem de pagamentos da assinatura e cancelamento.
+    - Links de Pagamento: geração de links para checkout com prazos e valores parametrizados.
+    - Webhooks: criação, listagem e remoção de webhooks para atualização em tempo real de faturas.
+    - Gestão Financeira: consulta de saldo em conta, taxas e estatísticas de pagamentos.
+    - Resiliência e Simulação: fallback automático seguro com dados realistas quando em ambiente sem credencial cadastrada.
+  - Aplicada migração SQL no PostgreSQL (`portfolio_db`) da VPS Oracle:
+    - Adicionadas as colunas `asaas_token`, `asaas_environment` e `active_gateway` na tabela `maintenance_settings`.
+    - Adicionadas as colunas `asaas_id`, `asaas_invoice_url` e `gateway` na tabela `maintenance_invoices`.
+    - Adicionadas as colunas `asaas_customer_id` e `asaas_subscription_id` na tabela `maintenance_subscriptions`.
+    - Recarregado o schema cache do PostgREST reiniciando o container `portfolio-api`.
+  - Atualizado modal executivo de configurações (`PushinPayConfigModal.jsx`):
+    - Abas para alternar entre Asaas (API v3) e PushinPay (Cash-In).
+    - Seletor de gateway padrão ativo para novas faturas (Asaas vs PushinPay).
+    - Seletor de ambiente Asaas (Sandbox vs Produção) e campo para chave de API (access_token).
+    - Botão "Testar Conexão com Asaas" que consulta saldo em tempo real com feedback visual e validação de credencial.
+  - Atualizado `maintenanceService.js` para suportar emissão e auto-recuperação de PIX dinamicamente através do gateway ativo selecionado.
+
+- [x] **Correção e Estruturação do Módulo de Mensagens e Contatos (`AdminSubmissions.jsx`, `portfolio_db`)**:
+  - Diagnosticada a causa do erro na aba de Atendimento (Mensagens & Contatos): as tabelas `contacts` e `quotes` não existiam no banco de dados na VPS Oracle, causando erro HTTP 400 (`PGRST205 - Could not find table in schema cache`) ao acessar `/admin/submissions`.
+  - Aplicada migração SQL na VPS Oracle: criadas as tabelas `public.contacts` e `public.quotes` com campos completos (`id`, `name`, `email`, `phone`, `company`, `subject`, `service`, `message`, `description`, `budget`, `deadline`, `status`, `created_at`) e concedidas permissões para `anon` e `authenticator`.
+  - Recarregado o schema cache do PostgREST reiniciando o container `portfolio-api`.
+  - Aprimorado `AdminSubmissions.jsx` substituindo `window.confirm` pelo modal moderno `AlertDialog`, com mensagens de toast específicas e tratamento completo de erros.
+  - Testadas e validadas consultas nas tabelas `contacts` e `quotes` com resposta 200 OK.
+- [x] **Correção e Estruturação do Módulo de Gerenciar Chamados (`AdminSupport.jsx`, `portfolio_db`)**:
+  - Diagnosticada a causa do erro na tela de chamados ("Erro ao buscar chamados"): a consulta esperava a coluna `is_archived` na tabela `support_tickets` e a tabela relacional `ticket_updates`, inexistentes até então no schema `public`.
+  - Aplicada migração SQL no PostgreSQL (`portfolio_db`) na VPS Oracle: criada a tabela `public.ticket_updates` (com chave estrangeira para `support_tickets`), adicionadas as colunas `is_archived`, `name`, `email`, `description` e `user_id` em `support_tickets` e concedidas permissões completas para `anon` e `authenticator`.
+  - Recarregado o schema cache do PostgREST reiniciando o container `portfolio-api`.
+  - Aprimorado `AdminSupport.jsx` com busca multi-campo (`client_name`, `client_email`, `ticket_code`, `subject`), fallbacks seguros para dados de contato e descrição e mensagens de feedback não-genéricas.
+  - Testadas e validadas consultas de leitura e escrita de chamados e notas com 100% de sucesso.
 - [x] **Correção e Renovação Automática de Cobranças PIX Expiradas (`maintenanceService.js`, `InvoicePixModal.jsx`, `ClientSubscriptionPortal.jsx`, `InvoicePdfModal.jsx`)**:
   - Diagnosticada a causa exata do erro "Problema com o QR Code: Não conseguimos ler os dados do QR Code" relatado pelo cliente Brasil Ltda: cobranças dinâmicas da PushinPay/Woovi possuem expiração padrão de 24 horas (`expiration_date: 2026-10-06`). Como a fatura original foi emitida em 05/10, o Banco Central e apps bancários rejeitavam a leitura por expiração.
   - Reemitida e atualizada imediatamente na PushinPay e no banco de dados da VPS Oracle a fatura `FAT-2026-GR3N` (Brasil Ltda, R$ 500,00) com nova transação ativa (`a2fb2019-543c-474e-8136-282799bb99cc`), novo QR Code e código Copia e Cola válidos para pagamento imediato.

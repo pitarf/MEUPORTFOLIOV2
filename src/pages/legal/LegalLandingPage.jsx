@@ -261,7 +261,7 @@ export default function LegalLandingPage() {
   }, [lawyerData, nicheInfo, theme]);
 
   return (
-    <div className={`min-h-screen bg-white text-slate-800 font-sans ${theme.gender === 'female' ? 'selection:bg-[#9A1E58]' : 'selection:bg-[#C6923C]'} selection:text-white`}>
+    <div className={`min-h-screen bg-white text-slate-800 font-sans w-full max-w-full overflow-x-hidden ${theme.gender === 'female' ? 'selection:bg-[#9A1E58]' : 'selection:bg-[#C6923C]'} selection:text-white`}>
       
       {/* 1. Barra Utilitária Superior (Topo Escuro com Endereço, Horário e Telefone) */}
       <LegalTopBar lawyer={lawyerData} theme={theme} />

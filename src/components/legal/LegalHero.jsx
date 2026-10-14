@@ -111,7 +111,7 @@ export default function LegalHero({ lawyer, nicheInfo, heroImage, theme }) {
   return (
     <section
       id="inicio"
-      className="relative text-white py-24 sm:py-28 lg:py-36 overflow-hidden min-h-[640px] lg:min-h-[720px] flex items-center justify-center"
+      className="relative text-white py-20 sm:py-28 lg:py-36 overflow-hidden min-h-[580px] sm:min-h-[640px] lg:min-h-[720px] flex items-center justify-center w-full max-w-full"
     >
       {/* 1. CARROSSEL DE IMAGENS FULL WIDTH EM BACKGROUND (CROSSFADE CONTÍNUO) */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
@@ -183,27 +183,27 @@ export default function LegalHero({ lawyer, nicheInfo, heroImage, theme }) {
             </motion.p>
 
             {/* Botões Duplos com Estilo Premium Arejado */}
-            <div className="pt-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+            <div className="pt-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
               <motion.a
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`px-7 py-4 ${isFemale ? 'rounded-full bg-gradient-to-r from-[#D8A756] via-[#E5BF7C] to-[#C79540] text-[#1A0314] font-semibold shadow-lg shadow-[#D8A756]/25 hover:shadow-[#D8A756]/40' : 'rounded-xl bg-gradient-to-r from-[#D8A756] via-[#C6923C] to-[#B5812B] hover:from-[#C6923C] hover:to-[#A37020] text-white font-bold shadow-xl shadow-amber-950/40'} text-xs sm:text-sm tracking-wide transition-all flex items-center justify-center gap-2.5 whitespace-nowrap group`}
+                className={`w-full sm:w-auto px-5 sm:px-7 py-3.5 sm:py-4 ${isFemale ? 'rounded-full bg-gradient-to-r from-[#D8A756] via-[#E5BF7C] to-[#C79540] text-[#1A0314] font-semibold shadow-lg shadow-[#D8A756]/25 hover:shadow-[#D8A756]/40' : 'rounded-xl bg-gradient-to-r from-[#D8A756] via-[#C6923C] to-[#B5812B] hover:from-[#C6923C] hover:to-[#A37020] text-white font-bold shadow-xl shadow-amber-950/40'} text-xs sm:text-sm tracking-wide transition-all flex items-center justify-center gap-2 whitespace-nowrap group text-center`}
               >
-                <MessageCircle className={`w-5 h-5 ${isFemale ? 'fill-[#1A0314] text-[#1A0314]' : 'fill-white text-white'} group-hover:scale-110 transition-transform`} />
-                <span>Agendar Consulta no WhatsApp</span>
+                <MessageCircle className={`w-4 h-4 sm:w-5 sm:h-5 ${isFemale ? 'fill-[#1A0314] text-[#1A0314]' : 'fill-white text-white'} group-hover:scale-110 transition-transform flex-shrink-0`} />
+                <span className="truncate">Agendar Consulta no WhatsApp</span>
               </motion.a>
 
               <motion.a
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 href="#atuacao"
-                className={`px-7 py-4 ${isFemale ? 'rounded-full bg-white/10 hover:bg-white/15 text-white font-medium border border-[#D8A756]/40' : 'rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold border border-white/25 hover:border-white'} text-xs sm:text-sm tracking-wide transition-all flex items-center justify-center gap-2 whitespace-nowrap backdrop-blur-md`}
+                className={`w-full sm:w-auto px-5 sm:px-7 py-3.5 sm:py-4 ${isFemale ? 'rounded-full bg-white/10 hover:bg-white/15 text-white font-medium border border-[#D8A756]/40' : 'rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold border border-white/25 hover:border-white'} text-xs sm:text-sm tracking-wide transition-all flex items-center justify-center gap-2 whitespace-nowrap backdrop-blur-md text-center`}
               >
                 <span>Nossas Especialidades</span>
-                <ArrowRight className="w-4 h-4 text-white" />
+                <ArrowRight className="w-4 h-4 text-white flex-shrink-0" />
               </motion.a>
             </div>
 

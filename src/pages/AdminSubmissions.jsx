@@ -7,6 +7,17 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const AdminSubmissions = () => {
     const [submissions, setSubmissions] = useState([]);
@@ -31,10 +42,16 @@ const AdminSubmissions = () => {
             .order('created_at', { ascending: false });
 
         if (error) {
-            toast({ variant: 'destructive', title: `Erro ao buscar ${activeTab}.` });
-            console.error(error);
+            console.error('Erro ao buscar mensagens:', error);
+            const tabName = activeTab === 'contacts' ? 'contatos' : 'orçamentos';
+            toast({
+                variant: 'destructive',
+                title: `Falha ao carregar ${tabName}`,
+                description: error.message || 'Servidor instável. Tente novamente em alguns instantes.'
+            });
+            setSubmissions([]);
         } else {
-            setSubmissions(data);
+            setSubmissions(data || []);
         }
         setLoading(false);
     }, [toast, activeTab]);
@@ -50,7 +67,11 @@ const AdminSubmissions = () => {
             .eq('id', id);
 
         if (error) {
-            toast({ variant: 'destructive', title: 'Erro ao atualizar status.' });
+            toast({
+                variant: 'destructive',
+                title: 'Falha ao atualizar status',
+                description: error.message || 'Não foi possível salvar o novo status.'
+            });
         } else {
             toast({ title: 'Status atualizado com sucesso!' });
             fetchSubmissions();
@@ -58,17 +79,19 @@ const AdminSubmissions = () => {
     };
 
     const handleDelete = async (id) => {
-        if (!window.confirm('Tem certeza que deseja excluir esta submissão permanentemente?')) return;
-
         const { error } = await supabase
             .from(activeTab)
             .delete()
             .eq('id', id);
 
         if (error) {
-            toast({ variant: 'destructive', title: 'Erro ao excluir.' });
+            toast({
+                variant: 'destructive',
+                title: 'Falha ao excluir registro',
+                description: error.message || 'Não foi possível remover o item selecionado.'
+            });
         } else {
-            toast({ title: 'Submissão excluída com sucesso.' });
+            toast({ title: 'Mensagem excluída com sucesso!' });
             setSelectedSubmission(null);
             fetchSubmissions();
         }
@@ -190,9 +213,27 @@ const AdminSubmissions = () => {
                                 </Select>
                             </div>
                             <div className="flex gap-2">
-                                <Button variant="destructive" size="sm" onClick={() => handleDelete(selectedSubmission.id)}>
-                                    <Trash2 className="w-4 h-4 mr-2" /> Excluir
-                                </Button>
+                                <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                        <Button variant="destructive" size="sm">
+                                            <Trash2 className="w-4 h-4 mr-2" /> Excluir
+                                        </Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>Excluir mensagem?</AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                Esta ação não pode ser desfeita. O registro será removido permanentemente da base de dados.
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                            <AlertDialogAction onClick={() => handleDelete(selectedSubmission.id)}>
+                                                Excluir Permanentemente
+                                            </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
                             </div>
                         </div>
                     </DialogContent>

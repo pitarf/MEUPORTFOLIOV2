@@ -602,3 +602,46 @@ Para gerenciar contratos contínuos de clientes, faturamento recorrente via PIX 
    - Abertura de chamados de suporte técnico com geração de protocolo (`TICK-2026-XXXX`) e canal direto para o WhatsApp de suporte.
 5. **Automação de Mensagens para WhatsApp (`src/utils/whatsappMessages.js`)**:
    - Geradores de links formatados com sanitização de números (DDI 55) para avisos de reajuste de valor, cobrança de fatura PIX e abertura de chamados.
+
+### 13.25 Arquitetura Multi-Gateway de Pagamentos & Integração Asaas API v3 (`src/services/asaasService.js`, `src/services/maintenanceService.js`)
+Para assegurar alta disponibilidade no processamento financeiro e faturamento recorrente:
+1. **Cliente Nativo Asaas API v3 (`src/services/asaasService.js`)**:
+   - Desenvolvido cliente completo compatível com a API v3 do Asaas (`https://api.asaas.com/v3` em produção e `https://sandbox.asaas.com/api/v3` em sandbox).
+   - Gerenciamento completo de clientes (`findOrCreateCustomer`), cobranças avulsas PIX (`createPixPayment`), QR Code dinâmico com chave Copia e Cola (`getPixQrCode`), assinaturas recorrentes (`createSubscription`), links de pagamento (`createPaymentLink`), consulta de saldo financeiro (`getBalance`) e teste de conectividade (`testConnection`).
+   - Modo de contingência simulado ativado automaticamente na ausência de token ou falha de conectividade.
+2. **Orquestrador Multi-Gateway (`src/services/maintenanceService.js`)**:
+   - Suporte dinâmico e transparente aos gateways Asaas v3 e PushinPay.
+   - Leitura da configuração ativa em `maintenance_settings.active_gateway` ('asaas' ou 'pushinpay').
+   - Persistência das faturas com metadados universais (`gateway_name`, `gateway_id`, `gateway_invoice_url`, `pix_qr_code`, `pix_qr_code_base64`).
+3. **Painel de Configurações Unificado (`PushinPayConfigModal.jsx`)**:
+   - Interface com abas dedicadas para o Gateway Ativo, Asaas v3 e PushinPay.
+   - Teste de conexão em tempo real com indicador visual de status e latência.
+   - Saldo em conta e webhook URLs configuráveis.
+
+### 13.26 Otimização Mobile-First com Carrosséis Touch nas Landing Pages Jurídicas (`LegalPracticeAreas.jsx`, `LegalMethodology.jsx`, `LegalReviews.jsx`, `LegalNavbar.jsx`, `LegalHero.jsx`)
+Para assegurar experiência de navegação impecável em dispositivos móveis (320px a 430px):
+1. **Eliminação de Overflow e Vazamento Lateral na Navbar (`LegalNavbar.jsx`, `LegalHero.jsx`, `LegalLandingPage.jsx`)**:
+   - Navbar com truncamento inteligente no logo (`min-w-0 flex-1 truncate`), gap reduzido e botão adaptativo ("WhatsApp" no mobile, "Agendar no WhatsApp" no desktop).
+   - Contêiner raiz da Landing Page protegido com `w-full max-w-full overflow-x-hidden`.
+2. **Carrossel Mobile de Especialidades (`LegalPracticeAreas.jsx`)**:
+   - Implementação de carrossel touch-first com `embla-carousel-react` no mobile (`basis-[88%]`, swipe por toque, setas de navegação e indicadores dots de paginação).
+   - Preservação da grade simétrica 3 + 2 no desktop.
+3. **Carrossel Mobile de Metodologia em 4 Passos (`LegalMethodology.jsx`)**:
+   - Carrossel mobile exibindo 1 passo por vez (`basis-[90%]`) com swipe suave, setas anterior/próximo e dots indicadores.
+   - Preservação da timeline com 4 círculos conectados no desktop.
+4. **Carrossel Mobile de Depoimentos e Avaliações (`LegalReviews.jsx`)**:
+   - Carrossel mobile com swipe touch (`basis-[90%]`), cartões com estrelas douradas, setas e dots.
+   - Preservação da grade em 3 colunas no desktop.
+
+### 13.27 Ações em Massa no Painel de Chamados, Submissões e Orçamentos
+Para aumentar a produtividade operacional na gestão de clientes:
+1. **Chamados de Suporte (`AdminSupport.jsx`)**:
+   - Seleção múltipla por checkboxes com barra de ações flutuante.
+   - Alteração em massa de status para "resolvido", "em andamento" ou "aberto".
+   - Exclusão em lote com confirmação de segurança.
+2. **Submissões de Formulários (`AdminSubmissions.jsx`)**:
+   - Seleção em massa com contadores visuais.
+   - Marcação em lote como lido/não lido e exclusão em lote.
+3. **Orçamentos Comerciais (`ManageBudgets.jsx`)**:
+   - Seleção múltipla e transição de status em bloco no pipeline comercial.
+

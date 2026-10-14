@@ -244,6 +244,53 @@ export const deleteBudget = async (id) => {
 };
 
 /**
+ * Exclui múltiplos orçamentos em massa do sistema
+ * @param {Array<string>} ids Lista de IDs de orçamentos a excluir
+ * @returns {Promise<boolean>}
+ */
+export const deleteBudgetsBulk = async (ids = []) => {
+    if (!ids || ids.length === 0) return true;
+
+    const { error } = await supabase
+        .from('budgets')
+        .delete()
+        .in('id', ids);
+
+    if (error) {
+        console.error('Erro ao excluir orçamentos em massa:', error);
+        throw new Error(`Falha ao excluir os orçamentos selecionados: ${error.message}`);
+    }
+
+    return true;
+};
+
+/**
+ * Atualiza o status de múltiplos orçamentos em massa
+ * @param {Array<string>} ids Lista de IDs dos orçamentos
+ * @param {string} newStatus Novo status a aplicar
+ * @returns {Promise<Array>}
+ */
+export const updateBudgetsStatusBulk = async (ids = [], newStatus) => {
+    if (!ids || ids.length === 0) return [];
+
+    const { data, error } = await supabase
+        .from('budgets')
+        .update({
+            status: newStatus,
+            updated_at: new Date().toISOString()
+        })
+        .in('id', ids)
+        .select('id, status');
+
+    if (error) {
+        console.error('Erro ao atualizar status em massa:', error);
+        throw new Error(`Falha ao alterar status em lote: ${error.message}`);
+    }
+
+    return data || [];
+};
+
+/**
  * Busca os dados de um orçamento/pedido para acompanhamento exclusivo do cliente
  * Utiliza o código do pedido (ex: #ORC-2026-001 ou ORC-2026-001) ou UUID
  * Retorna apenas campos públicos e pertinentes ao cliente (sem margens ou custos internos)

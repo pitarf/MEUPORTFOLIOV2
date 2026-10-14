@@ -1,5 +1,6 @@
 import { supabase } from '../lib/customSupabaseClient.js';
 import { createCashInPix, fetchPushinPaySettings } from './pushinPayService.js';
+import { generateAsaasPixInvoice, fetchAsaasSettings } from './asaasService.js';
 import { generatePixPayload } from '../utils/pixPayloadGenerator.js';
 
 /**
@@ -663,16 +664,57 @@ export const generateInvoiceForSubscription = async (subscriptionId, options = {
     // 4. Gera codigo unico da fatura
     const invoiceCode = generateUniqueCode('FAT');
 
-    // 5. Gera a cobranca via gateway PushinPay
-    let pushinPayResult = null;
-    try {
-        pushinPayResult = await createCashInPix({
-            amount: invoiceAmount,
-            invoiceCode,
-            description: `${subscription.plan_title} (${subscription.client_name})`
-        });
-    } catch (gatewayError) {
-        console.warn('Aviso: Gateway PushinPay retornou erro na emissao, usando geracao de contingencia com PIX BR Code:', gatewayError.message);
+    // 5. Gera a cobranca via gateway ativo (Asaas ou PushinPay)
+    const asaasSettings = await fetchAsaasSettings().catch(() => ({ active_gateway: 'pushinpay' }));
+    const activeGateway = options.gateway || asaasSettings.active_gateway || 'pushinpay';
+
+    let gatewayResult = null;
+    let gatewayUsed = activeGateway;
+
+    if (activeGateway === 'asaas') {
+        try {
+            const asaasResponse = await generateAsaasPixInvoice({
+                clientName: subscription.client_name,
+                clientDocument: subscription.client_document,
+                clientEmail: subscription.client_email,
+                clientPhone: subscription.client_phone,
+                amount: invoiceAmount,
+                dueDate,
+                description: `${subscription.plan_title} (${subscription.client_name})`,
+                invoiceCode
+            });
+            gatewayResult = {
+                id: asaasResponse.paymentId,
+                qr_code: asaasResponse.pixQrCode,
+                qr_code_base64: asaasResponse.pixQrCodeBase64,
+                asaas_id: asaasResponse.paymentId,
+                asaas_invoice_url: asaasResponse.invoiceUrl
+            };
+        } catch (asaasError) {
+            console.warn('Aviso: Gateway Asaas retornou erro na emissao, usando fallback:', asaasError.message);
+        }
+    }
+
+    // Se nao for Asaas ou se Asaas falhou, tenta PushinPay
+    if (!gatewayResult?.qr_code && activeGateway === 'pushinpay') {
+        try {
+            const pushinPayResponse = await createCashInPix({
+                amount: invoiceAmount,
+                invoiceCode,
+                description: `${subscription.plan_title} (${subscription.client_name})`
+            });
+            gatewayResult = {
+                id: pushinPayResponse.id,
+                qr_code: pushinPayResponse.qr_code,
+                qr_code_base64: pushinPayResponse.qr_code_base64
+            };
+        } catch (gatewayError) {
+            console.warn('Aviso: Gateway PushinPay retornou erro na emissao, usando geracao de contingencia com PIX BR Code:', gatewayError.message);
+        }
+    }
+
+    // Fallback de contingencia BR Code padrao caso nenhum gateway tenha gerado QR Code
+    if (!gatewayResult?.qr_code) {
         try {
             const settings = await fetchPushinPaySettings();
             const defaultKey = settings?.default_pix_key || '55812208000105';
@@ -683,19 +725,17 @@ export const generateInvoiceForSubscription = async (subscriptionId, options = {
                 receiverCity: 'Aracaju',
                 txid: invoiceCode.replace(/[^a-zA-Z0-9]/g, '')
             });
-            pushinPayResult = {
+            gatewayResult = {
                 id: 'emv_brcode_' + Date.now().toString(36),
                 qr_code: brCodePayload,
-                qr_code_base64: null,
-                status: 'pending'
+                qr_code_base64: null
             };
         } catch (brCodeErr) {
             console.error('Erro ao gerar contingencia BR Code:', brCodeErr);
-            pushinPayResult = {
+            gatewayResult = {
                 id: 'err_fallback_' + Date.now().toString(36),
                 qr_code: null,
-                qr_code_base64: null,
-                status: 'pending'
+                qr_code_base64: null
             };
         }
     }
@@ -707,9 +747,12 @@ export const generateInvoiceForSubscription = async (subscriptionId, options = {
         amount: invoiceAmount,
         due_date: dueDate,
         status: 'pendente',
-        pushinpay_id: pushinPayResult?.id || null,
-        pix_qr_code: pushinPayResult?.qr_code || null,
-        pix_qr_code_base64: pushinPayResult?.qr_code_base64 || null,
+        pushinpay_id: gatewayResult?.id || null,
+        pix_qr_code: gatewayResult?.qr_code || null,
+        pix_qr_code_base64: gatewayResult?.qr_code_base64 || null,
+        asaas_id: gatewayResult?.asaas_id || null,
+        asaas_invoice_url: gatewayResult?.asaas_invoice_url || null,
+        gateway: gatewayUsed,
         covered_websites: subscription.covered_websites || null,
         notes: options.notes ? options.notes.trim() : null
     };
@@ -777,24 +820,60 @@ export const ensureInvoicePix = async (invoiceId, options = {}) => {
     }
 
     const settings = await fetchPushinPaySettings();
-    let pushinPayResult = null;
+    const asaasSettings = await fetchAsaasSettings().catch(() => ({ active_gateway: 'pushinpay' }));
+    const useAsaas = invoice.gateway === 'asaas' || (!invoice.gateway && asaasSettings.active_gateway === 'asaas');
 
-    try {
-        pushinPayResult = await createCashInPix({
-            amount: Number(invoice.amount),
-            invoiceId: invoice.id,
-            invoiceCode: invoice.invoice_code,
-            description: `${invoice.subscription?.plan_title || 'Manutencao'} (${invoice.invoice_code})`
-        });
-    } catch (gatewayError) {
-        console.warn('Aviso: PushinPay indisponivel, utilizando geracao de contingencia BR Code:', gatewayError.message);
+    let gatewayResult = null;
+    let asaasId = invoice.asaas_id || null;
+    let asaasInvoiceUrl = invoice.asaas_invoice_url || null;
+
+    if (useAsaas) {
+        try {
+            const asaasResponse = await generateAsaasPixInvoice({
+                clientName: invoice.subscription?.client_name || 'Cliente',
+                clientDocument: invoice.subscription?.client_document || '',
+                clientEmail: invoice.subscription?.client_email || '',
+                clientPhone: invoice.subscription?.client_phone || '',
+                amount: Number(invoice.amount),
+                dueDate: invoice.due_date,
+                description: `${invoice.subscription?.plan_title || 'Manutencao'} (${invoice.invoice_code})`,
+                invoiceCode: invoice.invoice_code
+            });
+            gatewayResult = {
+                id: asaasResponse.paymentId,
+                qr_code: asaasResponse.pixQrCode,
+                qr_code_base64: asaasResponse.pixQrCodeBase64
+            };
+            asaasId = asaasResponse.paymentId;
+            asaasInvoiceUrl = asaasResponse.invoiceUrl;
+        } catch (asaasError) {
+            console.warn('Aviso: Asaas indisponivel para refresh PIX, tentando PushinPay:', asaasError.message);
+        }
     }
 
-    let finalPixCode = pushinPayResult?.qr_code || null;
-    let finalPixBase64 = pushinPayResult?.qr_code_base64 || null;
-    let finalPushinPayId = pushinPayResult?.id || null;
+    if (!gatewayResult?.qr_code) {
+        try {
+            const pushinPayResponse = await createCashInPix({
+                amount: Number(invoice.amount),
+                invoiceId: invoice.id,
+                invoiceCode: invoice.invoice_code,
+                description: `${invoice.subscription?.plan_title || 'Manutencao'} (${invoice.invoice_code})`
+            });
+            gatewayResult = {
+                id: pushinPayResponse.id,
+                qr_code: pushinPayResponse.qr_code,
+                qr_code_base64: pushinPayResponse.qr_code_base64
+            };
+        } catch (gatewayError) {
+            console.warn('Aviso: PushinPay indisponivel, utilizando geracao de contingencia BR Code:', gatewayError.message);
+        }
+    }
 
-    // Se a PushinPay nao retornou codigo (ou falhou), gera via BR Code EMV padrao
+    let finalPixCode = gatewayResult?.qr_code || null;
+    let finalPixBase64 = gatewayResult?.qr_code_base64 || null;
+    let finalGatewayId = gatewayResult?.id || null;
+
+    // Se o gateway nao retornou codigo (ou falhou), gera via BR Code EMV padrao
     if (!finalPixCode) {
         const defaultKey = settings?.default_pix_key || '55812208000105';
         finalPixCode = generatePixPayload({
@@ -804,16 +883,19 @@ export const ensureInvoicePix = async (invoiceId, options = {}) => {
             receiverCity: 'Aracaju',
             txid: invoice.invoice_code.replace(/[^a-zA-Z0-9]/g, '')
         });
-        finalPushinPayId = 'emv_brcode_' + Date.now().toString(36);
+        finalGatewayId = 'emv_brcode_' + Date.now().toString(36);
     }
 
     // Atualiza a fatura no banco de dados
     const { data: updatedInvoice, error } = await supabase
         .from('maintenance_invoices')
         .update({
-            pushinpay_id: finalPushinPayId,
+            pushinpay_id: finalGatewayId,
             pix_qr_code: finalPixCode,
             pix_qr_code_base64: finalPixBase64,
+            asaas_id: asaasId,
+            asaas_invoice_url: asaasInvoiceUrl,
+            gateway: useAsaas ? 'asaas' : (invoice.gateway || 'pushinpay'),
             updated_at: new Date().toISOString()
         })
         .eq('id', invoice.id)

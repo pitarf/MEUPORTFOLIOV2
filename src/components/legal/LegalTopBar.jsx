@@ -22,7 +22,7 @@ export default function LegalTopBar({ lawyer, theme }) {
   const displayPhone = formatPhoneDisplay(lawyer.phone || lawyer.whatsapp);
 
   return (
-    <div className={`${theme?.topBarBgClass || 'bg-[#071326] border-b border-white/10'} text-gray-300 text-xs py-2.5 hidden md:block transition-colors`}>
+    <div className={`${theme?.topBarBgClass || 'bg-[#071326] border-b border-white/10'} text-gray-300 text-xs py-2.5 hidden md:block transition-colors w-full overflow-hidden`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         
         {/* Esquerda: Endereço & Horário de Atendimento */}

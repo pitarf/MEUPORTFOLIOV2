@@ -40,7 +40,7 @@ export default function LegalAbout({ lawyer, nicheInfo, theme }) {
   const aboutImage = isFemale ? (theme?.aboutImg || '/images/legal/advogada_sobre.jpg') : '/images/legal/reuniao.jpg';
 
   return (
-    <section id="sobre" className={`${isFemale ? 'bg-[#FCF9F7] text-stone-800 border-[#EEDCE7]' : 'bg-white text-slate-800 border-slate-100'} py-20 sm:py-24 border-t`}>
+    <section id="sobre" className={`${isFemale ? 'bg-[#FCF9F7] text-stone-800 border-[#EEDCE7]' : 'bg-white text-slate-800 border-slate-100'} py-20 sm:py-24 border-t overflow-hidden w-full`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
           

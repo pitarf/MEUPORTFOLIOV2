@@ -2,6 +2,90 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.42.0] - 2026-10-14
+
+### Adicionado e Aprimorado (Carrossel Mobile de Depoimentos e Avaliações)
+* **Carrossel Touch-First para Celular (`LegalReviews.jsx`)**:
+  * Substituído o empilhamento vertical longo dos cards de depoimento no mobile por um carrossel horizontal deslizável via Embla Carousel.
+  * Cada card mobile ocupa 90% da largura da tela (`basis-[90%]`) com vislumbre do próximo, aspas em ouro, texto com tipografia itálica e as 5 estrelas de satisfação.
+  * Controles completos com botões circulares anterior/próximo (`ChevronLeft` / `ChevronRight`), indicadores interativos em bolinhas (*dots* animados em gradiente ouro) e contador numérico (`01 / 03`).
+  * Removidos caracteres de travessão no componente, garantindo estrita conformidade com as diretrizes do projeto.
+  * Na visualização desktop (`md:` em diante), a grade horizontal de 3 cards foi integralmente mantida.
+
+## [1.41.0] - 2026-10-14
+
+### Adicionado e Aprimorado (Carrossel Mobile de Etapas do Rito de Atendimento)
+* **Carrossel de Etapas Individuais para Celular (`LegalMethodology.jsx`)**:
+  * Substituído o empilhamento vertical das etapas no mobile por um carrossel interativo exibindo 1 etapa por vez (`basis-[90%]`) com vislumbre suave do próximo passo.
+  * Cartão de etapa individual com elevação, sombra suave, badge circular numerado e ícone temático em destaque.
+  * Controles completos com botões de navegação anterior/próximo (`ChevronLeft` / `ChevronRight`), indicadores interativos em bolinhas (*dots*) e contador formatado (`Etapa 01 de 04`).
+  * Na visualização desktop (`md:` em diante), a linha horizontal contínua conectando os 4 círculos foi integralmente preservada.
+
+## [1.40.0] - 2026-10-14
+
+### Adicionado e Aprimorado (Carrossel Mobile de Especialidades Jurídicas)
+* **Carrossel Touch-First para Celular (`LegalPracticeAreas.jsx`)**:
+  * Substituído o empilhamento vertical longo dos 5 cards no mobile por um carrossel deslizável horizontal com navegação por gestos de toque (swipe) via Embla Carousel.
+  * Cada card mobile ocupa 88% da largura da tela, exibindo um vislumbre do card seguinte para instigar a navegação fluida.
+  * Adicionados botões de navegação anterior/próximo (`ChevronLeft` / `ChevronRight`), indicadores interativos em bolinhas (dots com animação em gradiente ouro) e contador numérico de slides (`01 / 05`).
+  * No desktop e tablets (`md:`), a grade equilibrada de 3 + 2 cards foi totalmente preservada.
+
+## [1.39.0] - 2026-10-14
+
+### Corrigido e Aprimorado (Responsividade Mobile-First nas Landing Pages Jurídicas)
+* **Correção de Overflow Horizontal e Vazamento Lateral na Navbar (`LegalNavbar.jsx`)**:
+  * Identificada e corrigida a causa raiz do deslocamento lateral no mobile (que cortava o ícone da balança à esquerda e gerava faixa vazia à direita): o botão "Agendar no WhatsApp" possuía texto longo e largura fixa que, combinados com a largura rígida da logo (`max-w-[260px]`), ultrapassavam a largura de 360px a 390px dos smartphones.
+  * O botão passa a utilizar rótulo adaptativo: exibe "WhatsApp" com espaçamento otimizado no mobile e "Agendar no WhatsApp" a partir de telas `sm:` e desktop.
+  * O container da logo passa a ser flexível (`min-w-0 flex-1`) com truncamento suave de texto para nomes longos, assegurando alinhamento perfeito.
+* **Ajustes de Contenção no Hero e Seções (`LegalHero.jsx`, `LegalLandingPage.jsx`, `LegalAbout.jsx`, `LegalTopBar.jsx`)**:
+  * Adicionada contenção estrita (`w-full max-w-full overflow-hidden` e `overflow-x-hidden`) no wrapper raiz e nas seções com efeitos de gradiente, carrossel e fundos borrados.
+  * Botões de chamada para ação no Hero adaptados para ocupar 100% da largura em smartphones (`w-full sm:w-auto`) com centralização de conteúdo.
+
+## [1.38.0] - 2026-10-14
+
+### Adicionado e Integrado (Gateway Oficial Asaas API v3)
+* **Serviço Completo Asaas (`src/services/asaasService.js`)**:
+  * Implementação da API v3 do Asaas com suporte a ambientes de Sandbox (`https://sandbox.asaas.com/api/v3`) e Produção (`https://api.asaas.com/v3`).
+  * Gestão de Clientes: cadastro inteligente (`findOrCreateCustomer`), busca por CPF/CNPJ ou e-mail, consulta por ID, listagem e atualização.
+  * Cobranças & PIX: criação de cobranças (`PIX`, `BOLETO`, `CREDIT_CARD`), consulta de status, obtenção de QR Code PIX oficial (`/v3/payments/{id}/pixQrCode`), cancelamento, estorno e confirmação de recebimento manual em dinheiro.
+  * Assinaturas Recorrentes: criação com ciclos parametrizados (`MONTHLY`, `QUARTERLY`, `SEMIANNUALLY`, `YEARLY`), consulta, listagem de pagamentos e cancelamento.
+  * Links de Pagamento: emissão de links diretos de checkout rápido (`/v3/paymentLinks`).
+  * Webhooks: criação, listagem e remoção de webhooks para liquidação automática em tempo real.
+  * Finanças: consulta de saldo da conta Asaas (`/v3/finance/balance`), taxas e métricas consolidadas.
+  * Modo de simulação resiliente: testes sem credenciais em ambiente local sem falhas na UI.
+* **Migração no Banco de Dados (`portfolio_db` na VPS Oracle)**:
+  * Criadas as colunas `asaas_token`, `asaas_environment` e `active_gateway` na tabela `maintenance_settings`.
+  * Criadas as colunas `asaas_id`, `asaas_invoice_url` e `gateway` na tabela `maintenance_invoices`.
+  * Criadas as colunas `asaas_customer_id` e `asaas_subscription_id` na tabela `maintenance_subscriptions`.
+  * Recarregado o schema cache do PostgREST reiniciando o container `portfolio-api`.
+* **Painel Administrativo e Gestão de Gateways (`PushinPayConfigModal.jsx`, `maintenanceService.js`)**:
+  * Interface com abas para configuração do Asaas e PushinPay.
+  * Seletor de gateway ativo para direcionamento automático de faturas para o Asaas ou PushinPay.
+  * Botão de teste de conexão com o Asaas com consulta e exibição do saldo em tempo real.
+
+## [1.37.0] - 2026-10-14
+
+### Corrigido e Estruturado (Módulo de Mensagens e Contatos)
+* **Diagnóstico e Correção de Erro de Mensagens e Contatos (`AdminSubmissions.jsx`)**:
+  * Identificada a causa do erro na aba Atendimento (Mensagens & Contatos): as tabelas `contacts` e `quotes` não existiam no PostgreSQL, disparando erro HTTP 400 (`PGRST205`) no PostgREST.
+  * Executada migração SQL no PostgreSQL (`portfolio_db`) da VPS Oracle: criadas as tabelas `public.contacts` e `public.quotes` com campos completos e permissões para `anon` e `authenticator`.
+  * Recarregado o schema cache do PostgREST reiniciando o container `portfolio-api`.
+* **Aprimoramentos de UI e UX Premium**:
+  * Substituído o diálogo nativo `window.confirm` pelo modal elegante `AlertDialog` do Radix UI.
+  * Mensagens de feedback detalhadas e não-genéricas para ações de consulta, alteração de status e exclusão de mensagens.
+
+## [1.36.0] - 2026-10-14
+
+### Corrigido e Estruturado (Módulo Administrativo de Gerenciar Chamados)
+* **Diagnóstico e Correção de Erro de Busca de Chamados (`AdminSupport.jsx`)**:
+  * Identificada a causa da notificação "Erro ao buscar chamados": a query tentava selecionar o relacionamento `ticket_updates(*)` e filtrar por `is_archived`, mas a tabela `ticket_updates` e a coluna `is_archived` não existiam no schema `public`.
+  * Executada migração SQL no PostgreSQL (`portfolio_db`) da VPS Oracle: criada a tabela relacional `public.ticket_updates` (com cascade delete para `support_tickets`), criadas as colunas `is_archived`, `name`, `email`, `description` e `user_id` em `support_tickets` e concedidas permissões para `anon` e `authenticator`.
+  * Recarregado o schema cache do PostgREST reiniciando o container `portfolio-api`.
+* **Aprimoramentos de UI e Resiliência no `AdminSupport.jsx`**:
+  * Atualizada a busca textual para cobrir múltiplos campos: `client_name`, `client_email`, `name`, `email`, `ticket_code` e `subject`.
+  * Adicionados fallbacks seguros para exibição do nome do cliente, e-mail e descrição original da solicitação (`message || description`).
+  * Mensagens de toast específicas substituindo mensagens genéricas de erro conforme diretrizes de UX premium.
+
 ## [1.35.0] - 2026-10-14
 
 ### Corrigido e Aprimorado (Correção e Renovação Automática de Cobranças PIX Expiradas)

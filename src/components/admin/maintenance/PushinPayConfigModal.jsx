@@ -18,16 +18,32 @@ import {
     SelectTrigger,
     SelectValue
 } from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/components/ui/use-toast';
 import {
     fetchPushinPaySettings,
     updatePushinPaySettings
 } from '@/services/pushinPayService';
-import { Loader2, CreditCard, ShieldCheck, Key, HelpCircle } from 'lucide-react';
+import {
+    fetchAsaasSettings,
+    updateAsaasSettings,
+    getAccountBalance
+} from '@/services/asaasService';
+import {
+    Loader2,
+    CreditCard,
+    ShieldCheck,
+    Key,
+    HelpCircle,
+    Zap,
+    CheckCircle2,
+    Globe,
+    Server
+} from 'lucide-react';
 
 /**
- * Modal de configuracoes do gateway PushinPay e cobrancas PIX.
- * Permite cadastrar o token Bearer, segredo de webhook, chave PIX e templates de aviso.
+ * Modal executivo de configuracoes de gateways de pagamento (PushinPay e Asaas v3).
+ * Permite cadastrar credenciais, ambiente Sandbox/Producao, chave PIX e definir gateway ativo.
  *
  * @param {Object} props
  * @param {boolean} props.isOpen Estado de visibilidade
@@ -37,14 +53,21 @@ const PushinPayConfigModal = ({ isOpen, onClose }) => {
     const { toast } = useToast();
     const [loading, setLoading] = useState(false);
     const [saving, setSaving] = useState(false);
+    const [testingAsaas, setTestingAsaas] = useState(false);
+    const [asaasStatusInfo, setAsaasStatusInfo] = useState(null);
 
     const [settings, setSettings] = useState({
+        active_gateway: 'pushinpay',
+        // PushinPay
         pushinpay_token: '',
         pushinpay_webhook_token: '',
         default_pix_key: '',
         default_pix_key_type: 'chave_aleatoria',
         webhook_url: '',
-        whatsapp_notification_template: ''
+        whatsapp_notification_template: '',
+        // Asaas
+        asaas_token: '',
+        asaas_environment: 'sandbox'
     });
 
     useEffect(() => {
@@ -52,22 +75,28 @@ const PushinPayConfigModal = ({ isOpen, onClose }) => {
 
         const loadSettings = async () => {
             setLoading(true);
+            setAsaasStatusInfo(null);
             try {
-                const data = await fetchPushinPaySettings();
+                const pushinData = await fetchPushinPaySettings();
+                const asaasData = await fetchAsaasSettings();
+
                 setSettings({
-                    pushinpay_token: data.pushinpay_token || '',
-                    pushinpay_webhook_token: data.pushinpay_webhook_token || '',
-                    default_pix_key: data.default_pix_key || '',
-                    default_pix_key_type: data.default_pix_key_type || 'chave_aleatoria',
-                    webhook_url: data.webhook_url || '',
-                    whatsapp_notification_template: data.whatsapp_notification_template || ''
+                    active_gateway: asaasData.active_gateway || 'pushinpay',
+                    pushinpay_token: pushinData.pushinpay_token || '',
+                    pushinpay_webhook_token: pushinData.pushinpay_webhook_token || '',
+                    default_pix_key: pushinData.default_pix_key || '',
+                    default_pix_key_type: pushinData.default_pix_key_type || 'chave_aleatoria',
+                    webhook_url: pushinData.webhook_url || '',
+                    whatsapp_notification_template: pushinData.whatsapp_notification_template || '',
+                    asaas_token: asaasData.asaas_token || '',
+                    asaas_environment: asaasData.asaas_environment || 'sandbox'
                 });
             } catch (err) {
-                console.error('Erro ao buscar configuracoes da PushinPay:', err);
+                console.error('Erro ao buscar configuracoes de gateways:', err);
                 toast({
                     variant: 'destructive',
                     title: 'Erro ao carregar configurações',
-                    description: 'Não foi possível carregar as credenciais da PushinPay.'
+                    description: 'Não foi possível carregar as credenciais dos gateways de pagamento.'
                 });
             } finally {
                 setLoading(false);
@@ -82,6 +111,7 @@ const PushinPayConfigModal = ({ isOpen, onClose }) => {
         setSaving(true);
 
         try {
+            // Salva PushinPay
             await updatePushinPaySettings({
                 pushinpay_token: settings.pushinpay_token.trim(),
                 pushinpay_webhook_token: settings.pushinpay_webhook_token.trim(),
@@ -91,9 +121,16 @@ const PushinPayConfigModal = ({ isOpen, onClose }) => {
                 whatsapp_notification_template: settings.whatsapp_notification_template.trim()
             });
 
+            // Salva Asaas e Gateway Ativo
+            await updateAsaasSettings({
+                asaas_token: settings.asaas_token.trim(),
+                asaas_environment: settings.asaas_environment,
+                active_gateway: settings.active_gateway
+            });
+
             toast({
                 title: 'Configurações salvas!',
-                description: 'As credenciais da PushinPay e chave Pix foram atualizadas com sucesso.'
+                description: 'As credenciais do Asaas e PushinPay foram atualizadas com sucesso no banco de dados.'
             });
             onClose();
         } catch (err) {
@@ -108,129 +145,254 @@ const PushinPayConfigModal = ({ isOpen, onClose }) => {
         }
     };
 
+    const handleTestAsaasConnection = async () => {
+        setTestingAsaas(true);
+        setAsaasStatusInfo(null);
+        try {
+            const balanceData = await getAccountBalance();
+            setAsaasStatusInfo({
+                success: true,
+                message: `Conexão bem-sucedida! Saldo disponível na conta Asaas: R$ ${Number(balanceData?.balance || 0).toFixed(2).replace('.', ',')}`
+            });
+            toast({
+                title: 'Conexão Asaas Validada!',
+                description: `API respondeu com sucesso. Ambiente: ${settings.asaas_environment.toUpperCase()}.`
+            });
+        } catch (err) {
+            console.error('Falha ao testar conexao com Asaas:', err);
+            setAsaasStatusInfo({
+                success: false,
+                message: err.message || 'Falha na comunicação com o Asaas.'
+            });
+            toast({
+                variant: 'destructive',
+                title: 'Falha na Conexão com Asaas',
+                description: err.message || 'Verifique se o token de acesso e o ambiente estão corretos.'
+            });
+        } finally {
+            setTestingAsaas(false);
+        }
+    };
+
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
+            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2 text-xl font-bold">
                         <CreditCard className="w-5 h-5 text-emerald-500" />
-                        Configurações PushinPay & PIX
+                        Gateways de Pagamento (Asaas & PushinPay)
                     </DialogTitle>
                     <DialogDescription>
-                        Credenciais da API Cash-In da PushinPay para geração automática de QR Codes PIX e recebimento direto.
+                        Configure as credenciais da API do Asaas v3 e PushinPay para geração de faturas PIX e assinaturas.
                     </DialogDescription>
                 </DialogHeader>
 
                 {loading ? (
                     <div className="flex flex-col items-center justify-center py-12 text-muted-foreground gap-3">
                         <Loader2 className="w-8 h-8 animate-spin text-primary" />
-                        <span className="text-sm">Carregando configurações...</span>
+                        <span className="text-sm">Carregando configurações de pagamento...</span>
                     </div>
                 ) : (
-                    <form onSubmit={handleSave} className="space-y-5 pt-2">
-                        {/* Token PushinPay */}
-                        <div className="space-y-1.5">
-                            <Label htmlFor="pushinpay_token" className="flex items-center justify-between">
-                                <span className="flex items-center gap-1.5">
-                                    <Key className="w-4 h-4 text-primary" />
-                                    Token de Produção PushinPay (Bearer)
-                                </span>
+                    <form onSubmit={handleSave} className="space-y-6 pt-2">
+                        {/* Seletor de Gateway Ativo */}
+                        <div className="p-4 rounded-xl border bg-muted/30 space-y-2">
+                            <Label htmlFor="active_gateway" className="text-sm font-semibold flex items-center gap-2">
+                                <Zap className="w-4 h-4 text-amber-500" />
+                                Gateway Ativo Padrão para Novas Faturas
                             </Label>
-                            <Input
-                                id="pushinpay_token"
-                                type="password"
-                                placeholder="Insira seu token oficial da PushinPay..."
-                                value={settings.pushinpay_token}
-                                onChange={(e) => setSettings({ ...settings, pushinpay_token: e.target.value })}
-                            />
+                            <Select
+                                value={settings.active_gateway}
+                                onValueChange={(val) => setSettings({ ...settings, active_gateway: val })}
+                            >
+                                <SelectTrigger id="active_gateway" className="font-medium bg-background">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="asaas">Asaas v3 (PIX Oficial, Boleto e Gestão Completa)</SelectItem>
+                                    <SelectItem value="pushinpay">PushinPay (PIX Direto Cash-In)</SelectItem>
+                                </SelectContent>
+                            </Select>
                             <p className="text-xs text-muted-foreground">
-                                Caso este token esteja vazio, o sistema operará no modo de simulação e contingência PIX seguro.
+                                Define qual provedor processará automaticamente a emissão dos QR Codes PIX no painel e na área do cliente.
                             </p>
                         </div>
 
-                        {/* Token de Webhook */}
-                        <div className="space-y-1.5">
-                            <Label htmlFor="pushinpay_webhook_token" className="flex items-center gap-1.5">
-                                <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                                Token do Webhook (Segredo de Validação)
-                            </Label>
-                            <Input
-                                id="pushinpay_webhook_token"
-                                placeholder="whsec_..."
-                                value={settings.pushinpay_webhook_token}
-                                onChange={(e) => setSettings({ ...settings, pushinpay_webhook_token: e.target.value })}
-                            />
-                            <p className="text-xs text-muted-foreground">
-                                Token enviado na query string para autenticar os disparos de confirmação de pagamento.
-                            </p>
-                        </div>
+                        {/* Abas para cada Gateway */}
+                        <Tabs defaultValue={settings.active_gateway === 'asaas' ? 'asaas' : 'asaas'} className="w-full">
+                            <TabsList className="grid grid-cols-2 w-full">
+                                <TabsTrigger value="asaas" className="flex items-center gap-2">
+                                    <Server className="w-4 h-4 text-primary" />
+                                    Asaas (API v3)
+                                </TabsTrigger>
+                                <TabsTrigger value="pushinpay" className="flex items-center gap-2">
+                                    <Zap className="w-4 h-4 text-emerald-500" />
+                                    PushinPay (Cash-In)
+                                </TabsTrigger>
+                            </TabsList>
 
-                        {/* Chave PIX Padrão e Tipo */}
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                            <div className="sm:col-span-2 space-y-1.5">
-                                <Label htmlFor="default_pix_key">Chave PIX Padrão (Fallback)</Label>
-                                <Input
-                                    id="default_pix_key"
-                                    placeholder="ex: contato@rafaelpitaoficial.com.br"
-                                    value={settings.default_pix_key}
-                                    onChange={(e) => setSettings({ ...settings, default_pix_key: e.target.value })}
-                                />
-                            </div>
+                            {/* ABA ASAAS */}
+                            <TabsContent value="asaas" className="space-y-4 pt-3">
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="asaas_environment" className="flex items-center gap-1.5">
+                                        <Globe className="w-4 h-4 text-primary" />
+                                        Ambiente da API Asaas
+                                    </Label>
+                                    <Select
+                                        value={settings.asaas_environment}
+                                        onValueChange={(val) => setSettings({ ...settings, asaas_environment: val })}
+                                    >
+                                        <SelectTrigger id="asaas_environment" className="bg-background">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="sandbox">Sandbox: Homologação e Testes (https://sandbox.asaas.com/api/v3)</SelectItem>
+                                            <SelectItem value="production">Produção Oficial (https://api.asaas.com/v3)</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <p className="text-xs text-muted-foreground">
+                                        No modo Sandbox, cobranças são geradas para teste sem débito real.
+                                    </p>
+                                </div>
 
-                            <div className="space-y-1.5">
-                                <Label htmlFor="default_pix_key_type">Tipo de Chave</Label>
-                                <Select
-                                    value={settings.default_pix_key_type}
-                                    onValueChange={(val) => setSettings({ ...settings, default_pix_key_type: val })}
-                                >
-                                    <SelectTrigger id="default_pix_key_type">
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="chave_aleatoria">Aleatória</SelectItem>
-                                        <SelectItem value="email">E-mail</SelectItem>
-                                        <SelectItem value="telefone">Telefone</SelectItem>
-                                        <SelectItem value="cpf_cnpj">CPF/CNPJ</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        </div>
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="asaas_token" className="flex items-center justify-between">
+                                        <span className="flex items-center gap-1.5">
+                                            <Key className="w-4 h-4 text-primary" />
+                                            Token de Acesso Asaas (API Key / access_token)
+                                        </span>
+                                    </Label>
+                                    <Input
+                                        id="asaas_token"
+                                        type="password"
+                                        placeholder="$aact_YTU5YTE0M2M6N2Zl..."
+                                        value={settings.asaas_token}
+                                        onChange={(e) => setSettings({ ...settings, asaas_token: e.target.value })}
+                                    />
+                                    <p className="text-xs text-muted-foreground">
+                                        Chave gerada no menu Integrações / Chaves de API do painel Asaas.
+                                    </p>
+                                </div>
 
-                        {/* Webhook URL */}
-                        <div className="space-y-1.5">
-                            <Label htmlFor="webhook_url">URL de Notificação do Webhook</Label>
-                            <Input
-                                id="webhook_url"
-                                placeholder="https://seudominio.com.br/api/pushinpay-webhook"
-                                value={settings.webhook_url}
-                                onChange={(e) => setSettings({ ...settings, webhook_url: e.target.value })}
-                            />
-                            <p className="text-xs text-muted-foreground">
-                                Endpoint HTTPS cadastrado no painel da PushinPay para receber os callbacks em tempo real.
-                            </p>
-                        </div>
+                                <div className="flex items-center justify-between pt-1">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={handleTestAsaasConnection}
+                                        disabled={testingAsaas}
+                                        className="gap-2"
+                                    >
+                                        {testingAsaas ? (
+                                            <Loader2 className="w-4 h-4 animate-spin text-primary" />
+                                        ) : (
+                                            <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                                        )}
+                                        Testar Conexão com Asaas
+                                    </Button>
 
-                        {/* Template WhatsApp */}
-                        <div className="space-y-1.5">
-                            <Label htmlFor="whatsapp_template">Mensagem Padrão para Cobrança via WhatsApp</Label>
-                            <Textarea
-                                id="whatsapp_template"
-                                rows={3}
-                                placeholder="Olá {{cliente}}, sua fatura {{fatura}} no valor de R$ {{valor}} vence em {{vencimento}}. Link PIX: {{link_pix}}"
-                                value={settings.whatsapp_notification_template}
-                                onChange={(e) => setSettings({ ...settings, whatsapp_notification_template: e.target.value })}
-                            />
-                            <p className="text-xs text-muted-foreground">
-                                Variáveis disponíveis: {'{{cliente}}'}, {'{{fatura}}'}, {'{{valor}}'}, {'{{vencimento}}'}, {'{{link_pix}}'}.
-                            </p>
-                        </div>
+                                    {asaasStatusInfo && (
+                                        <span className={`text-xs font-medium ${asaasStatusInfo.success ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
+                                            {asaasStatusInfo.message}
+                                        </span>
+                                    )}
+                                </div>
 
-                        <div className="rounded-lg bg-emerald-500/10 border border-emerald-500/20 p-3 text-xs text-emerald-700 dark:text-emerald-300 flex items-start gap-2">
-                            <HelpCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                            <span>
-                                Os valores enviados para o Cash-In da PushinPay são convertidos estritamente em números inteiros de centavos para garantir total precisão contábil.
-                            </span>
-                        </div>
+                                <div className="rounded-lg bg-primary/10 border border-primary/20 p-3 text-xs text-primary dark:text-primary-foreground/80 flex items-start gap-2">
+                                    <HelpCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                                    <span>
+                                        O serviço Asaas gerencia clientes automaticamente por CPF/CNPJ ou e-mail, gera o QR Code PIX oficial com prazo de expiração e sincroniza o link de pagamento da fatura.
+                                    </span>
+                                </div>
+                            </TabsContent>
+
+                            {/* ABA PUSHINPAY */}
+                            <TabsContent value="pushinpay" className="space-y-4 pt-3">
+                                {/* Token PushinPay */}
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="pushinpay_token" className="flex items-center justify-between">
+                                        <span className="flex items-center gap-1.5">
+                                            <Key className="w-4 h-4 text-emerald-500" />
+                                            Token de Produção PushinPay (Bearer)
+                                        </span>
+                                    </Label>
+                                    <Input
+                                        id="pushinpay_token"
+                                        type="password"
+                                        placeholder="Insira seu token oficial da PushinPay..."
+                                        value={settings.pushinpay_token}
+                                        onChange={(e) => setSettings({ ...settings, pushinpay_token: e.target.value })}
+                                    />
+                                </div>
+
+                                {/* Token de Webhook */}
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="pushinpay_webhook_token" className="flex items-center gap-1.5">
+                                        <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                                        Token do Webhook (Segredo de Validação)
+                                    </Label>
+                                    <Input
+                                        id="pushinpay_webhook_token"
+                                        placeholder="whsec_..."
+                                        value={settings.pushinpay_webhook_token}
+                                        onChange={(e) => setSettings({ ...settings, pushinpay_webhook_token: e.target.value })}
+                                    />
+                                </div>
+
+                                {/* Chave PIX Padrão e Tipo */}
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                    <div className="sm:col-span-2 space-y-1.5">
+                                        <Label htmlFor="default_pix_key">Chave PIX Padrão (Fallback)</Label>
+                                        <Input
+                                            id="default_pix_key"
+                                            placeholder="ex: contato@rafaelpitaoficial.com.br"
+                                            value={settings.default_pix_key}
+                                            onChange={(e) => setSettings({ ...settings, default_pix_key: e.target.value })}
+                                        />
+                                    </div>
+
+                                    <div className="space-y-1.5">
+                                        <Label htmlFor="default_pix_key_type">Tipo de Chave</Label>
+                                        <Select
+                                            value={settings.default_pix_key_type}
+                                            onValueChange={(val) => setSettings({ ...settings, default_pix_key_type: val })}
+                                        >
+                                            <SelectTrigger id="default_pix_key_type">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="chave_aleatoria">Aleatória</SelectItem>
+                                                <SelectItem value="email">E-mail</SelectItem>
+                                                <SelectItem value="telefone">Telefone</SelectItem>
+                                                <SelectItem value="cpf_cnpj">CPF/CNPJ</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                </div>
+
+                                {/* Webhook URL */}
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="webhook_url">URL de Notificação do Webhook</Label>
+                                    <Input
+                                        id="webhook_url"
+                                        placeholder="https://seudominio.com.br/api/pushinpay-webhook"
+                                        value={settings.webhook_url}
+                                        onChange={(e) => setSettings({ ...settings, webhook_url: e.target.value })}
+                                    />
+                                </div>
+
+                                {/* Template WhatsApp */}
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="whatsapp_template">Mensagem Padrão para Cobrança via WhatsApp</Label>
+                                    <Textarea
+                                        id="whatsapp_template"
+                                        rows={3}
+                                        placeholder="Olá {{cliente}}, sua fatura {{fatura}} no valor de R$ {{valor}} vence em {{vencimento}}. Link PIX: {{link_pix}}"
+                                        value={settings.whatsapp_notification_template}
+                                        onChange={(e) => setSettings({ ...settings, whatsapp_notification_template: e.target.value })}
+                                    />
+                                </div>
+                            </TabsContent>
+                        </Tabs>
 
                         <DialogFooter className="gap-2 sm:gap-0">
                             <Button

@@ -768,3 +768,40 @@ Seu sistema agora conta com um módulo completo para controle de faturamento rec
    * Seção de Faturas Pendentes com botão "Pagar com PIX", exibindo o QR Code na tela e botão de cópia rápida da chave Copia e Cola.
    * Histórico de mensalidades quitadas com emissão de recibo digital de comprovação.
    * Abertura de chamados de suporte técnico vinculados à assinatura com protocolo exclusivo (`TICK-2026-XXXX`) e canal direto para contato no WhatsApp de suporte.
+
+### 19.23 Gateway de Pagamento Asaas v3 & Multi-Gateway de Cobrança
+Seu sistema agora conta com integração oficial com o gateway bancário Asaas e arquitetura multi-gateway para recebimento de mensalidades:
+1. **Configuração de Gateways (`/admin/assinaturas` -> Botão "Gateways & Cobrança")**:
+   * **Seletor de Gateway Ativo**: Escolha entre Asaas v3 e PushinPay como motor principal de emissão de cobranças com um único clique.
+   * **Aba Asaas v3**:
+     * Insira sua API Key do Asaas (chave de produção ou sandbox).
+     * Alternador de Ambiente: Sandbox (testes) ou Produção (real).
+     * Botão "Testar Conexão": Verifica em tempo real o status da API do Asaas e exibe o saldo financeiro disponível na conta.
+     * Webhook URL: Endereço para sincronização de notificações automáticas de liquidação.
+   * **Aba PushinPay**:
+     * Token de API e Webhook Token da PushinPay, com chave Pix padrão de contingência.
+2. **Geração Inteligente de Faturas**:
+   * Ao clicar em "Gerar Fatura / PIX", o sistema consulta o gateway ativo configurado e gera o QR Code e o código Pix Copia e Cola instantaneamente.
+   * Se o Asaas estiver ativo, a fatura é criada diretamente no ecossistema do Asaas com link de pagamento e código PIX dinâmico.
+
+### 19.24 Experiência Mobile com Carrosséis Touch nas Landing Pages de Advogados
+Para potencializar as conversões em smartphones, as Landing Pages Jurídicas contam com navegação mobile nativa:
+1. **Navegação Superior Otimizada**:
+   * O cabeçalho foi ajustado para celulares: o botão de ação rápida exibe "WhatsApp" em vez do texto longo, garantindo que o logo e as informações fiquem visíveis sem cortes ou vazamentos laterais.
+2. **Carrossel Touch de Áreas de Atuação**:
+   * No celular, as especialidades jurídicas são apresentadas em formato de carrossel deslizante por toque (swipe), com setas de navegação e indicadores em formato de pontos (dots). No desktop, permanece a grade executiva 3 + 2.
+3. **Carrossel Touch do Rito de Atendimento (Metodologia)**:
+   * Cada etapa do atendimento jurídico (Diagnóstico, Análise, Estratégia e Acompanhamento) é exibida individualmente no celular em um carrossel focado, permitindo leitura confortável sem sobrecarregar a tela.
+4. **Carrossel Touch de Avaliações e Depoimentos**:
+   * Os depoimentos de clientes com estrelas douradas podem ser folheados deslizando com o dedo, garantindo prova social envolvente no mobile.
+
+### 19.25 Gestão Ágil com Ações em Massa (Chamados, Submissões e Orçamentos)
+Para agilizar o trabalho administrativo diário:
+1. **Chamados de Suporte (`/admin/suporte`)**:
+   * Marque vários chamados pelas caixas de seleção na lateral esquerda.
+   * Na barra flutuante inferior, altere o status em bloco ("Concluir Selecionados", "Em Andamento") ou exclua múltiplos chamados de uma só vez.
+2. **Submissões de Formulários (`/admin/submissoes`)**:
+   * Selecione mensagens em massa para marcar como lidas ou excluir contatos em lote.
+3. **Orçamentos Comerciais (`/admin/orcamentos`)**:
+   * Seleção múltipla para avanço em massa no pipeline de vendas.
+
