@@ -645,3 +645,15 @@ Para aumentar a produtividade operacional na gestão de clientes:
 3. **Orçamentos Comerciais (`ManageBudgets.jsx`)**:
    - Seleção múltipla e transição de status em bloco no pipeline comercial.
 
+### 13.28 Sistema Tipográfico de Luxo Editorial com Cormorant Garamond (`index.html`, `src/index.css`, `tailwind.config.js`)
+Para transmitir autoridade e refinamento estético alinhados aos padrões internacionais de design de luxo:
+1. **Integração no Ecossistema de Estilos**:
+   - Google Fonts atualizado com os pesos 400, 500, 600, 700 e variantes itálicas da família Cormorant Garamond.
+   - Vinculado em `index.html` (com `preconnect` para alta performance de carregamento) e em `src/index.css` via `@import`.
+2. **Mapeamento no Tailwind CSS**:
+   - `fontFamily.serif` passa a priorizar `"Cormorant Garamond"` antes de `"Playfair Display"` e `"Georgia"`.
+   - Adicionada a classe utilitária direta `font-cormorant`.
+3. **Aplicação nas Páginas**:
+   - Aplicada automaticamente a todos os títulos, headlines e destaques que consom `font-serif`, com especial destaque para as Landing Pages Jurídicas e seções de alta autoridade.
+
+

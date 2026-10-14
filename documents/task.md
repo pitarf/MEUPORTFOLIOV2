@@ -2,6 +2,10 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Substituição da Tipografia Serifada por Cormorant Garamond (`index.html`, `src/index.css`, `tailwind.config.js`)**:
+  - Incorporada a fonte de alto luxo editorial Cormorant Garamond via Google Fonts (pesos 400, 500, 600, 700 e itálico).
+  - Configurada como primeira opção de `fontFamily.serif` no Tailwind CSS, elevando instantaneamente o refinamento visual das Landing Pages Jurídicas e elementos de destaque sem quebrar o layout.
+
 - [x] **Carrossel Mobile de Depoimentos e Avaliações de Clientes (`LegalReviews.jsx`)**:
   - Implementado carrossel touch-first para smartphones (`< md`): os cards de avaliações agora deslizam suavemente com suporte a gestos de toque (swipe via Embla Carousel), permitindo visualizar 1 depoimento por vez com vislumbre do próximo (`basis-[90%]`).
   - Cada card conta com aspas douradas estilizadas, depoimento contextualizado por nicho e cidade, nome do cliente e as 5 estrelas douradas de satisfação.

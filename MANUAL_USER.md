@@ -805,3 +805,12 @@ Para agilizar o trabalho administrativo diário:
 3. **Orçamentos Comerciais (`/admin/orcamentos`)**:
    * Seleção múltipla para avanço em massa no pipeline de vendas.
 
+### 19.26 Tipografia de Luxo Cormorant Garamond
+Para elevar o valor percebido das suas páginas públicas e demonstrações jurídicas:
+1. **Identidade Visual Refinada**:
+   * A família tipográfica Cormorant Garamond foi definida como a fonte serifada oficial do sistema.
+   * Inspirada nas matrizes clássicas dos séculos XVI e XVIII e amplamente adotada por marcas de alta joalheria, editoriais de prestígio e escritórios de advocacia internacionais, ela entrega serenidade, requinte e sofisticação a cada título e elemento de destaque.
+2. **Harmonização Automática**:
+   * Não é necessária nenhuma configuração manual: todas as demonstrações de advogados e páginas com design editorial já carregam a nova tipografia instantaneamente em computadores e celulares.
+
+

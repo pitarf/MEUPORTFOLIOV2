@@ -2,6 +2,14 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.43.0] - 2026-10-14
+
+### Aprimorado (Tipografia de Luxo Editorial com Cormorant Garamond)
+* **Substituição da Fonte Serifada Padrão por Cormorant Garamond**:
+  * Integrada a fonte de altíssimo luxo editorial Cormorant Garamond via Google Fonts em `index.html` e `src/index.css`.
+  * Atualizada a configuração de `fontFamily.serif` e criada a chave utilitária `cormorant` em `tailwind.config.js`.
+  * Todas as seções e títulos com a classe `font-serif` (destaque para Landing Pages Jurídicas femininas e corporativas de elite) passam a utilizar a proporção nobre, delicada e sofisticada da Cormorant Garamond.
+
 ## [1.42.0] - 2026-10-14
 
 ### Adicionado e Aprimorado (Carrossel Mobile de Depoimentos e Avaliações)
