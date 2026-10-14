@@ -108,12 +108,12 @@ const InvoicePixModal = ({
         if (!activeInvoice) return;
         setLoadingPix(true);
         try {
-            const updated = await ensureInvoicePix(activeInvoice.id);
+            const updated = await ensureInvoicePix(activeInvoice.id, { forceRefresh: true });
             if (updated) {
                 setLocalInvoice(updated);
                 toast({
-                    title: 'PIX Sincronizado!',
-                    description: 'QR Code e chave Copia e Cola atualizados com sucesso.'
+                    title: 'PIX Atualizado!',
+                    description: 'Novo QR Code e chave Copia e Cola emitidos com sucesso.'
                 });
             }
         } catch (err) {
@@ -309,6 +309,17 @@ const InvoicePixModal = ({
                         <span className="text-xs text-muted-foreground mt-2 text-center">
                             Abra o aplicativo do banco e aponte a câmera para ler o QR Code
                         </span>
+                        {activeInvoice.status !== 'pago' && (
+                            <button
+                                type="button"
+                                onClick={handleManualRegeneratePix}
+                                disabled={loadingPix}
+                                className="mt-2 text-[11px] text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 transition-colors font-medium"
+                            >
+                                <RefreshCw className={`w-3 h-3 ${loadingPix ? 'animate-spin' : ''}`} />
+                                Não conseguiu ler ou QR Code expirou? Clique para renovar
+                            </button>
+                        )}
                     </div>
 
                     {/* Copia e Cola */}

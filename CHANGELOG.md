@@ -2,6 +2,19 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.35.0] - 2026-10-14
+
+### Corrigido e Aprimorado (Correção e Renovação Automática de Cobranças PIX Expiradas)
+* **Diagnóstico e Correção de Erro de Leitura no App Bancário**:
+  * Identificada a causa da rejeição do aplicativo bancário ("Problema com o QR Code: Não conseguimos ler os dados do QR Code"): a transação original da Woovi/PushinPay possuía validade de 24 horas (`expiration_date: 2026-10-06`) e havia expirado.
+  * Reemitida e atualizada imediatamente no gateway e no banco de dados da VPS Oracle a fatura `FAT-2026-GR3N` (Brasil Ltda, R$ 500,00) com novo QR Code e código Copia e Cola ativos (`a2fb2019-543c-474e-8136-282799bb99cc`).
+* **Auto-Renovação Inteligente de PIX Expirado (`src/services/maintenanceService.js`)**:
+  * Atualizada a função `ensureInvoicePix`: cobranças dinâmicas da PushinPay criadas há mais de 20 horas são identificadas automaticamente como expiradas ou próximas do vencimento e renovadas de forma transparente.
+  * Adicionado suporte ao parâmetro `{ forceRefresh: true }` para forçar geração de uma nova transação a qualquer momento.
+* **Ações de Renovação Manual e Resiliência na UI (`InvoicePixModal.jsx`, `ClientSubscriptionPortal.jsx`, `InvoicePdfModal.jsx`)**:
+  * Adicionado link direto "Não conseguiu ler ou QR Code expirou? Clique para renovar" no modal administrativo e no Portal do Assinante.
+  * Integrada verificação de validade de PIX ao abrir o modal de PDF, garantindo que arquivos baixados ou impressos sempre possuam códigos vigentes.
+
 ## [1.34.0] - 2026-10-05
 
 ### Aprimorado (Sincronização Dinâmica em Tempo Real e Atualização em Cascata de Faturas em PDF)

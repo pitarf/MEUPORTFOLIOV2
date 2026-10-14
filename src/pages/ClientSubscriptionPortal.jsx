@@ -25,7 +25,8 @@ import {
     ArrowRight,
     ExternalLink,
     Pencil,
-    Globe
+    Globe,
+    RefreshCw
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -358,33 +359,34 @@ const ClientSubscriptionPortal = () => {
     };
 
     /**
-     * Alterna a exibicao do PIX da fatura, garantindo a emissao do QR Code caso necessario
+     * Alterna a exibicao do PIX da fatura, garantindo a emissao do QR Code caso necessario ou renovando quando solicitado
      */
-    const handleTogglePixInvoice = async (inv) => {
+    const handleTogglePixInvoice = async (inv, forceRenew = false) => {
         if (!inv) return;
-        if (selectedPixInvoice?.id === inv.id) {
+        if (selectedPixInvoice?.id === inv.id && !forceRenew) {
             setSelectedPixInvoice(null);
             return;
         }
 
-        // Se a fatura estiver sem codigo PIX, recupera automaticamente
-        if (!inv.pix_qr_code || inv.pix_qr_code.trim() === '') {
-            try {
-                const updated = await ensureInvoicePix(inv.id);
-                const resolved = updated || inv;
-                setSelectedPixInvoice(resolved);
-                setPortalData((prev) => {
-                    if (!prev) return prev;
-                    return {
-                        ...prev,
-                        pendingInvoices: (prev.pendingInvoices || []).map((p) => p.id === inv.id ? { ...p, ...resolved } : p)
-                    };
+        try {
+            const updated = await ensureInvoicePix(inv.id, { forceRefresh: forceRenew });
+            const resolved = updated || inv;
+            setSelectedPixInvoice(resolved);
+            setPortalData((prev) => {
+                if (!prev) return prev;
+                return {
+                    ...prev,
+                    pendingInvoices: (prev.pendingInvoices || []).map((p) => p.id === inv.id ? { ...p, ...resolved } : p)
+                };
+            });
+            if (forceRenew) {
+                toast({
+                    title: 'PIX Atualizado!',
+                    description: 'O QR Code e a chave Copia e Cola foram renovados com sucesso.'
                 });
-            } catch (err) {
-                console.warn('Aviso ao sincronizar PIX no portal:', err.message);
-                setSelectedPixInvoice(inv);
             }
-        } else {
+        } catch (err) {
+            console.warn('Aviso ao sincronizar PIX no portal:', err.message);
             setSelectedPixInvoice(inv);
         }
     };
@@ -811,6 +813,17 @@ const ClientSubscriptionPortal = () => {
                                                                 <p className="text-xs text-muted-foreground">
                                                                     Abra o app do seu banco, escolha <strong>Pix</strong> e aponte a câmera.
                                                                 </p>
+
+                                                                <div className="pt-0.5">
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => handleTogglePixInvoice(inv, true)}
+                                                                        className="text-[11px] text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center gap-1 font-medium"
+                                                                    >
+                                                                        <RefreshCw className="w-3 h-3" />
+                                                                        Problema ao ler QR Code ou cobrança expirou? Clique para atualizar
+                                                                    </button>
+                                                                </div>
 
                                                                 {/* Copia e Cola */}
                                                                 {inv.pix_qr_code && (

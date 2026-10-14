@@ -25,7 +25,7 @@ import {
 } from 'lucide-react';
 import html2pdf from 'html2pdf.js';
 import { fetchPricingSettings } from '@/services/budgetService';
-import { getSubscriptionById } from '@/services/maintenanceService';
+import { getSubscriptionById, ensureInvoicePix } from '@/services/maintenanceService';
 import {
     formatCurrencyBRL,
     formatDateBR,
@@ -58,11 +58,38 @@ const InvoicePdfModal = ({
     const [copiedPix, setCopiedPix] = useState(false);
     const [companySettings, setCompanySettings] = useState(initialPricingSettings);
     const [liveSubscription, setLiveSubscription] = useState(invoice?.subscription || null);
+    const [liveInvoice, setLiveInvoice] = useState(invoice || null);
 
-    // Sincroniza liveSubscription com a prop invoice
+    // Sincroniza liveSubscription e liveInvoice com a prop invoice
     useEffect(() => {
         setLiveSubscription(invoice?.subscription || null);
-    }, [invoice?.subscription]);
+        setLiveInvoice(invoice || null);
+    }, [invoice]);
+
+    // Busca os dados atualizados em tempo real da fatura e PIX quando o modal abre
+    useEffect(() => {
+        if (!isOpen || !invoice?.id) return;
+
+        let isMounted = true;
+        const syncFreshInvoicePix = async () => {
+            try {
+                // Se a fatura estiver pendente, assegura que o QR Code PIX esteja ativo e nao expirado
+                if (invoice.status !== 'pago') {
+                    const refreshed = await ensureInvoicePix(invoice.id);
+                    if (isMounted && refreshed) {
+                        setLiveInvoice(refreshed);
+                    }
+                }
+            } catch (err) {
+                console.warn('Aviso ao sincronizar PIX no PDF da fatura:', err.message);
+            }
+        };
+
+        syncFreshInvoicePix();
+        return () => {
+            isMounted = false;
+        };
+    }, [isOpen, invoice?.id, invoice?.status]);
 
     // Busca os dados atualizados em tempo real da assinatura no banco quando o modal abre
     useEffect(() => {
@@ -117,12 +144,14 @@ const InvoicePdfModal = ({
         };
     }, [isOpen, initialPricingSettings]);
 
-    if (!invoice) return null;
+    if (!invoice && !liveInvoice) return null;
+
+    const activeInvoice = liveInvoice || invoice;
 
     // Prioriza sempre os dados vivos e mais recentes da assinatura vinculada
-    const subscription = liveSubscription || invoice.subscription || {};
-    const isPaid = invoice.status === 'pago';
-    const statusMeta = getInvoiceStatusMeta(invoice.status);
+    const subscription = liveSubscription || activeInvoice.subscription || {};
+    const isPaid = activeInvoice.status === 'pago';
+    const statusMeta = getInvoiceStatusMeta(activeInvoice.status);
 
     // Dados da Empresa Emissora (Rafael Pita Solutions) com fallbacks
     const company = {
@@ -140,13 +169,13 @@ const InvoicePdfModal = ({
     };
 
     // Datas formatadas
-    const createdAtDate = invoice.created_at ? new Date(invoice.created_at) : new Date();
+    const createdAtDate = activeInvoice.created_at ? new Date(activeInvoice.created_at) : new Date();
     const issueDateStr = formatDateBR(createdAtDate);
-    const dueDateStr = formatDateBR(invoice.due_date);
-    const paidDateStr = invoice.paid_at ? formatDateBR(invoice.paid_at) : null;
+    const dueDateStr = formatDateBR(activeInvoice.due_date);
+    const paidDateStr = activeInvoice.paid_at ? formatDateBR(activeInvoice.paid_at) : null;
 
     // Competencia calculada (mes e ano do vencimento)
-    const dueDateObj = invoice.due_date ? new Date(invoice.due_date + 'T12:00:00') : new Date();
+    const dueDateObj = activeInvoice.due_date ? new Date(activeInvoice.due_date + 'T12:00:00') : new Date();
     const monthNames = [
         'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
         'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
@@ -154,15 +183,15 @@ const InvoicePdfModal = ({
     const competenceStr = `${monthNames[dueDateObj.getMonth()]} de ${dueDateObj.getFullYear()}`;
 
     // Codigo da Fatura
-    const invoiceCode = invoice.invoice_code || `FAT-${new Date().getFullYear()}-001`;
+    const invoiceCode = activeInvoice.invoice_code || `FAT-${new Date().getFullYear()}-001`;
 
     // Websites Cobertos pela Manutencao: SEMPRE prioriza os dados vivos e mais atuais da assinatura
-    const rawCoveredWebsites = subscription.covered_websites || invoice.covered_websites || '';
+    const rawCoveredWebsites = subscription.covered_websites || activeInvoice.covered_websites || '';
     const coveredWebsitesList = parseCoveredWebsites(rawCoveredWebsites);
 
     // PIX dados
-    const pixCode = invoice.pix_qr_code || '';
-    const pixQrImage = invoice.pix_qr_code_base64;
+    const pixCode = activeInvoice.pix_qr_code || '';
+    const pixQrImage = activeInvoice.pix_qr_code_base64;
 
     /**
      * Copia o codigo Pix Copia e Cola para a area de transferencia
@@ -483,7 +512,7 @@ const InvoicePdfModal = ({
                                                 {subscription.billing_cycle || 'Mensal'}
                                             </td>
                                             <td className="py-3.5 px-3 text-right font-bold text-slate-900 text-sm align-top">
-                                                {formatCurrencyBRL(invoice.amount)}
+                                                {formatCurrencyBRL(activeInvoice.amount)}
                                             </td>
                                         </tr>
                                     </tbody>
@@ -493,7 +522,7 @@ const InvoicePdfModal = ({
                                                 Total da Fatura:
                                             </td>
                                             <td className="py-3 px-3 text-right text-base text-slate-900 font-black">
-                                                {formatCurrencyBRL(invoice.amount)}
+                                                {formatCurrencyBRL(activeInvoice.amount)}
                                             </td>
                                         </tr>
                                     </tfoot>
@@ -524,7 +553,7 @@ const InvoicePdfModal = ({
                                         <div>
                                             <span className="text-emerald-700 block text-[11px]">Autenticação Digital:</span>
                                             <strong className="font-mono text-[10px] break-all">
-                                                {invoice.end_to_end_id || invoice.pushinpay_id || `AUTH-${String(invoice.id).slice(0, 12)}`}
+                                                {activeInvoice.end_to_end_id || activeInvoice.pushinpay_id || `AUTH-${String(activeInvoice.id).slice(0, 12)}`}
                                             </strong>
                                         </div>
                                     </div>

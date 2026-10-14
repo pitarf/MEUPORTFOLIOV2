@@ -2,6 +2,12 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Correção e Renovação Automática de Cobranças PIX Expiradas (`maintenanceService.js`, `InvoicePixModal.jsx`, `ClientSubscriptionPortal.jsx`, `InvoicePdfModal.jsx`)**:
+  - Diagnosticada a causa exata do erro "Problema com o QR Code: Não conseguimos ler os dados do QR Code" relatado pelo cliente Brasil Ltda: cobranças dinâmicas da PushinPay/Woovi possuem expiração padrão de 24 horas (`expiration_date: 2026-10-06`). Como a fatura original foi emitida em 05/10, o Banco Central e apps bancários rejeitavam a leitura por expiração.
+  - Reemitida e atualizada imediatamente na PushinPay e no banco de dados da VPS Oracle a fatura `FAT-2026-GR3N` (Brasil Ltda, R$ 500,00) com nova transação ativa (`a2fb2019-543c-474e-8136-282799bb99cc`), novo QR Code e código Copia e Cola válidos para pagamento imediato.
+  - Implementada detecção automática de expiração no `ensureInvoicePix`: cobranças dinâmicas com mais de 20 horas são auto-renovadas silenciosamente sem expor QR Codes inativos ao cliente ou administrador.
+  - Adicionado parâmetro `{ forceRefresh: true }` e botões de ação rápida no modal administrativo (`InvoicePixModal.jsx`) e no Portal do Assinante (`ClientSubscriptionPortal.jsx`): "Problema ao ler QR Code ou cobrança expirou? Clique para atualizar".
+  - Sincronização em tempo real integrada ao gerador de PDF (`InvoicePdfModal.jsx`), assegurando que downloads e impressões sempre contenham QR Codes vigentes e testados.
 - [x] **Sincronização Dinâmica em Tempo Real e Atualização em Cascata para Faturas em PDF (`InvoicePdfModal.jsx`, `maintenanceService.js`)**:
   - Corrigida a divergência entre a assinatura atualizada e a fatura em PDF: o PDF agora busca em tempo real os dados mais recentes da assinatura vinculada via `getSubscriptionById` e prioriza os dados vivos (`subscription.covered_websites || invoice.covered_websites`).
   - Implementada sincronização automática em cascata no `updateSubscription`: sempre que o usuário editar uma assinatura, todas as faturas com status `pendente` dessa assinatura têm suas colunas `covered_websites` e dados cadastrais atualizados instantaneamente no banco de dados.

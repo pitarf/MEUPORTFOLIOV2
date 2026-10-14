@@ -741,22 +741,38 @@ export const generateInvoiceForSubscription = async (subscriptionId, options = {
 };
 
 /**
- * Garante que a fatura possua um QR Code e codigo Copia e Cola PIX valido.
- * Se a fatura ja possuir pix_qr_code valido, retorna a fatura sem reemissao.
- * Caso contrario, tenta emitir via PushinPay ou gera imediatamente o payload PIX EMV oficial (BR Code)
- * com base na chave cadastrada, salvando os dados no banco de dados.
+ * Garante que a fatura possua um QR Code e codigo Copia e Cola PIX valido e ativo.
+ * Se a fatura ja possuir pix_qr_code valido emitido recentemente (menos de 20h para cobrancas dinamicas PushinPay),
+ * reaproveita o codigo sem custo extra.
+ * Caso o codigo tenha expirado (mais de 20h na PushinPay), ou forceRefresh seja solicitado,
+ * ou nao possua codigo valido, emite imediatamente uma nova cobranca na PushinPay
+ * ou recorre a geracao estatica BR Code com a chave oficial cadastrada.
  *
  * @param {string} invoiceId ID da fatura
+ * @param {Object} [options]
+ * @param {boolean} [options.forceRefresh=false] Forcar geracao de novo PIX mesmo se existir codigo
  * @returns {Promise<Object>} Fatura atualizada com os dados do PIX
  */
-export const ensureInvoicePix = async (invoiceId) => {
+export const ensureInvoicePix = async (invoiceId, options = {}) => {
+    const { forceRefresh = false } = options;
     if (!invoiceId) throw new Error('ID da fatura nao informado.');
 
     const invoice = await getInvoiceById(invoiceId);
     if (!invoice) throw new Error(`Fatura nao encontrada para o ID: ${invoiceId}`);
 
-    // Se ja possui codigo Pix valido, retorna diretamente
-    if (invoice.pix_qr_code && invoice.pix_qr_code.trim() !== '' && !invoice.pushinpay_id?.startsWith('err_fallback_')) {
+    // Verifica se o codigo PIX existente ainda e valido ou se e permanente
+    const hasPixCode = Boolean(invoice.pix_qr_code && invoice.pix_qr_code.trim() !== '');
+    const isErrorFallback = invoice.pushinpay_id?.startsWith('err_fallback_');
+    const isStaticBrCode = invoice.pushinpay_id?.startsWith('emv_brcode_');
+
+    // Cobrancas dinamicas da PushinPay/Woovi expiram em 24h.
+    // Se a fatura foi criada/atualizada ha mais de 20h, o QR Code dinamico expira no app bancario.
+    const lastUpdate = new Date(invoice.updated_at || invoice.created_at || 0).getTime();
+    const hoursSinceUpdate = (Date.now() - lastUpdate) / (1000 * 60 * 60);
+    const isDynamicExpired = !isStaticBrCode && hoursSinceUpdate >= 20;
+
+    // Se possui codigo valido, nao e fallback de erro, nao expirou e nao foi forcada a atualizacao:
+    if (hasPixCode && !isErrorFallback && !isDynamicExpired && !forceRefresh) {
         return invoice;
     }
 
