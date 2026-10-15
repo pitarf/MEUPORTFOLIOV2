@@ -64,6 +64,7 @@ import {
 import {
     formatCurrencyBRL,
     formatDateBR,
+    formatDateTimeBR,
     maskCpfCnpj,
     maskPhone,
     getSubscriptionStatusMeta,
@@ -1117,7 +1118,7 @@ const ClientSubscriptionPortal = () => {
 
                                                     <div className="pt-2 border-t border-border/40 flex items-center justify-between text-[11px] text-muted-foreground">
                                                         <span>Prioridade: <strong className="capitalize">{ticket.priority || 'normal'}</strong></span>
-                                                        <span>Registrado em: {formatDateBR(ticket.created_at)}</span>
+                                                        <span>Aberto em: {formatDateTimeBR(ticket.created_at)}</span>
                                                     </div>
                                                 </div>
                                             );

@@ -6,8 +6,9 @@ import { supabase } from '@/lib/customSupabaseClient';
 import { useToast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Loader2, Search, Ticket, Clock, MessageSquare, AlertTriangle, Image as ImageIcon, ZoomIn } from 'lucide-react';
+import { Loader2, Search, Ticket, Clock, MessageSquare, AlertTriangle, Image as ImageIcon, ZoomIn, Calendar } from 'lucide-react';
 import ImageLightboxModal from '@/components/common/ImageLightboxModal';
+import { formatDateTimeBR } from '@/utils/maintenanceFormatters';
 
 const TrackTicket = () => {
     const { ticketCode: urlTicketCode } = useParams();
@@ -159,7 +160,10 @@ const TrackTicket = () => {
                                 </div>
                             )}
 
-                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-4 font-semibold">Criado em: {new Date(ticketData.created_at).toLocaleString()}</p>
+                            <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 mt-4 font-semibold">
+                                <Calendar className="w-3.5 h-3.5 text-blue-500" />
+                                <span>Aberto em: {formatDateTimeBR(ticketData.created_at, true)}</span>
+                            </div>
                         </div>
 
                         <div className="border-t border-gray-200 dark:border-gray-700 pt-8">
@@ -184,7 +188,7 @@ const TrackTicket = () => {
                                                         <div
                                                             onClick={() => setLightboxImage({
                                                                 url: update.attachment_url || update.attachments[0]?.url,
-                                                                title: `Print da Atualização : ${new Date(update.created_at).toLocaleString()}`
+                                                                title: `Print da Atualização : ${formatDateTimeBR(update.created_at, true)}`
                                                             })}
                                                             className="group relative inline-block cursor-pointer overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 bg-black/10 dark:bg-black/30 hover:border-blue-500 transition-all max-w-xs shadow-sm"
                                                         >
@@ -201,9 +205,9 @@ const TrackTicket = () => {
                                                     </div>
                                                 )}
 
-                                                <p className="text-xs text-gray-550 dark:text-gray-450 mt-2 flex items-center gap-1 font-semibold">
-                                                    <Clock className="w-3 h-3" />
-                                                    {new Date(update.created_at).toLocaleString()}
+                                                <p className="text-xs text-gray-550 dark:text-gray-450 mt-2 flex items-center gap-1.5 font-semibold">
+                                                    <Clock className="w-3 h-3 text-purple-500" />
+                                                    <span>Atualizado em: {formatDateTimeBR(update.created_at, true)}</span>
                                                 </p>
                                             </div>
                                         </div>

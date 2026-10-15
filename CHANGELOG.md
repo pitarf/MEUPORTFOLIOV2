@@ -20,9 +20,14 @@ Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
   * Botão de clipe para anexar arquivos de imagem manualmente a partir do computador.
   * Card de pré-visualização do print selecionado com nome, tamanho em KB e botão de descarte antes do envio.
   * Visualização de miniaturas interativas com efeito de zoom em notas e na descrição original de chamados.
-* **Portal do Assinante e Rastreamento Público (`ClientSubscriptionPortal.jsx` e `TrackTicket.jsx`)**:
-  * Suporte para assinantes anexarem prints ao abrir chamados pelo portal (com suporte a Ctrl+V e botão de anexo).
-  * Renderização de miniaturas e visualização com Lightbox no rastreamento público do chamado.
+* **Data e Hora em Tempo Real no Horário de Brasília (`formatDateTimeBR`)**:
+  * Desenvolvida a função utilitária `formatDateTimeBR()` em `src/utils/maintenanceFormatters.js`, forçando o fuso horário oficial `America/Sao_Paulo` (UTC-3).
+  * Exibição destacada da data e hora de abertura do chamado:
+    * Nos cartões kanban do painel de chamados (`AdminSupport.jsx`) com ícone de relógio e código do ticket.
+    * No cabeçalho do chamado com badge dedicado (`Aberto em: DD/MM/AAAA às HH:mm:ss`).
+    * No cabeçalho da "Descrição Original".
+  * Exibição elegante em cada nota do "Histórico de Atualizações", trazendo o cabeçalho "Nota de Acompanhamento" com o timestamp exato formatado.
+  * Sincronização da visualização de data e hora no portal do assinante (`ClientSubscriptionPortal.jsx`) e no rastreamento público (`TrackTicket.jsx`).
 
 ### Corrigido e Fortalecido (Permissões de Chamados no PostgreSQL & Fallback Resiliente)
 * **Correção de Permissão no Banco de Dados (`portfolio_db` / VPS Oracle)**:

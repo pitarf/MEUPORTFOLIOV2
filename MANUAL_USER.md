@@ -953,6 +953,12 @@ Agora você e seus clientes podem anexar capturas de tela e prints diretamente n
 4. **Anexo pelo Portal do Assinante (`/minha-assinatura`)**:
    * Os seus clientes de planos de manutenção também podem anexar prints ao relatar qualquer dúvida ou erro pelo portal do assinante, agilizando o seu atendimento técnico.
 
+5. **Data e Hora de Abertura e Histórico de Atualizações (Horário de Brasília)**:
+   * **No Painel de Chamados**: Cada cartão exibe no rodapé o código do chamado e a data e hora em que foi aberto.
+   * **No Cabeçalho do Chamado**: Um selo azul no topo informa o momento exato da abertura (ex: `Aberto em: 15/10/2026 às 16:14:24`).
+   * **Na Descrição Original**: Um marcador de relógio indica a data e hora originais registradas na criação.
+   * **No Histórico de Atualizações**: Cada nota enviada possui um cabeçalho cinza destacado informando `Nota de Acompanhamento` e a data e hora exatas da mensagem no Horário Oficial de Brasília (UTC-3).
+
 
 
 

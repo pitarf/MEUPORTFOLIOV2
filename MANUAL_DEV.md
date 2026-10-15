@@ -849,3 +849,12 @@ Para permitir comunicação visual ágil entre o suporte e os clientes:
    - Card de preview da imagem selecionada com botão de exclusão e indicador de tamanho em KB.
    - Miniaturas clicáveis integradas nas notas de atualização e na descrição do chamado com efeito de zoom no hover.
 
+5. **Padronização de Data e Hora no Horário de Brasília (`src/utils/maintenanceFormatters.js`)**:
+   - A função `formatDateTimeBR(dateVal, includeSeconds)` utiliza `Intl.DateTimeFormat` com `timeZone: 'America/Sao_Paulo'` (UTC-3), garantindo que a data e o horário exibidos correspondam com precisão ao fuso oficial brasileiro.
+   - A data e a hora de abertura do chamado são exibidas:
+     - Nos cards kanban do painel de chamados (`AdminSupport.jsx`).
+     - No cabeçalho da modal de detalhes em badge dedicado (`Aberto em: DD/MM/AAAA às HH:mm:ss`).
+     - No cabeçalho da "Descrição Original".
+   - Cada nota do "Histórico de Atualizações" apresenta a data e a hora exatas de envio no cabeçalho da mensagem.
+   - A página pública de rastreamento (`TrackTicket.jsx`) e o portal do cliente (`ClientSubscriptionPortal.jsx`) utilizam o mesmo formatador unificado.
+

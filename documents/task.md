@@ -8,6 +8,7 @@ Roadmap de acompanhamento para a reestruturação visual de alta conversão, com
   - Componente Lightbox (`ImageLightboxModal.jsx`): Modal em tela cheia com alta resolução, download do print original e abertura em nova aba com acessibilidade do Radix UI.
   - Gestão de Chamados (`AdminSupport.jsx`): Suporte a colar prints com `Ctrl+V` diretamente na caixa de notas, botão de upload manual por arquivo, preview com botão de descarte, inclusão na nota e exibição de miniaturas com efeito de zoom nas notas e na descrição do chamado.
   - Portal do Assinante e Rastreamento (`ClientSubscriptionPortal.jsx` e `TrackTicket.jsx`): Permissão para o assinante anexar prints ao abrir chamados de manutenção e visualização com Lightbox no rastreamento público.
+  - Data e Hora no Horário Oficial de Brasília (`formatDateTimeBR`): Exibição padronizada da data e hora de abertura do chamado nos cards do kanban, no badge do cabeçalho do chamado, no topo da descrição original e em cada item do histórico de atualizações.
   - Validação Automatizada e Visual com Playwright: Testes ponta a ponta executados com sucesso gerando capturas reais arquivadas provando a interface de anexo, o preview, o envio com print e o modal de zoom Lightbox.
   - Auditoria com subagente concluída com louvor (zero pontas soltas e zero caracteres de travessão).
 

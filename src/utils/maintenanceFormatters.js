@@ -42,6 +42,41 @@ export const formatDateBR = (dateVal) => {
 };
 
 /**
+ * Formata data e hora no padrao brasileiro oficial (Horario de Brasilia: America/Sao_Paulo).
+ * Exemplo: 15/10/2026 as 19:29
+ *
+ * @param {string|Date} dateVal Data de entrada (ISO, timestamp ou Date)
+ * @param {boolean} includeSeconds Se deve incluir segundos (padrao: false)
+ * @returns {string} Data e hora formatadas
+ */
+export const formatDateTimeBR = (dateVal, includeSeconds = false) => {
+    if (!dateVal) return 'Nao informada';
+    try {
+        const d = new Date(dateVal);
+        if (isNaN(d.getTime())) return String(dateVal);
+
+        const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
+            timeZone: 'America/Sao_Paulo',
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
+
+        const timeFormatter = new Intl.DateTimeFormat('pt-BR', {
+            timeZone: 'America/Sao_Paulo',
+            hour: '2-digit',
+            minute: '2-digit',
+            ...(includeSeconds ? { second: '2-digit' } : {}),
+            hour12: false
+        });
+
+        return `${dateFormatter.format(d)} às ${timeFormatter.format(d)}`;
+    } catch {
+        return new Date(dateVal).toLocaleString('pt-BR');
+    }
+};
+
+/**
  * Aplica mascara dinamica de CPF (11 digitos) ou CNPJ (14 digitos).
  *
  * @param {string} value Documento com ou sem pontuacao

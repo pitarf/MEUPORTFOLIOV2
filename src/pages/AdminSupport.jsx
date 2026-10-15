@@ -9,9 +9,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose, DialogDescription } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Loader2, Filter, X, Send, Clock, Trash2, Archive, Edit, Paperclip, Image as ImageIcon, ZoomIn } from 'lucide-react';
+import { Loader2, Filter, X, Send, Clock, Trash2, Archive, Edit, Paperclip, Image as ImageIcon, ZoomIn, Calendar, User, ShieldCheck } from 'lucide-react';
 import { uploadTicketAttachment, extractImageFromClipboard } from '@/services/ticketAttachmentService';
 import ImageLightboxModal from '@/components/common/ImageLightboxModal';
+import { formatDateTimeBR } from '@/utils/maintenanceFormatters';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -277,7 +278,13 @@ const AdminSupport = () => {
                                         <motion.div key={ticket.id} layoutId={`ticket-${ticket.id}`} onClick={() => setSelectedTicket(ticket)} className={`p-4 rounded-lg cursor-pointer glass-effect border-l-4 ${getStatusColor(ticket.status)} hover:bg-muted/50 transition-colors`}>
                                             <p className="font-bold truncate">{ticket.subject}</p>
                                             <p className="text-sm text-muted-foreground">{ticket.client_name || ticket.name || ticket.client_email || ticket.email || 'Cliente'}</p>
-                                            <p className="text-xs text-muted-foreground mt-2">{ticket.ticket_code}</p>
+                                            <div className="flex items-center justify-between text-xs text-muted-foreground mt-2 pt-2 border-t border-border/30">
+                                                <span className="font-mono text-[11px] font-semibold text-primary/80">{ticket.ticket_code}</span>
+                                                <span className="flex items-center gap-1 text-[11px]" title="Data e hora de abertura (Horário de Brasília)">
+                                                    <Clock className="w-3 h-3 text-blue-500" />
+                                                    {formatDateTimeBR(ticket.created_at)}
+                                                </span>
+                                            </div>
                                         </motion.div>
                                     ))}
                                     {(ticketsByStatus[status]?.length === 0) && <p className="text-muted-foreground text-sm p-4">Nenhum chamado.</p>}
@@ -293,15 +300,29 @@ const AdminSupport = () => {
                     {selectedTicket && (
                         <>
                             <DialogHeader>
-                                <DialogTitle className="text-2xl">{selectedTicket.subject}</DialogTitle>
-                                <DialogDescription><span className="font-mono">{selectedTicket.ticket_code}</span> : por {selectedTicket.client_name || selectedTicket.name || 'Cliente'} ({selectedTicket.client_email || selectedTicket.email || 'Sem e-mail'})</DialogDescription>
+                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pr-6">
+                                    <DialogTitle className="text-2xl font-bold">{selectedTicket.subject}</DialogTitle>
+                                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20 shrink-0">
+                                        <Calendar className="w-3.5 h-3.5" />
+                                        Aberto em: {formatDateTimeBR(selectedTicket.created_at, true)}
+                                    </span>
+                                </div>
+                                <DialogDescription>
+                                    <span className="font-mono font-semibold text-primary">{selectedTicket.ticket_code}</span> : Solicitado por {selectedTicket.client_name || selectedTicket.name || 'Cliente'} ({selectedTicket.client_email || selectedTicket.email || 'Sem e-mail'})
+                                </DialogDescription>
                             </DialogHeader>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
                                 <div><Label>Status</Label><Select value={selectedTicket.status} onValueChange={(value) => handleUpdateTicket(selectedTicket.id, { status: value })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{statuses.map(s => <SelectItem key={s} value={s} className="capitalize">{s}</SelectItem>)}</SelectContent></Select></div>
                                 <div><Label>Prioridade</Label><Select value={selectedTicket.priority} onValueChange={(value) => handleUpdateTicket(selectedTicket.id, { priority: value })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{priorities.map(p => <SelectItem key={p} value={p} className="capitalize">{p}</SelectItem>)}</SelectContent></Select></div>
                             </div>
                             <div className="flex-grow overflow-y-auto pr-2 space-y-4 glass-effect p-4 rounded-lg">
-                                <h3 className="font-bold text-lg">Descrição Original</h3>
+                                <div className="flex items-center justify-between">
+                                    <h3 className="font-bold text-lg">Descrição Original</h3>
+                                    <span className="text-xs text-muted-foreground flex items-center gap-1 font-mono bg-muted/60 px-2 py-0.5 rounded border border-border/40">
+                                        <Clock className="w-3 h-3 text-blue-500" />
+                                        Abertura: {formatDateTimeBR(selectedTicket.created_at, true)}
+                                    </span>
+                                </div>
                                 <div className="text-foreground bg-muted p-3 rounded-md space-y-3">
                                     <p className="whitespace-pre-wrap">{selectedTicket.message || selectedTicket.description || 'Sem descrição.'}</p>
                                     
@@ -337,7 +358,17 @@ const AdminSupport = () => {
                                 <div className="space-y-4">
                                     {(selectedTicket.ticket_updates || []).sort((a, b) => new Date(a.created_at) - new Date(b.created_at)).map(update => (
                                         <div key={update.id} className="text-sm">
-                                            <div className="text-foreground bg-muted p-3 rounded-md space-y-2">
+                                            <div className="text-foreground bg-muted p-3 rounded-md space-y-2 border border-border/30">
+                                                <div className="flex items-center justify-between text-xs text-muted-foreground pb-1.5 border-b border-border/30">
+                                                    <span className="font-semibold text-foreground/90 flex items-center gap-1.5">
+                                                        <ShieldCheck className="w-3.5 h-3.5 text-blue-500" />
+                                                        Nota de Acompanhamento
+                                                    </span>
+                                                    <span className="flex items-center gap-1 font-mono text-[11px] bg-background/70 px-2 py-0.5 rounded border border-border/50 text-foreground/80">
+                                                        <Clock className="w-3 h-3 text-blue-500" />
+                                                        {formatDateTimeBR(update.created_at, true)}
+                                                    </span>
+                                                </div>
                                                 <p className="whitespace-pre-wrap">{update.note}</p>
                                                 
                                                 {/* Renderizacao de print ou anexo da nota */}
@@ -346,7 +377,7 @@ const AdminSupport = () => {
                                                         <div
                                                             onClick={() => setLightboxImage({
                                                                 url: update.attachment_url || update.attachments[0]?.url,
-                                                                title: `Print da Atualização : ${new Date(update.created_at).toLocaleString()}`
+                                                                title: `Print da Atualização : ${formatDateTimeBR(update.created_at, true)}`
                                                             })}
                                                             className="group relative inline-block cursor-pointer overflow-hidden rounded-lg border border-border/80 bg-background/50 hover:border-blue-500 transition-all max-w-xs shadow-sm hover:shadow-md"
                                                         >
@@ -363,10 +394,6 @@ const AdminSupport = () => {
                                                     </div>
                                                 )}
                                             </div>
-                                            <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
-                                                <Clock className="w-3 h-3" />
-                                                {new Date(update.created_at).toLocaleString()}
-                                            </p>
                                         </div>
                                     ))}
                                     {(selectedTicket.ticket_updates?.length === 0 || !selectedTicket.ticket_updates) && (
