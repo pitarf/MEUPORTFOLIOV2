@@ -871,6 +871,58 @@ Para maximizar a confiança do cliente e o índice de conversão:
 2. **Contato Imediato em 1 Clique**:
    * Seja no site principal ou nas landing pages, ao tocar no botão de WhatsApp o visitante é direcionado diretamente para uma conversa privada com mensagem preliminar preenchida, tornando o início do atendimento rápido e profissional.
 
+### 19.34 Gestão Despoluída de Assinaturas e Central de Informações por Modal
+O painel administrativo de Assinaturas & Manutenção (`/admin/assinaturas`) foi reestruturado para proporcionar máxima produtividade e clareza visual:
+1. **Visual Limpo e Executivo na Tabela**:
+   * O nome do cliente e a razão social foram higienizados para não aparecerem duplicados quando forem iguais.
+   * Documentos (CPF/CNPJ) e números de telefone foram retirados da visualização principal da tabela, permitindo focar imediatamente no que importa: cliente, plano, valor, dia de vencimento e status.
+   * O excesso de etiquetas azuis de sites cobertos foi substituído pelo indicador resumido e clicável `🌐 X sites`.
+2. **Central 360 Graus no Modal de Informações**:
+   * Ao clicar no ícone de informação `(i)` ao lado do nome do cliente ou no botão `[Info]` das ações rápidas, abre-se a ficha cadastral completa.
+   * **Cópia Rápida em 1 Clique**: Você pode copiar o CPF ou CNPJ com um clique para colar em sistemas bancários ou notas fiscais.
+   * **WhatsApp Direto**: Link imediato para conversar com o cliente no WhatsApp oficial sanitizado.
+   * **Sites Cobertos**: Lista limpa de todas as URLs atendidas no contrato, com botões para abrir cada site diretamente.
+   * **Histórico Completo**: Visualização de faturas emitidas, recibos em PDF, geração de QR Code PIX e chamados de suporte abertos pelo cliente.
+
+### 19.35 Saudações Inteligentes pelo Horário de Brasília & Tratamento Humanizado
+Para garantir abordagens de alto padrão e máxima receptividade no WhatsApp:
+1. **Cumprimento Automático no Fuso de Brasília**:
+   * O sistema agora calcula dinamicamente o cumprimento com base no Horário Oficial de Brasília:
+     * Manhã (05h às 11h59): *"Olá, bom dia! Tudo bem?"*
+     * Tarde (12h às 17h59): *"Olá, boa tarde! Tudo bem?"*
+     * Noite (18h às 04h59): *"Olá, boa noite! Tudo bem?"*
+   * Nunca mais você correrá o risco de mandar "bom dia" no meio da tarde.
+2. **Tratamento Humanizado Sem Construções Robóticas**:
+   * O sistema identifica o gênero do profissional e formula a frase com naturalidade e respeito:
+     * Para advogadas: *"Por gentileza, este canal é o contato direto com a Dra. [Nome] ou falo com a equipe do escritório?"*
+     * Para advogados: *"Por gentileza, este canal é o contato direto com o Dr. [Nome] ou falo com a equipe do escritório?"*
+   * Foram abolidas formulações frias com barras e parênteses como "o(a) Dr(a).".
+
+### 19.36 Envio Seguro de Prévia em PDF e Exportação Executiva em 1 Clique
+Muitos advogados têm receio de clicar em links de pessoas desconhecidas no WhatsApp por medo de vírus ou golpes. Pensando nisso, o sistema agora conta com uma solução completa de segurança:
+1. **Opção de Envio do PDF no WhatsApp**:
+   * O roteiro de prospecção (Passo 3) agora oferece expressamente as duas opções: *"Se achar mais seguro, posso te encaminhar um arquivo PDF com as fotos do layout por aqui mesmo ou, se preferir navegar, o link da demonstração é..."*.
+   * Isso desarma a desconfiança, passa credibilidade imediata e permite que você envie o arquivo anexo sem exigir que o advogado clique em links desconhecidos.
+2. **Botão de Exportar em PDF no Painel**:
+   * No Radar Google Maps, em cada cartão de advogado e na lista de demonstrações da nuvem, você encontra o botão **PDF**.
+   * Ao clicar nele, abre-se uma prévia executiva diagramada em tamanho folha A4.
+   * Basta clicar em **"Baixar Apresentação em PDF"** e o sistema gera na hora um arquivo executivo completo com a capa do escritório, áreas de atuação, rito de trabalho, avaliações do Google Maps e proposta comercial transparente de R$ 297, pronto para você anexar na conversa do WhatsApp.
+
+### 19.37 Nova Landing Page de Vendas de Sites para Advogados
+Para atrair e fechar clientes de advocacia de forma passiva através de buscas no Google e anúncios:
+1. **Rotas Dedicadas e Otimizadas para o Google**:
+   * A página está no ar nos endereços `/criacao-site-advogado` e `/sites-para-advogados`.
+   * Possui um trabalho profundo de SEO (títulos, descrições e dados estruturados) para disputar as primeiras posições nas buscas por *"criar site para advogado"*, *"desenvolvedor de site de advogado"*, *"onde comprar site de advogado"* e *"site de advogado com seo"*.
+2. **Gatilho de Escassez Real (48 Horas)**:
+   * Uma barra fixa no topo da página exibe um relógio regressivo informando que a condição especial é válida por apenas 48 horas, incentivando o contato imediato.
+3. **Vitrine com Modelos ao Vivo**:
+   * O visitante pode testar na prática 4 modelos reais de demonstração: Direito Trabalhista, Direito de Família, Direito do Consumidor e Escritório Full-Service.
+4. **Preço Transparente Sem Letras Miúdas**:
+   * A página deixa claro o valor promocional de **R$ 297** (de R$ 450) como taxa única de configuração e criação, informando com clareza que o domínio próprio anual (cerca de R$ 40/ano) é pago à parte diretamente ao registro oficial.
+5. **Vários Botões para Seu WhatsApp**:
+   * Botões estrategicamente distribuídos ao longo de toda a página abrem diretamente uma conversa com você no WhatsApp, já com a mensagem preenchida de interesse para facilitar o fechamento da venda.
+
+
 
 
 

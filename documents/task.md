@@ -2,6 +2,34 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Exportação em PDF, Roteiro Seguro de Prospecção e Landing Page de Vendas para Advogados (`LegalLandingPdfModal.jsx`, `googleMapsProspectService.js`, `LegalSalesLandingPage.jsx`, `RadarGoogleMaps.jsx`)**:
+  - Segurança contra receio de cliques: Roteiros do WhatsApp atualizados com oferta expressa de envio em arquivo PDF anexo como alternativa segura ao link interativo, além da inclusão do preço promocional de R$ 297 (de R$ 450) com domínio anual à parte.
+  - Modal de Exportação em PDF corporativo (`LegalLandingPdfModal.jsx`): Renderização em escala 2x via `html2pdf.js` diagramado em A4 com capa executiva, titulação, OAB, endereço, nota do Google Maps, hero, especialidades, metodologia, depoimentos e proposta transparente com QR Code.
+  - Botão de ação rápida `PDF` integrado ao Radar Google Maps nos leads mapeados, demonstrações na nuvem e no modal de envio de proposta comercial.
+  - Nova Landing Page de Vendas de alta conversão (`LegalSalesLandingPage.jsx`) nas rotas `/criacao-site-advogado` e `/sites-para-advogados`:
+    - Faixa fixa com contador regressivo de escassez de 48 horas.
+    - Hero com H1 otimizado para SEO e CTA para WhatsApp.
+    - Vitrine interativa de 4 modelos de demonstração ao vivo (Trabalhista, Família, Consumidor e Full-Service).
+    - 4 pilares de customização: logo, cores, fotos e redação sob medida.
+    - Precificação transparente: De R$ 450 por R$ 297 (+ domínio).
+    - FAQ em accordion sanfonado e dados estruturados Schema.org (`ProfessionalService` / `Offer`).
+    - Integração no `tools/generate-sitemap.js` e regeneração de `public/sitemap.xml`.
+  - Validação visual realizada com Playwright gerando 4 prints de auditoria em alta definição.
+
+- [x] **Saudações Dinâmicas pelo Horário de Brasília & Humanização de Honoríficos (`src/utils/greetingUtils.js`, `googleMapsProspectService.js`, `RadarGoogleMaps.jsx`)**:
+  - Criado utilitário `greetingUtils.js` com a função `getGreetingByBrasiliaTime()`, sincronizando o cumprimento com o Horário Oficial de Brasília (`America/Sao_Paulo` / UTC-3): "bom dia" (05h às 11h59), "boa tarde" (12h às 17h59) e "boa noite" (18h às 04h59).
+  - Implementada a função `formatLawyerSalutation()` integrando detecção de gênero para eliminar construções robóticas como `o(a) Dr(a).`.
+  - Tratamento personalizado: "com a Dra. Nome" para advogadas (ex: Victória Motta) e "com o Dr. Nome" para advogados, além de "da Dra." / "do Dr." nas mensagens de indicação e resgate.
+  - Testado e validado em tempo real com build 100% aprovado.
+
+- [x] **Despoluição da Tabela de Assinaturas e Central de Informações por Modal (`ManageMaintenanceSubscriptions.jsx`, `SubscriptionDetailsModal.jsx`)**:
+  - Tabela Desktop e Cards Mobile despoluídos radicalmente: eliminadas duplicidades de razão social/nome e sobrecarga de CPF/telefone na visualização primária.
+  - Substituídas as listas expansivas de domínios por indicador compacto e clicável `🌐 X sites`.
+  - Coluna de Ações Rápidas padronizada com a tríade `[Info (i)]`, `[PIX]` e `[WhatsApp]` (com o logotipo oficial da marca), além do menu `[...]` para ações administrativas secundárias.
+  - Modal `SubscriptionDetailsModal.jsx` aprimorado como central 360 graus do contrato: dados cadastrais com cópia rápida de CPF/CNPJ, link direto para WhatsApp com número sanitizado, e-mail clicável, valor mensal, dia de cobrança, razão social, notas, observações, lista de sites cobertos com links externos, histórico de faturas e chamados de suporte.
+  - Correção na ordem dos Hooks do React para estabilidade total do ciclo de vida.
+  - Compilação do build e validação visual executadas com sucesso através de capturas reais via Playwright.
+
 - [x] **Padronização do Logotipo Oficial do WhatsApp no Site e Landing Pages com Subagentes (`WhatsAppIcon.jsx`, `WhatsAppFloat.jsx`, `Contact.jsx`, `LegalFloatingWhatsApp.jsx`, `LegalNavbar.jsx`, `LegalHero.jsx`, `LegalPracticeAreas.jsx`)**:
   - Extraído o ativo oficial de alta fidelidade do WhatsApp (`public/whatsapp-official.png`) e criado o componente reutilizável `WhatsAppIcon.jsx`.
   - Subagentes especializados atuaram em paralelo para migrar todos os ícones genéricos de chat e suporte:

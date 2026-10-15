@@ -21,13 +21,16 @@ import {
   Building,
   PhoneCall,
   Trash2,
-  Clock
+  Clock,
+  FileText
 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { googleMapsProspectService, generateLawyerSlug, buildGoogleMapsUrl, buildDemoUrl } from '../../services/googleMapsProspectService';
 import { LEGAL_NICHES } from '../../data/legalTemplates';
 import { cleanLawyerName } from '../../utils/lawyerNameFormatter';
+import { getGreetingByBrasiliaTime } from '../../utils/greetingUtils';
+import LegalLandingPdfModal from '@/components/admin/LegalLandingPdfModal';
 
 /**
  * Radar Google Maps de Prospecção Ativa para Advogados
@@ -42,7 +45,7 @@ const SAVED_PITCH_SCRIPTS = [
     badge: 'Filtro Secretária',
     badgeColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
     objective: 'Quebra de gelo sem envio de link. Identifica se o canal fala com a assessoria ou com o advogado titular para romper o filtro sem risco de bloqueio.',
-    text: `Olá, bom dia! Tudo bem?
+    text: `Olá, ${getGreetingByBrasiliaTime()}! Tudo bem?
 
 Por gentileza, este canal é o contato direto com o(a) Dr(a). [Nome do Advogado] ou falo com a equipe do escritório?`
   },
@@ -65,16 +68,17 @@ Me autoriza a enviar o link rápido de demonstração para vocês darem uma olha
     title: '3. Demonstração Oficial',
     badge: 'Link + Proposta',
     badgeColor: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
-    objective: 'Entrega da Landing Page personalizada sob demanda, com menção à personalização de fotos/textos, respeito ao Código de Ética da OAB e proposta de R$ 300 mais domínio anual.',
+    objective: 'Entrega da Landing Page personalizada sob demanda, com menção à personalização de fotos/textos, respeito ao Código de Ética da OAB e proposta de R$ 297 mais domínio anual.',
     text: `Perfeito, Dr(a). [Nome]! Montei esta prévia personalizada pensando exatamente no posicionamento de vocês:
 
 👉 https://rafaelpitaoficial.com.br/adv/[slug-do-advogado]
+(Caso prefira por segurança, posso te encaminhar a prévia completa em PDF por aqui para você avaliar o layout com tranquilidade!)
 
 O objetivo é transformar quem pesquisa por advogados em [Cidade] no Google em contatos diretos no WhatsApp de vocês, com alto padrão visual e total respeito ao Código de Ética da OAB.
 
 Todos os textos, fotos e áreas de atuação podem ser 100% personalizados com a identidade oficial do escritório.
 
-Para colocar no ar com domínio próprio e configurado, o valor é de apenas R$ 300 (taxa única de implementação) mais a anuidade do domínio próprio (em média R$ 60 ao ano).
+Para colocar no ar com domínio próprio e configurado, o valor é de apenas R$ 297 (taxa única de implementação com desconto de lançamento) mais a anuidade do domínio próprio (em média R$ 60 ao ano).
 
 Depois me conte o que achou da estrutura!`
   },
@@ -105,10 +109,11 @@ Hoje, potenciais clientes que pesquisam por advogados na sua região acabam fech
 Cheguei a desenhar um modelo exclusivo para o escritório de vocês verem na prática como resolver isso:
 
 👉 https://rafaelpitaoficial.com.br/adv/[slug-do-advogado]
+(Caso ache mais seguro e prático, também posso te enviar a prévia completa em PDF por aqui para dar uma olhada no layout).
 
 (Lembrando que todos os textos, áreas de atuação e fotos podem ser 100% personalizados com a identidade oficial de vocês).
 
-Para subir com domínio próprio e configurado, o valor é de apenas R$ 300 (taxa única de implementação) mais a anuidade do domínio (em média R$ 60 ao ano).
+Para subir com domínio próprio e configurado, o valor é de apenas R$ 297 (taxa única de implementação) mais a anuidade do domínio (em média R$ 60 ao ano).
 
 Depois me dê um retorno sobre o que achou da estrutura!`
   },
@@ -164,6 +169,15 @@ export default function RadarGoogleMaps() {
   // Modal de Proposta
   const [selectedLawyerForProposal, setSelectedLawyerForProposal] = useState(null);
   const [proposalVariant, setProposalVariant] = useState('passo1');
+
+  // Modal de Exportacao em PDF
+  const [pdfModalOpen, setPdfModalOpen] = useState(false);
+  const [pdfLawyer, setPdfLawyer] = useState(null);
+
+  const handleOpenPdfModal = (lawyer) => {
+    setPdfLawyer(lawyer);
+    setPdfModalOpen(true);
+  };
 
   // Modal de Adição Manual
   const [isManualModalOpen, setIsManualModalOpen] = useState(false);
@@ -308,7 +322,7 @@ export default function RadarGoogleMaps() {
 
     toast({
       title: 'Proposta copiada com sucesso!',
-      description: 'Mensagem com link curto e valor de R$ 300 + domínio pronta para envio.'
+      description: 'Mensagem com link curto e valor de R$ 297 + domínio pronta para envio.'
     });
     setTimeout(() => setCopiedId(null), 3000);
   };
@@ -367,7 +381,7 @@ export default function RadarGoogleMaps() {
     setIsManualModalOpen(false);
     toast({
       title: 'Escritório real adicionado à lista!',
-      description: 'Lead registrado e proposta de R$ 300 gerada com sucesso.'
+      description: 'Lead registrado e proposta de R$ 297 gerada com sucesso.'
     });
   };
 
@@ -387,7 +401,7 @@ export default function RadarGoogleMaps() {
     const avgRating = total > 0
       ? (results.reduce((acc, curr) => acc + Number(curr.rating || 0), 0) / total).toFixed(1)
       : '0.0';
-    const potentialRevenue = total * 300;
+    const potentialRevenue = total * 297;
 
     return { total, avgRating, potentialRevenue };
   }, [results]);
@@ -407,7 +421,7 @@ export default function RadarGoogleMaps() {
           </h1>
           <p className="text-sm text-muted-foreground max-w-2xl leading-relaxed">
             Identifique escritórios com excelente reputação no Google que não possuem presença na web. 
-            Dispare propostas irresistíveis de <strong className="text-foreground font-semibold">R$ 300 (implementação única) + anuidade do domínio</strong> direto no WhatsApp.
+            Dispare propostas irresistíveis de <strong className="text-foreground font-semibold">R$ 297 (implementação única) + anuidade do domínio</strong> direto no WhatsApp.
           </p>
         </div>
 
@@ -676,7 +690,7 @@ export default function RadarGoogleMaps() {
           </div>
 
           <span className="text-xs text-muted-foreground self-start sm:self-auto font-medium">
-            Proposta padronizada: <strong className="text-emerald-600 dark:text-emerald-400">R$ 300</strong> implementação + domínio anual (~R$ 60/ano)
+            Proposta padronizada: <strong className="text-emerald-600 dark:text-emerald-400">R$ 297</strong> implementação + domínio anual (~R$ 60/ano)
           </span>
         </div>
 
@@ -887,7 +901,7 @@ export default function RadarGoogleMaps() {
                     <button
                       type="button"
                       onClick={() => handleSendWhatsApp(lawyer, 'passo3')}
-                      title="Passo 3: Envia a Landing Page personalizada e a proposta de R$ 300"
+                      title="Passo 3: Envia a Landing Page personalizada e a proposta de R$ 297"
                       className="flex flex-col items-center justify-center p-2 rounded-xl border border-amber-500/30 bg-amber-500/5 hover:bg-amber-500/15 text-amber-700 dark:text-amber-300 transition-all text-center group"
                     >
                       <div className="flex items-center gap-1 text-[11px] font-bold">
@@ -895,24 +909,24 @@ export default function RadarGoogleMaps() {
                         <span>Demo</span>
                       </div>
                       <span className="text-[9px] text-muted-foreground mt-0.5 truncate max-w-full">
-                        Link + R$ 300
+                        Link + R$ 297
                       </span>
                     </button>
 
                   </div>
 
-                  {/* Linha de 4 Ações Rápidas */}
-                  <div className="grid grid-cols-4 gap-1.5 pt-1">
+                  {/* Linha de 5 Ações Rápidas */}
+                  <div className="grid grid-cols-5 gap-1 pt-1">
                     
                     {/* Link Direto do Google Maps */}
                     <a
                       href={mapsUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-1 text-[11px] px-1.5 h-8 rounded-md border border-input bg-background hover:bg-primary/10 hover:text-primary text-foreground transition-colors"
+                      className="inline-flex items-center justify-center gap-0.5 text-[11px] px-1 h-8 rounded-md border border-input bg-background hover:bg-primary/10 hover:text-primary text-foreground transition-colors"
                       title="Abrir a ficha oficial no Google Maps"
                     >
-                      <MapPin className="w-3 h-3 text-red-500" />
+                      <MapPin className="w-3 h-3 text-red-500 shrink-0" />
                       <span className="truncate">Maps</span>
                     </a>
 
@@ -925,10 +939,10 @@ export default function RadarGoogleMaps() {
                         setProposalVariant('passo1');
                         googleMapsProspectService.saveCloudDemo(lawyer).then(() => loadCloudDemos());
                       }}
-                      className="text-[11px] px-1.5 h-8 gap-1"
+                      className="text-[11px] px-1 h-8 gap-0.5"
                       title="Ver e copiar os textos de cada etapa do roteiro"
                     >
-                      <Copy className="w-3 h-3 text-muted-foreground" />
+                      <Copy className="w-3 h-3 text-muted-foreground shrink-0" />
                       <span className="truncate">Textos</span>
                     </Button>
 
@@ -937,12 +951,24 @@ export default function RadarGoogleMaps() {
                       href={demoUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-1 text-[11px] px-1.5 h-8 rounded-md border border-input bg-background hover:bg-muted text-foreground transition-colors"
+                      className="inline-flex items-center justify-center gap-0.5 text-[11px] px-1 h-8 rounded-md border border-input bg-background hover:bg-muted text-foreground transition-colors"
                       title="Abrir o site modelo gerado para este escritório"
                     >
-                      <ExternalLink className="w-3 h-3 text-primary" />
+                      <ExternalLink className="w-3 h-3 text-primary shrink-0" />
                       <span className="truncate">Demo</span>
                     </a>
+
+                    {/* Exportar Maquete em PDF */}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleOpenPdfModal(lawyer)}
+                      className="text-[11px] px-1 h-8 gap-0.5 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/10"
+                      title="Baixar a prévia do site em PDF para enviar no WhatsApp"
+                    >
+                      <FileText className="w-3 h-3 text-emerald-500 shrink-0" />
+                      <span className="truncate">PDF</span>
+                    </Button>
 
                     {/* Salvar no CRM */}
                     <Button
@@ -1069,7 +1095,7 @@ export default function RadarGoogleMaps() {
                       <button
                         type="button"
                         onClick={() => handleSendWhatsApp({ ...demo, lawyer_name: demo.name }, 'passo3')}
-                        title="Passo 3: Envia link da demonstração e proposta R$ 300"
+                        title="Passo 3: Envia link da demonstração e proposta R$ 297"
                         className="py-1 px-1 rounded-lg border border-amber-500/30 bg-amber-500/5 hover:bg-amber-500/15 text-amber-700 dark:text-amber-300 text-[10px] font-bold text-center"
                       >
                         3. Demo
@@ -1095,6 +1121,17 @@ export default function RadarGoogleMaps() {
                       <ExternalLink className="w-3.5 h-3.5 text-primary" />
                       <span>Abrir Demo</span>
                     </a>
+
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleOpenPdfModal({ ...demo, lawyer_name: demo.name })}
+                      className="gap-1 text-xs text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/10 px-2.5 py-1.5 h-auto"
+                      title="Baixar a maquete deste site em PDF para enviar no WhatsApp"
+                    >
+                      <FileText className="w-3.5 h-3.5 text-emerald-500" />
+                      <span>PDF</span>
+                    </Button>
 
                     <Button
                       variant="outline"
@@ -1296,7 +1333,7 @@ export default function RadarGoogleMaps() {
                   }`}
                 >
                   <div className="text-[11px]">3. Demo</div>
-                  <div className="text-[9px] opacity-80">Link + R$ 300</div>
+                  <div className="text-[9px] opacity-80">Link + R$ 297</div>
                 </button>
 
                 <button
@@ -1384,7 +1421,7 @@ export default function RadarGoogleMaps() {
               <p className="text-muted-foreground text-[11px] leading-relaxed">
                 {proposalVariant === 'passo1' && 'Sem links e sem texto longo. Evita bloqueio do WhatsApp e passa pela secretária solicitando o contato do titular.'}
                 {proposalVariant === 'passo2' && 'Reconhece a boa avaliação no Google, alerta clientes escapando na cidade e pede permissão para enviar a prévia.'}
-                {proposalVariant === 'passo3' && 'Envia a página oficial com o nome deles, respeitando as normas da OAB e com taxa de R$ 300 mais anuidade do domínio.'}
+                {proposalVariant === 'passo3' && 'Envia a página oficial com o nome deles, respeitando as normas da OAB e com taxa de R$ 297 mais anuidade do domínio.'}
                 {(proposalVariant === 'recuperacao1' || proposalVariant === 'recuperacao') && 'Pergunta com total naturalidade se este é o contato certo para tratar do assunto ou se indicam outro. Zero pressão de venda, desarma defesas.'}
                 {proposalVariant === 'recuperacao2' && 'Usada assim que a pessoa responde "é comigo", "sou eu" ou "pode falar". Entrega o protótipo e alerta a concorrência local.'}
                 {proposalVariant === 'recuperacao_indicado' && 'Mensagem pronta para abordar com respeito o novo contato ou sócio indicado pela equipe.'}
@@ -1460,7 +1497,7 @@ export default function RadarGoogleMaps() {
                 <div className="flex items-center gap-2">
                   <DollarSign className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                   <span className="text-muted-foreground">Proposta transparente:</span>
-                  <strong className="text-foreground font-bold">R$ 300 (implementação única)</strong>
+                  <strong className="text-foreground font-bold">R$ 297 (de R$ 450 com desconto de lançamento)</strong>
                 </div>
                 <div className="text-muted-foreground text-[11px]">
                   + Domínio (~R$ 60/ano)
@@ -1476,6 +1513,17 @@ export default function RadarGoogleMaps() {
                 onClick={() => setSelectedLawyerForProposal(null)}
               >
                 Fechar
+              </Button>
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleOpenPdfModal(selectedLawyerForProposal)}
+                className="gap-1.5 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/10"
+                title="Gerar e baixar o PDF desta demonstração para enviar no WhatsApp"
+              >
+                <FileText className="w-3.5 h-3.5 text-emerald-500" />
+                <span>Exportar PDF</span>
               </Button>
 
               <Button
@@ -1636,6 +1684,13 @@ export default function RadarGoogleMaps() {
           </div>
         </div>
       )}
+
+      {/* Modal de Exportação do Site em PDF */}
+      <LegalLandingPdfModal
+        isOpen={pdfModalOpen}
+        onClose={() => setPdfModalOpen(false)}
+        lawyer={pdfLawyer}
+      />
 
     </div>
   );

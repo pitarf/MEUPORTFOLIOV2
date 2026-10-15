@@ -8,6 +8,7 @@ import { scanLawyersWithoutWebsite } from '../lib/gemini.js';
 import { legalProspectService } from './legalProspectService.js';
 import { supabase } from '@/lib/customSupabaseClient';
 import { cleanLawyerName } from '../utils/lawyerNameFormatter.js';
+import { getGreetingByBrasiliaTime, formatLawyerSalutation } from '../utils/greetingUtils.js';
 
 /**
  * Gera um slug único, limpo e amigável para a URL da landing page de um advogado
@@ -344,13 +345,13 @@ export const googleMapsProspectService = {
   },
 
   /**
-   * Gera a mensagem de proposta comercial de R$ 300 + domínio anual
+   * Gera a mensagem de proposta comercial de R$ 297 + domínio anual
    * @param {Object} lawyer - Dados do advogado
    * @param {string} variant - 'direto', 'autoridade' ou 'curto'
    * @returns {string}
    */
   /**
-   * Gera a mensagem de proposta comercial de R$ 300 + anuidade do domínio
+   * Gera a mensagem de proposta comercial de R$ 297 + anuidade do domínio
    * Sem uso de travessão, com menção à personalização completa de fotos e textos
    * @param {Object} lawyer - Dados do advogado
    * @param {string} variant - 'direto', 'autoridade' ou 'curto'
@@ -358,7 +359,9 @@ export const googleMapsProspectService = {
    */
   generateProposalMessage: (lawyer, variant = 'direto') => {
     const rawName = lawyer.lawyer_name || lawyer.name || 'Doutor(a)';
-    const name = cleanLawyerName(rawName) || 'Doutor(a)';
+    const salutation = formatLawyerSalutation(rawName);
+    const name = salutation.cleanName;
+    const greeting = getGreetingByBrasiliaTime();
     const rating = lawyer.rating ? `${Number(lawyer.rating).toFixed(1)}★` : '5.0★';
     const reviews = lawyer.reviews_count ? ` (${lawyer.reviews_count} avaliações)` : '';
     const city = lawyer.city || 'sua região';
@@ -368,9 +371,9 @@ export const googleMapsProspectService = {
     const previewUrl = buildDemoUrl(lawyer, baseUrl);
 
     if (variant === 'passo1') {
-      return `Olá, bom dia! Tudo bem?
+      return `Olá, ${greeting}! Tudo bem?
 
-Por gentileza, este canal é o contato direto com o(a) Dr(a). ${name} ou falo com a equipe do escritório?`;
+Por gentileza, este canal é o contato direto ${salutation.directContactPhrase} ou falo com a equipe do escritório?`;
     }
 
     if (variant === 'passo2') {
@@ -384,15 +387,16 @@ Me autoriza a enviar o link rápido de demonstração para vocês darem uma olha
     }
 
     if (variant === 'passo3') {
-      return `Perfeito, Dr(a). ${name}! Montei esta prévia personalizada pensando exatamente no posicionamento de vocês:
+      return `Perfeito, ${salutation.salutationCall}! Montei esta prévia personalizada pensando exatamente no posicionamento de vocês:
 
 👉 ${previewUrl}
+(Caso prefira por segurança, posso te encaminhar a prévia completa em PDF por aqui para você avaliar o layout com tranquilidade!)
 
 O objetivo é transformar quem pesquisa por advogados em ${city} no Google em contatos diretos no WhatsApp de vocês, com alto padrão visual e total respeito ao Código de Ética da OAB.
 
 Todos os textos, fotos e áreas de atuação podem ser 100% personalizados com a identidade oficial do escritório.
 
-Para colocar no ar com domínio próprio e configurado, o valor é de apenas R$ 300 (taxa única de implementação) mais a anuidade do domínio próprio (em média R$ 60 ao ano).
+Para colocar no ar com domínio próprio e configurado, o valor é de apenas R$ 297 (taxa única de implementação) mais a anuidade do domínio próprio (em média R$ 60 ao ano).
 
 Depois me conte o que achou da estrutura!`;
     }
@@ -406,7 +410,7 @@ Caso não seja, teria algum outro canal ou pessoa responsável que você pudesse
     }
 
     if (variant === 'recuperacao2' || variant === 'recuperacao_confirmou') {
-      return `Perfeito, Dr(a). ${name}! 
+      return `Perfeito, ${salutation.salutationCall}! 
 
 Quis apenas retomar o contato porque verifiquei que vocês possuem excelente avaliação no Google Maps em ${city}, mas ainda não têm um site oficial cadastrado.
 
@@ -415,10 +419,11 @@ Hoje, potenciais clientes que pesquisam por advogados na sua região acabam fech
 Cheguei a desenhar um modelo exclusivo para o escritório de vocês verem na prática como resolver isso:
 
 👉 ${previewUrl}
+(Caso ache mais seguro e prático, também posso te enviar a prévia completa em PDF por aqui para dar uma olhada no layout).
 
 (Lembrando que todos os textos, áreas de atuação e fotos podem ser 100% personalizados com a identidade oficial de vocês).
 
-Para subir com domínio próprio e configurado, o valor é de apenas R$ 300 (taxa única de implementação) mais a anuidade do domínio (em média R$ 60 ao ano).
+Para subir com domínio próprio e configurado, o valor é de apenas R$ 297 (taxa única de implementação) mais a anuidade do domínio (em média R$ 60 ao ano).
 
 Depois me dê um retorno sobre o que achou da estrutura!`;
     }
@@ -426,7 +431,7 @@ Depois me dê um retorno sobre o que achou da estrutura!`;
     if (variant === 'recuperacao_indicado') {
       return `Olá! Tudo bem?
 
-Falei anteriormente no canal principal do escritório do(a) Dr(a). ${name} e me indicaram falar com você sobre a presença digital e captação de clientes.
+Falei anteriormente no canal principal do escritório ${salutation.officeOfPhrase} e me indicaram falar com você sobre a presença digital e captação de clientes.
 
 Desenvolvi um protótipo visual exclusivo para o escritório em ${city}:
 👉 ${previewUrl}
@@ -443,40 +448,42 @@ Um abraço e excelente trabalho para toda a equipe!`;
     }
 
     if (variant === 'curto') {
-      return `Olá, ${name}, tudo bem? Me chamo Rafael Pita.
+      return `Olá, ${salutation.salutationCall}, tudo bem? Me chamo Rafael Pita.
 
 Vi seu perfil no Google Maps com ótima avaliação (${rating}${reviews}), porém notei que ainda não tem um site oficial cadastrado.
 
 Fiz um modelo sob medida para você ver como ficaria:
 👉 ${previewUrl}
+(Se preferir por segurança, também posso te enviar o PDF da prévia por aqui!)
 
 (Lembrando que todos os textos, áreas de atuação e as fotos podem ser 100% alterados para colocar suas fotos reais e biografia. A ideia aqui é apenas ilustrar como o seu escritório pode se posicionar com alto padrão).
 
-Cobro apenas R$ 300 (taxa única de implementação), mais a anuidade do domínio próprio (em média R$ 60 ao ano).
+Cobro apenas R$ 297 (taxa única de implementação com desconto de lançamento), mais a anuidade do domínio próprio (em média R$ 60 ao ano).
 
 Se tiver interesse em colocar no ar com o seu nome essa semana, é só me dar um retorno por aqui!`;
     }
 
     if (variant === 'autoridade') {
-      return `Olá, ${name}, tudo bem? Me chamo Rafael Pita, especialista em presença digital para o setor jurídico.
+      return `Olá, ${salutation.salutationCall}, tudo bem? Me chamo Rafael Pita, especialista em presença digital para o setor jurídico.
 
 Estava pesquisando escritórios de referência em ${city} e me deparei com a excelente nota do seu escritório no Google (${rating}${reviews}).
 
 Muitos clientes em potencial procuram um site oficial para validar autoridade antes de entrar em contato e não conseguem localizar o seu. Pensando nisso, desenhei uma estrutura executiva sob medida pronta para o seu escritório:
 
 👉 ${previewUrl}
+(Ou caso prefira, te encaminho a prévia completa em PDF por aqui para conferir a estrutura!)
 
 (Lembrando que fotos reais, biografia, textos e especialidades são 100% personalizáveis com a sua identidade oficial. A proposta é demonstrar visualmente o potencial de autoridade da sua banca).
 
-A implementação completa fica em apenas R$ 300 (pagamento único), mais a taxa anual do domínio próprio (em média R$ 60 ao ano).
+A implementação completa fica em apenas R$ 297 (pagamento único de lançamento), mais a taxa anual do domínio próprio (em média R$ 60 ao ano).
 
 Teria interesse em subir essa página oficial para converter mais contatos que te encontram no Google Maps?`;
     }
 
     // Padrão: Passo 1 do Roteiro Cadenciado
-    return `Olá, bom dia! Tudo bem?
+    return `Olá, ${greeting}! Tudo bem?
 
-Por gentileza, este canal é o contato direto com o(a) Dr(a). ${name} ou falo com a equipe do escritório?`;
+Por gentileza, este canal é o contato direto ${salutation.directContactPhrase} ou falo com a equipe do escritório?`;
   },
 
   /**
@@ -505,7 +512,7 @@ Por gentileza, este canal é o contato direto com o(a) Dr(a). ${name} ou falo co
       {
         step: 3,
         title: 'Passo 3: Demonstração',
-        subtitle: 'Envia o link da Landing Page e proposta de R$ 300',
+        subtitle: 'Envia o link da Landing Page e proposta de R$ 297',
         badge: 'Link + Proposta',
         variant: 'passo3',
         message: googleMapsProspectService.generateProposalMessage(lawyer, 'passo3')

@@ -39,6 +39,7 @@ import ClientSubscriptionPortal from '@/pages/ClientSubscriptionPortal';
 import ManageLegalProspects from '@/pages/admin/ManageLegalProspects';
 import RadarGoogleMaps from '@/pages/admin/RadarGoogleMaps';
 import LegalLandingPage from '@/pages/legal/LegalLandingPage';
+import LegalSalesLandingPage from '@/pages/legal/LegalSalesLandingPage';
 import MainLayout from '@/components/MainLayout';
 import AdminLayout from '@/components/AdminLayout';
 
@@ -101,6 +102,10 @@ function App() {
                             <Route path="/advocacia/:slug" element={<LegalLandingPage />} />
                             <Route path="/adv/:slug" element={<LegalLandingPage />} />
                             <Route path="/modelo-advocacia/:niche" element={<LegalLandingPage />} />
+
+                            {/* Nova Landing Page de Vendas de Criação de Sites para Advogados */}
+                            <Route path="/criacao-site-advogado" element={<LegalSalesLandingPage />} />
+                            <Route path="/sites-para-advogados" element={<LegalSalesLandingPage />} />
                             
                             {/* Acesso Direto ao Radar Google Maps de Prospecção */}
                             <Route path="/radar-google-maps" element={<RadarGoogleMaps />} />

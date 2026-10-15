@@ -743,8 +743,66 @@ Para conferir consistência visual em todas as páginas públicas:
 2. **Páginas Refatoradas**:
    - Portfólio, Projetos, Serviços, Sobre Nós, Avaliações, Contato, Assinaturas e Fotografia harmonizadas com fundo `#0a0a08`, cartões `#121210` e bordas com hover verde neon.
 
+### 13.33 Arquitetura de Dados Despoluída da Tabela de Assinaturas e Modal 360 Graus
 
+Para garantir uma interface executiva, limpa e de alta performance na gestão de contratos recorrentes em `/admin/assinaturas`:
 
+1. **Separação de Densidade de Dados (Tabela Sintética vs. Modal Detalhado)**:
+   - A tabela primária em `ManageMaintenanceSubscriptions.jsx` exibe apenas as informações essenciais para tomada de decisão em lote: Nome do Cliente, Plano & Categoria com indicador resumido de sites (`🌐 X sites`), Valor Mensal, Vencimento e Status.
+   - Todo o detalhamento cadastral complexo (CPF/CNPJ, Razão Social, E-mail, Celular com WhatsApp sanitizado, observações e lista integral de URLs cobertas com links externos) foi encapsulado no componente `SubscriptionDetailsModal.jsx`.
 
+2. **Acionamento Intuitivo via Ícone de Informação (i)**:
+   - O modal é acionável tanto pelo ícone sutil de `Info` localizado ao lado do nome do cliente, quanto pelo botão de ação rápida `[Info]` na coluna da direita e no cabeçalho dos cards mobile.
+   - Fornece recursos de cópia em 1 clique para documentos e link direto para conversa no WhatsApp com o número oficial sanitizado.
 
+3. **Conformidade com a Ordem dos Hooks do React**:
+   - Todos os hooks de estado (`useState`, `useEffect`) em `SubscriptionDetailsModal.jsx` são declarados no topo do componente, antes de qualquer cláusula de retorno antecipado, prevenindo alertas e instabilidades no ciclo de vida do React.
 
+### 13.34 Sincronização Temporal com o Horário de Brasília & Humanização de Honoríficos
+
+Para assegurar uma abordagem comercial impecável, sem erros temporais de cumprimento no WhatsApp e sem construções robóticas:
+
+1. **Cálculo Preciso pelo Horário de Brasília (`src/utils/greetingUtils.js`)**:
+   - A função `getGreetingByBrasiliaTime()` utiliza a API nativa `Intl.DateTimeFormat` configurada estritamente para `timeZone: 'America/Sao_Paulo'`.
+   - Independentemente do fuso horário da máquina local ou do servidor, a hora é convertida para o Horário Oficial de Brasília:
+     - 05:00 às 11:59: `'bom dia'`
+     - 12:00 às 17:59: `'boa tarde'`
+     - 18:00 às 04:59: `'boa noite'`
+   - Possui fallback seguro baseado em cálculo UTC-3 caso a API de internacionalização falhe.
+
+2. **Formatação Humanizada de Honoríficos e Gênero (`formatLawyerSalutation`)**:
+   - Integra o algoritmo de `detectLawyerGender` para identificar se o prospecto é homem ou mulher.
+   - Elimina o uso de construções frias como `o(a) Dr(a).`.
+### 13.35 Módulo de Exportação Executiva em PDF (`LegalLandingPdfModal.jsx`)
+
+Para atender advogados que hesitam em clicar em links externos e preferem receber propostas em formato anexo fechado:
+
+1. **Geração Client-Side via `html2pdf.js`**:
+   - O componente `LegalLandingPdfModal.jsx` utiliza a biblioteca `html2pdf.js` com motor de renderização `html2canvas` configurado em escala 2x (`scale: 2`) e modo `useCORS: true`.
+   - O documento A4 é estruturado com margens corporativas (`margin: [10, 10, 12, 10]`) e quebras de página programadas através da classe CSS `.html2pdf__page-break`.
+
+2. **Diagramação Executiva em 3 Páginas A4**:
+   - **Página 1 (Apresentação & Hero)**: Cabeçalho com monograma e logotipo, número de inscrição na OAB, endereço completo do escritório, nota média e avaliações do Google Maps, badge oficial do WhatsApp e hero executivo personalizado.
+   - **Página 2 (Especialidades & Rito Metodológico)**: Grade diagramada das principais áreas de atuação jurídica com tags de especialidade, rito de trabalho em 4 fases e métricas do escritório.
+   - **Página 3 (Prova Social, Diferenciais & Proposta)**: Depoimentos de clientes satisfeitos, diferenciais técnicos de infraestrutura (HTTPS, Mobile-First, Cloud Flare, SEO Local), proposta comercial transparente (R$ 297 à vista ou parcelado, com anuidade de domínio à parte) e QR Code direto para o WhatsApp comercial.
+
+3. **Integração no Painel de Prospecção (`RadarGoogleMaps.jsx`)**:
+   - Botão de ação rápida `PDF` disponibilizado no grid de 5 ações de cada lead do Google Maps, nos cards de demonstrações salvas na nuvem (`cloudDemos`) e dentro do modal de envio de proposta comercial.
+
+### 13.36 Arquitetura da Landing Page de Vendas de Sites Jurídicos (`LegalSalesLandingPage.jsx`)
+
+Para captação direta de advogados e bancas jurídicas interessadas em modernização de presença digital:
+
+1. **Rotas e Indexação**:
+   - Acessível nas rotas `/criacao-site-advogado` e `/sites-para-advogados` registradas no `src/App.jsx`.
+   - Mapeada no utilitário de geração de sitemap (`tools/generate-sitemap.js`) com inclusão automática em `public/sitemap.xml` (prioridade 0.9 e frequência de atualização semanal).
+
+2. **Metadados e Schema.org Otimizados para Alta Intenção de Busca**:
+   - Título e descrição calibrados para palavras-chave de fundo de funil: *"Criação de Site para Advogado | Especialista em Sites Jurídicos com SEO"*, *"Desenvolvedor de site de advogado"*, *"Onde comprar site de advogado"*, *"Como comprar site de advogado"* e *"Site de advogado com SEO"*.
+   - Estrutura JSON-LD dos tipos `ProfessionalService` e `Offer` especificando preço promocional de R$ 297, moeda BRL e cobertura de serviços.
+
+3. **Elementos de Alta Conversão e Gatilhos Psicológicos**:
+   - **Escassez Real**: Barra fixa de topo com temporizador regressivo de 48 horas persistido em `localStorage`.
+   - **Demonstrações ao Vivo**: Vitrine interativa de 4 modelos reais (Direito Trabalhista, Direito de Família, Direito do Consumidor e Escritório Full-Service) com abertura em nova guia.
+   - **Clareza de Precificação**: Exibição visual de ancoragem de preço (De R$ 450 por R$ 297 taxa única de configuração) destacando com transparência a anuidade de domínio de aproximadamente R$ 40/ano paga diretamente ao registro.br.
+   - **Perguntas Frequentes Interativas**: Sanfona interativa (FAQ) abordando conformidade com o Código de Ética da OAB, prazos de entrega (24h a 48h), painel de controle e independência do cliente.

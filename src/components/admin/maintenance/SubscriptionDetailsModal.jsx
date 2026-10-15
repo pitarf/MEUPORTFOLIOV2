@@ -43,8 +43,14 @@ import {
     Loader2,
     Globe,
     ExternalLink,
-    Trash2
+    Trash2,
+    Info,
+    Copy,
+    Check,
+    Mail,
+    Phone
 } from 'lucide-react';
+import WhatsAppIcon from '@/components/common/WhatsAppIcon';
 
 /**
  * Modal com a visao 360 graus da assinatura: historico completo de faturas e chamados de suporte.
@@ -71,6 +77,7 @@ const SubscriptionDetailsModal = ({
     const [tickets, setTickets] = useState([]);
     const [loadingData, setLoadingData] = useState(false);
     const [actionLoading, setActionLoading] = useState(false);
+    const [copiedField, setCopiedField] = useState(null);
 
     useEffect(() => {
         if (!isOpen || !subscription?.id) return;
@@ -208,59 +215,159 @@ const SubscriptionDetailsModal = ({
         }
     };
 
+    const handleCopyText = (text, fieldName) => {
+        if (!text) return;
+        navigator.clipboard.writeText(text);
+        setCopiedField(fieldName);
+        setTimeout(() => setCopiedField(null), 2000);
+        toast({
+            title: 'Copiado para a área de transferência',
+            description: `${text}`
+        });
+    };
+
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <div className="flex items-center justify-between gap-3">
                         <DialogTitle className="flex items-center gap-2 text-xl font-bold">
-                            <FileText className="w-5 h-5 text-primary" />
+                            <Info className="w-5 h-5 text-primary" />
                             {subscription.client_name}
                         </DialogTitle>
                         <span className={`px-2.5 py-0.5 text-xs font-semibold rounded-full ${statusMeta.badgeClass}`}>
                             {statusMeta.label}
                         </span>
                     </div>
-                    <DialogDescription>
-                        {subscription.plan_title} : Código: {subscription.subscription_code}
+                    <DialogDescription className="flex items-center gap-2 pt-1">
+                        <span className="font-medium text-foreground">{subscription.plan_title}</span>
+                        <span className="text-muted-foreground">•</span>
+                        <span className="font-mono text-xs text-muted-foreground">{subscription.subscription_code}</span>
                     </DialogDescription>
                 </DialogHeader>
 
                 <div className="space-y-6 pt-2">
-                    {/* Resumo do Cliente e Assinatura */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 p-3.5 rounded-xl bg-muted/30 border border-border text-xs">
-                        <div>
-                            <span className="text-muted-foreground block font-medium">Documento:</span>
-                            <span className="font-semibold text-foreground">
-                                {maskCpfCnpj(subscription.client_document)}
+                    {/* Painel Completo de Informações do Cliente & Contrato */}
+                    <div className="p-4 rounded-xl bg-muted/30 border border-border space-y-4">
+                        <div className="flex items-center justify-between border-b border-border/50 pb-2.5">
+                            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+                                <Building2 className="w-4 h-4 text-primary" />
+                                Informações Cadastrais & Contratuais
+                            </span>
+                            <span className="text-xs font-mono text-muted-foreground">
+                                Categoria: <strong className="text-foreground">{subscription.category?.name || 'Geral'}</strong>
                             </span>
                         </div>
-                        <div>
-                            <span className="text-muted-foreground block font-medium">WhatsApp:</span>
-                            <span className="font-semibold text-foreground">
-                                {maskPhone(subscription.client_phone)}
-                            </span>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                            {/* Documento (CPF / CNPJ) com Botão Copiar */}
+                            <div className="p-2.5 rounded-lg bg-card border border-border/60">
+                                <span className="text-muted-foreground block text-[11px] font-medium">CPF / CNPJ:</span>
+                                <div className="flex items-center justify-between gap-1 mt-0.5">
+                                    <span className="font-semibold text-foreground font-mono">
+                                        {maskCpfCnpj(subscription.client_document)}
+                                    </span>
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={() => handleCopyText(subscription.client_document, 'doc')}
+                                        className="h-6 w-6 text-muted-foreground hover:text-primary"
+                                        title="Copiar documento"
+                                    >
+                                        {copiedField === 'doc' ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
+                                    </Button>
+                                </div>
+                            </div>
+
+                            {/* WhatsApp com Link Direto */}
+                            <div className="p-2.5 rounded-lg bg-card border border-border/60">
+                                <span className="text-muted-foreground block text-[11px] font-medium">WhatsApp / Telefone:</span>
+                                <div className="flex items-center justify-between gap-1 mt-0.5">
+                                    <span className="font-semibold text-foreground">
+                                        {maskPhone(subscription.client_phone)}
+                                    </span>
+                                    {subscription.client_phone && (
+                                        <a
+                                            href={`https://wa.me/${subscription.client_phone.replace(/\D/g, '')}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-emerald-500 hover:text-emerald-600 p-1 rounded-md hover:bg-emerald-500/10 transition-colors"
+                                            title="Conversar no WhatsApp"
+                                        >
+                                            <WhatsAppIcon className="w-3.5 h-3.5" />
+                                        </a>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Valor Mensal e Ciclo */}
+                            <div className="p-2.5 rounded-lg bg-card border border-border/60">
+                                <span className="text-muted-foreground block text-[11px] font-medium">Valor Contratado:</span>
+                                <div className="font-bold text-sm text-emerald-600 dark:text-emerald-400 mt-0.5">
+                                    {formatCurrencyBRL(subscription.current_price)}
+                                </div>
+                                <span className="text-[10px] text-muted-foreground capitalize">
+                                    Ciclo {subscription.billing_cycle || 'mensal'}
+                                </span>
+                            </div>
+
+                            {/* Vencimento e Dia Fixo */}
+                            <div className="p-2.5 rounded-lg bg-card border border-border/60">
+                                <span className="text-muted-foreground block text-[11px] font-medium">Próximo Vencimento:</span>
+                                <div className="font-semibold text-foreground mt-0.5">
+                                    {formatDateBR(subscription.next_due_date)}
+                                </div>
+                                <span className="text-[10px] text-muted-foreground">
+                                    Dia fixo de cobrança: {subscription.billing_day}
+                                </span>
+                            </div>
                         </div>
-                        <div>
-                            <span className="text-muted-foreground block font-medium">Valor Mensal:</span>
-                            <span className="font-semibold text-emerald-600 dark:text-emerald-400">
-                                {formatCurrencyBRL(subscription.current_price)}
-                            </span>
+
+                        {/* Linha Adicional: Empresa e E-mail */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
+                            {subscription.client_company && (
+                                <div className="flex items-center gap-2 p-2.5 rounded-lg bg-card border border-border/60">
+                                    <Building2 className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                                    <div>
+                                        <span className="text-muted-foreground text-[10px] block">Razão Social / Empresa:</span>
+                                        <span className="font-medium text-foreground">{subscription.client_company}</span>
+                                    </div>
+                                </div>
+                            )}
+
+                            {subscription.client_email && (
+                                <div className="flex items-center gap-2 p-2.5 rounded-lg bg-card border border-border/60">
+                                    <Mail className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                                    <div className="min-w-0 flex-1">
+                                        <span className="text-muted-foreground text-[10px] block">E-mail de Contato:</span>
+                                        <a
+                                            href={`mailto:${subscription.client_email}`}
+                                            className="font-medium text-foreground hover:text-primary truncate block"
+                                            title="Enviar e-mail"
+                                        >
+                                            {subscription.client_email}
+                                        </a>
+                                    </div>
+                                </div>
+                            )}
                         </div>
-                        <div>
-                            <span className="text-muted-foreground block font-medium">Próximo Vencimento:</span>
-                            <span className="font-semibold text-foreground">
-                                {formatDateBR(subscription.next_due_date)} (Dia {subscription.billing_day})
-                            </span>
-                        </div>
+
+                        {/* Observações do Contrato se houver */}
+                        {subscription.notes && (
+                            <div className="p-2.5 rounded-lg bg-card border border-border/60 text-xs">
+                                <span className="text-muted-foreground text-[10px] block font-medium">Notas & Observações:</span>
+                                <p className="text-foreground mt-0.5 leading-relaxed">{subscription.notes}</p>
+                            </div>
+                        )}
                     </div>
 
-                    {/* Sites Cobertos pela Manutencao */}
+                    {/* Sites Cobertos pela Manutenção */}
                     {parseCoveredWebsites(subscription.covered_websites).length > 0 && (
-                        <div className="p-3 rounded-xl bg-primary/5 border border-primary/20 space-y-1.5">
+                        <div className="p-3.5 rounded-xl bg-primary/5 border border-primary/20 space-y-2">
                             <span className="text-xs font-semibold text-primary flex items-center gap-1.5">
-                                <Globe className="w-3.5 h-3.5" />
-                                Sites & Aplicações Atendidos ({parseCoveredWebsites(subscription.covered_websites).length}):
+                                <Globe className="w-4 h-4" />
+                                Sites & Aplicações Cobertos ({parseCoveredWebsites(subscription.covered_websites).length}):
                             </span>
                             <div className="flex flex-wrap gap-2 pt-0.5">
                                 {parseCoveredWebsites(subscription.covered_websites).map((siteUrl, sIdx) => {
@@ -271,10 +378,10 @@ const SubscriptionDetailsModal = ({
                                             href={safeUrl}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono font-medium bg-card hover:bg-muted text-foreground border border-border shadow-2xs hover:border-primary/50 transition-colors"
+                                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-card hover:bg-muted text-foreground border border-border shadow-xs hover:border-primary/50 transition-colors"
                                             title={`Abrir ${siteUrl} em nova aba`}
                                         >
-                                            <Globe className="w-3 h-3 text-primary" />
+                                            <Globe className="w-3.5 h-3.5 text-primary" />
                                             {siteUrl}
                                             <ExternalLink className="w-3 h-3 text-muted-foreground ml-0.5" />
                                         </a>

@@ -18,14 +18,18 @@ async function generate() {
         { path: '/avaliacoes', priority: '0.7', changefreq: 'weekly' },
         { path: '/contato', priority: '0.8', changefreq: 'monthly' },
         
-        // As 7 novas páginas específicas de serviços
+        // As páginas específicas de serviços
         { path: '/criacao-de-sites', priority: '0.9', changefreq: 'monthly' },
         { path: '/landing-pages', priority: '0.9', changefreq: 'monthly' },
         { path: '/desenvolvimento-de-sistemas', priority: '0.9', changefreq: 'monthly' },
         { path: '/automacoes', priority: '0.9', changefreq: 'monthly' },
         { path: '/dashboards-power-bi', priority: '0.9', changefreq: 'monthly' },
         { path: '/fotografia-eventos', priority: '0.8', changefreq: 'monthly' },
-        { path: '/fotografia-corporativa', priority: '0.8', changefreq: 'monthly' }
+        { path: '/fotografia-corporativa', priority: '0.8', changefreq: 'monthly' },
+
+        // Landing Pages de Vendas de Sites para Advogados (Alta Prioridade SEO)
+        { path: '/criacao-site-advogado', priority: '1.0', changefreq: 'weekly' },
+        { path: '/sites-para-advogados', priority: '0.9', changefreq: 'weekly' }
     ];
 
     const urls = [...staticRoutes];

@@ -25,8 +25,10 @@ import {
     Building2,
     Eye,
     Loader2,
-    Globe
+    Globe,
+    Info
 } from 'lucide-react';
+import WhatsAppIcon from '@/components/common/WhatsAppIcon';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -667,57 +669,92 @@ const ManageMaintenanceSubscriptions = () => {
                                         className="p-4 rounded-xl border border-border bg-card shadow-sm space-y-3"
                                     >
                                         <div className="flex items-start justify-between gap-2">
-                                            <div>
-                                                <div className="flex items-center gap-2">
-                                                    <span className={`w-2 h-2 rounded-full ${statusMeta.dotClass}`} />
-                                                    <h3 className="font-bold text-base text-foreground">
+                                            <div className="min-w-0 flex-1">
+                                                <div className="flex items-center gap-1.5">
+                                                    <span className={`w-2 h-2 rounded-full flex-shrink-0 ${statusMeta.dotClass}`} />
+                                                    <h3 className="font-bold text-base text-foreground truncate">
                                                         {sub.client_name}
                                                     </h3>
+                                                    <Button
+                                                        type="button"
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        onClick={() => {
+                                                            setDetailsSubscription(sub);
+                                                            setDetailsModalOpen(true);
+                                                        }}
+                                                        className="h-6 w-6 text-muted-foreground hover:text-primary rounded-full flex-shrink-0 ml-1"
+                                                        title="Informações completas"
+                                                    >
+                                                        <Info className="w-3.5 h-3.5 text-primary" />
+                                                    </Button>
                                                 </div>
-                                                {sub.client_company && (
-                                                    <span className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
-                                                        <Building2 className="w-3 h-3" />
+                                                {sub.client_company && sub.client_company.trim().toLowerCase() !== sub.client_name.trim().toLowerCase() && (
+                                                    <span className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5 truncate">
+                                                        <Building2 className="w-3 h-3 flex-shrink-0" />
                                                         {sub.client_company}
                                                     </span>
                                                 )}
                                             </div>
-                                            <span className={`px-2.5 py-0.5 text-xs font-semibold rounded-full ${statusMeta.badgeClass}`}>
+                                            <span className={`px-2.5 py-0.5 text-xs font-semibold rounded-full flex-shrink-0 ${statusMeta.badgeClass}`}>
                                                 {statusMeta.label}
                                             </span>
                                         </div>
 
-                                        <div className="p-2.5 rounded-lg bg-muted/40 text-xs space-y-1">
-                                            <div className="font-semibold text-foreground">
-                                                {sub.plan_title}
+                                        <div className="p-2.5 rounded-lg bg-muted/40 text-xs space-y-1.5">
+                                            <div className="flex items-center justify-between gap-2">
+                                                <div className="font-semibold text-foreground truncate">
+                                                    {sub.plan_title}
+                                                </div>
+                                                <span className="px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-[10px] font-medium border border-border/40 flex-shrink-0">
+                                                    {sub.category?.name || 'Geral'}
+                                                </span>
+                                            </div>
+
+                                            <div className="flex items-center justify-between text-muted-foreground pt-0.5">
+                                                <span>Mensal: <strong className="text-foreground">{formatCurrencyBRL(sub.current_price)}</strong></span>
+                                                <span>Vencimento: <strong className="text-foreground">{formatDateBR(sub.next_due_date)}</strong></span>
                                             </div>
 
                                             {sub.covered_websites && parseCoveredWebsites(sub.covered_websites).length > 0 && (
-                                                <div className="flex flex-wrap gap-1 pt-1 pb-0.5">
-                                                    {parseCoveredWebsites(sub.covered_websites).map((site, idx) => (
-                                                        <span
-                                                            key={idx}
-                                                            className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20"
-                                                        >
-                                                            <Globe className="w-2.5 h-2.5" />
-                                                            {extractDomain(site)}
-                                                        </span>
-                                                    ))}
+                                                <div className="pt-0.5">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setDetailsSubscription(sub);
+                                                            setDetailsModalOpen(true);
+                                                        }}
+                                                        className="inline-flex items-center gap-1 text-[11px] font-mono text-primary hover:underline"
+                                                    >
+                                                        <Globe className="w-3 h-3" />
+                                                        <span>{parseCoveredWebsites(sub.covered_websites).length} site{parseCoveredWebsites(sub.covered_websites).length > 1 ? 's' : ''} coberto{parseCoveredWebsites(sub.covered_websites).length > 1 ? 's' : ''} (ver detalhes)</span>
+                                                    </button>
                                                 </div>
                                             )}
 
-                                            <div className="flex items-center justify-between text-muted-foreground">
-                                                <span>Mensal: <strong>{formatCurrencyBRL(sub.current_price)}</strong></span>
-                                                <span>Vencimento: <strong>{formatDateBR(sub.next_due_date)}</strong> (Dia {sub.billing_day})</span>
-                                            </div>
                                             {sub.next_price && (
-                                                <div className="text-amber-600 dark:text-amber-400 font-medium pt-1 border-t border-border/50">
+                                                <div className="text-amber-600 dark:text-amber-400 font-medium text-[11px] pt-1 border-t border-border/50">
                                                     Reajuste: {formatCurrencyBRL(sub.next_price)} a partir de {formatDateBR(sub.next_price_effective_date)}
                                                 </div>
                                             )}
                                         </div>
 
-                                        {/* Acoes Mobile */}
-                                        <div className="grid grid-cols-2 gap-2 pt-1">
+                                        {/* Ações Mobile Compactas */}
+                                        <div className="grid grid-cols-3 gap-2 pt-1">
+                                            <Button
+                                                type="button"
+                                                size="sm"
+                                                variant="outline"
+                                                onClick={() => {
+                                                    setDetailsSubscription(sub);
+                                                    setDetailsModalOpen(true);
+                                                }}
+                                                className="text-xs flex items-center justify-center gap-1 text-primary border-primary/30 hover:bg-primary/10"
+                                            >
+                                                <Info className="w-3.5 h-3.5" />
+                                                Info
+                                            </Button>
+
                                             <Button
                                                 type="button"
                                                 size="sm"
@@ -727,60 +764,7 @@ const ManageMaintenanceSubscriptions = () => {
                                                 className="text-xs flex items-center justify-center gap-1 text-emerald-600 border-emerald-500/30 hover:bg-emerald-500/10"
                                             >
                                                 {isActionBusy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <QrCode className="w-3.5 h-3.5" />}
-                                                Gerar PIX
-                                            </Button>
-
-                                            <Button
-                                                type="button"
-                                                size="sm"
-                                                variant="outline"
-                                                disabled={isActionBusy}
-                                                onClick={() => handleConfirmManualPaymentQuick(sub)}
-                                                className="text-xs flex items-center justify-center gap-1 text-blue-600 border-blue-500/30 hover:bg-blue-500/10"
-                                            >
-                                                <CheckCircle2 className="w-3.5 h-3.5" />
-                                                Dar Baixa
-                                            </Button>
-
-                                            <Button
-                                                type="button"
-                                                size="sm"
-                                                variant="outline"
-                                                onClick={() => {
-                                                    setPriceSubscription(sub);
-                                                    setPriceModalOpen(true);
-                                                }}
-                                                className="text-xs flex items-center justify-center gap-1"
-                                            >
-                                                <TrendingUp className="w-3.5 h-3.5 text-amber-500" />
-                                                Reajuste
-                                            </Button>
-
-                                            <Button
-                                                type="button"
-                                                size="sm"
-                                                variant="outline"
-                                                onClick={() => {
-                                                    setDetailsSubscription(sub);
-                                                    setDetailsModalOpen(true);
-                                                }}
-                                                className="text-xs flex items-center justify-center gap-1"
-                                            >
-                                                <Eye className="w-3.5 h-3.5 text-primary" />
-                                                Detalhes
-                                            </Button>
-
-                                            <Button
-                                                type="button"
-                                                size="sm"
-                                                variant="outline"
-                                                disabled={isActionBusy}
-                                                onClick={() => handleOpenSubscriptionPdf(sub)}
-                                                className="col-span-2 text-xs flex items-center justify-center gap-1 text-primary border-primary/30 hover:bg-primary/10 font-medium"
-                                                title="Visualizar e Baixar Fatura em PDF"
-                                            >
-                                                <FileText className="w-3.5 h-3.5" />
-                                                Visualizar Fatura (PDF)
+                                                PIX
                                             </Button>
 
                                             <Button
@@ -788,10 +772,10 @@ const ManageMaintenanceSubscriptions = () => {
                                                 size="sm"
                                                 variant="outline"
                                                 onClick={() => handleOpenShareModal(sub)}
-                                                className="col-span-2 text-xs flex items-center justify-center gap-1.5 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/10 font-bold"
+                                                className="text-xs flex items-center justify-center gap-1 text-emerald-600 border-emerald-500/30 hover:bg-emerald-500/10 font-medium"
                                             >
-                                                <MessageCircle className="w-3.5 h-3.5 text-emerald-500" />
-                                                WhatsApp (Apresentação / Lembretes)
+                                                <WhatsAppIcon className="w-3.5 h-3.5" />
+                                                WhatsApp
                                             </Button>
                                         </div>
                                     </div>
@@ -825,66 +809,64 @@ const ManageMaintenanceSubscriptions = () => {
                                                     key={sub.id}
                                                     className="hover:bg-muted/20 transition-colors"
                                                 >
-                                                    {/* Cliente */}
-                                                    <td className="py-3.5 px-4 align-top">
-                                                        <div className="font-bold text-sm text-foreground flex items-center gap-1.5">
-                                                            {sub.client_name}
-                                                        </div>
-                                                        {sub.client_company && (
-                                                            <div className="text-muted-foreground text-xs flex items-center gap-1 mt-0.5">
-                                                                <Building2 className="w-3 h-3 text-muted-foreground" />
-                                                                {sub.client_company}
+                                                    {/* Cliente / Empresa */}
+                                                    <td className="py-3 px-4 align-middle">
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="min-w-0">
+                                                                <div className="font-bold text-sm text-foreground flex items-center gap-1.5">
+                                                                    <span>{sub.client_name}</span>
+                                                                </div>
+                                                                {sub.client_company && sub.client_company.trim().toLowerCase() !== sub.client_name.trim().toLowerCase() && (
+                                                                    <div className="text-muted-foreground text-xs flex items-center gap-1 mt-0.5">
+                                                                        <Building2 className="w-3 h-3 text-muted-foreground flex-shrink-0" />
+                                                                        <span className="truncate">{sub.client_company}</span>
+                                                                    </div>
+                                                                )}
                                                             </div>
-                                                        )}
-                                                        <div className="text-muted-foreground text-xs mt-1 flex items-center gap-2">
-                                                            <span>{maskCpfCnpj(sub.client_document)}</span>
-                                                            {cleanPhone && (
-                                                                <a
-                                                                    href={`https://wa.me/${cleanPhone}`}
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
-                                                                    className="text-emerald-600 hover:text-emerald-700 font-medium inline-flex items-center gap-0.5"
-                                                                    title="Abrir WhatsApp direto"
-                                                                >
-                                                                    <MessageCircle className="w-3 h-3" />
-                                                                    {maskPhone(sub.client_phone)}
-                                                                </a>
-                                                            )}
+                                                            <Button
+                                                                type="button"
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                onClick={() => {
+                                                                    setDetailsSubscription(sub);
+                                                                    setDetailsModalOpen(true);
+                                                                }}
+                                                                className="h-7 w-7 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-full flex-shrink-0"
+                                                                title="Ver informações cadastrais completas"
+                                                            >
+                                                                <Info className="w-4 h-4 text-primary" />
+                                                            </Button>
                                                         </div>
                                                     </td>
 
                                                     {/* Plano & Categoria */}
-                                                    <td className="py-3.5 px-4 align-top">
-                                                        <div className="font-semibold text-foreground">
+                                                    <td className="py-3 px-4 align-middle">
+                                                        <div className="font-semibold text-foreground text-xs sm:text-sm">
                                                             {sub.plan_title}
                                                         </div>
-                                                        <div className="text-xs text-muted-foreground mt-0.5">
-                                                            <span className="inline-block px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-[11px] font-medium border border-border/40">
+                                                        <div className="flex items-center gap-2 mt-1">
+                                                            <span className="inline-block px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-[10px] font-medium border border-border/40">
                                                                 {categoryName}
                                                             </span>
+                                                            {sub.covered_websites && parseCoveredWebsites(sub.covered_websites).length > 0 && (
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => {
+                                                                        setDetailsSubscription(sub);
+                                                                        setDetailsModalOpen(true);
+                                                                    }}
+                                                                    className="inline-flex items-center gap-1 text-[11px] font-mono text-primary hover:underline hover:text-primary/80 transition-colors"
+                                                                    title="Clique para ver todos os sites atendidos"
+                                                                >
+                                                                    <Globe className="w-3 h-3" />
+                                                                    <span>{parseCoveredWebsites(sub.covered_websites).length} site{parseCoveredWebsites(sub.covered_websites).length > 1 ? 's' : ''}</span>
+                                                                </button>
+                                                            )}
                                                         </div>
-                                                        <span className="text-[11px] font-mono text-muted-foreground/80 mt-1 block">
-                                                            {sub.subscription_code}
-                                                        </span>
-
-                                                        {sub.covered_websites && parseCoveredWebsites(sub.covered_websites).length > 0 && (
-                                                            <div className="flex flex-wrap items-center gap-1 mt-1.5">
-                                                                {parseCoveredWebsites(sub.covered_websites).map((site, idx) => (
-                                                                    <span
-                                                                        key={idx}
-                                                                        className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20"
-                                                                        title={site}
-                                                                    >
-                                                                        <Globe className="w-2.5 h-2.5" />
-                                                                        {extractDomain(site)}
-                                                                    </span>
-                                                                ))}
-                                                            </div>
-                                                        )}
                                                     </td>
 
                                                     {/* Valor Mensal */}
-                                                    <td className="py-3.5 px-4 align-top">
+                                                    <td className="py-3 px-4 align-middle">
                                                         <div className="text-sm font-bold text-foreground">
                                                             {formatCurrencyBRL(sub.current_price)}
                                                         </div>
@@ -892,14 +874,14 @@ const ManageMaintenanceSubscriptions = () => {
                                                             Ciclo {sub.billing_cycle || 'mensal'}
                                                         </span>
                                                         {sub.next_price && (
-                                                            <div className="text-[11px] text-amber-600 dark:text-amber-400 font-medium mt-1">
+                                                            <div className="text-[10px] text-amber-600 dark:text-amber-400 font-medium mt-0.5">
                                                                 Reajuste: {formatCurrencyBRL(sub.next_price)}
                                                             </div>
                                                         )}
                                                     </td>
 
                                                     {/* Vencimento */}
-                                                    <td className="py-3.5 px-4 align-top">
+                                                    <td className="py-3 px-4 align-middle">
                                                         <div className="font-medium text-foreground">
                                                             {formatDateBR(sub.next_due_date)}
                                                         </div>
@@ -909,19 +891,35 @@ const ManageMaintenanceSubscriptions = () => {
                                                     </td>
 
                                                     {/* Status */}
-                                                    <td className="py-3.5 px-4 align-top">
+                                                    <td className="py-3 px-4 align-middle">
                                                         <div className="flex items-center gap-1.5">
                                                             <span className={`w-2 h-2 rounded-full ${statusMeta.dotClass}`} />
-                                                            <span className={`px-2 py-0.5 rounded-full font-semibold ${statusMeta.badgeClass}`}>
+                                                            <span className={`px-2 py-0.5 rounded-full font-semibold text-[11px] ${statusMeta.badgeClass}`}>
                                                                 {statusMeta.label}
                                                             </span>
                                                         </div>
                                                     </td>
 
-                                                    {/* Acoes Rapidas */}
-                                                    <td className="py-3.5 px-4 align-top text-right">
+                                                    {/* Ações Rápidas */}
+                                                    <td className="py-3 px-4 align-middle text-right">
                                                         <div className="flex items-center justify-end gap-1.5">
-                                                            {/* Botao PIX */}
+                                                            {/* Botão de Informações Rápidas */}
+                                                            <Button
+                                                                type="button"
+                                                                size="sm"
+                                                                variant="outline"
+                                                                onClick={() => {
+                                                                    setDetailsSubscription(sub);
+                                                                    setDetailsModalOpen(true);
+                                                                }}
+                                                                className="h-8 px-2.5 text-primary border-primary/30 hover:bg-primary/10"
+                                                                title="Informações completas do contrato, sites, faturas e chamados"
+                                                            >
+                                                                <Info className="w-3.5 h-3.5 mr-1" />
+                                                                Info
+                                                            </Button>
+
+                                                            {/* Botão PIX */}
                                                             <Button
                                                                 type="button"
                                                                 size="sm"
@@ -939,47 +937,42 @@ const ManageMaintenanceSubscriptions = () => {
                                                                 PIX
                                                             </Button>
 
-                                                            {/* Botao Dar Baixa */}
-                                                            <Button
-                                                                type="button"
-                                                                size="sm"
-                                                                variant="outline"
-                                                                disabled={isActionBusy}
-                                                                onClick={() => handleConfirmManualPaymentQuick(sub)}
-                                                                className="h-8 px-2.5 text-blue-600 hover:text-blue-700 hover:bg-blue-500/10 border-blue-500/30"
-                                                                title="Confirmar pagamento e avançar ciclo"
-                                                            >
-                                                                <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
-                                                                Baixar
-                                                            </Button>
-
-                                                            {/* Botao Notificar WhatsApp */}
+                                                            {/* Botão Compartilhar WhatsApp */}
                                                             <Button
                                                                 type="button"
                                                                 size="sm"
                                                                 variant="outline"
                                                                 onClick={() => handleOpenShareModal(sub)}
                                                                 className="h-8 px-2.5 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-500/10 border-emerald-500/30 font-medium"
-                                                                title="Compartilhar no WhatsApp: Apresentação do sistema ou lembrete mensal"
+                                                                title="Compartilhar no WhatsApp: Cobrança ou apresentação"
                                                             >
-                                                                <MessageCircle className="w-3.5 h-3.5 mr-1 text-emerald-500" />
+                                                                <WhatsAppIcon className="w-3.5 h-3.5 mr-1" />
                                                                 WhatsApp
                                                             </Button>
 
-                                                            {/* Dropdown com mais acoes */}
+                                                            {/* Dropdown com mais ações */}
                                                             <DropdownMenu>
                                                                 <DropdownMenuTrigger asChild>
                                                                     <Button variant="ghost" size="icon" className="h-8 w-8">
                                                                         <MoreVertical className="w-4 h-4 text-muted-foreground" />
                                                                     </Button>
                                                                 </DropdownMenuTrigger>
-                                                                <DropdownMenuContent align="end" className="w-52">
+                                                                <DropdownMenuContent align="end" className="w-56">
                                                                     <DropdownMenuItem
-                                                                        onClick={() => handleOpenShareModal(sub)}
-                                                                        className="cursor-pointer text-emerald-600 dark:text-emerald-400 font-semibold"
+                                                                        disabled={isActionBusy}
+                                                                        onClick={() => handleConfirmManualPaymentQuick(sub)}
+                                                                        className="cursor-pointer text-blue-600 dark:text-blue-400 font-semibold"
                                                                     >
-                                                                        <MessageCircle className="w-4 h-4 mr-2 text-emerald-500" />
-                                                                        Notificar no WhatsApp
+                                                                        <CheckCircle2 className="w-4 h-4 mr-2" />
+                                                                        Dar Baixa Manual
+                                                                    </DropdownMenuItem>
+
+                                                                    <DropdownMenuItem
+                                                                        onClick={() => handleOpenSubscriptionPdf(sub)}
+                                                                        className="cursor-pointer text-primary focus:text-primary focus:bg-primary/10 font-semibold"
+                                                                    >
+                                                                        <FileText className="w-4 h-4 mr-2" />
+                                                                        Visualizar Fatura (PDF)
                                                                     </DropdownMenuItem>
 
                                                                     <DropdownMenuItem
@@ -994,22 +987,14 @@ const ManageMaintenanceSubscriptions = () => {
                                                                     </DropdownMenuItem>
 
                                                                     <DropdownMenuItem
-                                                                        onClick={() => handleOpenSubscriptionPdf(sub)}
-                                                                        className="cursor-pointer text-primary focus:text-primary focus:bg-primary/10 font-semibold"
-                                                                    >
-                                                                        <FileText className="w-4 h-4 mr-2" />
-                                                                        Visualizar Fatura (PDF)
-                                                                    </DropdownMenuItem>
-
-                                                                    <DropdownMenuItem
                                                                         onClick={() => {
                                                                             setDetailsSubscription(sub);
                                                                             setDetailsModalOpen(true);
                                                                         }}
                                                                         className="cursor-pointer"
                                                                     >
-                                                                        <FileText className="w-4 h-4 mr-2 text-primary" />
-                                                                        Faturas & Chamados
+                                                                        <Eye className="w-4 h-4 mr-2 text-primary" />
+                                                                        Histórico de Faturas & Chamados
                                                                     </DropdownMenuItem>
 
                                                                     <DropdownMenuItem

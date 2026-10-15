@@ -2,6 +2,68 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.53.0] - 2026-10-15
+
+### Adicionado e Otimizado (Exportação em PDF, Roteiro Seguro de Prospecção e Landing Page de Vendas de Sites Jurídicos)
+* **Segurança e Confiança na Prospecção via WhatsApp (Alternativa em PDF)**:
+  * Atualizados os roteiros de prospecção do Radar Google Maps (`googleMapsProspectService.js`):
+    * O Passo 3 da cadência de mensagens agora oferece expressamente o envio da maquete em arquivo PDF como alternativa segura para advogados receosos de clicar em links externos.
+    * Resgates e variantes de mensagens ajustados com opção transparente: link interativo ou documento PDF anexo.
+    * Inclusão da oferta promocional de R$ 297 (com desconto de R$ 450) com domínio anual à parte.
+* **Módulo de Exportação Executiva em PDF (`LegalLandingPdfModal.jsx`)**:
+  * Desenvolvido componente de renderização e diagramação de páginas A4 corporativas de alta resolução utilizando `html2pdf.js`.
+  * Layout impresso profissional dividido por quebras de página CSS (`html2pdf__page-break`):
+    * Página 1: Capa institucional de luxo, titulação, OAB, endereço, nota do Google Maps, badge oficial do WhatsApp e hero executivo.
+    * Página 2: Áreas de atuação com tags temáticas, metodologia de trabalho em 4 fases e métricas do escritório.
+    * Página 3: Depoimentos de clientes, diferenciais técnicos, proposta comercial transparente (R$ 297) e QR Code para WhatsApp.
+  * Botão de exportação `PDF` adicionado no Radar Google Maps (`RadarGoogleMaps.jsx`) nos cartões de leads (grid de 5 ações), demonstrações na nuvem e no modal de envio de propostas.
+* **Nova Landing Page de Vendas para Advogados (`LegalSalesLandingPage.jsx`)**:
+  * Criada página comercial de alta conversão nas rotas `/criacao-site-advogado` e `/sites-para-advogados`:
+    * Faixa superior fixa com contador regressivo de escassez real de 48 horas.
+    * Hero impactante com tipografia Plus Jakarta Sans e H1 otimizado para os motores de busca.
+    * Vitrine interativa com 4 modelos ao vivo (Trabalhista, Família, Consumidor e Full-Service) com badges de especialidade e abertura direta.
+    * Pilares de personalização: Logotipo próprio, paleta cromática, fotografias da banca e redação persuasiva.
+    * Caixa de preços transparente: De R$ 450 por R$ 297 (taxa única de configuração) + anuidade de domínio à parte.
+    * Seção de Perguntas Frequentes (FAQ) em accordion sanfonado.
+    * CTAs distribuídos estrategicamente apontando para o WhatsApp oficial com mensagem predefinida.
+* **SEO Espetacular e Atualização de Sitemap**:
+  * Metadados profundos e Schema.org (`ProfessionalService` / `Offer`) focados em palavras-chave estratégicas: *"criar site para advogado"*, *"desenvolvedor de site de advogado"*, *"onde comprar site de advogado"*, *"como comprar site de advogado"* e *"site de advogado com seo"*.
+  * Atualizado o script `tools/generate-sitemap.js` e regenerado o `public/sitemap.xml` com prioridade 0.9 e frequência semanal.
+
+## [1.52.0] - 2026-10-15
+
+### Aprimorado e Humanizado (Saudações Dinâmicas pelo Horário de Brasília & Honoríficos)
+* **Sincronização Estrita com o Horário Oficial de Brasília (`America/Sao_Paulo`)**:
+  * Desenvolvido utilitário modular `src/utils/greetingUtils.js` com a função `getGreetingByBrasiliaTime()`.
+  * Elimina saudações estáticas incorretas (como "bom dia" à tarde ou à noite), garantindo o cumprimento exato pelo fuso de Brasília:
+    * 05:00 até 11:59: 'bom dia'
+    * 12:00 até 17:59: 'boa tarde'
+    * 18:00 até 04:59: 'boa noite'
+  * Suporte a fallback resiliente com compensação automática de fuso UTC-3.
+* **Humanização de Tratamento por Gênero e Titulação Jurídica (`formatLawyerSalutation`)**:
+  * Integrada detecção inteligente de gênero (`detectLawyerGender`) para eliminar construções robóticas e frias como `o(a) Dr(a).`.
+  * Nomes femininos (ex: Victória Motta) recebem automaticamente tratamento nobre: *"com a Dra. Victória Motta"*, *"Perfeito, Dra. Victória Motta!"* e *"escritório da Dra. Victória Motta"*.
+  * Nomes masculinos recebem tratamento proporcional: *"com o Dr. Nome"*, *"Perfeito, Dr. Nome!"* e *"escritório do Dr. Nome"*.
+* **Atualização dos Motores de Mensagem (`googleMapsProspectService.js` e `RadarGoogleMaps.jsx`)**:
+  * Atualizados todos os scripts de prospecção, primeiro contato, roteiro cadenciado em 3 passos e banco de respostas para aplicar saudações e pronomes dinâmicos em tempo real.
+
+## [1.51.0] - 2026-10-15
+
+### Aprimorado e Despoluído (Tabela de Assinaturas & Central de Informações por Modal)
+* **Despoluição Radical da Tabela de Assinaturas (`ManageMaintenanceSubscriptions.jsx`)**:
+  * Eliminada a duplicidade de razão social e nome de fantasia quando idênticos na coluna de cliente.
+  * Removida a sobrecarga de CPF e telefone da visualização tabular primária, mantendo a linha limpa, compacta e elegante.
+  * Substituído o despejo de múltiplas tags de URLs por indicador compacto e clicável (`🌐 X sites`), que ao ser acionado abre diretamente a ficha completa do contrato.
+  * Reestruturada a coluna de ações rápidas para uma tríade funcional e harmoniosa: `[Info (i)]`, `[PIX]` e `[WhatsApp]` (com o logotipo oficial da marca), além do menu `[...]` para ações administrativas secundárias.
+  * Despoluição equivalente aplicada aos cards da versão mobile, garantindo visual executivo em qualquer dispositivo.
+* **Central Completa de Informações Cadastrais (`SubscriptionDetailsModal.jsx`)**:
+  * O modal acionado pelo botão `Info` ou pelo ícone `(i)` foi enriquecido como a central única de visualização 360 graus do cliente e contrato.
+  * Exibição estruturada com cópia em 1 clique de CPF/CNPJ, link direto para WhatsApp com número sanitizado, e-mail clicável, valor mensal, dia fixo de cobrança, razão social, notas e observações.
+  * Listagem organizada de sites e aplicações cobertos com links externos de abertura direta.
+  * Histórico de faturas geradas com baixa manual, reversão e recibo PDF, além da aba de chamados de suporte vinculados.
+* **Correção de Regras dos Hooks do React**:
+  * Realinhada a ordem de declaração dos hooks em `SubscriptionDetailsModal.jsx`, prevenindo alertas e garantindo estabilidade no ciclo de vida do componente.
+
 ## [1.50.0] - 2026-10-15
 
 ### Aprimorado e Padronizado (Logotipo Oficial do WhatsApp no Site e Landing Pages)
