@@ -105,41 +105,41 @@ const Subscriptions = () => {
                 <meta name="description" content="Conheça nossos planos de assinatura e economize em seus projetos recorrentes. Soluções flexíveis para empresas de todos os tamanhos." />
             </Helmet>
 
-            <div className="pt-20">
+            <div className="pt-20 min-h-screen bg-slate-50 dark:bg-[#0a0a08] text-slate-900 dark:text-white transition-colors duration-300">
                 {/* Hero Section */}
-                <section className="py-20 tech-pattern">
+                <section className="py-20 bg-slate-50 dark:bg-[#0a0a08] tech-pattern">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="text-center mb-16"
+                            className="text-center mb-16 space-y-4"
                         >
-                            <h1 className="text-5xl md:text-6xl font-bold mb-6">
-                                <span className="gradient-text">Planos de Assinatura</span>
+                            <h1 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight text-slate-900 dark:text-white">
+                                Planos de <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Assinatura</span>
                             </h1>
-                            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+                            <p className="text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto font-medium">
                                 Economize tempo e dinheiro com nossos planos recorrentes. Soluções flexíveis para suas necessidades contínuas.
                             </p>
 
                             {/* Banner do Portal do Assinante */}
                             <div className="mt-8 inline-block max-w-2xl mx-auto">
-                                <div className="p-4 sm:p-5 rounded-2xl bg-card/80 border border-primary/30 backdrop-blur shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4 text-left">
+                                <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b]/50 shadow-md flex flex-col sm:flex-row items-center justify-between gap-4 text-left transition-all">
                                     <div className="flex items-start gap-3">
-                                        <div className="p-2.5 rounded-xl bg-primary/10 text-primary flex-shrink-0 mt-0.5">
+                                        <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-[#181814] border border-slate-200 dark:border-[#23231f] text-[#4d7c0f] dark:text-[#bcf13b] flex-shrink-0 mt-0.5">
                                             <ShieldCheck className="w-5 h-5" />
                                         </div>
                                         <div>
-                                            <h3 className="font-bold text-sm text-foreground">
+                                            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
                                                 Já é nosso cliente de Manutenção?
                                             </h3>
-                                            <p className="text-xs text-muted-foreground mt-0.5">
+                                            <p className="text-xs text-slate-600 dark:text-gray-400 mt-0.5">
                                                 Acesse o Portal do Assinante sem senha para pagar faturas com PIX, obter recibos e abrir chamados.
                                             </p>
                                         </div>
                                     </div>
                                     <Link
                                         to="/minha-assinatura"
-                                        className="w-full sm:w-auto flex-shrink-0 px-4 py-2 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-sm"
+                                        className="w-full sm:w-auto flex-shrink-0 px-4 py-2.5 rounded-xl bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-sm"
                                     >
                                         Acessar Portal
                                         <ArrowRight className="w-3.5 h-3.5" />
@@ -151,15 +151,17 @@ const Subscriptions = () => {
                 </section>
 
                 {/* Benefits Section */}
-                <section className="py-20 bg-slate-50/80 dark:bg-gray-900/50 border-y border-border/50">
+                <section className="py-20 bg-slate-100/60 dark:bg-[#0a0a08] border-y border-slate-200 dark:border-[#23231f]">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            className="text-center mb-16"
+                            className="text-center mb-16 space-y-4"
                         >
-                            <h2 className="text-4xl font-bold gradient-text mb-6">Por que assinar?</h2>
-                            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+                            <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                                Por que <span className="text-[#4d7c0f] dark:text-[#bcf13b]">assinar?</span>
+                            </h2>
+                            <p className="text-lg md:text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto font-medium">
                                 Vantagens exclusivas para quem escolhe nossos serviços recorrentes
                             </p>
                         </motion.div>
@@ -171,11 +173,11 @@ const Subscriptions = () => {
                                     initial={{ opacity: 0, y: 20 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     transition={{ delay: index * 0.1 }}
-                                    className="text-center"
+                                    className="text-center p-6 rounded-2xl bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] hover:shadow-[0_0_20px_rgba(77,124,15,0.15)] dark:hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] transition-all shadow-sm"
                                 >
                                     <div className="text-4xl mb-4">{benefit.icon}</div>
-                                    <h3 className="text-xl font-semibold text-foreground mb-3">{benefit.title}</h3>
-                                    <p className="text-muted-foreground">{benefit.description}</p>
+                                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{benefit.title}</h3>
+                                    <p className="text-slate-600 dark:text-gray-400 text-sm leading-relaxed font-medium">{benefit.description}</p>
                                 </motion.div>
                             ))}
                         </div>
@@ -183,55 +185,61 @@ const Subscriptions = () => {
                 </section>
 
                 {/* Pricing Plans */}
-                <section className="py-20">
+                <section className="py-20 bg-slate-50 dark:bg-[#0a0a08]">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
                             {plans.map((plan, index) => (
                                 <motion.div
                                     key={plan.name}
                                     initial={{ opacity: 0, y: 20 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     transition={{ delay: index * 0.1 }}
-                                    className={`relative service-card p-8 rounded-2xl ${plan.popular ? 'ring-2 ring-purple-500 scale-105' : ''
-                                        }`}
+                                    className={`relative p-8 rounded-2xl flex flex-col justify-between transition-all shadow-sm ${
+                                        plan.popular
+                                            ? 'bg-white dark:bg-[#121210] border-2 border-lime-600 dark:border-[#bcf13b] shadow-[0_0_30px_rgba(77,124,15,0.15)] dark:shadow-[0_0_30px_rgba(188,241,59,0.2)] md:-translate-y-2'
+                                            : 'bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] hover:shadow-[0_0_20px_rgba(77,124,15,0.15)] dark:hover:shadow-[0_0_20px_rgba(188,241,59,0.15)]'
+                                    }`}
                                 >
                                     {plan.popular && (
                                         <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                                            <span className="bg-gradient-to-r from-purple-500 to-pink-600 text-white px-4 py-2 rounded-full text-sm font-medium">
+                                            <span className="bg-[#bcf13b] text-[#0a0a08] px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-wider shadow-md">
                                                 Mais Popular
                                             </span>
                                         </div>
                                     )}
 
-                                    <div className="text-center mb-8">
-                                        <div className={`w-16 h-16 mx-auto mb-4 bg-gradient-to-r ${plan.color} rounded-full flex items-center justify-center`}>
-                                            <plan.icon className="w-8 h-8 text-white" />
-                                        </div>
-                                        <h3 className="text-2xl font-bold text-foreground mb-2">{plan.name}</h3>
-                                        <p className="text-muted-foreground mb-6">{plan.description}</p>
-                                        <div className="mb-6">
-                                            <span className="text-4xl font-bold gradient-text">{plan.price}</span>
-                                            <span className="text-muted-foreground">{plan.period}</span>
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-4 mb-8">
-                                        {plan.features.map((feature, idx) => (
-                                            <div key={idx} className="flex items-center space-x-3">
-                                                <Check className="w-5 h-5 text-emerald-500 flex-shrink-0" />
-                                                <span className="text-slate-700 dark:text-gray-300 text-sm">{feature}</span>
+                                    <div>
+                                        <div className="text-center mb-8">
+                                            <div className="w-16 h-16 mx-auto mb-4 bg-slate-100 dark:bg-[#181814] border border-slate-200 dark:border-[#23231f] rounded-full flex items-center justify-center">
+                                                <plan.icon className="w-8 h-8 text-[#4d7c0f] dark:text-[#bcf13b]" />
                                             </div>
-                                        ))}
+                                            <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">{plan.name}</h3>
+                                            <p className="text-slate-600 dark:text-gray-400 text-sm mb-6 font-medium">{plan.description}</p>
+                                            <div className="mb-6 flex items-baseline justify-center">
+                                                <span className="text-4xl md:text-5xl font-extrabold text-[#4d7c0f] dark:text-[#bcf13b]">{plan.price}</span>
+                                                <span className="text-slate-500 dark:text-gray-400 font-medium ml-1.5">{plan.period}</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-3.5 mb-8">
+                                            {plan.features.map((feature, idx) => (
+                                                <div key={idx} className="flex items-start space-x-3">
+                                                    <Check className="w-5 h-5 text-[#4d7c0f] dark:text-[#bcf13b] flex-shrink-0 mt-0.5" />
+                                                    <span className="text-slate-700 dark:text-gray-300 text-sm font-medium">{feature}</span>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
 
                                     <Button
                                         onClick={() => handleSubscribe(plan.name)}
-                                        className={`w-full ${plan.popular
-                                            ? 'bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700'
-                                            : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700'
-                                            }`}
+                                        className={`w-full py-6 rounded-xl font-bold text-base transition-all ${
+                                            plan.popular
+                                                ? 'bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] shadow-lg shadow-[#bcf13b]/20'
+                                                : 'bg-slate-100 dark:bg-[#181814] border border-slate-300 dark:border-[#23231f] text-slate-800 dark:text-white hover:border-lime-500 dark:hover:border-[#bcf13b] hover:text-[#4d7c0f] dark:hover:text-[#bcf13b]'
+                                        }`}
                                     >
-                                        Assinar {plan.name}
+                                        Assinar Agora
                                     </Button>
                                 </motion.div>
                             ))}
@@ -240,15 +248,17 @@ const Subscriptions = () => {
                 </section>
 
                 {/* FAQ Section */}
-                <section className="py-20 bg-slate-50/80 dark:bg-gray-900/50 border-y border-border/50">
+                <section className="py-20 bg-slate-100/60 dark:bg-[#0a0a08] border-y border-slate-200 dark:border-[#23231f]">
                     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            className="text-center mb-16"
+                            className="text-center mb-16 space-y-4"
                         >
-                            <h2 className="text-4xl font-bold gradient-text mb-6">Perguntas Frequentes</h2>
-                            <p className="text-xl text-muted-foreground">
+                            <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                                Perguntas <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Frequentes</span>
+                            </h2>
+                            <p className="text-lg md:text-xl text-slate-600 dark:text-gray-400 font-medium">
                                 Tire suas dúvidas sobre nossos planos de assinatura
                             </p>
                         </motion.div>
@@ -277,10 +287,10 @@ const Subscriptions = () => {
                                     initial={{ opacity: 0, y: 20 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     transition={{ delay: index * 0.1 }}
-                                    className="glass-effect p-6 rounded-xl border border-border"
+                                    className="p-6 rounded-xl bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b]/50 transition-all shadow-sm"
                                 >
-                                    <h3 className="text-lg font-semibold text-foreground mb-3">{faq.question}</h3>
-                                    <p className="text-muted-foreground">{faq.answer}</p>
+                                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">{faq.question}</h3>
+                                    <p className="text-slate-600 dark:text-gray-400 leading-relaxed font-medium">{faq.answer}</p>
                                 </motion.div>
                             ))}
                         </div>
@@ -288,26 +298,30 @@ const Subscriptions = () => {
                 </section>
 
                 {/* CTA Section */}
-                <section className="py-20">
+                <section className="py-20 bg-slate-50 dark:bg-[#0a0a08]">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            className="text-center glass-effect p-12 rounded-2xl"
+                            className="text-center bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] p-12 rounded-3xl shadow-xl max-w-4xl mx-auto"
                         >
-                            <h2 className="text-4xl font-bold gradient-text mb-6">
-                                Ainda tem dúvidas?
+                            <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-6 tracking-tight">
+                                Ainda tem <span className="text-[#4d7c0f] dark:text-[#bcf13b]">dúvidas?</span>
                             </h2>
-                            <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+                            <p className="text-lg md:text-xl text-slate-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto font-medium">
                                 Entre em contato conosco e descubra qual plano é ideal para seu negócio
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                                <Button size="lg" className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-lg px-8 py-4">
-                                    Falar com Especialista
-                                </Button>
-                                <Button size="lg" variant="outline" className="border-gray-600 hover:border-blue-500 text-lg px-8 py-4">
-                                    Ver Projetos Avulsos
-                                </Button>
+                                <Link to="/contato">
+                                    <Button size="lg" className="w-full sm:w-auto bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-bold text-lg px-8 py-6 rounded-xl shadow-lg shadow-[#bcf13b]/20">
+                                        Falar com Especialista
+                                    </Button>
+                                </Link>
+                                <Link to="/portfolio">
+                                    <Button size="lg" variant="outline" className="w-full sm:w-auto border-slate-300 dark:border-[#23231f] bg-slate-100 dark:bg-[#181814] text-slate-800 dark:text-white hover:border-lime-500 dark:hover:border-[#bcf13b] hover:text-[#4d7c0f] dark:hover:text-[#bcf13b] text-lg px-8 py-6 rounded-xl font-bold">
+                                        Ver Projetos Avulsos
+                                    </Button>
+                                </Link>
                             </div>
                         </motion.div>
                     </div>

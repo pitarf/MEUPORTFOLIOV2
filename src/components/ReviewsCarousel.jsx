@@ -31,7 +31,7 @@ const ReviewsCarousel = () => {
             if (error) {
                 console.error('Error fetching reviews:', error);
             } else {
-                setReviews(data);
+                setReviews(data || []);
             }
             setLoading(false);
         };
@@ -43,8 +43,7 @@ const ReviewsCarousel = () => {
         return Array.from({ length: 5 }, (_, i) => (
             <Star
                 key={i}
-                className={`w-5 h-5 ${i < rating ? 'text-yellow-400 fill-current' : 'text-gray-600'
-                    }`}
+                className={`w-5 h-5 ${i < rating ? 'text-[#4d7c0f] dark:text-[#bcf13b] fill-current' : 'text-slate-300 dark:text-gray-600'}`}
             />
         ));
     };
@@ -52,7 +51,7 @@ const ReviewsCarousel = () => {
     if (loading) {
         return (
             <div className="flex justify-center items-center h-64">
-                <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
+                <Loader2 className="h-12 w-12 animate-spin text-[#4d7c0f] dark:text-[#bcf13b]" />
             </div>
         );
     }
@@ -77,31 +76,30 @@ const ReviewsCarousel = () => {
                     <CarouselItem key={review.id}>
                         <div className="p-2 sm:p-4">
                             {/* Card Premium de Depoimento */}
-                            <div className="glass-effect rounded-2xl p-6 sm:p-10 border border-gray-200/50 dark:border-white/10 shadow-xl backdrop-blur-xl bg-white/50 dark:bg-gray-900/40 relative overflow-hidden transition-all duration-300 hover:shadow-2xl max-w-2xl mx-auto">
+                            <div className="rounded-2xl p-6 sm:p-10 border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] shadow-xl bg-white dark:bg-[#121210] relative overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(77,124,15,0.15)] dark:hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] max-w-2xl mx-auto group">
                                 
-                                {/* Aspas flutuantes elegantes como marca d'água */}
-                                <Quote className="absolute top-4 right-6 w-16 h-16 text-blue-500/10 dark:text-blue-400/10 pointer-events-none transform rotate-180" />
+                                {/* Aspas flutuantes como marca d'agua */}
+                                <Quote className="absolute top-4 right-6 w-16 h-16 text-lime-600/10 dark:text-[#bcf13b]/10 group-hover:text-lime-600/20 dark:group-hover:text-[#bcf13b]/20 pointer-events-none transform rotate-180 transition-colors" />
                                 
                                 <div className="relative z-10 text-center">
-                                    <p className="text-base sm:text-lg md:text-xl text-gray-800 dark:text-gray-200 italic leading-relaxed mb-6 font-medium max-w-xl mx-auto transition-colors duration-300">
+                                    <p className="text-base sm:text-lg md:text-xl text-slate-700 dark:text-gray-200 italic leading-relaxed mb-6 font-medium max-w-xl mx-auto transition-colors">
                                         "{review.comment}"
                                     </p>
                                     
                                     <div className="flex flex-col items-center justify-center space-y-3">
-                                        {/* Avatar com moldura gradiente refinada */}
                                         {review.avatar_url ? (
-                                            <div className="w-14 h-14 rounded-full p-[2px] bg-gradient-to-tr from-blue-500 to-purple-600 shadow-md">
-                                                <img alt={review.name} className="w-full h-full rounded-full object-cover bg-background" src={review.avatar_url} loading="lazy" />
+                                            <div className="w-14 h-14 rounded-full p-[2px] bg-[#bcf13b] shadow-md shadow-[#bcf13b]/20">
+                                                <img alt={review.name} className="w-full h-full rounded-full object-cover bg-slate-100 dark:bg-[#0a0a08]" src={review.avatar_url} loading="lazy" />
                                             </div>
                                         ) : (
-                                            <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-blue-500/20 to-purple-650/20 flex items-center justify-center border border-blue-500/30">
-                                                <User className="w-6 h-6 text-blue-500 dark:text-blue-400" />
+                                            <div className="w-14 h-14 rounded-full bg-slate-100 dark:bg-[#181814] border border-slate-200 dark:border-[#23231f] flex items-center justify-center">
+                                                <User className="w-6 h-6 text-[#4d7c0f] dark:text-[#bcf13b]" />
                                             </div>
                                         )}
                                         <div>
-                                            <h4 className="font-bold text-gray-900 dark:text-white text-base sm:text-lg transition-colors duration-300">{review.name}</h4>
+                                            <h4 className="font-bold text-slate-900 dark:text-white group-hover:text-[#4d7c0f] dark:group-hover:text-[#bcf13b] text-base sm:text-lg transition-colors">{review.name}</h4>
                                             {review.role && (
-                                                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-semibold tracking-wide uppercase mt-0.5 transition-colors duration-300">{review.role}</p>
+                                                <p className="text-xs sm:text-sm text-[#4d7c0f] dark:text-[#bcf13b] font-semibold tracking-wide uppercase mt-0.5">{review.role}</p>
                                             )}
                                         </div>
                                     </div>
@@ -112,8 +110,8 @@ const ReviewsCarousel = () => {
                     </CarouselItem>
                 ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden md:flex border-gray-200/80 dark:border-gray-800 hover:bg-gray-150 dark:hover:bg-white/10 hover:text-blue-500 text-gray-600 dark:text-gray-400 transition-colors" />
-            <CarouselNext className="hidden md:flex border-gray-200/80 dark:border-gray-800 hover:bg-gray-150 dark:hover:bg-white/10 hover:text-blue-500 text-gray-600 dark:text-gray-400 transition-colors" />
+            <CarouselPrevious className="hidden md:flex border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] hover:border-lime-500 dark:hover:border-[#bcf13b] hover:text-[#4d7c0f] dark:hover:text-[#bcf13b] text-slate-800 dark:text-white transition-colors shadow-sm" />
+            <CarouselNext className="hidden md:flex border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] hover:border-lime-500 dark:hover:border-[#bcf13b] hover:text-[#4d7c0f] dark:hover:text-[#bcf13b] text-slate-800 dark:text-white transition-colors shadow-sm" />
         </Carousel>
     );
 };

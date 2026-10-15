@@ -38,7 +38,21 @@ Diferente da estrutura legada que forçava o Tema Escuro em toda a área de foto
 1. **Tema Claro Editorial (Light Mode)**: Foco em fundos marfim/branco limpos, molduras finas, tipografia em cinza-escuro (`text-gray-900`) e rótulos discretos em cinza (`text-gray-400`), resultando em um visual de portfólio artístico de altíssimo nível.
 2. **Tema Escuro Cinematográfico (Dark Mode)**: Preservação de fundos pretos espaciais profundos de alto contraste e realce cromático de fotos em lote.
 
-As páginas transitam suavemente através do wrapper `min-h-screen bg-background text-foreground transition-colors duration-300`.
+### 1.4 Padrão de Contraste WCAG AAA e Validação Visual Automatizada
+
+Com a introdução da identidade visual "rp ." e do verde neon (`#bcf13b`), foi estabelecido um padrão rigoroso para evitar perda de contraste no Tema Claro:
+1. **Contraste de Palavras-Chave**:
+   * O verde neon `#bcf13b` sobre fundo branco possui taxa de contraste inferior a 2:1 (ilegível).
+   * Por isso, aplica-se a classe híbrida `text-[#4d7c0f] dark:text-[#bcf13b]`. No tema claro, renderiza um verde floresta profundo com contraste superior a 7:1 (padrão WCAG AAA), mantendo o verde neon de alto impacto no tema escuro.
+2. **Superfícies e Cartões**:
+   * Estrutura padronizada: `bg-white dark:bg-[#121210] border-slate-200 dark:border-[#23231f] text-slate-900 dark:text-white`.
+   * Efeito de foco/hover: borda iluminada `hover:border-lime-500 dark:hover:border-[#bcf13b]`.
+3. **Logotipo Adaptativo (`BrandLogo.jsx`)**:
+   * Letras 'rp' recebem `text-slate-950 dark:text-white`, assegurando leitura imediata tanto em fundos brancos quanto no obsidian `#0a0a08`.
+   * O ponto '.' mantém a assinatura de cor `#bcf13b` em ambos os modos.
+4. **Script de Testes Visuais via Playwright (`tools/capture_theme_screenshots.cjs`)**:
+   * O utilitário inicializa um servidor local de visualização da SPA e aciona uma instância Chromium headless do Playwright.
+   * Executa a alternância programática de tema via `localStorage.setItem('portfolio_theme', 'light' | 'dark')` e captura prints de alta definição de todas as rotas públicas, salvando em `public/screenshots/`.
 
 ---
 
@@ -685,9 +699,17 @@ Para conferir presença de marca moderna no segmento de alta tecnologia e inteli
    - Sombra difusa neon: `0 0 20px rgba(188, 241, 59, 0.15)`.
 2. **Componente de Marca `BrandLogo` (`src/components/common/BrandLogo.jsx`)**:
    - Renderiza as letras 'rp' em branco puro com o ponto estilizado em verde neon `#bcf13b`.
-   - Suporta múltiplos tamanhos e inclusão opcional de divisória vertical com especialização (`| DADOS & TECNOLOGIA`).
+   - Suporta múltiplos tamanhos e inclusão opcional de divisória vertical com o nome da marca (`| Rafael Pita Solutions`).
 3. **Efeito Hover nos Cartões**:
    - Cartões com transição suave, elevação e borda verde neon iluminada ao passar o mouse.
+
+### 13.32 Destaques de Títulos em Verde Neon e Expansão Global da Identidade Dark
+Para conferir consistência visual em todas as páginas públicas:
+1. **Substituição de Gradientes por Verde Neon (`#bcf13b`)**:
+   - Eliminadas as classes `gradient-text` nos títulos de seções em favor de títulos brancos com palavras-chave em `text-[#bcf13b]`.
+2. **Páginas Refatoradas**:
+   - Portfólio, Projetos, Serviços, Sobre Nós, Avaliações, Contato, Assinaturas e Fotografia harmonizadas com fundo `#0a0a08`, cartões `#121210` e bordas com hover verde neon.
+
 
 
 

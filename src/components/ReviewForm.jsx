@@ -31,7 +31,6 @@ const ReviewForm = ({ onSuccess, className }) => {
         const file = e.target.files[0];
         if (file) {
             try {
-                // Show preview immediately with original file (optional, but faster feedback)
                 const reader = new FileReader();
                 reader.onloadend = () => {
                     setAvatarPreview(reader.result);
@@ -46,7 +45,6 @@ const ReviewForm = ({ onSuccess, className }) => {
                 }
             } catch (error) {
                 console.error("Error compressing image:", error);
-                // Fallback to original file if compression fails
                 setAvatarFile(file);
             }
         }
@@ -115,15 +113,19 @@ const ReviewForm = ({ onSuccess, className }) => {
 
     if (isSuccess) {
         return (
-            <div className={`flex flex-col items-center justify-center p-8 text-center space-y-6 ${className}`}>
-                <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center animate-bounce shadow-lg shadow-green-500/20">
-                    <Star className="w-10 h-10 text-white fill-current" />
+            <div className={`flex flex-col items-center justify-center p-8 text-center space-y-6 ${className || ''}`}>
+                <div className="w-20 h-20 bg-[#bcf13b] text-[#0a0a08] rounded-full flex items-center justify-center animate-bounce shadow-lg shadow-[#bcf13b]/20">
+                    <Star className="w-10 h-10 fill-current" />
                 </div>
                 <div className="space-y-2">
-                    <h3 className="text-3xl font-bold text-gray-900 dark:text-white transition-colors duration-300">Obrigado!</h3>
-                    <p className="text-slate-600 dark:text-gray-300 text-lg font-medium transition-colors duration-300">Sua avaliação foi enviada com sucesso.</p>
+                    <h3 className="text-3xl font-extrabold text-slate-900 dark:text-white">Obrigado!</h3>
+                    <p className="text-slate-600 dark:text-gray-300 text-lg font-medium">Sua avaliação foi enviada com sucesso e passará por moderação.</p>
                 </div>
-                <Button onClick={() => setIsSuccess(false)} variant="outline" className="mt-6 border-slate-300 dark:border-gray-600 text-slate-800 dark:text-white hover:bg-slate-100 dark:hover:bg-gray-800 w-full py-6 text-lg font-bold transition-all shadow-sm">
+                <Button
+                    onClick={() => setIsSuccess(false)}
+                    variant="outline"
+                    className="mt-6 border-slate-300 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] text-slate-800 dark:text-white hover:text-[#4d7c0f] dark:hover:text-[#bcf13b] bg-white dark:bg-transparent w-full py-6 text-lg font-bold transition-all shadow-sm"
+                >
                     Enviar outra avaliação
                 </Button>
             </div>
@@ -131,48 +133,87 @@ const ReviewForm = ({ onSuccess, className }) => {
     }
 
     return (
-        <form onSubmit={handleSubmitReview} className={`space-y-6 ${className}`}>
-            <div className="flex items-center space-x-6">
-                <div className="relative">
-                    <div className="w-24 h-24 rounded-full bg-slate-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden transition-colors duration-300 border border-slate-300/50 dark:border-transparent shadow-inner">
+        <form onSubmit={handleSubmitReview} className={`space-y-6 ${className || ''}`}>
+            <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6">
+                <div className="relative flex-shrink-0">
+                    <div className="w-24 h-24 rounded-full bg-slate-100 dark:bg-[#181814] flex items-center justify-center overflow-hidden border border-slate-200 dark:border-[#23231f] shadow-inner">
                         {avatarPreview ? (
                             <img src={avatarPreview} alt="Preview do Avatar" className="w-full h-full object-cover" loading="lazy" />
                         ) : (
-                            <User className="w-12 h-12 text-slate-400 dark:text-gray-400 transition-colors duration-300" />
+                            <User className="w-12 h-12 text-slate-400 dark:text-gray-500" />
                         )}
                     </div>
-                    <label htmlFor="avatar-upload-form" className="absolute -bottom-2 -right-2 bg-blue-500 p-2 rounded-full cursor-pointer hover:bg-blue-600 transition-colors">
-                        <Upload className="w-4 h-4 text-white" />
+                    <label
+                        htmlFor="avatar-upload-form"
+                        className="absolute -bottom-1 -right-1 bg-[#bcf13b] text-[#0a0a08] p-2 rounded-full cursor-pointer hover:bg-[#a8df2a] transition-colors shadow-md"
+                        title="Upload de foto"
+                    >
+                        <Upload className="w-4 h-4" />
                         <input id="avatar-upload-form" type="file" className="hidden" accept="image/*" onChange={handleAvatarChange} />
                     </label>
                 </div>
-                <div className="flex-1 grid grid-cols-1 gap-4">
+                <div className="w-full flex-1 grid grid-cols-1 gap-4">
                     <div>
-                        <Label htmlFor="review-name">Nome *</Label>
-                        <Input id="review-name" type="text" value={newReview.name} onChange={(e) => setNewReview({ ...newReview, name: e.target.value })} placeholder="Seu nome" required />
+                        <Label htmlFor="review-name" className="text-slate-700 dark:text-gray-300 font-semibold mb-1.5 block">Nome *</Label>
+                        <Input
+                            id="review-name"
+                            type="text"
+                            value={newReview.name}
+                            onChange={(e) => setNewReview({ ...newReview, name: e.target.value })}
+                            placeholder="Seu nome"
+                            className="bg-white dark:bg-[#181814] border-slate-200 dark:border-[#23231f] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-gray-500 focus-visible:ring-lime-500 dark:focus-visible:ring-[#bcf13b] focus-visible:border-lime-500 dark:focus-visible:border-[#bcf13b]"
+                            required
+                        />
                     </div>
                     <div>
-                        <Label htmlFor="review-role">Cargo / Empresa</Label>
-                        <Input id="review-role" type="text" value={newReview.role} onChange={(e) => setNewReview({ ...newReview, role: e.target.value })} placeholder="Ex: CEO, TechStart" />
+                        <Label htmlFor="review-role" className="text-slate-700 dark:text-gray-300 font-semibold mb-1.5 block">Cargo / Empresa</Label>
+                        <Input
+                            id="review-role"
+                            type="text"
+                            value={newReview.role}
+                            onChange={(e) => setNewReview({ ...newReview, role: e.target.value })}
+                            placeholder="Ex: CEO, TechStart"
+                            className="bg-white dark:bg-[#181814] border-slate-200 dark:border-[#23231f] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-gray-500 focus-visible:ring-lime-500 dark:focus-visible:ring-[#bcf13b] focus-visible:border-lime-500 dark:focus-visible:border-[#bcf13b]"
+                        />
                     </div>
                 </div>
             </div>
+
             <div>
-                <Label>Avaliação</Label>
+                <Label className="text-slate-700 dark:text-gray-300 font-semibold mb-2 block">Sua Avaliação</Label>
                 <div className="flex space-x-2">
                     {[1, 2, 3, 4, 5].map((star) => (
-                        <button key={star} type="button" onClick={() => setNewReview({ ...newReview, rating: star })} className="focus:outline-none">
-                            <Star className={`w-8 h-8 ${star <= newReview.rating ? 'text-yellow-400 fill-current' : 'text-gray-400'} hover:text-yellow-400 transition-colors`} />
+                        <button
+                            key={star}
+                            type="button"
+                            onClick={() => setNewReview({ ...newReview, rating: star })}
+                            className="focus:outline-none transition-transform hover:scale-110"
+                        >
+                            <Star className={`w-8 h-8 ${star <= newReview.rating ? 'text-[#4d7c0f] dark:text-[#bcf13b] fill-current' : 'text-slate-300 dark:text-gray-600'} hover:text-lime-500 dark:hover:text-[#bcf13b] transition-colors`} />
                         </button>
                     ))}
                 </div>
             </div>
+
             <div>
-                <Label htmlFor="review-comment">Comentário *</Label>
-                <Textarea id="review-comment" value={newReview.comment} onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })} rows={4} placeholder="Conte-nos sobre sua experiência..." required />
+                <Label htmlFor="review-comment" className="text-slate-700 dark:text-gray-300 font-semibold mb-1.5 block">Comentário *</Label>
+                <Textarea
+                    id="review-comment"
+                    value={newReview.comment}
+                    onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
+                    rows={4}
+                    placeholder="Conte-nos sobre sua experiência com nossos serviços..."
+                    className="bg-white dark:bg-[#181814] border-slate-200 dark:border-[#23231f] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-gray-500 focus-visible:ring-lime-500 dark:focus-visible:ring-[#bcf13b] focus-visible:border-lime-500 dark:focus-visible:border-[#bcf13b]"
+                    required
+                />
             </div>
-            <Button type="submit" className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 py-3" disabled={submitting}>
-                {submitting ? <Loader2 className="w-5 h-5 mr-2 animate-spin" /> : <MessageCircle className="w-5 h-5 mr-2" />}
+
+            <Button
+                type="submit"
+                className="w-full bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-bold rounded-lg shadow-lg shadow-[#bcf13b]/20 py-3.5 text-base transition-all flex items-center justify-center"
+                disabled={submitting}
+            >
+                {submitting ? <Loader2 className="w-5 h-5 mr-2 animate-spin text-[#0a0a08]" /> : <MessageCircle className="w-5 h-5 mr-2 text-[#0a0a08]" />}
                 {submitting ? 'Enviando...' : 'Enviar Avaliação'}
             </Button>
         </form>

@@ -67,21 +67,20 @@ const Services = () => {
                 keywords="servicos de tecnologia rj, criacao de sites profissional rj, programador rio de janeiro, desenvolvimento de sites rj, fotografo rio de janeiro, dashboards power bi rio de janeiro"
             />
 
-            <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
+            <div className="min-h-screen bg-slate-50 dark:bg-[#0a0a08] text-slate-900 dark:text-white transition-colors duration-300">
                 {/* Hero Section */}
-                <section className="relative pt-24 pb-14 md:pt-28 md:pb-20 overflow-hidden bg-gradient-to-b from-blue-50/20 via-transparent to-transparent dark:from-blue-950/10 z-0">
-                    <div className="absolute inset-0 aurora-bg opacity-30 dark:opacity-40 z-0 pointer-events-none"></div>
+                <section className="relative pt-24 pb-14 md:pt-28 md:pb-20 overflow-hidden bg-slate-50 dark:bg-[#0a0a08] z-0">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(188,241,59,0.05)_0%,_transparent_70%)] pointer-events-none"></div>
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             className="text-center mb-12"
                         >
-                            <h1 className="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight text-white">
-                                <span>Nossos Serviços</span>
-                                <span className="text-[#bcf13b]">.</span>
+                            <h1 className="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight text-slate-900 dark:text-white">
+                                Nossos <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Serviços</span>
                             </h1>
-                            <p className="text-base md:text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto font-semibold leading-relaxed px-4">
+                            <p className="text-base md:text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto font-medium leading-relaxed px-4">
                                 Soluções completas e personalizadas para transformar sua presença digital e impulsionar seu negócio
                             </p>
                         </motion.div>
@@ -100,31 +99,31 @@ const Services = () => {
                                     initial={{ opacity: 0, y: 20 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     transition={{ delay: index * 0.1 }}
-                                    className="service-card p-8 rounded-xl group relative overflow-hidden bg-[#121210] border border-[#23231f] hover:border-[#bcf13b]"
+                                    className="service-card p-8 rounded-xl group relative overflow-hidden bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] text-slate-900 dark:text-white transition-all duration-300 shadow-sm"
                                 >
                                     <div className="flex flex-col sm:flex-row items-start gap-6 relative z-10">
-                                        <div className={`w-16 h-16 bg-[#181814] border border-[#23231f] group-hover:border-[#bcf13b] rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-all shadow-md`}>
-                                            <IconComponent className="w-8 h-8 text-[#bcf13b]" />
+                                        <div className="w-16 h-16 bg-slate-100 dark:bg-[#181814] border border-slate-200 dark:border-[#23231f] group-hover:border-lime-500 dark:group-hover:border-[#bcf13b] rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-all shadow-sm">
+                                            <IconComponent className="w-8 h-8 text-[#4d7c0f] dark:text-[#bcf13b]" />
                                         </div>
 
                                         <div className="flex-1">
-                                            <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-[#bcf13b] transition-colors">
+                                            <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-[#4d7c0f] dark:group-hover:text-[#bcf13b] transition-colors">
                                                 {service.title}
                                             </h3>
-                                            <p className="text-gray-400 mb-6 leading-relaxed text-sm font-medium">
+                                            <p className="text-slate-600 dark:text-gray-400 mb-6 leading-relaxed text-sm font-medium">
                                                 {service.description}
                                             </p>
 
                                             <div className="space-y-2.5 mb-6">
                                                 {service.features.map((feature, idx) => (
                                                     <div key={idx} className="flex items-center space-x-2.5">
-                                                        <div className="w-2 h-2 bg-[#bcf13b] rounded-full flex-shrink-0"></div>
-                                                        <span className="text-gray-300 text-sm font-medium">{feature}</span>
+                                                        <div className="w-2 h-2 bg-[#4d7c0f] dark:bg-[#bcf13b] rounded-full flex-shrink-0"></div>
+                                                        <span className="text-slate-700 dark:text-gray-300 text-sm font-medium">{feature}</span>
                                                     </div>
                                                 ))}
                                             </div>
 
-                                            <Link to={serviceSlugMap[service.slug] || `/portfolio#${service.slug}`} className="inline-flex items-center text-[#bcf13b] hover:text-[#a8df2a] transition-colors font-bold text-sm group-hover:translate-x-1">
+                                            <Link to={serviceSlugMap[service.slug] || `/portfolio#${service.slug}`} className="inline-flex items-center text-[#4d7c0f] dark:text-[#bcf13b] hover:text-[#3f6212] dark:hover:text-[#a8df2a] transition-colors font-bold text-sm group-hover:translate-x-1">
                                                 <span>Saiba mais</span>
                                                 <ArrowRight className="w-4 h-4 ml-1.5" />
                                             </Link>
@@ -137,18 +136,17 @@ const Services = () => {
                 </section>
 
                 {/* Process Section */}
-                <section className="py-20 bg-[#0a0a08] border-y border-[#23231f]">
+                <section className="py-20 bg-slate-100/60 dark:bg-[#0a0a08] border-y border-slate-200 dark:border-[#23231f]">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             className="text-center mb-16 space-y-4"
                         >
-                            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white">
-                                <span>Como Trabalhamos</span>
-                                <span className="text-[#bcf13b]">.</span>
+                            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                                Como <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Trabalhamos</span>
                             </h2>
-                            <p className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto font-medium">
+                            <p className="text-lg md:text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto font-medium">
                                 Nosso processo e estruturado para garantir resultados excepcionais em cada projeto
                             </p>
                         </motion.div>
@@ -165,14 +163,14 @@ const Services = () => {
                                     initial={{ opacity: 0, y: 20 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     transition={{ delay: index * 0.1 }}
-                                    className="service-card p-6 rounded-2xl border border-[#23231f] hover:border-[#bcf13b] bg-[#121210] flex flex-col justify-between text-center"
+                                    className="service-card p-6 rounded-2xl border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] bg-white dark:bg-[#121210] text-slate-900 dark:text-white transition-all duration-300 flex flex-col justify-between text-center shadow-sm"
                                 >
                                     <div>
-                                        <div className="w-14 h-14 mx-auto mb-4 bg-[#181814] border border-[#23231f] rounded-full flex items-center justify-center shadow-md">
-                                            <span className="text-lg font-bold text-[#bcf13b]">{item.step}</span>
+                                        <div className="w-14 h-14 mx-auto mb-4 bg-slate-100 dark:bg-[#181814] border border-slate-200 dark:border-[#23231f] rounded-full flex items-center justify-center shadow-sm">
+                                            <span className="text-lg font-bold text-[#4d7c0f] dark:text-[#bcf13b]">{item.step}</span>
                                         </div>
-                                        <h3 className="text-lg font-bold text-white mb-2 leading-tight">{item.title}</h3>
-                                        <p className="text-xs md:text-sm text-gray-400 leading-relaxed font-medium">{item.description}</p>
+                                        <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2 leading-tight">{item.title}</h3>
+                                        <p className="text-xs md:text-sm text-slate-600 dark:text-gray-400 leading-relaxed font-medium">{item.description}</p>
                                     </div>
                                 </motion.div>
                             ))}
@@ -185,24 +183,23 @@ const Services = () => {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        className="text-center p-12 rounded-2xl border border-[#23231f] bg-[#121210] shadow-2xl"
+                        className="text-center p-12 rounded-2xl border border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] shadow-xl dark:shadow-2xl"
                     >
-                        <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-6 text-white">
-                            <span>Pronto para começar seu projeto</span>
-                            <span className="text-[#bcf13b]">?</span>
+                        <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-6 text-slate-900 dark:text-white">
+                            Pronto para começar seu <span className="text-[#4d7c0f] dark:text-[#bcf13b]">projeto</span>?
                         </h2>
-                        <p className="text-base md:text-xl text-gray-400 mb-8 max-w-2xl mx-auto font-medium leading-relaxed">
+                        <p className="text-base md:text-xl text-slate-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto font-medium leading-relaxed">
                             Entre em contato conosco e descubra como podemos transformar suas ideias em realidade digital premium
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                             <Link to="/contato" className="w-full sm:w-auto">
-                                <Button size="lg" className="w-full sm:w-auto bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-extrabold text-lg px-8 py-6 rounded-xl shadow-lg shadow-[#bcf13b]/20 hover:scale-[1.02] transition-all">
+                                <Button size="lg" className="w-full sm:w-auto bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-bold rounded-lg shadow-lg shadow-[#bcf13b]/20 hover:scale-[1.02] transition-all text-base px-8 py-6">
                                     Solicitar Orçamento
                                     <ArrowRight className="ml-2 w-5 h-5" />
                                 </Button>
                             </Link>
                             <Link to="/portfolio" className="w-full sm:w-auto">
-                                <Button size="lg" variant="outline" className="w-full sm:w-auto border-[#23231f] hover:border-[#bcf13b] bg-transparent hover:bg-[#181814] text-white hover:text-[#bcf13b] text-lg px-8 py-6 font-bold rounded-xl transition-all">
+                                <Button size="lg" variant="outline" className="w-full sm:w-auto border-slate-300 dark:border-[#23231f] hover:border-[#4d7c0f] dark:hover:border-[#bcf13b] bg-transparent hover:bg-slate-100 dark:hover:bg-[#181814] text-slate-800 dark:text-white hover:text-[#4d7c0f] dark:hover:text-[#bcf13b] text-base px-8 py-6 font-bold rounded-lg transition-all">
                                     Ver Portfólio
                                 </Button>
                             </Link>

@@ -102,8 +102,8 @@ const ProjectPage = () => {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-screen">
-                <Loader2 className="h-16 w-16 animate-spin text-blue-500" />
+            <div className="flex justify-center items-center h-screen bg-slate-50 dark:bg-[#0a0a08]">
+                <Loader2 className="h-16 w-16 animate-spin text-[#4d7c0f] dark:text-[#bcf13b]" />
             </div>
         );
     }
@@ -157,219 +157,254 @@ const ProjectPage = () => {
                 />
             )}
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                >
-                    <Link
-                        to={project.category && project.category.slug === 'fotografia' ? '/portfolio-fotografia/galeria' : '/portfolio'}
-                        className="inline-flex items-center text-slate-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white mb-8 transition-colors font-semibold"
+            <div className="min-h-screen bg-slate-50 dark:bg-[#0a0a08] text-slate-900 dark:text-white transition-colors duration-300">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
                     >
-                        <ArrowLeft className="mr-2 w-4 h-4" /> {project.category && project.category.slug === 'fotografia' ? 'Voltar para Galeria' : 'Voltar ao Portfólio'}
-                    </Link>
-                    <h1 className="text-4xl md:text-6xl font-bold mb-2">
-                        <span className="gradient-text">{project.title}</span>
-                    </h1>
-                    {project.category && (
-                        <div className="flex flex-wrap items-center gap-x-4 text-slate-500 dark:text-gray-400 mb-8 font-semibold">
-                            <Link to={`/portfolio?category=${project.category.slug || ''}`} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{project.category.title || 'Portfólio'}</Link>
-                        </div>
-                    )}
-                </motion.div>
-
-                <motion.div variants={sectionVariants} initial="hidden" animate="visible">
-                    <div 
-                        className={cn("w-full rounded-2xl mb-12 shadow-2xl shadow-black/30 overflow-hidden cursor-pointer group relative", aspectRatioClasses[mainImageAspectRatio])}
-                        onClick={() => openModal(0)}
-                    >
-                        <img
-                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                            alt={`Imagem principal do projeto ${project.title}`}
-                            src={project.main_image_url || "https://images.unsplash.com/photo-1572177812156-58036aae439c"}
-                            loading="lazy"
-                        />
-                        <div className="absolute inset-0 bg-black/45 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                            <p className="text-white text-sm font-bold bg-black/50 px-4 py-2 rounded-full border border-white/10 backdrop-blur-sm shadow-lg">Ver Capa Completa</p>
-                        </div>
-                    </div>
-                </motion.div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                    <motion.div variants={sectionVariants} initial="hidden" animate="visible" className="lg:col-span-2 space-y-8">
-                        {project.description && (
-                            <motion.div variants={itemVariants} className="glass-effect p-8 rounded-2xl">
-                                <h2 className="text-3xl font-bold mb-4 gradient-text">Sobre o Projeto</h2>
-                                <p className="text-slate-650 dark:text-gray-300 leading-relaxed whitespace-pre-wrap font-medium">{project.description}</p>
-                            </motion.div>
-                        )}
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            {project.challenge && (
-                                <motion.div variants={itemVariants} className="glass-effect p-6 rounded-2xl">
-                                    <h2 className="text-2xl font-bold mb-3 gradient-text">O Desafio</h2>
-                                    <p className="text-slate-650 dark:text-gray-300 leading-relaxed whitespace-pre-wrap text-sm font-medium">{project.challenge}</p>
-                                </motion.div>
-                            )}
-                            {project.solution && (
-                                <motion.div variants={itemVariants} className="glass-effect p-6 rounded-2xl">
-                                    <h2 className="text-2xl font-bold mb-3 gradient-text">A Solução</h2>
-                                    <p className="text-slate-650 dark:text-gray-300 leading-relaxed whitespace-pre-wrap text-sm font-medium">{project.solution}</p>
-                                </motion.div>
-                            )}
-                        </div>
-
-                        {project.results && (
-                            <motion.div variants={itemVariants} className="glass-effect p-8 rounded-2xl">
-                                <h2 className="text-3xl font-bold mb-4 gradient-text">Resultados</h2>
-                                <p className="text-slate-650 dark:text-gray-300 leading-relaxed whitespace-pre-wrap font-medium">{project.results}</p>
-                            </motion.div>
+                        <Link
+                            to={project.category && project.category.slug === 'fotografia' ? '/portfolio-fotografia/galeria' : '/portfolio'}
+                            className="inline-flex items-center text-slate-600 dark:text-gray-400 hover:text-lime-600 dark:hover:text-[#bcf13b] mb-8 transition-colors font-semibold"
+                        >
+                            <ArrowLeft className="mr-2 w-4 h-4" /> {project.category && project.category.slug === 'fotografia' ? 'Voltar para Galeria' : 'Voltar ao Portfólio'}
+                        </Link>
+                        <h1 className="text-4xl md:text-6xl font-extrabold mb-2 text-slate-900 dark:text-white">
+                            {project.title}
+                        </h1>
+                        {project.category && (
+                            <div className="flex flex-wrap items-center gap-x-4 text-slate-600 dark:text-gray-400 mb-8 font-semibold">
+                                <Link to={`/portfolio?category=${project.category.slug || ''}`} className="text-[#4d7c0f] dark:text-[#bcf13b] hover:underline transition-colors">
+                                    {project.category.title || 'Portfólio'}
+                                </Link>
+                            </div>
                         )}
                     </motion.div>
 
-                    <aside className="lg:sticky top-24 self-start">
-                        <motion.div variants={sectionVariants} initial="hidden" animate="visible" className="glass-effect p-8 rounded-2xl space-y-8">
-                            <div>
-                                <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Detalhes do Projeto</h3>
-                                <ul className="space-y-3 text-slate-650 dark:text-gray-300 font-semibold text-sm">
-                                    <li className="flex items-center gap-3"><User className="w-5 h-5 text-blue-500 dark:text-blue-400" /> <span>{project.client}</span></li>
-                                    <li className="flex items-center gap-3"><Calendar className="w-5 h-5 text-blue-500 dark:text-blue-400" /> <span>{project.year}</span></li>
-                                </ul>
+                    <motion.div variants={sectionVariants} initial="hidden" animate="visible">
+                        <div 
+                            className={cn("w-full rounded-2xl mb-12 shadow-xl dark:shadow-2xl shadow-slate-200/50 dark:shadow-black/50 overflow-hidden cursor-pointer group relative border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] transition-all duration-300", aspectRatioClasses[mainImageAspectRatio])}
+                            onClick={() => openModal(0)}
+                        >
+                            <img
+                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                alt={`Imagem principal do projeto ${project.title}`}
+                                src={project.main_image_url || "https://images.unsplash.com/photo-1572177812156-58036aae439c"}
+                                loading="lazy"
+                            />
+                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                <p className="text-[#0a0a08] text-sm font-bold bg-[#bcf13b] px-4 py-2 rounded-full border border-[#bcf13b]/30 backdrop-blur-sm shadow-lg">
+                                    Ver Capa Completa
+                                </p>
                             </div>
-                            <div>
-                                <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Serviços Prestados</h3>
-                                <ul className="flex flex-wrap gap-2">
-                                    {(project.services || [])
-                                        .filter(service => typeof service === 'string' && !service.startsWith('subcategoria:') && !service.startsWith('nicho:'))
-                                        .map((service, index) => (
-                                            <li key={index} className="bg-slate-100 dark:bg-gray-800 text-slate-700 dark:text-gray-300 text-sm px-3 py-1 rounded-full flex items-center gap-2 border border-slate-200 dark:border-gray-700 font-bold"><Tag className="w-3 h-3 text-blue-500 dark:text-blue-400" />{service}</li>
-                                        ))}
-                                </ul>
+                        </div>
+                    </motion.div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                        <motion.div variants={sectionVariants} initial="hidden" animate="visible" className="lg:col-span-2 space-y-8">
+                            {project.description && (
+                                <motion.div variants={itemVariants} className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] p-8 rounded-2xl shadow-sm dark:shadow-none">
+                                    <h2 className="text-3xl font-bold mb-4 text-slate-900 dark:text-white">
+                                        Sobre o <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Projeto</span>
+                                    </h2>
+                                    <p className="text-slate-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap font-medium">{project.description}</p>
+                                </motion.div>
+                            )}
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                {project.challenge && (
+                                    <motion.div variants={itemVariants} className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] p-6 rounded-2xl shadow-sm dark:shadow-none">
+                                        <h2 className="text-2xl font-bold mb-3 text-slate-900 dark:text-white">
+                                            O <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Desafio</span>
+                                        </h2>
+                                        <p className="text-slate-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap text-sm font-medium">{project.challenge}</p>
+                                    </motion.div>
+                                )}
+                                {project.solution && (
+                                    <motion.div variants={itemVariants} className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] p-6 rounded-2xl shadow-sm dark:shadow-none">
+                                        <h2 className="text-2xl font-bold mb-3 text-slate-900 dark:text-white">
+                                            A <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Solução</span>
+                                        </h2>
+                                        <p className="text-slate-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap text-sm font-medium">{project.solution}</p>
+                                    </motion.div>
+                                )}
                             </div>
-                            {project.project_url && (
-                                <div>
-                                    <h3 className="text-xl font-bold mb-4">Link do Projeto</h3>
-                                    <a href={project.project_url} target="_blank" rel="noopener noreferrer">
-                                        <Button className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:scale-105 transition-transform">
-                                            Visitar Site <ExternalLink className="ml-2 h-4 w-4" />
-                                        </Button>
-                                    </a>
-                                </div>
+
+                            {project.results && (
+                                <motion.div variants={itemVariants} className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] p-8 rounded-2xl shadow-sm dark:shadow-none">
+                                    <h2 className="text-3xl font-bold mb-4 text-slate-900 dark:text-white">
+                                        <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Resultados</span>
+                                    </h2>
+                                    <p className="text-slate-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap font-medium">{project.results}</p>
+                                </motion.div>
                             )}
                         </motion.div>
-                    </aside>
-                </div>
 
-                {project.video_urls && project.video_urls.length > 0 && (
-                    <motion.div variants={sectionVariants} initial="hidden" animate="visible" className="mt-20">
-                        <h2 className="text-4xl font-bold mb-8 text-center gradient-text">Galeria de Vídeos</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            {project.video_urls.map((url, index) => {
-                                const embedUrl = getEmbedUrl(url);
-                                if (!embedUrl) return null;
-                                return (
-                                    <motion.div key={index} variants={itemVariants} className="aspect-video">
-                                        <iframe
-                                            src={embedUrl}
-                                            title={`Vídeo do projeto ${project.title} - ${index + 1}`}
-                                            className="w-full h-full rounded-lg shadow-lg"
-                                            frameBorder="0"
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                            allowFullScreen
-                                        ></iframe>
-                                    </motion.div>
-                                );
-                            })}
-                        </div>
-                    </motion.div>
-                )}
-
-                {allGalleryImages && allGalleryImages.length > 0 && (
-                    <motion.div variants={sectionVariants} initial="hidden" animate="visible" className="mt-20">
-                        <h2 className="text-4xl font-bold mb-8 text-center gradient-text">Galeria de Imagens</h2>
-                        <div className={cn("grid gap-4",
-                            project.gallery_aspect_ratio === '16:9' ? "grid-cols-1 md:grid-cols-2" : "grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-                        )}>
-                            {allGalleryImages.map((url, index) => (
-                                <motion.div
-                                    key={index}
-                                    variants={itemVariants}
-                                    className={cn("relative group overflow-hidden rounded-lg cursor-pointer",
-                                        aspectRatioClasses[project.gallery_aspect_ratio || '16:9'] || 'aspect-[4/5]'
-                                    )}
-                                    onClick={() => openModal(index)}
-                                >
-                                    <img
-                                        src={url}
-                                        alt={`Galeria do projeto ${project.title} - ${index + 1}`}
-                                        className=" h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
-                                        loading="lazy"
-                                    />
-                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                        <p className="text-white text-lg font-bold">Ver Imagem</p>
+                        <aside className="lg:sticky top-24 self-start">
+                            <motion.div variants={sectionVariants} initial="hidden" animate="visible" className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] p-8 rounded-2xl shadow-sm dark:shadow-none space-y-8">
+                                <div>
+                                    <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">Detalhes do Projeto</h3>
+                                    <ul className="space-y-3 text-slate-600 dark:text-gray-300 font-semibold text-sm">
+                                        <li className="flex items-center gap-3">
+                                            <User className="w-5 h-5 text-[#4d7c0f] dark:text-[#bcf13b]" /> 
+                                            <span>{project.client}</span>
+                                        </li>
+                                        <li className="flex items-center gap-3">
+                                            <Calendar className="w-5 h-5 text-[#4d7c0f] dark:text-[#bcf13b]" /> 
+                                            <span>{project.year}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">Serviços Prestados</h3>
+                                    <ul className="flex flex-wrap gap-2">
+                                        {(project.services || [])
+                                            .filter(service => typeof service === 'string' && !service.startsWith('subcategoria:') && !service.startsWith('nicho:'))
+                                            .map((service, index) => (
+                                                <li key={index} className="bg-slate-100 dark:bg-[#181814] text-slate-700 dark:text-gray-200 text-sm px-3 py-1 rounded-full flex items-center gap-2 border border-slate-200 dark:border-[#23231f] font-bold">
+                                                    <Tag className="w-3 h-3 text-[#4d7c0f] dark:text-[#bcf13b]" />
+                                                    {service}
+                                                </li>
+                                            ))}
+                                    </ul>
+                                </div>
+                                {project.project_url && (
+                                    <div>
+                                        <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">Link do Projeto</h3>
+                                        <a href={project.project_url} target="_blank" rel="noopener noreferrer">
+                                            <Button className="w-full bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-bold rounded-lg shadow-lg shadow-[#bcf13b]/20 hover:scale-[1.02] transition-transform">
+                                                Visitar Site <ExternalLink className="ml-2 h-4 w-4" />
+                                            </Button>
+                                        </a>
                                     </div>
-                                </motion.div>
-                            ))}
+                                )}
+                            </motion.div>
+                        </aside>
+                    </div>
+
+                    {project.video_urls && project.video_urls.length > 0 && (
+                        <motion.div variants={sectionVariants} initial="hidden" animate="visible" className="mt-20">
+                            <h2 className="text-4xl font-bold mb-8 text-center text-slate-900 dark:text-white">
+                                Galeria de <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Vídeos</span>
+                            </h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                {project.video_urls.map((url, index) => {
+                                    const embedUrl = getEmbedUrl(url);
+                                    if (!embedUrl) return null;
+                                    return (
+                                        <motion.div key={index} variants={itemVariants} className="aspect-video rounded-xl overflow-hidden border border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210]">
+                                            <iframe
+                                                src={embedUrl}
+                                                title={`Vídeo do projeto ${project.title} - ${index + 1}`}
+                                                className="w-full h-full rounded-lg shadow-lg"
+                                                frameBorder="0"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                allowFullScreen
+                                            ></iframe>
+                                        </motion.div>
+                                    );
+                                })}
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {allGalleryImages && allGalleryImages.length > 0 && (
+                        <motion.div variants={sectionVariants} initial="hidden" animate="visible" className="mt-20">
+                            <h2 className="text-4xl font-bold mb-8 text-center text-slate-900 dark:text-white">
+                                Galeria de <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Imagens</span>
+                            </h2>
+                            <div className={cn("grid gap-4",
+                                project.gallery_aspect_ratio === '16:9' ? "grid-cols-1 md:grid-cols-2" : "grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+                            )}>
+                                {allGalleryImages.map((url, index) => (
+                                    <motion.div
+                                        key={index}
+                                        variants={itemVariants}
+                                        className={cn("relative group overflow-hidden rounded-xl cursor-pointer border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] transition-all duration-300",
+                                            aspectRatioClasses[project.gallery_aspect_ratio || '16:9'] || 'aspect-[4/5]'
+                                        )}
+                                        onClick={() => openModal(index)}
+                                    >
+                                        <img
+                                            src={url}
+                                            alt={`Galeria do projeto ${project.title} - ${index + 1}`}
+                                            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                                            loading="lazy"
+                                        />
+                                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                            <p className="text-[#0a0a08] text-sm font-bold bg-[#bcf13b] px-4 py-2 rounded-full border border-[#bcf13b]/30 shadow-lg">
+                                                Ver Imagem
+                                            </p>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </motion.div>
+                    )}
+
+                    <motion.div
+                        variants={sectionVariants}
+                        initial="hidden"
+                        animate="visible"
+                        className="mt-20 text-center"
+                    >
+                        <div className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] inline-block p-8 rounded-2xl max-w-3xl mx-auto shadow-sm dark:shadow-none">
+                            <h3 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white">
+                                Vamos criar algo <span className="text-[#4d7c0f] dark:text-[#bcf13b]">incrível</span>?
+                            </h3>
+                            <p className="text-slate-600 dark:text-gray-400 mb-8 font-medium text-sm md:text-base">
+                                Transforme suas ideias em realidade ou nos conte como foi sua experiência.
+                            </p>
+
+                            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                                <Link to="/contato">
+                                    <Button size="lg" className="bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-bold rounded-lg shadow-lg shadow-[#bcf13b]/20 hover:scale-[1.02] transition-transform w-full sm:w-auto">
+                                        Peça seu orçamento
+                                    </Button>
+                                </Link>
+                                <Dialog>
+                                    <DialogTrigger asChild>
+                                        <Button size="lg" variant="outline" className="border border-slate-200 dark:border-[#23231f] bg-slate-100 dark:bg-[#181814] text-slate-800 dark:text-white hover:bg-slate-200 dark:hover:bg-[#23231f] hover:text-lime-600 dark:hover:text-[#bcf13b] hover:border-lime-500 dark:hover:border-[#bcf13b] w-full sm:w-auto font-bold shadow-sm transition-all duration-300">
+                                            <Star className="mr-2 h-4 w-4 text-[#4d7c0f] dark:text-[#bcf13b] fill-current" /> Deixar Avaliação
+                                        </Button>
+                                    </DialogTrigger>
+                                    <DialogContent className="sm:max-w-2xl bg-white dark:bg-[#121210] border-slate-200 dark:border-[#23231f] text-slate-900 dark:text-white">
+                                        <DialogHeader>
+                                             <DialogTitle className="text-2xl font-bold text-slate-900 dark:text-white">
+                                                Sua opinião é <span className="text-[#4d7c0f] dark:text-[#bcf13b]">importante</span>
+                                            </DialogTitle>
+                                        </DialogHeader>
+                                        <div className="py-4">
+                                            <ReviewForm />
+                                        </div>
+                                    </DialogContent>
+                                </Dialog>
+                            </div>
                         </div>
                     </motion.div>
-                )}
 
-                <motion.div
-                    variants={sectionVariants}
-                    initial="hidden"
-                    animate="visible"
-                    className="mt-20 text-center"
-                >
-                    <div className="glass-effect inline-block p-8 rounded-2xl max-w-3xl mx-auto">
-                        <h3 className="text-2xl font-bold mb-4 gradient-text">Vamos criar algo incrível?</h3>
-                        <p className="text-slate-650 dark:text-gray-400 mb-8 font-medium text-sm md:text-base">Transforme suas ideias em realidade ou nos conte como foi sua experiência.</p>
-
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <Link to="/contato">
-                                <Button size="lg" className="bg-gradient-to-r from-green-500 to-teal-600 hover:scale-105 transition-transform w-full sm:w-auto font-bold text-white">
-                                    Peça seu orçamento
+                    <motion.div
+                        variants={sectionVariants}
+                        initial="hidden"
+                        animate="visible"
+                        className="flex justify-between items-center mt-20 pt-8 border-t border-slate-200 dark:border-[#23231f]"
+                    >
+                        {prevProject ? (
+                            <Link to={`/portfolio/${prevProject.category?.slug || 'geral'}/${prevProject.slug}`}>
+                                <Button variant="outline" className="border border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-[#181814] hover:text-lime-600 dark:hover:text-[#bcf13b] hover:border-lime-500 dark:hover:border-[#bcf13b] font-bold transition-all shadow-sm">
+                                    <ArrowLeft className="mr-2 h-4 w-4" /> Projeto Anterior
                                 </Button>
                             </Link>
-                            <Dialog>
-                                <DialogTrigger asChild>
-                                    <Button size="lg" variant="outline" className="border-slate-300 dark:border-gray-700 text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-gray-800 hover:text-slate-900 dark:hover:text-white w-full sm:w-auto font-bold shadow-sm transition-all duration-300">
-                                        <Star className="mr-2 h-4 w-4 text-yellow-500 fill-yellow-500" /> Deixar Avaliação
-                                    </Button>
-                                </DialogTrigger>
-                                <DialogContent className="sm:max-w-2xl bg-gray-900 border-gray-800 text-white">
-                                    <DialogHeader>
-                                        <DialogTitle className="text-2xl font-bold gradient-text">Sua opinião é importante</DialogTitle>
-                                    </DialogHeader>
-                                    <div className="py-4">
-                                        <ReviewForm />
-                                    </div>
-                                </DialogContent>
-                            </Dialog>
-                        </div>
-                    </div>
-                </motion.div>
-
-                <motion.div
-                    variants={sectionVariants}
-                    initial="hidden"
-                    animate="visible"
-                    className="flex justify-between items-center mt-20 pt-8 border-t border-slate-200 dark:border-gray-850"
-                >
-                    {prevProject ? (
-                        <Link to={`/portfolio/${prevProject.category?.slug || 'geral'}/${prevProject.slug}`}>
-                            <Button variant="outline" className="border-slate-300 dark:border-gray-700 text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800 hover:text-slate-900 dark:hover:text-white font-bold transition-all shadow-sm">
-                                <ArrowLeft className="mr-2 h-4 w-4" /> Projeto Anterior
-                            </Button>
-                        </Link>
-                    ) : <div />}
-                    {nextProject ? (
-                        <Link to={`/portfolio/${nextProject.category?.slug || 'geral'}/${nextProject.slug}`}>
-                            <Button variant="outline" className="border-slate-300 dark:border-gray-700 text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800 hover:text-slate-900 dark:hover:text-white font-bold transition-all shadow-sm">
-                                Próximo Projeto <ArrowRight className="ml-2 h-4 w-4" />
-                            </Button>
-                        </Link>
-                    ) : <div />}
-                </motion.div>
+                        ) : <div />}
+                        {nextProject ? (
+                            <Link to={`/portfolio/${nextProject.category?.slug || 'geral'}/${nextProject.slug}`}>
+                                <Button variant="outline" className="border border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-[#181814] hover:text-lime-600 dark:hover:text-[#bcf13b] hover:border-lime-500 dark:hover:border-[#bcf13b] font-bold transition-all shadow-sm">
+                                    Próximo Projeto <ArrowRight className="ml-2 h-4 w-4" />
+                                </Button>
+                            </Link>
+                        ) : <div />}
+                    </motion.div>
+                </div>
             </div>
         </>
     );

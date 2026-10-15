@@ -837,6 +837,24 @@ Seu site agora conta com uma identidade visual moderna inspirada em inteligênci
 3. **Botões de Alta Ação**:
    * O botão principal de contato e orçamento agora possui acabamento sólido em verde neon `#bcf13b`, aumentando a taxa de conversão e atraindo os olhos do cliente imediatamente.
 
+### 19.30 Palavras-Chave dos Títulos em Verde Neon
+Para tornar a leitura mais dinâmica e moderna:
+1. **Destaques em Verde Neon (#bcf13b)**:
+   * Os gradientes antigos foram substituídos por um estilo minimalista de alto contraste: a frase em branco puro e a palavra mais importante destacada em verde neon (ex: Projetos em Destaque, O que nossos clientes dizem, Nossos Serviços).
+2. **Harmonia em Todo o Site**:
+   * Todas as páginas (Portfólio, Serviços, Sobre, Depoimentos, Contato e Fotografia) compartilham da mesma linguagem visual dark e tecnológica.
+
+### 19.31 Suporte Completo ao Tema Claro (Light Mode)
+O site oferece agora uma experiência impecável para clientes que preferem o tema claro:
+1. **Contraste Perfeito e Legibilidade Cristalinamente Nítida**:
+   * No tema claro, o fundo ganha tons claros elegantes e os títulos mudam suavemente para tons escuros.
+   * As palavras de destaque utilizam um verde floresta elegante de alto contraste que facilita a leitura em ambientes muito iluminados.
+2. **Logotipo Adaptativo**:
+   * O logotipo `rp .` ajusta as letras 'rp' automaticamente para preto profundo no tema claro e branco no tema escuro, mantendo sempre o ponto em verde neon.
+3. **Alternância Instantânea**:
+   * O visitante pode alternar entre o modo claro e o modo escuro a qualquer instante através do ícone de sol e lua na barra superior.
+
+
 
 
 

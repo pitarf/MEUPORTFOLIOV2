@@ -2,6 +2,32 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.48.0] - 2026-10-15
+
+### Aprimorado e Validado (Suporte Completo ao Tema Claro e Testes Visuais Automatizados)
+* **Compatibilidade Completa com o Tema Claro (Light Mode) em Todas as Páginas**:
+  * Implementada arquitetura de cores adaptativa em todas as páginas públicas: Home, Portfólio, Detalhe do Projeto, Serviços, Detalhe do Serviço, Sobre Nós, Avaliações, Contato, Assinaturas e Fotografia.
+  * Estratégia de Contraste Rigoroso WCAG AAA: palavras-chave e destaques utilizam verde floresta escuro de alta legibilidade no tema claro (`text-[#4d7c0f]`) e verde neon luminoso no tema escuro (`dark:text-[#bcf13b]`).
+  * Cartões e Superfícies Adaptativos: transição fluida entre fundo branco puro e bordas suaves no tema claro (`bg-white border-slate-200`) e fundo obsidian no tema escuro (`dark:bg-[#121210] dark:border-[#23231f]`), com efeito de hover verde neon.
+* **Logotipo Oficial BrandLogo Totalmente Adaptativo**:
+  * Letras 'rp' estilizadas com contraste inteligente (`text-slate-950 dark:text-white`) e ponto fixo em verde neon `#bcf13b`, garantindo visibilidade cristalina em fundos claros e escuros.
+  * Escala monumental 'hero' adicionada para impacto visual na Home Page.
+* **Validação Visual Automatizada com Capturas Reais (Playwright)**:
+  * Desenvolvido utilitário de teste automatizado `tools/capture_theme_screenshots.cjs` com Playwright Chromium headless.
+  * Capturados e validados 12 prints de alta fidelidade cobrindo todas as páginas principais em ambos os modos (Claro e Escuro).
+
+## [1.47.0] - 2026-10-15
+
+### Aprimorado e Padronizado (Identidade Dark Neon e Palavras-Chave em Verde Neon em Todas as Páginas)
+* **Substituição de Gradientes por Verde Neon (#bcf13b) em Todas as Páginas**:
+  * Eliminadas todas as ocorrências de `gradient-text` nos títulos principais e de seções em todo o site.
+  * Títulos convertidos para texto branco com palavras-chave de destaque em verde neon sólido `text-[#bcf13b]` ("Projetos em Destaque", "O que nossos clientes dizem", "Nosso Portfólio", "Nossos Serviços", "Sobre Nós", "Todas as Avaliações", "Fale Conosco", "Planos de Assinatura").
+* **Aplicação Completa da Identidade Dark Neon nas Páginas Internas**:
+  * `Portfolio.jsx` e `ProjectPage.jsx`: Fundo `#0a0a08`, cards `#121210` com hover verde neon, filtros escuros e botões de ação em `#bcf13b`.
+  * `Services.jsx` e `ServiceDetailPage.jsx`: Fundo `#0a0a08`, cards de serviços e benefícios com bordas `#23231f`, hover neon e accordions integrados.
+  * `About.jsx`, `Reviews.jsx`, `ReviewForm.jsx` e `ReviewsCarousel.jsx`: Fundo `#0a0a08`, métricas com números em `#bcf13b`, formulário dark e cards de avaliação com estrelas neon.
+  * `Contact.jsx`, `Subscriptions.jsx`, `PhotographyLanding.jsx` e `PhotographyPortfolio.jsx`: Fundo `#0a0a08`, formulário de contato com foco em `#bcf13b`, preços dos planos de assinatura em verde neon e galerias com efeito hover iluminado.
+
 ## [1.46.0] - 2026-10-15
 
 ### Adicionado e Redesenhado (Nova Identidade Visual Minimalista Dark & Verde Neon)
@@ -12,6 +38,7 @@ Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
   * Mapeada paleta oficial no `tailwind.config.js`: fundo obsidian `#0a0a08`, superfícies `#121210`, verde neon `#bcf13b`, bordas `#23231f` e sombra difusa `neon-glow`.
   * Atualizados cartões de serviços e portfólio com borda sutil e efeito de hover com borda verde neon `#bcf13b` e brilho difuso.
   * Home Page e Hero redesenhados com badge mono, botões com preenchimento sólido `#bcf13b` e outline dark com hover neon.
+  * Padronizado "Rafael Pita Solutions" como nome comercial oficial ao lado do símbolo `rp .` na Navbar, Rodapé e badges, substituindo rótulos temporários de protótipo.
   * Criado documento de especificação técnica completa em `documents/brand_identity_spec.md`.
 
 ## [1.45.0] - 2026-10-15

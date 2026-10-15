@@ -75,7 +75,7 @@ const ProjectCarousel = ({ categorySlug, excludeCategorySlug, onDataLoaded }) =>
     if (loading) {
         return (
             <div className="flex justify-center items-center h-64">
-                <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
+                <Loader2 className="h-12 w-12 animate-spin text-[#4d7c0f] dark:text-[#bcf13b]" />
             </div>
         );
     }
@@ -95,7 +95,7 @@ const ProjectCarousel = ({ categorySlug, excludeCategorySlug, onDataLoaded }) =>
                 {projects.map((project) => (
                     <CarouselItem key={project.id} className="md:basis-1/2 lg:basis-1/3">
                         <div className="p-1">
-                            <Card className="service-card rounded-xl overflow-hidden group border border-[#23231f] hover:border-[#bcf13b] bg-[#121210]">
+                            <Card className="service-card rounded-xl overflow-hidden group border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] bg-white dark:bg-[#121210] shadow-sm hover:shadow-md dark:shadow-none transition-all duration-300">
                                 <CardContent className="flex flex-col aspect-square items-start justify-between p-0">
                                     <Link to={`/portfolio/${project.category?.slug}/${project.slug}`} className="block w-full h-full">
                                         <div className="relative overflow-hidden h-full">
@@ -118,8 +118,8 @@ const ProjectCarousel = ({ categorySlug, excludeCategorySlug, onDataLoaded }) =>
                     </CarouselItem>
                 ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden sm:flex" />
-            <CarouselNext className="hidden sm:flex" />
+            <CarouselPrevious className="hidden sm:flex border border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-[#181814] hover:text-lime-600 dark:hover:text-[#bcf13b]" />
+            <CarouselNext className="hidden sm:flex border border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-[#181814] hover:text-lime-600 dark:hover:text-[#bcf13b]" />
         </Carousel>
     );
 };

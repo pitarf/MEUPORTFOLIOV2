@@ -34,10 +34,10 @@ const Footer = () => {
     const services = ['Desenvolvimento Web', 'Dashboards Power BI', 'Automações & Sistemas', 'Landing Pages', 'Fotografia Profissional', 'Tráfego Pago', 'Design Gráfico', 'Consultoria Tech'];
 
     // Dynamic Styles for Footer
-    const footerBg = 'bg-[#0a0a08] border-[#23231f] text-gray-300';
-    const textHover = 'hover:text-[#bcf13b]';
-    const iconColor = 'text-[#bcf13b]';
-    const socialBtnClass = (colorClass) => `w-10 h-10 ${colorClass} rounded-full flex items-center justify-center hover:opacity-90 hover:scale-105 transition-all shadow-md`;
+    const footerBg = 'bg-slate-100 dark:bg-[#0a0a08] border-slate-200 dark:border-[#23231f] text-slate-700 dark:text-gray-300';
+    const textHover = 'hover:text-lime-700 dark:hover:text-[#bcf13b]';
+    const iconColor = 'text-lime-700 dark:text-[#bcf13b]';
+    const socialBtnClass = (colorClass) => `w-10 h-10 ${colorClass} text-white rounded-full flex items-center justify-center hover:opacity-90 hover:scale-105 transition-all shadow-md`;
 
     return <footer className={`${footerBg} border-t transition-colors duration-300`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -48,11 +48,11 @@ const Footer = () => {
                         <BrandLogo
                             asLink={true}
                             size="md"
-                            subtitle={isPhotography ? "FOTOGRAFIA" : "DADOS & TECNOLOGIA"}
+                            subtitle={isPhotography ? "Rafael Pita Fotografia" : (siteName || "Rafael Pita Solutions")}
                             showSubtitle={true}
                         />
                     </div>
-                    <p className="text-gray-400 text-sm leading-relaxed">
+                    <p className="text-slate-600 dark:text-gray-400 text-sm leading-relaxed">
                         {description}
                     </p>
                     <div className="flex space-x-3 pt-2">
@@ -81,9 +81,9 @@ const Footer = () => {
 
                 {/* Quick Links */}
                 <div className="space-y-4">
-                    <span className="text-base font-bold text-white tracking-wide uppercase">{t('footer_quick_links', 'Links Rápidos')}</span>
+                    <span className="text-base font-bold text-slate-900 dark:text-white tracking-wide uppercase">{t('footer_quick_links', 'Links Rápidos')}</span>
                     <div className="space-y-2">
-                        {quickLinks.map(link => <Link key={link.name} to={link.path} className={`block text-gray-400 transition-colors text-sm font-medium ${textHover}`}>
+                        {quickLinks.map(link => <Link key={link.name} to={link.path} className={`block text-slate-600 dark:text-gray-400 transition-colors text-sm font-medium ${textHover}`}>
                             {link.name}
                         </Link>)}
                     </div>
@@ -91,9 +91,9 @@ const Footer = () => {
 
                 {/* Services */}
                 <div className="space-y-4">
-                    <span className="text-base font-bold text-white tracking-wide uppercase">{t('footer_services', 'Serviços')}</span>
+                    <span className="text-base font-bold text-slate-900 dark:text-white tracking-wide uppercase">{t('footer_services', 'Serviços')}</span>
                     <div className="space-y-2">
-                        {services.map(service => <span key={service} className="block text-gray-400 text-sm font-medium hover:text-[#bcf13b] transition-colors cursor-pointer">
+                        {services.map(service => <span key={service} className="block text-slate-600 dark:text-gray-400 text-sm font-medium hover:text-lime-700 dark:hover:text-[#bcf13b] transition-colors cursor-pointer">
                             {service}
                         </span>)}
                     </div>
@@ -101,26 +101,26 @@ const Footer = () => {
 
                 {/* Contact Info */}
                 <div className="space-y-4">
-                    <span className="text-base font-bold text-white tracking-wide uppercase">{t('footer_contact', 'Contato & Suporte')}</span>
+                    <span className="text-base font-bold text-slate-900 dark:text-white tracking-wide uppercase">{t('footer_contact', 'Contato & Suporte')}</span>
                     <div className="space-y-3">
                         <div className="flex items-center space-x-3">
                             <Mail className={`w-5 h-5 ${iconColor}`} />
-                            <span className="text-gray-400 text-sm font-medium">{contactEmail}</span>
+                            <span className="text-slate-600 dark:text-gray-400 text-sm font-medium">{contactEmail}</span>
                         </div>
                         <div className="flex items-center space-x-3">
                             <Phone className={`w-5 h-5 ${iconColor}`} />
-                            <span className="text-gray-400 text-sm font-medium">{contactPhone}</span>
+                            <span className="text-slate-600 dark:text-gray-400 text-sm font-medium">{contactPhone}</span>
                         </div>
                         <div className="flex items-center space-x-3">
                             <MapPin className={`w-5 h-5 ${iconColor}`} />
-                            <span className="text-gray-400 text-sm font-medium">{contactAddress}</span>
+                            <span className="text-slate-600 dark:text-gray-400 text-sm font-medium">{contactAddress}</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="border-t mt-12 pt-8 text-center border-[#23231f]">
-                <p className="text-gray-500 text-xs sm:text-sm font-medium">
+            <div className="border-t mt-12 pt-8 text-center border-slate-200 dark:border-[#23231f]">
+                <p className="text-slate-500 dark:text-gray-500 text-xs sm:text-sm font-medium">
                     © {new Date().getFullYear()} rp . {t('footer_rights', 'Todos os direitos reservados.')}
                 </p>
             </div>

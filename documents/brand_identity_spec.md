@@ -106,7 +106,7 @@ export const RpLogo: React.FC<RpLogoProps> = ({
       {showCategory && (
         <div className="flex items-center ml-4 pl-4 border-l border-[#23231f]">
           <span className="text-xs font-mono font-medium tracking-widest text-[#bcf13b] uppercase">
-            DADOS & TECNOLOGIA
+            RAFAEL PITA SOLUTIONS
           </span>
         </div>
       )}

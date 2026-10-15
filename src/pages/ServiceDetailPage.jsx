@@ -235,11 +235,11 @@ const ServiceDetailPage = ({ serviceSlug }) => {
     // Redireciona se a slug não for válida
     if (!service) {
         return (
-            <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-6 text-center">
+            <div className="min-h-screen bg-slate-50 dark:bg-[#0a0a08] text-slate-900 dark:text-white flex flex-col items-center justify-center p-6 text-center">
                 <h1 className="text-3xl font-bold mb-4">Serviço não encontrado</h1>
-                <p className="text-muted-foreground mb-6">A página de serviço solicitada não existe ou foi movida.</p>
+                <p className="text-slate-600 dark:text-gray-400 mb-6">A página de serviço solicitada não existe ou foi movida.</p>
                 <Link to="/servicos">
-                    <Button className="bg-gradient-to-r from-blue-500 to-purple-600">
+                    <Button className="bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-bold rounded-lg shadow-lg shadow-[#bcf13b]/20">
                         <ArrowLeft className="w-4 h-4 mr-2" /> Voltar para Serviços
                     </Button>
                 </Link>
@@ -391,14 +391,14 @@ const ServiceDetailPage = ({ serviceSlug }) => {
                 </script>
             </Helmet>
 
-            <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
+            <div className="min-h-screen bg-slate-50 dark:bg-[#0a0a08] text-slate-900 dark:text-white transition-colors duration-300">
                 <main id="main-content">
                     {/* Hero Section */}
-                    <section aria-label="Hero" className="relative pt-28 pb-16 md:pt-36 md:pb-24 overflow-hidden bg-gradient-to-b from-blue-50/20 via-transparent to-transparent dark:from-blue-950/10 z-0 border-b border-gray-250/20 dark:border-white/5">
-                        <div className="absolute inset-0 aurora-bg opacity-20 dark:opacity-30 pointer-events-none"></div>
+                    <section aria-label="Hero" className="relative pt-28 pb-16 md:pt-36 md:pb-24 overflow-hidden bg-slate-50 dark:bg-[#0a0a08] z-0 border-b border-slate-200 dark:border-[#23231f]">
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(188,241,59,0.05)_0%,_transparent_70%)] pointer-events-none"></div>
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                             <Link to="/servicos">
-                                <Button variant="ghost" className="text-slate-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white mb-6 font-bold pl-0 transition-colors">
+                                <Button variant="ghost" className="text-slate-600 dark:text-gray-400 hover:text-[#4d7c0f] dark:hover:text-[#bcf13b] hover:bg-transparent mb-6 font-bold pl-0 transition-colors">
                                     <ArrowLeft className="mr-2 h-4 w-4" /> Todos os Serviços
                                 </Button>
                             </Link>
@@ -406,20 +406,20 @@ const ServiceDetailPage = ({ serviceSlug }) => {
                             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
                                 <div className="lg:col-span-8 space-y-6 text-left">
                                     <div className="flex items-center gap-3">
-                                        <div className={`w-12 h-12 bg-gradient-to-r ${service.color} rounded-xl flex items-center justify-center shadow-md`}>
-                                            <IconComponent className="w-6 h-6 text-white" />
+                                        <div className="w-12 h-12 bg-slate-100 dark:bg-[#181814] border border-slate-200 dark:border-[#23231f] rounded-xl flex items-center justify-center shadow-sm">
+                                            <IconComponent className="w-6 h-6 text-[#4d7c0f] dark:text-[#bcf13b]" />
                                         </div>
-                                        <span className="text-xs font-bold text-blue-500 uppercase tracking-widest">Serviço Premium</span>
+                                        <span className="text-xs font-bold text-[#4d7c0f] dark:text-[#bcf13b] uppercase tracking-widest">Serviço Premium</span>
                                     </div>
-                                    <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight">
-                                        <span className="gradient-text">{service.title}</span>
+                                    <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight text-slate-900 dark:text-white">
+                                        {service.title}
                                     </h1>
-                                    <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 font-semibold leading-relaxed max-w-4xl">
+                                    <p className="text-lg md:text-xl text-slate-600 dark:text-gray-300 font-medium leading-relaxed max-w-4xl">
                                         {service.description}
                                     </p>
                                     <div className="flex flex-col sm:flex-row gap-4 pt-4">
                                         <Link to="/contato">
-                                            <Button size="lg" className="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-purple-600 hover:scale-105 transition-transform text-md px-8 py-5 font-bold text-white shadow-md">
+                                            <Button size="lg" className="w-full sm:w-auto bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-bold rounded-lg shadow-lg shadow-[#bcf13b]/20 hover:scale-[1.02] transition-all text-base px-8 py-5">
                                                 Solicitar Orçamento
                                                 <ArrowRight className="ml-2 w-5 h-5" />
                                             </Button>
@@ -431,23 +431,23 @@ const ServiceDetailPage = ({ serviceSlug }) => {
                     </section>
 
                     {/* Benefícios e Proposta de Valor */}
-                    <section aria-label="Benefícios" className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-gray-250/20 dark:border-white/5">
+                    <section aria-label="Benefícios" className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-slate-200 dark:border-[#23231f]">
                         <div className="text-center mb-16 space-y-4">
-                            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
-                                Por que Escolher a <span className="gradient-text">Pita Solutions</span>?
+                            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                                Por que Escolher a <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Pita Solutions</span>?
                             </h2>
-                            <p className="text-md md:text-lg text-slate-500 max-w-2xl mx-auto font-semibold">
+                            <p className="text-md md:text-lg text-slate-600 dark:text-gray-400 max-w-2xl mx-auto font-medium">
                                 Foco em resultado técnico de alto nível, agilidade e excelência corporativa.
                             </p>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             {service.benefits.map((benefit, idx) => (
-                                <div key={idx} className="glass-effect p-8 rounded-2xl border border-gray-200/50 dark:border-white/10 bg-white/50 dark:bg-gray-900/30 flex items-start gap-4">
-                                    <CheckCircle2 className="w-6 h-6 text-green-500 dark:text-green-400 mt-1 flex-shrink-0" />
+                                <div key={idx} className="p-8 rounded-2xl border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] bg-white dark:bg-[#121210] flex items-start gap-4 transition-all duration-300 shadow-sm">
+                                    <CheckCircle2 className="w-6 h-6 text-[#4d7c0f] dark:text-[#bcf13b] mt-1 flex-shrink-0" />
                                     <div>
-                                        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{benefit.title}</h3>
-                                        <p className="text-slate-650 dark:text-gray-400 leading-relaxed font-semibold text-sm">{benefit.desc}</p>
+                                        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">{benefit.title}</h3>
+                                        <p className="text-slate-600 dark:text-gray-400 leading-relaxed font-normal text-sm">{benefit.desc}</p>
                                     </div>
                                 </div>
                             ))}
@@ -455,18 +455,18 @@ const ServiceDetailPage = ({ serviceSlug }) => {
                     </section>
 
                     {/* Projetos Recentes (Portfólio Relacionado) */}
-                    <section aria-label="Portfólio Relacionado" className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-gray-250/20 dark:border-white/5">
+                    <section aria-label="Portfólio Relacionado" className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-slate-200 dark:border-[#23231f]">
                         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
                             <div>
-                                <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
-                                    Casos de <span className="gradient-text">Sucesso</span> Recentes
+                                <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                                    Casos de <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Sucesso</span> Recentes
                                 </h2>
-                                <p className="text-md text-slate-500 mt-2 font-semibold">
+                                <p className="text-md text-slate-600 dark:text-gray-400 mt-2 font-medium">
                                     Trabalhos reais desenvolvidos para clientes de diversos nichos no mercado.
                                 </p>
                             </div>
                             <Link to="/portfolio">
-                                <Button variant="outline" className="border-slate-300 dark:border-gray-800 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-white/5 font-bold transition-all">
+                                <Button variant="outline" className="border-slate-300 dark:border-[#23231f] hover:border-[#4d7c0f] dark:hover:border-[#bcf13b] bg-transparent hover:bg-slate-100 dark:hover:bg-[#181814] text-slate-800 dark:text-white hover:text-[#4d7c0f] dark:hover:text-[#bcf13b] font-bold rounded-lg transition-all">
                                     Ver Todo o Portfólio <ArrowRight className="w-4 h-4 ml-2" />
                                 </Button>
                             </Link>
@@ -474,18 +474,18 @@ const ServiceDetailPage = ({ serviceSlug }) => {
 
                         {projectsLoading ? (
                             <div className="flex justify-center items-center h-64">
-                                <Loader2 className="h-10 w-10 animate-spin text-blue-500" />
+                                <Loader2 className="h-10 w-10 animate-spin text-[#4d7c0f] dark:text-[#bcf13b]" />
                             </div>
                         ) : projects.length === 0 ? (
-                            <div className="text-center p-12 bg-muted/20 border border-dashed border-border rounded-xl">
-                                <p className="text-muted-foreground font-semibold">Nenhum projeto relacionado cadastrado no momento.</p>
+                            <div className="text-center p-12 bg-white dark:bg-[#121210] border border-dashed border-slate-200 dark:border-[#23231f] rounded-xl">
+                                <p className="text-slate-600 dark:text-gray-400 font-medium">Nenhum projeto relacionado cadastrado no momento.</p>
                             </div>
                         ) : (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                                 {projects.map((proj) => (
                                     <Link key={proj.id} to={`/portfolio/${proj.category?.slug || 'geral'}/${proj.slug}`} className="group block">
-                                        <article className="glass-effect rounded-2xl overflow-hidden border border-gray-200/50 dark:border-white/10 shadow-md hover:shadow-xl transition-all duration-300 bg-white/50 dark:bg-gray-900/30">
-                                            <div className="aspect-[16/10] w-full overflow-hidden bg-muted relative">
+                                        <article className="rounded-2xl overflow-hidden border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] transition-all duration-300 bg-white dark:bg-[#121210] shadow-sm">
+                                            <div className="aspect-[16/10] w-full overflow-hidden bg-slate-100 dark:bg-[#181814] relative">
                                                 <img 
                                                     src={proj.main_image_url || 'https://via.placeholder.com/800x600'} 
                                                     alt={proj.title} 
@@ -494,10 +494,10 @@ const ServiceDetailPage = ({ serviceSlug }) => {
                                                 />
                                             </div>
                                             <div className="p-6 space-y-2">
-                                                <span className="text-[10px] font-bold text-blue-500 uppercase tracking-widest">
+                                                <span className="text-[10px] font-bold text-[#4d7c0f] dark:text-[#bcf13b] uppercase tracking-widest">
                                                     {proj.client || 'Cliente Corporativo'}
                                                 </span>
-                                                <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-blue-500 transition-colors leading-tight">
+                                                <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-[#4d7c0f] dark:group-hover:text-[#bcf13b] transition-colors leading-tight">
                                                     {proj.title}
                                                 </h3>
                                             </div>
@@ -509,53 +509,53 @@ const ServiceDetailPage = ({ serviceSlug }) => {
                     </section>
 
                     {/* Prova Social (Depoimentos) */}
-                    <section aria-label="Depoimentos" className="py-20 bg-slate-50 dark:bg-gray-900/40 border-b border-gray-250/20 dark:border-white/5">
+                    <section aria-label="Depoimentos" className="py-20 bg-slate-100/60 dark:bg-[#0a0a08] border-b border-slate-200 dark:border-[#23231f]">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                             <div className="text-center mb-16 space-y-4">
-                                <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
-                                    O que dizem os <span className="gradient-text">Nossos Clientes</span>
+                                <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                                    O que dizem os <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Nossos Clientes</span>
                                 </h2>
-                                <p className="text-md text-slate-500 font-semibold max-w-xl mx-auto">
+                                <p className="text-md text-slate-600 dark:text-gray-400 font-medium max-w-xl mx-auto">
                                     Garantia de satisfação e alto nível de fidelidade em orçamentos entregues.
                                 </p>
                             </div>
 
                             {reviewsLoading ? (
                                 <div className="flex justify-center items-center h-48">
-                                    <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+                                    <Loader2 className="h-8 w-8 animate-spin text-[#4d7c0f] dark:text-[#bcf13b]" />
                                 </div>
                             ) : reviews.length === 0 ? (
                                 <div className="text-center p-6">
-                                    <p className="text-muted-foreground font-semibold">Avaliações em fase de moderação.</p>
+                                    <p className="text-slate-600 dark:text-gray-400 font-medium">Avaliações em fase de moderação.</p>
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                                     {reviews.map((review) => (
-                                        <div key={review.id} className="glass-effect p-6 rounded-2xl border border-gray-200/50 dark:border-white/10 bg-white/70 dark:bg-gray-900/40 flex flex-col justify-between shadow-md">
+                                        <div key={review.id} className="p-6 rounded-2xl border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] bg-white dark:bg-[#121210] flex flex-col justify-between transition-all duration-300 shadow-sm">
                                             <div className="space-y-4">
                                                 <div className="flex gap-1">
                                                     {Array.from({ length: 5 }).map((_, i) => (
                                                         <Star 
                                                             key={i} 
-                                                            className={`w-4 h-4 ${i < review.rating ? 'text-yellow-400 fill-current' : 'text-gray-300 dark:text-gray-700'}`} 
+                                                            className={`w-4 h-4 ${i < review.rating ? 'text-[#4d7c0f] dark:text-[#bcf13b] fill-[#4d7c0f] dark:fill-[#bcf13b]' : 'text-slate-300 dark:text-gray-700'}`} 
                                                         />
                                                     ))}
                                                 </div>
-                                                <p className="text-sm text-slate-650 dark:text-gray-300 italic font-semibold leading-relaxed">
+                                                <p className="text-sm text-slate-700 dark:text-gray-300 italic font-medium leading-relaxed">
                                                     "{review.comment}"
                                                 </p>
                                             </div>
-                                            <div className="flex items-center gap-3 pt-6 border-t border-gray-200/30 mt-6">
+                                            <div className="flex items-center gap-3 pt-6 border-t border-slate-200 dark:border-[#23231f] mt-6">
                                                 {review.avatar_url ? (
                                                     <img src={review.avatar_url} alt={review.name} className="w-10 h-10 rounded-full object-cover" />
                                                 ) : (
-                                                    <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center border border-blue-500/20 text-blue-500 font-bold text-sm">
+                                                    <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-[#181814] border border-slate-200 dark:border-[#23231f] text-[#4d7c0f] dark:text-[#bcf13b] flex items-center justify-center font-bold text-sm">
                                                         {review.name.charAt(0).toUpperCase()}
                                                     </div>
                                                 )}
                                                 <div>
-                                                    <h4 className="text-sm font-bold text-gray-900 dark:text-white">{review.name}</h4>
-                                                    <span className="text-[10px] text-muted-foreground font-bold">{review.role || 'Cliente'}</span>
+                                                    <h4 className="text-sm font-bold text-slate-900 dark:text-white">{review.name}</h4>
+                                                    <span className="text-[10px] text-slate-500 dark:text-gray-400 font-bold">{review.role || 'Cliente'}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -567,22 +567,22 @@ const ServiceDetailPage = ({ serviceSlug }) => {
 
                     {/* SEO Local e Contexto Regional */}
                     <section aria-label="Presença Regional" className="py-16 max-w-4xl mx-auto px-4 text-center">
-                        <div className="bg-blue-50/20 dark:bg-blue-950/10 border border-blue-200/20 dark:border-blue-800/15 rounded-3xl p-8 space-y-4">
-                            <span className="text-xs font-bold text-blue-500 uppercase tracking-widest">Presença Local RJ</span>
-                            <h3 className="text-xl font-bold text-gray-950 dark:text-white">Atendimento em Todo o Rio de Janeiro</h3>
-                            <p className="text-sm text-slate-600 dark:text-gray-400 leading-relaxed font-semibold">
+                        <div className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] rounded-3xl p-8 space-y-4 shadow-sm">
+                            <span className="text-xs font-bold text-[#4d7c0f] dark:text-[#bcf13b] uppercase tracking-widest">Presença Local RJ</span>
+                            <h3 className="text-xl font-bold text-slate-900 dark:text-white">Atendimento em Todo o Rio de Janeiro</h3>
+                            <p className="text-sm text-slate-600 dark:text-gray-400 leading-relaxed font-medium">
                                 {service.localContext} Prestamos serviços de excelência técnica com flexibilidade de reuniões presenciais, sessões de fotos locais ou entregas corporativas integradas na Região Metropolitana do Rio de Janeiro.
                             </p>
                         </div>
                     </section>
 
                     {/* FAQ Interativo (SEO para IA) */}
-                    <section aria-label="Perguntas Frequentes" className="py-20 bg-background max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-gray-250/20 dark:border-white/5">
+                    <section aria-label="Perguntas Frequentes" className="py-20 bg-slate-50 dark:bg-[#0a0a08] max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-200 dark:border-[#23231f]">
                         <div className="text-center mb-12 space-y-4">
-                            <h2 className="text-3xl font-extrabold tracking-tight">
-                                Perguntas <span className="gradient-text">Frequentes</span> (FAQ)
+                            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                                Perguntas <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Frequentes</span> (FAQ)
                             </h2>
-                            <p className="text-sm text-slate-500 font-semibold">
+                            <p className="text-sm text-slate-600 dark:text-gray-400 font-medium">
                                 Dúvidas comuns para agilizar o escopo de contratação e alinhar as expectativas técnicas.
                             </p>
                         </div>
@@ -593,18 +593,18 @@ const ServiceDetailPage = ({ serviceSlug }) => {
                                 return (
                                     <div 
                                         key={index} 
-                                        className="glass-effect rounded-xl border border-gray-200/50 dark:border-white/10 overflow-hidden bg-white/40 dark:bg-gray-900/20 transition-colors"
+                                        className="rounded-xl border border-slate-200 dark:border-[#23231f] hover:border-lime-500/60 dark:hover:border-[#bcf13b]/60 overflow-hidden bg-white dark:bg-[#121210] text-slate-900 dark:text-white transition-colors shadow-sm"
                                     >
                                         <button
                                             onClick={() => toggleFaq(index)}
-                                            className="w-full p-5 text-left flex justify-between items-center gap-4 hover:bg-slate-50/50 dark:hover:bg-white/5 transition-colors font-bold text-slate-900 dark:text-white"
+                                            className="w-full p-5 text-left flex justify-between items-center gap-4 hover:bg-slate-50 dark:hover:bg-[#181814] transition-colors font-bold text-slate-900 dark:text-white"
                                             aria-expanded={isOpen}
                                         >
                                             <span className="text-base flex items-center gap-2">
-                                                <HelpCircle className="w-5 h-5 text-blue-500 dark:text-blue-400 flex-shrink-0" />
+                                                <HelpCircle className="w-5 h-5 text-[#4d7c0f] dark:text-[#bcf13b] flex-shrink-0" />
                                                 {item.q}
                                             </span>
-                                            {isOpen ? <ChevronUp className="w-5 h-5 text-muted-foreground" /> : <ChevronDown className="w-5 h-5 text-muted-foreground" />}
+                                            {isOpen ? <ChevronUp className="w-5 h-5 text-slate-500 dark:text-gray-400" /> : <ChevronDown className="w-5 h-5 text-slate-500 dark:text-gray-400" />}
                                         </button>
                                         
                                         <AnimatePresence initial={false}>
@@ -615,7 +615,7 @@ const ServiceDetailPage = ({ serviceSlug }) => {
                                                     exit={{ height: 0, opacity: 0 }}
                                                     transition={{ duration: 0.2 }}
                                                 >
-                                                    <div className="p-5 pt-0 text-sm text-slate-650 dark:text-gray-400 border-t border-gray-200/20 font-semibold leading-relaxed">
+                                                    <div className="p-5 pt-0 text-sm text-slate-600 dark:text-gray-400 border-t border-slate-200 dark:border-[#23231f] font-normal leading-relaxed">
                                                         {item.a}
                                                     </div>
                                                 </motion.div>
@@ -629,17 +629,17 @@ const ServiceDetailPage = ({ serviceSlug }) => {
 
                     {/* CTA Final */}
                     <section aria-label="CTA de Contato" className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="text-center glass-effect p-12 rounded-3xl border border-gray-200/50 dark:border-white/5 bg-white/40 dark:bg-gray-900/30 shadow-2xl relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
-                            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-4">
-                                Vamos iniciar seu projeto de <span className="gradient-text">{service.title.split(' ')[0]}</span>?
+                        <div className="text-center p-12 rounded-3xl border border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] shadow-xl dark:shadow-2xl relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-48 h-48 bg-[#bcf13b]/10 rounded-full blur-3xl pointer-events-none"></div>
+                            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-4 text-slate-900 dark:text-white">
+                                Vamos iniciar seu projeto de <span className="text-[#4d7c0f] dark:text-[#bcf13b]">{service.title.split(' ')[0]}</span>?
                             </h2>
-                            <p className="text-base md:text-lg text-slate-650 dark:text-gray-300 mb-8 max-w-xl mx-auto font-semibold leading-relaxed">
+                            <p className="text-base md:text-lg text-slate-600 dark:text-gray-400 mb-8 max-w-xl mx-auto font-medium leading-relaxed">
                                 Orçamentos sob medida adaptados para o tamanho do seu negócio e suporte contínuo premium.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                                 <Link to="/contato" className="w-full sm:w-auto">
-                                    <Button size="lg" className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:scale-105 transition-transform text-lg px-10 py-5 font-bold text-white shadow-md">
+                                    <Button size="lg" className="w-full sm:w-auto bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-bold rounded-lg shadow-lg shadow-[#bcf13b]/20 hover:scale-[1.02] transition-all text-base px-10 py-5">
                                         Solicitar Orçamento
                                     </Button>
                                 </Link>
@@ -649,7 +649,7 @@ const ServiceDetailPage = ({ serviceSlug }) => {
                                     rel="noopener noreferrer" 
                                     className="w-full sm:w-auto"
                                 >
-                                    <Button size="lg" variant="outline" className="w-full border-green-500/30 dark:border-green-800/40 text-green-600 dark:text-green-400 hover:bg-green-500/5 hover:text-green-700 text-lg px-10 py-5 font-bold transition-all shadow-sm">
+                                    <Button size="lg" variant="outline" className="w-full sm:w-auto border-slate-300 dark:border-[#23231f] hover:border-[#4d7c0f] dark:hover:border-[#bcf13b] bg-transparent hover:bg-slate-100 dark:hover:bg-[#181814] text-slate-800 dark:text-white hover:text-[#4d7c0f] dark:hover:text-[#bcf13b] text-base px-10 py-5 font-bold rounded-lg transition-all">
                                         Falar no WhatsApp
                                     </Button>
                                 </a>

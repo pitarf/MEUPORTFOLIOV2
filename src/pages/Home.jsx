@@ -118,13 +118,13 @@ const Home = () => {
             />
 
             {/* Hero Section */}
-            <section className="relative min-h-0 md:min-h-screen flex items-center justify-center overflow-hidden bg-background text-foreground transition-colors duration-300 pt-28 pb-12 md:py-0 -mt-20">
+            <section className="relative min-h-0 md:min-h-screen flex items-center justify-center overflow-hidden bg-slate-50 dark:bg-[#0a0a08] text-slate-900 dark:text-white transition-colors duration-300 pt-28 pb-12 md:py-0 -mt-20">
                 {/* Project Marquee Background */}
                 <div className="absolute inset-0 z-0 opacity-30 dark:opacity-20 overflow-hidden transition-opacity duration-300 pointer-events-none">
                     <div className="absolute top-10 left-0 w-full rotate-[-5deg]">
                         <div className="flex gap-4 animate-marquee whitespace-nowrap">
                             {bgProjects.map((proj, idx) => (
-                                <div key={`row1-${idx}`} className="w-[280px] h-[180px] md:w-[500px] md:h-[330px] rounded-xl overflow-hidden flex-shrink-0 border border-gray-200/10 dark:border-white/5 bg-gray-100 dark:bg-gray-800 shadow-lg">
+                                <div key={`row1-${idx}`} className="w-[280px] h-[180px] md:w-[500px] md:h-[330px] rounded-xl overflow-hidden flex-shrink-0 border border-slate-200/50 dark:border-white/5 bg-slate-100 dark:bg-gray-800 shadow-lg">
                                     <img src={proj.main_image_url || "https://images.unsplash.com/photo-1550745165-9bc0b252726f"} className="w-full h-full object-cover opacity-80" alt="" />
                                 </div>
                             ))}
@@ -133,7 +133,7 @@ const Home = () => {
                     <div className="absolute bottom-10 left-0 w-full rotate-[5deg]">
                         <div className="flex gap-4 animate-marquee-reverse whitespace-nowrap">
                             {bgProjects.map((proj, idx) => (
-                                <div key={`row2-${idx}`} className="w-[280px] h-[180px] md:w-[500px] md:h-[330px] rounded-xl overflow-hidden flex-shrink-0 border border-gray-200/10 dark:border-white/5 bg-gray-100 dark:bg-gray-800 shadow-lg">
+                                <div key={`row2-${idx}`} className="w-[280px] h-[180px] md:w-[500px] md:h-[330px] rounded-xl overflow-hidden flex-shrink-0 border border-slate-200/50 dark:border-white/5 bg-slate-100 dark:bg-gray-800 shadow-lg">
                                     <img src={proj.main_image_url || "https://images.unsplash.com/photo-1550745165-9bc0b252726f"} className="w-full h-full object-cover opacity-80" alt="" />
                                 </div>
                             ))}
@@ -143,10 +143,10 @@ const Home = () => {
 
                 {/* Aurora Background Overlay */}
                 <div className="absolute inset-0 aurora-bg opacity-40 dark:opacity-50 z-0 pointer-events-none"></div>
-                <div className="absolute inset-0 bg-background/55 dark:bg-background/80 z-0 pointer-events-none transition-colors duration-300"></div>
+                <div className="absolute inset-0 bg-slate-50/70 dark:bg-[#0a0a08]/80 z-0 pointer-events-none transition-colors duration-300"></div>
 
                 {/* Central Spotlight */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-[80px] opacity-40 pulse-glow z-0"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-lime-500/10 dark:bg-blue-500/20 rounded-full blur-[80px] opacity-40 pulse-glow z-0"></div>
 
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-4 sm:pt-6">
                     <motion.div
@@ -161,32 +161,32 @@ const Home = () => {
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ duration: 0.5 }}
-                                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#121210] border border-[#23231f] text-xs font-semibold text-gray-300 shadow-sm hover:border-[#bcf13b]/50 transition-colors"
+                                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] text-xs font-semibold text-slate-800 dark:text-gray-200 shadow-sm hover:border-lime-500 dark:hover:border-[#bcf13b]/50 transition-colors"
                             >
                                 <span className="w-2 h-2 rounded-full bg-[#bcf13b] animate-pulse"></span>
-                                <span className="text-[#bcf13b] font-bold">rp .</span>
-                                <span className="text-gray-600">|</span>
-                                <span className="tracking-wider uppercase">Soluções Digitais & Tecnologia</span>
+                                <span className="text-[#4d7c0f] dark:text-[#bcf13b] font-bold">rp .</span>
+                                <span className="text-slate-300 dark:text-gray-600">|</span>
+                                <span className="tracking-wider uppercase text-slate-800 dark:text-gray-200 font-bold">Rafael Pita Solutions</span>
                             </motion.div>
 
                             <motion.div
                                 initial={{ scale: 0.85, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
                                 transition={{ delay: 0.2, type: "spring", stiffness: 260, damping: 20 }}
-                                className="flex items-center justify-center my-2"
+                                className="flex items-center justify-center my-3 sm:my-4"
                             >
-                                <BrandLogo size="xl" showSubtitle={false} />
+                                <BrandLogo size="hero" showSubtitle={false} />
                             </motion.div>
 
-                            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black px-2 tracking-tight text-white leading-tight">
-                                Transformamos Ideias em Resultados Digitais<span className="text-[#bcf13b]">.</span>
+                            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black px-2 tracking-tight text-slate-950 dark:text-white leading-tight">
+                                Transformamos Ideias em Resultados Digitais<span className="text-[#4d7c0f] dark:text-[#bcf13b]">.</span>
                             </h1>
 
-                            <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto px-4 font-semibold leading-relaxed">
+                            <p className="text-lg md:text-xl text-slate-700 dark:text-gray-300 max-w-3xl mx-auto px-4 font-semibold leading-relaxed">
                                 {config?.hero_subtitle || 'Criatividade e tecnologia em um so lugar'}
                             </p>
 
-                            <p className="text-sm md:text-base text-gray-400 max-w-2xl mx-auto px-4 leading-relaxed font-medium">
+                            <p className="text-sm md:text-base text-slate-600 dark:text-gray-400 max-w-2xl mx-auto px-4 leading-relaxed font-medium">
                                 {config?.hero_description || 'Transformamos suas ideias em realidade digital com solucoes inovadoras e personalizadas para o seu negocio.'}
                             </p>
                         </div>
@@ -200,7 +200,7 @@ const Home = () => {
                             </Link>
 
                              <Link to="/portfolio" className="w-full sm:w-auto">
-                                <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8 py-6 border-[#23231f] hover:border-[#bcf13b] text-gray-200 hover:text-[#bcf13b] bg-[#121210]/80 hover:bg-[#121210] font-bold rounded-xl transition-all duration-300">
+                                <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8 py-6 bg-white dark:bg-[#121210] border-slate-300 dark:border-[#23231f] text-slate-800 dark:text-gray-200 hover:border-lime-600 dark:hover:border-[#bcf13b] hover:text-slate-950 dark:hover:text-[#bcf13b] font-bold rounded-xl transition-all duration-300">
                                     Ver Portfólio
                                 </Button>
                             </Link>
@@ -217,8 +217,8 @@ const Home = () => {
             {/* Floating Stats Section */}
             <div className="relative z-20 px-4 -mt-20 sm:-mt-24 md:-mt-28">
                 <div className="max-w-6xl mx-auto">
-                    <div className="rounded-3xl p-6 sm:p-8 border border-[#23231f] shadow-2xl backdrop-blur-xl bg-[#121210]/95">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 divide-x-0 md:divide-x divide-[#23231f]">
+                    <div className="rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-[#23231f] shadow-2xl backdrop-blur-xl bg-white/95 dark:bg-[#121210]/95">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 divide-x-0 md:divide-x divide-slate-200 dark:divide-[#23231f]">
                             {stats.map((stat, index) => (
                                 <motion.div
                                     key={stat.label}
@@ -227,13 +227,13 @@ const Home = () => {
                                     transition={{ delay: index * 0.1 }}
                                     className="text-center px-4"
                                 >
-                                    <div className="w-12 h-12 mx-auto mb-3 bg-[#181814] border border-[#23231f] rounded-xl flex items-center justify-center shadow-inner">
-                                        <stat.icon className="w-6 h-6 text-[#bcf13b]" />
+                                    <div className="w-12 h-12 mx-auto mb-3 bg-slate-50 dark:bg-[#181814] border border-slate-200 dark:border-[#23231f] rounded-xl flex items-center justify-center shadow-inner">
+                                        <stat.icon className="w-6 h-6 text-lime-600 dark:text-[#bcf13b]" />
                                     </div>
-                                     <div className="text-3xl font-extrabold text-white mb-1">
+                                     <div className="text-3xl font-extrabold text-slate-900 dark:text-white mb-1">
                                          <AnimatedStat to={stat.number} suffix={stat.suffix} />
                                      </div>
-                                     <div className="text-xs text-gray-400 font-semibold tracking-wide uppercase">{stat.label}</div>
+                                     <div className="text-xs text-slate-500 dark:text-gray-400 font-semibold tracking-wide uppercase">{stat.label}</div>
                                 </motion.div>
                             ))}
                         </div>
@@ -249,10 +249,10 @@ const Home = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         className="text-center mb-16"
                     >
-                        <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-white">
-                            <span className="gradient-text">Projetos em Destaque</span>
+                        <h2 className="text-4xl md:text-5xl font-bold mb-6 text-slate-900 dark:text-white">
+                            Projetos em <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Destaque</span>
                         </h2>
-                        <p className="text-xl text-gray-500 dark:text-gray-400 max-w-3xl mx-auto">
+                        <p className="text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto">
                             Uma amostra do nosso trabalho, combinando criatividade e tecnologia para entregar resultados de impacto.
                         </p>
                     </motion.div>
@@ -264,7 +264,7 @@ const Home = () => {
                         className="text-center mt-12"
                     >
                          <Link to="/portfolio">
-                            <Button size="lg" variant="outline" className="border-[#23231f] hover:border-[#bcf13b] text-gray-200 hover:text-[#bcf13b] bg-[#121210] hover:bg-[#181814] transition-all">
+                            <Button size="lg" variant="outline" className="bg-white dark:bg-[#121210] border-slate-300 dark:border-[#23231f] text-slate-800 dark:text-gray-200 hover:border-lime-600 dark:hover:border-[#bcf13b] hover:text-slate-950 dark:hover:text-[#bcf13b] font-bold rounded-xl transition-all">
                                  Conhecer todos os projetos
                                  <ArrowRight className="ml-2 w-5 h-5" />
                              </Button>
@@ -274,7 +274,7 @@ const Home = () => {
             </section >
 
             {/* Photography Section - Only visible if there are projects */}
-            <section className={`py-20 bg-[#0a0a08] border-y border-[#23231f] text-white ${photographyCount === 0 ? 'hidden' : ''}`}>
+            <section className={`py-20 bg-slate-100 dark:bg-[#0a0a08] border-y border-slate-200 dark:border-[#23231f] text-slate-900 dark:text-white ${photographyCount === 0 ? 'hidden' : ''}`}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -283,9 +283,9 @@ const Home = () => {
                     >
                         <h2 className="text-4xl md:text-5xl font-extrabold mb-6">
                             <span>Fotografia em Destaque</span>
-                            <span className="text-[#bcf13b]">.</span>
+                            <span className="text-[#4d7c0f] dark:text-[#bcf13b]">.</span>
                         </h2>
-                        <p className="text-xl text-gray-400 max-w-3xl mx-auto font-medium">
+                        <p className="text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto font-medium">
                             Capturando a essencia de cada momento com olhar artistico e profissional.
                         </p>
                     </motion.div>
@@ -297,7 +297,7 @@ const Home = () => {
                         className="text-center mt-12"
                     >
                         <Link to="/portfolio-fotografia/galeria">
-                            <Button size="lg" className="bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] text-lg px-8 py-4 font-bold shadow-lg shadow-[#bcf13b]/20 hover:scale-105 transition-all">
+                            <Button size="lg" className="bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] text-lg px-8 py-4 font-bold rounded-xl shadow-lg shadow-[#bcf13b]/20 hover:scale-105 transition-all">
                                 Ver Galeria de Fotografia
                                 <ArrowRight className="ml-2 w-5 h-5 text-[#0a0a08]" />
                             </Button>
@@ -314,11 +314,11 @@ const Home = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         className="text-center mb-16"
                     >
-                        <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-white">
+                        <h2 className="text-4xl md:text-5xl font-bold mb-6 text-slate-900 dark:text-white">
                             <span>Nossos Serviços</span>
-                            <span className="text-[#bcf13b]">.</span>
+                            <span className="text-[#4d7c0f] dark:text-[#bcf13b]">.</span>
                         </h2>
-                        <p className="text-xl text-gray-500 dark:text-gray-400 max-w-3xl mx-auto">
+                        <p className="text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto">
                             Oferecemos solucoes completas para transformar sua presenca digital e impulsionar seu negocio
                         </p>
                     </motion.div>
@@ -334,11 +334,11 @@ const Home = () => {
                                     transition={{ delay: index * 0.1 }}
                                     className="service-card p-6 rounded-xl"
                                 >
-                                     <div className={`w-12 h-12 mb-4 rounded-lg bg-gradient-to-r ${service.color || 'from-[#bcf13b]/30 to-[#a8df2a]/20'} flex items-center justify-center shadow-md border border-[#23231f]`}>
-                                         <IconComponent className="w-6 h-6 text-[#bcf13b]" />
+                                     <div className={`w-12 h-12 mb-4 rounded-lg bg-lime-100 dark:bg-[#181814] flex items-center justify-center shadow-md border border-slate-200 dark:border-[#23231f]`}>
+                                         <IconComponent className="w-6 h-6 text-lime-700 dark:text-[#bcf13b]" />
                                      </div>
-                                     <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">{service.title}</h3>
-                                     <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">{service.description}</p>
+                                     <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">{service.title}</h3>
+                                     <p className="text-slate-600 dark:text-gray-400 text-sm leading-relaxed">{service.description}</p>
                                 </motion.div>
                             );
                         })}
@@ -350,7 +350,7 @@ const Home = () => {
                         className="text-center mt-12"
                     >
                         <Link to="/servicos">
-                            <Button size="lg" variant="outline" className="border-[#23231f] hover:border-[#bcf13b] text-gray-200 hover:text-[#bcf13b] bg-[#121210] hover:bg-[#181814] transition-all">
+                            <Button size="lg" variant="outline" className="bg-white dark:bg-[#121210] border-slate-300 dark:border-[#23231f] text-slate-800 dark:text-gray-200 hover:border-lime-600 dark:hover:border-[#bcf13b] hover:text-slate-950 dark:hover:text-[#bcf13b] font-bold rounded-xl transition-all">
                                  Ver Todos os Serviços
                                  <ArrowRight className="ml-2 w-5 h-5" />
                              </Button>
@@ -360,17 +360,17 @@ const Home = () => {
             </section >
 
             {/* CTA Section */}
-            < section className="py-20 bg-gradient-to-b from-[#121210] to-[#0a0a08] border-y border-[#23231f]" >
+            < section className="py-20 bg-gradient-to-b from-slate-100 to-slate-200 dark:from-[#121210] dark:to-[#0a0a08] border-y border-slate-200 dark:border-[#23231f]" >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         className="space-y-8"
                     >
-                        <h2 className="text-4xl md:text-5xl font-black text-white">
-                            Pronto para transformar suas ideias<span className="text-[#bcf13b]">?</span>
+                        <h2 className="text-4xl md:text-5xl font-black text-slate-950 dark:text-white">
+                            Pronto para transformar suas ideias<span className="text-[#4d7c0f] dark:text-[#bcf13b]">?</span>
                         </h2>
-                        <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+                        <p className="text-xl text-slate-600 dark:text-gray-400 max-w-2xl mx-auto">
                             Entre em contato conosco e descubra como podemos ajudar seu negocio a alcancar o proximo nivel
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -381,7 +381,7 @@ const Home = () => {
                                 </Button>
                             </Link>
                              <Link to="/avaliacoes" className="w-full sm:w-auto">
-                                 <Button size="lg" variant="outline" className="w-full sm:w-auto border-[#23231f] hover:border-[#bcf13b] bg-transparent hover:bg-[#181814] text-white hover:text-[#bcf13b] text-lg px-8 py-6 font-bold rounded-xl transition-all">
+                                 <Button size="lg" variant="outline" className="w-full sm:w-auto bg-white dark:bg-[#121210] border-slate-300 dark:border-[#23231f] text-slate-800 dark:text-gray-200 hover:border-lime-600 dark:hover:border-[#bcf13b] hover:text-slate-950 dark:hover:text-[#bcf13b] text-lg px-8 py-6 font-bold rounded-xl transition-all">
                                      Ver Avaliações
                                  </Button>
                              </Link>
@@ -398,9 +398,9 @@ const Home = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         className="text-center mb-16"
                     >
-                        <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-white">
-                             <span className="gradient-text">O que nossos clientes dizem</span>
-                         </h2>
+                        <h2 className="text-4xl md:text-5xl font-bold mb-6 text-slate-900 dark:text-white">
+                            O que nossos clientes <span className="text-[#4d7c0f] dark:text-[#bcf13b]">dizem</span>
+                        </h2>
                     </motion.div>
                     <ReviewsCarousel />
                 </div>

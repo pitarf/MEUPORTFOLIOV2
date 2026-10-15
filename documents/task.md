@@ -2,6 +2,17 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Suporte Completo ao Tema Claro (Light Mode) e Validação Visual via Prints (`Home.jsx`, `Portfolio.jsx`, `Services.jsx`, `About.jsx`, `Reviews.jsx`, `Contact.jsx`, `BrandLogo.jsx`)**:
+  - Reestruturada a paleta de todas as páginas públicas para suporte nativo e contraste impecável tanto no Tema Claro quanto no Tema Escuro.
+  - Implementada a regra de contraste de alto padrão WCAG AAA para palavras-chave de destaque: `text-[#4d7c0f] dark:text-[#bcf13b]`, garantindo legibilidade perfeita sobre fundos brancos e o brilho verde neon original sobre fundos escuros.
+  - Cartões e superfícies padronizados com `bg-white dark:bg-[#121210] border-slate-200 dark:border-[#23231f]` mantendo o efeito de hover com borda verde neon.
+  - Logotipo `BrandLogo` adaptado com letras 'rp' em `text-slate-950 dark:text-white` e ponto em `#bcf13b`.
+  - Criado script de validação visual automatizado com Playwright (`tools/capture_theme_screenshots.cjs`) e gerados 12 prints de teste reais comprovando a correção em ambos os modos.
+
+- [x] **Substituição de Gradientes por Verde Neon (#bcf13b) e Expansão Visual para Todas as Páginas**:
+  - Removido `gradient-text` de todos os títulos em favor de texto branco com palavras-chave em verde neon sólido `text-[#bcf13b]`.
+  - Aplicada a identidade visual dark neon (#0a0a08, cartões #121210, bordas #23231f com hover verde neon) em todas as páginas públicas: Portfólio, Projetos, Serviços, Sobre, Avaliações, Contato, Assinaturas e Fotografia.
+
 - [x] **Nova Identidade Visual Minimalista Dark & Verde Neon (`BrandLogo.jsx`, `tailwind.config.js`, `Home.jsx`, `Navbar.jsx`)**:
   - Extraídos tokens cromáticos a partir do protótipo do usuário e documentados em `documents/brand_identity_spec.md`.
   - Desenvolvido logotipo `BrandLogo` com símbolo `rp .` (letras brancas e ponto verde neon `#bcf13b`).
