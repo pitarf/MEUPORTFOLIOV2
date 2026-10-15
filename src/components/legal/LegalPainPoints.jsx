@@ -16,7 +16,6 @@ import {
   AlertOctagon,
   FileWarning,
   ArrowRight,
-  MessageCircle,
   HelpCircle
 } from 'lucide-react';
 

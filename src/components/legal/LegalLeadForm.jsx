@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Lock, MessageCircle, Send, ShieldCheck, Check, Sparkles } from 'lucide-react';
+import { Lock, Send, ShieldCheck, Check, Sparkles } from 'lucide-react';
+import WhatsAppIcon from '../common/WhatsAppIcon';
 
 /**
  * Formulário em Estilo Protocolo Digital Seguro em Glassmorphism de Alto Padrão
@@ -164,7 +165,8 @@ export default function LegalLeadForm({ lawyer, nicheInfo }) {
               disabled={loading}
               className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 text-black font-extrabold text-sm sm:text-base tracking-wide shadow-xl shadow-amber-500/25 hover:shadow-amber-500/40 flex items-center justify-center gap-3 group transition-all duration-300"
             >
-              <MessageCircle className="w-5 h-5 text-black" />
+              {/* Logotipo Oficial do WhatsApp */}
+              <WhatsAppIcon className="w-5 h-5 flex-shrink-0" />
               <span>{loading ? 'Formatando Protocolo...' : 'Transmitir Protocolo para o WhatsApp'}</span>
               <Send className="w-4 h-4 text-black group-hover:translate-x-1.5 transition-transform" />
             </motion.button>

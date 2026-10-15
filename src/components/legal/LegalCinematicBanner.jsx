@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { MessageCircle } from 'lucide-react';
+import WhatsAppIcon from '../common/WhatsAppIcon';
 
 /**
  * Banner de Chamada para Ação no Pré-Rodapé (Estilo Exato da Summit Financial)
@@ -40,7 +40,8 @@ export default function LegalCinematicBanner({ lawyer, theme }) {
               rel="noopener noreferrer"
               className={`inline-flex items-center gap-2.5 px-8 py-4 ${theme?.gender === 'female' ? 'rounded-full bg-gradient-to-r from-[#D8A756] via-[#E5BF7C] to-[#C79540] text-[#1A0314] font-semibold shadow-lg shadow-[#D8A756]/25 hover:shadow-[#D8A756]/40' : 'rounded-xl bg-[#C6923C] hover:bg-[#B5812B] text-white font-semibold shadow-lg shadow-amber-950/40'} text-xs sm:text-sm tracking-wide transition-all whitespace-nowrap`}
             >
-              <MessageCircle className={`w-4 h-4 ${theme?.gender === 'female' ? 'fill-[#1A0314] text-[#1A0314]' : 'text-white'}`} />
+              {/* Logotipo Oficial do WhatsApp */}
+              <WhatsAppIcon className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
               <span>Agendar uma Consulta</span>
             </motion.a>
           </div>

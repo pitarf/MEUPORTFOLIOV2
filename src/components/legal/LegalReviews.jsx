@@ -3,11 +3,11 @@ import { motion } from 'framer-motion';
 import {
   Star,
   ShieldCheck,
-  MessageCircle,
   ArrowRight,
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
+import WhatsAppIcon from '../common/WhatsAppIcon';
 import {
   Carousel,
   CarouselContent,
@@ -285,7 +285,8 @@ export default function LegalReviews({ lawyer, nicheInfo, theme }) {
               rel="noopener noreferrer"
               className={`w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 ${isFemale ? 'rounded-full bg-gradient-to-r from-[#D8A756] via-[#E5BF7C] to-[#C79540] text-[#1A0314] font-semibold shadow-lg shadow-[#D8A756]/20 hover:shadow-[#D8A756]/35' : 'rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold shadow-md hover:shadow-emerald-500/25'} text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 whitespace-nowrap flex-shrink-0 group text-center`}
             >
-              <MessageCircle className={`w-4 h-4 ${isFemale ? 'fill-[#1A0314] text-[#1A0314]' : 'fill-white text-white'} group-hover:scale-110 transition-transform`} />
+              {/* Logotipo Oficial do WhatsApp */}
+              <WhatsAppIcon className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform flex-shrink-0" />
               <span>Consultar no WhatsApp</span>
               <ArrowRight className={`w-4 h-4 ${isFemale ? 'text-[#1A0314]' : 'text-white'} group-hover:translate-x-1 transition-transform`} />
             </motion.a>

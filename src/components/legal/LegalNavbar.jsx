@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Scale, MessageCircle, Sparkles } from 'lucide-react';
+import { Scale, Sparkles } from 'lucide-react';
+import WhatsAppIcon from '../common/WhatsAppIcon';
 import { cleanLawyerName, formatNavbarLawyerName } from '../../utils/lawyerNameFormatter';
 
 /**
@@ -18,7 +19,7 @@ export default function LegalNavbar({ lawyer, nicheInfo, theme }) {
   )}`;
 
   return (
-    <header className={`${isFemale ? 'bg-white/95 backdrop-blur-md border-b border-[#EEDCE7] shadow-[0_4px_20px_rgba(44,8,34,0.03)]' : 'bg-white border-b border-slate-200 shadow-sm'} sticky top-0 z-50 w-full overflow-hidden`}>
+    <header className={`${isFemale ? 'bg-white/95 backdrop-blur-md border-b border-[#EEDCE7] shadow-[0_4px_20px_rgba(44,8,34,0.03)]' : 'bg-white border-b border-slate-200 shadow-sm'} sticky top-0 z-[60] w-full`}>
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20 gap-2 sm:gap-4">
           
@@ -78,7 +79,8 @@ export default function LegalNavbar({ lawyer, nicheInfo, theme }) {
             rel="noopener noreferrer"
             className={`flex-shrink-0 px-2.5 py-1.5 sm:px-5 sm:py-2.5 xl:px-6 ${isFemale ? 'rounded-full bg-gradient-to-r from-[#D8A756] via-[#E5BF7C] to-[#C79540] text-[#1A0314] font-semibold shadow-md shadow-[#D8A756]/20 hover:shadow-[#D8A756]/35' : 'rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold shadow-md shadow-emerald-500/20'} text-[11px] sm:text-xs xl:text-sm transition-all flex items-center gap-1.5 sm:gap-2 whitespace-nowrap group`}
           >
-            <MessageCircle className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isFemale ? 'fill-[#1A0314] text-[#1A0314]' : 'fill-white text-white'} group-hover:scale-110 transition-transform flex-shrink-0`} />
+            {/* Logotipo Oficial do WhatsApp */}
+            <WhatsAppIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:scale-110 transition-transform flex-shrink-0" />
             <span className="hidden sm:inline">Agendar no WhatsApp</span>
             <span className="sm:hidden font-bold">WhatsApp</span>
           </motion.a>

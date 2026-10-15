@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, ArrowRight, ShieldCheck, Scale, Award, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Scale, Award, ChevronLeft, ChevronRight } from 'lucide-react';
+import WhatsAppIcon from '../common/WhatsAppIcon';
 
 /**
  * Hero Section com Carrossel Cinematográfico Full Width em Background
@@ -192,7 +193,8 @@ export default function LegalHero({ lawyer, nicheInfo, heroImage, theme }) {
                 rel="noopener noreferrer"
                 className={`w-full sm:w-auto px-5 sm:px-7 py-3.5 sm:py-4 ${isFemale ? 'rounded-full bg-gradient-to-r from-[#D8A756] via-[#E5BF7C] to-[#C79540] text-[#1A0314] font-semibold shadow-lg shadow-[#D8A756]/25 hover:shadow-[#D8A756]/40' : 'rounded-xl bg-gradient-to-r from-[#D8A756] via-[#C6923C] to-[#B5812B] hover:from-[#C6923C] hover:to-[#A37020] text-white font-bold shadow-xl shadow-amber-950/40'} text-xs sm:text-sm tracking-wide transition-all flex items-center justify-center gap-2 whitespace-nowrap group text-center`}
               >
-                <MessageCircle className={`w-4 h-4 sm:w-5 sm:h-5 ${isFemale ? 'fill-[#1A0314] text-[#1A0314]' : 'fill-white text-white'} group-hover:scale-110 transition-transform flex-shrink-0`} />
+                {/* Logotipo Oficial do WhatsApp */}
+                <WhatsAppIcon className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform flex-shrink-0" />
                 <span className="truncate">Agendar Consulta no WhatsApp</span>
               </motion.a>
 

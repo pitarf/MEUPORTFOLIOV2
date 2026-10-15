@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, X, Sparkles } from 'lucide-react';
+import WhatsAppIcon from '../common/WhatsAppIcon';
 
 /**
  * Botão Flutuante de WhatsApp em Glassmorphism & Gradiente Dourado
@@ -54,7 +54,8 @@ export default function LegalFloatingWhatsApp({ lawyer, theme }) {
           rel="noopener noreferrer"
           className="hidden sm:flex items-center gap-2 py-2 px-3.5 rounded-full bg-white/95 backdrop-blur-md border border-slate-200 shadow-lg shadow-black/5 text-[#0A192F] hover:text-[#C6923C] text-xs font-bold transition-all hover:scale-105"
         >
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          {/* Logotipo Oficial do WhatsApp na pílula */}
+          <WhatsAppIcon className="w-4 h-4" />
           <span>Falar no WhatsApp</span>
         </motion.a>
 
@@ -73,7 +74,8 @@ export default function LegalFloatingWhatsApp({ lawyer, theme }) {
             <span className="relative inline-flex rounded-full h-4 w-4 bg-emerald-600 border-2 border-white" />
           </span>
 
-          <MessageCircle className="w-7 h-7 fill-white text-white stroke-[2.2] transition-transform group-hover:scale-110" />
+          {/* Logotipo Oficial do WhatsApp em Alta Definição */}
+          <WhatsAppIcon className="w-8 h-8 transition-transform group-hover:scale-110 drop-shadow" />
         </motion.a>
       </div>
     </div>

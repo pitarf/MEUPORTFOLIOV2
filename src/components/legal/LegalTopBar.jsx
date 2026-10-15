@@ -1,5 +1,6 @@
 import React from 'react';
-import { MapPin, Clock, Phone, Facebook, Instagram, Linkedin, MessageCircle } from 'lucide-react';
+import { MapPin, Clock, Phone, Facebook, Instagram, Linkedin } from 'lucide-react';
+import WhatsAppIcon from '../common/WhatsAppIcon';
 
 /**
  * TopBar Utilitária Executiva no Estilo Summit Financial (Topo da Referência)
@@ -77,7 +78,8 @@ export default function LegalTopBar({ lawyer, theme }) {
               className="w-6 h-6 rounded-full bg-white/5 hover:bg-[#C6923C] hover:text-black flex items-center justify-center transition-colors text-gray-300"
               aria-label="WhatsApp"
             >
-              <MessageCircle className="w-3 h-3" />
+              {/* Logotipo Oficial do WhatsApp */}
+              <WhatsAppIcon className="w-3.5 h-3.5" />
             </a>
           </div>
         </div>

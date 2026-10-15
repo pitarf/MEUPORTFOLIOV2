@@ -2,6 +2,34 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.50.0] - 2026-10-15
+
+### Aprimorado e Padronizado (Logotipo Oficial do WhatsApp no Site e Landing Pages)
+* **Substituição de Ícones Genéricos pelo Logotipo Oficial do WhatsApp**:
+  * Desenvolvido componente reutilizável `WhatsAppIcon.jsx` com suporte à renderização de alta fidelidade do ativo oficial (`/whatsapp-official.png`) e versão vetorial SVG ultra leve.
+  * **Site Principal (`MeuPortfolio v2`)**:
+    * `WhatsAppFloat.jsx`: Botão flutuante de suporte atualizado com o logotipo oficial do WhatsApp, acabamento verde oficial (`#25D366`) e base de contraste em branco.
+    * `Contact.jsx`: Cards de atendimento, canal de suporte e modal de confirmação de chamados técnicos atualizados com a logo oficial.
+    * `ClientSubscriptionPortal.jsx`: Área do cliente e faturas com canal direto para suporte no WhatsApp devidamente identificado.
+    * `ServiceDetailPage.jsx`: Botão de solicitação e esclarecimento de dúvidas técnicas atualizado com a logo oficial.
+  * **Landing Pages Jurídicas (`src/components/legal/*`)**:
+    * Atualizados com a logo oficial: `LegalFloatingWhatsApp`, `LegalNavbar`, `LegalHero`, `LegalPracticeAreas`, `LegalAbout`, `LegalFaq`, `LegalCinematicBanner`, `LegalFooter`, `LegalTopBar`, `LegalReviews` e `LegalDiagnosisCalculator`.
+* **Execução via Subagentes Especializados e Validação Visual**:
+  * Tarefas distribuídas entre subagentes paralelos (`site_whatsapp_migrator` e `legal_whatsapp_migrator`).
+  * Criado utilitário `tools/capture_whatsapp_screenshots.cjs` com Playwright e validadas 3 capturas de tela comprovando a exibição impecável nos navegadores.
+
+## [1.49.0] - 2026-10-15
+
+### Adicionado e Aprimorado (Carrossel Vertical Stacking Cards a 60 FPS)
+* **Arquitetura de Carrossel Vertical com Efeito de Empilhamento Magnético (Sticky Scroll)**:
+  * Implementado componente ultra-performático de empilhamento de cartões em `LegalPracticeAreas.jsx` para as Landing Pages, substituindo grades estáticas por uma experiência editorial dinâmica de alto padrão.
+  * Cabeçalho de Seção Fixo com Efeito Vidro (`services-sticky-header`): permanece visível abaixo da Navbar com `backdrop-filter: blur(14px)`, permitindo leitura clara enquanto os cartões deslizam por baixo.
+  * Escalonamento Matemático de Offsets: fórmula progressiva `top_{card(n)} = top_base + (n * step_offset)` calibrada por breakpoint (mobile, tablet e desktop), garantindo que as abas superiores dos cartões anteriores permaneçam visíveis como em um fichário executivo de luxo.
+  * Interpolação Óptica Leve em Vanilla JS a 60 FPS: cálculo de sobreposição por `requestAnimationFrame` que reduz sutilmente a escala (`scale(0.95)`) e aplica escurecimento tátil suave (`brightness(0.78)` com `translateY(-4px)`), sem bibliotecas pesadas externas.
+  * Anti-Bugs Estruturais: blindagem global com `overflow-x: clip` no `html`, `body` e nós pais, eliminando bloqueios de scroll e garantindo rolagem contínua sem nenhum vácuo ou abismo em branco.
+* **Validação Visual Automatizada**:
+  * Desenvolvido utilitário de teste `tools/test_stacking_cards.cjs` via Playwright Chromium headless, validando o empilhamento real dos cartões com capturas de tela inspecionadas.
+
 ## [1.48.0] - 2026-10-15
 
 ### Aprimorado e Validado (Suporte Completo ao Tema Claro e Testes Visuais Automatizados)

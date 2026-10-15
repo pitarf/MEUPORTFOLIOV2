@@ -10,6 +10,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+// Importação do logotipo oficial do WhatsApp para os canais de atendimento e suporte
+import WhatsAppIcon from '@/components/common/WhatsAppIcon';
 
 const Contact = () => {
     const { config } = useSiteConfig();
@@ -162,9 +164,10 @@ const Contact = () => {
     const contactAddress = config?.contact_address || 'Rio de Janeiro, RJ - Brasil';
     const whatsappNumber = contactPhone.replace(/\D/g, '');
 
+    // Canais de informacao e suporte : Substituicao do icone generico de telefone pela logo oficial do WhatsApp
     const contactInfo = [
         { icon: Mail, title: 'Email', info: contactEmail, link: `mailto:${contactEmail}` },
-        { icon: Phone, title: 'Telefone', info: contactPhone, link: config?.social_links?.whatsapp || `https://wa.me/55${whatsappNumber}` },
+        { icon: WhatsAppIcon, title: 'WhatsApp / Suporte', info: contactPhone, link: config?.social_links?.whatsapp || `https://wa.me/55${whatsappNumber}` },
         { icon: MapPin, title: 'Localização', info: contactAddress, link: '#' },
         { icon: Clock, title: 'Horário', info: 'Seg - Sex: 9h às 18h', link: '#' }
     ];
@@ -328,9 +331,22 @@ const Contact = () => {
                                 {/* --- SUPPORT FORM --- */}
                                 {activeForm === 'support' && (
                                     <>
-                                        <div className="text-center mb-10">
+                                        <div className="text-center mb-10 space-y-3">
                                             <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">Suporte Técnico</h2>
-                                            <p className="text-slate-600 dark:text-gray-400">Já é cliente? Abra um chamado para nossa equipe.</p>
+                                            <p className="text-slate-600 dark:text-gray-400 max-w-xl mx-auto">Já é cliente? Abra um chamado detalhado para nossa equipe ou esclareça dúvidas emergenciais diretamente no WhatsApp.</p>
+                                            
+                                            {/* Canal rápido de atendimento de suporte via WhatsApp */}
+                                            <div className="pt-2">
+                                                <a
+                                                    href={config?.social_links?.whatsapp || `https://wa.me/55${whatsappNumber}?text=${encodeURIComponent('Olá Rafael! Gostaria de suporte técnico para o meu projeto/serviço.')}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold bg-[#25D366]/15 hover:bg-[#25D366]/25 text-[#1e8343] dark:text-[#25D366] border border-[#25D366]/30 shadow-sm transition-all"
+                                                >
+                                                    <WhatsAppIcon className="w-4 h-4" />
+                                                    Atendimento Imediato no WhatsApp
+                                                </a>
+                                            </div>
                                         </div>
                                         <form onSubmit={(e) => handleSubmit(e, 'support', supportForm, setSupportForm)} className="space-y-6 max-w-2xl mx-auto">
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -383,6 +399,16 @@ const Contact = () => {
                         <span className="text-2xl font-mono font-bold text-[#4d7c0f] dark:text-[#bcf13b] tracking-wider">{generatedTicketCode}</span>
                         <Button size="icon" variant="ghost" className="text-slate-500 hover:text-slate-900 dark:text-gray-500 dark:group-hover:text-white"><Copy className="h-6 w-6" /></Button>
                     </div>
+                    {/* Botão de envio rápido do protocolo para suporte via WhatsApp */}
+                    <a
+                        href={`https://wa.me/55${whatsappNumber}?text=${encodeURIComponent(`Olá! Acabei de abrir o chamado ${generatedTicketCode} e gostaria de acompanhamento da equipe de suporte.`)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-bold bg-[#25D366] hover:bg-[#20ba5a] text-white shadow-md transition-colors"
+                    >
+                        <WhatsAppIcon className="w-4 h-4" />
+                        Acompanhar Chamado no WhatsApp
+                    </a>
                 </DialogContent>
             </Dialog>
         </>

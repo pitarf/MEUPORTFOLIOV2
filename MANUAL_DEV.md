@@ -54,6 +54,39 @@ Com a introdução da identidade visual "rp ." e do verde neon (`#bcf13b`), foi 
    * O utilitário inicializa um servidor local de visualização da SPA e aciona uma instância Chromium headless do Playwright.
    * Executa a alternância programática de tema via `localStorage.setItem('portfolio_theme', 'light' | 'dark')` e captura prints de alta definição de todas as rotas públicas, salvando em `public/screenshots/`.
 
+### 1.5 Arquitetura de Carrossel Vertical Stacking Cards a 60 FPS
+
+O componente de especialidades em [LegalPracticeAreas.jsx](file:///c:/Git/React/MeuPortfolio%20v2/src/components/legal/LegalPracticeAreas.jsx) foi projetado sob o padrão editorial de cartões empilháveis com rolagem contínua:
+1. **Regra Anti-Quebra do Sticky (overflow-x: clip)**:
+   * O uso de `overflow: hidden` ou `overflow-x: hidden` em elementos pais bloqueia nativamente o `position: sticky`.
+   * A solução adotada em `html`, `body` e casca de páginas foi `overflow-x: clip; width: 100%; max-width: 100%;`, impedindo vazamento lateral sem interferir no contexto de rolagem vertical.
+2. **Escalonamento Matemático de Offsets (top)**:
+   * Cada cartão possui um valor de `top` progressivo:
+     $$\text{top}_{card(n)} = \text{top\_base} + (n \times \text{step\_offset})$$
+   * No desktop: base 245px com degrau de 20px (Card 0 em 245px, Card 1 em 265px, Card 2 em 285px...).
+   * No mobile: base 150px com degrau de 16px (Card 0 em 150px, Card 1 em 166px, Card 2 em 182px...).
+3. **Hierarquia de Z-Index**:
+   * Navbar Global: `z-[60]`
+   * Cabeçalho Sticky da Seção: `z-50`
+   * Cartões Empilháveis: `z-10`, `z-15`, `z-20`, `z-25`, `z-30`
+4. **Interpolação Óptica Leve em Vanilla JS a 60 FPS**:
+   * Utiliza `requestAnimationFrame` para calcular a sobreposição entre cartões adjacentes (`overlap = currentRect.bottom - nextRect.top`).
+   * Reduz suavemente a escala do cartão inferior para até 0.95 e aplica escurecimento tátil até 0.78 com leve deslocamento vertical negativo, gerando percepção de profundidade sem recorrer a bibliotecas de animação pesadas.
+5. **Rolagem Contínua sem Abismos**:
+   * O espaçamento inferior entre cartões é fixado em 20px, com o último cartão em 0px e container com `padding-bottom: 0 !important`, garantindo conexão imediata com a próxima seção.
+
+### 1.6 Componente do Logotipo Oficial do WhatsApp (`WhatsAppIcon.jsx`)
+
+Para garantir uniformidade e autoridade máxima nos canais de suporte e conversão:
+1. **Ativo Oficial de Alta Fidelidade**:
+   * O ativo oficial foi alocado em `public/whatsapp-official.png` com transparência e altíssima resolução.
+2. **Componente Modular Reutilizável**:
+   * O componente [WhatsAppIcon.jsx](file:///c:/Git/React/MeuPortfolio%20v2/src/components/common/WhatsAppIcon.jsx) encapsula a renderização da imagem oficial por padrão (`useImage={true}`) e fornece alternativa em vetor SVG ultra-leve (`useImage={false}`).
+3. **Distribuição nos Pontos de Contato**:
+   * Botões flutuantes: [WhatsAppFloat.jsx](file:///c:/Git/React/MeuPortfolio%20v2/src/components/WhatsAppFloat.jsx) e [LegalFloatingWhatsApp.jsx](file:///c:/Git/React/MeuPortfolio%20v2/src/components/legal/LegalFloatingWhatsApp.jsx).
+   * Landing Pages: Barra de navegação, Hero executivo, cartões de especialidades, formulário de diagnóstico e rodapé.
+   * Portal do Assinante e Páginas de Contato: suporte técnico e protocolo de chamados.
+
 ---
 
 ## 2. Estrutura de SEO Dinâmico

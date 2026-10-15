@@ -1,5 +1,6 @@
 import React from 'react';
-import { Scale, MapPin, Phone, Mail, Clock, Instagram, MessageCircle, ShieldCheck } from 'lucide-react';
+import { Scale, MapPin, Phone, Mail, Clock, Instagram, ShieldCheck } from 'lucide-react';
+import WhatsAppIcon from '../common/WhatsAppIcon';
 
 /**
  * Rodapé Corporativo de Alto Padrão no Estilo Exato da Summit Financial (Imagem de Referência)
@@ -54,7 +55,8 @@ export default function LegalFooter({ lawyer, nicheInfo, theme }) {
                 className="w-8 h-8 rounded-full bg-slate-800 hover:bg-[#C6923C] hover:text-black flex items-center justify-center transition-colors text-slate-300"
                 aria-label="WhatsApp"
               >
-                <MessageCircle className="w-3.5 h-3.5" />
+                {/* Logotipo Oficial do WhatsApp */}
+                <WhatsAppIcon className="w-4 h-4" />
               </a>
             </div>
           </div>
@@ -132,7 +134,12 @@ export default function LegalFooter({ lawyer, nicheInfo, theme }) {
               </li>
               {(lawyer.phone || lawyer.whatsapp) && (
                 <li className="flex items-center gap-2.5 font-mono">
-                  <Phone className="w-4 h-4 text-[#C6923C] flex-shrink-0" />
+                  {/* Logotipo Oficial do WhatsApp ou Telefone */}
+                  {lawyer.whatsapp ? (
+                    <WhatsAppIcon className="w-4 h-4 flex-shrink-0" />
+                  ) : (
+                    <Phone className="w-4 h-4 text-[#C6923C] flex-shrink-0" />
+                  )}
                   <a
                     href={lawyer.whatsapp ? `https://wa.me/${lawyer.whatsapp}` : `tel:${lawyer.phone}`}
                     target="_blank"

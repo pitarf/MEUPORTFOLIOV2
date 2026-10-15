@@ -24,6 +24,8 @@ import {
     Sparkles
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+// Importação do logotipo oficial do WhatsApp para esclarecimento de dúvidas e atendimento direto
+import WhatsAppIcon from '@/components/common/WhatsAppIcon';
 
 // Conteúdo fixo e otimizado para os 7 serviços (Copy, Benefícios, FAQ, SEO Local)
 const SERVICES_DATA = {
@@ -625,6 +627,23 @@ const ServiceDetailPage = ({ serviceSlug }) => {
                                 );
                             })}
                         </div>
+
+                        {/* Bloco de esclarecimento de dúvidas frequentes com suporte via WhatsApp */}
+                        <div className="mt-10 p-6 rounded-2xl border border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm text-center sm:text-left">
+                            <div className="space-y-1">
+                                <h3 className="text-base font-bold text-slate-900 dark:text-white">Ainda restou alguma dúvida sobre este serviço?</h3>
+                                <p className="text-xs sm:text-sm text-slate-600 dark:text-gray-400">Nossa equipe de suporte está online no WhatsApp para esclarecer dúvidas técnicas sem compromisso.</p>
+                            </div>
+                            <a
+                                href={`https://wa.me/5521966149077?text=${encodeURIComponent(`Olá! Gostaria de esclarecer algumas dúvidas sobre o serviço de ${service.title}.`)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-bold bg-[#25D366] hover:bg-[#20ba5a] text-white shadow-md transition-all"
+                            >
+                                <WhatsAppIcon className="w-4 h-4" />
+                                Esclarecer Dúvidas no WhatsApp
+                            </a>
+                        </div>
                     </section>
 
                     {/* CTA Final */}
@@ -644,12 +663,13 @@ const ServiceDetailPage = ({ serviceSlug }) => {
                                     </Button>
                                 </Link>
                                 <a 
-                                    href="https://wa.me/5521966149077"
+                                    href={`https://wa.me/5521966149077?text=${encodeURIComponent(`Olá! Gostaria de mais informações e esclarecer dúvidas sobre o serviço de ${service.title}.`)}`}
                                     target="_blank" 
                                     rel="noopener noreferrer" 
                                     className="w-full sm:w-auto"
                                 >
-                                    <Button size="lg" variant="outline" className="w-full sm:w-auto border-slate-300 dark:border-[#23231f] hover:border-[#4d7c0f] dark:hover:border-[#bcf13b] bg-transparent hover:bg-slate-100 dark:hover:bg-[#181814] text-slate-800 dark:text-white hover:text-[#4d7c0f] dark:hover:text-[#bcf13b] text-base px-10 py-5 font-bold rounded-lg transition-all">
+                                    <Button size="lg" variant="outline" className="w-full sm:w-auto border-slate-300 dark:border-[#23231f] hover:border-[#4d7c0f] dark:hover:border-[#bcf13b] bg-transparent hover:bg-slate-100 dark:hover:bg-[#181814] text-slate-800 dark:text-white hover:text-[#4d7c0f] dark:hover:text-[#bcf13b] text-base px-8 py-5 font-bold rounded-lg transition-all flex items-center justify-center gap-2.5">
+                                        <WhatsAppIcon className="w-5 h-5" />
                                         Falar no WhatsApp
                                     </Button>
                                 </a>

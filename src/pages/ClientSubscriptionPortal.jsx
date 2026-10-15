@@ -10,7 +10,6 @@ import {
     Check,
     LifeBuoy,
     PlusCircle,
-    MessageCircle,
     Receipt,
     CheckCircle2,
     Calendar,
@@ -28,6 +27,8 @@ import {
     Globe,
     RefreshCw
 } from 'lucide-react';
+// Importação do logotipo oficial do WhatsApp para o canal de suporte e atendimento de assinantes
+import WhatsAppIcon from '@/components/common/WhatsAppIcon';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -476,9 +477,9 @@ const ClientSubscriptionPortal = () => {
                                             href="https://wa.me/5521966149077"
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="text-primary hover:underline font-medium inline-flex items-center gap-1"
+                                            className="text-primary hover:underline font-medium inline-flex items-center gap-1.5"
                                         >
-                                            <MessageCircle className="w-3 h-3 text-emerald-500" />
+                                            <WhatsAppIcon className="w-3.5 h-3.5" />
                                             Fale no WhatsApp
                                         </a>
                                     </p>
@@ -980,9 +981,9 @@ const ClientSubscriptionPortal = () => {
                                             variant="outline"
                                             size="sm"
                                             onClick={handleOpenWhatsappSupport}
-                                            className="border-emerald-500/30 text-emerald-600 hover:bg-emerald-500/10 font-semibold flex items-center gap-1.5 text-xs"
+                                            className="border-emerald-500/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10 font-semibold flex items-center gap-1.5 text-xs shadow-sm"
                                         >
-                                            <MessageCircle className="w-4 h-4" />
+                                            <WhatsAppIcon className="w-4 h-4" />
                                             Falar com Rafael no WhatsApp
                                         </Button>
                                     </div>

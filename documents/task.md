@@ -2,6 +2,21 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Padronização do Logotipo Oficial do WhatsApp no Site e Landing Pages com Subagentes (`WhatsAppIcon.jsx`, `WhatsAppFloat.jsx`, `Contact.jsx`, `LegalFloatingWhatsApp.jsx`, `LegalNavbar.jsx`, `LegalHero.jsx`, `LegalPracticeAreas.jsx`)**:
+  - Extraído o ativo oficial de alta fidelidade do WhatsApp (`public/whatsapp-official.png`) e criado o componente reutilizável `WhatsAppIcon.jsx`.
+  - Subagentes especializados atuaram em paralelo para migrar todos os ícones genéricos de chat e suporte:
+    - No site institucional: Botão flutuante de suporte, página de contato, portal de assinantes e detalhe de serviços.
+    - Nas Landing Pages: Botão flutuante de atendimento, navbar, hero, cards verticais de especialidades, FAQ e rodapé.
+  - Validação visual automatizada executada via Playwright com capturas reais comprovando a integração.
+
+- [x] **Carrossel Vertical Stacking Cards a 60 FPS (`LegalPracticeAreas.jsx`, `LegalNavbar.jsx`, `LegalLandingPage.jsx`, `index.css`)**:
+  - Implementado componente ultra-performático de empilhamento de cartões (Sticky Scroll) para a seção de Especialidades das Landing Pages.
+  - Cabeçalho de seção `services-sticky-header` com `backdrop-filter: blur(14px)` fixo abaixo da Navbar.
+  - Offsets de `top` escalonados matematicamente por breakpoint, mantendo a visualização das abas empilhadas no topo da tela.
+  - Interpolação óptica leve em Vanilla JS (`requestAnimationFrame`) com redução de escala (`scale: 0.95`) e escurecimento tátil suave (`brightness: 0.78`).
+  - Proteção anti-bloqueio de scroll com `overflow-x: clip` no `html`, `body` e nós ancestrais, eliminando vácuos vazios entre cartões.
+  - Validado com 100% de sucesso através de testes automatizados com Playwright.
+
 - [x] **Suporte Completo ao Tema Claro (Light Mode) e Validação Visual via Prints (`Home.jsx`, `Portfolio.jsx`, `Services.jsx`, `About.jsx`, `Reviews.jsx`, `Contact.jsx`, `BrandLogo.jsx`)**:
   - Reestruturada a paleta de todas as páginas públicas para suporte nativo e contraste impecável tanto no Tema Claro quanto no Tema Escuro.
   - Implementada a regra de contraste de alto padrão WCAG AAA para palavras-chave de destaque: `text-[#4d7c0f] dark:text-[#bcf13b]`, garantindo legibilidade perfeita sobre fundos brancos e o brilho verde neon original sobre fundos escuros.

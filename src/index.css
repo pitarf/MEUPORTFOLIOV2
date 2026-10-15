@@ -60,6 +60,48 @@
 }
 
 /* ----------------------------------------------------
+   2.1 RESET ANTI-QUEBRA DO POSITION STICKY E STACKING CARDS
+   ---------------------------------------------------- */
+html, body {
+    overflow-x: clip;
+    max-width: 100%;
+    width: 100%;
+}
+
+/* Cabecalho Sticky da Secao */
+.services-sticky-header {
+    position: sticky;
+    top: 64px; /* Altura da navbar mobile */
+    z-index: 50;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+@media (min-width: 640px) {
+    .services-sticky-header {
+        top: 80px; /* Altura da navbar desktop */
+    }
+}
+
+/* Container e Cartoes Empilhaveis (Stacking Cards) */
+.stacking-container {
+    position: relative;
+    padding-bottom: 0 !important;
+}
+
+.stack-card {
+    transform-origin: top center;
+    will-change: transform, filter;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s ease;
+    margin-bottom: 20px !important;
+}
+
+.stack-card:last-child {
+    margin-bottom: 0 !important;
+}
+
+/* ----------------------------------------------------
    3. ESTILIZACAO DO CORPO (BODY) COM TRANSICAO SUAVE
    ---------------------------------------------------- */
 body {

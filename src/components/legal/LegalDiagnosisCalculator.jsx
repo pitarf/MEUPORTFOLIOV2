@@ -5,12 +5,12 @@ import {
   ArrowRight,
   CheckCircle2,
   Send,
-  MessageCircle,
   RotateCcw,
   ShieldCheck,
   Scale,
   Lock
 } from 'lucide-react';
+import WhatsAppIcon from '../common/WhatsAppIcon';
 
 /**
  * Diagnóstico Jurídico Interativo de 60 Segundos em Puro Glassmorphism e Fluidez
@@ -371,7 +371,8 @@ export default function LegalDiagnosisCalculator({ lawyer, nicheInfo, theme }) {
                   rel="noopener noreferrer"
                   className={`w-full sm:flex-1 py-4 px-6 ${isFemale ? 'rounded-full bg-gradient-to-r from-[#D8A756] via-[#E5BF7C] to-[#C79540] text-[#1A0314] font-bold shadow-lg shadow-[#D8A756]/25' : 'rounded-xl bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 text-black font-black shadow-2xl'} text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 group transition-all`}
                 >
-                  <MessageCircle className={`w-5 h-5 ${isFemale ? 'fill-[#1A0314] text-[#1A0314]' : 'text-black'}`} />
+                  {/* Logotipo Oficial do WhatsApp */}
+                  <WhatsAppIcon className="w-5 h-5 flex-shrink-0" />
                   <span>TRANSMITIR DIAGNÓSTICO {isFemale ? 'À DRA.' : 'AO DR.'} {lawyer.name}</span>
                   <ArrowRight className={`w-4 h-4 ${isFemale ? 'text-[#1A0314]' : 'text-black'} group-hover:translate-x-1.5 transition-transform`} />
                 </motion.a>

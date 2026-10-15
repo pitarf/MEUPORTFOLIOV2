@@ -854,6 +854,25 @@ O site oferece agora uma experiência impecável para clientes que preferem o te
 3. **Alternância Instantânea**:
    * O visitante pode alternar entre o modo claro e o modo escuro a qualquer instante através do ícone de sol e lua na barra superior.
 
+### 19.32 Carrossel Vertical de Empilhamento Magnético (Stacking Cards)
+As landing pages agora contam com uma apresentação de serviços e especialidades no estilo editorial:
+1. **Sensação Tátil de Fichário Físico**:
+   * Conforme o visitante rola a página, cada cartão sobe suavemente e se empilha sobre o anterior.
+   * As abas superiores de todos os cartões continuam visíveis no topo da tela, permitindo que o cliente acompanhe toda a amplitude de áreas atendidas.
+2. **Cabeçalho Sempre Visível**:
+   * O título da seção e sua descrição permanecem fixos no topo com um acabamento translúcido de alta tecnologia, garantindo clareza total durante a navegação.
+3. **Rolagem Fluida e Sem Abismos**:
+   * A transição entre os cartões ocorre de maneira contínua e sem espaços vazios, direcionando o cliente naturalmente ao botão de contato no WhatsApp.
+
+### 19.33 Identificação Oficial do Canal de WhatsApp e Suporte
+Para maximizar a confiança do cliente e o índice de conversão:
+1. **Logotipo Oficial Reconhecível**:
+   * Todos os botões flutuantes de suporte, canais de contato direto e CTAs de agendamento exibem a identidade visual oficial do WhatsApp.
+2. **Contato Imediato em 1 Clique**:
+   * Seja no site principal ou nas landing pages, ao tocar no botão de WhatsApp o visitante é direcionado diretamente para uma conversa privada com mensagem preliminar preenchida, tornando o início do atendimento rápido e profissional.
+
+
+
 
 
 
