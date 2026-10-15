@@ -6,7 +6,8 @@ import { supabase } from '@/lib/customSupabaseClient';
 import { useToast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Loader2, Search, Ticket, Clock, MessageSquare, AlertTriangle } from 'lucide-react';
+import { Loader2, Search, Ticket, Clock, MessageSquare, AlertTriangle, Image as ImageIcon, ZoomIn } from 'lucide-react';
+import ImageLightboxModal from '@/components/common/ImageLightboxModal';
 
 const TrackTicket = () => {
     const { ticketCode: urlTicketCode } = useParams();
@@ -16,6 +17,7 @@ const TrackTicket = () => {
     const [ticketData, setTicketData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [searched, setSearched] = useState(false);
+    const [lightboxImage, setLightboxImage] = useState(null);
 
     const fetchTicket = useCallback(async (code) => {
         if (!code) return;
@@ -128,7 +130,35 @@ const TrackTicket = () => {
                                 </span>
                             </div>
                             <p className="text-lg font-bold text-gray-900 dark:text-white">{ticketData.subject}</p>
-                            <p className="text-gray-700 dark:text-gray-300 mt-2 font-medium">{ticketData.description}</p>
+                            <p className="text-gray-700 dark:text-gray-300 mt-2 font-medium whitespace-pre-wrap">{ticketData.message || ticketData.description}</p>
+                            
+                            {/* Print anexado na abertura do chamado */}
+                            {(ticketData.attachment_url || (ticketData.attachments && ticketData.attachments.length > 0)) && (
+                                <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700/80">
+                                    <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 block mb-2 flex items-center gap-1.5">
+                                        <ImageIcon className="w-3.5 h-3.5 text-blue-500" />
+                                        Print anexado:
+                                    </span>
+                                    <div
+                                        onClick={() => setLightboxImage({
+                                            url: ticketData.attachment_url || ticketData.attachments[0]?.url,
+                                            title: `Print do Chamado : ${ticketData.ticket_code}`
+                                        })}
+                                        className="group relative inline-block cursor-pointer overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 bg-black/10 dark:bg-black/30 hover:border-blue-500 transition-all max-w-xs shadow-sm"
+                                    >
+                                        <img
+                                            src={ticketData.attachment_url || ticketData.attachments[0]?.url}
+                                            alt="Print do chamado"
+                                            className="h-32 w-auto object-cover rounded-lg group-hover:scale-105 transition-transform duration-200"
+                                        />
+                                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1.5 text-white text-xs font-semibold">
+                                            <ZoomIn className="w-4 h-4" />
+                                            <span>Ampliar Print</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
                             <p className="text-xs text-gray-500 dark:text-gray-400 mt-4 font-semibold">Criado em: {new Date(ticketData.created_at).toLocaleString()}</p>
                         </div>
 
@@ -145,9 +175,33 @@ const TrackTicket = () => {
                                                 <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
                                                 <div className="w-px flex-grow bg-gray-200 dark:bg-gray-700"></div>
                                             </div>
-                                            <div className="pb-6">
-                                                <p className="text-gray-700 dark:text-gray-250 font-medium">{update.note}</p>
-                                                <p className="text-xs text-gray-550 dark:text-gray-450 mt-1 flex items-center gap-1 font-semibold">
+                                            <div className="pb-6 flex-1">
+                                                <p className="text-gray-700 dark:text-gray-250 font-medium whitespace-pre-wrap">{update.note}</p>
+                                                
+                                                {/* Print da nota de atualizacao */}
+                                                {(update.attachment_url || (update.attachments && update.attachments.length > 0)) && (
+                                                    <div className="mt-3">
+                                                        <div
+                                                            onClick={() => setLightboxImage({
+                                                                url: update.attachment_url || update.attachments[0]?.url,
+                                                                title: `Print da Atualização : ${new Date(update.created_at).toLocaleString()}`
+                                                            })}
+                                                            className="group relative inline-block cursor-pointer overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 bg-black/10 dark:bg-black/30 hover:border-blue-500 transition-all max-w-xs shadow-sm"
+                                                        >
+                                                            <img
+                                                                src={update.attachment_url || update.attachments[0]?.url}
+                                                                alt="Print da atualização"
+                                                                className="h-28 w-auto object-cover rounded-lg group-hover:scale-105 transition-transform duration-200"
+                                                            />
+                                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1.5 text-white text-xs font-semibold">
+                                                                <ZoomIn className="w-4 h-4" />
+                                                                <span>Ampliar Print</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                <p className="text-xs text-gray-550 dark:text-gray-450 mt-2 flex items-center gap-1 font-semibold">
                                                     <Clock className="w-3 h-3" />
                                                     {new Date(update.created_at).toLocaleString()}
                                                 </p>
@@ -162,6 +216,14 @@ const TrackTicket = () => {
                     </motion.div>
                 )}
             </div>
+
+            {/* Modal Lightbox para visualizacao ampliada */}
+            <ImageLightboxModal
+                isOpen={!!lightboxImage}
+                onClose={() => setLightboxImage(null)}
+                imageUrl={lightboxImage?.url}
+                title={lightboxImage?.title}
+            />
         </>
     );
 };

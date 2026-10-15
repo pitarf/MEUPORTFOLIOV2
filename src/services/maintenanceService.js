@@ -1266,7 +1266,9 @@ export const createClientTicket = async ({
     clientDocument = '',
     subject,
     message,
-    priority = 'normal'
+    priority = 'normal',
+    attachmentUrl = null,
+    attachments = []
 }) => {
     if (!clientName || !clientName.trim()) {
         throw new Error('Nome do solicitante e obrigatorio.');
@@ -1293,7 +1295,9 @@ export const createClientTicket = async ({
         subject: subject.trim(),
         message: message.trim(),
         status: 'aberto',
-        priority: priority || 'normal'
+        priority: priority || 'normal',
+        attachment_url: attachmentUrl || null,
+        attachments: attachments || []
     };
 
     const { data, error } = await supabase

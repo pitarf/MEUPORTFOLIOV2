@@ -824,3 +824,28 @@ Para garantir estabilidade integral na consulta e gestão de chamados (`AdminSup
 2. **Mecanismo de Fallback no Frontend (`AdminSupport.jsx`)**:
    - Caso uma requisição com join relacional (`ticket_updates(*)`) encontre qualquer bloqueio na camada de transporte ou banco, o componente aciona automaticamente um fallback transparente buscando apenas as colunas primárias de `support_tickets`, garantindo que os cartões de chamados sejam sempre apresentados sem interrupção para o administrador.
 
+### 13.38 Arquitetura de Anexos de Prints e Lightbox em Chamados Técnicos
+
+Para permitir comunicação visual ágil entre o suporte e os clientes:
+
+1. **Esquema de Dados no PostgreSQL (`portfolio_db`)**:
+   - Colunas adicionadas nas tabelas `support_tickets` e `ticket_updates`:
+     - `attachment_url` (tipo `TEXT`): armazena o link público direto para a imagem do print no Firebase Storage.
+     - `attachments` (tipo `JSONB` com default `'[]'::jsonb`): armazena metadados detalhados de cada anexo (id, nome original, URL, tamanho em bytes, tipo MIME e data de criação).
+
+2. **Serviço de Upload e Captura de Clipboard (`src/services/ticketAttachmentService.js`)**:
+   - **Upload Estruturado**: Armazena as imagens no Firebase Storage em `tickets-attachments/{ticketFolder}/{timestamp}_{hash}.webp`.
+   - **Compressão Automática em WebP**: Reduz drasticamente o consumo de banda e armazenamento utilizando `optimizeAndConvertToWebP()` com qualidade 0.88 e limite de até 2048px, garantindo carregamento instantâneo.
+   - **Captura via Clipboard (`extractImageFromClipboard`)**: Inspeciona `event.clipboardData.items` e extrai imagens coladas diretamente do teclado via `Ctrl+V`, convertendo-as em instâncias de `File` prontas para upload.
+
+3. **Componente de Visualização Ampliada (`src/components/common/ImageLightboxModal.jsx`)**:
+   - Utiliza a primitiva `Dialog` do Radix UI com acessibilidade garantida via `DialogTitle`.
+   - Oferece ações de 1 clique: botão para abrir a imagem original em nova aba e botão de download direto.
+   - Suporte nativo a fechamento por clique fora, tecla ESC ou botão de fechar.
+
+4. **Integração no Painel de Chamados (`AdminSupport.jsx`) e Portais (`TrackTicket.jsx`, `ClientSubscriptionPortal.jsx`)**:
+   - Suporte a colar prints com `Ctrl+V` diretamente na caixa de notas.
+   - Botão com ícone de clipe para anexar arquivos manuais a partir do computador.
+   - Card de preview da imagem selecionada com botão de exclusão e indicador de tamanho em KB.
+   - Miniaturas clicáveis integradas nas notas de atualização e na descrição do chamado com efeito de zoom no hover.
+

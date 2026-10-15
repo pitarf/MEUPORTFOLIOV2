@@ -2,6 +2,15 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Opção Completa de Anexar Prints em Chamados Técnicos & Notas (`AdminSupport.jsx`, `ticketAttachmentService.js`, `ImageLightboxModal.jsx`, `TrackTicket.jsx`, `ClientSubscriptionPortal.jsx`)**:
+  - Banco de Dados PostgreSQL na VPS Oracle (`portfolio_db`): Criadas as colunas `attachment_url` (text) e `attachments` (jsonb) nas tabelas `support_tickets` e `ticket_updates` com permissões concedidas para `anon`, `authenticated` e `authenticator`.
+  - Serviço de Anexos (`ticketAttachmentService.js`): Upload para o Firebase Storage em `tickets-attachments/`, compressão inteligente para WebP (88% de qualidade) e extração de imagens copiadas da área de transferência (`extractImageFromClipboard`) via evento de paste.
+  - Componente Lightbox (`ImageLightboxModal.jsx`): Modal em tela cheia com alta resolução, download do print original e abertura em nova aba com acessibilidade do Radix UI.
+  - Gestão de Chamados (`AdminSupport.jsx`): Suporte a colar prints com `Ctrl+V` diretamente na caixa de notas, botão de upload manual por arquivo, preview com botão de descarte, inclusão na nota e exibição de miniaturas com efeito de zoom nas notas e na descrição do chamado.
+  - Portal do Assinante e Rastreamento (`ClientSubscriptionPortal.jsx` e `TrackTicket.jsx`): Permissão para o assinante anexar prints ao abrir chamados de manutenção e visualização com Lightbox no rastreamento público.
+  - Validação Automatizada e Visual com Playwright: Testes ponta a ponta executados com sucesso gerando capturas reais arquivadas provando a interface de anexo, o preview, o envio com print e o modal de zoom Lightbox.
+  - Auditoria com subagente concluída com louvor (zero pontas soltas e zero caracteres de travessão).
+
 - [x] **Correção de Permissões de Chamados no PostgreSQL & Fallback Resiliente (`AdminSupport.jsx`, `portfolio_db`)**:
   - Diagnosticado erro *"permission denied for table ticket_updates"* exibido na tela de Gestão de Chamados: a role `authenticated` do PostgREST não possuía concessão de permissão na tabela relacional `ticket_updates`.
   - Executados privilégios completos (`GRANT ALL`) para `anon`, `authenticated` e `authenticator` na tabela `ticket_updates` e em todas as tabelas e sequências do schema `public` no banco `portfolio_db` na VPS Oracle.

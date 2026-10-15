@@ -2,7 +2,27 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
-## [1.54.0] - 2026-10-15
+## [1.55.0] - 2026-10-15
+
+### Adicionado (Opção Completa de Anexar Prints em Chamados Técnicos & Notas)
+* **Arquitetura de Banco de Dados (`portfolio_db` / VPS Oracle)**:
+  * Criadas as colunas `attachment_url` (text) e `attachments` (jsonb padrão `[]`) nas tabelas `support_tickets` e `ticket_updates`.
+  * Concedidos privilégios completos (`GRANT ALL`) para as roles `anon`, `authenticated` e `authenticator`.
+* **Serviço Especializado de Anexos (`src/services/ticketAttachmentService.js`)**:
+  * Upload estruturado para o Firebase Storage no diretório isolado `tickets-attachments/{ticketFolder}/{timestamp}_{hash}.webp`.
+  * Compressão automática e conversão para formato WebP com qualidade de 88% e limite de até 2048px via `imageOptimizer.js`.
+  * Suporte nativo à captura de prints colados via teclado (`Ctrl+V`) através do utilitário `extractImageFromClipboard(event)`.
+* **Componente Lightbox em Alta Resolução (`src/components/common/ImageLightboxModal.jsx`)**:
+  * Modal responsivo em tela cheia com Radix UI `Dialog` para visualização detalhada de capturas de tela.
+  * Suporte a download direto da imagem original e abertura em nova aba.
+* **Painel Administrativo de Suporte (`src/pages/AdminSupport.jsx`)**:
+  * Integração de captura automática de prints via `Ctrl+V` diretamente na caixa de notas.
+  * Botão de clipe para anexar arquivos de imagem manualmente a partir do computador.
+  * Card de pré-visualização do print selecionado com nome, tamanho em KB e botão de descarte antes do envio.
+  * Visualização de miniaturas interativas com efeito de zoom em notas e na descrição original de chamados.
+* **Portal do Assinante e Rastreamento Público (`ClientSubscriptionPortal.jsx` e `TrackTicket.jsx`)**:
+  * Suporte para assinantes anexarem prints ao abrir chamados pelo portal (com suporte a Ctrl+V e botão de anexo).
+  * Renderização de miniaturas e visualização com Lightbox no rastreamento público do chamado.
 
 ### Corrigido e Fortalecido (Permissões de Chamados no PostgreSQL & Fallback Resiliente)
 * **Correção de Permissão no Banco de Dados (`portfolio_db` / VPS Oracle)**:

@@ -933,6 +933,26 @@ A tela de gestão de chamados (`/admin/suporte`) agora conta com conexão refor�
 2. **Proteção contra Falhas de Conexão**:
    * Foi adicionado um sistema de recuperação automática: mesmo diante de instabilidades momentâneas da rede, o sistema assegura a exibição de todos os chamados cadastrados para que nenhum atendimento seja perdido.
 
+### 19.39 Como Anexar e Visualizar Prints nos Chamados Técnicos
+
+Agora você e seus clientes podem anexar capturas de tela e prints diretamente nos chamados para facilitar o diagnóstico de qualquer ajuste:
+
+1. **Como Colar Prints Direto do Teclado (Ctrl+V)**:
+   * Ao tirar um print da sua tela com a tecla `Print Screen` ou com o atalho `Windows + Shift + S`, basta clicar no campo de texto de notas do chamado e pressionar **Ctrl + V**.
+   * O sistema detecta a imagem copiada na hora, exibe um cartão verde de confirmação com a miniatura do print e o tamanho do arquivo.
+
+2. **Como Anexar Imagens pelo Computador**:
+   * Caso o print já esteja salvo nos seus arquivos, basta clicar no botão com ícone de **Clipe de Papel** ao lado do campo de digitação e escolher a imagem desejada.
+   * Se desejar remover o print antes de enviar, basta clicar no ícone de "X" vermelho no cartão de prévia.
+
+3. **Como Visualizar Prints em Alta Definição (Modo Ampliado / Lightbox)**:
+   * Sempre que um chamado ou nota possuir um print anexo, uma miniatura elegante com o botão *"Ampliar Print"* é exibida.
+   * Ao clicar na miniatura, a imagem abre instantaneamente em tela cheia com alta resolução.
+   * Você pode clicar no botão **"Baixar"** para salvar a imagem original no seu computador ou no botão **"Nova Aba"** para visualizar a imagem isolada no navegador.
+
+4. **Anexo pelo Portal do Assinante (`/minha-assinatura`)**:
+   * Os seus clientes de planos de manutenção também podem anexar prints ao relatar qualquer dúvida ou erro pelo portal do assinante, agilizando o seu atendimento técnico.
+
 
 
 

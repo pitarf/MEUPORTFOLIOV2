@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -25,10 +25,16 @@ import {
     ExternalLink,
     Pencil,
     Globe,
-    RefreshCw
+    RefreshCw,
+    Paperclip,
+    ZoomIn,
+    Image as ImageIcon,
+    X
 } from 'lucide-react';
 // Importação do logotipo oficial do WhatsApp para o canal de suporte e atendimento de assinantes
 import WhatsAppIcon from '@/components/common/WhatsAppIcon';
+import { uploadTicketAttachment, extractImageFromClipboard } from '@/services/ticketAttachmentService';
+import ImageLightboxModal from '@/components/common/ImageLightboxModal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -114,6 +120,54 @@ const ClientSubscriptionPortal = () => {
         priority: 'normal',
         message: ''
     });
+
+    // Anexo de print para novo chamado
+    const [ticketAttachment, setTicketAttachment] = useState(null);
+    const [ticketAttachmentPreview, setTicketAttachmentPreview] = useState(null);
+    const ticketFileInputRef = useRef(null);
+    const [portalLightboxImage, setPortalLightboxImage] = useState(null);
+
+    const handleRemoveTicketAttachment = () => {
+        setTicketAttachment(null);
+        if (ticketAttachmentPreview) {
+            URL.revokeObjectURL(ticketAttachmentPreview);
+            setTicketAttachmentPreview(null);
+        }
+        if (ticketFileInputRef.current) {
+            ticketFileInputRef.current.value = '';
+        }
+    };
+
+    const handleTicketPaste = (e) => {
+        const file = extractImageFromClipboard(e);
+        if (file) {
+            e.preventDefault();
+            setTicketAttachment(file);
+            const previewUrl = URL.createObjectURL(file);
+            setTicketAttachmentPreview(previewUrl);
+            toast({
+                title: 'Print anexado!',
+                description: 'Imagem capturada do teclado e anexada ao chamado.'
+            });
+        }
+    };
+
+    const handleTicketFileChange = (e) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            if (!file.type || !file.type.startsWith('image/')) {
+                toast({
+                    variant: 'destructive',
+                    title: 'Formato inválido',
+                    description: 'Por favor, selecione um arquivo de imagem (PNG, JPG, WebP, etc.).'
+                });
+                return;
+            }
+            setTicketAttachment(file);
+            const previewUrl = URL.createObjectURL(file);
+            setTicketAttachmentPreview(previewUrl);
+        }
+    };
 
     // Modal de conclusao/edicao de cadastro do cliente (CPF/CNPJ, WhatsApp, etc.)
     const [profileModalOpen, setProfileModalOpen] = useState(false);
@@ -280,6 +334,15 @@ const ClientSubscriptionPortal = () => {
 
         setTicketSaving(true);
         try {
+            let uploadedAttachmentUrl = null;
+            let attachmentsArray = [];
+
+            if (ticketAttachment) {
+                const uploaded = await uploadTicketAttachment(ticketAttachment, 'portal_chamados');
+                uploadedAttachmentUrl = uploaded.url;
+                attachmentsArray = [uploaded];
+            }
+
             const newTicket = await createClientTicket({
                 subscriptionId: ticketForm.subscriptionId || null,
                 clientName: portalData.client.name,
@@ -287,7 +350,9 @@ const ClientSubscriptionPortal = () => {
                 clientDocument: portalData.client.document,
                 subject: ticketForm.subject,
                 message: ticketForm.message,
-                priority: ticketForm.priority
+                priority: ticketForm.priority,
+                attachmentUrl: uploadedAttachmentUrl,
+                attachments: attachmentsArray
             });
 
             toast({
@@ -308,6 +373,7 @@ const ClientSubscriptionPortal = () => {
                 priority: 'normal',
                 message: ''
             });
+            handleRemoveTicketAttachment();
         } catch (err) {
             console.error('Erro ao cadastrar chamado:', err);
             toast({
@@ -1022,9 +1088,32 @@ const ClientSubscriptionPortal = () => {
                                                         </span>
                                                     </div>
 
-                                                    <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed">
+                                                    <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed whitespace-pre-wrap">
                                                         {ticket.message}
                                                     </p>
+
+                                                    {/* Print do chamado do cliente */}
+                                                    {(ticket.attachment_url || (ticket.attachments && ticket.attachments.length > 0)) && (
+                                                        <div className="pt-2">
+                                                            <div
+                                                                onClick={() => setPortalLightboxImage({
+                                                                    url: ticket.attachment_url || ticket.attachments[0]?.url,
+                                                                    title: `Print do Chamado : ${ticket.ticket_code}`
+                                                                })}
+                                                                className="group relative inline-block cursor-pointer overflow-hidden rounded-lg border border-border bg-muted/40 hover:border-primary transition-all max-w-[180px] shadow-sm"
+                                                            >
+                                                                <img
+                                                                    src={ticket.attachment_url || ticket.attachments[0]?.url}
+                                                                    alt="Print do chamado"
+                                                                    className="h-20 w-auto object-cover rounded-md group-hover:scale-105 transition-transform duration-200"
+                                                                />
+                                                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1 text-white text-[10px] font-semibold">
+                                                                    <ZoomIn className="w-3 h-3" />
+                                                                    <span>Ver Print</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )}
 
                                                     <div className="pt-2 border-t border-border/40 flex items-center justify-between text-[11px] text-muted-foreground">
                                                         <span>Prioridade: <strong className="capitalize">{ticket.priority || 'normal'}</strong></span>
@@ -1106,22 +1195,80 @@ const ClientSubscriptionPortal = () => {
                         </div>
 
                         <div className="space-y-1.5">
-                            <Label htmlFor="ticket_message">Descrição Detalhada *</Label>
+                            <div className="flex items-center justify-between">
+                                <Label htmlFor="ticket_message">Descrição Detalhada *</Label>
+                                <span className="text-[11px] text-muted-foreground hidden sm:inline">
+                                    Cole um print com <kbd className="px-1 py-0.5 rounded bg-muted text-[10px] border border-border">Ctrl+V</kbd>
+                                </span>
+                            </div>
                             <Textarea
                                 id="ticket_message"
                                 rows={4}
-                                placeholder="Descreva os detalhes da alteração solicitada, links afetados ou o que precisa ser ajustado..."
+                                placeholder="Descreva os detalhes da alteração solicitada ou pressione Ctrl+V para colar um print..."
                                 value={ticketForm.message}
                                 onChange={(e) => setTicketForm({ ...ticketForm, message: e.target.value })}
+                                onPaste={handleTicketPaste}
                                 required
                             />
+                        </div>
+
+                        {/* Preview do print anexado */}
+                        {ticketAttachmentPreview && (
+                            <div className="flex items-center gap-3 p-2 bg-muted/70 border border-primary/40 rounded-lg">
+                                <img
+                                    src={ticketAttachmentPreview}
+                                    alt="Preview do print"
+                                    className="w-12 h-12 object-cover rounded-md border border-border"
+                                />
+                                <div className="flex-1 min-w-0">
+                                    <p className="text-xs font-semibold truncate text-foreground">
+                                        {ticketAttachment?.name || 'Print capturado'}
+                                    </p>
+                                    <p className="text-[11px] text-muted-foreground">
+                                        {ticketAttachment?.size ? `${Math.round(ticketAttachment.size / 1024)} KB` : 'Imagem pronta'}
+                                    </p>
+                                </div>
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={handleRemoveTicketAttachment}
+                                    className="h-8 w-8 p-0 text-muted-foreground hover:text-red-500"
+                                    title="Remover anexo"
+                                >
+                                    <X className="w-4 h-4" />
+                                </Button>
+                            </div>
+                        )}
+
+                        {/* Input file invisivel para print */}
+                        <input
+                            type="file"
+                            ref={ticketFileInputRef}
+                            onChange={handleTicketFileChange}
+                            accept="image/*"
+                            className="hidden"
+                        />
+
+                        <div className="flex items-center justify-between pt-1">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => ticketFileInputRef.current?.click()}
+                                disabled={ticketSaving}
+                                className="text-xs text-muted-foreground hover:text-primary gap-1.5"
+                            >
+                                <Paperclip className="w-3.5 h-3.5" />
+                                <span>{ticketAttachment ? 'Trocar imagem' : 'Anexar print ou imagem'}</span>
+                            </Button>
                         </div>
 
                         <DialogFooter className="gap-2 sm:gap-0 pt-2">
                             <Button
                                 type="button"
                                 variant="outline"
-                                onClick={() => setTicketModalOpen(false)}
+                                onClick={() => { setTicketModalOpen(false); handleRemoveTicketAttachment(); }}
                                 disabled={ticketSaving}
                             >
                                 Cancelar
@@ -1328,6 +1475,14 @@ const ClientSubscriptionPortal = () => {
                 isOpen={clientPdfModalOpen}
                 onClose={() => setClientPdfModalOpen(false)}
                 invoice={clientPdfInvoice}
+            />
+
+            {/* Modal Lightbox para visualizacao ampliada de prints */}
+            <ImageLightboxModal
+                isOpen={!!portalLightboxImage}
+                onClose={() => setPortalLightboxImage(null)}
+                imageUrl={portalLightboxImage?.url}
+                title={portalLightboxImage?.title}
             />
         </>
     );
