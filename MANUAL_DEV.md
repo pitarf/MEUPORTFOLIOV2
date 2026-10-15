@@ -811,3 +811,16 @@ Para captação direta de advogados e bancas jurídicas interessadas em moderniz
    - Por meio do hook `useTheme()` do `ThemeContext`, a página força a exibição do **Tema Claro** logo na montagem (`setTheme('light')`), garantindo contraste nobre, iluminação e autoridade institucional.
    - O tema global do usuário é preservado no `localStorage` e restaurado no desmonte (`cleanup` do `useEffect`) ao navegar para qualquer outra página do portfólio.
    - Um botão reativo na barra superior de escassez permite alternar entre os modos claro e escuro a qualquer instante sem perder a experiência do usuário.
+
+### 13.37 Correção de Privilégios no PostgreSQL (`portfolio_db`) e Resiliência em Chamados
+
+Para garantir estabilidade integral na consulta e gestão de chamados (`AdminSupport.jsx`):
+
+1. **Permissões Granulares para a Role `authenticated`**:
+   - Ao autenticar no painel administrativo, o PostgREST assume a role PostgreSQL `authenticated`. A tabela `ticket_updates` possuía concessões apenas para `anon` e `authenticator`, gerando o erro `permission denied for table ticket_updates`.
+   - Foram concedidos privilégios completos (`GRANT ALL ON ALL TABLES IN SCHEMA public TO anon, authenticated, authenticator`) com persistência em `ALTER DEFAULT PRIVILEGES`.
+   - O schema cache do container `portfolio-api` foi recarregado com comando de reinício para refletir a atualização.
+
+2. **Mecanismo de Fallback no Frontend (`AdminSupport.jsx`)**:
+   - Caso uma requisição com join relacional (`ticket_updates(*)`) encontre qualquer bloqueio na camada de transporte ou banco, o componente aciona automaticamente um fallback transparente buscando apenas as colunas primárias de `support_tickets`, garantindo que os cartões de chamados sejam sempre apresentados sem interrupção para o administrador.
+

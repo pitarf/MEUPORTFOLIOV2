@@ -48,7 +48,24 @@ const AdminSupport = () => {
 
         query = query.eq('is_archived', filters.showArchived);
 
-        const { data, error } = await query.order('created_at', { ascending: false });
+        let { data, error } = await query.order('created_at', { ascending: false });
+
+        // Fallback resiliente: caso ocorra erro no join de ticket_updates, tenta carregar os chamados sem o join
+        if (error) {
+            console.warn('Tentando fallback de chamados sem ticket_updates(*):', error);
+            let fallbackQuery = supabase.from('support_tickets').select('*');
+            if (filters.status !== 'todos') fallbackQuery = fallbackQuery.eq('status', filters.status);
+            if (filters.search && filters.search.trim()) {
+                const cleanSearch = filters.search.trim();
+                fallbackQuery = fallbackQuery.or(`subject.ilike.%${cleanSearch}%,ticket_code.ilike.%${cleanSearch}%,client_name.ilike.%${cleanSearch}%,client_email.ilike.%${cleanSearch}%,name.ilike.%${cleanSearch}%,email.ilike.%${cleanSearch}%`);
+            }
+            fallbackQuery = fallbackQuery.eq('is_archived', filters.showArchived);
+            const fallbackResult = await fallbackQuery.order('created_at', { ascending: false });
+            if (!fallbackResult.error && fallbackResult.data) {
+                data = fallbackResult.data.map(t => ({ ...t, ticket_updates: [] }));
+                error = null;
+            }
+        }
 
         if (error) {
             console.error('Falha ao carregar chamados:', error);

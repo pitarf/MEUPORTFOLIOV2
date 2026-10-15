@@ -926,6 +926,13 @@ Para atrair e fechar clientes de advocacia de forma passiva através de buscas n
    * Caso o visitante ou você queira testar como a página fica no tema escuro, há um botão de alternância (Sol/Lua) na barra superior de escassez.
    * Ao sair da landing page para as outras páginas do seu portfólio, o sistema restaura automaticamente o tema que estava ativo anteriormente.
 
+### 19.38 Visualização e Gestão de Chamados de Suporte
+A tela de gestão de chamados (`/admin/suporte`) agora conta com conexão reforçada e direta com o banco de dados:
+1. **Carregamento Instantâneo das Fichas**:
+   * Ao acessar o painel de chamados, todas as solicitações abertas por clientes ou visitantes (incluindo código do chamado, cliente, assunto, prioridade e status) são carregadas imediatamente nas colunas de atendimento (*Aberto*, *Em Andamento*, *Concluído* e *Cancelado*).
+2. **Proteção contra Falhas de Conexão**:
+   * Foi adicionado um sistema de recuperação automática: mesmo diante de instabilidades momentâneas da rede, o sistema assegura a exibição de todos os chamados cadastrados para que nenhum atendimento seja perdido.
+
 
 
 

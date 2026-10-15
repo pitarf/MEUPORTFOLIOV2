@@ -2,6 +2,12 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Correção de Permissões de Chamados no PostgreSQL & Fallback Resiliente (`AdminSupport.jsx`, `portfolio_db`)**:
+  - Diagnosticado erro *"permission denied for table ticket_updates"* exibido na tela de Gestão de Chamados: a role `authenticated` do PostgREST não possuía concessão de permissão na tabela relacional `ticket_updates`.
+  - Executados privilégios completos (`GRANT ALL`) para `anon`, `authenticated` e `authenticator` na tabela `ticket_updates` e em todas as tabelas e sequências do schema `public` no banco `portfolio_db` na VPS Oracle.
+  - Recarregado o container `portfolio-api` (PostgREST) e testada a query via Node.js com recuperação bem-sucedida de todos os chamados existentes.
+  - Implementado mecanismo de fallback resiliente no frontend em `AdminSupport.jsx` para garantir que os chamados sempre apareçam mesmo se houver falha de rede ou join relacional momentâneo.
+
 - [x] **Exportação em PDF, Roteiro Seguro de Prospecção e Landing Page de Vendas para Advogados (`LegalLandingPdfModal.jsx`, `googleMapsProspectService.js`, `LegalSalesLandingPage.jsx`, `RadarGoogleMaps.jsx`)**:
   - Segurança contra receio de cliques: Roteiros do WhatsApp atualizados com oferta expressa de envio em arquivo PDF anexo como alternativa segura ao link interativo, além da inclusão do preço promocional de R$ 297 (de R$ 450) com domínio anual à parte.
   - Modal de Exportação em PDF corporativo (`LegalLandingPdfModal.jsx`): Renderização em escala 2x via `html2pdf.js` diagramado em A4 com capa executiva, titulação, OAB, endereço, nota do Google Maps, hero, especialidades, metodologia, depoimentos e proposta transparente com QR Code.

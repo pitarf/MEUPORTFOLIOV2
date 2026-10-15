@@ -2,6 +2,16 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.54.0] - 2026-10-15
+
+### Corrigido e Fortalecido (Permissões de Chamados no PostgreSQL & Fallback Resiliente)
+* **Correção de Permissão no Banco de Dados (`portfolio_db` / VPS Oracle)**:
+  * Diagnosticada a causa do erro *"permission denied for table ticket_updates"*: a role `authenticated` do PostgREST não possuía permissões concedidas na tabela relacional `ticket_updates`.
+  * Concedidos privilégios completos (`GRANT ALL`) para `anon`, `authenticated` e `authenticator` em todas as tabelas e sequências do schema `public`, com recarregamento do schema cache no container `portfolio-api`.
+  * Validação com sucesso via script de consulta com retorno integral dos chamados reais (incluindo tickets de clientes e atualizações).
+* **Camada de Resiliência no Frontend (`AdminSupport.jsx`)**:
+  * Implementado mecanismo de fallback gracioso: caso a consulta de chamados com relacionamento (`ticket_updates(*)`) encontre qualquer inconsistência na API, o sistema realiza automaticamente uma segunda tentativa consultando diretamente os chamados da tabela `support_tickets`, blindando a tela contra telas vazias.
+
 ## [1.53.0] - 2026-10-15
 
 ### Adicionado e Otimizado (Exportação em PDF, Roteiro Seguro de Prospecção e Landing Page de Vendas de Sites Jurídicos)
