@@ -55,7 +55,7 @@ export default function LegalPainPoints({ lawyer, nicheInfo }) {
             <span className="text-xs font-mono font-semibold text-[#C5A880] uppercase tracking-widest block">
               Triagem de Conflitos & Direitos
             </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-white leading-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sans font-bold text-white leading-tight tracking-tight">
               {painPoints.title}
             </h2>
           </div>
@@ -86,7 +86,7 @@ export default function LegalPainPoints({ lawyer, nicheInfo }) {
                   </div>
                 </div>
 
-                <h3 className="text-xl sm:text-2xl font-serif font-bold text-white mb-3 group-hover:text-[#E2D4BE] transition-colors">
+                <h3 className="text-xl sm:text-2xl font-sans font-bold text-white mb-3 group-hover:text-[#E2D4BE] transition-colors tracking-tight">
                   {items[0].title}
                 </h3>
                 <p className="text-sm sm:text-base text-gray-300 leading-relaxed max-w-xl">
@@ -129,7 +129,7 @@ export default function LegalPainPoints({ lawyer, nicheInfo }) {
                   </div>
                 </div>
 
-                <h3 className="text-xl font-serif font-bold text-white mb-3 group-hover:text-[#E2D4BE] transition-colors">
+                <h3 className="text-xl font-sans font-bold text-white mb-3 group-hover:text-[#E2D4BE] transition-colors tracking-tight">
                   {items[1].title}
                 </h3>
                 <p className="text-sm text-gray-300 leading-relaxed">
@@ -172,7 +172,7 @@ export default function LegalPainPoints({ lawyer, nicheInfo }) {
                   </div>
                 </div>
 
-                <h3 className="text-xl font-serif font-bold text-white mb-3 group-hover:text-[#E2D4BE] transition-colors">
+                <h3 className="text-xl font-sans font-bold text-white mb-3 group-hover:text-[#E2D4BE] transition-colors tracking-tight">
                   {items[2].title}
                 </h3>
                 <p className="text-sm text-gray-300 leading-relaxed">
@@ -215,7 +215,7 @@ export default function LegalPainPoints({ lawyer, nicheInfo }) {
                   </div>
                 </div>
 
-                <h3 className="text-xl sm:text-2xl font-serif font-bold text-white mb-3 group-hover:text-[#E2D4BE] transition-colors">
+                <h3 className="text-xl sm:text-2xl font-sans font-bold text-white mb-3 group-hover:text-[#E2D4BE] transition-colors tracking-tight">
                   {items[3].title}
                 </h3>
                 <p className="text-sm sm:text-base text-gray-300 leading-relaxed max-w-xl">

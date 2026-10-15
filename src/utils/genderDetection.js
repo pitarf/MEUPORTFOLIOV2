@@ -115,8 +115,8 @@ export const LEGAL_THEMES = {
     heroDefaultImg: '/images/legal/advogada_hero.jpg',
     aboutImg: '/images/legal/advogada_sobre.jpg',
 
-    // Tipografia Nobre Editorial
-    headingFontClass: 'font-serif font-medium tracking-normal text-[#2C0822]',
+    // Tipografia Nobre Editorial Sem Serifa
+    headingFontClass: 'font-sans font-semibold tracking-tight text-[#2C0822]',
     subheadingFontClass: 'font-sans font-light text-stone-600 leading-relaxed',
     badgeTextClass: 'font-sans font-medium text-[11px] uppercase tracking-widest text-[#C89445]',
     

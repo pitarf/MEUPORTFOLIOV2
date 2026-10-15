@@ -37,7 +37,7 @@ export default function LegalNavbar({ lawyer, nicheInfo, theme }) {
             </div>
 
             <div className="min-w-0 flex-1">
-              <span className={`${isFemale ? 'font-serif text-xs sm:text-base xl:text-lg font-medium text-[#2C0822] tracking-normal' : 'font-sans text-xs sm:text-sm xl:text-base font-bold tracking-tight text-[#0A192F]'} block leading-tight truncate`}>
+              <span className={`${isFemale ? 'font-sans text-xs sm:text-base xl:text-lg font-semibold text-[#2C0822] tracking-tight' : 'font-sans text-xs sm:text-sm xl:text-base font-bold tracking-tight text-[#0A192F]'} block leading-tight truncate`}>
                 {navbarName}
               </span>
               <span className={`text-[8px] sm:text-[10px] font-mono tracking-wider ${isFemale ? 'text-[#C89445]' : 'text-[#C6923C]'} uppercase font-semibold block mt-0.5 truncate`}>

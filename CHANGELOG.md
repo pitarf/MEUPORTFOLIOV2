@@ -2,6 +2,34 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.46.0] - 2026-10-15
+
+### Adicionado e Redesenhado (Nova Identidade Visual Minimalista Dark & Verde Neon)
+* **Novo Logotipo Oficial "rp ."`**:
+  * Desenvolvido componente unificado `BrandLogo.jsx` com as letras 'rp' em branco puro e ponto em verde neon `#bcf13b`.
+  * Integrado à Navbar, Rodapé e como novo Favicon SVG oficial (`public/favicon.svg`).
+* **Tokens de Design e Estilização Dark Neon**:
+  * Mapeada paleta oficial no `tailwind.config.js`: fundo obsidian `#0a0a08`, superfícies `#121210`, verde neon `#bcf13b`, bordas `#23231f` e sombra difusa `neon-glow`.
+  * Atualizados cartões de serviços e portfólio com borda sutil e efeito de hover com borda verde neon `#bcf13b` e brilho difuso.
+  * Home Page e Hero redesenhados com badge mono, botões com preenchimento sólido `#bcf13b` e outline dark com hover neon.
+  * Criado documento de especificação técnica completa em `documents/brand_identity_spec.md`.
+
+## [1.45.0] - 2026-10-15
+
+### Aprimorado (Navegação Simplificada na Barra Superior)
+* **Remoção do Link Redundante "Home" na Navbar (`Navbar.jsx`)**:
+  * Removido o item "Home" da barra de navegação principal, uma vez que a logo e o nome da marca já funcionam como link direto para a página inicial (`/`).
+  * Ganho de espaço e respiro visual para os itens essenciais: Portfólio, Serviços, Fotografia e Contato.
+
+## [1.44.0] - 2026-10-15
+
+### Refatorado e Aprimorado (Erradicação Total de Serifas nas Landing Pages)
+* **Substituição Definitiva de Fontes Serifadas por Tipografia Executiva de Luxo**:
+  * Eliminadas 100% das classes `font-serif` em todos os 12 componentes das Landing Pages Jurídicas (`LegalAbout`, `LegalCinematicBanner`, `LegalFaq`, `LegalFooter`, `LegalHero`, `LegalLeadForm`, `LegalMethodology`, `LegalNavbar`, `LegalPainPoints`, `LegalPracticeAreas`, `LegalReviews`, `LegalTrustBar`).
+  * Atualizado `src/utils/genderDetection.js` para utilizar tipografia moderna executiva `font-sans font-semibold tracking-tight text-[#2C0822]`.
+  * No `tailwind.config.js`, todas as famílias (`serif`, `cormorant`, `playfair`, `cinzel`, `display`) foram unificadas para a tipografia moderna `Plus Jakarta Sans` e `Inter` como salvaguarda definitiva contra qualquer renderização serifada.
+  * Otimizado o carregamento de fontes em `index.html` e `src/index.css`, removendo downloads de famílias serifadas desnecessárias.
+
 ## [1.43.0] - 2026-10-14
 
 ### Aprimorado (Tipografia de Luxo Editorial com Cormorant Garamond)

@@ -99,7 +99,7 @@ export default function LegalPracticeAreas({ lawyer, nicheInfo, theme }) {
             <IconComponent className="w-6 h-6 sm:w-7 sm:h-7 stroke-[1.8]" />
           </div>
 
-          <h3 className={`${isFemale ? 'font-serif font-medium text-xl sm:text-2xl text-[#2C0822]' : 'font-sans font-bold text-lg sm:text-xl text-[#0A192F]'} mb-2.5 leading-snug tracking-tight`}>
+          <h3 className={`${isFemale ? 'font-sans font-bold text-xl sm:text-2xl text-[#2C0822]' : 'font-sans font-bold text-lg sm:text-xl text-[#0A192F]'} mb-2.5 leading-snug tracking-tight`}>
             {area.title}
           </h3>
 
@@ -136,7 +136,7 @@ export default function LegalPracticeAreas({ lawyer, nicheInfo, theme }) {
             </span>
             <span className={`w-8 h-[2px] ${isFemale ? 'bg-[#D8A756]' : 'bg-[#C6923C]'}`} />
           </div>
-          <h2 className={`text-2xl sm:text-4xl lg:text-[2.6rem] ${isFemale ? 'font-serif font-normal text-[#2C0822] tracking-normal' : 'font-sans font-extrabold text-[#0A192F] tracking-tight'}`}>
+          <h2 className={`text-2xl sm:text-4xl lg:text-[2.6rem] ${isFemale ? 'font-sans font-bold text-[#2C0822] tracking-tight' : 'font-sans font-extrabold text-[#0A192F] tracking-tight'}`}>
             Soluções Jurídicas Abrangentes
           </h2>
           <p className={`text-sm sm:text-base ${isFemale ? 'text-stone-600 font-light' : 'text-slate-600 font-light'} mt-3 leading-relaxed max-w-2xl mx-auto`}>

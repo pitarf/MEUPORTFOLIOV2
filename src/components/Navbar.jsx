@@ -14,6 +14,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Globe } from 'lucide-react';
+import BrandLogo from '@/components/common/BrandLogo';
 
 const Navbar = () => {
     const { theme, toggleTheme } = useTheme();
@@ -62,7 +63,6 @@ const Navbar = () => {
     }, [isOpen]);
 
     const mainNavItems = [
-        { name: t('nav_home', 'Home'), path: '/' },
         { name: t('nav_portfolio', 'Portfólio'), path: '/portfolio' },
         { name: t('nav_services', 'Serviços'), path: '/servicos' },
         { name: t('nav_photography', 'Fotografia'), path: '/portfolio-fotografia' },
@@ -84,23 +84,21 @@ const Navbar = () => {
         <header className="fixed top-0 left-0 w-full z-50">
             <nav
                 className={`w-full transition-all duration-300 ${scrolled
-                    ? 'bg-white/80 dark:bg-black/20 backdrop-blur-lg border-b border-gray-200/50 dark:border-white/10'
+                    ? 'bg-[#0a0a08]/90 backdrop-blur-xl border-b border-[#23231f] shadow-lg shadow-black/50'
                     : 'bg-transparent border-transparent py-4'
                     }`}
             >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
-                    {/* Logo */}
-                    <Link to="/" className="flex items-center space-x-2">
-                        {logoUrl ? (
-                            <img src={logoUrl} alt={siteName} className="h-10 w-auto object-contain" />
-                        ) : (
-                            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                                <Zap className="w-6 h-6 text-white" />
-                            </div>
-                        )}
-                        {!isPhotography && <span className="text-xl font-bold gradient-text">{siteName}</span>}
-                    </Link>
+                    {/* Logo Nova Marca */}
+                    <div className="flex items-center">
+                        <BrandLogo
+                            asLink={true}
+                            size="md"
+                            subtitle={isPhotography ? "FOTOGRAFIA" : "DADOS & TECNOLOGIA"}
+                            showSubtitle={true}
+                        />
+                    </div>
 
                     {/* Desktop Menu */}
                     <div className="hidden lg:flex items-center space-x-6">
@@ -108,7 +106,7 @@ const Navbar = () => {
                             <Link
                                 key={item.name}
                                 to={item.path}
-                                className={`text-sm font-medium transition-colors hover:text-blue-500 ${location.pathname === item.path ? 'text-blue-500 dark:text-blue-400' : 'text-gray-700 dark:text-gray-300'
+                                className={`text-sm font-medium transition-colors hover:text-[#bcf13b] ${location.pathname === item.path ? 'text-[#bcf13b] font-semibold' : 'text-gray-300'
                                     }`}
                             >
                                 {item.name}
@@ -117,21 +115,21 @@ const Navbar = () => {
 
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" className="flex items-center space-x-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 p-0 h-auto hover:bg-transparent">
+                                <Button variant="ghost" className="flex items-center space-x-2 text-sm font-medium text-gray-300 hover:text-[#bcf13b] p-0 h-auto hover:bg-transparent">
                                     <span>{t('nav_studio', 'O Estúdio')}</span>
                                     <ChevronDown className="w-4 h-4" />
                                 </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className="glass-effect">
+                            <DropdownMenuContent className="glass-effect bg-[#121210] border-[#23231f] text-gray-200">
                                 {studioNavItems.map((item) => (
-                                    <DropdownMenuItem key={item.name} asChild>
+                                    <DropdownMenuItem key={item.name} asChild className="hover:text-[#bcf13b] focus:text-[#bcf13b] focus:bg-[#181814]">
                                         <Link to={item.path} className="cursor-pointer">{item.name}</Link>
                                     </DropdownMenuItem>
                                 ))}
                             </DropdownMenuContent>
                         </DropdownMenu>
 
-                        <div className="flex items-center gap-3 border-l border-gray-200 dark:border-gray-700 pl-4 ml-2">
+                        <div className="flex items-center gap-3 border-l border-[#23231f] pl-4 ml-2">
                             {/* Toggle de Idioma PT / EN */}
                             <Button
                                 variant="ghost"
@@ -184,7 +182,7 @@ const Navbar = () => {
                             </DropdownMenu>
 
                             <Link to="/contato">
-                                <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-lg transition-all text-white font-bold">
+                                <Button className="bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-bold rounded-lg shadow-lg shadow-[#bcf13b]/20 hover:shadow-[#bcf13b]/40 hover:scale-[1.02] transition-all duration-300">
                                     {t('nav_quote', 'Orçamento')}
                                 </Button>
                             </Link>
@@ -197,9 +195,9 @@ const Navbar = () => {
                             variant="ghost"
                             size="sm"
                             onClick={toggleLanguage}
-                            className="flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-lg border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300"
+                            className="flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-lg border border-[#23231f] text-gray-300"
                         >
-                            <Globe className="w-3.5 h-3.5 text-blue-500" />
+                            <Globe className="w-3.5 h-3.5 text-[#bcf13b]" />
                             <span>{language === 'pt' ? 'PT' : 'EN'}</span>
                         </Button>
 
@@ -208,16 +206,16 @@ const Navbar = () => {
                             variant="ghost"
                             size="icon"
                             onClick={toggleTheme}
-                            className="text-gray-600 dark:text-gray-300 hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-white/10"
+                            className="text-gray-300 hover:text-[#bcf13b] hover:bg-white/10"
                         >
-                            {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5 text-yellow-400" />}
+                            {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5 text-[#bcf13b]" />}
                         </Button>
 
                         <Button
                             variant="ghost"
                             size="icon"
                             onClick={() => setIsOpen(!isOpen)}
-                            className="text-gray-600 dark:text-gray-300"
+                            className="text-gray-300 hover:text-[#bcf13b]"
                         >
                             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
                         </Button>
@@ -231,7 +229,7 @@ const Navbar = () => {
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="lg:hidden glass-effect mt-2 rounded-xl p-4 overflow-hidden border border-slate-200/80 dark:border-gray-700/50 shadow-2xl bg-white/90 dark:bg-black/80 backdrop-blur-xl"
+                            className="lg:hidden glass-effect mt-2 rounded-xl p-4 overflow-hidden border border-[#23231f] shadow-2xl bg-[#0a0a08]/95 backdrop-blur-xl"
                         >
                             <div className="flex flex-col space-y-3">
                                 {mainNavItems.map((item) => (
@@ -239,36 +237,36 @@ const Navbar = () => {
                                         key={item.name}
                                         to={item.path}
                                         onClick={() => setIsOpen(false)}
-                                        className={`text-base font-semibold transition-colors hover:text-blue-500 block text-center py-2.5 rounded-lg ${location.pathname === item.path ? 'text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/30' : 'text-slate-700 dark:text-gray-300'
+                                        className={`text-base font-semibold transition-colors hover:text-[#bcf13b] block text-center py-2.5 rounded-lg ${location.pathname === item.path ? 'text-[#0a0a08] bg-[#bcf13b] font-bold' : 'text-gray-300'
                                             }`}
                                     >
                                         {item.name}
                                     </Link>
                                 ))}
 
-                                <div className="h-px bg-slate-200 dark:bg-gray-800 my-2" />
-                                <p className="text-xs uppercase text-slate-400 dark:text-gray-500 font-bold text-center tracking-wider">{t('nav_studio', 'O Estúdio')}</p>
+                                <div className="h-px bg-[#23231f] my-2" />
+                                <p className="text-xs uppercase text-gray-500 font-bold text-center tracking-wider">{t('nav_studio', 'O Estúdio')}</p>
 
                                 {studioNavItems.map((item) => (
                                     <Link
                                         key={item.name}
                                         to={item.path}
                                         onClick={() => setIsOpen(false)}
-                                        className="text-base font-medium text-slate-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-white block text-center py-2 transition-colors"
+                                        className="text-base font-medium text-gray-400 hover:text-[#bcf13b] block text-center py-2 transition-colors"
                                     >
                                         {item.name}
                                     </Link>
                                 ))}
 
-                                <div className="h-px bg-slate-200 dark:bg-gray-800 my-2" />
-                                <p className="text-xs uppercase text-slate-400 dark:text-gray-500 font-bold text-center tracking-wider">{t('nav_client_area', 'Área do Cliente')}</p>
+                                <div className="h-px bg-[#23231f] my-2" />
+                                <p className="text-xs uppercase text-gray-500 font-bold text-center tracking-wider">{t('nav_client_area', 'Área do Cliente')}</p>
 
                                 {clientNavItems.map((item) => (
                                     <Link
                                         key={item.name}
                                         to={item.path}
                                         onClick={() => setIsOpen(false)}
-                                        className="text-base font-medium text-slate-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-white block text-center py-2 flex justify-center items-center transition-colors"
+                                        className="text-base font-medium text-gray-400 hover:text-[#bcf13b] block text-center py-2 flex justify-center items-center transition-colors"
                                     >
                                         {item.icon}
                                         <span className="ml-2">{item.name}</span>
@@ -276,7 +274,7 @@ const Navbar = () => {
                                 ))}
 
                                 <Link to="/contato" onClick={() => setIsOpen(false)}>
-                                    <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 w-full mt-4 h-12 text-base font-bold text-white shadow-lg">
+                                    <Button className="bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] w-full mt-4 h-12 text-base font-bold rounded-lg shadow-lg shadow-[#bcf13b]/20">
                                         {t('nav_quote', 'Solicitar Orçamento')}
                                     </Button>
                                 </Link>

@@ -22,7 +22,7 @@ export default function LegalFooter({ lawyer, nicheInfo, theme }) {
                 <Scale className={`w-5 h-5 ${isFemale ? 'text-[#1A0314]' : 'text-white'}`} />
               </div>
               <div className="min-w-0 max-w-sm">
-                <span className={`${isFemale ? 'font-serif text-base sm:text-lg font-medium text-white' : 'font-sans text-sm sm:text-base font-bold text-white'} block line-clamp-2`}>
+                <span className={`${isFemale ? 'font-sans text-base sm:text-lg font-semibold text-white' : 'font-sans text-sm sm:text-base font-bold text-white'} block line-clamp-2`}>
                   {lawyer.name}
                 </span>
                 <span className={`text-[10px] font-mono tracking-widest ${isFemale ? 'text-[#D8A756]' : 'text-[#C6923C]'} uppercase font-semibold block mt-0.5 truncate`}>

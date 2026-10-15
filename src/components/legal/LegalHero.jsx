@@ -157,16 +157,16 @@ export default function LegalHero({ lawyer, nicheInfo, heroImage, theme }) {
               </span>
             </div>
 
-            {/* Headline Monumental Sans Moderna ou Serif Nobre Feminina */}
+            {/* Headline Monumental Sans Moderna Executiva */}
             <motion.h1
               key={`title-${currentIndex}`}
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className={`text-3xl sm:text-4xl lg:text-5xl xl:text-[3.4rem] ${isFemale ? 'font-serif font-normal leading-[1.15] tracking-normal' : 'font-sans font-extrabold leading-[1.18] tracking-tight'} text-white max-w-3xl`}
+              className={`text-3xl sm:text-4xl lg:text-5xl xl:text-[3.4rem] ${isFemale ? 'font-sans font-extrabold leading-[1.15] tracking-tight' : 'font-sans font-extrabold leading-[1.18] tracking-tight'} text-white max-w-3xl`}
             >
               {currentSlide.title}{' '}
-              <span className={`text-transparent bg-clip-text ${isFemale ? 'italic font-serif bg-gradient-to-r from-[#FCECD0] via-[#E8C280] to-[#D8A756]' : 'bg-gradient-to-r from-amber-200 via-amber-400 to-[#C6923C]'}`}>
+              <span className={`text-transparent bg-clip-text ${isFemale ? 'font-sans font-extrabold bg-gradient-to-r from-[#FCECD0] via-[#E8C280] to-[#D8A756]' : 'bg-gradient-to-r from-amber-200 via-amber-400 to-[#C6923C]'}`}>
                 {currentSlide.highlight}
               </span>
             </motion.h1>

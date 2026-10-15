@@ -18,11 +18,11 @@ module.exports = {
         extend: {
             fontFamily: {
                 sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
-                serif: ['"Cormorant Garamond"', '"Playfair Display"', 'Georgia', 'serif'],
-                cormorant: ['"Cormorant Garamond"', 'Georgia', 'serif'],
-                playfair: ['"Playfair Display"', 'Georgia', 'serif'],
-                cinzel: ['"Cinzel"', 'serif'],
-                display: ['"Plus Jakarta Sans"', 'sans-serif'],
+                serif: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+                cormorant: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+                playfair: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+                cinzel: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+                display: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
             },
             colors: {
                 border: 'hsl(var(--border))',
@@ -30,6 +30,14 @@ module.exports = {
                 ring: 'hsl(var(--ring))',
                 background: 'hsl(var(--background))',
                 foreground: 'hsl(var(--foreground))',
+                'brand-dark': '#0a0a08',
+                'brand-surface': '#121210',
+                'brand-surface-elevated': '#181814',
+                'brand-neon': '#bcf13b',
+                'brand-neon-hover': '#a8df2a',
+                'brand-border': '#23231f',
+                'brand-border-hover': '#bcf13b',
+                'brand-text-muted': '#9da3af',
                 primary: {
                     DEFAULT: 'hsl(var(--primary))',
                     foreground: 'hsl(var(--primary-foreground))',
@@ -58,6 +66,10 @@ module.exports = {
                     DEFAULT: 'hsl(var(--card))',
                     foreground: 'hsl(var(--card-foreground))',
                 },
+            },
+            boxShadow: {
+                'neon-glow': '0 0 20px rgba(188, 241, 59, 0.15)',
+                'neon-glow-strong': '0 0 30px rgba(188, 241, 59, 0.3)',
             },
             borderRadius: {
                 lg: 'var(--radius)',

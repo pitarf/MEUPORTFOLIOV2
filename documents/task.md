@@ -2,6 +2,19 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Nova Identidade Visual Minimalista Dark & Verde Neon (`BrandLogo.jsx`, `tailwind.config.js`, `Home.jsx`, `Navbar.jsx`)**:
+  - Extraídos tokens cromáticos a partir do protótipo do usuário e documentados em `documents/brand_identity_spec.md`.
+  - Desenvolvido logotipo `BrandLogo` com símbolo `rp .` (letras brancas e ponto verde neon `#bcf13b`).
+  - Atualizadas cores de fundo para `#0a0a08`, superfícies para `#121210` e cartões com borda iluminada ao passar o mouse (`hover:border-[#bcf13b]` com brilho difuso).
+  - Atualizados botões de ação com preenchimento sólido `#bcf13b` e texto escuro, gerando alto contraste e impacto visual tech.
+
+- [x] **Remoção do Link Redundante "Home" na Navbar (`src/components/Navbar.jsx`)**:
+  - Removido o item "Home" da barra de navegação, mantendo navegação natural para o início através do clique no logotipo e nome da empresa.
+
+- [x] **Erradicação Completa de Fontes Serifadas e Adoção de Tipografia Executiva de Luxo (`src/components/legal/*`, `tailwind.config.js`)**:
+  - Eliminadas 100% das classes `font-serif` em todos os 12 componentes das Landing Pages Jurídicas e no utilitário de gênero `src/utils/genderDetection.js`.
+  - Mapeadas todas as famílias de fonte do Tailwind para a tipografia moderna `Plus Jakarta Sans` e `Inter` (`font-sans`), garantindo zero ocorrências de serifa e estética executiva impecável.
+
 - [x] **Substituição da Tipografia Serifada por Cormorant Garamond (`index.html`, `src/index.css`, `tailwind.config.js`)**:
   - Incorporada a fonte de alto luxo editorial Cormorant Garamond via Google Fonts (pesos 400, 500, 600, 700 e itálico).
   - Configurada como primeira opção de `fontFamily.serif` no Tailwind CSS, elevando instantaneamente o refinamento visual das Landing Pages Jurídicas e elementos de destaque sem quebrar o layout.

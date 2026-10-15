@@ -9,10 +9,10 @@ const ThemeContext = createContext();
  * O tema padrão do projeto é o Tema Claro ('light') para um ar comercial e corporativo.
  */
 export const ThemeProvider = ({ children }) => {
-    // Busca do localStorage ou inicia no padrão 'light'
+    // Busca do localStorage ou inicia no padrao 'dark' com a nova identidade
     const [theme, setTheme] = useState(() => {
         const savedTheme = localStorage.getItem('theme');
-        return savedTheme ? savedTheme : 'light';
+        return savedTheme ? savedTheme : 'dark';
     });
 
     useEffect(() => {

@@ -656,4 +656,40 @@ Para transmitir autoridade e refinamento estético alinhados aos padrões intern
 3. **Aplicação nas Páginas**:
    - Aplicada automaticamente a todos os títulos, headlines e destaques que consom `font-serif`, com especial destaque para as Landing Pages Jurídicas e seções de alta autoridade.
 
+### 13.29 Erradicação Definitiva de Serifas e Padronização Executiva Sans-Serif (`src/components/legal/*`, `tailwind.config.js`)
+Para garantir design limpo, moderno e livre de qualquer elemento com serifa:
+1. **Remoção de Classes Serifadas**:
+   - Eliminadas 100% das classes `font-serif` em todos os 12 componentes jurídicos e no detector de gênero (`genderDetection.js`), substituindo-as por `font-sans font-bold` ou `font-sans font-semibold` com tracking refinado (`tracking-tight`).
+2. **Salvaguarda no Tailwind CSS**:
+   - No `tailwind.config.js`, todas as famílias (`serif`, `cormorant`, `playfair`, `cinzel`, `display`) foram unificadas para a pilha moderna `['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif']`.
+   - Isso garante que, mesmo que qualquer componente utilize a classe `font-serif`, o navegador renderizará compulsoriamente a fonte moderna de luxo `Plus Jakarta Sans`.
+3. **Otimização de Assets**:
+   - Removidos downloads desnecessários de fontes serifadas em `index.html` e `src/index.css`, acelerando a velocidade de renderização da página.
+
+### 13.30 Simplificação da Navegação Principal (`src/components/Navbar.jsx`)
+Para aprimorar a ergonomia visual do menu superior:
+1. **Eliminação do Item Redundante "Home"**:
+   - O item "Home" foi removido da matriz `mainNavItems`.
+   - A navegação para a raiz (`/`) permanece garantida através do componente `<Link to="/">` que envolve o logotipo e o nome da marca.
+2. **Harmonização do Espaçamento**:
+   - A distribuição dos links restantes (Portfólio, Serviços, Fotografia, Contato) ganha mais respiro em telas intermediárias e desktops.
+
+### 13.31 Identidade Visual Dark Minimalista & Verde Neon (`BrandLogo.jsx`, `tailwind.config.js`)
+Para conferir presença de marca moderna no segmento de alta tecnologia e inteligência digital:
+1. **Paleta de Cores e Tokens Oficiais**:
+   - Fundo base obsidian: `#0a0a08`.
+   - Superfície dos cartões: `#121210` e superfícies elevadas `#181814`.
+   - Cor de destaque principal: `#bcf13b` (verde neon / chartreuse).
+   - Acento secundário de hover: `#a8df2a`.
+   - Bordas neutras: `#23231f` e bordas iluminadas: `#bcf13b`.
+   - Sombra difusa neon: `0 0 20px rgba(188, 241, 59, 0.15)`.
+2. **Componente de Marca `BrandLogo` (`src/components/common/BrandLogo.jsx`)**:
+   - Renderiza as letras 'rp' em branco puro com o ponto estilizado em verde neon `#bcf13b`.
+   - Suporta múltiplos tamanhos e inclusão opcional de divisória vertical com especialização (`| DADOS & TECNOLOGIA`).
+3. **Efeito Hover nos Cartões**:
+   - Cartões com transição suave, elevação e borda verde neon iluminada ao passar o mouse.
+
+
+
+
 

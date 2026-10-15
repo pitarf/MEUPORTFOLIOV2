@@ -66,7 +66,7 @@ export default function LegalLeadForm({ lawyer, nicheInfo }) {
                 <Lock className="w-3.5 h-3.5 text-amber-400" />
                 <span>Canal Criptografado & Sigiloso</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white tracking-tight">
+              <h2 className="text-2xl sm:text-3xl font-sans font-bold text-white tracking-tight">
                 Abertura de Protocolo de Atendimento
               </h2>
               <p className="text-xs sm:text-sm text-gray-400 font-light mt-1">

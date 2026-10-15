@@ -136,7 +136,7 @@ export default function LegalReviews({ lawyer, nicheInfo, theme }) {
     >
       <div>
         {/* Aspas em Ouro */}
-        <span className={`text-4xl font-serif font-bold ${isFemale ? 'text-[#D8A756]' : 'text-[#C6923C]'} block leading-none mb-3`}>
+        <span className={`text-4xl font-sans font-bold ${isFemale ? 'text-[#D8A756]' : 'text-[#C6923C]'} block leading-none mb-3`}>
           “
         </span>
 
@@ -147,7 +147,7 @@ export default function LegalReviews({ lawyer, nicheInfo, theme }) {
 
       <div className={`mt-6 sm:mt-8 pt-4 border-t ${isFemale ? 'border-[#F2E4ED]' : 'border-slate-100'} flex items-center justify-between`}>
         <div>
-          <span className={`text-sm ${isFemale ? 'font-serif font-medium text-[#2C0822]' : 'font-bold text-[#0A192F]'} block`}>
+          <span className={`text-sm ${isFemale ? 'font-sans font-bold text-[#2C0822]' : 'font-bold text-[#0A192F]'} block`}>
             {r.name}
           </span>
           <span className={`text-[11px] ${isFemale ? 'text-stone-500 font-light' : 'text-slate-500 font-mono'}`}>
@@ -178,7 +178,7 @@ export default function LegalReviews({ lawyer, nicheInfo, theme }) {
             </span>
             <span className={`w-8 h-[2px] ${isFemale ? 'bg-[#D8A756]' : 'bg-[#C6923C]'}`} />
           </div>
-          <h2 className={`text-2xl sm:text-4xl lg:text-[2.5rem] ${isFemale ? 'font-serif font-normal text-[#2C0822] tracking-normal' : 'font-sans font-extrabold text-[#0A192F] tracking-tight'}`}>
+          <h2 className={`text-2xl sm:text-4xl lg:text-[2.5rem] ${isFemale ? 'font-sans font-bold text-[#2C0822] tracking-tight' : 'font-sans font-extrabold text-[#0A192F] tracking-tight'}`}>
             A Confiança de Quem Teve Seus Direitos Defendidos
           </h2>
           <p className={`text-sm sm:text-base ${isFemale ? 'text-stone-600 font-light' : 'text-slate-600 font-normal'} mt-3 leading-relaxed`}>
@@ -266,7 +266,7 @@ export default function LegalReviews({ lawyer, nicheInfo, theme }) {
                 <ShieldCheck className="w-6 h-6" />
               </div>
               <div>
-                <span className={`text-sm ${isFemale ? 'font-serif font-medium text-[#2C0822]' : 'font-bold text-[#0A192F]'} block leading-tight`}>
+                <span className={`text-sm ${isFemale ? 'font-sans font-bold text-[#2C0822]' : 'font-bold text-[#0A192F]'} block leading-tight`}>
                   Deseja a mesma tranquilidade para o seu caso?
                 </span>
                 <span className={`text-xs ${isFemale ? 'text-stone-500 font-light' : 'text-slate-500 font-normal'} block mt-0.5`}>

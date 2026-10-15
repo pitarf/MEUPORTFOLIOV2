@@ -42,7 +42,7 @@ export default function LegalTrustBar({ theme }) {
                   <IconComp className="w-5 h-5 stroke-[1.8]" />
                 </div>
                 <div>
-                  <h4 className={`text-sm ${isFemale ? 'font-serif font-medium text-[#2C0822]' : 'font-bold text-[#0A192F]'} tracking-tight`}>
+                  <h4 className={`text-sm ${isFemale ? 'font-sans font-bold text-[#2C0822]' : 'font-bold text-[#0A192F]'} tracking-tight`}>
                     {item.title}
                   </h4>
                   <p className={`text-xs ${isFemale ? 'text-stone-500 font-light' : 'text-slate-500 font-normal'} mt-1 leading-relaxed`}>

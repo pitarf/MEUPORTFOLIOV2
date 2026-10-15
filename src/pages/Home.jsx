@@ -4,11 +4,12 @@ import { supabase } from '@/lib/customSupabaseClient'; // Import supabase
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import SEO from '@/components/SEO';
-import { ArrowRight, Zap, Star, Users, Award, TrendingUp, Palette, Camera, Code, BarChart3, Video, Target, Wrench, Shield } from 'lucide-react';
+import { ArrowRight, Zap, Star, Users, Award, TrendingUp, Palette, Camera, Code, BarChart3, Video, Target, Wrench, Shield, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ProjectCarousel from '@/components/ProjectCarousel';
 import ReviewsCarousel from '@/components/ReviewsCarousel';
 import AnimatedStat from '@/components/AnimatedStat';
+import BrandLogo from '@/components/common/BrandLogo';
 
 const iconMap = {
     Palette, Camera, Code, BarChart3, Video, Target, Wrench, Shield
@@ -154,45 +155,52 @@ const Home = () => {
                         transition={{ duration: 0.8 }}
                         className="space-y-6 sm:space-y-8"
                     >
-                        <div className="space-y-3 sm:space-y-4">
+                        <div className="space-y-4 sm:space-y-6">
+                            {/* Badge da Marca */}
                             <motion.div
-                                initial={{ scale: 0 }}
-                                animate={{ scale: 1 }}
-                                transition={{ delay: 0.2, type: "spring", stiffness: 260, damping: 20 }}
-                                className="w-24 h-24 sm:w-32 sm:h-32 mx-auto flex items-center justify-center mb-2 sm:mb-4"
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.5 }}
+                                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#121210] border border-[#23231f] text-xs font-semibold text-gray-300 shadow-sm hover:border-[#bcf13b]/50 transition-colors"
                             >
-                                {config?.logo_url ? (
-                                    <img src={config.logo_url} alt={config.site_name} className="w-full h-full object-contain drop-shadow-2xl" />
-                                ) : (
-                                    <div className="w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
-                                        <Zap className="w-12 h-12 text-white" />
-                                    </div>
-                                )}
+                                <span className="w-2 h-2 rounded-full bg-[#bcf13b] animate-pulse"></span>
+                                <span className="text-[#bcf13b] font-bold">rp .</span>
+                                <span className="text-gray-600">|</span>
+                                <span className="tracking-wider uppercase">Soluções Digitais & Tecnologia</span>
                             </motion.div>
 
-                            <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold px-2 tracking-tight">
-                                <span className="gradient-text">{config?.hero_title || 'Rafael Pita Solutions'}</span>
+                            <motion.div
+                                initial={{ scale: 0.85, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                transition={{ delay: 0.2, type: "spring", stiffness: 260, damping: 20 }}
+                                className="flex items-center justify-center my-2"
+                            >
+                                <BrandLogo size="xl" showSubtitle={false} />
+                            </motion.div>
+
+                            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black px-2 tracking-tight text-white leading-tight">
+                                Transformamos Ideias em Resultados Digitais<span className="text-[#bcf13b]">.</span>
                             </h1>
 
-                            <p className="text-lg md:text-xl text-gray-750 dark:text-gray-300 max-w-3xl mx-auto px-4 font-semibold leading-relaxed">
-                                {config?.hero_subtitle || 'Criatividade e tecnologia em um só lugar'}
+                            <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto px-4 font-semibold leading-relaxed">
+                                {config?.hero_subtitle || 'Criatividade e tecnologia em um so lugar'}
                             </p>
 
-                            <p className="text-sm md:text-base text-gray-550 dark:text-gray-400 max-w-2xl mx-auto px-4 leading-relaxed font-medium">
-                                {config?.hero_description || 'Transformamos suas ideias em realidade digital com soluções inovadoras e personalizadas para o seu negócio.'}
+                            <p className="text-sm md:text-base text-gray-400 max-w-2xl mx-auto px-4 leading-relaxed font-medium">
+                                {config?.hero_description || 'Transformamos suas ideias em realidade digital com solucoes inovadoras e personalizadas para o seu negocio.'}
                             </p>
                         </div>
 
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4 sm:pt-6">
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2 sm:pt-4">
                             <Link to="/contato" className="w-full sm:w-auto">
-                                <Button size="lg" className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-lg px-8 py-4 neon-glow font-bold text-white transition-all duration-300">
+                                <Button size="lg" className="w-full sm:w-auto bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] text-lg px-8 py-6 font-extrabold rounded-xl shadow-lg shadow-[#bcf13b]/20 hover:shadow-[#bcf13b]/40 hover:scale-[1.02] transition-all duration-300">
                                     Solicitar Orçamento
-                                    <ArrowRight className="ml-2 w-5 h-5" />
+                                    <ArrowRight className="ml-2 w-5 h-5 text-[#0a0a08]" />
                                 </Button>
                             </Link>
 
                              <Link to="/portfolio" className="w-full sm:w-auto">
-                                <Button variant="outline" size="lg" className="w-full text-lg px-8 py-4 border-primary/20 dark:border-gray-700 text-primary dark:text-gray-300 hover:bg-primary/5 dark:hover:bg-white/5 font-semibold transition-all duration-300">
+                                <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8 py-6 border-[#23231f] hover:border-[#bcf13b] text-gray-200 hover:text-[#bcf13b] bg-[#121210]/80 hover:bg-[#121210] font-bold rounded-xl transition-all duration-300">
                                     Ver Portfólio
                                 </Button>
                             </Link>
@@ -201,16 +209,16 @@ const Home = () => {
                 </div >
 
                 {/* Floating Elements */}
-                <div className="absolute top-20 left-10 w-20 h-20 bg-blue-500/10 rounded-full blur-xl floating-animation pointer-events-none" ></div>
-                <div className="absolute bottom-20 right-10 w-32 h-32 bg-purple-500/10 rounded-full blur-xl floating-animation pointer-events-none" style={{ animationDelay: '2s' }}></div>
-                <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-pink-500/10 rounded-full blur-xl floating-animation pointer-events-none" style={{ animationDelay: '4s' }}></div>
+                <div className="absolute top-20 left-10 w-20 h-20 bg-[#bcf13b]/10 rounded-full blur-xl floating-animation pointer-events-none" ></div>
+                <div className="absolute bottom-20 right-10 w-32 h-32 bg-[#bcf13b]/5 rounded-full blur-xl floating-animation pointer-events-none" style={{ animationDelay: '2s' }}></div>
+                <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-[#bcf13b]/10 rounded-full blur-xl floating-animation pointer-events-none" style={{ animationDelay: '4s' }}></div>
             </section>
 
             {/* Floating Stats Section */}
             <div className="relative z-20 px-4 -mt-20 sm:-mt-24 md:-mt-28">
                 <div className="max-w-6xl mx-auto">
-                    <div className="glass-effect rounded-3xl p-6 sm:p-8 border border-gray-200/50 dark:border-white/10 shadow-2xl backdrop-blur-xl bg-white/70 dark:bg-gray-900/60">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 divide-x-0 md:divide-x divide-gray-200 dark:divide-gray-700/50">
+                    <div className="rounded-3xl p-6 sm:p-8 border border-[#23231f] shadow-2xl backdrop-blur-xl bg-[#121210]/95">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 divide-x-0 md:divide-x divide-[#23231f]">
                             {stats.map((stat, index) => (
                                 <motion.div
                                     key={stat.label}
@@ -219,13 +227,13 @@ const Home = () => {
                                     transition={{ delay: index * 0.1 }}
                                     className="text-center px-4"
                                 >
-                                    <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-xl flex items-center justify-center border border-white/5">
-                                        <stat.icon className="w-6 h-6 text-blue-400" />
+                                    <div className="w-12 h-12 mx-auto mb-3 bg-[#181814] border border-[#23231f] rounded-xl flex items-center justify-center shadow-inner">
+                                        <stat.icon className="w-6 h-6 text-[#bcf13b]" />
                                     </div>
-                                     <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
+                                     <div className="text-3xl font-extrabold text-white mb-1">
                                          <AnimatedStat to={stat.number} suffix={stat.suffix} />
                                      </div>
-                                     <div className="text-xs text-gray-500 dark:text-gray-400 font-semibold tracking-wide uppercase">{stat.label}</div>
+                                     <div className="text-xs text-gray-400 font-semibold tracking-wide uppercase">{stat.label}</div>
                                 </motion.div>
                             ))}
                         </div>
@@ -256,7 +264,7 @@ const Home = () => {
                         className="text-center mt-12"
                     >
                          <Link to="/portfolio">
-                            <Button size="lg" variant="outline" className="border-gray-300 dark:border-gray-600 hover:border-blue-500 dark:hover:border-blue-400 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5">
+                            <Button size="lg" variant="outline" className="border-[#23231f] hover:border-[#bcf13b] text-gray-200 hover:text-[#bcf13b] bg-[#121210] hover:bg-[#181814] transition-all">
                                  Conhecer todos os projetos
                                  <ArrowRight className="ml-2 w-5 h-5" />
                              </Button>
@@ -266,7 +274,7 @@ const Home = () => {
             </section >
 
             {/* Photography Section - Only visible if there are projects */}
-            <section className={`py-20 bg-slate-950 border-y border-slate-900 text-white ${photographyCount === 0 ? 'hidden' : ''}`}>
+            <section className={`py-20 bg-[#0a0a08] border-y border-[#23231f] text-white ${photographyCount === 0 ? 'hidden' : ''}`}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -274,10 +282,11 @@ const Home = () => {
                         className="text-center mb-16"
                     >
                         <h2 className="text-4xl md:text-5xl font-extrabold mb-6">
-                            <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Fotografia em Destaque</span>
+                            <span>Fotografia em Destaque</span>
+                            <span className="text-[#bcf13b]">.</span>
                         </h2>
-                        <p className="text-xl text-slate-300 max-w-3xl mx-auto font-medium">
-                            Capturando a essência de cada momento com olhar artístico e profissional.
+                        <p className="text-xl text-gray-400 max-w-3xl mx-auto font-medium">
+                            Capturando a essencia de cada momento com olhar artistico e profissional.
                         </p>
                     </motion.div>
                     <ProjectCarousel categorySlug="fotografia" onDataLoaded={setPhotographyCount} />
@@ -288,9 +297,9 @@ const Home = () => {
                         className="text-center mt-12"
                     >
                         <Link to="/portfolio-fotografia/galeria">
-                            <Button size="lg" className="bg-white text-slate-950 hover:bg-slate-200 text-lg px-8 py-4 font-bold shadow-lg shadow-white/5 hover:scale-105 transition-all">
+                            <Button size="lg" className="bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] text-lg px-8 py-4 font-bold shadow-lg shadow-[#bcf13b]/20 hover:scale-105 transition-all">
                                 Ver Galeria de Fotografia
-                                <ArrowRight className="ml-2 w-5 h-5" />
+                                <ArrowRight className="ml-2 w-5 h-5 text-[#0a0a08]" />
                             </Button>
                         </Link>
                     </motion.div>
@@ -306,10 +315,11 @@ const Home = () => {
                         className="text-center mb-16"
                     >
                         <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-white">
-                            <span className="gradient-text">Nossos Serviços</span>
+                            <span>Nossos Serviços</span>
+                            <span className="text-[#bcf13b]">.</span>
                         </h2>
                         <p className="text-xl text-gray-500 dark:text-gray-400 max-w-3xl mx-auto">
-                            Oferecemos soluções completas para transformar sua presença digital e impulsionar seu negócio
+                            Oferecemos solucoes completas para transformar sua presenca digital e impulsionar seu negocio
                         </p>
                     </motion.div>
 
@@ -324,11 +334,11 @@ const Home = () => {
                                     transition={{ delay: index * 0.1 }}
                                     className="service-card p-6 rounded-xl"
                                 >
-                                     <div className={`w-12 h-12 mb-4 rounded-lg bg-gradient-to-r ${service.color || 'from-blue-500 to-purple-600'} flex items-center justify-center shadow-md`}>
-                                         <IconComponent className="w-6 h-6 text-white" />
+                                     <div className={`w-12 h-12 mb-4 rounded-lg bg-gradient-to-r ${service.color || 'from-[#bcf13b]/30 to-[#a8df2a]/20'} flex items-center justify-center shadow-md border border-[#23231f]`}>
+                                         <IconComponent className="w-6 h-6 text-[#bcf13b]" />
                                      </div>
                                      <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">{service.title}</h3>
-                                     <p className="text-gray-600 dark:text-gray-400">{service.description}</p>
+                                     <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">{service.description}</p>
                                 </motion.div>
                             );
                         })}
@@ -340,7 +350,7 @@ const Home = () => {
                         className="text-center mt-12"
                     >
                         <Link to="/servicos">
-                            <Button size="lg" variant="outline" className="border-gray-300 dark:border-gray-600 hover:border-blue-500 dark:hover:border-blue-400 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5">
+                            <Button size="lg" variant="outline" className="border-[#23231f] hover:border-[#bcf13b] text-gray-200 hover:text-[#bcf13b] bg-[#121210] hover:bg-[#181814] transition-all">
                                  Ver Todos os Serviços
                                  <ArrowRight className="ml-2 w-5 h-5" />
                              </Button>
@@ -350,28 +360,28 @@ const Home = () => {
             </section >
 
             {/* CTA Section */}
-            < section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600" >
+            < section className="py-20 bg-gradient-to-b from-[#121210] to-[#0a0a08] border-y border-[#23231f]" >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         className="space-y-8"
                     >
-                        <h2 className="text-4xl md:text-5xl font-bold text-white">
-                            Pronto para transformar suas ideias?
+                        <h2 className="text-4xl md:text-5xl font-black text-white">
+                            Pronto para transformar suas ideias<span className="text-[#bcf13b]">?</span>
                         </h2>
-                        <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-                            Entre em contato conosco e descubra como podemos ajudar seu negócio a alcançar o próximo nível
+                        <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+                            Entre em contato conosco e descubra como podemos ajudar seu negocio a alcancar o proximo nivel
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <Link to="/contato">
-                                <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-4">
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                            <Link to="/contato" className="w-full sm:w-auto">
+                                <Button size="lg" className="w-full sm:w-auto bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-extrabold text-lg px-8 py-6 rounded-xl shadow-lg shadow-[#bcf13b]/20 hover:scale-[1.02] transition-all">
                                     Falar Conosco
                                     <ArrowRight className="ml-2 w-5 h-5" />
                                 </Button>
                             </Link>
-                             <Link to="/avaliacoes">
-                                 <Button size="lg" className="bg-transparent border-2 border-white hover:bg-white text-white hover:text-blue-600 text-lg px-8 py-4 font-bold transition-all duration-300">
+                             <Link to="/avaliacoes" className="w-full sm:w-auto">
+                                 <Button size="lg" variant="outline" className="w-full sm:w-auto border-[#23231f] hover:border-[#bcf13b] bg-transparent hover:bg-[#181814] text-white hover:text-[#bcf13b] text-lg px-8 py-6 font-bold rounded-xl transition-all">
                                      Ver Avaliações
                                  </Button>
                              </Link>

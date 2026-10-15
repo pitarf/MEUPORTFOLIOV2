@@ -36,7 +36,7 @@ export default function LegalFaq({ lawyer, nicheInfo, theme }) {
                   ESCLARECIMENTOS & DÚVIDAS
                 </span>
               </div>
-              <h2 className={`text-2xl sm:text-3xl lg:text-[2.5rem] ${isFemale ? 'font-serif font-normal text-[#2C0822] tracking-normal' : 'font-sans font-extrabold text-[#0A192F] tracking-tight'} leading-tight`}>
+              <h2 className={`text-2xl sm:text-3xl lg:text-[2.5rem] ${isFemale ? 'font-sans font-bold text-[#2C0822] tracking-tight' : 'font-sans font-extrabold text-[#0A192F] tracking-tight'} leading-tight`}>
                 Perguntas Frequentes & Prazos Forenses
               </h2>
             </div>
@@ -52,7 +52,7 @@ export default function LegalFaq({ lawyer, nicheInfo, theme }) {
               </div>
 
               <div>
-                <h3 className={`${isFemale ? 'font-serif font-medium text-xl text-[#2C0822]' : 'font-sans font-bold text-lg sm:text-xl text-[#0A192F]'} leading-snug`}>
+                <h3 className={`${isFemale ? 'font-sans font-bold text-lg sm:text-xl text-[#2C0822]' : 'font-sans font-bold text-lg sm:text-xl text-[#0A192F]'} leading-snug`}>
                   Ficou com alguma dúvida específica sobre o seu caso?
                 </h3>
                 <p className={`text-xs sm:text-sm ${isFemale ? 'text-stone-500 font-light' : 'text-slate-600 font-normal'} mt-2 leading-relaxed`}>
@@ -94,7 +94,7 @@ export default function LegalFaq({ lawyer, nicheInfo, theme }) {
                     onClick={() => toggleFaq(idx)}
                     className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 focus:outline-none"
                   >
-                    <span className={`${isFemale ? 'font-serif font-medium text-base text-[#2C0822]' : 'font-sans font-bold text-sm sm:text-base text-[#0A192F]'} leading-snug`}>
+                    <span className={`${isFemale ? 'font-sans font-bold text-sm sm:text-base text-[#2C0822]' : 'font-sans font-bold text-sm sm:text-base text-[#0A192F]'} leading-snug`}>
                       {item.question}
                     </span>
                     <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 ${

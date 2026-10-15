@@ -813,4 +813,31 @@ Para elevar o valor percebido das suas páginas públicas e demonstrações jur�
 2. **Harmonização Automática**:
    * Não é necessária nenhuma configuração manual: todas as demonstrações de advogados e páginas com design editorial já carregam a nova tipografia instantaneamente em computadores e celulares.
 
+### 19.27 Tipografia Moderna de Alto Luxo (Plus Jakarta Sans)
+Todas as demonstrações jurídicas e landing pages agora contam com design 100% livre de serifas:
+1. **Estética Contemporânea de Elite**:
+   * O sistema adota a tipografia geométrica `Plus Jakarta Sans`, mundialmente aclamada pela legibilidade impecável e sofisticação visual utilizada pelas marcas de tecnologia e consultorias mais valiosas do mercado.
+2. **Visual Limpo em Todos os Dispositivos**:
+   * Títulos, subtítulos, cards e botões agora possuem desenho moderno e arrojado, garantindo máxima autoridade sem qualquer traço antigo ou serifado tanto no celular quanto no computador.
+
+### 19.28 Navegação Direta para a Home pelo Logotipo
+O menu superior agora possui visual mais limpo e direto:
+1. **Retorno Intuitivo**:
+   * O botão avulso "Home" foi retirado do menu para evitar redundância.
+   * O visitante retorna à página inicial clicando diretamente sobre o logotipo ou sobre o nome da empresa, seguindo o padrão das maiores plataformas da web.
+
+### 19.29 Nova Identidade Visual: Logotipo rp. e Estética Dark Neon
+Seu site agora conta com uma identidade visual moderna inspirada em inteligência de dados e tecnologia:
+1. **O Logotipo rp.**:
+   * Símbolo minimalista composto pelas letras 'rp' em branco e o ponto final em verde neon vibrante (`#bcf13b`).
+   * Acompanhado no topo pelo subtítulo discreto que reforça seu posicionamento em soluções digitais e dados.
+2. **Ambiente Dark Tecnológico (#0a0a08)**:
+   * Fundo preto profundo combinado com cartões escuros em `#121210`.
+   * Ao passar o mouse sobre qualquer cartão de serviço ou projeto, uma borda em verde neon acende suavemente com um elegante efeito de iluminação difusa.
+3. **Botões de Alta Ação**:
+   * O botão principal de contato e orçamento agora possui acabamento sólido em verde neon `#bcf13b`, aumentando a taxa de conversão e atraindo os olhos do cliente imediatamente.
+
+
+
+
 

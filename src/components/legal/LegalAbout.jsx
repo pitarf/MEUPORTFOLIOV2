@@ -62,7 +62,7 @@ export default function LegalAbout({ lawyer, nicheInfo, theme }) {
                   <Scale className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className={`text-xs ${isFemale ? 'font-serif font-medium text-[#2C0822]' : 'font-bold text-[#0A192F]'} block`}>Atendimento Dedicado</span>
+                  <span className={`text-xs ${isFemale ? 'font-sans font-bold text-[#2C0822]' : 'font-bold text-[#0A192F]'} block`}>Atendimento Dedicado</span>
                   <span className={`text-[11px] ${isFemale ? 'text-stone-500 font-light' : 'text-slate-500 font-light'} block leading-tight mt-0.5`}>
                     {lawyer.city && lawyer.state ? `Presencial em ${lawyer.city} (${lawyer.state}) e Online em todo o país` : 'Presencial ou Online em todo o território nacional'}
                   </span>
@@ -80,7 +80,7 @@ export default function LegalAbout({ lawyer, nicheInfo, theme }) {
                   SOBRE O ESCRITÓRIO
                 </span>
               </div>
-              <h2 className={`text-2xl sm:text-3xl lg:text-[2.5rem] ${isFemale ? 'font-serif font-normal text-[#2C0822] leading-tight tracking-normal' : 'font-sans font-extrabold text-[#0A192F] leading-tight tracking-tight'}`}>
+              <h2 className={`text-2xl sm:text-3xl lg:text-[2.5rem] ${isFemale ? 'font-sans font-bold text-[#2C0822] leading-tight tracking-tight' : 'font-sans font-extrabold text-[#0A192F] leading-tight tracking-tight'}`}>
                 Seus Direitos. Nossa Experiência. Um Futuro Seguro.
               </h2>
             </div>
@@ -122,7 +122,7 @@ export default function LegalAbout({ lawyer, nicheInfo, theme }) {
                     <div className={`w-8 h-8 rounded-lg ${isFemale ? 'bg-[#D8A756]/15 border border-[#D8A756]/30 text-[#D8A756]' : 'bg-amber-500/10 border border-amber-400/30 text-[#C6923C]'} flex items-center justify-center mb-2`}>
                       <IconComponent className="w-4 h-4 stroke-[1.8]" />
                     </div>
-                    <span className={`text-xl sm:text-2xl ${isFemale ? 'font-serif font-medium text-[#2C0822]' : 'font-sans font-extrabold text-[#0A192F]'} block leading-none`}>
+                    <span className={`text-xl sm:text-2xl ${isFemale ? 'font-sans font-bold text-[#2C0822]' : 'font-sans font-extrabold text-[#0A192F]'} block leading-none`}>
                       {s.value}
                     </span>
                     <span className={`text-[11px] ${isFemale ? 'text-stone-500 font-light' : 'text-slate-500 font-medium'} block mt-1.5 leading-snug`}>

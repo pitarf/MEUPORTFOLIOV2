@@ -22,7 +22,7 @@ export default function LegalCinematicBanner({ lawyer, theme }) {
           
           {/* Lado Esquerdo: Texto de Chamada */}
           <div className="space-y-1.5 max-w-2xl">
-            <h2 className={`text-2xl sm:text-3xl lg:text-[2.2rem] ${theme?.gender === 'female' ? 'font-serif font-normal tracking-normal' : 'font-sans font-extrabold tracking-tight'} text-white`}>
+            <h2 className={`text-2xl sm:text-3xl lg:text-[2.2rem] ${theme?.gender === 'female' ? 'font-sans font-bold tracking-tight' : 'font-sans font-extrabold tracking-tight'} text-white`}>
               Pronto para Assumir o Controle do Seu Caso Jurídico?
             </h2>
             <p className={`text-sm ${theme?.gender === 'female' ? 'text-stone-300 font-light' : 'text-slate-200 font-normal'}`}>

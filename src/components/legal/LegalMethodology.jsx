@@ -100,9 +100,9 @@ export default function LegalMethodology({ lawyer, nicheInfo, theme }) {
         </div>
 
         <h3
-          className={`font-serif ${
-            isFemale ? 'font-medium text-xl text-[#2C0822]' : 'font-sans font-bold text-lg text-[#0A192F]'
-          } tracking-wide mb-2`}
+          className={`font-sans ${
+            isFemale ? 'font-semibold text-xl text-[#2C0822]' : 'font-bold text-lg text-[#0A192F]'
+          } tracking-tight mb-2`}
         >
           {step.title}
         </h3>
@@ -131,7 +131,7 @@ export default function LegalMethodology({ lawyer, nicheInfo, theme }) {
             </span>
             <span className={`w-8 h-[2px] ${isFemale ? 'bg-[#D8A756]' : 'bg-[#C6923C]'}`} />
           </div>
-          <h2 className={`text-2xl sm:text-4xl lg:text-[2.5rem] ${isFemale ? 'font-serif font-normal text-[#2C0822] tracking-normal' : 'font-sans font-extrabold text-[#0A192F] tracking-tight'}`}>
+          <h2 className={`text-2xl sm:text-4xl lg:text-[2.5rem] ${isFemale ? 'font-sans font-bold text-[#2C0822] tracking-tight' : 'font-sans font-extrabold text-[#0A192F] tracking-tight'}`}>
             Um Processo Simples. Resultados Estratégicos.
           </h2>
           <p className={`text-sm sm:text-base ${isFemale ? 'text-stone-600 font-light' : 'text-slate-600 font-normal'} mt-3 leading-relaxed`}>
@@ -227,7 +227,7 @@ export default function LegalMethodology({ lawyer, nicheInfo, theme }) {
                     </div>
                   </div>
 
-                  <h3 className={`font-serif ${isFemale ? 'font-medium text-xl text-[#2C0822]' : 'font-sans font-bold text-lg text-[#0A192F]'} tracking-wide mb-2`}>
+                  <h3 className={`font-sans ${isFemale ? 'font-semibold text-xl text-[#2C0822]' : 'font-bold text-lg text-[#0A192F]'} tracking-tight mb-2`}>
                     {step.title}
                   </h3>
 
@@ -249,7 +249,7 @@ export default function LegalMethodology({ lawyer, nicheInfo, theme }) {
                 Atendimento Imediato Aberto
               </span>
             </div>
-            <h4 className={`text-lg sm:text-xl ${isFemale ? 'font-serif font-medium text-[#2C0822]' : 'font-bold text-[#0A192F]'} tracking-tight`}>
+            <h4 className={`text-lg sm:text-xl ${isFemale ? 'font-sans font-semibold text-[#2C0822]' : 'font-bold text-[#0A192F]'} tracking-tight`}>
               Inicie o Passo 1 Agora: Agende seu Diagnóstico
             </h4>
             <p className={`text-xs sm:text-sm ${isFemale ? 'text-stone-500 font-light' : 'text-slate-500 font-normal'}`}>
