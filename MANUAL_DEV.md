@@ -806,3 +806,8 @@ Para captação direta de advogados e bancas jurídicas interessadas em moderniz
    - **Demonstrações ao Vivo**: Vitrine interativa de 4 modelos reais (Direito Trabalhista, Direito de Família, Direito do Consumidor e Escritório Full-Service) com abertura em nova guia.
    - **Clareza de Precificação**: Exibição visual de ancoragem de preço (De R$ 450 por R$ 297 taxa única de configuração) destacando com transparência a anuidade de domínio de aproximadamente R$ 40/ano paga diretamente ao registro.br.
    - **Perguntas Frequentes Interativas**: Sanfona interativa (FAQ) abordando conformidade com o Código de Ética da OAB, prazos de entrega (24h a 48h), painel de controle e independência do cliente.
+
+4. **Tema Claro (Light Mode) Preferencial por Padrão**:
+   - Por meio do hook `useTheme()` do `ThemeContext`, a página força a exibição do **Tema Claro** logo na montagem (`setTheme('light')`), garantindo contraste nobre, iluminação e autoridade institucional.
+   - O tema global do usuário é preservado no `localStorage` e restaurado no desmonte (`cleanup` do `useEffect`) ao navegar para qualquer outra página do portfólio.
+   - Um botão reativo na barra superior de escassez permite alternar entre os modos claro e escuro a qualquer instante sem perder a experiência do usuário.

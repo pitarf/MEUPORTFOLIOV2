@@ -19,12 +19,14 @@ Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
   * Botão de exportação `PDF` adicionado no Radar Google Maps (`RadarGoogleMaps.jsx`) nos cartões de leads (grid de 5 ações), demonstrações na nuvem e no modal de envio de propostas.
 * **Nova Landing Page de Vendas para Advogados (`LegalSalesLandingPage.jsx`)**:
   * Criada página comercial de alta conversão nas rotas `/criacao-site-advogado` e `/sites-para-advogados`:
-    * Faixa superior fixa com contador regressivo de escassez real de 48 horas.
+    * Configurada com **Tema Claro (Light Mode) preferencial por padrão**: Ao ser acessada, a página carrega prioritariamente no tema claro corporativo, transmitindo serenidade, clareza e autoridade para advogados, restaurando o tema anterior do usuário ao sair da página.
+    * Botão elegante de alternância entre Tema Claro e Tema Escuro (ícones de Sol e Lua) na barra superior de escassez.
+    * Faixa superior fixa com contador regressivo de escassez real de 48 horas persistido no `localStorage`.
     * Hero impactante com tipografia Plus Jakarta Sans e H1 otimizado para os motores de busca.
     * Vitrine interativa com 4 modelos ao vivo (Trabalhista, Família, Consumidor e Full-Service) com badges de especialidade e abertura direta.
     * Pilares de personalização: Logotipo próprio, paleta cromática, fotografias da banca e redação persuasiva.
     * Caixa de preços transparente: De R$ 450 por R$ 297 (taxa única de configuração) + anuidade de domínio à parte.
-    * Seção de Perguntas Frequentes (FAQ) em accordion sanfonado.
+    * Seção de Perguntas Frequentes (FAQ) em accordion sanfonado com atributos de acessibilidade.
     * CTAs distribuídos estrategicamente apontando para o WhatsApp oficial com mensagem predefinida.
 * **SEO Espetacular e Atualização de Sitemap**:
   * Metadados profundos e Schema.org (`ProfessionalService` / `Offer`) focados em palavras-chave estratégicas: *"criar site para advogado"*, *"desenvolvedor de site de advogado"*, *"onde comprar site de advogado"*, *"como comprar site de advogado"* e *"site de advogado com seo"*.

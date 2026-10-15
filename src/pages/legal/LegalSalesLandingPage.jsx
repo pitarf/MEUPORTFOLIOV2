@@ -14,19 +14,43 @@ import {
     Smartphone,
     ChevronDown,
     Users,
-    Check
+    Check,
+    Sun,
+    Moon
 } from 'lucide-react';
 import WhatsAppIcon from '@/components/common/WhatsAppIcon';
 import SEO from '@/components/SEO';
+import { useTheme } from '@/contexts/ThemeContext';
 
 /**
  * Landing Page de Alta Conversao para Venda de Criacao de Sites Juridicos
  * Focada no ranqueamento organico no Google e captacao ativa de advogados.
+ * Configurada com Tema Claro por padrão para alta autoridade institucional.
  * Rota: /criacao-site-advogado e /sites-para-advogados
  */
 export default function LegalSalesLandingPage() {
     // FAQ Accordion Estado
     const [openFaq, setOpenFaq] = useState(0);
+
+    // Controle de Tema via ThemeContext: Tema Claro ('light') preferencial nesta Landing Page
+    const { theme, toggleTheme, setTheme } = useTheme();
+
+    useEffect(() => {
+        // Armazena o tema prévio que o visitante estava usando no sistema
+        const previousTheme = localStorage.getItem('theme') || 'dark';
+
+        // Ativa o Tema Claro como padrão prioritário ao carregar a página
+        if (setTheme) {
+            setTheme('light');
+        }
+
+        return () => {
+            // Ao sair da landing page para o portfólio geral, restaura a preferência anterior
+            if (setTheme) {
+                setTheme(previousTheme);
+            }
+        };
+    }, []);
 
     // Contador regressivo de 48 horas persistido no localStorage
     const [timeLeft, setTimeLeft] = useState(() => {
@@ -213,7 +237,27 @@ export default function LegalSalesLandingPage() {
                         </span>
                     </div>
 
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                        {/* Botão de Alternância de Tema */}
+                        <button
+                            type="button"
+                            onClick={toggleTheme}
+                            title={theme === 'dark' ? 'Alternar para Tema Claro (Padrão Recomendado)' : 'Alternar para Tema Escuro'}
+                            className="flex items-center gap-1.5 bg-black/25 hover:bg-black/40 text-white px-2.5 py-1 rounded-md text-[11px] transition-all border border-white/10"
+                        >
+                            {theme === 'dark' ? (
+                                <>
+                                    <Sun className="w-3.5 h-3.5 text-amber-300" />
+                                    <span className="hidden md:inline">Tema Claro</span>
+                                </>
+                            ) : (
+                                <>
+                                    <Moon className="w-3.5 h-3.5 text-slate-200" />
+                                    <span className="hidden md:inline">Tema Escuro</span>
+                                </>
+                            )}
+                        </button>
+
                         <div className="flex items-center gap-1.5 font-mono text-[11px] bg-black/25 px-2.5 py-1 rounded-full border border-white/20">
                             <Clock className="w-3.5 h-3.5 text-amber-300" />
                             <span>Expira em:</span>

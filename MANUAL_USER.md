@@ -921,6 +921,10 @@ Para atrair e fechar clientes de advocacia de forma passiva através de buscas n
    * A página deixa claro o valor promocional de **R$ 297** (de R$ 450) como taxa única de configuração e criação, informando com clareza que o domínio próprio anual (cerca de R$ 40/ano) é pago à parte diretamente ao registro oficial.
 5. **Vários Botões para Seu WhatsApp**:
    * Botões estrategicamente distribuídos ao longo de toda a página abrem diretamente uma conversa com você no WhatsApp, já com a mensagem preenchida de interesse para facilitar o fechamento da venda.
+6. **Acesso Preferencial pelo Tema Claro (Light Mode)**:
+   * Por padrão, a Landing Page de Vendas de sites para advogados sempre abre no **Tema Claro**, garantindo fundo branco iluminado, leitura agradável e estética corporativa de alto escalão.
+   * Caso o visitante ou você queira testar como a página fica no tema escuro, há um botão de alternância (Sol/Lua) na barra superior de escassez.
+   * Ao sair da landing page para as outras páginas do seu portfólio, o sistema restaura automaticamente o tema que estava ativo anteriormente.
 
 
 

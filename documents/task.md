@@ -7,14 +7,15 @@ Roadmap de acompanhamento para a reestruturação visual de alta conversão, com
   - Modal de Exportação em PDF corporativo (`LegalLandingPdfModal.jsx`): Renderização em escala 2x via `html2pdf.js` diagramado em A4 com capa executiva, titulação, OAB, endereço, nota do Google Maps, hero, especialidades, metodologia, depoimentos e proposta transparente com QR Code.
   - Botão de ação rápida `PDF` integrado ao Radar Google Maps nos leads mapeados, demonstrações na nuvem e no modal de envio de proposta comercial.
   - Nova Landing Page de Vendas de alta conversão (`LegalSalesLandingPage.jsx`) nas rotas `/criacao-site-advogado` e `/sites-para-advogados`:
-    - Faixa fixa com contador regressivo de escassez de 48 horas.
+    - **Tema Claro (Light Mode) preferencial por padrão**: A página abre prioritariamente em tema claro executivo para transmitir máxima autoridade institucional a advogados, com alternador reativo (Sol/Lua) e restauração automática do tema do usuário ao sair.
+    - Faixa fixa com contador regressivo de escassez de 48 horas persistido no `localStorage`.
     - Hero com H1 otimizado para SEO e CTA para WhatsApp.
     - Vitrine interativa de 4 modelos de demonstração ao vivo (Trabalhista, Família, Consumidor e Full-Service).
     - 4 pilares de customização: logo, cores, fotos e redação sob medida.
     - Precificação transparente: De R$ 450 por R$ 297 (+ domínio).
     - FAQ em accordion sanfonado e dados estruturados Schema.org (`ProfessionalService` / `Offer`).
     - Integração no `tools/generate-sitemap.js` e regeneração de `public/sitemap.xml`.
-  - Validação visual realizada com Playwright gerando 4 prints de auditoria em alta definição.
+  - Validação visual realizada com Playwright gerando prints de auditoria em alta definição nos modos claro e escuro.
 
 - [x] **Saudações Dinâmicas pelo Horário de Brasília & Humanização de Honoríficos (`src/utils/greetingUtils.js`, `googleMapsProspectService.js`, `RadarGoogleMaps.jsx`)**:
   - Criado utilitário `greetingUtils.js` com a função `getGreetingByBrasiliaTime()`, sincronizando o cumprimento com o Horário Oficial de Brasília (`America/Sao_Paulo` / UTC-3): "bom dia" (05h às 11h59), "boa tarde" (12h às 17h59) e "boa noite" (18h às 04h59).
