@@ -12,13 +12,13 @@ import React from 'react';
  */
 export default function WhatsAppIcon({
   className = 'w-6 h-6',
-  useImage = true,
+  useImage = false,
   alt = 'WhatsApp'
 }) {
   if (useImage) {
     return (
       <img
-        src="/whatsapp-official.png"
+        src="/whatsapp-official.webp"
         alt={alt}
         className={`object-contain flex-shrink-0 select-none pointer-events-none ${className}`}
         loading="lazy"
@@ -27,7 +27,7 @@ export default function WhatsAppIcon({
     );
   }
 
-  // SVG vetorial da Logo Oficial do WhatsApp
+  // SVG vetorial da Logo Oficial do WhatsApp (0 bytes de download adicional)
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

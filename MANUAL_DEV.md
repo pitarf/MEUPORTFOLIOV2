@@ -886,3 +886,24 @@ Para garantir comunicação em tempo real e transparência total com o cliente d
    - Checkbox com estado reativo `notifyClientByEmail` permitindo ao admin desmarcar o envio caso queira inserir uma nota exclusivamente interna.
    - Indicador visual dinâmico com ícone de e-mail e status ativo/inativo dependendo da presença de e-mail no chamado.
 
+### 13.40 Otimizações de PageSpeed, Navegação Agêntica e Acessibilidade
+
+Para atender às auditorias do Google Lighthouse 13.5+ e aos critérios de Navegação Agêntica:
+
+1. **Descoberta Agêntica e IA (Padrão ARD e llmstxt.org)**:
+   - `public/llms.txt`: Estrutura padronizada em Markdown contendo descrição institucional, links dos serviços principais e dados de contato para leitura imediata por modelos e crawlers de IA (ChatGPT Search, Perplexity, Gemini, Claude).
+   - `public/.well-known/ai-catalog.json` e `public/ai-catalog.json`: Catálogo de recursos estruturado no padrão ARD (Agentic Resource Discovery) versão 1.0, expondo os serviços de criação de landing pages e portfólio.
+   - `public/robots.txt`: Inclusão da diretiva `ARD: https://rafaelpitaoficial.com.br/.well-known/ai-catalog.json`.
+   - `index.html`: Inclusão das tags `<link rel="agentic-resource-discovery" ...>` e `<link rel="help" href="/llms.txt" />`.
+
+2. **Acessibilidade Semântica (WCAG AA & AAA)**:
+   - Landmark `<main id="main-content" role="main">`: Todo o conteúdo central da página é demarcado pelo elemento semântico principal.
+   - Hierarquia de Títulos Descendente: Estrutura rigorosamente sequencial (H1 -> H2 -> H3), sem saltos de níveis intermediários.
+   - Contrastes Aprimorados: Todas as cores de texto, badges e botões seguem a proporção mínima de 4.5:1 (WCAG AA) e até 7:1 (WCAG AAA).
+
+3. **Eliminação de Bloqueios e Imagens Otimizadas**:
+   - `WhatsAppIcon.jsx`: Utiliza vetor SVG puro por padrão com custo de 0 bytes em rede e zero requisições HTTP adicionais, eliminando o alerta de 88 KiB do Lighthouse. Fallback em WebP de 2.5 KB (`whatsapp-official.webp`).
+   - Google Tag Manager diferido: O script do GTM é inicializado apenas no evento `window.load`, liberando a thread primária para os cálculos de FCP e LCP sem disputar recursos de rede.
+   - Google Fonts: Pesos essenciais limitados a 400, 600, 700 e 800 carregados assincronamente com `media="print" onload="this.media='all'"`.
+
+

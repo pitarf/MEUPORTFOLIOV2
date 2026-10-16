@@ -228,12 +228,12 @@ export default function LegalSalesLandingPage() {
             </Helmet>
 
             {/* FAIXA SUPERIOR DE ESCASSEZ : OFERTA 48 HORAS */}
-            <header className="bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-800 text-white py-2.5 px-4 sticky top-0 z-50 shadow-md">
+            <header className="bg-gradient-to-r from-emerald-800 via-teal-900 to-slate-950 text-white py-2.5 px-4 sticky top-0 z-50 shadow-md">
                 <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
-                    <div className="flex items-center gap-2 font-semibold">
+                    <div className="flex items-center gap-2 font-semibold text-white">
                         <Flame className="w-4 h-4 text-amber-300 animate-pulse shrink-0" />
                         <span>
-                            Oferta Exclusiva de Lançamento: De <span className="line-through opacity-80">R$ 450</span> por apenas <strong className="text-amber-200 text-sm">R$ 297</strong> (+ domínio)
+                            Oferta Exclusiva de Lançamento: De <span className="line-through text-emerald-200">R$ 450</span> por apenas <strong className="text-amber-300 text-sm font-black">R$ 297</strong> (+ domínio)
                         </span>
                     </div>
 
@@ -243,7 +243,7 @@ export default function LegalSalesLandingPage() {
                             type="button"
                             onClick={toggleTheme}
                             title={theme === 'dark' ? 'Alternar para Tema Claro (Padrão Recomendado)' : 'Alternar para Tema Escuro'}
-                            className="flex items-center gap-1.5 bg-black/25 hover:bg-black/40 text-white px-2.5 py-1 rounded-md text-[11px] transition-all border border-white/10"
+                            className="flex items-center gap-1.5 bg-black/40 hover:bg-black/60 text-white px-2.5 py-1 rounded-md text-[11px] transition-all border border-white/20"
                         >
                             {theme === 'dark' ? (
                                 <>
@@ -252,13 +252,13 @@ export default function LegalSalesLandingPage() {
                                 </>
                             ) : (
                                 <>
-                                    <Moon className="w-3.5 h-3.5 text-slate-200" />
+                                    <Moon className="w-3.5 h-3.5 text-slate-100" />
                                     <span className="hidden md:inline">Tema Escuro</span>
                                 </>
                             )}
                         </button>
 
-                        <div className="flex items-center gap-1.5 font-mono text-[11px] bg-black/25 px-2.5 py-1 rounded-full border border-white/20">
+                        <div className="flex items-center gap-1.5 font-mono text-[11px] bg-black/40 px-2.5 py-1 rounded-full border border-white/20 text-white">
                             <Clock className="w-3.5 h-3.5 text-amber-300" />
                             <span>Expira em:</span>
                             <span className="font-bold text-amber-300">
@@ -272,7 +272,7 @@ export default function LegalSalesLandingPage() {
                             href={createWhatsAppUrl('Olá, Rafael! Gostaria de garantir a condição de R$ 297 da landing page jurídica antes do término das 48h.')}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="bg-white text-emerald-900 hover:bg-slate-100 font-bold px-3 py-1 rounded-md text-[11px] transition-all shrink-0"
+                            className="bg-white text-emerald-950 hover:bg-slate-100 font-extrabold px-3 py-1 rounded-md text-[11px] transition-all shrink-0 shadow"
                         >
                             Garantir Vaga
                         </a>
@@ -280,69 +280,71 @@ export default function LegalSalesLandingPage() {
                 </div>
             </header>
 
-            {/* SEÇÃO 1: HERO MONUMENTAL */}
-            <section className="relative pt-12 pb-16 md:pt-20 md:pb-24 px-4 sm:px-6 max-w-6xl mx-auto">
-                <div className="text-center space-y-6 max-w-3xl mx-auto">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-[#bcf13b] border border-emerald-500/20">
-                        <Shield className="w-3.5 h-3.5" />
-                        <span>Conforme Provimento 205/2021 CFOAB</span>
-                    </div>
+            {/* CONTEÚDO PRINCIPAL (LANDMARK MAIN PARA ACESSIBILIDADE WCAG E LIGHTHOUSE) */}
+            <main id="main-content" role="main">
+                {/* SEÇÃO 1: HERO MONUMENTAL */}
+                <section className="relative pt-12 pb-16 md:pt-20 md:pb-24 px-4 sm:px-6 max-w-6xl mx-auto">
+                    <div className="text-center space-y-6 max-w-3xl mx-auto">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-700 dark:text-[#bcf13b] border border-emerald-500/20">
+                            <Shield className="w-3.5 h-3.5" />
+                            <span>Conforme Provimento 205/2021 CFOAB</span>
+                        </div>
 
-                    <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-950 dark:text-white leading-[1.15]">
-                        Criação de Site para Advogado com{' '}
-                        <span className="text-emerald-700 dark:text-[#bcf13b]">
-                            SEO e Alta Conversão
-                        </span>
-                    </h1>
+                        <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-950 dark:text-white leading-[1.15]">
+                            Criação de Site para Advogado com{' '}
+                            <span className="text-emerald-700 dark:text-[#bcf13b]">
+                                SEO e Alta Conversão
+                            </span>
+                        </h1>
 
-                    <p className="text-base sm:text-lg text-slate-600 dark:text-gray-300 leading-relaxed max-w-2xl mx-auto">
-                        Pare de perder clientes que procuram advogados na sua cidade e não encontram o seu escritório.
-                        Tenha uma <strong>Landing Page Jurídica completa</strong>, configurada com seu logotipo, suas fotos, suas áreas de atuação e botão direto para o seu WhatsApp oficial.
-                    </p>
+                        <p className="text-base sm:text-lg text-slate-700 dark:text-gray-200 leading-relaxed max-w-2xl mx-auto">
+                            Pare de perder clientes que procuram advogados na sua cidade e não encontram o seu escritório.
+                            Tenha uma <strong>Landing Page Jurídica completa</strong>, configurada com seu logotipo, suas fotos, suas áreas de atuação e botão direto para o seu WhatsApp oficial.
+                        </p>
 
-                    {/* Preço de Destaque no Hero */}
-                    <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <div className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] rounded-2xl p-4 shadow-sm inline-flex items-center gap-4">
-                            <div className="text-left">
-                                <span className="text-xs text-slate-400 line-through block">De R$ 450,00</span>
-                                <div className="text-2xl sm:text-3xl font-black text-emerald-600 dark:text-[#bcf13b]">
-                                    R$ 297,00
+                        {/* Preço de Destaque no Hero */}
+                        <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
+                            <div className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] rounded-2xl p-4 shadow-sm inline-flex items-center gap-4">
+                                <div className="text-left">
+                                    <span className="text-xs text-slate-500 dark:text-slate-400 line-through block font-medium">De R$ 450,00</span>
+                                    <div className="text-2xl sm:text-3xl font-black text-emerald-700 dark:text-[#bcf13b]">
+                                        R$ 297,00
+                                    </div>
+                                    <span className="text-[11px] text-slate-600 dark:text-slate-300 font-medium">
+                                        Taxa única de implementação (+ domínio)
+                                    </span>
                                 </div>
-                                <span className="text-[10px] text-slate-500 dark:text-gray-400">
-                                    Taxa única de implementação (+ domínio)
-                                </span>
-                            </div>
 
-                            <a
-                                href={createWhatsAppUrl('Olá, Rafael! Quero solicitar a criação do site do meu escritório de advocacia por R$ 297.')}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3.5 rounded-xl text-sm transition-all shadow-md flex items-center gap-2 group"
-                            >
-                                <WhatsAppIcon className="w-5 h-5 text-white" />
-                                <span>Quero Meu Site Pronto</span>
-                                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                            </a>
+                                <a
+                                    href={createWhatsAppUrl('Olá, Rafael! Quero solicitar a criação do site do meu escritório de advocacia por R$ 297.')}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3.5 rounded-xl text-sm transition-all shadow-md flex items-center gap-2 group"
+                                >
+                                    <WhatsAppIcon className="w-5 h-5 text-white" />
+                                    <span>Quero Meu Site Pronto</span>
+                                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                </a>
+                            </div>
+                        </div>
+
+                        {/* Benefícios Rápidos */}
+                        <div className="pt-4 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-700 dark:text-gray-300">
+                            <span className="flex items-center gap-1.5">
+                                <CheckCircle2 className="w-4 h-4 text-emerald-700 dark:text-[#bcf13b]" />
+                                Entrega rápida em 24h a 48h
+                            </span>
+                            <span className="flex items-center gap-1.5">
+                                <CheckCircle2 className="w-4 h-4 text-emerald-700 dark:text-[#bcf13b]" />
+                                100% responsivo para celulares
+                            </span>
+                            <span className="flex items-center gap-1.5">
+                                <CheckCircle2 className="w-4 h-4 text-emerald-700 dark:text-[#bcf13b]" />
+                                Sem mensalidade obrigatória
+                            </span>
                         </div>
                     </div>
-
-                    {/* Benefícios Rápidos */}
-                    <div className="pt-4 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-600 dark:text-gray-400">
-                        <span className="flex items-center gap-1.5">
-                            <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-[#bcf13b]" />
-                            Entrega rápida em 24h a 48h
-                        </span>
-                        <span className="flex items-center gap-1.5">
-                            <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-[#bcf13b]" />
-                            100% responsivo para celulares
-                        </span>
-                        <span className="flex items-center gap-1.5">
-                            <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-[#bcf13b]" />
-                            Sem mensalidade obrigatória
-                        </span>
-                    </div>
-                </div>
-            </section>
+                </section>
 
             {/* SEÇÃO 2: VITRINE DE MODELOS JURÍDICOS REAIS */}
             <section id="modelos" className="py-16 bg-white dark:bg-[#121210] border-y border-slate-200 dark:border-[#23231f]">
@@ -367,7 +369,7 @@ export default function LegalSalesLandingPage() {
                             >
                                 <div className="space-y-4">
                                     <div className="flex items-center justify-between">
-                                        <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300">
+                                        <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-950 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-800">
                                             {template.badge}
                                         </span>
                                         <div className="flex items-center gap-1 text-amber-500 text-xs">
@@ -380,7 +382,7 @@ export default function LegalSalesLandingPage() {
                                         {template.title}
                                     </h3>
 
-                                    <p className="text-xs text-slate-600 dark:text-gray-400 leading-relaxed">
+                                    <p className="text-xs text-slate-700 dark:text-gray-300 leading-relaxed">
                                         {template.desc}
                                     </p>
 
@@ -421,218 +423,219 @@ export default function LegalSalesLandingPage() {
                 </div>
             </section>
 
-            {/* SEÇÃO 3: PERSONALIZAÇÃO COMPLETA ("COM A CARA DO SEU ESCRITÓRIO") */}
-            <section className="py-16 max-w-6xl mx-auto px-4 sm:px-6">
-                <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
-                    <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-[#bcf13b]">
-                        Personalização Rigorosa
-                    </span>
-                    <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
-                        Deixamos o Site 100% com a Cara da Sua Banca
-                    </h2>
-                    <p className="text-sm text-slate-600 dark:text-gray-400">
-                        Você não recebe um modelo genérico. Adaptamos cada detalhe para transmitir a autoridade real da sua atuação.
-                    </p>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] p-5 rounded-2xl space-y-3">
-                        <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-[#bcf13b] flex items-center justify-center">
-                            <Palette className="w-5 h-5" />
-                        </div>
-                        <h4 className="font-bold text-sm text-slate-900 dark:text-white">Suas Cores & Logotipo</h4>
-                        <p className="text-xs text-slate-600 dark:text-gray-400 leading-relaxed">
-                            Ajustamos a identidade cromática: Vinho Nobre, Navy Profundo, Verde Esmeralda ou Dourado Real, alinhados com o seu logotipo oficial.
-                        </p>
-                    </div>
-
-                    <div className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] p-5 rounded-2xl space-y-3">
-                        <div className="w-10 h-10 rounded-xl bg-sky-500/10 text-sky-600 dark:text-sky-400 flex items-center justify-center">
-                            <Users className="w-5 h-5" />
-                        </div>
-                        <h4 className="font-bold text-sm text-slate-900 dark:text-white">Suas Fotos & Biografia</h4>
-                        <p className="text-xs text-slate-600 dark:text-gray-400 leading-relaxed">
-                            Inserimos sua foto profissional, histórico acadêmico, tempo de experiência e número de inscrição na OAB.
-                        </p>
-                    </div>
-
-                    <div className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] p-5 rounded-2xl space-y-3">
-                        <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
-                            <Search className="w-5 h-5" />
-                        </div>
-                        <h4 className="font-bold text-sm text-slate-900 dark:text-white">SEO & Google Maps</h4>
-                        <p className="text-xs text-slate-600 dark:text-gray-400 leading-relaxed">
-                            Otimização de palavras-chave para quem pesquisa por advogados na sua cidade e bairro encontre o seu contato em primeiro lugar.
-                        </p>
-                    </div>
-
-                    <div className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] p-5 rounded-2xl space-y-3">
-                        <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-[#bcf13b] flex items-center justify-center">
-                            <Smartphone className="w-5 h-5" />
-                        </div>
-                        <h4 className="font-bold text-sm text-slate-900 dark:text-white">WhatsApp de Atendimento</h4>
-                        <p className="text-xs text-slate-600 dark:text-gray-400 leading-relaxed">
-                            Botão flutuante e chamadas ao longo de toda a página direcionando contatos diretamente para a conversa privada do seu escritório.
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            {/* SEÇÃO 4: TABELA DE PREÇO TRANSPARENTE E ESCASSEZ */}
-            <section className="py-16 bg-slate-900 text-white relative overflow-hidden">
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
-                    <div className="text-center space-y-3 mb-10">
-                        <span className="text-xs font-mono font-bold tracking-widest uppercase text-emerald-400 bg-emerald-950/80 px-3 py-1 rounded-full border border-emerald-500/30">
-                            Condição Comercial Transparente
+                {/* SEÇÃO 3: PERSONALIZAÇÃO COMPLETA ("COM A CARA DO SEU ESCRITÓRIO") */}
+                <section className="py-16 max-w-6xl mx-auto px-4 sm:px-6">
+                    <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
+                        <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-[#bcf13b]">
+                            Personalização Rigorosa
                         </span>
-                        <h2 className="text-2xl sm:text-4xl font-extrabold text-white">
-                            Investimento Acessível sem Mensalidades Ocultas
+                        <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
+                            Deixamos o Site 100% com a Cara da Sua Banca
                         </h2>
-                        <p className="text-sm text-slate-300 max-w-xl mx-auto">
-                            Tudo o que seu escritório precisa para se posicionar com alto padrão visual e captar clientes sem surpresas no orçamento.
+                        <p className="text-sm text-slate-700 dark:text-gray-300">
+                            Você não recebe um modelo genérico. Adaptamos cada detalhe para transmitir a autoridade real da sua atuação.
                         </p>
                     </div>
 
-                    <div className="bg-slate-800/90 border-2 border-emerald-500/40 rounded-3xl p-6 sm:p-10 shadow-2xl relative">
-                        <div className="absolute top-0 right-6 -translate-y-1/2 bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-black text-xs px-4 py-1.5 rounded-full shadow-lg uppercase tracking-wider">
-                            Desconto de 34% : 48h
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] p-5 rounded-2xl space-y-3">
+                            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-700 dark:text-[#bcf13b] flex items-center justify-center">
+                                <Palette className="w-5 h-5" />
+                            </div>
+                            <h3 className="font-bold text-sm text-slate-900 dark:text-white">Suas Cores & Logotipo</h3>
+                            <p className="text-xs text-slate-700 dark:text-gray-300 leading-relaxed">
+                                Ajustamos a identidade cromática: Vinho Nobre, Navy Profundo, Verde Esmeralda ou Dourado Real, alinhados com o seu logotipo oficial.
+                            </p>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                            <div className="space-y-4">
-                                <div>
-                                    <span className="text-sm text-slate-400 line-through">De R$ 450,00</span>
-                                    <div className="flex items-baseline gap-2">
-                                        <span className="text-4xl sm:text-5xl font-black text-white">
-                                            R$ 297
-                                        </span>
-                                        <span className="text-xs text-slate-300 font-semibold">
-                                            taxa única de implementação
-                                        </span>
-                                    </div>
-                                    <p className="text-xs text-emerald-400 mt-1">
-                                        Ou em até 12x no cartão de crédito
-                                    </p>
-                                </div>
+                        <div className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] p-5 rounded-2xl space-y-3">
+                            <div className="w-10 h-10 rounded-xl bg-sky-500/10 text-sky-700 dark:text-sky-400 flex items-center justify-center">
+                                <Users className="w-5 h-5" />
+                            </div>
+                            <h3 className="font-bold text-sm text-slate-900 dark:text-white">Suas Fotos & Biografia</h3>
+                            <p className="text-xs text-slate-700 dark:text-gray-300 leading-relaxed">
+                                Inserimos sua foto profissional, histórico acadêmico, tempo de experiência e número de inscrição na OAB.
+                            </p>
+                        </div>
 
-                                <p className="text-xs text-slate-300 leading-relaxed">
-                                    + Domínio oficial registrado diretamente no seu CPF ou CNPJ (média de R$ 40 a R$ 60 ao ano no Registro.br, pago diretamente ao órgão gestor).
-                                </p>
+                        <div className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] p-5 rounded-2xl space-y-3">
+                            <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-700 dark:text-amber-400 flex items-center justify-center">
+                                <Search className="w-5 h-5" />
+                            </div>
+                            <h3 className="font-bold text-sm text-slate-900 dark:text-white">SEO & Google Maps</h3>
+                            <p className="text-xs text-slate-700 dark:text-gray-300 leading-relaxed">
+                                Otimização de palavras-chave para quem pesquisa por advogados na sua cidade e bairro encontre o seu contato em primeiro lugar.
+                            </p>
+                        </div>
 
-                                <div className="pt-2">
-                                    <a
-                                        href={createWhatsAppUrl('Olá, Rafael! Quero aproveitar a oferta de R$ 297 e colocar o site do meu escritório de advocacia no ar.')}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm transition-all shadow-lg group"
-                                    >
-                                        <WhatsAppIcon className="w-5 h-5 text-slate-950" />
-                                        <span>Contratar via WhatsApp</span>
-                                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                                    </a>
-                                </div>
+                        <div className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] p-5 rounded-2xl space-y-3">
+                            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-700 dark:text-[#bcf13b] flex items-center justify-center">
+                                <Smartphone className="w-5 h-5" />
+                            </div>
+                            <h3 className="font-bold text-sm text-slate-900 dark:text-white">WhatsApp de Atendimento</h3>
+                            <p className="text-xs text-slate-700 dark:text-gray-300 leading-relaxed">
+                                Botão flutuante e chamadas ao longo de toda a página direcionando contatos diretamente para a conversa privada do seu escritório.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                {/* SEÇÃO 4: TABELA DE PREÇO TRANSPARENTE E ESCASSEZ */}
+                <section className="py-16 bg-slate-900 text-white relative overflow-hidden">
+                    <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
+                        <div className="text-center space-y-3 mb-10">
+                            <span className="text-xs font-mono font-bold tracking-widest uppercase text-emerald-400 bg-emerald-950/80 px-3 py-1 rounded-full border border-emerald-500/30">
+                                Condição Comercial Transparente
+                            </span>
+                            <h2 className="text-2xl sm:text-4xl font-extrabold text-white">
+                                Investimento Acessível sem Mensalidades Ocultas
+                            </h2>
+                            <p className="text-sm text-slate-300 max-w-xl mx-auto">
+                                Tudo o que seu escritório precisa para se posicionar com alto padrão visual e captar clientes sem surpresas no orçamento.
+                            </p>
+                        </div>
+
+                        <div className="bg-slate-800/90 border-2 border-emerald-500/40 rounded-3xl p-6 sm:p-10 shadow-2xl relative">
+                            <div className="absolute top-0 right-6 -translate-y-1/2 bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-black text-xs px-4 py-1.5 rounded-full shadow-lg uppercase tracking-wider">
+                                Desconto de 34% : 48h
                             </div>
 
-                            <div className="space-y-3 bg-slate-900/60 p-6 rounded-2xl border border-slate-700/60">
-                                <h5 className="font-bold text-xs uppercase tracking-wider text-slate-300 mb-3">
-                                    Tudo o que está incluso no pacote:
-                                </h5>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                                <div className="space-y-4">
+                                    <div>
+                                        <span className="text-sm text-slate-300 line-through font-medium">De R$ 450,00</span>
+                                        <div className="flex items-baseline gap-2">
+                                            <span className="text-4xl sm:text-5xl font-black text-white">
+                                                R$ 297
+                                            </span>
+                                            <span className="text-xs text-slate-200 font-semibold">
+                                                taxa única de implementação
+                                            </span>
+                                        </div>
+                                        <p className="text-xs text-emerald-400 mt-1">
+                                            Ou em até 12x no cartão de crédito
+                                        </p>
+                                    </div>
 
-                                <div className="space-y-2 text-xs text-slate-200">
-                                    <div className="flex items-center gap-2">
-                                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                                        <span>Landing Page de 1 Página (Single Page de Alta Conversão)</span>
+                                    <p className="text-xs text-slate-300 leading-relaxed">
+                                        + Domínio oficial registrado diretamente no seu CPF ou CNPJ (média de R$ 40 a R$ 60 ao ano no Registro.br, pago diretamente ao órgão gestor).
+                                    </p>
+
+                                    <div className="pt-2">
+                                        <a
+                                            href={createWhatsAppUrl('Olá, Rafael! Quero aproveitar a oferta de R$ 297 e colocar o site do meu escritório de advocacia no ar.')}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm transition-all shadow-lg group"
+                                        >
+                                            <WhatsAppIcon className="w-5 h-5 text-slate-950" />
+                                            <span>Contratar via WhatsApp</span>
+                                            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                        </a>
                                     </div>
-                                    <div className="flex items-center gap-2">
-                                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                                        <span>Personalização com seu Logotipo, Fotos e Cores</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                                        <span>Conformidade estrita com o Provimento 205/2021 da OAB</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                                        <span>Configuração do Botão Oficial do WhatsApp</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                                        <span>Otimização técnica para o Google (SEO Local e Metatags)</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                                        <span>Hospedagem segura com Certificado SSL (Cadeado Verde)</span>
+                                </div>
+
+                                <div className="space-y-3 bg-slate-900/60 p-6 rounded-2xl border border-slate-700/60">
+                                    <h3 className="font-bold text-xs uppercase tracking-wider text-slate-200 mb-3">
+                                        Tudo o que está incluso no pacote:
+                                    </h3>
+
+                                    <div className="space-y-2 text-xs text-slate-200">
+                                        <div className="flex items-center gap-2">
+                                            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                                            <span>Landing Page de 1 Página (Single Page de Alta Conversão)</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                                            <span>Personalização com seu Logotipo, Fotos e Cores</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                                            <span>Conformidade estrita com o Provimento 205/2021 da OAB</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                                            <span>Configuração do Botão Oficial do WhatsApp</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                                            <span>Otimização técnica para o Google (SEO Local e Metatags)</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                                            <span>Hospedagem segura com Certificado SSL (Cadeado Verde)</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            {/* SEÇÃO 5: PERGUNTAS FREQUENTES (FAQ) */}
-            <section className="py-16 max-w-4xl mx-auto px-4 sm:px-6">
-                <div className="text-center space-y-3 mb-12">
-                    <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-[#bcf13b]">
-                        Tire Suas Dúvidas
-                    </span>
-                    <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
-                        Perguntas Frequentes
-                    </h2>
-                </div>
+                {/* SEÇÃO 5: PERGUNTAS FREQUENTES (FAQ) */}
+                <section className="py-16 max-w-4xl mx-auto px-4 sm:px-6">
+                    <div className="text-center space-y-3 mb-12">
+                        <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-[#bcf13b]">
+                            Tire Suas Dúvidas
+                        </span>
+                        <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
+                            Perguntas Frequentes
+                        </h2>
+                    </div>
 
-                <div className="space-y-3">
-                    {faqItems.map((item, idx) => {
-                        const isOpen = openFaq === idx;
-                        return (
-                            <div
-                                key={idx}
-                                className="border border-slate-200 dark:border-[#23231f] rounded-2xl overflow-hidden bg-white dark:bg-[#121210] transition-colors"
-                            >
-                                <button
-                                    type="button"
-                                    aria-expanded={isOpen}
-                                    onClick={() => setOpenFaq(isOpen ? null : idx)}
-                                    className="w-full p-5 text-left flex items-center justify-between gap-4 font-bold text-sm text-slate-900 dark:text-white hover:text-emerald-700 dark:hover:text-[#bcf13b] transition-colors"
+                    <div className="space-y-3">
+                        {faqItems.map((item, idx) => {
+                            const isOpen = openFaq === idx;
+                            return (
+                                <div
+                                    key={idx}
+                                    className="border border-slate-200 dark:border-[#23231f] rounded-2xl overflow-hidden bg-white dark:bg-[#121210] transition-colors"
                                 >
-                                    <span>{item.q}</span>
-                                    <ChevronDown
-                                        className={`w-4 h-4 text-muted-foreground shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-                                    />
-                                </button>
+                                    <button
+                                        type="button"
+                                        aria-expanded={isOpen}
+                                        onClick={() => setOpenFaq(isOpen ? null : idx)}
+                                        className="w-full p-5 text-left flex items-center justify-between gap-4 font-bold text-sm text-slate-900 dark:text-white hover:text-emerald-700 dark:hover:text-[#bcf13b] transition-colors"
+                                    >
+                                        <span>{item.q}</span>
+                                        <ChevronDown
+                                            className={`w-4 h-4 text-muted-foreground shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                                        />
+                                    </button>
 
-                                {isOpen && (
-                                    <div className="px-5 pb-5 text-xs text-slate-600 dark:text-gray-300 leading-relaxed border-t border-slate-100 dark:border-[#1d1d18] pt-3">
-                                        {item.a}
-                                    </div>
-                                )}
-                            </div>
-                        );
-                    })}
-                </div>
+                                    {isOpen && (
+                                        <div className="px-5 pb-5 text-xs text-slate-700 dark:text-gray-200 leading-relaxed border-t border-slate-100 dark:border-[#1d1d18] pt-3">
+                                            {item.a}
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
 
-                {/* CTA Final abaixo do FAQ */}
-                <div className="mt-12 text-center bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/40 p-8 rounded-3xl space-y-4">
-                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">
-                        Ainda ficou com alguma dúvida sobre a estrutura?
-                    </h3>
-                    <p className="text-xs text-slate-600 dark:text-gray-300 max-w-md mx-auto">
-                        Fale diretamente com o desenvolvedor responsável no WhatsApp. Demonstramos o layout na prática para o seu escritório.
-                    </p>
-                    <a
-                        href={createWhatsAppUrl('Olá, Rafael! Gostaria de tirar algumas dúvidas sobre a criação de site para advogados.')}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-all shadow-md"
-                    >
-                        <WhatsAppIcon className="w-4 h-4 text-white" />
-                        <span>Conversar no WhatsApp com Rafael</span>
-                    </a>
-                </div>
-            </section>
+                    {/* CTA Final abaixo do FAQ */}
+                    <div className="mt-12 text-center bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/40 p-8 rounded-3xl space-y-4">
+                        <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                            Ainda ficou com alguma dúvida sobre a estrutura?
+                        </h3>
+                        <p className="text-xs text-slate-700 dark:text-gray-300 max-w-md mx-auto">
+                            Fale diretamente com o desenvolvedor responsável no WhatsApp. Demonstramos o layout na prática para o seu escritório.
+                        </p>
+                        <a
+                            href={createWhatsAppUrl('Olá, Rafael! Gostaria de tirar algumas dúvidas sobre a criação de site para advogados.')}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-all shadow-md"
+                        >
+                            <WhatsAppIcon className="w-4 h-4 text-white" />
+                            <span>Conversar no WhatsApp com Rafael</span>
+                        </a>
+                    </div>
+                </section>
+            </main>
 
             {/* RODAPÉ INSTITUCIONAL */}
-            <footer className="border-t border-slate-200 dark:border-[#23231f] py-8 px-4 text-center text-xs text-slate-500 dark:text-gray-500">
+            <footer className="border-t border-slate-200 dark:border-[#23231f] py-8 px-4 text-center text-xs text-slate-600 dark:text-slate-400">
                 <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div>
                         <strong>Rafael Pita Solutions</strong> : Soluções Digitais & Inteligência Web

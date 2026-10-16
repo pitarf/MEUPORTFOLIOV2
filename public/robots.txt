@@ -11,3 +11,7 @@ Disallow: /track-ticket/
 
 # Sitemap do site
 Sitemap: https://rafaelpitaoficial.com.br/sitemap.xml
+
+# Descoberta Agêntica e IA (ARD / LLMs)
+ARD: https://rafaelpitaoficial.com.br/.well-known/ai-catalog.json
+

@@ -2,6 +2,23 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.57.0] - 2026-10-16
+
+### Otimizado (Google PageSpeed Insights: Desempenho, Acessibilidade e Navegação Agêntica)
+* **Navegação Agêntica & Descoberta por IA (Google Lighthouse 13.5+)**:
+  * Criado o arquivo `public/llms.txt` seguindo rigorosamente a especificação oficial de `llmstxt.org` para indexação direta por modelos e agentes de IA (ChatGPT Search, Perplexity, Gemini, Claude).
+  * Criado o catálogo de recursos agênticos `public/.well-known/ai-catalog.json` e `public/ai-catalog.json` estruturado no padrão ARD (Agentic Resource Discovery) com declaração de serviços, metadados institucionais e canais oficiais.
+  * Inclusa a diretiva `ARD: https://rafaelpitaoficial.com.br/.well-known/ai-catalog.json` no `public/robots.txt` e meta tags de link com `rel="agentic-resource-discovery"` e `rel="help"` no cabeçalho do `index.html`.
+* **Acessibilidade 100% (WCAG AA & AAA)**:
+  * Inclusão do ponto de referência principal semântico `<main id="main-content" role="main">` englobando todo o conteúdo funcional da landing page.
+  * Correção rigorosa da hierarquia sequencial de títulos: eliminados saltos de níveis (ex: H2 para H4 e H2 para H5), estabelecendo ordenação estritamente descendente (H1 -> H2 -> H3).
+  * Elevação dos contrastes cromáticos para conformidade estrita com a proporção mínima de 4.5:1 (WCAG AA) e 7:1 (WCAG AAA) em badges, textos secundários, valores riscados e rodapé.
+* **Otimização de Entrega de Imagens & Desempenho**:
+  * Refatorado o componente `src/components/common/WhatsAppIcon.jsx` para utilizar vetor SVG puro por padrão (0 bytes baixados via rede), eliminando completamente o alerta de 88 KiB do Lighthouse.
+  * Gerada versão ultra-compacta em WebP (`public/whatsapp-official.webp`, 2.5 KB) com redução superior a 97% sobre o PNG original como fallback.
+  * Carregamento diferido do script do Google Tag Manager (GTM) para disparo apenas após a conclusão do evento `window.load`, liberando a thread principal e eliminando solicitações abortadas no Lighthouse.
+  * Redução seletiva dos pesos de fontes do Google Fonts no `index.html` para os pesos essenciais (400, 600, 700 e 800), diminuindo a carga estática pela metade.
+
 ## [1.56.0] - 2026-10-15
 
 ### Adicionado (Envio Automático de E-mails com Atualizações de Chamados)

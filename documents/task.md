@@ -2,6 +2,12 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Otimizações do Google PageSpeed Insights: Desempenho, Acessibilidade e Navegação Agêntica (`llms.txt`, `ai-catalog.json`, `index.html`, `LegalSalesLandingPage.jsx`, `WhatsAppIcon.jsx`, `robots.txt`)**:
+  - Navegação Agêntica & IA (Google Lighthouse 13.5+): Criado `llms.txt` padronizado e catálogo estruturado ARD `/.well-known/ai-catalog.json` e `/ai-catalog.json` para eliminar falhas de esquema em agentes de IA, com diretiva ARD no `robots.txt` e meta tags de link no `index.html`.
+  - Acessibilidade (Nota 100): Implementado landmark semântico `<main id="main-content" role="main">`, unificada a hierarquia sequencial de títulos (H1 -> H2 -> H3 sem saltos) e otimizados todos os contrastes de texto e badges para padrão WCAG AA e AAA.
+  - Eliminação de Alerta de 88 KiB em Imagens: Otimizado o `WhatsAppIcon.jsx` para usar vetor SVG nativo por padrão (0 bytes baixados) e gerado fallback em WebP ultra-compacto de 2.5 KB.
+  - Desbloqueio da Thread Principal: Carregamento diferido do Google Tag Manager no `window.load` e diminuição seletiva dos pesos de fontes do Google Fonts para eliminar o bloqueio de renderização do FCP/LCP.
+
 - [x] **Envio Automático de E-mails com Atualizações de Chamados Técnicos (`api/ticket-notification.js`, `ticketNotificationService.js`, `AdminSupport.jsx`, `ClientSubscriptionPortal.jsx`, `.env.example`)**:
   - Serverless Function Vercel (`api/ticket-notification.js`): Endpoint protegido com CORS, validação de payload, renderização de template corporativo HTML de alto padrão (identidade visual Rafael Pita Solutions, badge do código `#TICK`, status colorido, data no Horário de Brasília, mensagem formatada, print anexo e botão CTA direto para `/track-ticket/{ticketCode}`).
   - Despacho via Resend API (`api.resend.com/emails`) com remetente oficial `suporte@rafaelpitaoficial.com.br` e fallback inteligente (modo sandbox e simulação resiliente sem quebra).

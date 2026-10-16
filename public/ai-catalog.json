@@ -1,0 +1,32 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "Rafael Pita Solutions",
+    "identifier": "https://rafaelpitaoficial.com.br",
+    "documentationUrl": "https://rafaelpitaoficial.com.br/llms.txt",
+    "logoUrl": "https://rafaelpitaoficial.com.br/favicon.svg"
+  },
+  "entries": [
+    {
+      "identifier": "urn:ai:rafaelpitaoficial.com.br:service:legal-landing-page",
+      "displayName": "Criacao de Site para Advogado",
+      "type": "text/html",
+      "url": "https://rafaelpitaoficial.com.br/criacao-site-advogado",
+      "description": "Desenvolvimento e configuracao de landing pages para advogados com SEO avancado, integracao direta com WhatsApp e conformidade OAB."
+    },
+    {
+      "identifier": "urn:ai:rafaelpitaoficial.com.br:service:legal-templates",
+      "displayName": "Modelos de Sites Juridicos",
+      "type": "text/html",
+      "url": "https://rafaelpitaoficial.com.br/sites-para-advogados",
+      "description": "Demonstracoes interativas de landing pages para advogados nas areas Trabalhista, Familia, Consumidor e Geral."
+    },
+    {
+      "identifier": "urn:ai:rafaelpitaoficial.com.br:portfolio:projects",
+      "displayName": "Portfolio de Projetos Web",
+      "type": "text/html",
+      "url": "https://rafaelpitaoficial.com.br/portfolio",
+      "description": "Catalogo de sistemas web modernos, dashboards e engenharia de software desenvolvidos por Rafael Pita."
+    }
+  ]
+}
