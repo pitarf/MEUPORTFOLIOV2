@@ -959,6 +959,30 @@ Agora você e seus clientes podem anexar capturas de tela e prints diretamente n
    * **Na Descrição Original**: Um marcador de relógio indica a data e hora originais registradas na criação.
    * **No Histórico de Atualizações**: Cada nota enviada possui um cabeçalho cinza destacado informando `Nota de Acompanhamento` e a data e hora exatas da mensagem no Horário Oficial de Brasília (UTC-3).
 
+### 19.40 Notificações Automáticas por E-mail em Chamados de Suporte
+
+Para que seus clientes acompanhem cada passo do atendimento sem precisar ficar cobrando você no WhatsApp ou acessando o sistema a todo momento:
+
+1. **Aviso Automático a Cada Nova Nota ou Resolução**:
+   * Sempre que você responder a um chamado no painel administrativo (`/admin/support`) adicionando uma nota explicativa ou um print, o sistema envia automaticamente um e-mail corporativo de alta elegância diretamente para a caixa de entrada do cliente.
+
+2. **Como Funciona no Painel Administrativo**:
+   * Ao abrir a modal de qualquer chamado, você verá a caixa de seleção **"Notificar cliente por e-mail"**.
+   * Se o cliente cadastrou um e-mail ao abrir o chamado, a opção já vem marcada por padrão com um selo verde *"Envio automático ativo"*.
+   * Caso você queira registrar uma anotação estritamente interna (que o cliente não deve ler), basta desmarcar a caixa antes de clicar em "Enviar".
+
+3. **Aviso Automático ao Mudar o Status do Chamado**:
+   * Ao mover o chamado de *"Aberto"* para *"Em Andamento"* ou *"Concluído"*, o cliente recebe um e-mail avisando que o status da solicitação dele evoluiu, transmitindo máxima seriedade e transparência.
+
+4. **O que o Cliente Recebe no E-mail**:
+   * Um e-mail com layout corporativo executivo com o logotipo e selos de garantia de Rafael Pita Solutions.
+   * O código do chamado (ex: `#TICK-2026-0001`), o assunto original e o status atualizado.
+   * A mensagem completa que você escreveu, formatada com destaque.
+   * O print anexado (se houver), permitindo que ele clique para ver em tamanho ampliado.
+   * Um botão de destaque **"Acompanhar Chamado em Tempo Real"** que abre a página pública de rastreamento do chamado sem exigir senha.
+   * Link direto para o seu WhatsApp caso ele precise de um esclarecimento rápido.
+
+
 
 
 

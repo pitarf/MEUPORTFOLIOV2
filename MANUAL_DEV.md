@@ -858,3 +858,31 @@ Para permitir comunicação visual ágil entre o suporte e os clientes:
    - Cada nota do "Histórico de Atualizações" apresenta a data e a hora exatas de envio no cabeçalho da mensagem.
    - A página pública de rastreamento (`TrackTicket.jsx`) e o portal do cliente (`ClientSubscriptionPortal.jsx`) utilizam o mesmo formatador unificado.
 
+### 13.39 Sistema de Notificações por E-mail em Chamados Técnicos
+
+Para garantir comunicação em tempo real e transparência total com o cliente durante o ciclo de vida do chamado técnico:
+
+1. **Serverless Function Vercel (`api/ticket-notification.js`)**:
+   - Endpoint corporativo assíncrono projetado para operar na infraestrutura Vercel com suporte completo a CORS e validação estrita de e-mail e código do chamado (`#TICK`).
+   - Mantém as chaves de API 100% protegidas no backend (`process.env.RESEND_API_KEY`), sem nenhuma exposição no bundle frontend.
+   - Renderiza template HTML responsivo corporativo de alto luxo:
+     - Identidade visual Rafael Pita Solutions com cabeçalho escuro `#0a0a08` e detalhe verde neon `#bcf13b`.
+     - Badge do protocolo do chamado e chip colorido indicando status atual (`Aberto`, `Em Andamento`, `Concluído`, `Cancelado`).
+     - Saudação personalizada e sumário técnico com fuso oficial de Brasília (`America/Sao_Paulo`).
+     - Caixa de destaque para a nota técnica com preservação de quebras de linha.
+     - Cartão com miniatura e link de ampliação para prints anexos.
+     - Botão de ação primária (CTA) direcionando para `https://rafaelpitaoficial.com.br/track-ticket/{ticketCode}`.
+     - Canal direto com o suporte via WhatsApp com mensagem pré-formatada.
+   - Integração com a Resend REST API (`https://api.resend.com/emails`) com remetente configurável via `EMAIL_FROM` e fallback gracioso com remetente sandbox ou simulação detalhada sem quebra em ambiente de desenvolvimento.
+
+2. **Serviço de Notificações no Frontend (`src/services/ticketNotificationService.js`)**:
+   - Função `notifyClientTicketUpdate`: Despacha payload estruturado para `/api/ticket-notification` de forma assíncrona.
+   - Arquitetura desacoplada e fail-safe: falhas temporárias de conexão externa nunca bloqueiam nem cancelam operações locais de inserção no banco de dados.
+   - Função `canNotifyTicketClient`: Avalia com segurança se o objeto do chamado possui e-mail cadastrado e válido.
+
+3. **Integração no Painel Administrativo (`src/pages/AdminSupport.jsx`)**:
+   - Disparo automático na adição de notas técnicas (`handleAddNote`).
+   - Disparo automático na atualização de status (`handleUpdateTicket`), informando a transição de estado do chamado para o cliente.
+   - Checkbox com estado reativo `notifyClientByEmail` permitindo ao admin desmarcar o envio caso queira inserir uma nota exclusivamente interna.
+   - Indicador visual dinâmico com ícone de e-mail e status ativo/inativo dependendo da presença de e-mail no chamado.
+

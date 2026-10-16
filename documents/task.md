@@ -2,6 +2,15 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Envio Automático de E-mails com Atualizações de Chamados Técnicos (`api/ticket-notification.js`, `ticketNotificationService.js`, `AdminSupport.jsx`, `ClientSubscriptionPortal.jsx`, `.env.example`)**:
+  - Serverless Function Vercel (`api/ticket-notification.js`): Endpoint protegido com CORS, validação de payload, renderização de template corporativo HTML de alto padrão (identidade visual Rafael Pita Solutions, badge do código `#TICK`, status colorido, data no Horário de Brasília, mensagem formatada, print anexo e botão CTA direto para `/track-ticket/{ticketCode}`).
+  - Despacho via Resend API (`api.resend.com/emails`) com remetente oficial `suporte@rafaelpitaoficial.com.br` e fallback inteligente (modo sandbox e simulação resiliente sem quebra).
+  - Serviço Frontend (`ticketNotificationService.js`): Função desacoplada `notifyClientTicketUpdate` com proteção contra falhas de rede e utilitário `canNotifyTicketClient`.
+  - Painel Administrativo (`AdminSupport.jsx`): Disparo automático ao adicionar notas ou alterar o status do chamado (Aberto, Em Andamento, Concluído, Cancelado), com checkbox de controle ("Notificar cliente por e-mail"), indicador de e-mail ativo e feedback visual via Toast.
+  - Portal do Assinante (`ClientSubscriptionPortal.jsx`): Notificação inicial de confirmação de protocolo enviada por e-mail ao cliente logo após a abertura do chamado.
+  - Variáveis de ambiente devidamente documentadas em `.env.example` (`RESEND_API_KEY` e `EMAIL_FROM`) sem expor dados sensíveis.
+  - Validação completa com testes de requisição, compilação de produção aprovada com louvor e ausência total de travessões.
+
 - [x] **Opção Completa de Anexar Prints em Chamados Técnicos & Notas (`AdminSupport.jsx`, `ticketAttachmentService.js`, `ImageLightboxModal.jsx`, `TrackTicket.jsx`, `ClientSubscriptionPortal.jsx`)**:
   - Banco de Dados PostgreSQL na VPS Oracle (`portfolio_db`): Criadas as colunas `attachment_url` (text) e `attachments` (jsonb) nas tabelas `support_tickets` e `ticket_updates` com permissões concedidas para `anon`, `authenticated` e `authenticator`.
   - Serviço de Anexos (`ticketAttachmentService.js`): Upload para o Firebase Storage em `tickets-attachments/`, compressão inteligente para WebP (88% de qualidade) e extração de imagens copiadas da área de transferência (`extractImageFromClipboard`) via evento de paste.

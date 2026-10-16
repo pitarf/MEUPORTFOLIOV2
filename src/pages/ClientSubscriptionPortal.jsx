@@ -61,6 +61,7 @@ import {
     updateClientProfile,
     ensureInvoicePix
 } from '@/services/maintenanceService';
+import { notifyClientTicketUpdate } from '@/services/ticketNotificationService';
 import {
     formatCurrencyBRL,
     formatDateBR,
@@ -360,6 +361,14 @@ const ClientSubscriptionPortal = () => {
                 title: 'Chamado aberto com sucesso!',
                 description: `Protocolo registrado: ${newTicket.ticket_code}. Nossa equipe responderá em breve.`
             });
+
+            // Dispara notificacao inicial por e-mail para o cliente com link de acompanhamento
+            notifyClientTicketUpdate({
+                ticket: newTicket,
+                note: `Seu chamado foi registrado com sucesso em nosso sistema com prioridade ${newTicket.priority || 'normal'}. Nossa equipe técnica já foi notificada e qualquer atualização será enviada diretamente para o seu e-mail.`,
+                attachmentUrl: uploadedAttachmentUrl,
+                status: 'aberto'
+            }).catch(e => console.warn('Aviso: envio de e-mail de abertura em background falhou:', e));
 
             // Adiciona o novo chamado a lista local
             setPortalData((prev) => ({

@@ -1,51 +1,59 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Toaster } from '@/components/ui/toaster';
 
-import Home from '@/pages/Home';
-import About from '@/pages/About';
-import Services from '@/pages/Services';
-import Portfolio from '@/pages/Portfolio';
-import ClientArea from '@/pages/ClientArea';
-import Subscriptions from '@/pages/Subscriptions';
-import Reviews from '@/pages/Reviews';
-import Contact from '@/pages/Contact';
-import PhotographyLanding from '@/pages/PhotographyLanding';
-import ProjectPage from '@/pages/ProjectPage';
+// Componentes estruturais e utilitários mantidos no bundle base para renderização ágil
 import ScrollToTop from '@/components/ScrollToTop';
 import SEO from '@/components/SEO';
-import ServiceDetailPage from '@/pages/ServiceDetailPage';
 import GTMRouteTracker from '@/components/GTMRouteTracker';
-
 import ProtectedRoute from '@/components/ProtectedRoute';
-import Dashboard from '@/pages/Dashboard';
-import ManagePortfolio from '@/pages/ManagePortfolio';
-import AdminSubmissions from '@/pages/AdminSubmissions';
-import ManageReviews from '@/pages/ManageReviews';
-import Support from '@/pages/Support';
-import TrackTicket from '@/pages/TrackTicket';
-import ClientProjectTrack from '@/pages/ClientProjectTrack';
-import AdminSupport from '@/pages/AdminSupport';
-import ManageServices from '@/pages/ManageServices';
-import ManageLandingPage from '@/pages/admin/ManageLandingPage';
-import ManageGeneralSettings from '@/pages/admin/ManageGeneralSettings';
-import PhotographyPortfolio from '@/pages/PhotographyPortfolio';
-import Profile from '@/pages/Profile';
-import StorageOptimization from '@/pages/StorageOptimization';
-import ManageBudgets from '@/pages/admin/ManageBudgets';
-import ManageMaintenanceSubscriptions from '@/pages/admin/ManageMaintenanceSubscriptions';
-import ClientSubscriptionPortal from '@/pages/ClientSubscriptionPortal';
-import ManageLegalProspects from '@/pages/admin/ManageLegalProspects';
-import RadarGoogleMaps from '@/pages/admin/RadarGoogleMaps';
-import LegalLandingPage from '@/pages/legal/LegalLandingPage';
-import LegalSalesLandingPage from '@/pages/legal/LegalSalesLandingPage';
 import MainLayout from '@/components/MainLayout';
 import AdminLayout from '@/components/AdminLayout';
 
 import { SiteConfigProvider } from '@/contexts/SiteConfigContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { LanguageProvider } from '@/contexts/LanguageContext';
+
+// Divisão de código com React.lazy: cada rota pública ou administrativa carrega apenas seu próprio chunk
+const Home = lazy(() => import('@/pages/Home'));
+const About = lazy(() => import('@/pages/About'));
+const Services = lazy(() => import('@/pages/Services'));
+const Portfolio = lazy(() => import('@/pages/Portfolio'));
+const ClientArea = lazy(() => import('@/pages/ClientArea'));
+const Subscriptions = lazy(() => import('@/pages/Subscriptions'));
+const Reviews = lazy(() => import('@/pages/Reviews'));
+const Contact = lazy(() => import('@/pages/Contact'));
+const PhotographyLanding = lazy(() => import('@/pages/PhotographyLanding'));
+const ProjectPage = lazy(() => import('@/pages/ProjectPage'));
+const ServiceDetailPage = lazy(() => import('@/pages/ServiceDetailPage'));
+
+// Páginas de suporte e área do cliente
+const Support = lazy(() => import('@/pages/Support'));
+const TrackTicket = lazy(() => import('@/pages/TrackTicket'));
+const ClientProjectTrack = lazy(() => import('@/pages/ClientProjectTrack'));
+const ClientSubscriptionPortal = lazy(() => import('@/pages/ClientSubscriptionPortal'));
+
+// Landing pages jurídicas e prospecção
+const LegalLandingPage = lazy(() => import('@/pages/legal/LegalLandingPage'));
+const LegalSalesLandingPage = lazy(() => import('@/pages/legal/LegalSalesLandingPage'));
+const RadarGoogleMaps = lazy(() => import('@/pages/admin/RadarGoogleMaps'));
+
+// Painel administrativo sob demanda (não sobrecarrega o carregamento para visitantes públicos)
+const Dashboard = lazy(() => import('@/pages/Dashboard'));
+const ManagePortfolio = lazy(() => import('@/pages/ManagePortfolio'));
+const AdminSubmissions = lazy(() => import('@/pages/AdminSubmissions'));
+const ManageReviews = lazy(() => import('@/pages/ManageReviews'));
+const AdminSupport = lazy(() => import('@/pages/AdminSupport'));
+const ManageServices = lazy(() => import('@/pages/ManageServices'));
+const ManageLandingPage = lazy(() => import('@/pages/admin/ManageLandingPage'));
+const ManageGeneralSettings = lazy(() => import('@/pages/admin/ManageGeneralSettings'));
+const PhotographyPortfolio = lazy(() => import('@/pages/PhotographyPortfolio'));
+const Profile = lazy(() => import('@/pages/Profile'));
+const StorageOptimization = lazy(() => import('@/pages/StorageOptimization'));
+const ManageBudgets = lazy(() => import('@/pages/admin/ManageBudgets'));
+const ManageMaintenanceSubscriptions = lazy(() => import('@/pages/admin/ManageMaintenanceSubscriptions'));
+const ManageLegalProspects = lazy(() => import('@/pages/admin/ManageLegalProspects'));
 
 /**
  * Componente principal da aplicação MeuPortfolio v2 / Rafael Pita Solutions
@@ -65,70 +73,72 @@ function App() {
                     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
                         <SEO />
 
-                        <Routes>
-                            {/* Rotas Públicas - Envolvidas com o MainLayout */}
-                            <Route element={<MainLayout />}>
-                                <Route path="/" element={isPhotoSubdomain ? <PhotographyLanding /> : <Home />} />
-                                <Route path="/sobre" element={<About />} />
-                                <Route path="/servicos" element={<Services />} />
-                                <Route path="/criacao-de-sites" element={<ServiceDetailPage serviceSlug="criacao-de-sites" />} />
-                                <Route path="/landing-pages" element={<ServiceDetailPage serviceSlug="landing-pages" />} />
-                                <Route path="/desenvolvimento-de-sistemas" element={<ServiceDetailPage serviceSlug="desenvolvimento-de-sistemas" />} />
-                                <Route path="/automacoes" element={<ServiceDetailPage serviceSlug="automacoes" />} />
-                                <Route path="/dashboards-power-bi" element={<ServiceDetailPage serviceSlug="dashboards-power-bi" />} />
-                                <Route path="/fotografia-eventos" element={<ServiceDetailPage serviceSlug="fotografia-eventos" />} />
-                                <Route path="/fotografia-corporativa" element={<ServiceDetailPage serviceSlug="fotografia-corporativa" />} />
-                                <Route path="/portfolio" element={<Portfolio />} />
-                                <Route path="/portfolio/:categorySlug/:projectSlug" element={<ProjectPage />} />
-                                <Route path="/area-clientes" element={<ClientArea />} />
-                                <Route path="/assinaturas" element={<Subscriptions />} />
-                                <Route path="/minha-assinatura" element={<ClientSubscriptionPortal />} />
-                                <Route path="/area-cliente-assinaturas" element={<ClientSubscriptionPortal />} />
-                                <Route path="/portfolio-fotografia" element={<PhotographyLanding />} />
-                                <Route path="/portfolio-fotografia/galeria" element={<PhotographyPortfolio />} />
-                                {isPhotoSubdomain && <Route path="/galeria" element={<PhotographyPortfolio />} />}
-                                <Route path="/avaliacoes" element={<Reviews />} />
-                                <Route path="/contato" element={<Contact />} />
-                                <Route path="/support" element={<Support />} />
-                                <Route path="/track-ticket" element={<TrackTicket />} />
-                                <Route path="/track-ticket/:ticketCode" element={<TrackTicket />} />
-                                <Route path="/projeto" element={<ClientProjectTrack />} />
-                                <Route path="/projeto/:budgetCode" element={<ClientProjectTrack />} />
-                                <Route path="/acompanhar-projeto/:budgetCode" element={<ClientProjectTrack />} />
-                            </Route>
+                        <Suspense fallback={<div className="min-h-screen bg-background" />}>
+                            <Routes>
+                                {/* Rotas Públicas - Envolvidas com o MainLayout */}
+                                <Route element={<MainLayout />}>
+                                    <Route path="/" element={isPhotoSubdomain ? <PhotographyLanding /> : <Home />} />
+                                    <Route path="/sobre" element={<About />} />
+                                    <Route path="/servicos" element={<Services />} />
+                                    <Route path="/criacao-de-sites" element={<ServiceDetailPage serviceSlug="criacao-de-sites" />} />
+                                    <Route path="/landing-pages" element={<ServiceDetailPage serviceSlug="landing-pages" />} />
+                                    <Route path="/desenvolvimento-de-sistemas" element={<ServiceDetailPage serviceSlug="desenvolvimento-de-sistemas" />} />
+                                    <Route path="/automacoes" element={<ServiceDetailPage serviceSlug="automacoes" />} />
+                                    <Route path="/dashboards-power-bi" element={<ServiceDetailPage serviceSlug="dashboards-power-bi" />} />
+                                    <Route path="/fotografia-eventos" element={<ServiceDetailPage serviceSlug="fotografia-eventos" />} />
+                                    <Route path="/fotografia-corporativa" element={<ServiceDetailPage serviceSlug="fotografia-corporativa" />} />
+                                    <Route path="/portfolio" element={<Portfolio />} />
+                                    <Route path="/portfolio/:categorySlug/:projectSlug" element={<ProjectPage />} />
+                                    <Route path="/area-clientes" element={<ClientArea />} />
+                                    <Route path="/assinaturas" element={<Subscriptions />} />
+                                    <Route path="/minha-assinatura" element={<ClientSubscriptionPortal />} />
+                                    <Route path="/area-cliente-assinaturas" element={<ClientSubscriptionPortal />} />
+                                    <Route path="/portfolio-fotografia" element={<PhotographyLanding />} />
+                                    <Route path="/portfolio-fotografia/galeria" element={<PhotographyPortfolio />} />
+                                    {isPhotoSubdomain && <Route path="/galeria" element={<PhotographyPortfolio />} />}
+                                    <Route path="/avaliacoes" element={<Reviews />} />
+                                    <Route path="/contato" element={<Contact />} />
+                                    <Route path="/support" element={<Support />} />
+                                    <Route path="/track-ticket" element={<TrackTicket />} />
+                                    <Route path="/track-ticket/:ticketCode" element={<TrackTicket />} />
+                                    <Route path="/projeto" element={<ClientProjectTrack />} />
+                                    <Route path="/projeto/:budgetCode" element={<ClientProjectTrack />} />
+                                    <Route path="/acompanhar-projeto/:budgetCode" element={<ClientProjectTrack />} />
+                                </Route>
 
-                            {/* Rotas Especiais de Demonstração & Landing Pages de Advocacia (Layout Dedicado Próprio) */}
-                            <Route path="/advocacia" element={<LegalLandingPage />} />
-                            <Route path="/advocacia/:slug" element={<LegalLandingPage />} />
-                            <Route path="/adv/:slug" element={<LegalLandingPage />} />
-                            <Route path="/modelo-advocacia/:niche" element={<LegalLandingPage />} />
+                                {/* Rotas Especiais de Demonstração & Landing Pages de Advocacia (Layout Dedicado Próprio) */}
+                                <Route path="/advocacia" element={<LegalLandingPage />} />
+                                <Route path="/advocacia/:slug" element={<LegalLandingPage />} />
+                                <Route path="/adv/:slug" element={<LegalLandingPage />} />
+                                <Route path="/modelo-advocacia/:niche" element={<LegalLandingPage />} />
 
-                            {/* Nova Landing Page de Vendas de Criação de Sites para Advogados */}
-                            <Route path="/criacao-site-advogado" element={<LegalSalesLandingPage />} />
-                            <Route path="/sites-para-advogados" element={<LegalSalesLandingPage />} />
-                            
-                            {/* Acesso Direto ao Radar Google Maps de Prospecção */}
-                            <Route path="/radar-google-maps" element={<RadarGoogleMaps />} />
-                            <Route path="/clientes/radar-maps" element={<RadarGoogleMaps />} />
+                                {/* Nova Landing Page de Vendas de Criação de Sites para Advogados */}
+                                <Route path="/criacao-site-advogado" element={<LegalSalesLandingPage />} />
+                                <Route path="/sites-para-advogados" element={<LegalSalesLandingPage />} />
+                                
+                                {/* Acesso Direto ao Radar Google Maps de Prospecção */}
+                                <Route path="/radar-google-maps" element={<RadarGoogleMaps />} />
+                                <Route path="/clientes/radar-maps" element={<RadarGoogleMaps />} />
 
-                            {/* Rotas Administrativas - Protegidas por Autenticação JWT do Supabase */}
-                            <Route element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
-                                <Route path="/dashboard" element={<Dashboard />} />
-                                <Route path="/admin/profile" element={<Profile />} />
-                                <Route path="/admin/orcamentos" element={<ProtectedRoute adminOnly={true}><ManageBudgets /></ProtectedRoute>} />
-                                <Route path="/admin/assinaturas" element={<ProtectedRoute adminOnly={true}><ManageMaintenanceSubscriptions /></ProtectedRoute>} />
-                                <Route path="/admin/radar-google-maps" element={<ProtectedRoute adminOnly={true}><RadarGoogleMaps /></ProtectedRoute>} />
-                                <Route path="/admin/prospeccao-advogados" element={<ProtectedRoute adminOnly={true}><ManageLegalProspects /></ProtectedRoute>} />
-                                <Route path="/admin/portfolio" element={<ProtectedRoute adminOnly={true}><ManagePortfolio /></ProtectedRoute>} />
-                                <Route path="/admin/submissions" element={<ProtectedRoute adminOnly={true}><AdminSubmissions /></ProtectedRoute>} />
-                                <Route path="/admin/reviews" element={<ProtectedRoute adminOnly={true}><ManageReviews /></ProtectedRoute>} />
-                                <Route path="/admin/support" element={<ProtectedRoute adminOnly={true}><AdminSupport /></ProtectedRoute>} />
-                                <Route path="/admin/services" element={<ProtectedRoute adminOnly={true}><ManageServices /></ProtectedRoute>} />
-                                <Route path="/admin/storage" element={<ProtectedRoute adminOnly={true}><StorageOptimization /></ProtectedRoute>} />
-                                <Route path="/admin/landing-page" element={<ProtectedRoute adminOnly={true}><ManageLandingPage /></ProtectedRoute>} />
-                                <Route path="/admin/settings" element={<ProtectedRoute adminOnly={true}><ManageGeneralSettings /></ProtectedRoute>} />
-                            </Route>
-                        </Routes>
+                                {/* Rotas Administrativas - Protegidas por Autenticação JWT do Supabase */}
+                                <Route element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
+                                    <Route path="/dashboard" element={<Dashboard />} />
+                                    <Route path="/admin/profile" element={<Profile />} />
+                                    <Route path="/admin/orcamentos" element={<ProtectedRoute adminOnly={true}><ManageBudgets /></ProtectedRoute>} />
+                                    <Route path="/admin/assinaturas" element={<ProtectedRoute adminOnly={true}><ManageMaintenanceSubscriptions /></ProtectedRoute>} />
+                                    <Route path="/admin/radar-google-maps" element={<ProtectedRoute adminOnly={true}><RadarGoogleMaps /></ProtectedRoute>} />
+                                    <Route path="/admin/prospeccao-advogados" element={<ProtectedRoute adminOnly={true}><ManageLegalProspects /></ProtectedRoute>} />
+                                    <Route path="/admin/portfolio" element={<ProtectedRoute adminOnly={true}><ManagePortfolio /></ProtectedRoute>} />
+                                    <Route path="/admin/submissions" element={<ProtectedRoute adminOnly={true}><AdminSubmissions /></ProtectedRoute>} />
+                                    <Route path="/admin/reviews" element={<ProtectedRoute adminOnly={true}><ManageReviews /></ProtectedRoute>} />
+                                    <Route path="/admin/support" element={<ProtectedRoute adminOnly={true}><AdminSupport /></ProtectedRoute>} />
+                                    <Route path="/admin/services" element={<ProtectedRoute adminOnly={true}><ManageServices /></ProtectedRoute>} />
+                                    <Route path="/admin/storage" element={<ProtectedRoute adminOnly={true}><StorageOptimization /></ProtectedRoute>} />
+                                    <Route path="/admin/landing-page" element={<ProtectedRoute adminOnly={true}><ManageLandingPage /></ProtectedRoute>} />
+                                    <Route path="/admin/settings" element={<ProtectedRoute adminOnly={true}><ManageGeneralSettings /></ProtectedRoute>} />
+                                </Route>
+                            </Routes>
+                        </Suspense>
                         <Toaster />
                     </div>
                 </Router>

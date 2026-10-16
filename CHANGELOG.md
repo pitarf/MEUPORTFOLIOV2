@@ -2,6 +2,26 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.56.0] - 2026-10-15
+
+### Adicionado (Envio Automático de E-mails com Atualizações de Chamados)
+* **Serverless Function de Alta Performance (`api/ticket-notification.js`)**:
+  * Implementado endpoint serverless para despacho de e-mails transacionais de chamados na Vercel com proteção total de credenciais e chaves de API.
+  * Renderização de template corporativo responsivo de alto padrão com identidade visual Rafael Pita Solutions, fuso oficial de Brasília (`America/Sao_Paulo`), badge `#TICK`, caixas de resumo de status/prioridade, mensagem destacada, preview do print anexo e botão CTA direto para acompanhamento online (`/track-ticket/{ticketCode}`).
+  * Integração nativa com a Resend REST API via `fetch` global (remetente `suporte@rafaelpitaoficial.com.br`) e fallback gracioso inteligente para testes locais e modo sandbox.
+* **Serviço de Despacho no Frontend (`src/services/ticketNotificationService.js`)**:
+  * Desenvolvida a função `notifyClientTicketUpdate` desacoplada e assíncrona, garantindo que inconsistências externas de rede ou e-mail nunca interrompam nem bloqueiem a gravação de dados locais.
+  * Utilitário `canNotifyTicketClient` para validação de integridade de e-mail do cliente.
+* **Painel Administrativo de Suporte (`src/pages/AdminSupport.jsx`)**:
+  * Integração automática de envio de e-mail ao adicionar notas técnicas com texto e/ou prints anexos.
+  * Envio automático de e-mail informativo ao alterar o status do chamado (ex: de "aberto" para "em andamento" ou "concluído").
+  * Caixa de seleção (`Checkbox`) com rótulo "Notificar cliente por e-mail", pré-selecionada por padrão caso o chamado possua e-mail cadastrado, e badge indicativo "Envio automático ativo".
+  * Feedback visual específico no Toast informando o status do despacho ao admin.
+* **Portal do Assinante (`src/pages/ClientSubscriptionPortal.jsx`)**:
+  * Disparo automático de e-mail de confirmação de abertura do chamado com o número de protocolo e link de acompanhamento.
+* **Configuração de Variáveis de Ambiente (`.env.example`)**:
+  * Inclusão documentada das variáveis `RESEND_API_KEY` e `EMAIL_FROM` sem exposição de credenciais confidenciais.
+
 ## [1.55.0] - 2026-10-15
 
 ### Adicionado (Opção Completa de Anexar Prints em Chamados Técnicos & Notas)

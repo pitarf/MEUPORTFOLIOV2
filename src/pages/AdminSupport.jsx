@@ -9,8 +9,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose, DialogDescription } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Loader2, Filter, X, Send, Clock, Trash2, Archive, Edit, Paperclip, Image as ImageIcon, ZoomIn, Calendar, User, ShieldCheck } from 'lucide-react';
+import { Loader2, Filter, X, Send, Clock, Trash2, Archive, Edit, Paperclip, Image as ImageIcon, ZoomIn, Calendar, User, ShieldCheck, Mail, CheckCircle2 } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
 import { uploadTicketAttachment, extractImageFromClipboard } from '@/services/ticketAttachmentService';
+import { notifyClientTicketUpdate, canNotifyTicketClient } from '@/services/ticketNotificationService';
 import ImageLightboxModal from '@/components/common/ImageLightboxModal';
 import { formatDateTimeBR } from '@/utils/maintenanceFormatters';
 import {
@@ -33,6 +35,7 @@ const AdminSupport = () => {
     const [selectedTicket, setSelectedTicket] = useState(null);
     const [newNote, setNewNote] = useState('');
     const [isSubmittingNote, setIsSubmittingNote] = useState(false);
+    const [notifyClientByEmail, setNotifyClientByEmail] = useState(true);
     const [attachedImage, setAttachedImage] = useState(null);
     const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
     const [lightboxImage, setLightboxImage] = useState(null);
@@ -100,6 +103,10 @@ const AdminSupport = () => {
     };
 
     const handleUpdateTicket = async (ticketId, updateData) => {
+        const targetTicket = selectedTicket?.id === ticketId
+            ? selectedTicket
+            : tickets.find(t => t.id === ticketId);
+
         const { error } = await supabase.from('support_tickets').update(updateData).eq('id', ticketId);
         if (error) {
             toast({
@@ -108,7 +115,21 @@ const AdminSupport = () => {
                 description: error.message || 'Não foi possível salvar as alterações no chamado.'
             });
         } else {
-            toast({ title: 'Chamado atualizado com sucesso!' });
+            let emailNotice = '';
+            // Se o status foi alterado e o cliente possui e-mail, envia notificacao automatica
+            if (updateData.status && targetTicket && canNotifyTicketClient(targetTicket) && targetTicket.status !== updateData.status) {
+                const notifyResult = await notifyClientTicketUpdate({
+                    ticket: { ...targetTicket, ...updateData },
+                    note: `O status do seu chamado foi alterado de "${targetTicket.status || 'aberto'}" para "${updateData.status.toUpperCase()}".`,
+                    status: updateData.status,
+                    priority: updateData.priority || targetTicket.priority
+                });
+                if (notifyResult.success && !notifyResult.simulated) {
+                    emailNotice = ' : E-mail de aviso enviado ao cliente';
+                }
+            }
+
+            toast({ title: `Chamado atualizado com sucesso!${emailNotice}` });
             if (selectedTicket?.id === ticketId) {
                 setSelectedTicket(prev => ({ ...prev, ...updateData }));
             }
@@ -209,9 +230,28 @@ const AdminSupport = () => {
                     description: error.message || 'Não foi possível registrar a nota no chamado.'
                 });
             } else {
+                let emailFeedback = '';
+                if (notifyClientByEmail && canNotifyTicketClient(selectedTicket)) {
+                    const notifyResult = await notifyClientTicketUpdate({
+                        ticket: selectedTicket,
+                        note: notePayload.note,
+                        attachmentUrl: uploadedAttachmentUrl,
+                        status: selectedTicket.status,
+                        priority: selectedTicket.priority
+                    });
+
+                    if (notifyResult.success) {
+                        emailFeedback = notifyResult.simulated
+                            ? ' (Notificação processada em modo simulação)'
+                            : ' (E-mail enviado ao cliente)';
+                    } else {
+                        emailFeedback = ' (Aviso: não foi possível despachar o e-mail)';
+                    }
+                }
+
                 toast({
                     title: 'Nota registrada!',
-                    description: attachedImage ? 'Nota e print anexado com sucesso.' : 'Nota adicionada com sucesso.'
+                    description: (attachedImage ? 'Nota e print anexado com sucesso.' : 'Nota adicionada com sucesso.') + emailFeedback
                 });
                 setSelectedTicket(prev => ({
                     ...prev,
@@ -410,6 +450,30 @@ const AdminSupport = () => {
                                         <span className="text-[11px] text-muted-foreground hidden sm:inline">
                                             Dica: você pode colar um print diretamente com <kbd className="px-1 py-0.5 rounded bg-muted text-[10px] border border-border">Ctrl+V</kbd>
                                         </span>
+                                    </div>
+
+                                    {/* Opcao de Notificacao por E-mail */}
+                                    <div className="flex flex-wrap items-center justify-between gap-2 p-2 rounded-lg bg-muted/40 border border-border/50">
+                                        <div className="flex items-center space-x-2">
+                                            <Checkbox
+                                                id="notify-client-email"
+                                                checked={notifyClientByEmail && canNotifyTicketClient(selectedTicket)}
+                                                disabled={!canNotifyTicketClient(selectedTicket)}
+                                                onCheckedChange={(checked) => setNotifyClientByEmail(Boolean(checked))}
+                                            />
+                                            <label
+                                                htmlFor="notify-client-email"
+                                                className={`text-xs font-medium cursor-pointer flex items-center gap-1.5 ${canNotifyTicketClient(selectedTicket) ? 'text-foreground' : 'text-muted-foreground opacity-60'}`}
+                                            >
+                                                <Mail className="w-3.5 h-3.5 text-blue-500" />
+                                                <span>Notificar cliente por e-mail ({selectedTicket.client_email || selectedTicket.email || 'sem e-mail cadastrado'})</span>
+                                            </label>
+                                        </div>
+                                        {canNotifyTicketClient(selectedTicket) && (
+                                            <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
+                                                <CheckCircle2 className="w-3.5 h-3.5" /> Envio automático ativo
+                                            </span>
+                                        )}
                                     </div>
 
                                     {/* Preview da imagem anexada */}

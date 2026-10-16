@@ -56,6 +56,19 @@ export default defineConfig(({ mode }) => {
             port: 3001,
         },
         assetsInclude: ['**/*.JPG'],
+        build: {
+            rollupOptions: {
+                output: {
+                    manualChunks: {
+                        'vendor-react': ['react', 'react-dom', 'react-router-dom', 'react-helmet-async'],
+                        'vendor-framer': ['framer-motion'],
+                        'vendor-supabase': ['@supabase/supabase-js'],
+                        'vendor-icons': ['lucide-react']
+                    }
+                }
+            },
+            chunkSizeWarningLimit: 900
+        }
     };
 });
 
