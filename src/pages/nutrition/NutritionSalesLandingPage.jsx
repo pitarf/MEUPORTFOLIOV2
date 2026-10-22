@@ -116,6 +116,15 @@ export default function NutritionSalesLandingPage() {
       focus: 'Hipertrofia, composicao corporal e rendimento atletico',
       url: '/nutricionista/dr-lucas-mendes-nutricao-esportiva',
       accentColor: 'from-[#557A61] to-[#1e3c2f]'
+    },
+    {
+      id: 'nutrivida',
+      title: 'Modelo NutriVida : Clinica & Emagrecimento',
+      professional: 'Dra. Beatriz Lima (CRN-4)',
+      city: 'Rio de Janeiro, RJ (Barra da Tijuca)',
+      focus: 'Emagrecimento saudavel, nutricao esportiva e clinica com formulario direto',
+      url: '/nutrivida',
+      accentColor: 'from-[#0284C7] to-[#0C4A6E]'
     }
   ];
 

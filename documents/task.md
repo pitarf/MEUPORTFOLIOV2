@@ -2,6 +2,38 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Design System Moderno & Página Integradora de Nutrição : Referência NutriVida (`src/data/nutritionistsData.js`, `src/pages/nutrition/ModernNutritionPage.jsx`, `src/components/nutrition/modern/`, `src/App.jsx`)**:
+  - Camada de Dados Parametrizada (`src/data/nutritionistsData.js`):
+    - Novo perfil temático `dra-beatriz-lima-nutrivida` com aliases `nutrivida` e `dra-beatriz-lima`.
+    - Paleta azul médica: `#0284C7` (primária), `#0EA5E9` (secundária), `#0C4A6E` (azul marinho profundo), `#F0F9FF` (fundo suave) e `#1E293B` (texto).
+    - 4 Serviços mapeados: Emagrecimento Saudável, Nutrição Esportiva, Reeducação Alimentar e Nutrição Clínica.
+    - 5 Objetivos para o formulário Hero: 'Emagrecimento Saudável', 'Ganho de Massa Muscular', 'Reeducação Alimentar', 'Melhora de Exames / Saúde' e 'Nutrição na Gestação'.
+  - Página Dedicada & Alternador de Modelos (`src/pages/nutrition/ModernNutritionPage.jsx`):
+    - Integração completa dos 7 componentes modulares de `src/components/nutrition/modern/`.
+    - Suporte a parâmetros de URL e simulador de prospecção manual em tempo real (`NutritionProspectDrawer`).
+    - Barra flutuante superior com alternador visual imediato entre os modelos "NutriVida (Azul)" e "Editorial (Verde)", presente em ambas as páginas (`NutritionistPage.jsx` e `ModernNutritionPage.jsx`).
+  - Novas Rotas Registradas em `src/App.jsx` & SEO:
+    - Rotas criadas: `/nutrivida`, `/nutrivida/:slug`, `/modelo-nutricao/nutrivida` e `/modelo-nutricao/editorial`.
+    - Vitrine de vendas atualizada com o modelo NutriVida em `NutritionSalesLandingPage.jsx`.
+    - Sitemap atualizado via `tools/generate-sitemap.js` adicionando as rotas da NutriVida.
+  - Componentes modulares criados em `src/components/nutrition/modern/`:
+    - `ModernNutritionHero.jsx`: Proposta de valor com 3 micro-benefícios, foto recortada de jaleco branco e card com formulário de agendamento rápido integrado ao WhatsApp.
+    - `ModernNutritionServicesGrid.jsx`: 4 cards horizontais limpos com ícones circulares e setas de transição.
+    - `ModernNutritionBenefitsBar.jsx`: Faixa sólida em azul marinho com 4 facilidades operacionais.
+    - `ModernNutritionHowItWorks.jsx`: Composição dividida com prato saudável e 3 etapas didáticas.
+    - `ModernNutritionAbout.jsx`: Apresentação institucional com selo de CRN, checklist de métodos e card de 5 diferenciais.
+    - `ModernNutritionDarkLocation.jsx`: Seção escura em azul marinho com endereço, mapa Google Maps embed e horários.
+    - `ModernNutritionCtaBanner.jsx`: Banner panorâmico degradê azul com imagem de prato saudável e botões de ação.
+    - `index.js`: Ponto único de exportação dos novos componentes.
+  - Zero caracteres de travessão, responsividade mobile-first completa e compilação de produção 100% validada.
+
+- [x] **Cadastro do Projeto de IA: O Nascimento da Moda & Player Interativo do YouTube (`projects`, `ProjectPage.jsx`, `sitemap.xml`)**:
+  - Projeto cadastrado no banco Supabase na categoria "Produção com IA" (ID 5) com slug `o-nascimento-da-moda-animacao-ia`.
+  - Implementado player embutido do YouTube nativo no topo da página de detalhes do projeto (`ProjectPage.jsx`), permitindo reproduzir o curta de 5 minutos diretamente sem sair do portfólio.
+  - Alternador de mídia ("Assistir Vídeo / Curta Completo" vs "Ver Imagem de Capa") e botão direto para o YouTube oficial na barra lateral.
+  - Sitemap atualizado totalizando 60 projetos dinâmicos indexados.
+  - Zero caracteres de travessão e compilação de produção 100% aprovada.
+
 - [x] **Plataforma Parametrizada de Landing Pages para Nutricionistas & Captação Ativa (`nutritionistsData.js`, `src/components/nutrition/`, `NutritionistPage.jsx`, `NutritionSalesLandingPage.jsx`, `NutritionProspectDrawer.jsx`, `sitemap.xml`)**:
   - Arquitetura Reutilizável: Criado repositório de dados parametrizados `src/data/nutritionistsData.js` com modelos demonstrativos (Dra. Camila Rocha no RJ e Dr. Lucas Mendes em SP), isolando conteúdos e permitindo criar novas páginas sem editar código.
   - Maleabilidade Total por Parâmetros de URL: Suporte completo a sobreposição via `?nome=...&whatsapp=...&cidade=...&crn=...&endereco=...&titulo=...`, permitindo que qualquer link de nutricionista do Google Maps seja criado instantaneamente.

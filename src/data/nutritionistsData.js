@@ -336,16 +336,215 @@ export const nutritionistsDatabase = {
             primaryText: 'Agendar consulta esportiva',
             secondaryText: 'Falar no WhatsApp'
         }
+    },
+
+    // 3. Nutricionista Modelo : Clinica & Emagrecimento Saudavel (Estilo NutriVida)
+    'dra-beatriz-lima-nutrivida': {
+        id: 'dra-beatriz-lima-nutrivida',
+        slug: 'dra-beatriz-lima-nutrivida',
+        isDemonstrative: true,
+        niche: 'clinica-emagrecimento',
+        templateVariant: 'modern',
+        brandName: 'NutriVida',
+        professional: {
+            name: 'Dra. Beatriz Lima',
+            displayName: 'Beatriz Lima',
+            title: 'Nutricionista Clinica & Emagrecimento Saudavel',
+            crn: 'CRN-4 98765 (Demonstrativo)',
+            avatarInitials: 'BL',
+            shortBio: 'Especialista em Nutricao Clinica e Emagrecimento Saudavel, com mais de 7 anos transformando a saude e a qualidade de vida de pacientes atraves de planos alimentares reais e sustentaveis.',
+            fullBio: 'Acredito em uma nutricao preventiva e humanizada, onde cada plano alimentar e desenhado sob medida para se adaptar a sua rotina real, sem proibicoes extremas ou dietas da moda. Com embasamento cientifico e acompanhamento continuo, construimos habitos duradouros que geram disposicao, exames laboratoriais equilibrados e conquista do peso desejado com saude.',
+            photo: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=800&q=80',
+            secondaryPhoto: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=80',
+            logo: null,
+            academicBackground: [
+                'Graduacao em Nutricao pela Universidade Federal do Estado do Rio de Janeiro (UNIRIO)',
+                'Pos-Graduacao em Nutricao Clinica e Terapia Nutricional',
+                'Certificacao em Prescricao Fitoterapica e Suplementacao Clinica',
+                'Membro da Associacao Brasileira de Nutricao (ASBRAN)'
+            ]
+        },
+        location: {
+            city: 'Rio de Janeiro',
+            state: 'RJ',
+            neighborhood: 'Barra da Tijuca',
+            address: 'Av. Ayrton Senna, 3000, Bloco 2, Sala 415',
+            zipCode: '22775-904',
+            reference: 'Proximo ao Shopping Metropolitano Barra',
+            serviceMode: ['presencial', 'online'],
+            onlineScope: 'Atendimento online para todo o Brasil e pacientes no exterior via plataforma digital criptografada.',
+            hours: 'Segunda a Sexta: 08h00 as 19h00 | Sabados: 08h00 as 12h00',
+            mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3672.483938459419!2d-43.3642421!3d-22.9876251!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9bda4a8d052a6d%3A0x897914e68e4a1a3!2sAv.+Ayrton+Senna%2C+3000+-+Barra+da+Tijuca%2C+Rio+de+Janeiro+-+RJ!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr'
+        },
+        contact: {
+            phone: '(21) 96614-9077',
+            whatsapp: '5521966149077',
+            email: 'contato@nutrividabeatrizlima.com.br',
+            bookingUrl: 'https://wa.me/5521966149077?text=Ola%2C%20Dra.%20Beatriz!%20Gostaria%20de%20agendar%20uma%20consulta%20nutricional.',
+            initialWhatsappMessage: 'Ola! Acessei o site NutriVida e gostaria de mais informacoes para agendar uma consulta nutricional com a Dra. Beatriz Lima.'
+        },
+        seo: {
+            title: 'Dra. Beatriz Lima : Nutricionista no Rio de Janeiro : NutriVida',
+            description: 'Plano alimentar personalizado para emagrecimento saudavel, nutricao esportiva e clinica no Rio de Janeiro e online. Agende sua consulta com a Dra. Beatriz Lima.',
+            keywords: 'nutricionista rio de janeiro, nutricionista barra da tijuca, emagrecimento saudavel rj, nutricao clinica rj, nutricao esportiva rj, nutrivida',
+            canonicalUrl: 'https://rafaelpitaoficial.com.br/nutricionista/dra-beatriz-lima-nutrivida',
+            indexable: true,
+            ogImage: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=1200&h=630&q=85'
+        },
+        theme: {
+            primary: '#0284C7',
+            secondary: '#0EA5E9',
+            background: '#F0F9FF',
+            surface: '#FFFFFF',
+            text: '#1E293B',
+            accent: '#0C4A6E',
+            navyDark: '#0C4A6E',
+            skyLight: '#E0F2FE'
+        },
+        hero: {
+            badge: 'NUTRICIONISTA NO RIO DE JANEIRO',
+            title: 'Mais saude para a sua rotina, com um plano alimentar real e personalizado.',
+            subtitle: 'Um acompanhamento nutricional humanizado, focado na sua saude e bem-estar, com plano individualizado e apoio constante para transformar seus habitos sem radicalismos.',
+            primaryCtaText: 'Agendar consulta',
+            secondaryCtaText: 'Conversar pelo WhatsApp',
+            formTitle: 'Agende sua consulta',
+            formSubtitle: 'Preencha os campos abaixo para iniciar seu atendimento:'
+        },
+        heroObjectives: [
+            'Emagrecimento Saudavel',
+            'Ganho de Massa Muscular',
+            'Reeducacao Alimentar',
+            'Melhora de Exames / Saude',
+            'Nutricao na Gestacao'
+        ],
+        heroBenefits: [
+            { text: 'Atendimento presencial e online em plataforma segura' },
+            { text: 'Planos personalizados para seus objetivos' },
+            { text: 'Acompanhamento continuo e humanizado' }
+        ],
+        trustElements: [
+            { label: 'Registro Profissional', value: 'CRN-4 Ativo' },
+            { label: 'Modalidade', value: 'Presencial e Online' },
+            { label: 'Localizacao', value: 'Barra da Tijuca, RJ' },
+            { label: 'Abordagem', value: 'Individualizada e Baseada em Evidencias' }
+        ],
+        benefitsBar: [
+            { title: 'Horarios flexiveis', desc: 'Consultas com flexibilidade de agendas pela manha, tarde e noite.' },
+            { title: 'Pagamento facilitado', desc: 'Diversas formas de pagamento: PIX, cartao ou recibo para reembolso.' },
+            { title: 'Atendimento online', desc: 'Consultas no conforto da sua casa para todo o Brasil e exterior.' },
+            { title: 'Consultorio local', desc: 'Ambiente acolhedor e facil acesso na Barra da Tijuca, Rio de Janeiro.' }
+        ],
+        services: [
+            {
+                id: 'emagrecimento',
+                name: 'Emagrecimento Saudavel',
+                description: 'Estrategias nutricionais com deficit calorico equilibrado, preservando sua massa magra e sem o temido efeito sanfona.',
+                target: 'Adultos que desejam alcancar seu peso ideal com saude, disposicao e sem dietas restritivas.',
+                mode: 'Presencial ou Online',
+                ctaText: 'Quero Emagrecer'
+            },
+            {
+                id: 'esportiva',
+                name: 'Nutricao Esportiva',
+                description: 'Planejamento de macronutrientes, hidratacao e suplementacao sincronizados com a periodizacao dos seus treinos.',
+                target: 'Praticantes de musculacao, corrida, ciclismo, crossfit e esportes de resistencia.',
+                mode: 'Presencial ou Online',
+                ctaText: 'Otimizar Meus Treinos'
+            },
+            {
+                id: 'reeducacao',
+                name: 'Reeducacao Alimentar',
+                description: 'Aprenda a fazer escolhas conscientes, interpretar rotulos e comer de tudo com equilibrio e liberdade nas situacoes sociais.',
+                target: 'Pessoas que buscam melhorar a relacao com a comida e criar uma rotina leve e sustentavel.',
+                mode: 'Presencial ou Online',
+                ctaText: 'Mudar Meus Habitos'
+            },
+            {
+                id: 'clinica',
+                name: 'Nutricao Clinica',
+                description: 'Manejo nutricional focado no equilibrio metabolico, glicemia, saude cardiovascular, digestiva e melhora de exames laboratoriais.',
+                target: 'Para quem busca prevenir ou tratar condicoes cronicas atraves de uma alimentacao balanceada.',
+                mode: 'Presencial ou Online',
+                ctaText: 'Equilibrar Minha Saude'
+            }
+        ],
+        howItWorks: [
+            {
+                step: '01',
+                title: 'Entre em contato',
+                description: 'Mande uma mensagem pelo WhatsApp ou preencha o formulario para tirar suas primeiras duvidas.'
+            },
+            {
+                step: '02',
+                title: 'Agende sua consulta',
+                description: 'Escolha o melhor dia e horario para o atendimento presencial no consultorio ou por videochamada.'
+            },
+            {
+                step: '03',
+                title: 'Inicie seu plano',
+                description: 'Receba seu planejamento nutricional individualizado e conte com suporte continuo para alcancar suas metas.'
+            }
+        ],
+        differentials: [
+            {
+                title: 'Atendimento Humanizado',
+                description: 'Escuta atenta, empatica e acolhedora, sem cobrancas irreais ou pesagens constrangedoras.'
+            },
+            {
+                title: 'Plano 100% Personalizado',
+                description: 'Cada refeicao e pensada para se ajustar a sua rotina real de horarios e preferencias.'
+            },
+            {
+                title: 'Suporte Continuo no WhatsApp',
+                description: 'Canal direto para tirar duvidas sobre compras no mercado e substituicoes do cardapio.'
+            },
+            {
+                title: 'Nutricao Baseada em Evidencias',
+                description: 'Condutas cientificas comprovadas internacionalmente, sem dietas da moda ou promessas irreais.'
+            },
+            {
+                title: 'Praticidade nas Refeicoes',
+                description: 'Receitas simples e orientacoes praticas com alimentos acessiveis do seu dia a dia.'
+            }
+        ],
+        testimonials: [],
+        faq: [
+            {
+                q: 'Como funciona a primeira consulta com a Dra. Beatriz Lima?',
+                a: 'Na primeira consulta realizamos uma anamnese clinica completa, avaliando seu historico de saude, rotina de trabalho, preferencias alimentares e exames laboratoriais para construir um plano viavel e exclusivo.'
+            },
+            {
+                q: 'Como funciona o atendimento online?',
+                a: 'O atendimento online acontece por videoconferencia segura. Analisamos seus habitos com o mesmo rigor do presencial e voce recebe seu plano alimentar detalhado diretamente no aplicativo ou celular.'
+            },
+            {
+                q: 'Em quanto tempo recebo meu plano alimentar?',
+                a: 'Seu plano nutricional e elaborado com total exclusividade e enviado em ate 48 horas uteis apos a consulta, incluindo lista de compras e sugestoes de substituicoes.'
+            },
+            {
+                q: 'Terei suporte para tirar duvidas entre as consultas?',
+                a: 'Sim! Voce tem canal direto pelo WhatsApp para enviar duvidas sobre marcas, fotos de pratos ou adaptacoes na rotina sempre que precisar.'
+            }
+        ],
+        finalCta: {
+            title: 'Vamos cuidar da sua saude juntos?',
+            description: 'De o primeiro passo para transformar sua alimentacao de forma leve, saudavel e sustentavel. Agende sua consulta hoje mesmo.',
+            primaryText: 'Agendar minha consulta',
+            secondaryText: 'Falar pelo WhatsApp'
+        }
     }
 };
 
 /**
  * Recupera os dados de um nutricionista a partir do slug
- * @param {string} slug - Identificador amigável da URL
- * @returns {object} Dados completos do profissional ou o profissional padrão
+ * @param {string} slug - Identificador amigavel da URL
+ * @returns {object} Dados completos do profissional ou o profissional padrao
  */
 export function getNutritionistBySlug(slug) {
     if (!slug) return nutritionistsDatabase['dra-camila-rocha-rio-de-janeiro'];
+    if (slug === 'nutrivida' || slug === 'dra-beatriz-lima' || slug === 'beatriz-lima') {
+        return nutritionistsDatabase['dra-beatriz-lima-nutrivida'];
+    }
     return nutritionistsDatabase[slug] || nutritionistsDatabase['dra-camila-rocha-rio-de-janeiro'];
 }
 
@@ -358,8 +557,8 @@ export function getAllNutritionists() {
 }
 
 /**
- * Retorna o perfil demonstrativo padrão
- * @returns {object} Perfil padrão
+ * Retorna o perfil demonstrativo padrao
+ * @returns {object} Perfil padrao
  */
 export function getDefaultNutritionist() {
     return nutritionistsDatabase['dra-camila-rocha-rio-de-janeiro'];

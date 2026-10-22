@@ -1017,6 +1017,25 @@ Agora você conta com um nicho comercial completo e de altíssima demanda para p
    * Para cadastrar um novo cliente parceiro, basta adicionar um novo bloco no array com o nome, cidade, CRN, telefone de WhatsApp, serviços e fotos.
    * A nova landing page do cliente ficará instantaneamente no ar na rota `/nutricionista/slug-do-cliente`, com SEO local, mapa e botões personalizados sem precisar programar nada do zero.
 
+### 19.43 Novo Modelo Visual Moderno para Nutricionistas (Referência NutriVida)
+
+Para oferecer uma opção visual ainda mais conectada às tendências de saúde privada e estética médica moderna, foi criado o conjunto de componentes **NutriVida** em `src/components/nutrition/modern/`:
+
+1. **Card Embutido de Agendamento Imediato no Topo**:
+   * O paciente pode preencher seu nome, WhatsApp com DDD e selecionar seu objetivo principal (Emagrecimento, Performance Esportiva, Reeducação Alimentar ou Saúde/Exames) logo na primeira dobra do site.
+   * Ao clicar em "Enviar mensagem", o sistema abre o WhatsApp da nutricionista com a mensagem montada, reduzindo o atrito e aumentando a taxa de agendamentos.
+
+2. **Apresentação em 4 Especialidades Horizontais**:
+   * Grade limpa com os 4 pilares mais procurados por pacientes, com ícones temáticos intuitivos e setas de direcionamento.
+
+3. **Faixa de Benefícios e Facilidades Operacionais**:
+   * Faixa de alto destaque em azul marinho com ícones em ciano evidenciando horários flexíveis, pagamentos no Pix/cartão, atendimento online para todo o Brasil e endereço do consultório.
+
+4. **Etapas de Consulta e Autoridade Profissional**:
+   * Explicação didática de como funciona a consulta em 3 etapas com prato saudável ilustrado.
+   * Seção sobre a nutricionista com validação do CRN, selos de acolhimento e mapa interativo do Google Maps.
+
+
 
 
 

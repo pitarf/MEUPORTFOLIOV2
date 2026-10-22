@@ -2,7 +2,52 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
-## [1.58.0] - 2026-10-22
+## [1.60.0] - 2026-10-22
+
+### Adicionado (Design System Moderno & Página Integradora de Nutrição : Referência NutriVida)
+* **Novo Perfil de Dados em `src/data/nutritionistsData.js`**:
+  * Adicionado perfil temático demonstrativo NutriVida (`dra-beatriz-lima-nutrivida` com aliases `nutrivida` e `dra-beatriz-lima`).
+  * Paleta azul médica: Primária `#0284C7`, Secundária `#0EA5E9`, Marinho Profundo `#0C4A6E`, Fundo Suave `#F0F9FF`.
+  * Serviços mapeados: Emagrecimento Saudável, Nutrição Esportiva, Reeducação Alimentar e Nutrição Clínica.
+  * Objetivos para o formulário Hero: 'Emagrecimento Saudável', 'Ganho de Massa Muscular', 'Reeducação Alimentar', 'Melhora de Exames / Saúde' e 'Nutrição na Gestação'.
+* **Nova Página Dedicada & Alternador de Modelo (`src/pages/nutrition/ModernNutritionPage.jsx`)**:
+  * Integrados os 7 componentes visuais de `src/components/nutrition/modern/`.
+  * Suporte nativo a parâmetros de URL (`?nome=...&whatsapp=...&cidade=...`) e customizador manual de prospecção (`NutritionProspectDrawer`).
+  * Barra superior com alternador de modelos visuais entre NutriVida (Azul) e Editorial (Verde).
+* **Novas Rotas Registradas em `src/App.jsx` & Sitemap**:
+  * Rotas adicionadas: `/nutrivida`, `/nutrivida/:slug`, `/modelo-nutricao/nutrivida` e `/modelo-nutricao/editorial`.
+  * Atualizada a vitrine de demonstrações da página de vendas (`NutritionSalesLandingPage.jsx`) com card do modelo NutriVida.
+  * Inclusão de `/nutrivida` e `/nutricionista/dra-beatriz-lima-nutrivida` no sitemap dinâmico (`tools/generate-sitemap.js`).
+* **Novo Conjunto Modular de Componentes em `src/components/nutrition/modern/`**:
+  * `ModernNutritionHero.jsx`: Seção hero com distribuição tripartite (proposta de valor com 3 micro-benefícios à esquerda, foto profissional da nutricionista em jaleco ao centro e card embutido de agendamento rápido com redirecionamento formatado ao WhatsApp à direita).
+  * `ModernNutritionServicesGrid.jsx`: Grade horizontal com 4 cards limpos (Emagrecimento Saudável, Nutrição Esportiva, Reeducação Alimentar e Nutrição Clínica) com ícones temáticos, descrições concisas e setas interativas.
+  * `ModernNutritionBenefitsBar.jsx`: Faixa de alto impacto em azul marinho (#0C4A6E) com 4 facilidades operacionais (Horários flexíveis, Pagamento facilitado, Atendimento online e Consultório local).
+  * `ModernNutritionHowItWorks.jsx`: Composição dividida com prato saudável e selo flutuante "Plano alimentar 100% personalizado" à esquerda, e 3 etapas didáticas conectadas à direita.
+  * `ModernNutritionAbout.jsx`: Apresentação institucional com foto e selo profissional de CRN, checklist com ticks azuis, botão "Conheça minha história" e card destacado de 5 diferenciais de acolhimento.
+  * `ModernNutritionDarkLocation.jsx`: Seção imersiva em azul marinho profundo (#0C4A6E) com card de endereço físico, mapa do Google Maps embed centralizado e card de horários com botão de agendamento.
+  * `ModernNutritionCtaBanner.jsx`: Banner panorâmico azul degradê com foto de prato saudável, chamada convidativa "Vamos cuidar da sua saúde juntos?" e botões duplos de conversão.
+  * `index.js`: Ponto central de exportação dos novos componentes modernos de nutrição.
+* **Padrões de Qualidade e Conformidade**:
+  * Ausência total de caracteres de travessão.
+  * 100% responsivo (mobile-first), com comentários em todas as funções e compilação de produção aprovada com êxito.
+
+## [1.59.0] - 2026-10-22
+
+### Adicionado (Novo Projeto de IA: O Nascimento da Moda & Player Nativo do YouTube)
+* **Novo Projeto de Produção com IA no Portfólio**:
+  * Cadastrado o projeto *"O Nascimento da Moda : Curta Educacional Animado com IA Generativa"* (`/portfolio/videos-com-ia/o-nascimento-da-moda-animacao-ia`).
+  * Cliente: Universidade Federal do Piauí (UFPI) : Curso de Graduação em Moda.
+  * Stack documentada: Google Flow (Image-to-Video & Text-to-Video), Microsoft Azure Neural Speech (TTS Multimodal pt-BR), Google Speech Recognition (VAD & Alinhamento Semântico), Python 3.10, FFmpeg, NumPy e RapidFuzz.
+  * Detalhamento completo do Desafio, Solução e Resultados métricos alcançados.
+* **Player Nativo do YouTube no Topo da Página de Projetos (`src/pages/ProjectPage.jsx`)**:
+  * Integrado player em 16:9 (`aspect-video`) widescreen no topo da página de projetos para reprodução imediata do curta em Full HD.
+  * Botões de alternância fluida entre *"Assistir Vídeo / Curta Completo"* e *"Ver Imagem de Capa"*.
+  * Botão de ação direta na barra lateral atualizado dinamicamente para *"Assistir no YouTube Oficial"*.
+  * Galeria de vídeos inferior adaptada com layout cinematográfico centralizado (`max-w-4xl mx-auto`) para exibições de vídeo único.
+* **Sitemap Dinâmico Atualizado**:
+  * Executado `tools/generate-sitemap.js`, totalizando 60 projetos dinâmicos indexados em `public/sitemap.xml`.
+
+
 
 ### Adicionado (Plataforma Parametrizada de Landing Pages para Nutricionistas & Captação Comercial)
 * **Arquitetura Reutilizável e Parametrizada por Dados (`src/data/nutritionistsData.js`)**:

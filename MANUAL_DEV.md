@@ -939,5 +939,26 @@ Desenvolvida para viabilizar a expansao comercial em parceria com nutricionistas
    - Disponivel nas rotas publicas `/criacao-site-nutricionista` e `/sites-para-nutricionistas`.
    - Estrutura completa de conversao comercial: proposta de valor de R$ 297 a vista (ou 12x de R$ 29,70), mostruario com links para os modelos ao vivo, cronometro regressivo com persistencia em localStorage e integracao direta com o WhatsApp do Rafael Pita.
 
+### 13.42 Design System Moderno de Nutrição : Referência NutriVida (`src/components/nutrition/modern/`)
+
+Desenvolvido para oferecer um layout de altíssima conversão baseado na referência visual NutriVida, com paleta médica em azul ciano, azul marinho profundo e contrastes acessíveis.
+
+1. **Diretrizes Cromáticas**:
+   - Azul Ciano / Médico: `#0284C7` (primário), `#0EA5E9` (secundário vibrante) e `#38BDF8` (destaques).
+   - Azul Marinho Profundo: `#0C4A6E` e `#075985` para faixas de alto contraste e seções escuras.
+   - Fundo e Superfícies: `#F0F9FF`, `#F8FAFC` e `#FFFFFF`.
+   - Tipografia Mineral: `#0F172A` e `#334155` (grafite).
+
+2. **Componentes Criados**:
+   - `ModernNutritionHero.jsx`: Layout em 3 colunas (proposta de valor com 3 micro-benefícios, fotografia central de jaleco branco e card embutido de agendamento com validação e despacho imediato para WhatsApp).
+   - `ModernNutritionServicesGrid.jsx`: 4 cards horizontais limpos (Emagrecimento Saudável, Nutrição Esportiva, Reeducação Alimentar e Nutrição Clínica) com ícones circulares e setas indicativas de ação.
+   - `ModernNutritionBenefitsBar.jsx`: Faixa sólida em azul marinho com 4 diferenciais operacionais (horários flexíveis, pagamento facilitado, atendimento online e consultório presencial).
+   - `ModernNutritionHowItWorks.jsx`: Composição dividida com prato saudável, selo flutuante de personalização 100% e as 3 etapas de consulta conectadas por setas.
+   - `ModernNutritionAbout.jsx`: Apresentação institucional com foto e selo flutuante de CRN, checklist com ticks azuis, botão de história e card destacado de 5 diferenciais de acolhimento.
+   - `ModernNutritionDarkLocation.jsx`: Seção escura em azul marinho com card de endereço físico, mapa interativo do Google Maps e card de horários com botão de agendamento.
+   - `ModernNutritionCtaBanner.jsx`: Banner panorâmico azul degradê com foto de prato saudável e botões duplos de conversão rápida.
+   - `index.js`: Ponto central de exportação dos novos componentes modernos de nutrição.
+
+
 
 

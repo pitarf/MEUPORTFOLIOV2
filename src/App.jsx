@@ -41,6 +41,7 @@ const RadarGoogleMaps = lazy(() => import('@/pages/admin/RadarGoogleMaps'));
 
 // Landing pages de nutricionistas e vendas
 const NutritionistPage = lazy(() => import('@/pages/nutrition/NutritionistPage'));
+const ModernNutritionPage = lazy(() => import('@/pages/nutrition/ModernNutritionPage'));
 const NutritionSalesLandingPage = lazy(() => import('@/pages/nutrition/NutritionSalesLandingPage'));
 
 // Painel administrativo sob demanda (não sobrecarrega o carregamento para visitantes públicos)
@@ -123,6 +124,10 @@ function App() {
                                 {/* Landing Pages de Demonstração & Vendas para Nutricionistas */}
                                 <Route path="/nutricionista" element={<NutritionistPage />} />
                                 <Route path="/nutricionista/:slug" element={<NutritionistPage />} />
+                                <Route path="/modelo-nutricao/editorial" element={<NutritionistPage />} />
+                                <Route path="/nutrivida" element={<ModernNutritionPage />} />
+                                <Route path="/nutrivida/:slug" element={<ModernNutritionPage />} />
+                                <Route path="/modelo-nutricao/nutrivida" element={<ModernNutritionPage />} />
                                 <Route path="/criacao-site-nutricionista" element={<NutritionSalesLandingPage />} />
                                 <Route path="/sites-para-nutricionistas" element={<NutritionSalesLandingPage />} />
                                 

@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import SEO from '@/components/SEO';
 import { motion } from 'framer-motion';
 import { supabase } from '@/lib/customSupabaseClient';
-import { Loader2, ArrowLeft, ArrowRight, ExternalLink, User, Calendar, Tag, Star } from 'lucide-react';
+import { Loader2, ArrowLeft, ArrowRight, ExternalLink, User, Calendar, Tag, Star, Play, Image as ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ImageGalleryModal from '@/components/ImageGalleryModal';
 import { cn } from '@/lib/utils';
@@ -140,6 +140,11 @@ const ProjectPage = () => {
         ...(project.gallery_urls || [])
     ]));
 
+    const [mediaMode, setMediaMode] = useState('auto');
+    const firstVideoUrl = (project.video_urls && project.video_urls.length > 0) ? project.video_urls[0] : null;
+    const primaryVideoEmbed = firstVideoUrl ? getEmbedUrl(firstVideoUrl) : null;
+    const isShowingVideo = primaryVideoEmbed && (mediaMode === 'video' || mediaMode === 'auto');
+
     return (
         <>
             <SEO 
@@ -181,23 +186,68 @@ const ProjectPage = () => {
                         )}
                     </motion.div>
 
-                    <motion.div variants={sectionVariants} initial="hidden" animate="visible">
-                        <div 
-                            className={cn("w-full rounded-2xl mb-12 shadow-xl dark:shadow-2xl shadow-slate-200/50 dark:shadow-black/50 overflow-hidden cursor-pointer group relative border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] transition-all duration-300", aspectRatioClasses[mainImageAspectRatio])}
-                            onClick={() => openModal(0)}
-                        >
-                            <img
-                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                alt={`Imagem principal do projeto ${project.title}`}
-                                src={project.main_image_url || "https://images.unsplash.com/photo-1572177812156-58036aae439c"}
-                                loading="lazy"
-                            />
-                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                <p className="text-[#0a0a08] text-sm font-bold bg-[#bcf13b] px-4 py-2 rounded-full border border-[#bcf13b]/30 backdrop-blur-sm shadow-lg">
-                                    Ver Capa Completa
-                                </p>
-                            </div>
+                    {/* Alternador de Midia: Video vs Imagem de Capa */}
+                    {primaryVideoEmbed && (
+                        <div className="flex items-center gap-3 mb-6">
+                            <button
+                                type="button"
+                                onClick={() => setMediaMode('video')}
+                                className={cn(
+                                    "px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all shadow-sm",
+                                    isShowingVideo
+                                        ? "bg-[#bcf13b] text-[#0a0a08] shadow-lime-500/20"
+                                        : "bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] text-slate-700 dark:text-gray-300 hover:border-lime-500"
+                                )}
+                            >
+                                <Play className="w-4 h-4 fill-current" />
+                                <span>Assistir Vídeo / Curta Completo</span>
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setMediaMode('image')}
+                                className={cn(
+                                    "px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all shadow-sm",
+                                    !isShowingVideo
+                                        ? "bg-[#bcf13b] text-[#0a0a08] shadow-lime-500/20"
+                                        : "bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] text-slate-700 dark:text-gray-300 hover:border-lime-500"
+                                )}
+                            >
+                                <ImageIcon className="w-4 h-4" />
+                                <span>Ver Imagem de Capa</span>
+                            </button>
                         </div>
+                    )}
+
+                    <motion.div variants={sectionVariants} initial="hidden" animate="visible">
+                        {isShowingVideo ? (
+                            <div className="w-full aspect-video rounded-2xl mb-12 shadow-xl dark:shadow-2xl overflow-hidden border border-slate-200 dark:border-[#23231f] bg-black">
+                                <iframe
+                                    src={primaryVideoEmbed}
+                                    title={`Vídeo oficial de ${project.title}`}
+                                    className="w-full h-full"
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                ></iframe>
+                            </div>
+                        ) : (
+                            <div 
+                                className={cn("w-full rounded-2xl mb-12 shadow-xl dark:shadow-2xl shadow-slate-200/50 dark:shadow-black/50 overflow-hidden cursor-pointer group relative border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] transition-all duration-300", aspectRatioClasses[mainImageAspectRatio])}
+                                onClick={() => openModal(0)}
+                            >
+                                <img
+                                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                    alt={`Imagem principal do projeto ${project.title}`}
+                                    src={project.main_image_url || "https://images.unsplash.com/photo-1572177812156-58036aae439c"}
+                                    loading="lazy"
+                                />
+                                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                    <p className="text-[#0a0a08] text-sm font-bold bg-[#bcf13b] px-4 py-2 rounded-full border border-[#bcf13b]/30 backdrop-blur-sm shadow-lg">
+                                        Ver Capa Completa
+                                    </p>
+                                </div>
+                            </div>
+                        )}
                     </motion.div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -270,10 +320,12 @@ const ProjectPage = () => {
                                 </div>
                                 {project.project_url && (
                                     <div>
-                                        <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">Link do Projeto</h3>
+                                        <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">
+                                            {project.project_url.includes('youtu') ? 'Assistir no YouTube' : 'Link do Projeto'}
+                                        </h3>
                                         <a href={project.project_url} target="_blank" rel="noopener noreferrer">
                                             <Button className="w-full bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-bold rounded-lg shadow-lg shadow-[#bcf13b]/20 hover:scale-[1.02] transition-transform">
-                                                Visitar Site <ExternalLink className="ml-2 h-4 w-4" />
+                                                {project.project_url.includes('youtu') ? 'Assistir no YouTube Oficial' : 'Visitar Site'} <ExternalLink className="ml-2 h-4 w-4" />
                                             </Button>
                                         </a>
                                     </div>
@@ -285,14 +337,17 @@ const ProjectPage = () => {
                     {project.video_urls && project.video_urls.length > 0 && (
                         <motion.div variants={sectionVariants} initial="hidden" animate="visible" className="mt-20">
                             <h2 className="text-4xl font-bold mb-8 text-center text-slate-900 dark:text-white">
-                                Galeria de <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Vídeos</span>
+                                {project.video_urls.length === 1 ? 'Vídeo Completo' : 'Galeria de'} <span className="text-[#4d7c0f] dark:text-[#bcf13b]">{project.video_urls.length === 1 ? 'em Alta Definição' : 'Vídeos'}</span>
                             </h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className={cn(
+                                "gap-8",
+                                project.video_urls.length === 1 ? "max-w-4xl mx-auto" : "grid grid-cols-1 md:grid-cols-2"
+                            )}>
                                 {project.video_urls.map((url, index) => {
                                     const embedUrl = getEmbedUrl(url);
                                     if (!embedUrl) return null;
                                     return (
-                                        <motion.div key={index} variants={itemVariants} className="aspect-video rounded-xl overflow-hidden border border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210]">
+                                        <motion.div key={index} variants={itemVariants} className="aspect-video rounded-xl overflow-hidden border border-slate-200 dark:border-[#23231f] bg-black shadow-xl">
                                             <iframe
                                                 src={embedUrl}
                                                 title={`Vídeo do projeto ${project.title} - ${index + 1}`}

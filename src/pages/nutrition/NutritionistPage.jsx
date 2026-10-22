@@ -77,6 +77,36 @@ export default function NutritionistPage() {
 
   return (
     <div className="min-h-screen bg-[#F8F7F2] text-[#252925] font-sans selection:bg-[#244B3B] selection:text-white">
+      {/* 0. Barra Flutuante Superior com Alternador de Modelos Visuais */}
+      <div className="bg-gradient-to-r from-stone-900 via-stone-800 to-stone-900 text-white text-xs py-2 px-4 border-b border-stone-700/80 shadow-xs">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+          <div className="flex items-center gap-2 text-stone-300">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="font-medium">Ambiente de Demonstração Interativo de Nutrição</span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-stone-400 hidden md:inline">Alternar Modelo Visual:</span>
+            
+            {/* Modelo Ativo: Editorial Verde */}
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-700 text-white font-bold text-[11px] shadow-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-white" />
+              Editorial (Verde)
+            </span>
+
+            {/* Alternador para o Modelo NutriVida Azul */}
+            <Link
+              to="/nutrivida"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-stone-800 hover:bg-sky-950 text-stone-300 hover:text-sky-300 border border-stone-700 transition-colors text-[11px] font-semibold"
+              title="Visualizar este profissional no Modelo NutriVida Azul"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-sky-400" />
+              NutriVida (Azul)
+            </Link>
+          </div>
+        </div>
+      </div>
+
       {/* 1. Injecao de Metadados e Schema.org */}
       <NutritionSeo data={activeNutritionist} nutritionist={activeNutritionist} />
 
