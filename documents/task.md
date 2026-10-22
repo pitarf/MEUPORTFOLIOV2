@@ -2,6 +2,16 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Plataforma Parametrizada de Landing Pages para Nutricionistas & Captação Ativa (`nutritionistsData.js`, `src/components/nutrition/`, `NutritionistPage.jsx`, `NutritionSalesLandingPage.jsx`, `NutritionProspectDrawer.jsx`, `sitemap.xml`)**:
+  - Arquitetura Reutilizável: Criado repositório de dados parametrizados `src/data/nutritionistsData.js` com modelos demonstrativos (Dra. Camila Rocha no RJ e Dr. Lucas Mendes em SP), isolando conteúdos e permitindo criar novas páginas sem editar código.
+  - Maleabilidade Total por Parâmetros de URL: Suporte completo a sobreposição via `?nome=...&whatsapp=...&cidade=...&crn=...&endereco=...&titulo=...`, permitindo que qualquer link de nutricionista do Google Maps seja criado instantaneamente.
+  - Simulador & Customizador Manual de Prospecção (`NutritionProspectDrawer.jsx`): Botão flutuante para editar dados na hora, testar na tela em tempo real, copiar o link parametrizado e disparar no WhatsApp com 4 scripts de abordagem.
+  - 14 Componentes Modulares de Alta Conversão em `src/components/nutrition/`: `NutritionSeo.jsx`, `NutritionHeader.jsx`, `NutritionHero.jsx`, `NutritionTrustBar.jsx`, `NutritionProfessional.jsx`, `NutritionServices.jsx`, `NutritionHowItWorks.jsx`, `NutritionDifferentials.jsx`, `NutritionTestimonials.jsx`, `NutritionLocation.jsx`, `NutritionFaq.jsx`, `NutritionFinalCta.jsx`, `NutritionFooter.jsx` e `NutritionFloatingWhatsApp.jsx`.
+  - Página Dinâmica de Nutricionistas (`NutritionistPage.jsx`): Renderização dinâmica das 12 seções orientadas pelo slug na rota `/nutricionista/:slug` e `/nutricionista`.
+  - Landing Page de Vendas de Sites (`NutritionSalesLandingPage.jsx`): Rotas `/criacao-site-nutricionista` e `/sites-para-nutricionistas` com mostruário de modelos ao vivo, cronômetro de 48h, proposta de R$ 297 à vista, conformidade ética com o CFN/CRN e botões de WhatsApp.
+  - Performance e SEO: Code-Splitting com `React.lazy` (chunks isolados de 31 kB e 72 kB), dados estruturados Schema.org (`Physician` e `ProfessionalService`) e inclusão no `tools/generate-sitemap.js` e `public/sitemap.xml`.
+  - Auditoria com subagente concluída com louvor: Zero caracteres de travessão, zero pontas soltas e compilação de produção 100% aprovada.
+
 - [x] **Otimizações do Google PageSpeed Insights: Desempenho, Acessibilidade e Navegação Agêntica (`llms.txt`, `ai-catalog.json`, `index.html`, `LegalSalesLandingPage.jsx`, `WhatsAppIcon.jsx`, `robots.txt`)**:
   - Navegação Agêntica & IA (Google Lighthouse 13.5+): Criado `llms.txt` padronizado e catálogo estruturado ARD `/.well-known/ai-catalog.json` e `/ai-catalog.json` para eliminar falhas de esquema em agentes de IA, com diretiva ARD no `robots.txt` e meta tags de link no `index.html`.
   - Acessibilidade (Nota 100): Implementado landmark semântico `<main id="main-content" role="main">`, unificada a hierarquia sequencial de títulos (H1 -> H2 -> H3 sem saltos) e otimizados todos os contrastes de texto e badges para padrão WCAG AA e AAA.

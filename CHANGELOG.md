@@ -2,7 +2,46 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
-## [1.57.0] - 2026-10-16
+## [1.58.0] - 2026-10-22
+
+### Adicionado (Plataforma Parametrizada de Landing Pages para Nutricionistas & Captação Comercial)
+* **Arquitetura Reutilizável e Parametrizada por Dados (`src/data/nutritionistsData.js`)**:
+  * Implementado repositório desacoplado de dados em que a mesma base de componentes renderiza qualquer nutricionista via configuração (sem código estático espalhado).
+  * Perfil demonstrativo inicial completo para o Rio de Janeiro (`dra-camila-rocha-rio-de-janeiro`), claramente marcado como demonstrativo sem alegações clínicas falsas ou depoimentos inventados.
+  * Perfil esportivo de alta performance para São Paulo (`dr-lucas-mendes-nutricao-esportiva`).
+  * Funções utilitárias seguras: `getNutritionistBySlug`, `getAllNutritionists` e `getDefaultNutritionist`.
+* **Componentes Modulares de Alta Conversão (`src/components/nutrition/`)**:
+  * `NutritionSeo.jsx`: Metadados dinâmicos e injeção do Schema.org JSON-LD (`Physician` e `Person`).
+  * `NutritionHeader.jsx`: Menu editorial responsivo com identificação de CRN e CTA direto.
+  * `NutritionHero.jsx`: Hero assimétrico de alta conversão com selos de credibilidade e área fotográfica com fallback.
+  * `NutritionTrustBar.jsx`: Faixa de dados verificáveis (registro profissional, modalidades, localização).
+  * `NutritionProfessional.jsx`: Seção sobre o profissional com credenciais acadêmicas e citação ética.
+  * `NutritionServices.jsx`: Grade de especialidades com CTAs individualizados para WhatsApp.
+  * `NutritionHowItWorks.jsx`: Processo de 3 etapas transparente e claro.
+  * `NutritionDifferentials.jsx`: Diferenciais reais de acolhimento e escuta sem promessas milagrosas.
+  * `NutritionTestimonials.jsx`: Prova social segura que oculta automaticamente se não houver depoimentos autorizados.
+  * `NutritionLocation.jsx`: SEO local com endereço físico, mapa interativo lazy e suporte a teleconsulta nacional.
+  * `NutritionFaq.jsx`: Acordeão acessível de dúvidas frequentes.
+  * `NutritionFinalCta.jsx`: Fechamento de alta conversão.
+  * `NutritionFooter.jsx`: Rodapé com aviso legal ético do CFN e créditos Rafael Pita Solutions.
+  * `NutritionFloatingWhatsApp.jsx`: Botão flutuante não-invasivo com indicador online e tooltip informativo.
+* **Página Dinâmica de Nutricionistas (`src/pages/nutrition/NutritionistPage.jsx`)**:
+  * Renderiza dinamicamente as 12 seções a partir do slug informado nas rotas `/nutricionista` e `/nutricionista/:slug`.
+* **Landing Page de Vendas de Sites para Nutricionistas (`src/pages/nutrition/NutritionSalesLandingPage.jsx`)**:
+  * Disponibilizada nas rotas públicas `/criacao-site-nutricionista` e `/sites-para-nutricionistas`.
+  * Apresenta proposta de valor comercial (de R$ 1.500 por R$ 297 à vista ou 12x de R$ 29,70), cronômetro regressivo com persistência em localStorage, mostruário com modelos ao vivo e FAQ completo.
+* **Maleabilidade Total por Parâmetros de URL (`src/utils/nutritionProspectUtils.js`)**:
+  * Implementada a função `applyNutritionistOverrides` que lê da query string: `nome` (ou `name`/`n`), `whatsapp` (ou `tel`/`w`), `crn` (ou `registro`), `cidade` (ou `city`/`c`), `uf`, `bairro` (ou `b`), `endereco` (ou `address`/`e`) e `titulo` (ou `especialidade`).
+  * Atualização dinâmica em cascata: nome higienizado com honorífico automático, iniciais do avatar, link de agendamento no WhatsApp, mapa embed do Google Maps para o novo endereço, selos de localização e registro na faixa de confiança e metadados de SEO/Schema.org.
+* **Simulador & Customizador Manual de Prospecção (`src/components/nutrition/NutritionProspectDrawer.jsx`)**:
+  * Botão flutuante "Personalizar Lead" permitindo ao operador alterar manualmente os dados de qualquer nutricionista prospectado no Google Maps em tempo real, sem recarregar a tela.
+  * Botão de 1 clique "Copiar Link Parametrizado" para compartilhar o link dinâmico pelo WhatsApp.
+  * Aba integrada com 4 scripts de abordagem no WhatsApp (Abertura, Permissão, Demonstração de R$ 297 e Resgate) com botões para copiar e disparar diretamente.
+* **Rotas e SEO**:
+  * Inclusão no `src/App.jsx` com divisão de código via `React.lazy` (chunks isolados de 31 kB e 72 kB).
+  * Atualização de `tools/generate-sitemap.js` e regeneração de `public/sitemap.xml`.
+
+
 
 ### Otimizado (Google PageSpeed Insights: Desempenho, Acessibilidade e Navegação Agêntica)
 * **Navegação Agêntica & Descoberta por IA (Google Lighthouse 13.5+)**:

@@ -993,6 +993,31 @@ Sua landing page jurídica e seu portfólio agora contam com o mais avançado pa
 3. **Carregamento Instantâneo no Celular**:
    * O ícone do WhatsApp agora é renderizado como vetor nativo (sem precisar baixar imagens pesadas), e o script do Google Tag Manager foi programado para não atrasar a primeira pintura da tela no celular, proporcionando uma experiência de abertura fluida e imediata.
 
+### 19.42 Nova Plataforma de Captação e Landing Pages para Nutricionistas
+
+Agora você conta com um nicho comercial completo e de altíssima demanda para prospecção ativa: **Nutricionistas e Clínicas de Nutrição**.
+
+1. **Por que o Nicho de Nutrição?**:
+   * Mais de 82% dos pacientes pesquisam nutricionistas no Google antes de agendar uma consulta presencial ou online.
+   * Diferente da advocacia, os nutricionistas são muito ativos no WhatsApp e possuem alto interesse em transmitir um visual moderno, acolhedor e focado em hábitos sustentáveis.
+
+2. **Página de Vendas de Sites (`/criacao-site-nutricionista` e `/sites-para-nutricionistas`)**:
+   * Página completa com argumento de vendas persuasivo, destacando a importância do SEO Local no Google e a conformidade ética com o Conselho Federal de Nutricionistas (CFN).
+   * **Mostruário com Modelos ao Vivo**: Permite ao profissional testar a experiência real antes de fechar.
+   * **Preço Promocional**: De R$ 1.500 por apenas R$ 297 à vista ou 12x de R$ 29,70.
+   * **Cronômetro Regressivo de Escassez**: Contador de 48 horas persistido no navegador estimulando o contato rápido no WhatsApp.
+   * **Botões de WhatsApp**: Já integrados com seu número oficial `(21) 99292-9983` e mensagens pré-formatadas.
+
+3. **Modelos Demonstrativos Prontos para Apresentação**:
+   * **Nutrição Clínica & Comportamental (Rio de Janeiro)**: Acesse `/nutricionista/dra-camila-rocha-rio-de-janeiro` (ou apenas `/nutricionista`).
+   * **Nutrição Esportiva & Performance (São Paulo)**: Acesse `/nutricionista/dr-lucas-mendes-nutricao-esportiva`.
+
+4. **Como Criar Novos Nutricionistas no Sistema**:
+   * Toda a estrutura é 100% orientada por dados no arquivo `src/data/nutritionistsData.js`.
+   * Para cadastrar um novo cliente parceiro, basta adicionar um novo bloco no array com o nome, cidade, CRN, telefone de WhatsApp, serviços e fotos.
+   * A nova landing page do cliente ficará instantaneamente no ar na rota `/nutricionista/slug-do-cliente`, com SEO local, mapa e botões personalizados sem precisar programar nada do zero.
+
+
 
 
 

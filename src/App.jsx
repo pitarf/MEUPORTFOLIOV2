@@ -39,6 +39,10 @@ const LegalLandingPage = lazy(() => import('@/pages/legal/LegalLandingPage'));
 const LegalSalesLandingPage = lazy(() => import('@/pages/legal/LegalSalesLandingPage'));
 const RadarGoogleMaps = lazy(() => import('@/pages/admin/RadarGoogleMaps'));
 
+// Landing pages de nutricionistas e vendas
+const NutritionistPage = lazy(() => import('@/pages/nutrition/NutritionistPage'));
+const NutritionSalesLandingPage = lazy(() => import('@/pages/nutrition/NutritionSalesLandingPage'));
+
 // Painel administrativo sob demanda (não sobrecarrega o carregamento para visitantes públicos)
 const Dashboard = lazy(() => import('@/pages/Dashboard'));
 const ManagePortfolio = lazy(() => import('@/pages/ManagePortfolio'));
@@ -115,6 +119,12 @@ function App() {
                                 {/* Nova Landing Page de Vendas de Criação de Sites para Advogados */}
                                 <Route path="/criacao-site-advogado" element={<LegalSalesLandingPage />} />
                                 <Route path="/sites-para-advogados" element={<LegalSalesLandingPage />} />
+
+                                {/* Landing Pages de Demonstração & Vendas para Nutricionistas */}
+                                <Route path="/nutricionista" element={<NutritionistPage />} />
+                                <Route path="/nutricionista/:slug" element={<NutritionistPage />} />
+                                <Route path="/criacao-site-nutricionista" element={<NutritionSalesLandingPage />} />
+                                <Route path="/sites-para-nutricionistas" element={<NutritionSalesLandingPage />} />
                                 
                                 {/* Acesso Direto ao Radar Google Maps de Prospecção */}
                                 <Route path="/radar-google-maps" element={<RadarGoogleMaps />} />

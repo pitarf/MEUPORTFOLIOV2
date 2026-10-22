@@ -906,4 +906,38 @@ Para atender às auditorias do Google Lighthouse 13.5+ e aos critérios de Naveg
    - Google Tag Manager diferido: O script do GTM é inicializado apenas no evento `window.load`, liberando a thread primária para os cálculos de FCP e LCP sem disputar recursos de rede.
    - Google Fonts: Pesos essenciais limitados a 400, 600, 700 e 800 carregados assincronamente com `media="print" onload="this.media='all'"`.
 
+### 13.41 Arquitetura da Plataforma de Landing Pages para Nutricionistas
+
+Desenvolvida para viabilizar a expansao comercial em parceria com nutricionistas de diferentes estados e cidades brasileiras, com arquitetura orientada por dados parametrizados e conformidade estrita com o Codigo de Etica do Conselho Federal de Nutricionistas (CFN).
+
+1. **Camada de Dados Parametrizada (`src/data/nutritionistsData.js`)**:
+   - O repositorio centraliza perfis completos de profissionais com suporte a temas visuais customizaveis (paleta de cores, tipografia, fotografias, especialidades, precos e dados de contato).
+   - Perfis nativos: `dra-camila-rocha-rio-de-janeiro` (Nutricao Clinica e Comportamental no RJ) e `dr-lucas-mendes-nutricao-esportiva` (Performance Esportiva em SP).
+   - Metodos de busca: `getNutritionistBySlug(slug)`, `getAllNutritionists()` e `getDefaultNutritionist()`.
+
+2. **Componentes Modulares (`src/components/nutrition/`)**:
+   - `NutritionSeo.jsx`: Injeta meta tags Open Graph, canonical URLs e Schema.org JSON-LD dos tipos `Physician` e `Person` com suporte a geolocalizacao.
+   - `NutritionHeader.jsx`: Menu editorial responsivo com status de CRN, navegacao interna suave e CTA para agendamento.
+   - `NutritionHero.jsx`: Composicao assimetrica editorial com proposta de valor clara, selos de credibilidade e area fotografica com fallback.
+   - `NutritionTrustBar.jsx`: Faixa de dados verificaveis (registro profissional, modalidades presencial e teleconsulta, consultorio).
+   - `NutritionProfessional.jsx`: Apresentacao humanizada com formacao academica, especializacoes e citacao etica.
+   - `NutritionServices.jsx`: Grade de especialidades com CTAs individualizados para o WhatsApp.
+   - `NutritionHowItWorks.jsx`: Processo de atendimento em 3 etapas com transparencia.
+   - `NutritionDifferentials.jsx`: Pilares de acolhimento e escuta sem promessas de emagrecimento garantido.
+   - `NutritionTestimonials.jsx`: Prova social segura que oculta automaticamente o bloco caso nao haja depoimentos com autorizacao formal.
+   - `NutritionLocation.jsx`: Bloco de SEO local com endereco, mapa incorporado em carregamento tardio (lazy) e cobertura nacional para teleconsultas.
+   - `NutritionFaq.jsx`: Acordeao acessivel de duvidas frequentes com controle de expansao por teclado.
+   - `NutritionFinalCta.jsx`: Chamada de fechamento de alta conversao.
+   - `NutritionFooter.jsx`: Rodape com aviso legal etico obrigatório do CFN e creditos.
+   - `NutritionFloatingWhatsApp.jsx`: Botao flutuante moderno de WhatsApp com indicador online e tooltip informativo.
+
+3. **Pagina Dinamica e Roteamento (`src/pages/nutrition/NutritionistPage.jsx`)**:
+   - Consome o parametro da rota `/nutricionista/:slug` via hook `useParams()`.
+   - Renderiza todas as 12 secoes de conversao em sequencia harmonica.
+
+4. **Landing Page de Vendas de Sites (`src/pages/nutrition/NutritionSalesLandingPage.jsx`)**:
+   - Disponivel nas rotas publicas `/criacao-site-nutricionista` e `/sites-para-nutricionistas`.
+   - Estrutura completa de conversao comercial: proposta de valor de R$ 297 a vista (ou 12x de R$ 29,70), mostruario com links para os modelos ao vivo, cronometro regressivo com persistencia em localStorage e integracao direta com o WhatsApp do Rafael Pita.
+
+
 

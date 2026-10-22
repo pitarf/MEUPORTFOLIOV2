@@ -29,7 +29,13 @@ async function generate() {
 
         // Landing Pages de Vendas de Sites para Advogados (Alta Prioridade SEO)
         { path: '/criacao-site-advogado', priority: '1.0', changefreq: 'weekly' },
-        { path: '/sites-para-advogados', priority: '0.9', changefreq: 'weekly' }
+        { path: '/sites-para-advogados', priority: '0.9', changefreq: 'weekly' },
+
+        // Landing Pages de Vendas de Sites para Nutricionistas (Alta Prioridade SEO)
+        { path: '/criacao-site-nutricionista', priority: '1.0', changefreq: 'weekly' },
+        { path: '/sites-para-nutricionistas', priority: '0.9', changefreq: 'weekly' },
+        { path: '/nutricionista/dra-camila-rocha-rio-de-janeiro', priority: '0.8', changefreq: 'weekly' },
+        { path: '/nutricionista/dr-lucas-mendes-nutricao-esportiva', priority: '0.8', changefreq: 'weekly' }
     ];
 
     const urls = [...staticRoutes];
