@@ -13,7 +13,7 @@ import { ExternalLink, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Autoplay from "embla-carousel-autoplay";
 
-const ProjectCarousel = ({ categorySlug, excludeCategorySlug, onDataLoaded }) => {
+const ProjectCarousel = ({ categorySlug, excludeCategorySlug, onDataLoaded, basePath = '/portfolio' }) => {
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
     const plugin = useRef(
@@ -97,7 +97,7 @@ const ProjectCarousel = ({ categorySlug, excludeCategorySlug, onDataLoaded }) =>
                         <div className="p-1">
                             <Card className="service-card rounded-xl overflow-hidden group border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] bg-white dark:bg-[#121210] shadow-sm hover:shadow-md dark:shadow-none transition-all duration-300">
                                 <CardContent className="flex flex-col aspect-square items-start justify-between p-0">
-                                    <Link to={`/portfolio/${project.category?.slug}/${project.slug}`} className="block w-full h-full">
+                                    <Link to={`${basePath}/${project.category?.slug}/${project.slug}`} className="block w-full h-full">
                                         <div className="relative overflow-hidden h-full">
                                             <img alt={project.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" src={project.main_image_url || "https://images.unsplash.com/photo-1572177812156-58036aae439c"} loading="lazy" />
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />

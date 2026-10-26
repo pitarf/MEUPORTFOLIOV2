@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import SEO from '@/components/SEO';
-import { Link } from 'react-router-dom';
-import { Camera, Heart, Users, Star, ArrowRight, Instagram } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { Camera, Heart, Users, Star, ArrowRight, Instagram, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ProjectCarousel from '@/components/ProjectCarousel';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -78,13 +78,26 @@ const NicheSlideshow = ({ images, defaultImage, title }) => {
  * PhotographyLanding Page
  * Landing page de fotografia profissional com suporte aos temas Claro e Escuro.
  */
-const PhotographyLanding = () => {
+const PhotographyLanding = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
     const { theme } = useTheme();
+    const location = useLocation();
+
+    // Detecta modo limpo para propostas externas (sem contatos externos)
+    const isCleanMode = Boolean(
+        propCleanMode ||
+        location.pathname.startsWith('/portfolio-fotografia-v2') ||
+        location.pathname.startsWith('/portfolio-v2/fotografia') ||
+        location.pathname.startsWith('/fotografia-v2')
+    );
+    const effectiveBasePath = propBasePath || (isCleanMode ? '/portfolio-v2' : '/portfolio');
+
     const [projectCount, setProjectCount] = useState(0);
     const [content, setContent] = useState(null);
 
     const isPhotoSubdomain = typeof window !== 'undefined' && window.location.hostname.includes('fotografia');
-    const galleryPath = isPhotoSubdomain ? "/galeria" : "/portfolio-fotografia/galeria";
+    const galleryPath = isCleanMode 
+        ? "/portfolio-fotografia-v2/galeria" 
+        : (isPhotoSubdomain ? "/galeria" : "/portfolio-fotografia/galeria");
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [bgImages, setBgImages] = useState([]);
@@ -254,20 +267,41 @@ const PhotographyLanding = () => {
                                 {heroSubtitle}
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6 items-center">
-                                <Link to="/contato?service=fotografia" className="w-full sm:w-auto">
-                                    <Button size="lg" className="w-full bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] text-lg px-8 py-6 rounded-full font-bold shadow-lg shadow-[#bcf13b]/20 hover:scale-105 transition-all">
-                                        Solicitar Orçamento
-                                    </Button>
-                                </Link>
-                                <Link to={galleryPath} className="w-full sm:w-auto">
-                                    <Button
-                                        size="lg"
-                                        variant="outline"
-                                        className="w-full border-white/30 bg-black/40 hover:bg-black/60 text-white hover:border-[#bcf13b] hover:text-[#bcf13b] text-lg px-8 py-6 rounded-full font-semibold shadow-sm transition-all backdrop-blur-sm"
-                                    >
-                                        Ver Portfólio
-                                    </Button>
-                                </Link>
+                                {isCleanMode ? (
+                                    <>
+                                        <Link to={galleryPath} className="w-full sm:w-auto">
+                                            <Button size="lg" className="w-full bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] text-lg px-8 py-6 rounded-full font-bold shadow-lg shadow-[#bcf13b]/20 hover:scale-105 transition-all">
+                                                Conhecer Galeria Completa
+                                            </Button>
+                                        </Link>
+                                        <a href="#portfolio" className="w-full sm:w-auto">
+                                            <Button
+                                                size="lg"
+                                                variant="outline"
+                                                className="w-full border-white/30 bg-black/40 hover:bg-black/60 text-white hover:border-[#bcf13b] hover:text-[#bcf13b] text-lg px-8 py-6 rounded-full font-semibold shadow-sm transition-all backdrop-blur-sm"
+                                            >
+                                                Ver Últimos Trabalhos
+                                            </Button>
+                                        </a>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Link to="/contato?service=fotografia" className="w-full sm:w-auto">
+                                            <Button size="lg" className="w-full bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] text-lg px-8 py-6 rounded-full font-bold shadow-lg shadow-[#bcf13b]/20 hover:scale-105 transition-all">
+                                                Solicitar Orçamento
+                                            </Button>
+                                        </Link>
+                                        <Link to={galleryPath} className="w-full sm:w-auto">
+                                            <Button
+                                                size="lg"
+                                                variant="outline"
+                                                className="w-full border-white/30 bg-black/40 hover:bg-black/60 text-white hover:border-[#bcf13b] hover:text-[#bcf13b] text-lg px-8 py-6 rounded-full font-semibold shadow-sm transition-all backdrop-blur-sm"
+                                            >
+                                                Ver Portfólio
+                                            </Button>
+                                        </Link>
+                                    </>
+                                )}
                             </div>
                         </motion.div>
                     </div>
@@ -354,7 +388,7 @@ const PhotographyLanding = () => {
                             </Link>
                         </div>
 
-                        <ProjectCarousel excludeCategorySlug="" categorySlug="fotografia" onDataLoaded={setProjectCount} />
+                        <ProjectCarousel excludeCategorySlug="" categorySlug="fotografia" onDataLoaded={setProjectCount} basePath={effectiveBasePath} />
 
                         <div className="mt-16 text-center md:hidden">
                             <Link to={galleryPath}>
@@ -384,19 +418,38 @@ const PhotographyLanding = () => {
                             <p className="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto font-medium leading-relaxed">
                                 Agenda aberta para {new Date().getFullYear()}. Garanta sua data e tenha registros de extrema notoriedade.
                             </p>
-                            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-8">
-                                <a href="https://wa.me/5521966149077" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
-                                    <Button size="lg" className="w-full bg-[#bcf13b] text-[#0a0a08] hover:bg-[#a8df2a] text-lg px-10 py-8 rounded-full font-bold shadow-lg shadow-[#bcf13b]/20 transition-transform hover:scale-105">
-                                        Falar no WhatsApp
-                                    </Button>
-                                </a>
-                                <a href="https://www.instagram.com/rp.digital_/" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
-                                    <Button size="lg" variant="outline" className="w-full bg-[#121210] text-white border border-[#23231f] hover:border-[#bcf13b] hover:text-[#bcf13b] text-lg px-10 py-8 rounded-full font-bold transition-all">
-                                        <Instagram className="mr-2 w-6 h-6" />
-                                        Ver Instagram
-                                    </Button>
-                                </a>
-                            </div>
+                            {isCleanMode ? (
+                                <div className="space-y-6 pt-6">
+                                    <div className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-lime-500/10 text-[#bcf13b] border border-lime-500/20 text-sm font-bold shadow-sm">
+                                        <CheckCircle2 className="w-5 h-5 text-[#bcf13b]" />
+                                        <span>Comunicação e contratação 100% integradas pela plataforma do 99freelas.</span>
+                                    </div>
+                                    <p className="text-base text-gray-300 max-w-xl mx-auto leading-relaxed">
+                                        Transformamos sua demanda em registros fotográficos de excelência. Responda diretamente na nossa proposta para combinarmos data, escopo e prazos de entrega!
+                                    </p>
+                                    <div>
+                                        <Link to={galleryPath}>
+                                            <Button size="lg" className="bg-[#bcf13b] text-[#0a0a08] hover:bg-[#a8df2a] text-lg px-10 py-7 rounded-full font-bold shadow-lg shadow-[#bcf13b]/20 hover:scale-105 transition-transform">
+                                                Explorar Galeria de Fotos
+                                            </Button>
+                                        </Link>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-8">
+                                    <a href="https://wa.me/5521966149077" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+                                        <Button size="lg" className="w-full bg-[#bcf13b] text-[#0a0a08] hover:bg-[#a8df2a] text-lg px-10 py-8 rounded-full font-bold shadow-lg shadow-[#bcf13b]/20 transition-transform hover:scale-105">
+                                            Falar no WhatsApp
+                                        </Button>
+                                    </a>
+                                    <a href="https://www.instagram.com/rp.digital_/" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+                                        <Button size="lg" variant="outline" className="w-full bg-[#121210] text-white border border-[#23231f] hover:border-[#bcf13b] hover:text-[#bcf13b] text-lg px-10 py-8 rounded-full font-bold transition-all">
+                                            <Instagram className="mr-2 w-6 h-6" />
+                                            Ver Instagram
+                                        </Button>
+                                    </a>
+                                </div>
+                            )}
                         </motion.div>
                     </div>
                 </section>

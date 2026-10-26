@@ -982,3 +982,44 @@ Para atender às diretrizes de moderação de plataformas de freelance (especial
 3. **Adaptações de Componentes para o Modo Limpo (`cleanMode`)**:
    - `Portfolio.jsx`: Detecta automaticamente a rota `/portfolio-v2`. Os links dos cards de projetos preservam a navegação interna em `/portfolio-v2/:categorySlug/:projectSlug`. O CTA final substitui o botão de orçamento por aviso orientando o cliente a responder diretamente pelo chat da proposta.
    - `ProjectPage.jsx`: O botão de retorno redireciona para `/portfolio-v2` com o rótulo "Voltar à Vitrine". Os links de "Projeto Anterior" e "Próximo Projeto" operam no prefixo `/portfolio-v2/`. O botão de solicitar orçamento externo é suprimido em favor da orientação de fechamento pela plataforma.
+
+
+### 13.44 Filtro NavBottom Flutuante no Scroll do Portfólio (`PortfolioBottomNav.jsx` e `Portfolio.jsx`)
+
+Para proporcionar uma experiência ergonômica de navegação e filtragem contínua durante a exploração de dezenas de projetos, foi implementada uma barra de navegação inferior flutuante ("NavBottom"):
+
+1. **Componente Modular (`src/components/PortfolioBottomNav.jsx`)**:
+   - Container flutuante centralizado (`fixed bottom-3 sm:bottom-6 left-1/2 -translate-x-1/2 z-40`).
+   - Efeito glassmorphism adaptativo com suporte total aos modos claro (`bg-white/95`) e escuro (`dark:bg-[#121210]/95`).
+   - Carrossel horizontal de pílulas com `overflow-x-auto no-scrollbar` exibindo todas as categorias ativas com ícones Lucide, títulos corporativos e contadores dinâmicos.
+   - Pílula ativa em verde neon `#bcf13b` com texto escuro `#0a0a08` e sombra suave.
+   - Campo de busca instantânea integrado expansível com foco automático e botão para limpar busca.
+   - Botão para retorno suave ao topo da página (`ArrowUp`).
+
+2. **Detecção Inteligente de Scroll em `src/pages/Portfolio.jsx`**:
+   - Referência DOM via `filterSectionRef` monitorando a posição do filtro original do topo.
+   - Quando o filtro principal sai da visualização superior (`rect.bottom < 80` ou `window.scrollY > 350`), a `PortfolioBottomNav` desliza para cima com transição spring do Framer Motion.
+   - Ao rolar de volta para o topo, a barra se recolhe suavemente.
+   - Ao clicar em uma categoria pela NavBottom, se o usuário estiver muito abaixo na página, a tela rola suavemente até o início dos cards de projetos (`#portfolio-grid-top`).
+
+3. **Compatibilidade Responsiva com WhatsApp (`src/components/WhatsAppFloat.jsx`)**:
+   - Em dispositivos móveis na rota `/portfolio`, o botão flutuante de atendimento é automaticamente elevado para `bottom-[78px]` para não conflitar com a barra de navegação inferior.
+
+
+### 13.45 Vitrine Limpa de Fotografia v2 para Propostas 99freelas (`PhotographyLanding.jsx` e `PhotographyPortfolio.jsx`)
+
+Para propostas que envolvam serviços de fotografia profissional, cobertura de eventos, retratos corporativos ou tratamento de imagem no 99freelas, foi criado o mesmo mecanismo de proteção e navegação blindada:
+
+1. **Rotas Dedicadas sob `CleanShowcaseLayout`**:
+   - `/portfolio-fotografia-v2`: Apresentação institucional de fotografia sem contatos externos.
+   - `/portfolio-fotografia-v2/galeria`: Galeria completa de fotos com filtros por nicho (casamentos, ensaios, eventos) e busca.
+   - Aliases: `/portfolio-v2/fotografia`, `/portfolio-v2/fotografia/galeria`, `/fotografia-v2` e `/fotografia-v2/galeria`.
+
+2. **Supressão de Canais Externos**:
+   - Eliminados links diretos para WhatsApp (`https://wa.me/...`) e perfil do Instagram.
+   - Omissão do rodapé tradicional com telefones e formulário de contato externo.
+   - Substituição do botão "Solicitar Orçamento" por aviso instruindo a responder diretamente na proposta do 99freelas.
+
+3. **Navegação Fechada no Modo Limpo**:
+   - O componente `ProjectCarousel.jsx` agora recebe a propriedade `basePath` dinâmica (configurada como `/portfolio-v2` quando em `cleanMode`), direcionando os cliques nos cases para `/portfolio-v2/fotografia/:projectSlug`.
+   - Na galeria, o botão de retorno aponta para `/portfolio-fotografia-v2` com o rótulo "Voltar à Vitrine de Fotografia".

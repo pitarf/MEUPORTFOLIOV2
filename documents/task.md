@@ -2,6 +2,33 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Vitrine Limpa de Fotografia v2 para Propostas 99freelas (`PhotographyLanding.jsx`, `PhotographyPortfolio.jsx`, `ProjectCarousel.jsx`, `App.jsx`)**:
+  - Objetivo: Estender o ambiente blindado contra contatos externos (sem WhatsApp, sem Instagram, sem rodapé corporativo) para as páginas de apresentação e galeria de fotografia para uso em propostas de fotografia no 99freelas.
+  - Rotas Registradas em `src/App.jsx` sob `CleanShowcaseLayout`:
+    - `/portfolio-fotografia-v2`: Landing page de fotografia blindada.
+    - `/portfolio-fotografia-v2/galeria`: Galeria completa de fotografia blindada.
+    - Aliases: `/portfolio-v2/fotografia`, `/portfolio-v2/fotografia/galeria`, `/fotografia-v2`, `/fotografia-v2/galeria`.
+  - Componentes Adaptados:
+    - `PhotographyLanding.jsx`: Suporte a `isCleanMode`, remoção dos links diretos de WhatsApp e Instagram, CTA final com aviso ético e direcionamento para fechar pela plataforma do 99freelas.
+    - `PhotographyPortfolio.jsx`: Botão de retorno adaptado para `/portfolio-fotografia-v2` e links de cards direcionando para `/portfolio-v2/fotografia/:projectSlug`.
+    - `ProjectCarousel.jsx`: Adicionada prop `basePath` dinâmica para manter cliques do carrossel na rota v2.
+  - Validação Automatizada: 0 links `wa.me`, 0 links `instagram.com`, 0 links `/contato`, 0 ocorrências de `WhatsAppFloat` e navegação de retorno 100% validada via Playwright.
+
+- [x] **Filtro NavBottom Flutuante no Scroll do Portfólio (`PortfolioBottomNav.jsx`, `Portfolio.jsx`, `WhatsAppFloat.jsx`)**:
+  - Objetivo: Permitir ao usuário alternar categorias, pesquisar projetos e navegar de forma ergonômica em uma barra de navegação inferior flutuante ("NavBottom") ao rolar a página para baixo além do filtro principal do topo.
+  - Componente Criado `src/components/PortfolioBottomNav.jsx`:
+    - Floating dock centrado no rodapé da viewport (`fixed bottom-3 sm:bottom-6 left-1/2 -translate-x-1/2`) com efeito glassmorphism e animação spring via Framer Motion.
+    - Pílulas com scroll horizontal suave contendo todas as categorias (Todos, Design Gráfico, Sites, Power BI, Produção IA) com ícones, títulos e contadores em tempo real.
+    - Busca instantânea expansível integrada com foco automático, digitação reativa e botão de limpar.
+    - Botão de retorno suave ao topo da página (`ArrowUp`).
+  - Integração em `src/pages/Portfolio.jsx`:
+    - Detecção de scroll via listener passivo e `getBoundingClientRect()` do filtro principal.
+    - Sincronização bidirecional em tempo real do estado de categoria ativa e busca com o grid de projetos.
+    - Funcional em ambas as rotas: portfólio oficial (`/portfolio`) e vitrine 99freelas (`/portfolio-v2`).
+  - Compatibilidade Mobile em `src/components/WhatsAppFloat.jsx`:
+    - Elevação automática do botão flutuante de WhatsApp (`max-sm:!bottom-[78px]`) quando em rotas de portfólio para evitar qualquer conflito visual com a barra inferior.
+  - Validação Automatizada: Testado via Playwright em Desktop (1280x800) e Mobile (390x844), com clique e filtragem instantânea de projetos. Build de produção aprovado em 24.68s.
+
 - [x] **Vitrine Limpa do Portfólio v2 para Propostas 99freelas (`CleanShowcaseLayout.jsx`, `Portfolio.jsx`, `ProjectPage.jsx`, `src/App.jsx`)**:
   - Objetivo: Criar uma versão dedicada do portfólio em URL própria para anexar em propostas no 99freelas, 100% blindada contra contatos externos para evitar penalizações ou suspensão de conta pela moderação da plataforma.
   - Layout Exclusivo `CleanShowcaseLayout`:

@@ -85,7 +85,7 @@ const ProjectPage = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                 const title = (data.category.title || '').toLowerCase();
 
                 if (slug === 'desenvolvimento-de-sites' || title === 'desenvolvimento de sites') {
-                    data.category.title = 'Sites';
+                    data.category.title = 'Desenvolvedor';
                 } else if (slug === 'dashboards-em-power-bi' || title === 'dashboards em power bi') {
                     data.category.title = 'Power BI';
                 } else if (slug === 'producao-com-ia' || title === 'produção com ia' || title === 'produção ia') {

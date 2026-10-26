@@ -37,7 +37,7 @@ const Contact = () => {
     }, [user]);
 
     // --- Configuration Lists ---
-    const services = ['Design Gráfico', 'Fotografia', 'Sites', 'Dashboards Power BI', 'Vídeos com IA', 'Tráfego Pago', 'Manutenção PC', 'Câmeras CFTV', 'Outro'];
+    const services = ['Design Gráfico', 'Fotografia', 'Desenvolvedor Web', 'Dashboards Power BI', 'Vídeos com IA', 'Tráfego Pago', 'Manutenção PC', 'Câmeras CFTV', 'Outro'];
 
     const budgetRanges = [
         { label: 'Até R$ 1k', value: 'Até R$ 1.000' },

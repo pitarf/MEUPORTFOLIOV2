@@ -2,6 +2,28 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.62.0] - 2026-10-26
+
+### Adicionado (Filtro NavBottom Flutuante no Scroll do Portfólio)
+* **Novo Componente `PortfolioBottomNav` (`src/components/PortfolioBottomNav.jsx`)**:
+  * Barra de navegacao e filtro inferior ("NavBottom") que surge suavemente com animacao Framer Motion ao rolar a pagina alem da secao de filtros principal do topo.
+  * Carrossel horizontal de pilulas de categorias (Todos, Design Grafico, Sites, Power BI, Producao IA) com icones, titulos e contadores em tempo real.
+  * Busca instantanea integrada expansivel com foco automatico e botao de limpar.
+  * Botao de retorno suave ao topo da pagina (`ArrowUp`).
+  * Estilizacao glassmorphism de elite com suporte automatico aos temas Claro e Escuro (`bg-white/95` e `dark:bg-[#121210]/95`).
+* **Integracao nos Portfólios Normal e v2 (`src/pages/Portfolio.jsx`)**:
+  * Monitoramento inteligente do scroll da janela com listener passivo e referencia DOM ao filtro principal do topo.
+  * Sincronizacao bidirecional instantanea de categoria ativa e pesquisa textual com o grid de projetos.
+* **Ajuste de Ergonomia no Botao Flutuante do WhatsApp (`src/components/WhatsAppFloat.jsx`)**:
+  * Elevacao automatica em telas mobile na rota de portfolio (`max-sm:!bottom-[78px]`) para evitar qualquer sobreposicao com a barra inferior de filtros.
+* **Atualizacao da Categoria de Projetos Web (`Portfolio.jsx`, `ProjectPage.jsx`, `Contact.jsx`)**:
+  * Substituido o rotulo simplista "Sites" pelo posicionamento profissional de alto valor "Desenvolvedor" com icone `< >`.
+* **Vitrine Limpa de Fotografia v2 para Propostas 99freelas (`PhotographyLanding.jsx`, `PhotographyPortfolio.jsx`, `ProjectCarousel.jsx`, `App.jsx`)**:
+  * Criadas as rotas `/portfolio-fotografia-v2`, `/portfolio-fotografia-v2/galeria` e aliases `/portfolio-v2/fotografia`, `/fotografia-v2` sob o `CleanShowcaseLayout`.
+  * Removidos todos os links diretos para WhatsApp (`wa.me`), Instagram e formulários externos de `/contato`.
+  * Substituído o CTA final e botões do Hero por avisos de conformidade orientando o cliente a fechar o orçamento pelo chat da proposta no 99freelas.
+  * Links dos cards da galeria de fotografia integrados ao caminho protegido `/portfolio-v2/fotografia/:projectSlug`.
+
 ## [1.61.0] - 2026-10-26
 
 ### Adicionado (Vitrine Limpa do Portfólio v2 para Propostas 99freelas : Sem Contato Externo)

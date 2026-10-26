@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
 // Substituído o ícone genérico MessageCircle pelo logotipo oficial do WhatsApp
 import WhatsAppIcon from '@/components/common/WhatsAppIcon';
 
@@ -8,6 +9,9 @@ import WhatsAppIcon from '@/components/common/WhatsAppIcon';
  * Utiliza o logotipo oficial do WhatsApp com acabamento de alta qualidade e animações suaves.
  */
 const WhatsAppFloat = () => {
+    const location = useLocation();
+    const isPortfolio = location.pathname.startsWith('/portfolio');
+
     const handleWhatsAppClick = () => {
         const phoneNumber = '5521966149077';
         const message = 'Olá! Gostaria de saber mais sobre os serviços da Rafael Pita Solutions.';
@@ -20,7 +24,9 @@ const WhatsAppFloat = () => {
             onClick={handleWhatsAppClick}
             aria-label="Atendimento via WhatsApp"
             title="Fale conosco no WhatsApp"
-            className="whatsapp-float group w-16 h-16 bg-[#25D366] hover:bg-[#20ba5a] rounded-full flex items-center justify-center shadow-[0_8px_25px_rgba(37,211,102,0.45)] hover:shadow-[0_10px_35px_rgba(37,211,102,0.65)] transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-emerald-400/40"
+            className={`whatsapp-float group w-16 h-16 bg-[#25D366] hover:bg-[#20ba5a] rounded-full flex items-center justify-center shadow-[0_8px_25px_rgba(37,211,102,0.45)] hover:shadow-[0_10px_35px_rgba(37,211,102,0.65)] transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-emerald-400/40 ${
+                isPortfolio ? 'max-sm:!bottom-[78px]' : ''
+            }`}
             whileHover={{ scale: 1.12 }}
             whileTap={{ scale: 0.92 }}
             initial={{ scale: 0, opacity: 0 }}

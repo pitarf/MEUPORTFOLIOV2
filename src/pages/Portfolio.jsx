@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SEO from '@/components/SEO';
 import { 
@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Link, useSearchParams, useLocation } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useLanguage } from '@/contexts/LanguageContext';
+import PortfolioBottomNav from '@/components/PortfolioBottomNav';
 
 // Mapeamento dos ícones para as categorias de portfólio
 const icons = { 
@@ -91,6 +92,25 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
         return searchParams.get('category') || (location.hash ? location.hash.replace('#', '') : 'all');
     });
     const [searchQuery, setSearchQuery] = useState('');
+    const [showBottomNav, setShowBottomNav] = useState(false);
+    const filterSectionRef = useRef(null);
+
+    // Monitora o scroll da pagina para exibir a NavBottom quando os filtros do topo sairem da tela
+    useEffect(() => {
+        const handleScroll = () => {
+            if (filterSectionRef.current) {
+                const rect = filterSectionRef.current.getBoundingClientRect();
+                // Ativa a navbottom quando o filtro principal subir acima do topo da janela
+                setShowBottomNav(rect.bottom < 80);
+            } else {
+                setShowBottomNav(window.scrollY > 350);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        handleScroll();
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     // Reage dinamicamente a mudanças de categoria via query params ou hash
     useEffect(() => {
@@ -121,7 +141,7 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                 const title = (cat.title || '').toLowerCase();
 
                 if (slug === 'desenvolvimento-de-sites' || title === 'desenvolvimento de sites') {
-                    return { ...cat, title: 'Sites' };
+                    return { ...cat, title: 'Desenvolvedor' };
                 }
                 if (slug === 'dashboards-em-power-bi' || title === 'dashboards em power bi') {
                     return { ...cat, title: 'Power BI' };
@@ -251,7 +271,7 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                 </section>
 
                 {/* 2. Barra de Controle e Filtros de Elite (Dashboard Style) */}
-                <section className="relative z-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto -mt-6">
+                <section ref={filterSectionRef} className="relative z-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto -mt-6">
                     <div className="rounded-2xl p-4 border border-slate-200 dark:border-[#23231f] shadow-lg dark:shadow-2xl backdrop-blur-xl bg-white/95 dark:bg-[#121210] flex flex-col md:flex-row gap-4 items-center justify-between">
                         
                         {/* Seletor de Categorias por Abas Multilinha */}
@@ -322,7 +342,7 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                 </section>
 
                 {/* 3. Grid de Projetos Ultra-Premium (Animações Fluidas Framer Motion) */}
-                <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <section id="portfolio-grid-top" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 scroll-mt-24">
                     <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8">
                         <AnimatePresence mode="popLayout">
                             {filteredProjects.map((project) => {
@@ -514,6 +534,19 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                         </motion.div>
                     </div>
                 </section>
+
+                {/* 6. Barra de Navegação Inferior de Filtros Flutuante (NavBottom no Scroll) */}
+                <PortfolioBottomNav
+                    show={showBottomNav}
+                    allCategories={allCategories}
+                    projects={projects}
+                    activeTab={activeTab}
+                    setActiveTab={setActiveTab}
+                    searchQuery={searchQuery}
+                    setSearchQuery={setSearchQuery}
+                    icons={icons}
+                    t={t}
+                />
             </div>
         </>
     );

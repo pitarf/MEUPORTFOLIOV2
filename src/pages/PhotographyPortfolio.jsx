@@ -4,7 +4,7 @@ import SEO from '@/components/SEO';
 import { ExternalLink, ArrowRight, Camera, Loader2, ArrowLeft, Search, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams, useLocation } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useTheme } from '@/contexts/ThemeContext';
 
@@ -37,8 +37,20 @@ const getProjectNiche = (project) => {
  * Galeria de fotos assimétrica estilo Masonry premium, com suporte adaptativo de temas
  * e filtros horizontais instantâneos.
  */
-const PhotographyPortfolio = () => {
+const PhotographyPortfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
     const { theme } = useTheme();
+    const location = useLocation();
+
+    // Detecta modo limpo para propostas externas (sem contatos externos)
+    const isCleanMode = Boolean(
+        propCleanMode ||
+        location.pathname.startsWith('/portfolio-fotografia-v2') ||
+        location.pathname.startsWith('/portfolio-v2/fotografia') ||
+        location.pathname.startsWith('/fotografia-v2')
+    );
+    const effectiveBasePath = propBasePath || (isCleanMode ? '/portfolio-v2' : '/portfolio');
+    const homePhotoPath = isCleanMode ? "/portfolio-fotografia-v2" : "/portfolio-fotografia";
+
     const capitalize = (s) => s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
     const [projects, setProjects] = useState([]);
     const [filteredProjects, setFilteredProjects] = useState([]);
@@ -146,9 +158,9 @@ const PhotographyPortfolio = () => {
                     {/* Header e Navegação */}
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
                         <div className="space-y-3">
-                            <Link to="/portfolio-fotografia">
+                            <Link to={homePhotoPath}>
                                 <Button variant="ghost" className="text-slate-600 hover:text-[#4d7c0f] dark:text-gray-400 dark:hover:text-[#bcf13b] mb-2 pl-0 font-bold transition-colors">
-                                    <ArrowLeft className="mr-2 h-4 w-4" /> Voltar para Home de Fotografia
+                                    <ArrowLeft className="mr-2 h-4 w-4" /> {isCleanMode ? "Voltar à Vitrine de Fotografia" : "Voltar para Home de Fotografia"}
                                 </Button>
                             </Link>
                             <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-3.5">
@@ -234,7 +246,7 @@ const PhotographyPortfolio = () => {
                                             transition={{ duration: 0.4 }}
                                             className="group cursor-pointer flex flex-col"
                                         >
-                                            <Link to={`/portfolio/fotografia/${project.slug}`} className="block w-full">
+                                            <Link to={`${effectiveBasePath}/fotografia/${project.slug}`} className="block w-full">
                                                 {/* Contêiner da Imagem */}
                                                 <div className="aspect-[3/2] w-full rounded-2xl overflow-hidden shadow-md relative bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] group-hover:border-lime-500 dark:group-hover:border-[#bcf13b] group-hover:shadow-[0_0_20px_rgba(77,124,15,0.15)] dark:group-hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] transition-all duration-500">
                                                     <img

@@ -120,6 +120,14 @@ function App() {
                                     <Route path="/portfolio/v2/:categorySlug/:projectSlug" element={<ProjectPage cleanMode={true} basePath="/portfolio-v2" />} />
                                     <Route path="/projetos-v2" element={<Portfolio cleanMode={true} basePath="/portfolio-v2" />} />
                                     <Route path="/projetos-v2/:categorySlug/:projectSlug" element={<ProjectPage cleanMode={true} basePath="/portfolio-v2" />} />
+
+                                    {/* Fotografia v2 (Blindada para Propostas 99freelas) */}
+                                    <Route path="/portfolio-fotografia-v2" element={<PhotographyLanding cleanMode={true} basePath="/portfolio-v2" />} />
+                                    <Route path="/portfolio-fotografia-v2/galeria" element={<PhotographyPortfolio cleanMode={true} basePath="/portfolio-v2" />} />
+                                    <Route path="/portfolio-v2/fotografia" element={<PhotographyLanding cleanMode={true} basePath="/portfolio-v2" />} />
+                                    <Route path="/portfolio-v2/fotografia/galeria" element={<PhotographyPortfolio cleanMode={true} basePath="/portfolio-v2" />} />
+                                    <Route path="/fotografia-v2" element={<PhotographyLanding cleanMode={true} basePath="/portfolio-v2" />} />
+                                    <Route path="/fotografia-v2/galeria" element={<PhotographyPortfolio cleanMode={true} basePath="/portfolio-v2" />} />
                                 </Route>
 
                                 {/* Rotas Especiais de Demonstração & Landing Pages de Advocacia (Layout Dedicado Próprio) */}

@@ -1067,3 +1067,42 @@ Foi criada uma versão dedicada do seu portfólio pensada especificamente para s
      `https://www.rafaelpitaoficial.com.br/portfolio-v2/[categoria]/[slug-do-projeto]`
      *(Exemplo: `/portfolio-v2/videos-com-ia/o-nascimento-da-moda-animacao-ia`)*
    * O cliente poderá navegar à vontade entre os projetos e categorias, e quando clicar em "Voltar" ou no logotipo do topo, ele continuará navegando dentro da vitrine limpa sem nenhum risco para a sua conta!
+
+
+### 19.24 Filtro NavBottom Flutuante no Scroll do Portfólio
+
+Para que você e seus clientes consigam filtrar categorias e pesquisar projetos com máxima facilidade em qualquer parte da página de portfólio:
+
+1. **Como Funciona na Prática**:
+   * Ao abrir a página `/portfolio` ou `/portfolio-v2`, os filtros principais continuam no topo como você já conhece.
+   * Assim que você rola a página para baixo e passa pelo topo, uma elegante barra inferior flutuante ("NavBottom") surge automaticamente fixada na parte de baixo da tela.
+   * Ela contém todas as categorias (Todos, Design Gráfico, Sites, Power BI, Produção IA) com seus ícones e números de projetos.
+   * Ao clicar em qualquer categoria na barra inferior, os projetos na tela são filtrados instantaneamente.
+
+2. **Busca Rápida e Voltar ao Topo**:
+   * **Ícone de Lupa**: Ao clicar na lupa da barra inferior, um campo de busca é aberto diretamente na barra para você pesquisar por nome ou tecnologia de projeto sem precisar rolar tudo de volta até o início.
+   * **Ícone de Seta para Cima**: Ao clicar na seta para cima, a página sobe suavemente de volta ao topo.
+
+3. **Perfeito no Celular e no Computador**:
+   * No celular, as pílulas deslizam suavemente com o polegar de forma super ergonômica.
+   * O botão do WhatsApp no celular foi ajustado para subir um pouco, garantindo que nada fique escondido ou sobreposto.
+
+
+### 19.25 Vitrine de Fotografia v2 para Propostas 99freelas (/portfolio-fotografia-v2)
+
+Se você estiver enviando propostas no **99freelas** para serviços de fotografia, cobertura de eventos, retratos corporativos ou tratamento de imagem, agora tem links 100% seguros e blindados contra moderação:
+
+1. **Links Prontos para Usar em Propostas de Fotografia**:
+   * **Vitrine de Fotografia**:
+     `https://www.rafaelpitaoficial.com.br/portfolio-fotografia-v2`
+   * **Galeria Completa de Fotografia**:
+     `https://www.rafaelpitaoficial.com.br/portfolio-fotografia-v2/galeria`
+   * **Aliases Curtos**:
+     `https://www.rafaelpitaoficial.com.br/fotografia-v2`
+     `https://www.rafaelpitaoficial.com.br/fotografia-v2/galeria`
+
+2. **Segurança e Conformidade com o 99freelas**:
+   * O cliente não verá botões de WhatsApp nem links para o Instagram.
+   * Não há rodapé com e-mails ou números de telefone.
+   * No final da página e no topo, o cliente é orientado a negociar e responder diretamente no chat da proposta do 99freelas.
+   * O contratante poderá navegar à vontade entre os ensaios, eventos e casamentos, permanecendo 100% dentro do ambiente protegido.
