@@ -2,6 +2,29 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Vitrine Limpa do Portfólio v2 para Propostas 99freelas (`CleanShowcaseLayout.jsx`, `Portfolio.jsx`, `ProjectPage.jsx`, `src/App.jsx`)**:
+  - Objetivo: Criar uma versão dedicada do portfólio em URL própria para anexar em propostas no 99freelas, 100% blindada contra contatos externos para evitar penalizações ou suspensão de conta pela moderação da plataforma.
+  - Layout Exclusivo `CleanShowcaseLayout`:
+    - Omissão completa do rodapé corporativo (`Footer`), eliminando números de telefone, e-mails, endereços e redes sociais.
+    - Omissão do botão flutuante de atendimento via WhatsApp (`WhatsAppFloat`).
+    - Header com logotipo da marca, selo "Versão Portfólio Comercial" e alternador de tema claro/escuro, sem menus ou links de contato externo.
+    - Rodapé minimalista informando que a contratação e o atendimento ocorrem estritamente pela plataforma.
+  - Rotas Registradas em `src/App.jsx`: `/portfolio-v2`, `/portfolio-v2/:categorySlug/:projectSlug`, e aliases `/portfolio/v2` e `/projetos-v2`.
+  - Adaptação dos Componentes:
+    - `Portfolio.jsx`: cards de projetos apontam internamente para `/portfolio-v2/...`. A seção final de CTA substitui o botão de orçamento por aviso neutro de alinhamento pela proposta do 99freelas.
+    - `ProjectPage.jsx`: botão voltar retorna para `/portfolio-v2`, navegação de anterior/próximo mantida em `/portfolio-v2` e remoção de links para `/contato`.
+  - Validação Automatizada: Testado via Playwright com zero ocorrências de WhatsApp e zero links de contato externo em `/portfolio-v2` e na página de detalhes. Compilação `npm run build` aprovada em 20.23s.
+
+- [x] **Correção de Tela Branca na Página de Detalhes do Projeto (`src/pages/ProjectPage.jsx`)**:
+  - Causa Raiz: O hook `useState('auto')` havia sido inserido após retornos condicionais (`if (loading)` e `if (!project)`), violando as regras de Hooks do React e provocando o erro fatal `Rendered more hooks than during the previous render` em tempo de execução ao finalizar o carregamento.
+  - Correção Estrutural: O hook `useState` foi movido para o topo do componente com os demais hooks.
+  - Defensividade: Implementada normalização resiliente para `project.services`, `project.video_urls` e `project.gallery_urls`.
+  - Validação Automatizada: Testado com Playwright localmente nas rotas `/portfolio/videos-com-ia/o-nascimento-da-moda-animacao-ia`, `/portfolio` e `/`, com carregamento de títulos e players sem nenhum erro no console. Compilação `npm run build` aprovada em 24.49s.
+  - Pranchas de Consistência & Capa Oficial do Curta de IA:
+    - Adicionadas as 4 pranchas originais em `public/images/projects/o-nascimento-da-moda/`: A Estudante contemporânea, Prof. João Braga, Gilles Lipovetsky e Georg Simmel.
+    - Integrada a imagem de capa oficial do curta (`capa-o-nascimento-da-moda.png`) como `main_image_url` no Supabase e na galeria.
+    - Galeria atualizada na `ProjectPage.jsx` com proporção 3:2, etiquetas inteligentes e modal lightbox em tela cheia.
+
 - [x] **Design System Moderno & Página Integradora de Nutrição : Referência NutriVida (`src/data/nutritionistsData.js`, `src/pages/nutrition/ModernNutritionPage.jsx`, `src/components/nutrition/modern/`, `src/App.jsx`)**:
   - Camada de Dados Parametrizada (`src/data/nutritionistsData.js`):
     - Novo perfil temático `dra-beatriz-lima-nutrivida` com aliases `nutrivida` e `dra-beatriz-lima`.

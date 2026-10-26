@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import SEO from '@/components/SEO';
 import { motion } from 'framer-motion';
 import { supabase } from '@/lib/customSupabaseClient';
-import { Loader2, ArrowLeft, ArrowRight, ExternalLink, User, Calendar, Tag, Star, Play, Image as ImageIcon } from 'lucide-react';
+import { Loader2, ArrowLeft, ArrowRight, ExternalLink, User, Calendar, Tag, Star, Play, Image as ImageIcon, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ImageGalleryModal from '@/components/ImageGalleryModal';
 import { cn } from '@/lib/utils';
@@ -31,15 +31,27 @@ const getEmbedUrl = (url) => {
     return embedUrl;
 };
 
-const ProjectPage = () => {
+const ProjectPage = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
     const { projectSlug } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // Detecta se a página está no modo limpo para propostas externas
+    const isCleanMode = Boolean(
+        propCleanMode ||
+        location.pathname.startsWith('/portfolio-v2') ||
+        location.pathname.startsWith('/portfolio/v2') ||
+        location.pathname.startsWith('/projetos-v2')
+    );
+    const effectiveBasePath = propBasePath || (isCleanMode ? '/portfolio-v2' : '/portfolio');
+
     const [project, setProject] = useState(null);
     const [loading, setLoading] = useState(true);
     const [allProjects, setAllProjects] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(-1);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalStartIndex, setModalStartIndex] = useState(0);
+    const [mediaMode, setMediaMode] = useState('auto');
 
     const fetchProjectData = useCallback(async () => {
         setLoading(true);
@@ -65,7 +77,7 @@ const ProjectPage = () => {
 
         if (error || !data) {
             console.error('Error fetching project:', error);
-            navigate('/portfolio');
+            navigate(effectiveBasePath);
         } else {
             // Mapeamento dinâmico de títulos corporativos compactos e refinados
             if (data.category) {
@@ -85,7 +97,7 @@ const ProjectPage = () => {
             setCurrentIndex(currentIdx);
         }
         setLoading(false);
-    }, [projectSlug, navigate]);
+    }, [projectSlug, navigate, effectiveBasePath]);
 
     useEffect(() => {
         fetchProjectData();
@@ -132,16 +144,42 @@ const ProjectPage = () => {
         '3:4': 'aspect-[3/4] max-w-lg mx-auto',
         '1:1': 'aspect-square max-w-2xl mx-auto',
         '4:5': 'aspect-[4/5] max-w-sm mx-auto',
+        '3:2': 'aspect-[3/2]',
     };
     const mainImageAspectRatio = project.main_image_aspect_ratio || '16:9';
 
+    // Identificação amigável de pranchas de personagens e mídias
+    const getPhotoLabel = (url) => {
+        if (typeof url !== 'string') return null;
+        const lower = url.toLowerCase();
+        if (lower.includes('capa-o-nascimento-da-moda') || lower.includes('capa')) return 'Cena Principal : Diálogo com Gilles Lipovetsky';
+        if (lower.includes('estudante')) return 'Prancha de Consistência : A Estudante';
+        if (lower.includes('joao-braga')) return 'Prancha de Consistência : Prof. João Braga';
+        if (lower.includes('lipovetsky')) return 'Prancha de Consistência : Gilles Lipovetsky';
+        if (lower.includes('simmel')) return 'Prancha de Consistência : Georg Simmel';
+        if (lower.includes('youtube.com') || lower.includes('maxresdefault')) return 'Cena de Abertura / Encontro na Biblioteca';
+        return null;
+    };
+
+    // Normalização defensiva de galerias e vídeos
+    const normalizedGalleryUrls = Array.isArray(project.gallery_urls)
+        ? project.gallery_urls
+        : (typeof project.gallery_urls === 'string' && project.gallery_urls.trim()
+            ? (project.gallery_urls.startsWith('[') ? JSON.parse(project.gallery_urls) : project.gallery_urls.split(',').map(u => u.trim()))
+            : []);
+
     const allGalleryImages = Array.from(new Set([
         ...(project.main_image_url ? [project.main_image_url] : []),
-        ...(project.gallery_urls || [])
+        ...normalizedGalleryUrls
     ]));
 
-    const [mediaMode, setMediaMode] = useState('auto');
-    const firstVideoUrl = (project.video_urls && project.video_urls.length > 0) ? project.video_urls[0] : null;
+    const normalizedVideoUrls = Array.isArray(project.video_urls)
+        ? project.video_urls
+        : (typeof project.video_urls === 'string' && project.video_urls.trim()
+            ? (project.video_urls.startsWith('[') ? JSON.parse(project.video_urls) : project.video_urls.split(',').map(u => u.trim()))
+            : []);
+
+    const firstVideoUrl = (normalizedVideoUrls && normalizedVideoUrls.length > 0) ? normalizedVideoUrls[0] : null;
     const primaryVideoEmbed = firstVideoUrl ? getEmbedUrl(firstVideoUrl) : null;
     const isShowingVideo = primaryVideoEmbed && (mediaMode === 'video' || mediaMode === 'auto');
 
@@ -169,17 +207,17 @@ const ProjectPage = () => {
                         animate={{ opacity: 1, y: 0 }}
                     >
                         <Link
-                            to={project.category && project.category.slug === 'fotografia' ? '/portfolio-fotografia/galeria' : '/portfolio'}
+                            to={project.category && project.category.slug === 'fotografia' ? '/portfolio-fotografia/galeria' : effectiveBasePath}
                             className="inline-flex items-center text-slate-600 dark:text-gray-400 hover:text-lime-600 dark:hover:text-[#bcf13b] mb-8 transition-colors font-semibold"
                         >
-                            <ArrowLeft className="mr-2 w-4 h-4" /> {project.category && project.category.slug === 'fotografia' ? 'Voltar para Galeria' : 'Voltar ao Portfólio'}
+                            <ArrowLeft className="mr-2 w-4 h-4" /> {project.category && project.category.slug === 'fotografia' ? 'Voltar para Galeria' : (isCleanMode ? 'Voltar à Vitrine' : 'Voltar ao Portfólio')}
                         </Link>
                         <h1 className="text-4xl md:text-6xl font-extrabold mb-2 text-slate-900 dark:text-white">
                             {project.title}
                         </h1>
                         {project.category && (
                             <div className="flex flex-wrap items-center gap-x-4 text-slate-600 dark:text-gray-400 mb-8 font-semibold">
-                                <Link to={`/portfolio?category=${project.category.slug || ''}`} className="text-[#4d7c0f] dark:text-[#bcf13b] hover:underline transition-colors">
+                                <Link to={`${effectiveBasePath}?category=${project.category.slug || ''}`} className="text-[#4d7c0f] dark:text-[#bcf13b] hover:underline transition-colors">
                                     {project.category.title || 'Portfólio'}
                                 </Link>
                             </div>
@@ -308,7 +346,11 @@ const ProjectPage = () => {
                                 <div>
                                     <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">Serviços Prestados</h3>
                                     <ul className="flex flex-wrap gap-2">
-                                        {(project.services || [])
+                                        {(Array.isArray(project.services)
+                                            ? project.services
+                                            : (typeof project.services === 'string' && project.services.trim()
+                                                ? (project.services.startsWith('[') ? JSON.parse(project.services) : project.services.split(',').map(s => s.trim()))
+                                                : []))
                                             .filter(service => typeof service === 'string' && !service.startsWith('subcategoria:') && !service.startsWith('nicho:'))
                                             .map((service, index) => (
                                                 <li key={index} className="bg-slate-100 dark:bg-[#181814] text-slate-700 dark:text-gray-200 text-sm px-3 py-1 rounded-full flex items-center gap-2 border border-slate-200 dark:border-[#23231f] font-bold">
@@ -334,16 +376,16 @@ const ProjectPage = () => {
                         </aside>
                     </div>
 
-                    {project.video_urls && project.video_urls.length > 0 && (
+                    {normalizedVideoUrls && normalizedVideoUrls.length > 0 && (
                         <motion.div variants={sectionVariants} initial="hidden" animate="visible" className="mt-20">
                             <h2 className="text-4xl font-bold mb-8 text-center text-slate-900 dark:text-white">
-                                {project.video_urls.length === 1 ? 'Vídeo Completo' : 'Galeria de'} <span className="text-[#4d7c0f] dark:text-[#bcf13b]">{project.video_urls.length === 1 ? 'em Alta Definição' : 'Vídeos'}</span>
+                                {normalizedVideoUrls.length === 1 ? 'Vídeo Completo' : 'Galeria de'} <span className="text-[#4d7c0f] dark:text-[#bcf13b]">{normalizedVideoUrls.length === 1 ? 'em Alta Definição' : 'Vídeos'}</span>
                             </h2>
                             <div className={cn(
                                 "gap-8",
-                                project.video_urls.length === 1 ? "max-w-4xl mx-auto" : "grid grid-cols-1 md:grid-cols-2"
+                                normalizedVideoUrls.length === 1 ? "max-w-4xl mx-auto" : "grid grid-cols-1 md:grid-cols-2"
                             )}>
-                                {project.video_urls.map((url, index) => {
+                                {normalizedVideoUrls.map((url, index) => {
                                     const embedUrl = getEmbedUrl(url);
                                     if (!embedUrl) return null;
                                     return (
@@ -366,33 +408,47 @@ const ProjectPage = () => {
                     {allGalleryImages && allGalleryImages.length > 0 && (
                         <motion.div variants={sectionVariants} initial="hidden" animate="visible" className="mt-20">
                             <h2 className="text-4xl font-bold mb-8 text-center text-slate-900 dark:text-white">
-                                Galeria de <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Imagens</span>
+                                {project.category && (project.category.slug === 'videos-com-ia' || project.category.slug === 'producao-com-ia')
+                                    ? <span>Pranchas de <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Personagens & Mídia</span></span>
+                                    : <span>Galeria de <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Imagens</span></span>}
                             </h2>
-                            <div className={cn("grid gap-4",
-                                project.gallery_aspect_ratio === '16:9' ? "grid-cols-1 md:grid-cols-2" : "grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+                            <div className={cn("grid gap-6",
+                                (project.gallery_aspect_ratio === '16:9' || project.gallery_aspect_ratio === '3:2')
+                                    ? "grid-cols-1 md:grid-cols-2"
+                                    : "grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
                             )}>
-                                {allGalleryImages.map((url, index) => (
-                                    <motion.div
-                                        key={index}
-                                        variants={itemVariants}
-                                        className={cn("relative group overflow-hidden rounded-xl cursor-pointer border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] transition-all duration-300",
-                                            aspectRatioClasses[project.gallery_aspect_ratio || '16:9'] || 'aspect-[4/5]'
-                                        )}
-                                        onClick={() => openModal(index)}
-                                    >
-                                        <img
-                                            src={url}
-                                            alt={`Galeria do projeto ${project.title} - ${index + 1}`}
-                                            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
-                                            loading="lazy"
-                                        />
-                                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                            <p className="text-[#0a0a08] text-sm font-bold bg-[#bcf13b] px-4 py-2 rounded-full border border-[#bcf13b]/30 shadow-lg">
-                                                Ver Imagem
-                                            </p>
-                                        </div>
-                                    </motion.div>
-                                ))}
+                                {allGalleryImages.map((url, index) => {
+                                    const photoLabel = getPhotoLabel(url);
+                                    return (
+                                        <motion.div
+                                            key={index}
+                                            variants={itemVariants}
+                                            className={cn("relative group overflow-hidden rounded-2xl cursor-pointer border border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] hover:border-lime-500 dark:hover:border-[#bcf13b] transition-all duration-300 shadow-md",
+                                                aspectRatioClasses[project.gallery_aspect_ratio || '16:9'] || 'aspect-[4/5]'
+                                            )}
+                                            onClick={() => openModal(index)}
+                                        >
+                                            <img
+                                                src={url}
+                                                alt={photoLabel || `Galeria do projeto ${project.title} - ${index + 1}`}
+                                                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                                loading="lazy"
+                                            />
+                                            {/* Rótulo permanente de identificação do personagem */}
+                                            {photoLabel && (
+                                                <div className="absolute top-3 left-3 bg-black/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 text-xs font-bold text-white shadow-lg pointer-events-none">
+                                                    <span className="text-[#bcf13b] mr-1.5 font-black">●</span>
+                                                    {photoLabel}
+                                                </div>
+                                            )}
+                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                                <p className="text-[#0a0a08] text-sm font-bold bg-[#bcf13b] px-4 py-2 rounded-full border border-[#bcf13b]/30 shadow-lg">
+                                                    Ampliar Imagem
+                                                </p>
+                                            </div>
+                                        </motion.div>
+                                    );
+                                })}
                             </div>
                         </motion.div>
                     )}
@@ -411,12 +467,19 @@ const ProjectPage = () => {
                                 Transforme suas ideias em realidade ou nos conte como foi sua experiência.
                             </p>
 
-                            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                                <Link to="/contato">
-                                    <Button size="lg" className="bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-bold rounded-lg shadow-lg shadow-[#bcf13b]/20 hover:scale-[1.02] transition-transform w-full sm:w-auto">
-                                        Peça seu orçamento
-                                    </Button>
-                                </Link>
+                            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                                {isCleanMode ? (
+                                    <div className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-lime-500/10 text-lime-700 dark:text-[#bcf13b] border border-lime-500/20 text-sm font-bold shadow-sm">
+                                        <CheckCircle2 className="w-5 h-5 text-lime-600 dark:text-[#bcf13b]" />
+                                        <span>Responda à nossa proposta diretamente no 99freelas para alinharmos seu projeto!</span>
+                                    </div>
+                                ) : (
+                                    <Link to="/contato">
+                                        <Button size="lg" className="bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-bold rounded-lg shadow-lg shadow-[#bcf13b]/20 hover:scale-[1.02] transition-transform w-full sm:w-auto">
+                                            Peça seu orçamento
+                                        </Button>
+                                    </Link>
+                                )}
                                 <Dialog>
                                     <DialogTrigger asChild>
                                         <Button size="lg" variant="outline" className="border border-slate-200 dark:border-[#23231f] bg-slate-100 dark:bg-[#181814] text-slate-800 dark:text-white hover:bg-slate-200 dark:hover:bg-[#23231f] hover:text-lime-600 dark:hover:text-[#bcf13b] hover:border-lime-500 dark:hover:border-[#bcf13b] w-full sm:w-auto font-bold shadow-sm transition-all duration-300">
@@ -445,14 +508,14 @@ const ProjectPage = () => {
                         className="flex justify-between items-center mt-20 pt-8 border-t border-slate-200 dark:border-[#23231f]"
                     >
                         {prevProject ? (
-                            <Link to={`/portfolio/${prevProject.category?.slug || 'geral'}/${prevProject.slug}`}>
+                            <Link to={`${effectiveBasePath}/${prevProject.category?.slug || 'geral'}/${prevProject.slug}`}>
                                 <Button variant="outline" className="border border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-[#181814] hover:text-lime-600 dark:hover:text-[#bcf13b] hover:border-lime-500 dark:hover:border-[#bcf13b] font-bold transition-all shadow-sm">
                                     <ArrowLeft className="mr-2 h-4 w-4" /> Projeto Anterior
                                 </Button>
                             </Link>
                         ) : <div />}
                         {nextProject ? (
-                            <Link to={`/portfolio/${nextProject.category?.slug || 'geral'}/${nextProject.slug}`}>
+                            <Link to={`${effectiveBasePath}/${nextProject.category?.slug || 'geral'}/${nextProject.slug}`}>
                                 <Button variant="outline" className="border border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-[#181814] hover:text-lime-600 dark:hover:text-[#bcf13b] hover:border-lime-500 dark:hover:border-[#bcf13b] font-bold transition-all shadow-sm">
                                     Próximo Projeto <ArrowRight className="ml-2 h-4 w-4" />
                                 </Button>

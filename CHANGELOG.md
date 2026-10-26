@@ -2,6 +2,37 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.61.0] - 2026-10-26
+
+### Adicionado (Vitrine Limpa do Portfólio v2 para Propostas 99freelas : Sem Contato Externo)
+* **Novo Layout Especial `CleanShowcaseLayout` (`src/components/CleanShowcaseLayout.jsx`)**:
+  * Removido o rodapé geral com telefones, e-mail e links para redes sociais externas.
+  * Removido o botão flutuante de WhatsApp (`WhatsAppFloat`).
+  * Header/Navbar exclusivo sem links para `/contato` ou chamadas externas, contendo apenas o logotipo da marca, badge de vitrine e alternador de tema claro/escuro.
+  * Rodapé estrito e minimalista em conformidade com as regras de moderação do 99freelas.
+* **Novas Rotas Dedicadas em `src/App.jsx`**:
+  * `/portfolio-v2`: Vitrine de projetos 100% blindada contra contatos externos.
+  * `/portfolio-v2/:categorySlug/:projectSlug`: Páginas de detalhes dos projetos com botão de retorno voltando para `/portfolio-v2`.
+  * Aliases `/portfolio/v2` e `/projetos-v2` para flexibilidade em propostas comerciais.
+* **Adaptação dos Componentes `Portfolio.jsx` e `ProjectPage.jsx`**:
+  * Suporte ao parâmetro `cleanMode`: substituição de links para `/contato` por chamadas neutras orientando o cliente a responder diretamente pelo chat da proposta na plataforma.
+  * Navegação entre projetos anteriores e próximos mantida dentro do escopo `/portfolio-v2/`.
+
+## [1.60.1] - 2026-10-22
+
+### Corrigido (Tela Branca na Página de Detalhes do Projeto : Regras de Hooks & Normalização Defensiva)
+* **Resolução de Violação das Regras de Hooks no React (`src/pages/ProjectPage.jsx`)**:
+  * Movida a chamada do hook `useState('auto')` (modo de mídia: vídeo vs imagem) para o topo do componente junto com os demais hooks, eliminando o erro fatal `Rendered more hooks than during the previous render` que causava tela branca após o término do carregamento.
+* **Normalização Defensiva de Arrays de Mídia & Serviços**:
+  * Implementada proteção contra valores `null`, strings serializadas ou formatos inesperados em `project.services`, `project.video_urls` e `project.gallery_urls`.
+  * Validação aprovada via Playwright sem erros de runtime na rota `/portfolio/videos-com-ia/o-nascimento-da-moda-animacao-ia` e no build de produção.
+* **Pranchas de Consistência dos Personagens de IA (`public/images/projects/o-nascimento-da-moda/`)**:
+  * Adicionadas as 4 pranchas originais de consistência de personagens em proporção 3:2 (A Estudante, Prof. João Braga, Gilles Lipovetsky e Georg Simmel).
+  * Galeria refinada em `src/pages/ProjectPage.jsx` com suporte a proporção 3:2 e etiquetas de identificação flutuantes (`● Prancha de Consistência : ...`).
+  * Atualização da galeria no Supabase conectando as pranchas à página do projeto.
+* **Capa Oficial de Produção em 16:9 (`capa-o-nascimento-da-moda.png`)**:
+  * Integrada a cena oficial do diálogo entre a Estudante e Gilles Lipovetsky no palácio clássico como imagem principal (`main_image_url`) do projeto no banco de dados e cards de vitrine do portfólio.
+
 ## [1.60.0] - 2026-10-22
 
 ### Adicionado (Design System Moderno & Página Integradora de Nutrição : Referência NutriVida)

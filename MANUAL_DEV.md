@@ -962,3 +962,23 @@ Desenvolvido para oferecer um layout de altíssima conversão baseado na referê
 
 
 
+
+
+### 13.43 Vitrine Limpa do Portfólio v2 para Propostas 99freelas (`CleanShowcaseLayout.jsx` e `/portfolio-v2`)
+
+Para atender às diretrizes de moderação de plataformas de freelance (especialmente 99freelas), onde qualquer exibição de contatos externos (números de telefone, e-mails, botões de WhatsApp ou links de redes sociais) acarreta cancelamento de propostas e suspensão da conta, foi desenvolvida uma arquitetura de exibição blindada:
+
+1. **Layout Isolado (`src/components/CleanShowcaseLayout.jsx`)**:
+   - Omite integralmente o componente `Footer`, eliminando qualquer menção a canais de contato, formulários ou mídias sociais.
+   - Omite integralmente o componente `WhatsAppFloat`, impedindo o surgimento do botão flutuante de atendimento.
+   - Navbar minimalista: exibe exclusivamente a logomarca oficial `BrandLogo`, o selo "Versão Portfólio Comercial" e o botão de alternância de tema claro/escuro.
+   - Rodapé técnico minimalista com aviso ético: *"Comunicação e contratação realizadas exclusivamente via plataforma oficial."*
+
+2. **Roteamento Exclusivo em `src/App.jsx`**:
+   - `/portfolio-v2`: Mostruário completo com filtros por categoria e busca textual em tempo real.
+   - `/portfolio-v2/:categorySlug/:projectSlug`: Visualização detalhada de cases de projetos.
+   - Aliases `/portfolio/v2` e `/projetos-v2` para maior flexibilidade em links de propostas.
+
+3. **Adaptações de Componentes para o Modo Limpo (`cleanMode`)**:
+   - `Portfolio.jsx`: Detecta automaticamente a rota `/portfolio-v2`. Os links dos cards de projetos preservam a navegação interna em `/portfolio-v2/:categorySlug/:projectSlug`. O CTA final substitui o botão de orçamento por aviso orientando o cliente a responder diretamente pelo chat da proposta.
+   - `ProjectPage.jsx`: O botão de retorno redireciona para `/portfolio-v2` com o rótulo "Voltar à Vitrine". Os links de "Projeto Anterior" e "Próximo Projeto" operam no prefixo `/portfolio-v2/`. O botão de solicitar orçamento externo é suprimido em favor da orientação de fechamento pela plataforma.

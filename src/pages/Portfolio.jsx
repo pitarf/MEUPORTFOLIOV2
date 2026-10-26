@@ -69,10 +69,20 @@ const getProjectTechs = (categorySlug, projectTitle, projectServices) => {
     return ['Figma', 'Soluções Digitais', 'Excelência'];
 };
 
-const Portfolio = () => {
+const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
     const { t } = useLanguage();
     const [searchParams] = useSearchParams();
     const location = useLocation();
+
+    // Detecta modo limpo para propostas externas (sem contatos externos)
+    const isCleanMode = Boolean(
+        propCleanMode ||
+        location.pathname.startsWith('/portfolio-v2') ||
+        location.pathname.startsWith('/portfolio/v2') ||
+        location.pathname.startsWith('/projetos-v2')
+    );
+    const effectiveBasePath = propBasePath || (isCleanMode ? '/portfolio-v2' : '/portfolio');
+
     const [allCategories, setAllCategories] = useState([]);
     const [projects, setProjects] = useState([]);
     const [filteredProjects, setFilteredProjects] = useState([]);
@@ -328,7 +338,7 @@ const Portfolio = () => {
                                         transition={{ duration: 0.4 }}
                                         className="group relative rounded-2xl overflow-hidden border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] shadow-sm hover:shadow-md dark:shadow-none hover:shadow-lime-500/10 dark:hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] transition-all duration-300 cursor-pointer bg-white dark:bg-[#121210] flex flex-col h-full"
                                     >
-                                        <Link to={`/portfolio/${cat.slug}/${project.slug}`} className="flex flex-col h-full w-full">
+                                        <Link to={`${effectiveBasePath}/${cat.slug}/${project.slug}`} className="flex flex-col h-full w-full">
                                             
                                             {/* Imagem de Fundo */}
                                             <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100 dark:bg-[#181814]">
@@ -476,22 +486,31 @@ const Portfolio = () => {
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            className="space-y-8"
+                            className="space-y-6"
                         >
                             <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white">
                                 Gostou do nosso <span className="text-[#4d7c0f] dark:text-[#bcf13b]">histórico técnico</span>?
                             </h2>
                             <p className="text-lg md:text-xl text-slate-600 dark:text-gray-300 max-w-2xl mx-auto font-medium">
-                                Vamos transformar seu próximo projeto em um case de sucesso de alta notoriedade comercial. Agende sua consultoria agora!
+                                {isCleanMode 
+                                    ? 'Transformamos sua necessidade em um projeto de alto nível e acabamento impecável. Responda diretamente na nossa proposta para alinharmos detalhes e prazos!'
+                                    : 'Vamos transformar seu próximo projeto em um case de sucesso de alta notoriedade comercial. Agende sua consultoria agora!'}
                             </p>
-                            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                                <Link to="/contato" className="w-full sm:w-auto">
-                                    <Button size="lg" className="w-full bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-bold rounded-lg shadow-lg shadow-[#bcf13b]/20 text-lg px-8 py-4 transition-all duration-300">
-                                        Solicitar Orçamento
-                                        <ArrowRight className="ml-2 w-5 h-5 text-[#0a0a08]" />
-                                    </Button>
-                                </Link>
-                            </div>
+                            {isCleanMode ? (
+                                <div className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-lime-500/10 text-lime-700 dark:text-[#bcf13b] border border-lime-500/20 text-sm font-bold shadow-sm">
+                                    <CheckCircle2 className="w-5 h-5 text-lime-600 dark:text-[#bcf13b]" />
+                                    <span>Comunicação e contratação 100% integradas pela plataforma do 99freelas.</span>
+                                </div>
+                            ) : (
+                                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                                    <Link to="/contato" className="w-full sm:w-auto">
+                                        <Button size="lg" className="w-full bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-bold rounded-lg shadow-lg shadow-[#bcf13b]/20 text-lg px-8 py-4 transition-all duration-300">
+                                            Solicitar Orçamento
+                                            <ArrowRight className="ml-2 w-5 h-5 text-[#0a0a08]" />
+                                        </Button>
+                                    </Link>
+                                </div>
+                            )}
                         </motion.div>
                     </div>
                 </section>

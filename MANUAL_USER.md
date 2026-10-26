@@ -1047,3 +1047,23 @@ Para oferecer uma opção visual ainda mais conectada às tendências de saúde 
 
 
 
+
+
+### 19.23 Vitrine do Portfólio v2 para Propostas 99freelas (/portfolio-v2)
+
+Foi criada uma versão dedicada do seu portfólio pensada especificamente para ser anexada em propostas no **99freelas** e outras plataformas de intermediação profissional:
+
+1. **Blindagem Total contra Bloqueio e Moderação**:
+   * O 99freelas pune severamente usuários cujos links contenham formas de contato direto (WhatsApp, telefone, e-mail ou formulários externos).
+   * Na rota `/portfolio-v2`, todos esses elementos foram removidos:
+     * **Sem Rodapé Externo**: Eliminados dados de contato, telefones, e-mails e redes sociais.
+     * **Sem Botão Flutuante de WhatsApp**: O botão verde de atendimento não é renderizado.
+     * **Sem Botões de "Solicitar Orçamento"**: O CTA final orienta o contratante a responder e negociar exclusivamente pelo chat da sua proposta no 99freelas.
+
+2. **Como Usar nas Suas Propostas**:
+   * Basta colar o link da vitrine limpa na sua proposta:
+     `https://www.rafaelpitaoficial.com.br/portfolio-v2`
+   * Caso queira enviar um projeto específico para o cliente ver um case idêntico ao que ele precisa, use a URL limpa do projeto:
+     `https://www.rafaelpitaoficial.com.br/portfolio-v2/[categoria]/[slug-do-projeto]`
+     *(Exemplo: `/portfolio-v2/videos-com-ia/o-nascimento-da-moda-animacao-ia`)*
+   * O cliente poderá navegar à vontade entre os projetos e categorias, e quando clicar em "Voltar" ou no logotipo do topo, ele continuará navegando dentro da vitrine limpa sem nenhum risco para a sua conta!

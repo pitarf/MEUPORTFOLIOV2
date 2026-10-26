@@ -10,6 +10,7 @@ import GTMRouteTracker from '@/components/GTMRouteTracker';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import MainLayout from '@/components/MainLayout';
 import AdminLayout from '@/components/AdminLayout';
+import CleanShowcaseLayout from '@/components/CleanShowcaseLayout';
 
 import { SiteConfigProvider } from '@/contexts/SiteConfigContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
@@ -109,6 +110,16 @@ function App() {
                                     <Route path="/projeto" element={<ClientProjectTrack />} />
                                     <Route path="/projeto/:budgetCode" element={<ClientProjectTrack />} />
                                     <Route path="/acompanhar-projeto/:budgetCode" element={<ClientProjectTrack />} />
+                                </Route>
+
+                                {/* Rotas da Vitrine Limpa para Propostas 99freelas (Sem Rodapé, Sem WhatsApp, Sem Contatos Externos) */}
+                                <Route element={<CleanShowcaseLayout />}>
+                                    <Route path="/portfolio-v2" element={<Portfolio cleanMode={true} basePath="/portfolio-v2" />} />
+                                    <Route path="/portfolio-v2/:categorySlug/:projectSlug" element={<ProjectPage cleanMode={true} basePath="/portfolio-v2" />} />
+                                    <Route path="/portfolio/v2" element={<Portfolio cleanMode={true} basePath="/portfolio-v2" />} />
+                                    <Route path="/portfolio/v2/:categorySlug/:projectSlug" element={<ProjectPage cleanMode={true} basePath="/portfolio-v2" />} />
+                                    <Route path="/projetos-v2" element={<Portfolio cleanMode={true} basePath="/portfolio-v2" />} />
+                                    <Route path="/projetos-v2/:categorySlug/:projectSlug" element={<ProjectPage cleanMode={true} basePath="/portfolio-v2" />} />
                                 </Route>
 
                                 {/* Rotas Especiais de Demonstração & Landing Pages de Advocacia (Layout Dedicado Próprio) */}
