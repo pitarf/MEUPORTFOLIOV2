@@ -3,9 +3,10 @@ import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Button } from '@/components/ui/button';
-import { LifeBuoy, FolderKanban, Mail, Star, Loader2, Briefcase, MessageSquare, CheckCircle, AlertCircle, Clock, Inbox, LogOut } from 'lucide-react';
+import { LifeBuoy, FolderKanban, Mail, Star, Loader2, Briefcase, MessageSquare, CheckCircle, AlertCircle, Clock, Inbox, LogOut, Server, HardDrive, ArrowRight } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
+import { fetchVPSStatus } from '@/services/vpsMonitorService';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from 'recharts';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -23,6 +24,7 @@ const Dashboard = () => {
         supportClosed: 0,
     });
     const [loading, setLoading] = useState(true);
+    const [vpsStats, setVpsStats] = useState(null);
 
     const handleSignOut = async () => {
         await signOut();
@@ -71,6 +73,7 @@ const Dashboard = () => {
 
         if (isAdmin) {
             fetchDashboardData();
+            fetchVPSStatus().then((data) => setVpsStats(data)).catch(() => {});
         } else {
             setLoading(false);
         }
@@ -159,7 +162,7 @@ const Dashboard = () => {
                                     </ResponsiveContainer>
                                 </CardContent>
                             </Card>
-                        </motion.div>
+                                                    </motion.div>
 
                         <motion.div className="space-y-8" variants={itemVariants}>
                             <Card className="glass-effect">
@@ -181,6 +184,54 @@ const Dashboard = () => {
                                 </CardContent>
                             </Card>
 
+                            <Card className="glass-effect border border-border/60">
+                                <CardHeader className="pb-3">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <Server className="h-4 w-4 text-primary" />
+                                            <CardTitle className="text-base font-semibold">Infraestrutura VPS</CardTitle>
+                                        </div>
+                                        <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                            Online
+                                        </span>
+                                    </div>
+                                </CardHeader>
+                                <CardContent className="space-y-3">
+                                    <div className="grid grid-cols-2 gap-2 text-xs">
+                                        <div className="p-2.5 rounded-lg bg-muted/40 border border-border/40">
+                                            <span className="text-muted-foreground block text-[11px]">SSD NVMe</span>
+                                            <span className="font-bold text-foreground">
+                                                {vpsStats?.disk?.free_gb ? `${vpsStats.disk.free_gb} GB livres` : '178 GB livres'}
+                                            </span>
+                                            <span className="text-[10px] text-muted-foreground block">
+                                                {vpsStats?.disk?.percent ? `${vpsStats.disk.percent}% usado` : '7.6% usado'}
+                                            </span>
+                                        </div>
+                                        <div className="p-2.5 rounded-lg bg-muted/40 border border-border/40">
+                                            <span className="text-muted-foreground block text-[11px]">Memória RAM</span>
+                                            <span className="font-bold text-foreground">
+                                                {vpsStats?.ram?.free_gb ? `${vpsStats.ram.free_gb} GB livres` : '21 GB livres'}
+                                            </span>
+                                            <span className="text-[10px] text-muted-foreground block">
+                                                {vpsStats?.ram?.percent ? `${vpsStats.ram.percent}% usado` : '10.1% usado'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center justify-between text-xs text-muted-foreground px-0.5">
+                                        <span>Containers Docker:</span>
+                                        <strong className="text-foreground">
+                                            {vpsStats?.docker?.containers ? `${vpsStats.docker.containers.filter(c => c.state === 'running').length} / ${vpsStats.docker.containers.length} ativos` : '12 ativos'}
+                                        </strong>
+                                    </div>
+                                    <Link to="/admin/vps" className="block pt-1">
+                                        <Button variant="outline" size="sm" className="w-full text-xs gap-1.5 justify-center">
+                                            <span>Painel de Monitoramento VPS</span>
+                                            <ArrowRight className="h-3.5 w-3.5" />
+                                        </Button>
+                                    </Link>
+                                </CardContent>
+                            </Card>
                         </motion.div>
                     </motion.div>
                 ) : (

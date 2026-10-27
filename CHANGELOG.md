@@ -2,6 +2,31 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.63.0] - 2026-10-27
+
+### Adicionado (Painel de Monitoramento da VPS Oracle Cloud & Ações do Docker)
+* **Novo Serviço de Monitoramento da VPS (`src/services/vpsMonitorService.js`)**:
+  * Integração autenticada via token `x-vps-token` com a API do agente na VPS Oracle Cloud (`https://license.rafaelpitaoficial.com.br/api/vps`).
+  * Funções assíncronas documentadas: `fetchVPSStatus`, `cleanDockerBuildCache` e `restartDockerContainer`.
+* **Nova Página Administrativa `ManageVPS` (`src/pages/admin/ManageVPS.jsx`)**:
+  * Indicadores de hardware em tempo real: Armazenamento SSD NVMe (192.7 GB, uso e GB livres), Memória RAM (23.4 GB), Carga e uso de CPU (4 núcleos ARM) e Uptime formatado com badge dinâmico de status operacional.
+  * Barras de progresso com gradientes reativos por criticidade (verde < 70%, amarelo 70-85%, vermelho > 85%).
+  * Detalhamento de armazenamento Docker: Imagens, Containers, Volumes Locais e Build Cache.
+  * Tabela de microserviços e containers Docker com filtros instantâneos por texto e status (Todos, Ativos, Parados), exibindo tempo de atividade e portas mapeadas.
+  * Ação rápida "Limpar Cache Docker" com diálogo de confirmação (`AlertDialog`) e toast de feedback.
+  * Ação "Reiniciar Container" individual por serviço com confirmação e estado de loading independente.
+  * Alternador de atualização automática reativa a cada 45 segundos ou recarregamento manual.
+* **Integração no Layout Administrativo e Rotas (`src/components/AdminLayout.jsx`, `src/App.jsx`)**:
+  * Adicionado item "Monitoramento VPS" com ícone `Server` na seção de Configurações / Sistema & Ajustes.
+  * Registrada rota protegida para administradores `/admin/vps` com code-splitting via `React.lazy`.
+* **Widget de Resumo no Dashboard Principal (`src/pages/Dashboard.jsx`)**:
+  * Card de visão rápida da infraestrutura VPS com métricas de SSD, RAM, contagem de containers ativos e botão de acesso direto ao painel.
+* **Agente Backend & Infraestrutura na VPS (`tools/vps_agent.py`)**:
+  * Agente Python 3 nativo rodando como serviço systemd (`vps-monitor.service`) na porta local 3035.
+  * Configurado proxy reverso seguro no Nginx (`/api/vps/`) com SSL Let's Encrypt e autenticação por cabeçalho secreto.
+  * Otimização do Docker realizada na VPS com liberação de 32.84 GB de build cache antigo.
+
+
 ## [1.62.0] - 2026-10-26
 
 ### Adicionado (Filtro NavBottom Flutuante no Scroll do Portfólio)

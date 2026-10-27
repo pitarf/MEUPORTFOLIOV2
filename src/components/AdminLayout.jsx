@@ -19,6 +19,7 @@ import {
     LifeBuoy,
     Settings,
     HardDrive,
+    Server,
     User,
     ExternalLink,
     ChevronDown,
@@ -335,6 +336,11 @@ const AdminLayout = () => {
                                 label: 'Otimização & Storage',
                                 path: '/admin/storage',
                                 icon: HardDrive
+                            },
+                            {
+                                label: 'Monitoramento VPS',
+                                path: '/admin/vps',
+                                icon: Server
                             },
                             {
                                 label: 'Minha Conta',

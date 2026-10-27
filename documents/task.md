@@ -2,6 +2,28 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Painel de Monitoramento da VPS Oracle Cloud & Gestão do Docker (`vpsMonitorService.js`, `ManageVPS.jsx`, `AdminLayout.jsx`, `App.jsx`, `Dashboard.jsx`, `vps-monitor.service`)**:
+  - Objetivo: Permitir o monitoramento em tempo real do hardware (SSD NVMe, RAM, CPU e Uptime) da VPS Oracle Cloud (`144.22.173.125`) e gerenciar os containers Docker diretamente pelo painel administrativo com ações rápidas de manutenção.
+  - Backend & Infraestrutura na VPS:
+    - Agente Python 3 nativo (`/home/ubuntu/vps-monitor-agent/agent.py`) rodando como serviço systemd (`vps-monitor.service`) na porta interna 3035 com apenas 2.5 MB de RAM.
+    - Exposição protegida via proxy reverso no Nginx (`/api/vps/`) em `https://license.rafaelpitaoficial.com.br/api/vps` com SSL Let's Encrypt e autenticação via cabeçalho `x-vps-token`.
+    - Executada a limpeza do build cache do Docker na VPS com liberação de 32.84 GB de espaço em disco (ocupação do SSD caiu de 24% para 7.6%).
+  - Camada de Serviços Frontend (`src/services/vpsMonitorService.js`):
+    - Métodos assíncronos: `fetchVPSStatus`, `cleanDockerBuildCache` e `restartDockerContainer`.
+    - Suporte a variáveis de ambiente `VITE_VPS_MONITOR_API_URL` e `VITE_VPS_MONITOR_TOKEN` com fallback seguro.
+  - Tela Administrativa (`src/pages/admin/ManageVPS.jsx`):
+    - Visual executivo com cards de hardware (SSD, RAM, CPU 4 cores e Uptime) e barras de progresso dinâmicas.
+    - Card de armazenamento Docker com separação de imagens, containers, volumes e build cache.
+    - Tabela completa de containers com busca por texto, filtro de status (Todos, Ativos, Parados), status, portas mapeadas e botão de reiniciar.
+    - Modais de confirmação (`AlertDialog`) para limpeza de cache e reinicialização de containers, evitando ações acidentais.
+    - Alternador de auto-atualização reativa (45 segundos) e botão de recarregamento manual.
+  - Integração & Rotas:
+    - Rota `/admin/vps` registrada em `src/App.jsx` com proteção admin e `React.lazy`.
+    - Item "Monitoramento VPS" adicionado ao menu lateral em `src/components/AdminLayout.jsx`.
+    - Widget de status rápido e atalho adicionado no `src/pages/Dashboard.jsx`.
+  - Validação: Build de produção (`npm run build`) concluído com 100% de sucesso (chunk de 18.40 kB).
+
+
 - [x] **Vitrine Limpa de Fotografia v2 para Propostas 99freelas (`PhotographyLanding.jsx`, `PhotographyPortfolio.jsx`, `ProjectCarousel.jsx`, `App.jsx`)**:
   - Objetivo: Estender o ambiente blindado contra contatos externos (sem WhatsApp, sem Instagram, sem rodapé corporativo) para as páginas de apresentação e galeria de fotografia para uso em propostas de fotografia no 99freelas.
   - Rotas Registradas em `src/App.jsx` sob `CleanShowcaseLayout`:

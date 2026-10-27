@@ -1106,3 +1106,28 @@ Se você estiver enviando propostas no **99freelas** para serviços de fotografi
    * Não há rodapé com e-mails ou números de telefone.
    * No final da página e no topo, o cliente é orientado a negociar e responder diretamente no chat da proposta do 99freelas.
    * O contratante poderá navegar à vontade entre os ensaios, eventos e casamentos, permanecendo 100% dentro do ambiente protegido.
+
+
+### 19.26 Monitoramento da VPS Oracle Cloud & Gestão do Docker (/admin/vps)
+
+Agora você tem o controle total da infraestrutura de servidores da sua VPS Oracle Cloud diretamente pelo painel administrativo do seu site:
+
+1. **Como Acessar o Painel**:
+   * No menu lateral do Painel Administrativo, clique em **Sistema & Ajustes** e selecione **Monitoramento VPS**.
+   * Ou acesse diretamente pela rota `/admin/vps`.
+   * Você também pode clicar no novo atalho "Painel de Monitoramento VPS" no card de Infraestrutura da tela inicial do seu Dashboard.
+
+2. **Indicadores de Saúde em Tempo Real**:
+   * **Armazenamento SSD**: Acompanhe o percentual ocupado do disco de 192.7 GB, quanto espaço livre em gigabytes ainda resta e a barra de saúde com cores dinâmicas (verde para saudável, amarelo para atenção, vermelho para crítico).
+   * **Memória RAM**: Veja o consumo atual da memória do servidor (24 GB totais e mais de 20 GB livres).
+   * **Processador ARM (4 Núcleos)**: Monitore a carga média da CPU e a estabilidade das tarefas.
+   * **Uptime & Containers**: Saiba há quantos dias a VPS está ligada continuamente e quantos microserviços estão rodando.
+
+3. **Armazenamento Detalhado do Docker**:
+   * O painel exibe um card exclusivo detalhando o peso de imagens, containers, volumes e do cache de compilação do Docker.
+
+4. **Botões de Ações Rápidas**:
+   * **Atualizar Métricas**: Recarrega instantaneamente todos os sensores e dados mais recentes da VPS.
+   * **Alternador Auto (45s)**: Permite deixar a tela atualizando sozinha a cada 45 segundos para você acompanhar manutenções ao vivo.
+   * **Limpar Cache Docker**: Com apenas um clique, o sistema executa a limpeza de camadas antigas e arquivos temporários da VPS, liberando gigabytes de espaço no SSD com confirmação segura e sem desligar nenhum container de clientes.
+   * **Reiniciar Container Individual**: Na tabela de containers Docker, cada serviço possui seu próprio botão "Reiniciar". Ao clicar, o painel solicita sua confirmação e reinicia o serviço isoladamente com feedback imediato via notificação toast.

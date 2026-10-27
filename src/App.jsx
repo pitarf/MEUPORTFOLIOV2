@@ -57,6 +57,7 @@ const ManageGeneralSettings = lazy(() => import('@/pages/admin/ManageGeneralSett
 const PhotographyPortfolio = lazy(() => import('@/pages/PhotographyPortfolio'));
 const Profile = lazy(() => import('@/pages/Profile'));
 const StorageOptimization = lazy(() => import('@/pages/StorageOptimization'));
+const ManageVPS = lazy(() => import('@/pages/admin/ManageVPS'));
 const ManageBudgets = lazy(() => import('@/pages/admin/ManageBudgets'));
 const ManageMaintenanceSubscriptions = lazy(() => import('@/pages/admin/ManageMaintenanceSubscriptions'));
 const ManageLegalProspects = lazy(() => import('@/pages/admin/ManageLegalProspects'));
@@ -168,6 +169,7 @@ function App() {
                                     <Route path="/admin/support" element={<ProtectedRoute adminOnly={true}><AdminSupport /></ProtectedRoute>} />
                                     <Route path="/admin/services" element={<ProtectedRoute adminOnly={true}><ManageServices /></ProtectedRoute>} />
                                     <Route path="/admin/storage" element={<ProtectedRoute adminOnly={true}><StorageOptimization /></ProtectedRoute>} />
+                                    <Route path="/admin/vps" element={<ProtectedRoute adminOnly={true}><ManageVPS /></ProtectedRoute>} />
                                     <Route path="/admin/landing-page" element={<ProtectedRoute adminOnly={true}><ManageLandingPage /></ProtectedRoute>} />
                                     <Route path="/admin/settings" element={<ProtectedRoute adminOnly={true}><ManageGeneralSettings /></ProtectedRoute>} />
                                 </Route>

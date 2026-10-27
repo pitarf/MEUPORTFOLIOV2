@@ -1023,3 +1023,42 @@ Para propostas que envolvam serviços de fotografia profissional, cobertura de e
 3. **Navegação Fechada no Modo Limpo**:
    - O componente `ProjectCarousel.jsx` agora recebe a propriedade `basePath` dinâmica (configurada como `/portfolio-v2` quando em `cleanMode`), direcionando os cliques nos cases para `/portfolio-v2/fotografia/:projectSlug`.
    - Na galeria, o botão de retorno aponta para `/portfolio-fotografia-v2` com o rótulo "Voltar à Vitrine de Fotografia".
+
+
+### 13.46 Painel de Monitoramento da VPS Oracle Cloud & Ações do Docker (`vpsMonitorService.js`, `ManageVPS.jsx`, `AdminLayout.jsx`)
+
+Para monitorar em tempo real a infraestrutura de servidores de produção (VPS Oracle Cloud Ubuntu 24.04 ARM - IP `144.22.173.125`) e controlar a saúde dos microserviços Docker:
+
+1. **Agente Backend na VPS (`vps-monitor-agent/agent.py`)**:
+   - Serviço nativo em Python 3 (`/etc/systemd/system/vps-monitor.service`) ouvindo na porta local `127.0.0.1:3035`.
+   - Consumo de memória mínimo: ~2.5 MB de RAM.
+   - Endpoints implementados:
+     - `GET /status`: Coleta métricas de hardware via `psutil`/`os` (disco SSD, memória RAM, carga de CPU de 4 núcleos e uptime) e inspeciona o daemon do Docker (`docker ps --format json` e `docker system df --format json`).
+     - `POST /clean-docker-cache`: Executa a limpeza segura de camadas antigas e cache de compilação via `docker builder prune -f`.
+     - `POST /restart-container`: Reinicia um microserviço específico de forma isolada via `docker restart <nome>`.
+   - Autenticação e Segurança:
+     - Exigência de cabeçalho `x-vps-token` em todas as rotas.
+     - Roteamento reverso via Nginx (`location /api/vps/`) no domínio `https://license.rafaelpitaoficial.com.br` com certificado SSL Let's Encrypt.
+
+2. **Camada de Serviço Frontend (`src/services/vpsMonitorService.js`)**:
+   - `fetchVPSStatus()`: Recupera o payload consolidado de métricas e status dos containers.
+   - `cleanDockerBuildCache()`: Dispara a rotina de recuperação de espaço em disco na VPS.
+   - `restartDockerContainer(containerName)`: Solicita a reinicialização segura de um container.
+   - Variáveis configuráveis via `.env`: `VITE_VPS_MONITOR_API_URL` e `VITE_VPS_MONITOR_TOKEN`.
+
+3. **Interface Administrativa (`src/pages/admin/ManageVPS.jsx`)**:
+   - Cartões visuais de hardware com barras de progresso reativas (`HealthProgressBar`):
+     - SSD NVMe: espaço usado, livre (GB) e percentual.
+     - Memória RAM: total de 24 GB, uso ativo e memória livre.
+     - Processador ARM (4 núcleos): uso percentual e médias de carga (1m, 5m, 15m).
+     - Uptime & Containers: dias de atividade contínua e total de containers em execução.
+   - Armazenamento Docker: divisão por imagens, containers, volumes e build cache.
+   - Gestão de Containers: listagem completa com status em tempo real, portas mapeadas, busca textual, filtro de estado (Todos / Ativos / Parados) e botão de reinicialização com diálogo de confirmação (`AlertDialog`).
+   - Ação rápida de limpeza de build cache com modal de segurança e feedback visual por toast.
+   - Alternador de sincronização automática (intervalo de 45s) ou atualização manual.
+
+4. **Navegação e Rotas**:
+   - Rota `/admin/vps` registrada em `src/App.jsx` com code-splitting (`React.lazy`).
+   - Item "Monitoramento VPS" adicionado ao menu lateral em `src/components/AdminLayout.jsx` sob "Sistema & Ajustes".
+   - Widget de resumo da VPS integrado na tela inicial do `/dashboard`.
+
