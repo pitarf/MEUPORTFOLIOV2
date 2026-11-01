@@ -8,6 +8,8 @@ Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 * **Novo Serviço Inteligente de Propostas (`src/services/proposalAiService.js`)**:
   * Integração com Google Gemini (`gemini-2.5-flash` com fallback resiliente para `gemini-flash-latest`) para análise e geração de propostas de alta conversão.
   * **Trava Anti-Valor Irrisório & Calibragem de Complexidade**:
+    * Nova função `extractCustomPriceAndDeadline`: detecta automaticamente valores ("3mil", "2.5k", "R$ 1.500", "800 reais") e prazos informados pelo freelancer em anotações livres.
+    * Ponderação inteligente com a média de concorrentes (`valorMedio` e `duracaoMedia`) e complexidade do projeto.
     * Restrição do piso de R$ 56,00 a R$ 90,00 estritamente para micro-tarefas simples de design (vetorização ou recorte pontual).
     * Bloqueio automático de valores irrisórios para Landing Pages, Sites Institucionais, WordPress, Lojas Virtuais e Sistemas Web completos, aplicando pisos inteligentes proporcionais (mínimo de R$ 280,00 a R$ 1.800,00 conforme o escopo).
     * Suporte prioritário a sugestões de faixa enviadas pela extensão (`sugestaoMin`, `sugestaoMax`, `sugestaoPrazo`).

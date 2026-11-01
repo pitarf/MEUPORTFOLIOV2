@@ -67,6 +67,72 @@ HISTÓRICO REAL DE CASOS DO FREELANCER (55 AVALIAÇÕES 5.0 ESTRELAS E 60 PROJET
 }
 
 /**
+ * Extrai de forma inteligente e precisa valores monetários e prazos informados
+ * em textos livres de anotações ou rascunhos do freelancer.
+ * @param {string} text - Texto do input opcional.
+ * @returns {{ valor: number|null, prazo: number|null }}
+ */
+export function extractCustomPriceAndDeadline(text = '') {
+    if (!text || typeof text !== 'string') return { valor: null, prazo: null };
+
+    let valor = null;
+    let prazo = null;
+
+    // 1. Extração de Valor Monetário:
+    // Padrão A: "3mil", "2.5 mil", "1.5k" com multiplicador
+    const matchMil = text.match(/(?:valor|preço|preco|cobrar|faço por|faco por|orçamento|orcamento|investimento)?\s*(?:R\$\s*)?(\d+(?:[.,]\d+)?)\s*(mil|k)\b/i);
+    if (matchMil) {
+        const base = parseFloat(matchMil[1].replace(',', '.'));
+        if (!isNaN(base)) valor = Math.round(base * 1000);
+    }
+
+    // Padrão B: R$ 3.000,00 ou R$ 1500
+    if (!valor) {
+        const matchReal = text.match(/R\$\s*(\d{1,3}(?:\.\d{3})*(?:,\d+)?|\d+)/i);
+        if (matchReal) {
+            const limpo = matchReal[1].replace(/\./g, '').replace(',', '.');
+            const n = parseFloat(limpo);
+            if (!isNaN(n) && n >= 50) valor = Math.round(n);
+        }
+    }
+
+    // Padrão C: "valor de 3000", "cobrar 1500", "preço 800", "o valor seria de 3000"
+    if (!valor) {
+        const matchPalavra = text.match(/(?:valor|preço|preco|cobrar|faço por|faco por|investimento|orçamento|orcamento)\s*(?:seria)?\s*(?:de|em|é|e|:)?\s*(?:R\$\s*)?(\d+(?:\.\d+)?)/i);
+        if (matchPalavra) {
+            const n = parseFloat(matchPalavra[1]);
+            if (!isNaN(n) && n >= 50) valor = Math.round(n);
+        }
+    }
+
+    // Padrão D: "1500 reais", "800 conto"
+    if (!valor) {
+        const matchReais = text.match(/(\d+(?:\.\d+)?)\s*(?:reais|pila|conto)\b/i);
+        if (matchReais) {
+            const n = parseFloat(matchReais[1]);
+            if (!isNaN(n) && n >= 50) valor = Math.round(n);
+        }
+    }
+
+    // 2. Extração de Prazo:
+    // Padrão A: "em até 20 dias", "prazo de 10 dias", "em 5 dias", "pronto em 15 dias"
+    const matchPrazo = text.match(/(?:em\s+at[ée]|at[ée]|prazo|dura[çc][ãa]o|tempo|pronto\s+em|entrega\s+em)\s*(?:de|em|:)?\s*(\d+)\s*(?:dias|dia|d)\b/i);
+    if (matchPrazo) {
+        prazo = parseInt(matchPrazo[1], 10);
+    }
+
+    // Padrão B: "20 dias", "5 dias"
+    if (!prazo) {
+        const matchDias = text.match(/(\d+)\s*(?:dias|dia)\b/i);
+        if (matchDias) {
+            prazo = parseInt(matchDias[1], 10);
+        }
+    }
+
+    return { valor, prazo };
+}
+
+/**
  * Detecta se o primeiro nome é predominantemente feminino no Brasil para saudação.
  * @param {string} name - Primeiro nome do cliente.
  * @returns {'feminino' | 'masculino'}
@@ -233,6 +299,15 @@ export async function generateProposal(payload = {}) {
     // Repertório e prova técnica (55 avaliações 5 estrelas + 60 projetos de portfólio)
     const casesSummary = getCasesKnowledgeBase();
 
+    // 1. Extração inteligente de valor e prazo do input manual ou anotações do freelancer
+    const customParsed = extractCustomPriceAndDeadline(instrucoesExtras);
+    const valorManualDefinido = valorManualNativo ? String(valorManualNativo).replace(/\D/g, '') : (customParsed.valor ? String(customParsed.valor) : '');
+    const prazoManualDefinido = prazoManualNativo ? String(prazoManualNativo).replace(/\D/g, '') : (customParsed.prazo ? String(customParsed.prazo) : '');
+
+    // 2. Análise e Ponderação do Valor Médio dos Concorrentes
+    const valorMedioNum = Number(payload.valorMedio || payload.valorMedioNum || 0);
+    const duracaoMediaNum = Number(payload.duracaoMedia || 0);
+
     // MALÍCIA E ANÁLISE DE COMPLEXIDADE DO PROJETO
     const fullTextSearch = `${titulo} ${descricao} ${categoria} ${(Array.isArray(habilidades) ? habilidades.join(' ') : habilidades)}`.toLowerCase();
 
@@ -248,25 +323,40 @@ export async function generateProposal(payload = {}) {
     let precoMaximoEsperado = 600;
     let prazoSugeridoEsperado = 4;
 
-    if (isSimpleDesign) {
-        precoMinimoEsperado = 60;
-        precoMaximoEsperado = 90;
-        prazoSugeridoEsperado = 1;
-    } else if (isBigSystem) {
-        precoMinimoEsperado = modo === 'emergencia' ? 1200 : 1800;
-        precoMaximoEsperado = modo === 'emergencia' ? 2400 : 3800;
-        prazoSugeridoEsperado = 12;
-    } else if (isEcommerce) {
-        precoMinimoEsperado = 900;
-        precoMaximoEsperado = 1800;
-        prazoSugeridoEsperado = 10;
-    } else if (isLandingOrSite) {
-        precoMinimoEsperado = modo === 'emergencia' ? 280 : 450;
-        precoMaximoEsperado = modo === 'emergencia' ? 450 : 650;
-        prazoSugeridoEsperado = 4;
+    if (valorMedioNum > 0) {
+        // Se a plataforma possui valor médio dos concorrentes, calcula faixa competitiva proporcional
+        if (modo === 'emergencia') {
+            precoMinimoEsperado = Math.max(56, Math.round(valorMedioNum * 0.70));
+            precoMaximoEsperado = Math.max(56, Math.round(valorMedioNum * 0.75));
+        } else {
+            precoMinimoEsperado = Math.max(56, Math.round(valorMedioNum * 0.85));
+            precoMaximoEsperado = Math.max(56, Math.round(valorMedioNum * 0.95));
+        }
+        if (duracaoMediaNum > 0) {
+            prazoSugeridoEsperado = modo === 'emergencia' ? Math.max(1, Math.round(duracaoMediaNum * 0.50)) : Math.max(1, Math.round(duracaoMediaNum * 0.70));
+        }
+    } else {
+        // Quando o valor médio for desconhecido, ancora na complexidade do projeto
+        if (isSimpleDesign) {
+            precoMinimoEsperado = 60;
+            precoMaximoEsperado = 90;
+            prazoSugeridoEsperado = 1;
+        } else if (isBigSystem) {
+            precoMinimoEsperado = modo === 'emergencia' ? 1200 : 1800;
+            precoMaximoEsperado = modo === 'emergencia' ? 2400 : 3800;
+            prazoSugeridoEsperado = 12;
+        } else if (isEcommerce) {
+            precoMinimoEsperado = 900;
+            precoMaximoEsperado = 1800;
+            prazoSugeridoEsperado = 10;
+        } else if (isLandingOrSite) {
+            precoMinimoEsperado = modo === 'emergencia' ? 280 : 450;
+            precoMaximoEsperado = modo === 'emergencia' ? 450 : 650;
+            prazoSugeridoEsperado = 4;
+        }
     }
 
-    // Se vier do payload sugestões calculadas pela extensão, usa com prioridade
+    // Se vier sugestões calculadas pelo algoritmo da extensão no payload, respeita
     if (payload.sugestaoMin && Number(payload.sugestaoMin) > 0) {
         precoMinimoEsperado = Number(payload.sugestaoMin);
     }
@@ -287,11 +377,17 @@ DIRETRIZES FUNDAMENTAIS DO FREELANCER (RAFAEL PITA):
 - Compromisso Oficial: 30 dias de suporte pós-entrega e dedicação para nota máxima 5.0 estrelas.
 - Modelo de Trabalho: 100% REMOTO (via chat da plataforma e chamadas de vídeo, sem trabalho ou reuniões presenciais).
 
-🚨 REGRA RIGOROSA DE PRECIFICAÇÃO E PROIBIÇÃO DE VALOR IRRISÓRIO (LEIA COM ATENÇÃO):
-- O valor de R$ 56,00 a R$ 90,00 é ESTRITAMENTE RESTRITO para micro-tarefas simples (ex: vetorização de 1 logotipo, 1 banner pontual, ajuste de 1 imagem).
-- É TASSATIVAMENTE PROIBIDO propor R$ 56,00, R$ 60,00 ou qualquer valor abaixo de R$ 250,00 para Landing Pages, Sites Institucionais, WordPress, Sistemas Web, APIs, Automações ou Lojas Virtuais!
-- FAIXA DE PRECIFICAÇÃO CALCULADA PARA ESTE PROJETO: Proponha um valor estritamente entre {b}R$ ${precoMinimoEsperado},00 e R$ ${precoMaximoEsperado},00{/b} (prazo de cerca de {b}${prazoSugeridoEsperado} dias{/b}), salvo se o freelancer tiver fixado outro valor nas instruções manuais.
-- Em projetos de Desenvolvimento Web e Sistemas, valorize a engenharia de software e a entrega profissional. Jamais proponha valores irrisórios de R$ 56!
+${valorManualDefinido ? `🚨 VALOR FIXADO PELO FREELANCER (PRIORIDADE ABSOLUTA):
+O freelancer determinou o valor exato de R$ ${valorManualDefinido},00.
+Você DEVE utilizar exatamente esse valor ({b}R$ ${Number(valorManualDefinido).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}{/b}) no JSON ('valorFinal') e no corpo da proposta. NÃO calcule nem altere este valor!` : `🚨 REGRA DE PRECIFICAÇÃO CONFORME MÉDIA E COMPLEXIDADE:
+- Valor Médio dos Concorrentes: ${valorMedioNum > 0 ? `R$ ${valorMedioNum},00` : 'Desconhecido'}
+- Prazo Médio dos Concorrentes: ${duracaoMediaNum > 0 ? `${duracaoMediaNum} dias` : 'Desconhecido'}
+- FAIXA COMPETITIVA CALCULADA: Proponha um valor estritamente entre {b}R$ ${precoMinimoEsperado},00 e R$ ${precoMaximoEsperado},00{/b} (prazo de cerca de {b}${prazoSugeridoEsperado} dias{/b}).
+- PROIBIÇÃO DE VALOR IRRISÓRIO: R$ 56 a R$ 90 é EXCLUSIVO para micro-design (vetorização ou banner). NUNCA proponha menos de R$ 250 para qualquer projeto web, dev ou sistema.`}
+
+${prazoManualDefinido ? `🚨 PRAZO FIXADO PELO FREELANCER (PRIORIDADE ABSOLUTA):
+O freelancer determinou o prazo exato de ${prazoManualDefinido} dias.
+Você DEVE utilizar exatamente esse prazo ({b}${prazoManualDefinido} dias{/b}) no JSON ('prazoDias') e no gancho da proposta!` : ''}
 
 REGRAS DE FORMATAÇÃO E ESTILO (RIGOROSO):
 1. PROIBIDO USAR QUALQUER MARKDOWN TRADICIONAL OU TRAVESSÕES (—, –, --). Separe orações estritamente com vírgulas ou pontos.
@@ -381,31 +477,14 @@ Retorne EXCLUSIVAMENTE um objeto JSON válido (sem markdown de bloco):
         throw new Error(`Falha ao gerar proposta via IA: ${lastError?.message || 'instabilidade no serviço do Gemini'}`);
     }
 
-    // Prioridade absoluta para valores e prazos manuais se informados pelo usuário
-    let finalValue = valorManualNativo
-        ? String(valorManualNativo).replace(/\D/g, '')
-        : String(rawResult.valorFinal || '').replace(/\D/g, '');
+    // Prioridade máxima: valor e prazo manuais definidos pelo freelancer (campo nativo ou anotações extras)
+    let finalValue = valorManualDefinido || String(rawResult.valorFinal || '').replace(/\D/g, '');
+    let finalDeadline = prazoManualDefinido || String(rawResult.prazoDias || '').replace(/\D/g, '');
 
-    let finalDeadline = prazoManualNativo
-        ? String(prazoManualNativo).replace(/\D/g, '')
-        : String(rawResult.prazoDias || '').replace(/\D/g, '');
-
-    // Se ainda vazio, busca no texto das instrucoesExtras (ex: "3mil" ou "R$ 3000")
-    if (!finalValue && instrucoesExtras) {
-        const valueMatch = instrucoesExtras.match(/(?:R\$\s*|valor\s*:?\s*)?(\d+(?:\.\d+)?)\s*(?:mil|k)?/i);
-        if (valueMatch) {
-            let num = parseFloat(valueMatch[1]);
-            if (instrucoesExtras.toLowerCase().includes('mil') || instrucoesExtras.toLowerCase().includes('k')) {
-                num = num * 1000;
-            }
-            if (num >= 56) finalValue = String(Math.round(num));
-        }
-    }
-
-    // TRAVA ANTI-VALOR IRRISÓRIO (Nunca enviar R$ 56 para projetos reais de tecnologia/web)
+    const isManualValor = Boolean(valorManualDefinido);
     const valorNumerico = Number(finalValue || 0);
-    const isManualValor = Boolean(valorManualNativo || (instrucoesExtras && instrucoesExtras.match(/(?:R\$\s*|valor\s*:?\s*)?\d+/i)));
 
+    // Se NÃO for valor manual do freelancer, aplica a proteção de faixa e média
     if (!isManualValor) {
         if (isSimpleDesign) {
             // Em vetorização ou banners simples, piso entre 56 e 90
@@ -414,9 +493,9 @@ Retorne EXCLUSIVAMENTE um objeto JSON válido (sem markdown de bloco):
             }
         } else {
             // Em qualquer projeto de site, landing page, app, sistema ou automação:
-            // É proibido propor menos de precoMinimoEsperado (mínimo absoluto de R$ 250 a R$ 450)
+            // Proibido propor menos que precoMinimoEsperado (calculado com base na média ou complexidade)
             if (valorNumerico < precoMinimoEsperado) {
-                console.warn(`[proposalAiService] Valor gerado muito baixo (R$ ${valorNumerico}). Ajustando para o piso da categoria: R$ ${precoMinimoEsperado}.`);
+                console.warn(`[proposalAiService] Valor gerado (R$ ${valorNumerico}) abaixo do piso justo calculado (R$ ${precoMinimoEsperado}). Ajustando.`);
                 finalValue = String(precoMinimoEsperado);
             }
         }
@@ -428,7 +507,7 @@ Retorne EXCLUSIVAMENTE um objeto JSON válido (sem markdown de bloco):
     }
 
     if (!finalDeadline || Number(finalDeadline) <= 0) {
-        finalDeadline = duracaoMedia ? String(duracaoMedia) : String(prazoSugeridoEsperado);
+        finalDeadline = duracaoMediaNum > 0 ? String(duracaoMediaNum) : String(prazoSugeridoEsperado);
     }
 
     // Sanitiza o texto gerado e corrige menções a R$ 56 residuais no texto
