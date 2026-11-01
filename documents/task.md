@@ -2,6 +2,31 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **API Backend do Motor de Propostas 99Freelas com IA & Expansão com 60 Cases do Portfólio (`proposalAiService.js`, `repertorio_cases.md`, `api/propostas/gerar.js`, `api/propostas.js`, `vite.config.js`)**:
+  - Objetivo: Criar uma API robusta no backend para receber dados de projetos publicados no 99Freelas (enviados por uma extensão do Chrome) e gerar propostas comerciais personalizadas de altíssima conversão utilizando a IA do Google Gemini cruzada com o histórico de 55 avaliações 5 estrelas e os 60 projetos reais do portfólio.
+  - Implementações Realizadas:
+    - `src/data/motor-ia/repertorio_cases.md` (e cópia sincronizada na extensão): Acrescentados os 60 cases reais em produção do portfólio (Vantage App, SMS Fácil, Sistema de Escalas, THD Engenharia, DetetiveBuscas, Mascotes, Dashboards Power BI, Produção com IA), divididos por categoria com cliente, tecnologias, soluções de engenharia e contexto de aplicação para propostas.
+    - `src/services/proposalAiService.js`: Carregamento dinâmico via `getCasesKnowledgeBase()`, detecção de gênero, preservação de histórias autênticas e projetos pessoais do desenvolvedor, respeito a valores e prazos manuais (piso R$ 56,00), e sanitização eliminando 100% dos travessões e aplicando tags `{b}`, `{i}`, `{u}` com gatilho de 5 estrelas.
+    - `api/propostas/gerar.js` e `api/propostas.js`: Serverless Functions com CORS irrestrito para consumo pela extensão do Chrome.
+    - `vite.config.js`: Middleware dev server para testes locais instantâneos na porta 3001.
+  - Validação Automatizada: Testes executados com briefing de marcenaria/drywall com aprovação total das regras de ouro, e compilação de produção (`npm run build`) concluída com 100% de sucesso.
+
+- [x] **Carrossel Horizontal Mobile por Categoria nos Portfólios (`Portfolio.jsx`, `PhotographyPortfolio.jsx`, `PortfolioProjectCard.jsx`, `index.css`)**:
+  - Objetivo: Reestruturar a experiência de navegação mobile dos portfólios (`/portfolio`, `/portfolio-v2`, `/portfolio-fotografia/galeria` e `/portfolio-fotografia-v2/galeria`), organizando os projetos por categorias/nichos dispostos verticalmente, cada um com um carrossel horizontal deslizável com toque lateral ("rolando pro lado"), preservando a exibição filtrada isolada quando um filtro ou busca estiver ativo.
+  - Portfólio Principal e Vitrine v2 (`src/pages/Portfolio.jsx`):
+    - No mobile (`block md:hidden`), quando sem filtro (`activeTab === 'all' && !searchQuery`), agrupa os projetos por categorias (Desenvolvedor, Design Gráfico, Power BI, Produção IA) empilhadas uma abaixo da outra.
+    - Cabeçalho de categoria com ícone, título, contagem e botão "Ver todos" que aciona a navegação direta com foco na categoria.
+    - Faixa de rolagem lateral horizontal com `snap-x snap-mandatory` e cards de `82vw` (máximo `320px`) com indicador para o card vizinho.
+    - Quando filtrado (`activeTab !== 'all'` ou busca textual), renderiza a listagem de projetos filtrados daquela categoria com barra indicativa e botão de retorno para todas as categorias.
+    - No desktop (`hidden md:grid`), preserva o grid multi-colunas unificado tradicional.
+  - Galeria de Fotografia (`src/pages/PhotographyPortfolio.jsx`):
+    - No mobile, agrupa os nichos (Casamentos, Ensaios, Eventos) verticalmente com carrosséis horizontais individuais rolando para o lado.
+    - Mantém a experiência de filtros por nicho ou busca quando selecionados.
+  - Componente Reutilizável `PortfolioProjectCard` (`src/components/PortfolioProjectCard.jsx`):
+    - Unificação do card com tags, cliente, ano, imagem 16:10, badge de categoria e botão Ver Case.
+  - Validação Automatizada: Testado via Playwright em viewport mobile (390x844) e compilação `npm run build` aprovada em 45.22s.
+
+
 - [x] **Painel de Monitoramento da VPS Oracle Cloud & Gestão do Docker (`vpsMonitorService.js`, `ManageVPS.jsx`, `AdminLayout.jsx`, `App.jsx`, `Dashboard.jsx`, `vps-monitor.service`)**:
   - Objetivo: Permitir o monitoramento em tempo real do hardware (SSD NVMe, RAM, CPU e Uptime) da VPS Oracle Cloud (`144.22.173.125`) e gerenciar os containers Docker diretamente pelo painel administrativo com ações rápidas de manutenção.
   - Backend & Infraestrutura na VPS:

@@ -2,6 +2,47 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.65.0] - 2026-10-31
+
+### Adicionado (API de Geração de Propostas Comerciais 99Freelas com IA)
+* **Novo Serviço Inteligente de Propostas (`src/services/proposalAiService.js`)**:
+  * Integração com Google Gemini (`gemini-2.5-flash` com fallback resiliente para `gemini-flash-latest`) para análise e geração de propostas de alta conversão.
+  * Base de conhecimento nativa alimentada por 55 avaliações 5.0 estrelas reais e histórico de 60 projetos reais em produção.
+  * Função `detectGenderByName` para personalizar a saudação de abertura conforme o gênero do cliente (`Olá, [Nome]!` para clientes femininas e `Fala, [Nome]!` para clientes masculinos).
+  * Sanitizador `sanitizeProposalText` que impõe estritamente as regras de ouro da plataforma 99Freelas: eliminação total de travessões (`—`, `–`, `--`), conversão de marcações residuais para tags customizadas `{b}` (valores e prazos), `{i}` (termos técnicos/estrangeiros) e `{u}` (link único oficial do portfólio).
+  * Inclusão mandatória do gatilho de confiança em bloco próprio: `> Minha meta é obter 5 estrelas, então você tem meu total comprometimento.`
+  * Tratamento prioritário para `instrucoesExtras`: preservação de histórias autênticas e projetos pessoais do desenvolvedor (ex: app de drywall, adaptação de orçamentos) como gancho de altíssima conexão e conversão, além de suporte a convite para chamadas 100% remotas.
+  * Respeito absoluto a valores e prazos manuais (`valorManualNativo`, `prazoManualNativo`) com piso mínimo regulamentar de R$ 56,00.
+* **Serverless Functions Vercel (`api/propostas/gerar.js` e `api/propostas.js`)**:
+  * Endpoints REST HTTP com suporte total a CORS (`Access-Control-Allow-Origin: *`, `POST`, `OPTIONS`) para consumo direto pela Extensão do Chrome e outros clientes.
+  * Suporte a parsing resiliente de JSON para múltiplos ambientes de execução.
+* **Middleware Dev Server no Vite (`vite.config.js`)**:
+  * Interceptador de rotas `/api/propostas` e `/api/propostas/gerar` no servidor local Vite (`localhost:3001`), permitindo testes em tempo real da extensão sem necessidade de deploy.
+* **Diretrizes e Repertório do Motor IA (`src/data/motor-ia/repertorio_cases.md`)**:
+  * Incorporados os manuais e diretrizes comerciais da metodologia de vendas do 99Freelas ao projeto.
+  * **Expansão do Repertório de Cases**: Adicionados integralmente os 60 projetos ativos do portfólio oficial (Design Gráfico, Fotografia, Desenvolvimento Web/SaaS, Dashboards Power BI e Produção Multimídia com IA), com títulos, clientes, tecnologias aplicadas, diferenciais de negócio e estratégias de prova de conceito para uso pela IA nas propostas comerciais.
+  * Carregamento dinâmico do repertório via `getCasesKnowledgeBase` em `src/services/proposalAiService.js`, garantindo que novos cases adicionados ao Markdown sejam imediatamente reconhecidos pela IA.
+
+
+## [1.64.0] - 2026-10-28
+
+### Adicionado (Carrossel Horizontal Mobile por Categoria nos Portfólios)
+* **Carrossel Horizontal por Categoria no Portfólio Principal e v2 (`src/pages/Portfolio.jsx`)**:
+  * Implementada visualização mobile em telas menores (`block md:hidden`), agrupando projetos por categoria (Desenvolvedor, Design Gráfico, Power BI, Produção IA) dispostas uma abaixo da outra.
+  * Cada categoria possui cabeçalho com ícone, título, contador dinâmico e botão "Ver todos" que aplica o filtro isolado.
+  * Faixa de carrossel horizontal com rolagem fluida por toque (`overflow-x-auto snap-x snap-mandatory no-scrollbar`) exibindo cards de largura otimizada (`82vw`, máx. `320px`) com indicação visual para o próximo item ("peek").
+  * Quando houver filtro ativo (`activeTab !== 'all'` ou busca textual), a tela exibe a listagem filtrada da categoria correspondente com cabeçalho de status e atalho "Ver todas as categorias" para retornar.
+  * No Desktop (`hidden md:grid`), o grid unificado multi-colunas tradicional permanece intacto.
+* **Carrossel Horizontal na Galeria de Fotografia (`src/pages/PhotographyPortfolio.jsx`)**:
+  * Estrutura similar aplicada na galeria fotográfica, organizando os nichos (Casamentos, Ensaios, Eventos) verticalmente no mobile.
+  * Carrossel horizontal deslizável sob cada nicho com imagens na proporção 3:2, badge de nicho e botão de acesso direto.
+  * Seletor de nicho e busca mantêm a exibição filtrada isolada quando selecionados.
+* **Componente Modular `PortfolioProjectCard` (`src/components/PortfolioProjectCard.jsx`)**:
+  * Unificação do card de projeto do portfólio corporativo, compartilhado entre o Grid Desktop e o Carrossel Mobile, eliminando código duplicado.
+* **Utilitário de Estilização em `src/index.css`**:
+  * Criada a classe `.no-scrollbar` para ocultar barras de rolagem em carrosséis mantendo a rolagem por toque natural e fluida em navegadores WebKit, Firefox e Edge.
+
+
 ## [1.63.0] - 2026-10-27
 
 ### Adicionado (Painel de Monitoramento da VPS Oracle Cloud & Ações do Docker)

@@ -1062,3 +1062,52 @@ Para monitorar em tempo real a infraestrutura de servidores de produção (VPS O
    - Item "Monitoramento VPS" adicionado ao menu lateral em `src/components/AdminLayout.jsx` sob "Sistema & Ajustes".
    - Widget de resumo da VPS integrado na tela inicial do `/dashboard`.
 
+
+### 13.47 Carrossel Horizontal Mobile por Categoria nos Portfólios (`Portfolio.jsx`, `PhotographyPortfolio.jsx`, `PortfolioProjectCard.jsx`)
+
+Para proporcionar uma experiência de descoberta nativa mobile (semelhante a apps como Netflix, Airbnb e App Store) ao navegar pelas dezenas de projetos:
+
+1. **Lógica de Renderização Condicional Responsiva**:
+   - Quando `activeTab === 'all' && searchQuery.trim() === ''` (nenhum filtro ou busca ativo):
+     - **No Mobile (`block md:hidden`)**: Renderiza os projetos organizados por categoria ou nicho, empilhadas verticalmente.
+       - Cabeçalho de cada categoria: Ícone temático da categoria, título com destaque, contador de projetos e botão "Ver todos" que aplica o filtro `setActiveTab(slug)` com rolagem suave ao topo da seção.
+       - Faixa de rolagem horizontal: `flex gap-4 overflow-x-auto pb-4 pt-1 px-4 -mx-4 scroll-smooth snap-x snap-mandatory no-scrollbar`.
+       - Cada cartão possui largura proporcional (`w-[82vw] max-w-[320px] flex-shrink-0 snap-start`), deixando uma prévia do próximo item visível na borda direita para incentivar a interação por swipe.
+     - **No Desktop (`hidden md:grid`)**: Preserva o grid multi-colunas uniforme (`grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8`) com transições suaves do Framer Motion.
+   - Quando houver filtro ativo (`activeTab !== 'all'` ou busca):
+     - A interface mobile e desktop exibe a listagem filtrada daquela categoria selecionada ou dos resultados da busca.
+     - Barra de status superior com pílula de destaque e botão rápido "Ver todas as categorias" para retornar à navegação em carrosséis.
+
+2. **Componente Modular `PortfolioProjectCard` (`src/components/PortfolioProjectCard.jsx`)**:
+   - Unifica a apresentação visual dos cards de projetos com proporção 16:10, imagem de capa, badge da categoria, metadados (cliente e ano), título, descrição resumida, pílulas de tecnologias e link interno adaptável (`effectiveBasePath`).
+   - Suporte ao prop `isCarousel` para desativar seleções de texto durante o arrasto por toque.
+
+3. **Galeria de Fotografia (`src/pages/PhotographyPortfolio.jsx`)**:
+   - Aplica a mesma arquitetura por nichos (`dynamicNiches`: Casamentos, Ensaios, Eventos) com carrosséis horizontais individuais rolando para o lado no mobile.
+   - Preserva os filtros rápidos em abas do topo.
+
+
+### 13.48 Motor de IA de Propostas Comerciais 99Freelas (`proposalAiService.js`, `api/propostas/gerar.js`, `api/propostas.js`)
+
+Implementação de uma API de inteligência artificial de alta conversão integrada ao Google Gemini para geração automática de propostas comerciais de alta precisão técnica a partir de briefings enviados pela Extensão do Chrome:
+
+1. **Endpoints e Integração HTTP/CORS**:
+   - Rota Oficial: `POST /api/propostas/gerar` (com alias em `POST /api/propostas`).
+   - Cabeçalhos CORS irrestritos para suportar chamadas da Extensão do Chrome em qualquer origem (`Access-Control-Allow-Origin: *`, `POST`, `OPTIONS`).
+   - Middleware de desenvolvimento integrado ao Vite (`vite.config.js`) permitindo testes locais em `http://localhost:3001/api/propostas/gerar`.
+
+2. **Módulo de Inteligência Comercial (`src/services/proposalAiService.js`)**:
+   - **Modelos**: Utiliza `gemini-2.5-flash` com fallback automático para `gemini-flash-latest`.
+   - **Base de Conhecimento e Repertório (`repertorio_cases.md`)**: Injeta a base consolidada contendo:
+     - As 55 avaliações 5.0 estrelas na plataforma 99Freelas (automações, web scraping, e-commerce, orçamentos, integrações de APIs de pagamento e bots).
+     - Os 60 projetos ativos em produção do portfólio oficial (Vantage App, SMS Fácil, Sistema de Escalas, THD Engenharia, DetetiveBuscas, Mascotes, Dashboards Power BI e Produções com IA), detalhando clientes, stacks e diferenciais aplicáveis a cada proposta.
+   - **Detecção de Gênero (`detectGenderByName`)**: Identifica o primeiro nome do cliente para abrir com a saudação de mais alta taxa de resposta (`Olá, [Nome]!` para mulheres e `Fala, [Nome]!` para homens).
+   - **Regras de Ouro e Sanitização (`sanitizeProposalText`)**:
+     - *Zero Travessões*: Elimina totalmente caracteres `—`, `–` ou `--` trocando por vírgula ou ponto.
+     - *Tags Customizadas do 99Freelas*: `{b}texto{/b}` para valores e prazos, `{i}texto{/i}` para termos técnicos, `{u}URL{/u}` para o link único do portfólio.
+     - *Link Único Blindado*: `{u}https://www.rafaelpitaoficial.com.br/portfolio-v2{/u}` (ou galeria de fotografia para ensaios/fotos).
+     - *Gatilho Obrigatório de 5 Estrelas*: `> Minha meta é obter 5 estrelas, então você tem meu total comprometimento.`
+     - *Preservação de Histórias Autênticas*: Respeita detalhes passados pelo desenvolvedor em `instrucoesExtras` (ex: bases prontas, apps caseiros de drywall/orçamentos).
+     - *Piso Mínimo*: R$ 56,00.
+
+

@@ -1,0 +1,921 @@
+[
+  {
+    "id": 8,
+    "title": "Mascote - CSS",
+    "slug": "mascote-css",
+    "client": "Vagner",
+    "services": [
+      "Figma",
+      "Adobe Photoshop",
+      "Illustrator",
+      "Imagens em IA",
+      "subcategoria:social-media"
+    ],
+    "description": "A empresa CSS Logística solicitou a criação de um mascote 2D com características de um tubarão forte, vestindo a camisa polo da empresa com a logo ao centro.",
+    "category_id": 1
+  },
+  {
+    "id": 29,
+    "title": "Sistema de Escalas",
+    "slug": "sistema-de-escalas",
+    "client": "Creative - ADVEC",
+    "services": [
+      "React",
+      "Tailwind CSS",
+      "Supabase",
+      "Node.js",
+      "PostgreSQL",
+      "subcategoria:desenvolvimento-de-sistemas"
+    ],
+    "description": "Criamos o \"Sistema de Escalas\", uma plataforma robusta onde é possível fazer o gerenciamento de usuários, eventos e funções. Investimos na experiência visual para garantir resultados impactantes e profissionais.",
+    "category_id": 3
+  },
+  {
+    "id": 32,
+    "title": "Casamento Coco Bambu - J&B",
+    "slug": "casamento-coco-bambu-j-b",
+    "client": "Jonatas",
+    "services": [
+      "Fotografia Profissional",
+      "Tratamento de Imagem",
+      "Lightroom",
+      "Ensaio Externo"
+    ],
+    "description": "",
+    "category_id": 2
+  },
+  {
+    "id": 39,
+    "title": "THD Engenharia - Site",
+    "slug": "thd-engenharia-consultoria-de-provedores-de-internet-site",
+    "client": "Thiago",
+    "services": [
+      "Wordpress",
+      "SEO Premium",
+      "subcategoria:criacao-de-sites"
+    ],
+    "description": "Desenvolvemos o novo website da THD Engenharia, posicionando-a como líder em consultoria especializada para provedores de internet.",
+    "category_id": 3
+  },
+  {
+    "id": 26,
+    "title": "Farmácia  - Social Media",
+    "slug": "farmacia-social-media",
+    "client": "",
+    "services": [
+      "Figma",
+      "Adobe Photoshop",
+      "Illustrator",
+      "Imagens em IA",
+      "subcategoria:social-media"
+    ],
+    "description": "",
+    "category_id": 1
+  },
+  {
+    "id": 12,
+    "title": "Atelier Petshopping - Social Media",
+    "slug": "atelier-petshopping",
+    "client": "Eduardo",
+    "services": [
+      "Figma",
+      "Adobe Photoshop",
+      "Illustrator",
+      "Imagens em IA",
+      "subcategoria:social-media"
+    ],
+    "description": "Criação de artes para feed, stories e edição de reels do Atelier Pet Shopping.",
+    "category_id": 1
+  },
+  {
+    "id": 30,
+    "title": "Pré-Wedding - W&M",
+    "slug": "pre-wedding",
+    "client": "Wallace",
+    "services": [
+      "Fotografia Profissional",
+      "Tratamento de Imagem",
+      "Lightroom",
+      "Ensaio Externo"
+    ],
+    "description": "Uma celebração íntima e autêntica do amor antes do \"sim\". Este ensaio pré-casamento capta a expectativa e a conexão única do casal Wallace e Mariana, transformando momentos simples em arte.",
+    "category_id": 2
+  },
+  {
+    "id": 50,
+    "title": "Lelê - 9 anos",
+    "slug": "lele-9-anos",
+    "client": "Fernanda",
+    "services": [
+      "Fotografia Infantil",
+      "Tratamento de Imagem",
+      "Lightroom",
+      "Edição de Cor"
+    ],
+    "description": "",
+    "category_id": 2
+  },
+  {
+    "id": 42,
+    "title": "SMS Fácil - Plataforma SaaS de Números Virtuais",
+    "slug": "sms-facil-plataforma-saas-de-numeros-virtuais",
+    "client": "Matheus",
+    "services": [
+      "React",
+      "Tailwind CSS",
+      "Supabase",
+      "Node.js",
+      "Docker",
+      "PostgreSQL",
+      "subcategoria:desenvolvimento-de-sistemas"
+    ],
+    "description": "Uma plataforma moderna e automatizada para venda de números temporários (SMS), com processamento de pagamentos Pix em tempo real, painel administrativo completo e arquitetura Docker escalável.",
+    "category_id": 3
+  },
+  {
+    "id": 25,
+    "title": "Alimentação - Social Media",
+    "slug": "alimentacao-social-media",
+    "client": "",
+    "services": [
+      "Figma",
+      "Adobe Photoshop",
+      "Illustrator",
+      "Imagens em IA",
+      "subcategoria:social-media"
+    ],
+    "description": "",
+    "category_id": 1
+  },
+  {
+    "id": 33,
+    "title": "Casamento J&V e G&A",
+    "slug": "casamento-j-v-e-g-a",
+    "client": "",
+    "services": [
+      "Fotografia Profissional",
+      "Tratamento de Imagem",
+      "Lightroom",
+      "Ensaio Externo"
+    ],
+    "description": "",
+    "category_id": 2
+  },
+  {
+    "id": 41,
+    "title": "Rafael Pita Phothography",
+    "slug": "rafael-pita-phothography-site",
+    "client": "",
+    "services": [
+      "React",
+      "Tailwind CSS",
+      "Supabase",
+      "Node.js",
+      "SEO Premium",
+      "subcategoria:desenvolvimento-de-sistemas"
+    ],
+    "description": "Criamos uma vitrine digital de alto impacto, focada em transformar visitantes em clientes. Uma experiência visual impecável que reflete a qualidade e o profissionalismo da sua arte.",
+    "category_id": 3
+  },
+  {
+    "id": 22,
+    "title": "Kaizen - Credencial",
+    "slug": "Kaizen-Credencial",
+    "client": "Kaizen",
+    "services": [
+      "Figma",
+      "Adobe Photoshop",
+      "Illustrator",
+      "Imagens em IA",
+      "subcategoria:materiais-impressos"
+    ],
+    "description": "A Kaizen solicitou a criação da arte da credencial para o evento Imersão Liderança de Alto Impacto.",
+    "category_id": 1
+  },
+  {
+    "id": 21,
+    "title": "Eu na CC'25",
+    "slug": "eu-cc25",
+    "client": "",
+    "services": [
+      "Figma",
+      "Adobe Photoshop",
+      "Illustrator",
+      "Branding"
+    ],
+    "description": "Criação de carrossel criativo para mostrar a minha participação na CC’25. Obs.: Na parte verde entrou video.",
+    "category_id": 1
+  },
+  {
+    "id": 35,
+    "title": "CBJJO - Landing Page",
+    "slug": "landing-page-cbjjo",
+    "client": "",
+    "services": [
+      "React",
+      "Tailwind CSS",
+      "Supabase",
+      "SEO Premium",
+      "Framer Motion",
+      "subcategoria:landing-pages"
+    ],
+    "description": "Desenvolvimento de uma Landing Page estratégica e de alto impacto para a Confederação [Cliente Confidencial]. Uma interface robusta projetada para maximizar a captação e o engajamento dos usuários.",
+    "category_id": 3
+  },
+  {
+    "id": 17,
+    "title": "Relatórios em Power BI",
+    "slug": "power-bi",
+    "client": "TP",
+    "services": [
+      "Power BI",
+      "DAX",
+      "Power Query",
+      "ETL",
+      "SQL Server",
+      "subcategoria:dashboards-power-bi"
+    ],
+    "description": "Desenvolvemos uma suíte de dashboards interativos em Power BI para o cliente TP, convertendo dados complexos em inteligência de negócios acionável. Este projeto demonstra nossa expertise em ETL e visualização estratégica de dados.",
+    "category_id": 4
+  },
+  {
+    "id": 37,
+    "title": "Moy Seguros - Site e Sorteio",
+    "slug": "moy-seguros-site-e-sorteio",
+    "client": "Moises",
+    "services": [
+      "React",
+      "Tailwind CSS",
+      "Supabase",
+      "Node.js",
+      "SEO Premium",
+      "subcategoria:landing-pages"
+    ],
+    "description": "Potencializamos a captação de leads para a Moy Seguros através de uma experiência digital e visualmente impactante. Desenvolvemos o novo website e a campanha de sorteio com foco em alta conversão.",
+    "category_id": 3
+  },
+  {
+    "id": 14,
+    "title": "Prospecta - Social Media",
+    "slug": "prospecta",
+    "client": "Prospecta",
+    "services": [
+      "Figma",
+      "Adobe Photoshop",
+      "Illustrator",
+      "Imagens em IA",
+      "subcategoria:social-media"
+    ],
+    "description": "Criação de arte para feed da Prospecta, empresa de pré-fabricados de concreto, coberturas metálicas, mezaninos e pisos industriais.",
+    "category_id": 1
+  },
+  {
+    "id": 19,
+    "title": "Paula Leal - Portfólio",
+    "slug": "paula-leal",
+    "client": "Paula Leal",
+    "services": [
+      "Figma",
+      "Adobe Photoshop",
+      "Illustrator",
+      "Branding",
+      "subcategoria:none"
+    ],
+    "description": "A Paula Leal solicitou a criação de uma apresentação em PowerPoint para servir como portfólio pessoal.",
+    "category_id": 1
+  },
+  {
+    "id": 24,
+    "title": "Açaí - Social Media",
+    "slug": "acai",
+    "client": "",
+    "services": [
+      "Figma",
+      "Adobe Photoshop",
+      "Illustrator",
+      "Imagens em IA",
+      "subcategoria:social-media"
+    ],
+    "description": "",
+    "category_id": 1
+  },
+  {
+    "id": 11,
+    "title": "2M Conect - Social Media",
+    "slug": "2mconect",
+    "client": "2M Conect",
+    "services": [
+      "Figma",
+      "Adobe Photoshop",
+      "Illustrator",
+      "Imagens em IA"
+    ],
+    "description": "Criação de artes para feed da 2M Conect, provedor de internet, divulgando planos de fibra óptica.",
+    "category_id": 1
+  },
+  {
+    "id": 48,
+    "title": "Arthur - 2 anos",
+    "slug": "arthur-2-anos",
+    "client": "Suelen e Eliseu",
+    "services": [
+      "Fotografia Infantil",
+      "Tratamento de Imagem",
+      "Lightroom",
+      "Edição de Cor"
+    ],
+    "description": "",
+    "category_id": 2
+  },
+  {
+    "id": 10,
+    "title": "Imagens - IA",
+    "slug": "imagens-ia",
+    "client": "",
+    "services": [
+      "Midjourney",
+      "ChatGPT",
+      "Adobe Photoshop",
+      "IA Generativa"
+    ],
+    "description": "Algumas Imagens Gerados por IA através de prompts elaborados por mim.",
+    "category_id": 5
+  },
+  {
+    "id": 6,
+    "title": "Social Midia -  Saldo Positivo",
+    "slug": "saldo-positivo",
+    "client": "Rodrigo",
+    "services": [
+      "Figma",
+      "Adobe Photoshop",
+      "Illustrator",
+      "Imagens em IA"
+    ],
+    "description": "Criação de artes para o aplicativo Saldo Positivo, incluindo imagens para lojas Android e iOS e posts para feed.",
+    "category_id": 1
+  },
+  {
+    "id": 52,
+    "title": "Sophie - 1 Ano",
+    "slug": "sophie-1-ano",
+    "client": "Ana e Eliel",
+    "services": [
+      "Fotografia Infantil",
+      "Tratamento de Imagem",
+      "Lightroom",
+      "Edição de Cor"
+    ],
+    "description": "",
+    "category_id": 2
+  },
+  {
+    "id": 3,
+    "title": "Social Media - Brito Adv",
+    "slug": "brito-adv",
+    "client": "Brito",
+    "services": [
+      "Figma",
+      "Adobe Photoshop",
+      "Illustrator",
+      "Imagens em IA",
+      "subcategoria:social-media"
+    ],
+    "description": "O escritório Brito Advocacia pediu artes para feed e stories no Instagram a fim de divulgar uma vaga de estágio.",
+    "category_id": 1
+  },
+  {
+    "id": 46,
+    "title": " Sistema de Escalas - Vitoriosas",
+    "slug": "sistema-de-escalas-vitoriosas",
+    "client": "Vitoriosas",
+    "services": [
+      "React",
+      "Tailwind CSS",
+      "Supabase",
+      "Node.js",
+      "PostgreSQL",
+      "subcategoria:desenvolvimento-de-sistemas"
+    ],
+    "description": "Criamos o \"Sistema de Escalas\", uma plataforma robusta onde é possível fazer o gerenciamento de usuários, eventos e funções. Investimos na experiência visual para garantir resultados impactantes e profissionais.",
+    "category_id": 3
+  },
+  {
+    "id": 38,
+    "title": "Contabilidade - Landing Page",
+    "slug": "contabilidade-landing-page",
+    "client": "Walter Muniz",
+    "services": [
+      "React",
+      "Tailwind CSS",
+      "Supabase",
+      "SEO Premium",
+      "Framer Motion",
+      "subcategoria:landing-pages"
+    ],
+    "description": "Criamos uma Landing Page de alta performance para a contabilidade Walter Muniz, focada na credibilidade e na conversão direta. Uma solução digital robusta para atrair e qualificar novos clientes de forma eficiente.",
+    "category_id": 3
+  },
+  {
+    "id": 47,
+    "title": "DetetiveBuscas",
+    "slug": "detetivebuscas",
+    "client": "Mateus",
+    "services": [
+      "React",
+      "Tailwind CSS",
+      "Supabase",
+      "Node.js",
+      "PostgreSQL",
+      "subcategoria:desenvolvimento-de-sistemas"
+    ],
+    "description": "",
+    "category_id": 3
+  },
+  {
+    "id": 28,
+    "title": "PharmaVille - Social Media",
+    "slug": "pharmaville-social-media",
+    "client": "",
+    "services": [
+      "Figma",
+      "Adobe Photoshop",
+      "Illustrator",
+      "Imagens em IA",
+      "subcategoria:social-media"
+    ],
+    "description": "",
+    "category_id": 1
+  },
+  {
+    "id": 27,
+    "title": "Provedor de Internet - Social Media",
+    "slug": "provedor-de-internet-social-media",
+    "client": "",
+    "services": [
+      "Figma",
+      "Adobe Photoshop",
+      "Illustrator",
+      "Imagens em IA",
+      "subcategoria:social-media"
+    ],
+    "description": "",
+    "category_id": 1
+  },
+  {
+    "id": 15,
+    "title": "Inobre - Social Media",
+    "slug": "nobre-propagando",
+    "client": "Fernanda",
+    "services": [
+      "Figma",
+      "Adobe Photoshop",
+      "Illustrator",
+      "Imagens em IA",
+      "subcategoria:social-media"
+    ],
+    "description": "A Nobre Propaganda solicitou a criação de artes em carrossel para feed e novas capas de destaques no Instagram, como parte de uma repaginada em sua identidade visual.",
+    "category_id": 1
+  },
+  {
+    "id": 18,
+    "title": "Coopertramo - Social Media",
+    "slug": "coopertramo",
+    "client": "Coopertramo",
+    "services": [
+      "Figma",
+      "Adobe Photoshop",
+      "Illustrator",
+      "Imagens em IA",
+      "subcategoria:social-media"
+    ],
+    "description": "A Coopertramo, cooperativa de táxi executivo, solicitou a criação de artes para feed e stories.",
+    "category_id": 1
+  },
+  {
+    "id": 4,
+    "title": "Cardápio - La Bella Pasta",
+    "slug": "cardapio-la-bella-pasta",
+    "client": "Maria",
+    "services": [
+      "Figma",
+      "Adobe Photoshop",
+      "Illustrator",
+      "Branding"
+    ],
+    "description": "O restaurante La Bella Pasta, especializado em comida italiana, solicitou a criação de um cardápio para impressão.",
+    "category_id": 1
+  },
+  {
+    "id": 7,
+    "title": "Social Media - Seu Gênio",
+    "slug": "seu-genio",
+    "client": "",
+    "services": [
+      "Figma",
+      "Adobe Photoshop",
+      "Illustrator",
+      "Imagens em IA"
+    ],
+    "description": "Criação de arte para feed da plataforma Seu Gênio, que oferece soluções de delivery.",
+    "category_id": 1
+  },
+  {
+    "id": 36,
+    "title": "Connect Conference 2025 - Site",
+    "slug": "connect-conference-2025-site",
+    "client": "Connect",
+    "services": [
+      "React",
+      "Tailwind CSS",
+      "Supabase",
+      "Node.js",
+      "SEO Premium",
+      "subcategoria:criacao-de-sites"
+    ],
+    "description": "Desenvolvimento estratégico do site para a Connect Conference 2025, focado em alta performance e experiência imersiva, transformando visitantes em participantes.",
+    "category_id": 3
+  },
+  {
+    "id": 13,
+    "title": "Anhanguera - Social Media",
+    "slug": "anhanguera",
+    "client": "Anhanguera",
+    "services": [
+      "Figma",
+      "Adobe Photoshop",
+      "Illustrator",
+      "Imagens em IA",
+      "subcategoria:social-media"
+    ],
+    "description": "Criação de artes para feed e carrossel da Anhanguera Pós-Graduação, divulgando um novo curso.",
+    "category_id": 1
+  },
+  {
+    "id": 31,
+    "title": "Pedido de Casamento - J & B",
+    "slug": "pedido-de-casamento-j-b",
+    "client": "Jonatha",
+    "services": [
+      "Fotografia Profissional",
+      "Tratamento de Imagem",
+      "Lightroom",
+      "Ensaio Externo"
+    ],
+    "description": "",
+    "category_id": 2
+  },
+  {
+    "id": 49,
+    "title": "João - 6 anos",
+    "slug": "joao-6-anos",
+    "client": "Laurenir",
+    "services": [
+      "Fotografia Infantil",
+      "Tratamento de Imagem",
+      "Lightroom",
+      "Edição de Cor"
+    ],
+    "description": "",
+    "category_id": 2
+  },
+  {
+    "id": 34,
+    "title": "Anúncio Gravidez - Rangel",
+    "slug": "anuncio-gravidez-rangel",
+    "client": "Rangel",
+    "services": [
+      "Fotografia Infantil",
+      "Tratamento de Imagem",
+      "Lightroom",
+      "Edição de Cor"
+    ],
+    "description": "",
+    "category_id": 2
+  },
+  {
+    "id": 51,
+    "title": "Rebeca - 2 anos",
+    "slug": "rebeca-2-anos",
+    "client": "Júlia",
+    "services": [
+      "Fotografia Infantil",
+      "Tratamento de Imagem",
+      "Lightroom",
+      "Edição de Cor"
+    ],
+    "description": "",
+    "category_id": 2
+  },
+  {
+    "id": 23,
+    "title": "DCONT - Modelo Portfólio",
+    "slug": "dcont-modelo",
+    "client": "Daiane",
+    "services": [
+      "Figma",
+      "Adobe Photoshop",
+      "Illustrator",
+      "Branding",
+      "subcategoria:social-media"
+    ],
+    "description": "A DCONT solicitou a criação de um modelo de portfólio e uma arte apresentando os serviços oferecidos.",
+    "category_id": 1
+  },
+  {
+    "id": 43,
+    "title": "12 anos - Eloáh",
+    "slug": "12-anos-eloah",
+    "client": "",
+    "services": [
+      "Fotografia Infantil",
+      "Tratamento de Imagem",
+      "Lightroom",
+      "Edição de Cor"
+    ],
+    "description": "",
+    "category_id": 2
+  },
+  {
+    "id": 20,
+    "title": "Millena na CC'25 - Design",
+    "slug": "millena-cc25",
+    "client": "Millena",
+    "services": [
+      "Figma",
+      "Adobe Photoshop",
+      "Illustrator",
+      "Branding"
+    ],
+    "description": "Criação de carrossel criativo para mostrar a participação da Millena na CC’25.",
+    "category_id": 1
+  },
+  {
+    "id": 53,
+    "title": "T&A -Casamento",
+    "slug": "t-a-casamento",
+    "client": "Thaigo e Ana",
+    "services": [
+      "Fotografia Profissional",
+      "Tratamento de Imagem",
+      "Lightroom",
+      "Ensaio Externo"
+    ],
+    "description": "",
+    "category_id": 2
+  },
+  {
+    "id": 40,
+    "title": "Rafael Pita Solutions - Site",
+    "slug": "rafael-pita-solutions-site",
+    "client": "",
+    "services": [
+      "React",
+      "Tailwind CSS",
+      "Supabase",
+      "Node.js",
+      "SEO Premium",
+      "subcategoria:desenvolvimento-de-sistemas"
+    ],
+    "description": "Estrutura digital completa para Rafael Pita Solutions. Um projeto de desenvolvimento web e design que alia performance robusta à excelência estética, garantindo máxima conversão.",
+    "category_id": 3
+  },
+  {
+    "id": 16,
+    "title": "CONNECT - Designer",
+    "slug": "connect-designer",
+    "client": "",
+    "services": [
+      "Figma",
+      "Adobe Photoshop",
+      "Illustrator",
+      "Branding",
+      "subcategoria:social-media"
+    ],
+    "description": "",
+    "category_id": 1
+  },
+  {
+    "id": 5,
+    "title": "Opala Coupe",
+    "slug": "opala-coupe",
+    "client": "Rodrigo",
+    "services": [
+      "Figma",
+      "Adobe Photoshop",
+      "Illustrator",
+      "Imagens em IA",
+      "subcategoria:social-media"
+    ],
+    "description": "Criação de artes para feed e stories divulgando o sorteio de um Opala Coupé 1976.",
+    "category_id": 1
+  },
+  {
+    "id": 45,
+    "title": "Pré Wedding - T&A",
+    "slug": "pre-wedding-t-a",
+    "client": "Ana Beatriz",
+    "services": [
+      "Fotografia Profissional",
+      "Tratamento de Imagem",
+      "Lightroom",
+      "Ensaio Externo"
+    ],
+    "description": "",
+    "category_id": 2
+  },
+  {
+    "id": 44,
+    "title": "Pré-Wedding - E&C",
+    "slug": "pre-wedding-e-c",
+    "client": "Elizeu e Carol",
+    "services": [
+      "Fotografia Profissional",
+      "Tratamento de Imagem",
+      "Lightroom",
+      "Ensaio Externo"
+    ],
+    "description": "",
+    "category_id": 2
+  },
+  {
+    "id": 54,
+    "title": "Vantage App - Plataforma SaaS de Fidelidade Gastronômica",
+    "slug": "vantage-app-fidelidade-gastronomica",
+    "client": "Vantage App (Thiago & Mafer)",
+    "services": [
+      "Next.js 16",
+      "React 19",
+      "Tailwind CSS",
+      "Prisma ORM & PostgreSQL",
+      "PWA Mobile-First",
+      "QR Code Dinâmico Criptografado",
+      "Bento Grid & Apple UX",
+      "Analytics em Tempo Real",
+      "subcategoria:criacao-de-sites"
+    ],
+    "description": "Plataforma digital completa de fidelidade e descoberta para restaurantes e clientes gastronômicos. Combina a experiência visual sofisticada de um marketplace gastronômico com motor antifraude de QR Codes dinâmicos com rotação diária e cartões de fidelidade estilo Apple Wallet.",
+    "category_id": 3
+  },
+  {
+    "id": 55,
+    "title": "Jorge Santos Advocacia - Portal Jurídico Especializado",
+    "slug": "jorge-santos-advocacia-aracaju-site",
+    "client": "Dr. Jorge Santos (Aracaju/SE)",
+    "services": [
+      "WordPress & Elementor Pro",
+      "SEO Jurídico Local (Aracaju/SE)",
+      "Landing Pages Especializadas",
+      "Otimização de Performance & Cache",
+      "Design Responsivo Mobile-First",
+      "Integração WhatsApp Direct",
+      "subcategoria:criacao-de-sites"
+    ],
+    "description": "Portal institucional e conjunto de landing pages segmentadas para o escritório Jorge Santos Advocacia e Consultoria Jurídica, com foco em autoridade jurídica e captação de clientes em Aracaju e em todo o Estado de Sergipe.",
+    "category_id": 3
+  },
+  {
+    "id": 56,
+    "title": "Advogado Online Aracaju - Landing Page de Alta Conversão",
+    "slug": "advogado-online-aracaju-landing-page",
+    "client": "Jorge Santos Advocacia (Aracaju/SE)",
+    "services": [
+      "Landing Page de Alta Conversão",
+      "SEO Jurídico Local (Aracaju/SE)",
+      "Copywriting Persuasivo",
+      "Design Responsivo Mobile-First",
+      "Integração WhatsApp Direct",
+      "subcategoria:landing-pages"
+    ],
+    "description": "Landing page de alta conversão projetada estrategicamente para captação direta de clientes qualificados em Aracaju e Sergipe, com copy persuasiva, conformidade com o Código de Ética da OAB e gatilhos rápidos para contato via WhatsApp.",
+    "category_id": 3
+  },
+  {
+    "id": 57,
+    "title": "BCont Contábil OS: Inteligência, Gestão e Conciliação Contábil",
+    "slug": "bcont-contabilidade-digital-plataforma",
+    "client": "BCont Contabilidade Digital",
+    "services": [
+      "React 19",
+      "TypeScript",
+      "TanStack Start",
+      "Tailwind CSS",
+      "Supabase (PostgreSQL + RLS)",
+      "Google Gemini AI",
+      "Conciliação Bancária OFX",
+      "DRE Gerencial em Tempo Real"
+    ],
+    "description": "Sistema operacional SaaS completo para escritórios de contabilidade. Apresenta cockpit operacional de gestão por setor com proteção RLS no banco de dados, matriz dinâmica de obrigações tributárias, leitura automatizada de certidões negativas (CNDs) com IA Google Gemini e supervisão humana, motor tolerante de conciliação bancária OFX (matching 1:1 e somatório N:1), DRE analítica em tempo real, relatórios de produtividade por colaborador e landing page comercial com apresentação da arquitetura do software.",
+    "category_id": 3
+  },
+  {
+    "id": 58,
+    "title": "Preço Certo by BCONT: Precificação com Inteligência Fiscal, Comercial e de Compras",
+    "slug": "preco-certo-by-bcont-precificacao-inteligente",
+    "client": "BCONT (Thiago Souza & Equipe)",
+    "services": [
+      "React 19",
+      "TypeScript",
+      "TanStack Start",
+      "Tailwind CSS",
+      "Supabase (PostgreSQL + RLS)",
+      "Inteligência Fiscal Condicional",
+      "Simulação Reforma Tributária",
+      "Gateway Asaas (PIX + Cartão)"
+    ],
+    "description": "Plataforma SaaS de engenharia de preços desenvolvida em parceria com a BCONT Contabilidade Digital. Substitui planilhas comuns por um motor matemático de markup inverso com inteligência fiscal condicional (Simples Nacional com alíquota efetiva por RBT12, Lucro Presumido e Lucro Real não cumulativo), simulação de impactos da Reforma Tributária (IBS/CBS), central de compras para negociação de fornecedores, auditoria Raio-X de margem em lote via Excel e gateway de pagamentos automatizado via Asaas.",
+    "category_id": 3
+  },
+  {
+    "id": 59,
+    "title": "NEXUSSTORE: E-commerce de Assinaturas Digitais com Fulfillment Automático",
+    "slug": "nexusstore-ecommerce-assinaturas-digitais",
+    "client": "NEXUSSTORE",
+    "services": [
+      "Next.js 14 (App Router)",
+      "React 18",
+      "Tailwind CSS",
+      "Prisma ORM",
+      "PostgreSQL na VPS",
+      "Gateway PushinPay (PIX Imediato)",
+      "Fulfillment Multi-Fornecedor API",
+      "Brevo E-mails Transacionais"
+    ],
+    "description": "Plataforma completa de e-commerce voltada para a comercialização de assinaturas digitais, licenças premium e ferramentas de inteligência artificial. Desenvolvida em Next.js 14 e Tailwind CSS com banco de dados PostgreSQL via Prisma ORM, o ecossistema automatiza 100% do fluxo transacional: desde o checkout instantâneo via PIX com PushinPay até a entrega das credenciais e links de convite via API multi-fornecedor e notificações transacionais por e-mail com Brevo.",
+    "category_id": 3
+  },
+  {
+    "id": 60,
+    "title": "StartOFF: Sistema Corporativo de Gestão de Férias com IA e Concorrência de Turnos",
+    "slug": "startoff-gestao-corporativa-de-ferias-ia",
+    "client": "StartOFF / Transpetro Petrobras",
+    "services": [
+      "React 19",
+      "Vite",
+      "Tailwind CSS",
+      "Node.js & Express 5",
+      "Sequelize ORM",
+      "PostgreSQL",
+      "Algoritmo de IA Heurística para Datas",
+      "Controle de Concorrência de Turnos & Papéis"
+    ],
+    "description": "Sistema corporativo web de alta fidelidade desenvolvido sob diretrizes visuais e operacionais da Transpetro para gestão inteligente de férias e afastamentos de equipes offshore e operacionais. A plataforma elimina conflitos de escala, valida saldos em tempo real e utiliza motor de recomendação inteligente que sugere períodos de folga otimizados (emendas com feriados e finais de semana) sem comprometer a capacidade operacional mínima por função.",
+    "category_id": 3
+  },
+  {
+    "id": 61,
+    "title": "Consultas Brasil: Plataforma Inteligente de Dados Cadastrais com PIX e SEO Avançado",
+    "slug": "consultas-brasil-plataforma-dados-cadastrais-pix",
+    "client": "Consultas Brasil Data Intelligence",
+    "services": [
+      "Next.js 16 (App Router + Turbopack)",
+      "React 19",
+      "TypeScript",
+      "Tailwind CSS v4",
+      "PostgreSQL & Prisma ORM",
+      "Gateway PushinPay (PIX < 100ms)",
+      "DirectData API V2 & V3",
+      "SEO Semântico Avançado & Google Search Console"
+    ],
+    "description": "Plataforma SaaS moderna de inteligência cadastral e background check desenvolvida em Next.js 16 e Tailwind CSS v4. Permite pesquisas unificadas de CPF, CNPJ, telefone, placa veicular e nome com modelo pré-pago sem mensalidades fixas. O sistema conta com motor de checkout instantâneo via PIX com webhook em menos de 100ms via PushinPay, integração de dados cadastrais oficiais e arquitetura de SEO semântico de alta densidade aprovada para indexação orgânica no Google.",
+    "category_id": 3
+  },
+  {
+    "id": 62,
+    "title": "VORIXA AI (VORTIXIA): Estúdio de Criação Audiovisual com Modelos Virtuais e Vídeos Virais",
+    "slug": "vorixa-vortixia-estudio-audiovisual-ia-generativa",
+    "client": "VORIXA AI / VORTIXIA Studio",
+    "services": [
+      "Next.js 16 (App Router)",
+      "React 19",
+      "TypeScript",
+      "Tailwind CSS v4",
+      "PostgreSQL & Prisma ORM",
+      "Integração fal.ai & Kling 3.0",
+      "Node-based Flow Builder (@xyflow/react)",
+      "Gateway VorexPay (PIX Imediato)",
+      "Sync Audio LipSync & Master Prompts"
+    ],
+    "description": "Plataforma SaaS de última geração de inteligência artificial generativa audiovisual. Permite que criadores e marcas desenvolvam modelos virtuais ultra-realistas com fotos de perfil e corpo todo, comercializem Master Prompts fotográficos exclusivos via créditos e gerem vídeos virais sincronizados com áudio natural em português (LipSync) sem necessidade de filmagens presenciais ou estúdios físicos.",
+    "category_id": 3
+  },
+  {
+    "id": 63,
+    "title": "O Nascimento da Moda : Curta Educacional Animado com IA Generativa",
+    "slug": "o-nascimento-da-moda-animacao-ia",
+    "client": "Universidade Federal do Piauí (UFPI) : Curso de Graduação em Moda",
+    "services": [
+      "Inteligência Artificial",
+      "Animação por IA",
+      "Google Flow",
+      "Engenharia de Prompt",
+      "Síntese de Voz (TTS)",
+      "Sound Design",
+      "Pós-Produção",
+      "Python",
+      "FFmpeg"
+    ],
+    "description": "Curta-metragem educacional animado em 2D (~5 minutos) produzido para o corpo docente e acadêmico do Curso de Moda da UFPI. O projeto dramatiza um encontro imaginário entre uma estudante contemporânea e três dos maiores pensadores da história da moda (Gilles Lipovetsky, João Braga e Georg Simmel), unindo rigor teórico acadêmico, animação gerada 100% por Inteligência Artificial e dublagem neural com sincronização labial milimétrica.",
+    "category_id": 5
+  }
+]

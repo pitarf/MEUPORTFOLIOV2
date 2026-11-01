@@ -12,6 +12,7 @@ import { Link, useSearchParams, useLocation } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useLanguage } from '@/contexts/LanguageContext';
 import PortfolioBottomNav from '@/components/PortfolioBottomNav';
+import PortfolioProjectCard from '@/components/PortfolioProjectCard';
 
 // Mapeamento dos ícones para as categorias de portfólio
 const icons = { 
@@ -341,99 +342,184 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                     </div>
                 </section>
 
-                {/* 3. Grid de Projetos Ultra-Premium (Animações Fluidas Framer Motion) */}
-                <section id="portfolio-grid-top" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 scroll-mt-24">
-                    <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8">
-                        <AnimatePresence mode="popLayout">
-                            {filteredProjects.map((project) => {
-                                const cat = allCategories.find(c => c.id === project.category_id) || { title: 'Geral', slug: 'geral' };
-                                const techs = getProjectTechs(cat.slug, project.title, project.services);
-                                return (
-                                    <motion.div
-                                        key={project.id}
-                                        layout
-                                        initial={{ opacity: 0, scale: 0.9 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        exit={{ opacity: 0, scale: 0.9 }}
-                                        transition={{ duration: 0.4 }}
-                                        className="group relative rounded-2xl overflow-hidden border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] shadow-sm hover:shadow-md dark:shadow-none hover:shadow-lime-500/10 dark:hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] transition-all duration-300 cursor-pointer bg-white dark:bg-[#121210] flex flex-col h-full"
-                                    >
-                                        <Link to={`${effectiveBasePath}/${cat.slug}/${project.slug}`} className="flex flex-col h-full w-full">
-                                            
-                                            {/* Imagem de Fundo */}
-                                            <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100 dark:bg-[#181814]">
-                                                <img
-                                                    alt={project.title}
-                                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                                    src={project.main_image_url || 'https://images.unsplash.com/photo-1572177812156-58036aae439c'}
-                                                    loading="lazy"
-                                                />
-                                                
-                                                {/* Gradiente sutil */}
-                                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 dark:from-[#121210]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                {/* 3. Grid de Projetos Ultra-Premium (Desktop Grid + Mobile Carrossel por Categoria) */}
+                <section id="portfolio-grid-top" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 scroll-mt-24">
+                    {/* Visualizacao 1: Sem Filtro Ativo (Modo Completo) */}
+                    {activeTab === 'all' && searchQuery.trim() === '' ? (
+                        <>
+                            {/* Mobile: Categorias uma abaixo da outra com Carrossel Horizontal Deslizavel */}
+                            <div className="block md:hidden space-y-10">
+                                {allCategories.map((cat) => {
+                                    const catProjects = projects.filter(p => p.category_id === cat.id);
+                                    if (catProjects.length === 0) return null;
+                                    const IconComp = icons[cat.icon] || Code;
 
-                                                {/* Badge da Categoria sobre a Imagem */}
-                                                <div className="absolute top-3 left-3 z-10">
-                                                    <span className="inline-flex items-center text-[11px] font-bold text-[#0a0a08] px-2.5 py-1 rounded-full bg-[#bcf13b] shadow-sm uppercase tracking-wider">
-                                                        {cat.title}
-                                                    </span>
-                                                </div>
-
-                                                {/* Ícone de Link Externo no Hover */}
-                                                <div className="absolute top-3 right-3 z-10 bg-white/90 dark:bg-[#121210]/90 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0 shadow-md border border-slate-200 dark:border-[#23231f]">
-                                                    <ExternalLink className="w-3.5 h-3.5 text-[#4d7c0f] dark:text-[#bcf13b]" />
-                                                </div>
-                                            </div>
-
-                                            {/* Conteúdo do Card Abaixo da Imagem */}
-                                            <div className="p-5 flex flex-col justify-between flex-1 space-y-3 bg-white dark:bg-[#121210]">
-                                                <div className="space-y-1.5">
-                                                    {/* Cliente e Ano */}
-                                                    <div className="flex items-center justify-between text-xs font-semibold text-slate-500 dark:text-gray-400">
-                                                        <span className="truncate">{project.client || t('portfolio_corporate_client', 'Cliente Corporativo')}</span>
-                                                        {project.year && <span className="flex-shrink-0">{project.year}</span>}
+                                    return (
+                                        <div key={cat.id} className="space-y-3.5">
+                                            {/* Cabecalho da Categoria Mobile */}
+                                            <div className="flex items-center justify-between px-1">
+                                                <div className="flex items-center gap-2.5 min-w-0">
+                                                    <div className="w-8 h-8 rounded-xl bg-lime-500/10 dark:bg-[#bcf13b]/10 flex items-center justify-center border border-lime-500/20 dark:border-[#bcf13b]/20 text-[#4d7c0f] dark:text-[#bcf13b] shrink-0 shadow-xs">
+                                                        <IconComp className="w-4 h-4" />
                                                     </div>
-
-                                                    {/* Título do Projeto */}
-                                                    <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white leading-tight group-hover:text-[#4d7c0f] dark:group-hover:text-[#bcf13b] transition-colors line-clamp-1">
-                                                        {project.title}
-                                                    </h3>
-                                                    
-                                                    {/* Descrição Curta */}
-                                                    {project.description && (
-                                                        <p className="text-slate-600 dark:text-gray-400 text-xs line-clamp-2 leading-relaxed font-normal">
-                                                            {project.description}
-                                                        </p>
-                                                    )}
-                                                </div>
-
-                                                {/* Rodapé do Card: Tecnologias e Call to Action */}
-                                                <div className="pt-3 border-t border-slate-100 dark:border-[#23231f] flex items-center justify-between gap-2">
-                                                    <div className="flex flex-wrap gap-1 max-w-[70%]">
-                                                        {techs.slice(0, 3).map((tech) => (
-                                                            <span key={tech} className="text-[10px] font-semibold text-lime-700 dark:text-[#bcf13b] bg-lime-50 dark:bg-[#bcf13b]/10 border border-lime-200 dark:border-[#bcf13b]/20 px-2 py-0.5 rounded">
-                                                                {tech}
+                                                    <div className="min-w-0">
+                                                        <div className="flex items-center gap-2">
+                                                            <h2 className="text-base font-extrabold text-slate-900 dark:text-white tracking-tight truncate">
+                                                                {cat.title}
+                                                            </h2>
+                                                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-[#181814] text-slate-600 dark:text-gray-400 border border-slate-200 dark:border-[#23231f] shrink-0">
+                                                                {catProjects.length}
                                                             </span>
-                                                        ))}
-                                                    </div>
-
-                                                    <div className="flex items-center text-xs font-bold text-[#4d7c0f] dark:text-[#bcf13b] group-hover:translate-x-1 transition-transform duration-200">
-                                                        {t('portfolio_view_case', 'Ver Case')} <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </Link>
-                                    </motion.div>
-                                );
-                            })}
-                        </AnimatePresence>
-                    </motion.div>
 
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setActiveTab(cat.slug);
+                                                        if (filterSectionRef.current) {
+                                                            filterSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+                                                        }
+                                                    }}
+                                                    className="text-xs font-bold text-[#4d7c0f] dark:text-[#bcf13b] hover:underline flex items-center gap-1 shrink-0 ml-2 py-1"
+                                                >
+                                                    <span>Ver todos</span>
+                                                    <ArrowRight className="w-3.5 h-3.5" />
+                                                </button>
+                                            </div>
+
+                                            {/* Carrossel Horizontal de Cards da Categoria */}
+                                            <div className="flex gap-4 overflow-x-auto pb-4 pt-1 px-4 -mx-4 scroll-smooth snap-x snap-mandatory no-scrollbar">
+                                                {catProjects.map((project) => {
+                                                    const techs = getProjectTechs(cat.slug, project.title, project.services);
+                                                    return (
+                                                        <div
+                                                            key={project.id}
+                                                            className="w-[82vw] max-w-[320px] flex-shrink-0 snap-start flex flex-col"
+                                                        >
+                                                            <PortfolioProjectCard
+                                                                project={project}
+                                                                cat={cat}
+                                                                techs={techs}
+                                                                effectiveBasePath={effectiveBasePath}
+                                                                t={t}
+                                                                isCarousel={true}
+                                                            />
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            {/* Desktop: Grid Completo Multi-colunas Tradicional */}
+                            <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8">
+                                <AnimatePresence mode="popLayout">
+                                    {filteredProjects.map((project) => {
+                                        const cat = allCategories.find(c => c.id === project.category_id) || { title: 'Geral', slug: 'geral' };
+                                        const techs = getProjectTechs(cat.slug, project.title, project.services);
+                                        return (
+                                            <motion.div
+                                                key={project.id}
+                                                layout
+                                                initial={{ opacity: 0, scale: 0.95 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                exit={{ opacity: 0, scale: 0.95 }}
+                                                transition={{ duration: 0.3 }}
+                                                className="h-full"
+                                            >
+                                                <PortfolioProjectCard
+                                                    project={project}
+                                                    cat={cat}
+                                                    techs={techs}
+                                                    effectiveBasePath={effectiveBasePath}
+                                                    t={t}
+                                                />
+                                            </motion.div>
+                                        );
+                                    })}
+                                </AnimatePresence>
+                            </div>
+                        </>
+                    ) : (
+                        /* Visualizacao 2: Com Filtro Ativo (Por Categoria Especifica ou Busca Textual) */
+                        <div className="space-y-6">
+                            {/* Barra Informativa do Filtro Ativo */}
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-2xl bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] shadow-xs">
+                                <div className="flex items-center gap-2 text-xs">
+                                    <span className="font-semibold text-slate-500 dark:text-gray-400">Exibindo:</span>
+                                    <span className="font-bold text-[#4d7c0f] dark:text-[#bcf13b] bg-lime-50 dark:bg-[#bcf13b]/10 border border-lime-200 dark:border-[#bcf13b]/20 px-2.5 py-0.5 rounded-full">
+                                        {activeTab !== 'all'
+                                            ? (allCategories.find(c => c.slug === activeTab)?.title || activeTab)
+                                            : `Busca por: "${searchQuery}"`}
+                                    </span>
+                                    <span className="text-slate-500 font-medium">({filteredProjects.length} {filteredProjects.length === 1 ? 'projeto' : 'projetos'})</span>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setActiveTab('all');
+                                        setSearchQuery('');
+                                    }}
+                                    className="text-xs font-bold text-slate-700 hover:text-[#4d7c0f] dark:text-gray-300 dark:hover:text-[#bcf13b] hover:underline flex items-center gap-1 self-start sm:self-auto"
+                                >
+                                    <span>Ver todas as categorias</span>
+                                    <ArrowRight className="w-3.5 h-3.5" />
+                                </button>
+                            </div>
+
+                            {/* Grid / Lista de Projetos Filtrados */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 md:gap-8">
+                                <AnimatePresence mode="popLayout">
+                                    {filteredProjects.map((project) => {
+                                        const cat = allCategories.find(c => c.id === project.category_id) || { title: 'Geral', slug: 'geral' };
+                                        const techs = getProjectTechs(cat.slug, project.title, project.services);
+                                        return (
+                                            <motion.div
+                                                key={project.id}
+                                                layout
+                                                initial={{ opacity: 0, scale: 0.95 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                exit={{ opacity: 0, scale: 0.95 }}
+                                                transition={{ duration: 0.3 }}
+                                                className="h-full"
+                                            >
+                                                <PortfolioProjectCard
+                                                    project={project}
+                                                    cat={cat}
+                                                    techs={techs}
+                                                    effectiveBasePath={effectiveBasePath}
+                                                    t={t}
+                                                />
+                                            </motion.div>
+                                        );
+                                    })}
+                                </AnimatePresence>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Estado Vazio quando nenhum projeto e encontrado */}
                     {filteredProjects.length === 0 && (
                         <div className="text-center p-12 rounded-2xl max-w-md mx-auto mt-8 border border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] shadow-sm dark:shadow-none">
                             <X className="mx-auto h-12 w-12 text-slate-400 dark:text-gray-500 mb-4" />
                             <h3 className="text-lg font-bold text-slate-900 dark:text-white">{t('portfolio_no_projects', 'Nenhum projeto encontrado')}</h3>
                             <p className="text-slate-600 dark:text-gray-400 mt-2 text-sm font-medium">{t('portfolio_no_projects_desc', 'Tente alterar os termos da busca ou filtre por outra especialidade.')}</p>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                    setActiveTab('all');
+                                    setSearchQuery('');
+                                }}
+                                className="mt-4 text-xs font-bold"
+                            >
+                                Limpar Filtros
+                            </Button>
                         </div>
                     )}
                 </section>

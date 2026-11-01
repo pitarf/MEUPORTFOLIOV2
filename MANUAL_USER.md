@@ -1131,3 +1131,47 @@ Agora você tem o controle total da infraestrutura de servidores da sua VPS Orac
    * **Alternador Auto (45s)**: Permite deixar a tela atualizando sozinha a cada 45 segundos para você acompanhar manutenções ao vivo.
    * **Limpar Cache Docker**: Com apenas um clique, o sistema executa a limpeza de camadas antigas e arquivos temporários da VPS, liberando gigabytes de espaço no SSD com confirmação segura e sem desligar nenhum container de clientes.
    * **Reiniciar Container Individual**: Na tabela de containers Docker, cada serviço possui seu próprio botão "Reiniciar". Ao clicar, o painel solicita sua confirmação e reinicia o serviço isoladamente com feedback imediato via notificação toast.
+
+
+### 19.27 Visualização em Carrossel Mobile por Categoria no Portfólio
+
+Agora, quando você ou seus clientes acessarem o seu portfólio pelo celular (smartphones e telas compactas):
+
+1. **Organização por Categorias**:
+   * Em vez de uma única coluna vertical longa e cansativa, os projetos agora são organizados automaticamente por categoria, uma abaixo da outra:
+     * **Desenvolvedor** (sites, sistemas e landing pages)
+     * **Design Gráfico** (marcas, identidades visuais e embalagens)
+     * **Power BI** (dashboards executivos e métricas financeiras)
+     * **Produção IA** (vídeos cinematográficos e curtas gerados com inteligência artificial)
+   * Na galeria de fotografia, os projetos seguem o mesmo padrão por nichos (**Casamentos**, **Ensaios** e **Eventos**).
+
+2. **Carrossel Horizontal com Toque ("Rolando pro lado")**:
+   * Em cada categoria, os projetos deslizam lateralmente com o movimento suave do polegar.
+   * Os cartões possuem largura adaptada que deixa um pedaço do próximo card visível, indicando intuitivamente que há mais conteúdos para explorar.
+
+3. **Como Ver Todos os Projetos de uma Categoria**:
+   * Cada seção possui um botão **"Ver todos"** no canto superior direito. Ao clicar, a página filtra automaticamente apenas os projetos daquela especialidade.
+   * Quando a página estiver filtrada (ou quando você fizer uma busca por texto), o sistema exibe os projetos filtrados com uma barra informativa e o botão **"Ver todas as categorias"** para retornar ao modo de carrosséis a qualquer momento.
+
+
+### 19.28 Gerador de Propostas Comerciais 99Freelas com IA (Extensão do Chrome)
+
+O seu portfólio agora conta com uma API de inteligência artificial de vendas conectada diretamente ao Google Gemini, unindo:
+- **55 avaliações reais 5.0 estrelas** do seu perfil no 99Freelas.
+- **60 projetos em produção do seu portfólio oficial** (SaaS Vantage App, SMS Fácil, Sistemas de Escalas, DetetiveBuscas, Lojas Virtuais, Landing Pages, Dashboards Power BI e Produção com IA).
+
+1. **Como Funciona na Prática**:
+   * Quando você visualiza um projeto no 99Freelas através da sua Extensão do Chrome, basta clicar para gerar a proposta.
+   * A extensão envia o título, a descrição do cliente, o orçamento e suas anotações extras para a rota do seu backend (`https://www.rafaelpitaoficial.com.br/api/propostas/gerar`).
+
+2. **Personalização e Regras Automáticas de Conversão**:
+   * **Saudação por Gênero**: A IA identifica se o cliente é homem ou mulher pelo primeiro nome (`Olá, [Nome]!` para clientes femininas e `Fala, [Nome]!` para clientes masculinos).
+   * **Histórias Reais e Base Pronta**: Se você informar nas instruções extras algo pessoal (por exemplo: *"estou montando um app de drywall para o guarda-roupa de casa e dá pra adaptar"*), a IA preserva essa autenticidade como argumento de rapidez e segurança técnica.
+   * **Regras de Ouro do 99Freelas**:
+     * Zero travessões proibidos (nunca usa `—` ou `--`).
+     * Negrito `{b}...{/b}` exclusivo para valores e prazos (ex: `{b}R$ 3.000,00{/b}`, `{b}20 dias{/b}`).
+     * Itálico `{i}...{/i}` para tecnologias e termos técnicos.
+     * Link único e seguro do seu portfólio sem contatos externos em `{u}https://www.rafaelpitaoficial.com.br/portfolio-v2{/u}`.
+     * Gatilho de Compromisso 5 estrelas em destaque.
+     * Convite para demonstração em chamada de vídeo 100% remota.
+
