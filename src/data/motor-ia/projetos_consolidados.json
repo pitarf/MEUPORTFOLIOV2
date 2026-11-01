@@ -1,0 +1,552 @@
+[
+  {
+    "id": 758620,
+    "titulo": "Criação de imagens renderizadas a partir de ilustrações 2D",
+    "url": "https://www.99freelas.com.br/project/criacao-de-imagens-renderizadas-a-partir-de-ilustracoes-2d-758620",
+    "cliente": "GUILHERME",
+    "nota": "3.8",
+    "comentario": "Muito bom!",
+    "periodo": "jun. 2026 - jun. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 750304,
+    "titulo": "Ajustes no design do site e tradução automática",
+    "url": "https://www.99freelas.com.br/project/ajustes-no-design-do-site-e-traducao-automatica-750304",
+    "cliente": "Eduardo Montenegro",
+    "nota": "5.0",
+    "comentario": "Excelente performance, obrigado!",
+    "periodo": "mai. 2026 - mai. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 742698,
+    "titulo": "Resolução de problemas em website",
+    "url": "https://www.99freelas.com.br/project/resolucao-de-problemas-em-website-742698",
+    "cliente": "Eduardo Montenegro",
+    "nota": "5.0",
+    "comentario": "Execução rapida e com os resultados esperados. Obrigado.",
+    "periodo": "abr. 2026 - abr. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 738706,
+    "titulo": "Correções e ajustes de web coding e web design",
+    "url": "https://www.99freelas.com.br/project/correcoes-e-ajustes-de-web-coding-e-web-design-738706",
+    "cliente": "Eduardo Montenegro",
+    "nota": "5.0",
+    "comentario": "Trabalho excelente do Rafael, obrigado.",
+    "periodo": "mar. 2026 - mar. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 729535,
+    "titulo": "Instalar e criar novo website WordPress",
+    "url": "https://www.99freelas.com.br/project/instalar-e-criar-novo-website-wordpress-729535",
+    "cliente": "Eduardo Montenegro",
+    "nota": "5.0",
+    "comentario": "ótmo trabalho exectado pelo Rafael, com rapidez. Obrigado.",
+    "periodo": "fev. 2026 - mar. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 736291,
+    "titulo": "Ajustes de design no site, checkout e POS",
+    "url": "https://www.99freelas.com.br/project/ajustes-de-design-no-site-checkout-e-pos-736291",
+    "cliente": "Eduardo Montenegro",
+    "nota": "5.0",
+    "comentario": "O Rafael tem a iniciativa de investigar em detalhes quando algo está bloqueando o bom funcionamento do sistema, mesmo que isso esteja fora do escopo do projeto. Seu diagnóstico descreveu com exatidão o problema encontrado, e isso facilita que esse problema seja resolvido rapidamente. Perdi a conta de quantos projetos com o Rafael foram levados ate o fim, em todos eles sempre há persistência, rapidez e eficiência, com tudo sendo resolvido sem demoras, sem erros. Obrigado.",
+    "periodo": "mar. 2026 - mar. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 735160,
+    "titulo": "Testar e integrar sistema de mailing com formulários no site",
+    "url": "https://www.99freelas.com.br/project/testar-e-integrar-sistema-de-mailing-com-formularios-no-site-735160",
+    "cliente": "Eduardo Montenegro",
+    "nota": "5.0",
+    "comentario": "Excelente trabalho do Rafael, integrando tudo via API e testando o funcionamento antes da entrega do projeto completo.",
+    "periodo": "mar. 2026 - mar. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 734858,
+    "titulo": "Corrigir problemas de layout em website trilíngue",
+    "url": "https://www.99freelas.com.br/project/corrigir-problemas-de-layout-em-website-trilingue-734858",
+    "cliente": "Eduardo Montenegro",
+    "nota": "5.0",
+    "comentario": "Outro projeto com o Rafael, este mais desafiante, e que ele resolveu rapidamente, sem precisar de apoio e sem ter dúvidas. Com isso consigo trabalhar em outros projetos. Obrigado.",
+    "periodo": "mar. 2026 - mar. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 732837,
+    "titulo": "Ajustes de design do website (desktop e móvel) e POS",
+    "url": "https://www.99freelas.com.br/project/ajustes-de-design-do-website-desktop-e-movel-e-pos-732837",
+    "cliente": "Eduardo Montenegro",
+    "nota": "5.0",
+    "comentario": "Mais uma entrega muito boa do Rafael. Sempre solícito, não há dificldades na comunicação, o serviço flui rapidamente. Obrigado.",
+    "periodo": "mar. 2026 - mar. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 732440,
+    "titulo": "Padronizar design POS e Product Dashboard",
+    "url": "https://www.99freelas.com.br/project/padronizar-design-pos-e-product-dashboard-732440",
+    "cliente": "Eduardo Montenegro",
+    "nota": "5.0",
+    "comentario": "Rafael conhece tudo. Propus projetos demandantes em termos de conhecimento na codificação, ele resolveu em pouco tempo. Obrigado!",
+    "periodo": "fev. 2026 - mar. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 732382,
+    "titulo": "Remover ícones de widgets no popup do checkout do POS",
+    "url": "https://www.99freelas.com.br/project/remover-icones-de-widgets-no-popup-do-checkout-do-pos-732382",
+    "cliente": "Eduardo Montenegro",
+    "nota": "5.0",
+    "comentario": "Já é o quarto ou quinto projeto com o Rafael. Ele conhece tudo. Rapido, eficiente. Obrigado Rafael.",
+    "periodo": "fev. 2026 - fev. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 728410,
+    "titulo": "Corrigir bug no checkout do site",
+    "url": "https://www.99freelas.com.br/project/corrigir-bug-no-checkout-do-site-728410",
+    "cliente": "Eduardo Montenegro",
+    "nota": "5.0",
+    "comentario": "Rapico e eficaz. Obrigado.",
+    "periodo": "fev. 2026 - fev. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 727888,
+    "titulo": "Ajustes de design e código para website (WP Bakery)",
+    "url": "https://www.99freelas.com.br/project/ajustes-de-design-e-codigo-para-website-wp-bakery-727888",
+    "cliente": "Eduardo Montenegro",
+    "nota": "5.0",
+    "comentario": "Recomendo o Rafael, profissional que entende do que faz.",
+    "periodo": "fev. 2026 - fev. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 727033,
+    "titulo": "Melhorar e padronizar layout, fontes e aspectos do website",
+    "url": "https://www.99freelas.com.br/project/melhorar-e-padronizar-layout-fontes-e-aspectos-do-website-727033",
+    "cliente": "Eduardo Montenegro",
+    "nota": "5.0",
+    "comentario": "Rapidez, eficiencia, bom resultado. Recomendo o Rafael como um profissional competente, minucioso e rapido.",
+    "periodo": "fev. 2026 - fev. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 726378,
+    "titulo": "Otimização de layout e design de website WordPress",
+    "url": "https://www.99freelas.com.br/project/otimizacao-de-layout-e-design-de-website-wordpress-726378",
+    "cliente": "Eduardo Montenegro",
+    "nota": "5.0",
+    "comentario": "Trabalho sempre acelerado e o Rafael entregou soluções rápidas para problemas complexos. Agradeço e recomendo ele como um profissional de qualidade.",
+    "periodo": "fev. 2026 - fev. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 723522,
+    "titulo": "Corrigir layout do carrinho e menu hambúrguer no site móvel",
+    "url": "https://www.99freelas.com.br/project/corrigir-layout-do-carrinho-e-menu-hamburguer-no-site-movel-723522",
+    "cliente": "Eduardo Montenegro",
+    "nota": "5.0",
+    "comentario": "Excelente profissional. Resolveu o problema em pouco tempo. Sabe o que faz.Recomendo.",
+    "periodo": "jan. 2026 - jan. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 719749,
+    "titulo": "32 Pictogramas minimalistas para app - (+18)",
+    "url": "https://www.99freelas.com.br/project/32-pictogramas-minimalistas-para-app-18-719749",
+    "cliente": "Excluído",
+    "nota": "5.0",
+    "comentario": "",
+    "periodo": "jan. 2026 - jan. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 719367,
+    "titulo": "Replicar estrutura WordPress em 23 subdomínios",
+    "url": "https://www.99freelas.com.br/project/replicar-estrutura-wordpress-em-23-subdominios-719367",
+    "cliente": "Player01",
+    "nota": "5.0",
+    "comentario": "otimo, fez rapido, fez certinho oque eu precisava, indico 100%",
+    "periodo": "jan. 2026 - jan. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 671862,
+    "titulo": "Alteração no sistema de login",
+    "url": "https://www.99freelas.com.br/project/alteracao-no-sistema-de-login-671862",
+    "cliente": "Nathan Danilo",
+    "nota": "5.0",
+    "comentario": "Obrigado",
+    "periodo": "ago. 2025 - concluído",
+    "status": "Concluído"
+  },
+  {
+    "id": 671472,
+    "titulo": "Desenvolvimento de mascote institucional com 5 poses",
+    "url": "https://www.99freelas.com.br/project/desenvolvimento-de-mascote-institucional-com-5-poses-671472",
+    "cliente": "Vinicius Graton",
+    "nota": "5.0",
+    "comentario": "Rafael arrasou super atencioso e paciente - gratidão, muito obrigado Rafa!",
+    "periodo": "jul. 2025 - jul. 2025",
+    "status": "Concluído"
+  },
+  {
+    "id": 671045,
+    "titulo": "Migrar site para subdomínio de cliente",
+    "url": "https://www.99freelas.com.br/project/migrar-site-para-subdominio-de-cliente-671045",
+    "cliente": "Rodrigo Rocha",
+    "nota": "5.0",
+    "comentario": "O Rafael foi direto ao ponto. Entendeu o problema, contornou as limitações e desafios da demanda para entregar o projeto. Concluiu em um tempo menor do que o estimado e tirou minhas dúvidas sobre as mudanças.",
+    "periodo": "jul. 2025 - jul. 2025",
+    "status": "Concluído"
+  },
+  {
+    "id": 658083,
+    "titulo": "Pacote de 15 artes para redes sociais - Rafael P.",
+    "url": "https://www.99freelas.com.br/project/pacote-de-15-artes-para-redes-sociais-rafael-p-658083",
+    "cliente": "Fernanda Gestora",
+    "nota": "5.0",
+    "comentario": "Super atencioso e disposto, ótima qualidade do trabalho",
+    "periodo": "jun. 2025 - jul. 2025",
+    "status": "Concluído"
+  },
+  {
+    "id": 664686,
+    "titulo": "Atualização e SEO de site",
+    "url": "https://www.99freelas.com.br/project/atualizacao-e-seo-de-site-664686",
+    "cliente": "Bruna Cigerza",
+    "nota": "5.0",
+    "comentario": "O Rafael foi sensacional! Demos a ideia do que queríamos e ele foi além!\nSuper fácil comunicação, fez o que pedimos, tudo foi feito de forma bastante simples e imediata, mesmo com uma dificuldades nossa de fuso horário! \nRecomendo 100% e se precisar de mais projetos do tipo, é com ele que vou lidar!",
+    "periodo": "jul. 2025 - jul. 2025",
+    "status": "Concluído"
+  },
+  {
+    "id": 664037,
+    "titulo": "Criação de formulário de inscrição com upload de arquivos",
+    "url": "https://www.99freelas.com.br/project/criacao-de-formulario-de-inscricao-com-upload-de-arquivos-664037",
+    "cliente": "Ribero Junior",
+    "nota": "5.0",
+    "comentario": "super recomendo, freelance entendeu de inicio o projeto e iniciou o mesmo assim que possivel, finalizando em tempo hábil e antes do prazo. Super profissional, atento e comunicativo",
+    "periodo": "jun. 2025 - jun. 2025",
+    "status": "Concluído"
+  },
+  {
+    "id": 659623,
+    "titulo": "Especialista em Excel para fazer dashboard e criar análises",
+    "url": "https://www.99freelas.com.br/project/especialista-em-excel-para-fazer-dashboard-e-criar-analises-659623",
+    "cliente": "Nome Sobrenome",
+    "nota": "5.0",
+    "comentario": "Tudo certo.",
+    "periodo": "jun. 2025 - concluído",
+    "status": "Concluído"
+  },
+  {
+    "id": 657363,
+    "titulo": "Criar 10 artes para Instagram",
+    "url": "https://www.99freelas.com.br/project/criar-10-artes-para-instagram-657363",
+    "cliente": "Leticia Martins",
+    "nota": "5.0",
+    "comentario": "",
+    "periodo": "jun. 2025 - jun. 2025",
+    "status": "Concluído"
+  },
+  {
+    "id": 657404,
+    "titulo": "Correção de erros em planilhas Excel com Macros VBA",
+    "url": "https://www.99freelas.com.br/project/correcao-de-erros-em-planilhas-excel-com-macros-vba-657404",
+    "cliente": "Leticia Garbin",
+    "nota": "5.0",
+    "comentario": "Atencioso e comprometido, entragou no prazo estabelecido.",
+    "periodo": "jun. 2025 - jun. 2025",
+    "status": "Concluído"
+  },
+  {
+    "id": 652952,
+    "titulo": "Criação de material para anúncios no Facebook e Instagram",
+    "url": "https://www.99freelas.com.br/project/criacao-de-material-para-anuncios-no-facebook-e-instagram-652952",
+    "cliente": "Victor Oliveira",
+    "nota": "5.0",
+    "comentario": "Excelente profissional",
+    "periodo": "jun. 2025 - jun. 2025",
+    "status": "Concluído"
+  },
+  {
+    "id": 655950,
+    "titulo": "Post e story para Instagram",
+    "url": "https://www.99freelas.com.br/project/post-e-story-para-instagram-655950",
+    "cliente": "Henrique Silva Vieira",
+    "nota": "5.0",
+    "comentario": "otimo atendimento e otimo serviço",
+    "periodo": "jun. 2025 - jun. 2025",
+    "status": "Concluído"
+  },
+  {
+    "id": 655171,
+    "titulo": "Arte para credencial de evento",
+    "url": "https://www.99freelas.com.br/project/arte-para-credencial-de-evento-655171",
+    "cliente": "Marcelle Alessi",
+    "nota": "5.0",
+    "comentario": "Excelente, ágil e profissional.",
+    "periodo": "mai. 2025 - mai. 2025",
+    "status": "Concluído"
+  },
+  {
+    "id": 653032,
+    "titulo": "Criação de artes para sorteio de carros clássicos",
+    "url": "https://www.99freelas.com.br/project/criacao-de-artes-para-sorteio-de-carros-classicos-653032",
+    "cliente": "Matheus Barbara",
+    "nota": "4.6",
+    "comentario": "Trabalho executado rapidamente e com comunicação e entendimento objetivo!",
+    "periodo": "mai. 2025 - mai. 2025",
+    "status": "Concluído"
+  },
+  {
+    "id": 652820,
+    "titulo": "Criação de carteirinha de montanhismo",
+    "url": "https://www.99freelas.com.br/project/criacao-de-carteirinha-de-montanhismo-652820",
+    "cliente": "Lucimara",
+    "nota": "5.0",
+    "comentario": "Rafael foi muito profissional!",
+    "periodo": "mai. 2025 - mai. 2025",
+    "status": "Concluído"
+  },
+  {
+    "id": 647995,
+    "titulo": "Apresentação de prestação de serviços",
+    "url": "https://www.99freelas.com.br/project/apresentacao-de-prestacao-de-servicos-647995",
+    "cliente": "Paula Leal",
+    "nota": "5.0",
+    "comentario": "Recomendo a todos, executou o trabalho conforme solicitado, foi bem fácil a comunicação com ele.",
+    "periodo": "mai. 2025 - mai. 2025",
+    "status": "Concluído"
+  },
+  {
+    "id": 596812,
+    "titulo": "Criação de artes para black friday da farmácia",
+    "url": "https://www.99freelas.com.br/project/criacao-de-artes-para-black-friday-da-farmacia-596812",
+    "cliente": "Bruna Miranda",
+    "nota": "5.0",
+    "comentario": "Freelancer educado e comunicativo. Infelizmente tivemos que interromper o projeto antes de finalizar.",
+    "periodo": "nov. 2024 - nov. 2024",
+    "status": "Concluído"
+  },
+  {
+    "id": 594592,
+    "titulo": "Criação de post para Instagram",
+    "url": "https://www.99freelas.com.br/project/criacao-de-post-para-instagram-594592",
+    "cliente": "Diego Pablo De Brito",
+    "nota": "5.0",
+    "comentario": "Rafa é muito rápido, paciente e atencioso! Recomendo seus trabalhos!",
+    "periodo": "out. 2024 - out. 2024",
+    "status": "Concluído"
+  },
+  {
+    "id": 592202,
+    "titulo": "Criação de animações simples no PowerPoint para Instagram",
+    "url": "https://www.99freelas.com.br/project/criacao-de-animacoes-simples-no-powerpoint-para-instagram-592202",
+    "cliente": "Sidney Rodrigo",
+    "nota": "5.0",
+    "comentario": "Excelente, rápido, comprometido, profissional, adorei trabalhar com ele, sem contar que ele me deixava a par de todo o processo e evolução do trabalho.\nSuper recomendo.",
+    "periodo": "out. 2024 - out. 2024",
+    "status": "Concluído"
+  },
+  {
+    "id": 582885,
+    "titulo": "Palestra sobre Setembro Amarelo",
+    "url": "https://www.99freelas.com.br/project/palestra-sobre-setembro-amarelo-582885",
+    "cliente": "Genilda Oliveira",
+    "nota": "4.8",
+    "comentario": "Rapidez e eficiência na entrega do serviço.",
+    "periodo": "set. 2024 - set. 2024",
+    "status": "Concluído"
+  },
+  {
+    "id": 582063,
+    "titulo": "Elaboração de artes semanais para Instagram",
+    "url": "https://www.99freelas.com.br/project/elaboracao-de-artes-semanais-para-instagram-582063",
+    "cliente": "Helton H Medeiros",
+    "nota": "5.0",
+    "comentario": "Profissional rápido/ágil.\nRecomendo, parabens.",
+    "periodo": "set. 2024 - set. 2024",
+    "status": "Concluído"
+  },
+  {
+    "id": 581567,
+    "titulo": "Criar 5 artes para Instagram novo",
+    "url": "https://www.99freelas.com.br/project/criar-5-artes-para-instagram-novo-581567",
+    "cliente": "Patrick Carvalho",
+    "nota": "5.0",
+    "comentario": "Excelente profissional, entregou as artes dentro do prazo!",
+    "periodo": "set. 2024 - set. 2024",
+    "status": "Concluído"
+  },
+  {
+    "id": 579570,
+    "titulo": "Posts para Instagram - Rafael P.",
+    "url": "https://www.99freelas.com.br/project/posts-para-instagram-rafael-p-579570",
+    "cliente": "Frederico Vales",
+    "nota": "5.0",
+    "comentario": "Excelente profissional. RECOMENDO!",
+    "periodo": "set. 2024 - set. 2024",
+    "status": "Concluído"
+  },
+  {
+    "id": 574120,
+    "titulo": "Transformar foto preto e branco em colorida",
+    "url": "https://www.99freelas.com.br/project/transformar-foto-preto-e-branco-em-colorida-574120",
+    "cliente": "Gabriel Camillo",
+    "nota": "3.2",
+    "comentario": "O trabalho não foi o que eu esperava.",
+    "periodo": "ago. 2024 - ago. 2024",
+    "status": "Concluído"
+  },
+  {
+    "id": 574234,
+    "titulo": "Desenvolver layout de cardápio para quiosque de shopping",
+    "url": "https://www.99freelas.com.br/project/desenvolver-layout-de-cardapio-para-quiosque-de-shopping-574234",
+    "cliente": "Thalita Cerioni Ribeiro",
+    "nota": "5.0",
+    "comentario": "Excelente profissional. Atendeu rapidamente minha solicitação. Fiquei muito satisfeita tanto pelo trabalho, quanto pela agilidade na entrega.",
+    "periodo": "ago. 2024 - ago. 2024",
+    "status": "Concluído"
+  },
+  {
+    "id": 573264,
+    "titulo": "Criação de peças gráficas para redes sociais",
+    "url": "https://www.99freelas.com.br/project/criacao-de-pecas-graficas-para-redes-sociais-573264",
+    "cliente": "Christian Charles",
+    "nota": "5.0",
+    "comentario": "Rafael foi um ótimo profissional.\nApresentamos para ele as nossas ideias e ele criou as peças gráficas com muita dedicação e agilidade.\nGostamos do resultado.",
+    "periodo": "ago. 2024 - ago. 2024",
+    "status": "Concluído"
+  },
+  {
+    "id": 572183,
+    "titulo": "Criar stories personalizados a partir de fotos - Rafael P.",
+    "url": "https://www.99freelas.com.br/project/criar-stories-personalizados-a-partir-de-fotos-rafael-p-572183",
+    "cliente": "Dulce Eliane Munk",
+    "nota": "5.0",
+    "comentario": "Rafael fez um trabalho profissional, com envolvimento, compromisso e de ótima qualidade. Fiquei muito satisfeita tanto com a comunicação, quanto com a qualidade do trabalho.",
+    "periodo": "ago. 2024 - ago. 2024",
+    "status": "Concluído"
+  },
+  {
+    "id": 775130,
+    "titulo": "Melhorias no sistema de contabilidade LOVABLE e gestor de tarefas",
+    "url": "https://www.99freelas.com.br/project/melhorias-no-sistema-de-contabilidade-lovable-e-gestor-de-tarefas-775130",
+    "cliente": "Cliente 99Freelas",
+    "nota": "Em andamento",
+    "comentario": "Projeto em andamento",
+    "periodo": "ago. 2026 - ?",
+    "status": "Em andamento"
+  },
+  {
+    "id": 791674,
+    "titulo": "Vídeo animado com IA de até 5 minutos",
+    "url": "https://www.99freelas.com.br/project/video-animado-com-ia-de-ate-5-minutos-791674",
+    "cliente": "Cliente 99Freelas",
+    "nota": "5.0",
+    "comentario": "",
+    "periodo": "out. 2026 - out. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 785290,
+    "titulo": "Melhorar a qualidade de fotos de roupas de bebê",
+    "url": "https://www.99freelas.com.br/project/melhorar-a-qualidade-de-fotos-de-roupas-de-bebe-785290",
+    "cliente": "Cliente 99Freelas",
+    "nota": "5.0",
+    "comentario": "Nenhum comentário",
+    "periodo": "set. 2026 - set. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 785211,
+    "titulo": "Criação de logotipo hotdog",
+    "url": "https://www.99freelas.com.br/project/criacao-de-logotipo-hotdog-785211",
+    "cliente": "Cliente 99Freelas",
+    "nota": "5.0",
+    "comentario": "",
+    "periodo": "set. 2026 - set. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 776000,
+    "titulo": "Site jurídico em WordPress com SEO on-page",
+    "url": "https://www.99freelas.com.br/project/site-juridico-em-wordpress-com-seo-on-page-776000",
+    "cliente": "Cliente 99Freelas",
+    "nota": "5.0",
+    "comentario": "",
+    "periodo": "ago. 2026 - ago. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 776112,
+    "titulo": "Desenvolvimento de ferramentas para escritório de contabilidade - Rafael P.",
+    "url": "https://www.99freelas.com.br/project/desenvolvimento-de-ferramentas-para-escritorio-de-contabilidade-rafael-p-776112",
+    "cliente": "Cliente 99Freelas",
+    "nota": "5.0",
+    "comentario": "",
+    "periodo": "ago. 2026 - ago. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 775739,
+    "titulo": "Ajustar um projeto de design de um trailler em PDF para CDR",
+    "url": "https://www.99freelas.com.br/project/ajustar-um-projeto-de-design-de-um-trailler-em-pdf-para-cdr-775739",
+    "cliente": "Cliente 99Freelas",
+    "nota": "4.8",
+    "comentario": "",
+    "periodo": "ago. 2026 - ago. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 775272,
+    "titulo": "Automação de vendas e entrega de infoproduto via WhatsApp",
+    "url": "https://www.99freelas.com.br/project/automacao-de-vendas-e-entrega-de-infoproduto-via-whatsapp-775272",
+    "cliente": "Cliente 99Freelas",
+    "nota": "5.0",
+    "comentario": "",
+    "periodo": "ago. 2026 - ago. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 773522,
+    "titulo": "Criar logotipo para página do Instagram focada em luxo",
+    "url": "https://www.99freelas.com.br/project/criar-logotipo-para-pagina-do-instagram-focada-em-luxo-773522",
+    "cliente": "Cliente 99Freelas",
+    "nota": "5.0",
+    "comentario": "",
+    "periodo": "ago. 2026 - ago. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 759274,
+    "titulo": "Tirar 750 prints de conta de motorista",
+    "url": "https://www.99freelas.com.br/project/tirar-750-prints-de-conta-de-motorista-759274",
+    "cliente": "Cliente 99Freelas",
+    "nota": "5.0",
+    "comentario": "",
+    "periodo": "jun. 2026 - jun. 2026",
+    "status": "Concluído"
+  },
+  {
+    "id": 760171,
+    "titulo": "Criar voucher para agência de viagem",
+    "url": "https://www.99freelas.com.br/project/criar-voucher-para-agencia-de-viagem-760171",
+    "cliente": "Cliente 99Freelas",
+    "nota": "5.0",
+    "comentario": "",
+    "periodo": "jun. 2026 - jun. 2026",
+    "status": "Concluído"
+  }
+]

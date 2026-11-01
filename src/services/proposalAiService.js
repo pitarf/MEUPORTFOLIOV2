@@ -233,6 +233,50 @@ export async function generateProposal(payload = {}) {
     // Repertório e prova técnica (55 avaliações 5 estrelas + 60 projetos de portfólio)
     const casesSummary = getCasesKnowledgeBase();
 
+    // MALÍCIA E ANÁLISE DE COMPLEXIDADE DO PROJETO
+    const fullTextSearch = `${titulo} ${descricao} ${categoria} ${(Array.isArray(habilidades) ? habilidades.join(' ') : habilidades)}`.toLowerCase();
+
+    const isSimpleDesign = (fullTextSearch.includes('vetoriza') || fullTextSearch.includes('vetor') || fullTextSearch.includes('recortar foto') || fullTextSearch.includes('ajuste de banner')) &&
+                           !fullTextSearch.includes('site') && !fullTextSearch.includes('landing') && !fullTextSearch.includes('sistema');
+
+    const isEcommerce = fullTextSearch.includes('loja') || fullTextSearch.includes('woocommerce') || fullTextSearch.includes('shopify') || fullTextSearch.includes('e-commerce') || fullTextSearch.includes('ecommerce');
+    const isBigSystem = fullTextSearch.includes('sistema') || fullTextSearch.includes('saas') || fullTextSearch.includes('erp') || fullTextSearch.includes('crm') || fullTextSearch.includes('full stack') || fullTextSearch.includes('fullstack') || fullTextSearch.includes('banco de dados') || fullTextSearch.includes('aplicativo e site');
+    const isLandingOrSite = fullTextSearch.includes('landing page') || fullTextSearch.includes('landing') || fullTextSearch.includes('site') || fullTextSearch.includes('institucional') || fullTextSearch.includes('wordpress') || fullTextSearch.includes('elementor');
+
+    // Define faixas inteligentes mínimas e máximas de precificação
+    let precoMinimoEsperado = 350;
+    let precoMaximoEsperado = 600;
+    let prazoSugeridoEsperado = 4;
+
+    if (isSimpleDesign) {
+        precoMinimoEsperado = 60;
+        precoMaximoEsperado = 90;
+        prazoSugeridoEsperado = 1;
+    } else if (isBigSystem) {
+        precoMinimoEsperado = modo === 'emergencia' ? 1200 : 1800;
+        precoMaximoEsperado = modo === 'emergencia' ? 2400 : 3800;
+        prazoSugeridoEsperado = 12;
+    } else if (isEcommerce) {
+        precoMinimoEsperado = 900;
+        precoMaximoEsperado = 1800;
+        prazoSugeridoEsperado = 10;
+    } else if (isLandingOrSite) {
+        precoMinimoEsperado = modo === 'emergencia' ? 280 : 450;
+        precoMaximoEsperado = modo === 'emergencia' ? 450 : 650;
+        prazoSugeridoEsperado = 4;
+    }
+
+    // Se vier do payload sugestões calculadas pela extensão, usa com prioridade
+    if (payload.sugestaoMin && Number(payload.sugestaoMin) > 0) {
+        precoMinimoEsperado = Number(payload.sugestaoMin);
+    }
+    if (payload.sugestaoMax && Number(payload.sugestaoMax) > 0) {
+        precoMaximoEsperado = Number(payload.sugestaoMax);
+    }
+    if (payload.sugestaoPrazo && Number(payload.sugestaoPrazo) > 0) {
+        prazoSugeridoEsperado = Number(payload.sugestaoPrazo);
+    }
+
     // Monta o prompt do sistema ultra-calibrado
     const systemPrompt = `Você é um Engenheiro de Software Sênior e Copywriter de Vendas de elite de Rafael Pita na plataforma 99Freelas.
 Seu objetivo é gerar uma proposta comercial irresistível, personalizada, técnica e de altíssima conversão.
@@ -242,7 +286,12 @@ DIRETRIZES FUNDAMENTAIS DO FREELANCER (RAFAEL PITA):
 - Metodologia de Engenharia: Utiliza IA avançada na programação para leitura rápida de documentações e aceleração de escrita de código limpo, sem abrir mão das boas práticas de engenharia de software.
 - Compromisso Oficial: 30 dias de suporte pós-entrega e dedicação para nota máxima 5.0 estrelas.
 - Modelo de Trabalho: 100% REMOTO (via chat da plataforma e chamadas de vídeo, sem trabalho ou reuniões presenciais).
-- Piso mínimo obrigatório: R$ 56,00. Nunca proponha valor inferior a 56.
+
+🚨 REGRA RIGOROSA DE PRECIFICAÇÃO E PROIBIÇÃO DE VALOR IRRISÓRIO (LEIA COM ATENÇÃO):
+- O valor de R$ 56,00 a R$ 90,00 é ESTRITAMENTE RESTRITO para micro-tarefas simples (ex: vetorização de 1 logotipo, 1 banner pontual, ajuste de 1 imagem).
+- É TASSATIVAMENTE PROIBIDO propor R$ 56,00, R$ 60,00 ou qualquer valor abaixo de R$ 250,00 para Landing Pages, Sites Institucionais, WordPress, Sistemas Web, APIs, Automações ou Lojas Virtuais!
+- FAIXA DE PRECIFICAÇÃO CALCULADA PARA ESTE PROJETO: Proponha um valor estritamente entre {b}R$ ${precoMinimoEsperado},00 e R$ ${precoMaximoEsperado},00{/b} (prazo de cerca de {b}${prazoSugeridoEsperado} dias{/b}), salvo se o freelancer tiver fixado outro valor nas instruções manuais.
+- Em projetos de Desenvolvimento Web e Sistemas, valorize a engenharia de software e a entrega profissional. Jamais proponha valores irrisórios de R$ 56!
 
 REGRAS DE FORMATAÇÃO E ESTILO (RIGOROSO):
 1. PROIBIDO USAR QUALQUER MARKDOWN TRADICIONAL OU TRAVESSÕES (—, –, --). Separe orações estritamente com vírgulas ou pontos.
@@ -353,23 +402,49 @@ Retorne EXCLUSIVAMENTE um objeto JSON válido (sem markdown de bloco):
         }
     }
 
-    // Piso mínimo do 99Freelas: R$ 56,00
+    // TRAVA ANTI-VALOR IRRISÓRIO (Nunca enviar R$ 56 para projetos reais de tecnologia/web)
+    const valorNumerico = Number(finalValue || 0);
+    const isManualValor = Boolean(valorManualNativo || (instrucoesExtras && instrucoesExtras.match(/(?:R\$\s*|valor\s*:?\s*)?\d+/i)));
+
+    if (!isManualValor) {
+        if (isSimpleDesign) {
+            // Em vetorização ou banners simples, piso entre 56 e 90
+            if (valorNumerico < 56 || valorNumerico > 150) {
+                finalValue = String(precoMinimoEsperado);
+            }
+        } else {
+            // Em qualquer projeto de site, landing page, app, sistema ou automação:
+            // É proibido propor menos de precoMinimoEsperado (mínimo absoluto de R$ 250 a R$ 450)
+            if (valorNumerico < precoMinimoEsperado) {
+                console.warn(`[proposalAiService] Valor gerado muito baixo (R$ ${valorNumerico}). Ajustando para o piso da categoria: R$ ${precoMinimoEsperado}.`);
+                finalValue = String(precoMinimoEsperado);
+            }
+        }
+    }
+
+    // Piso mínimo legal do 99Freelas: R$ 56,00
     if (!finalValue || Number(finalValue) < 56) {
-        finalValue = '60';
+        finalValue = isSimpleDesign ? '60' : String(precoMinimoEsperado);
     }
 
     if (!finalDeadline || Number(finalDeadline) <= 0) {
-        finalDeadline = duracaoMedia ? String(duracaoMedia) : '5';
+        finalDeadline = duracaoMedia ? String(duracaoMedia) : String(prazoSugeridoEsperado);
     }
 
-    // Sanitiza o texto gerado
-    const sanitizedText = sanitizeProposalText(rawResult.textoDetalhes, {
+    // Sanitiza o texto gerado e corrige menções a R$ 56 residuais no texto
+    let sanitizedText = sanitizeProposalText(rawResult.textoDetalhes, {
         categoria,
         titulo,
         descricao,
         finalValue,
         finalDeadline
     });
+
+    // Se o valor foi corrigido para cima (ex: não é design simples) e o texto ainda tinha R$ 56 ou R$ 60, corrige no texto:
+    if (!isSimpleDesign && !isManualValor && Number(finalValue) >= 250) {
+        sanitizedText = sanitizedText.replace(/\{b\}R\$\s*(?:56|60)(?:,00)?\{\/b\}/gi, `{b}R$ ${Number(finalValue).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}{/b}`);
+        sanitizedText = sanitizedText.replace(/R\$\s*(?:56|60)(?:,00)?/gi, `R$ ${Number(finalValue).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`);
+    }
 
     return {
         sucesso: true,

@@ -88,7 +88,9 @@ CTA de Fechamento Dinâmico (Com base na hora do envio):
 - Se for enviado à noite ou de madrugada (entre 18h e 5h): "Consigo começar amanhã mesmo. Me chama no chat!" ou "Consigo começar amanhã cedo. Me chama no chat!"
 
 5. Regras de Precificação e Prazos por Complexidade
-PISO MÍNIMO OBRIGATÓRIO (R$ 56,00): O menor valor de proposta permitido na plataforma 99Freelas para as categorias de Design e Tecnologia é R$ 56,00. É TASSATIVAMENTE PROIBIDO propor qualquer valor inferior a R$ 56,00 (nada de R$ 50, R$ 45 ou R$ 40). O piso mínimo absoluto para qualquer proposta simples é R$ 56,00.
+PISO MÍNIMO LEGAL (R$ 56,00) E PROIBIÇÃO DE VALOR IRRISÓRIO:
+O menor valor permitido pela plataforma 99Freelas é R$ 56,00. Contudo, ATENÇÃO MÁXIMA: a faixa de {b}R$ 56,00 a R$ 90,00{/b} é ESTRITAMENTE EXCLUSIVA para micro-tarefas pontuais (ex: vetorização de 1 logotipo, criação de 1 banner ou ajuste de 1 imagem).
+É EXPRESSAMENTE PROIBIDO propor R$ 56,00 ou qualquer valor abaixo de R$ 250,00 para Landing Pages, Sites Institucionais, WordPress, Sistemas Web, APIs, Automações ou Lojas Virtuais! Jamais desvalorize serviços de desenvolvimento e tecnologia com valores irrisórios de R$ 56.
 
 Projetos Simples (vetorização, 1-2 artes, ajustes rápidos, banners): {b}R$ 56,00 - R$ 90,00{/b} | Prazo: {b}1 dia{/b}
 
@@ -204,4 +206,4 @@ Quando o freelancer preencher o campo opcional de informações adicionais antes
 - Convite para Chamada/Demonstração: Se o freelancer se dispôs a fazer uma call para mostrar a tela funcionando, incorpore esse convite entusiasmado diretamente no CTA final.
 - Valor e Prazo Fixos: Se ele indicar um valor ou prazo específico (ex: 3mil, 20 dias), use rigorosamente esse valor no JSON ('valorFinal' e 'prazoDias') e no texto da proposta, sem aplicar descontos ou cálculos automáticos.
 - Zero Redundâncias: Se o valor e prazo já constam no texto, evite blocos repetitivos no final ("Investimento: ... | Prazo: ...") e evite duplicar frases de encerramento repetidas.
-
+

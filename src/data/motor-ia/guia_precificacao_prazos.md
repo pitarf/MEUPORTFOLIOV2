@@ -4,9 +4,10 @@ Este documento estabelece as **diretrizes numéricas de precificação, piso mí
 
 ---
 
-## 🛑 1. Piso Mínimo Obrigatório da Plataforma (R$ 56,00)
-- **Regra Rígida:** O menor valor permitido para envio de propostas nas categorias de Tecnologia e Design no 99Freelas é **R$ 56,00**.
-- **Proibição Absoluta:** É terminantemente proibido gerar propostas com valores como R$ 50,00, R$ 45,00, R$ 40,00 ou inferiores. Mesmo no *Modo Emergência*, se o cálculo der menos que R$ 56,00, a proposta deve ser fixada em **R$ 56,00** ou **R$ 60,00**.
+## 🛑 1. Piso Mínimo Legal (R$ 56,00) e Proibição de Valor Irrisório
+- **Piso Legal da Plataforma:** O menor valor aceito pelo sistema do 99Freelas é **R$ 56,00**.
+- **PROIBIÇÃO DE VALOR IRRISÓRIO (REGRA CRÍTICA):** A faixa de **R$ 56,00 a R$ 90,00** é ESTRITAMENTE EXCLUSIVA para micro-tarefas rápidas de design (1 vetorização de logo, 1 banner pontual ou ajuste simples de imagem).
+- **É EXPRESSAMENTE PROIBIDO** propor R$ 56,00, R$ 60,00 ou qualquer valor abaixo de R$ 250,00 para Landing Pages, Sites, WordPress, Sistemas, Automações ou Lojas Virtuais! Mesmo no *Modo Emergência*, projetos de desenvolvimento partem de no mínimo R$ 250,00 a R$ 350,00. Propor R$ 56,00 para desenvolvimento destrói a percepção de autoridade do profissional e causa rejeição imediata do cliente.
 
 ---
 

@@ -53,8 +53,9 @@ Crie uma proposta perfeita seguindo a estrutura One-Page Style.
 PRESERVE AS QUEBRAS DE LINHA E ESPAÇAMENTO: Use duas quebras de linha reais (\n\n) para separar cada parágrafo e seção.
 PROIBIDO USAR QUALQUER MARKDOWN OU TRAVESSÕES (—, –, --): Não utilize asteriscos (**), underscores (_) nem travessões. Separe orações estritamente com vírgulas ou pontos. Use estritamente as tags customizadas {b}texto{/b}, {i}texto{/i} e {u}texto{/u}.
 
-1. VALOR E PRAZO COERENTES:
-   - Piso mínimo obrigatório da plataforma: R$ 56,00.
+1. VALOR E PRAZO COERENTES E PROIBIÇÃO DE VALOR IRRISÓRIO:
+   - R$ 56,00 a R$ 90,00 é RESTRITO a micro-tarefas (vetorização ou banner).
+   - PROIBIDO propor R$ 56,00 para Landing Pages, Sites, WordPress, Sistemas ou Lojas (mínimo de R$ 250 a R$ 600 para sites; R$ 700 a R$ 1.500 para sistemas).
    - Para projetos grandes/SaaS/ERP: Malícia comercial, orçamento condizente (R$ 1.500 - R$ 4.500+) ou ancoragem de MVP.
 2. FRASE DE COMPROMISSO NATURAL:
    - Código limpo e 30 dias de suporte pós-entrega (Dev).

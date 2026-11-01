@@ -7,20 +7,25 @@ Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 ### Adicionado (API de Geração de Propostas Comerciais 99Freelas com IA)
 * **Novo Serviço Inteligente de Propostas (`src/services/proposalAiService.js`)**:
   * Integração com Google Gemini (`gemini-2.5-flash` com fallback resiliente para `gemini-flash-latest`) para análise e geração de propostas de alta conversão.
+  * **Trava Anti-Valor Irrisório & Calibragem de Complexidade**:
+    * Restrição do piso de R$ 56,00 a R$ 90,00 estritamente para micro-tarefas simples de design (vetorização ou recorte pontual).
+    * Bloqueio automático de valores irrisórios para Landing Pages, Sites Institucionais, WordPress, Lojas Virtuais e Sistemas Web completos, aplicando pisos inteligentes proporcionais (mínimo de R$ 280,00 a R$ 1.800,00 conforme o escopo).
+    * Suporte prioritário a sugestões de faixa enviadas pela extensão (`sugestaoMin`, `sugestaoMax`, `sugestaoPrazo`).
   * Base de conhecimento nativa alimentada por 55 avaliações 5.0 estrelas reais e histórico de 60 projetos reais em produção.
   * Função `detectGenderByName` para personalizar a saudação de abertura conforme o gênero do cliente (`Olá, [Nome]!` para clientes femininas e `Fala, [Nome]!` para clientes masculinos).
   * Sanitizador `sanitizeProposalText` que impõe estritamente as regras de ouro da plataforma 99Freelas: eliminação total de travessões (`—`, `–`, `--`), conversão de marcações residuais para tags customizadas `{b}` (valores e prazos), `{i}` (termos técnicos/estrangeiros) e `{u}` (link único oficial do portfólio).
   * Inclusão mandatória do gatilho de confiança em bloco próprio: `> Minha meta é obter 5 estrelas, então você tem meu total comprometimento.`
   * Tratamento prioritário para `instrucoesExtras`: preservação de histórias autênticas e projetos pessoais do desenvolvedor (ex: app de drywall, adaptação de orçamentos) como gancho de altíssima conexão e conversão, além de suporte a convite para chamadas 100% remotas.
-  * Respeito absoluto a valores e prazos manuais (`valorManualNativo`, `prazoManualNativo`) com piso mínimo regulamentar de R$ 56,00.
+  * Respeito absoluto a valores e prazos manuais (`valorManualNativo`, `prazoManualNativo`).
 * **Serverless Functions Vercel (`api/propostas/gerar.js` e `api/propostas.js`)**:
   * Endpoints REST HTTP com suporte total a CORS (`Access-Control-Allow-Origin: *`, `POST`, `OPTIONS`) para consumo direto pela Extensão do Chrome e outros clientes.
   * Suporte a parsing resiliente de JSON para múltiplos ambientes de execução.
 * **Middleware Dev Server no Vite (`vite.config.js`)**:
   * Interceptador de rotas `/api/propostas` e `/api/propostas/gerar` no servidor local Vite (`localhost:3001`), permitindo testes em tempo real da extensão sem necessidade de deploy.
-* **Diretrizes e Repertório do Motor IA (`src/data/motor-ia/repertorio_cases.md`)**:
+* **Diretrizes e Repertório do Motor IA (`src/data/motor-ia/`)**:
   * Incorporados os manuais e diretrizes comerciais da metodologia de vendas do 99Freelas ao projeto.
   * **Expansão do Repertório de Cases**: Adicionados integralmente os 60 projetos ativos do portfólio oficial (Design Gráfico, Fotografia, Desenvolvimento Web/SaaS, Dashboards Power BI e Produção Multimídia com IA), com títulos, clientes, tecnologias aplicadas, diferenciais de negócio e estratégias de prova de conceito para uso pela IA nas propostas comerciais.
+  * Arquivos de histórico consolidado e detalhado (`historico_projetos_realizados.md`, `projetos_consolidados.json`, `projetos_detalhados_completos.json`).
   * Carregamento dinâmico do repertório via `getCasesKnowledgeBase` em `src/services/proposalAiService.js`, garantindo que novos cases adicionados ao Markdown sejam imediatamente reconhecidos pela IA.
 
 
