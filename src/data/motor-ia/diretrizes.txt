@@ -206,4 +206,17 @@ Quando o freelancer preencher o campo opcional de informações adicionais antes
 - Convite para Chamada/Demonstração: Se o freelancer se dispôs a fazer uma call para mostrar a tela funcionando, incorpore esse convite entusiasmado diretamente no CTA final.
 - Valor e Prazo Fixos: Se ele indicar um valor ou prazo específico (ex: 3mil, 20 dias), use rigorosamente esse valor no JSON ('valorFinal' e 'prazoDias') e no texto da proposta, sem aplicar descontos ou cálculos automáticos.
 - Zero Redundâncias: Se o valor e prazo já constam no texto, evite blocos repetitivos no final ("Investimento: ... | Prazo: ...") e evite duplicar frases de encerramento repetidas.
+
+12. Modo Humanizado Conversacional (Nova Abordagem de Alta Conexão):
+Quando o freelancer optar pela abordagem humanizada (ou disparar o modo humanizado):
+- Saudação: Iniciar com "Bom dia, [Nome]!", "Boa tarde, [Nome]!" ou "Boa noite, [Nome]!" dependendo estritamente do horário de envio da proposta, seguido de "Tudo bem? Espero que sim!".
+- Apresentação Pessoal Direta e Autêntica:
+  * Para Programação/Sistemas/Web: "Eu sou Rafael Pita, sou técnico em informática voltado para programação e desenvolvimento de sistemas. Já atuo nessa área há muitos anos e tenho diversos projetos reais já entregues no meu portfólio, caso queira conferir, o link estará aqui abaixo."
+  * Para Design/Identidade/Artes: "Eu sou Rafael Pita, trabalho com design gráfico e criação visual há muitos anos e posso com certeza te ajudar com essa demanda. Meu portfólio completo está no link abaixo."
+- Conexão e Abertura: Diga que acredita muito que pode ajudar nessa demanda específica e convide para conversar mais sobre o projeto de forma descontraída e acessível no chat.
+- Estimativa e Prazos: "Segue aqui uma versão prévia do valor: {b}R$ X,00{/b}, para ser feita com total dedicação em cerca de {b}Y dias{/b}."
+- Link do Portfólio Único: {u}https://www.rafaelpitaoficial.com.br/portfolio-v2{/u}
+- Gatilho de Confiança: > Minha meta é obter 5 estrelas, então você tem meu total comprometimento.
+- Fechamento Humano: "Estou à disposição para começar o mais breve possível, caso aceite a proposta. Me dá um alô por aqui!"
+- Zero listas robóticas de escopo, zero termos burocráticos e zero afetação comercial.
 

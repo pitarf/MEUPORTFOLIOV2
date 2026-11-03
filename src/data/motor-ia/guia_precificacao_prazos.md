@@ -28,6 +28,7 @@ Este documento estabelece as **diretrizes numéricas de precificação, piso mí
 ### Modo Padrão (`🤖 MODO PADRÃO`)
 - **Preço:** Proposta competitiva calculada entre **10% a 20% abaixo da média dos concorrentes**, garantindo alta atratividade sem desvalorizar o serviço.
 - **Prazo:** Cerca de **30% mais rápido** que o prazo médio dos concorrentes ou alinhado com a tecnologia.
+  * **Regra de Ouro (Landing Pages & Sites):** Se for Landing Page, Página de Vendas ou Site Institucional e a duração média dos concorrentes já for curta (até 5 dias), **mantenha exatamente o tempo médio dos concorrentes**. Prazos curtos demais (1 ou 2 dias) em projetos web geram desconfiança de baixa qualidade ou trabalho amador.
 - **Gatilho de Confiança:**
   > Minha meta é obter 5 estrelas, então você tem meu total comprometimento.
 

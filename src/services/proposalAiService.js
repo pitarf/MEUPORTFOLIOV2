@@ -265,18 +265,35 @@ export async function generateProposal(payload = {}) {
         orcamento = '',
         valorMedio = 0,
         duracaoMedia = 0,
-        modo = 'padrao', // 'padrao', 'emergencia', 'falsa_emergencia'
+        modo = 'padrao', // 'padrao', 'emergencia', 'falsa_emergencia', 'humanizado'
         horaEnvio = new Date().getHours(),
         instrucoesExtras = '',
         valorManualNativo = '',
         prazoManualNativo = ''
     } = payload;
 
-    // Detecta saudação personalizada por gênero
+    // Detecta saudação personalizada por gênero ou horário
     const gender = detectGenderByName(clienteNome);
-    const greeting = clienteNome
+    
+    // Saudação dependendo da hora do dia para o modo humanizado
+    let saudacaoHorario = 'Olá';
+    if (horaEnvio >= 5 && horaEnvio < 12) {
+        saudacaoHorario = 'Bom dia';
+    } else if (horaEnvio >= 12 && horaEnvio < 18) {
+        saudacaoHorario = 'Boa tarde';
+    } else {
+        saudacaoHorario = 'Boa noite';
+    }
+
+    const greetingHumanizado = clienteNome
+        ? `${saudacaoHorario}, ${clienteNome}! Tudo bem? Espero que sim!`
+        : `${saudacaoHorario}! Tudo bem? Espero que sim!`;
+
+    const greetingPadrao = clienteNome
         ? (gender === 'feminino' ? `Olá, ${clienteNome}! Tudo bem? Espero que sim.` : `Fala, ${clienteNome}! Tudo bem? Espero que sim.`)
         : 'Olá! Tudo bem? Espero que sim.';
+
+    const greeting = modo === 'humanizado' ? greetingHumanizado : greetingPadrao;
 
     // URL do portfólio oficial
     const isPhotoCategory = (categoria || '').toLowerCase().includes('foto') ||
@@ -316,7 +333,7 @@ export async function generateProposal(payload = {}) {
 
     const isEcommerce = fullTextSearch.includes('loja') || fullTextSearch.includes('woocommerce') || fullTextSearch.includes('shopify') || fullTextSearch.includes('e-commerce') || fullTextSearch.includes('ecommerce');
     const isBigSystem = fullTextSearch.includes('sistema') || fullTextSearch.includes('saas') || fullTextSearch.includes('erp') || fullTextSearch.includes('crm') || fullTextSearch.includes('full stack') || fullTextSearch.includes('fullstack') || fullTextSearch.includes('banco de dados') || fullTextSearch.includes('aplicativo e site');
-    const isLandingOrSite = fullTextSearch.includes('landing page') || fullTextSearch.includes('landing') || fullTextSearch.includes('site') || fullTextSearch.includes('institucional') || fullTextSearch.includes('wordpress') || fullTextSearch.includes('elementor');
+    const isLandingOrSite = fullTextSearch.includes('landing page') || fullTextSearch.includes('landing') || fullTextSearch.includes('site') || fullTextSearch.includes('institucional') || fullTextSearch.includes('wordpress') || fullTextSearch.includes('elementor') || fullTextSearch.includes('página de vendas') || fullTextSearch.includes('pagina de vendas') || fullTextSearch.includes('página de captura') || fullTextSearch.includes('pagina de captura');
 
     // Define faixas inteligentes mínimas e máximas de precificação
     let precoMinimoEsperado = 350;
@@ -333,7 +350,12 @@ export async function generateProposal(payload = {}) {
             precoMaximoEsperado = Math.max(56, Math.round(valorMedioNum * 0.95));
         }
         if (duracaoMediaNum > 0) {
-            prazoSugeridoEsperado = modo === 'emergencia' ? Math.max(1, Math.round(duracaoMediaNum * 0.50)) : Math.max(1, Math.round(duracaoMediaNum * 0.70));
+            // REGRA: Se for landing page ou site e o tempo médio já é curto (ex: até 5 dias), MANTENHA o tempo médio
+            if (isLandingOrSite && duracaoMediaNum <= 5) {
+                prazoSugeridoEsperado = Math.max(1, duracaoMediaNum);
+            } else {
+                prazoSugeridoEsperado = modo === 'emergencia' ? Math.max(1, Math.round(duracaoMediaNum * 0.50)) : Math.max(1, Math.round(duracaoMediaNum * 0.70));
+            }
         }
     } else {
         // Quando o valor médio for desconhecido, ancora na complexidade do projeto
@@ -383,6 +405,7 @@ Você DEVE utilizar exatamente esse valor ({b}R$ ${Number(valorManualDefinido).t
 - Valor Médio dos Concorrentes: ${valorMedioNum > 0 ? `R$ ${valorMedioNum},00` : 'Desconhecido'}
 - Prazo Médio dos Concorrentes: ${duracaoMediaNum > 0 ? `${duracaoMediaNum} dias` : 'Desconhecido'}
 - FAIXA COMPETITIVA CALCULADA: Proponha um valor estritamente entre {b}R$ ${precoMinimoEsperado},00 e R$ ${precoMaximoEsperado},00{/b} (prazo de cerca de {b}${prazoSugeridoEsperado} dias{/b}).
+- REGRA DE OURO DE PRAZO PARA LANDING PAGE E SITE: Se for Landing Page ou Site Institucional e a duração média dos concorrentes já for curta (até 5 dias), MANTENHA exatamente a duração média informada (${duracaoMediaNum > 0 ? duracaoMediaNum : prazoSugeridoEsperado} dias). Não force prazos irreais de 1 ou 2 dias que possam soar amadores ou impossíveis para o cliente.
 - PROIBIÇÃO DE VALOR IRRISÓRIO: R$ 56 a R$ 90 é EXCLUSIVO para micro-design (vetorização ou banner). NUNCA proponha menos de R$ 250 para qualquer projeto web, dev ou sistema.`}
 
 ${prazoManualDefinido ? `🚨 PRAZO FIXADO PELO FREELANCER (PRIORIDADE ABSOLUTA):
@@ -426,7 +449,22 @@ DADOS DO PROJETO AVALIADO:
 
 ${casesSummary}
 
-ESTRUTURA DA PROPOSTA (140 a 200 palavras, One-Page Style, separado por \\n\\n):
+${modo === 'humanizado' ? `🚨 MODO HUMANIZADO CONVERSACIONAL (FOCO TOTAL EM AUTENTICIDADE E CALOR HUMANO):
+Neste modo, esqueça estruturas burocráticas ou listas frias de escopo técnico com traços ou bullets. O objetivo é soar como uma pessoa real, atenciosa e acessível conversando diretamente com o cliente!
+ESTRUTURA OBRIGATÓRIA DO MODO HUMANIZADO:
+1. Saudação: "${greeting}"
+2. Apresentação Pessoal:
+   ${isSimpleDesign ? '- Diga com naturalidade: "Eu sou Rafael Pita, trabalho com design gráfico e criação visual há muitos anos e posso com certeza te ajudar com essa demanda."' : '- Diga com naturalidade e segurança: "Eu sou Rafael Pita, sou técnico em informática voltado para programação e desenvolvimento de sistemas. Já atuo nessa área há muitos anos e tenho diversos projetos reais entregues no meu portfólio."'}
+3. Conexão com o Projeto e Portfólio:
+   - Diga que acredita muito que pode ajudar nessa demanda (cite brevemente o cerne do pedido do cliente com simpatia e clareza, em 1 ou 2 frases curtas).
+   - Indique o portfólio com humildade e autoridade: "Caso queira conferir alguns dos meus trabalhos anteriores, o link está aqui: ${portfolioUrl}"
+4. Abertura para Conversar e Estimativa Prévia:
+   - "Se tiver interesse, estou super à disposição para conversarmos mais sobre os detalhes do projeto no chat ou em uma chamada rápida."
+   - Apresente a estimativa: "Segue uma estimativa prévia de investimento de {b}R$ ${precoMinimoEsperado === precoMaximoEsperado ? precoMinimoEsperado : precoMinimoEsperado}{/b} (ou entre {b}R$ ${precoMinimoEsperado},00{/b} e {b}R$ ${precoMaximoEsperado},00{/b}), para ser entregue com calma e qualidade em cerca de {b}${prazoSugeridoEsperado} dias{/b}."
+5. Gatilho de Confiança:
+> Minha meta é obter 5 estrelas, então você tem meu total comprometimento.
+6. Fechamento Acolhedor:
+   - Diga que está à disposição para começar o quanto antes/o mais breve possível caso aceite a proposta, e convide com simpatia para trocar uma ideia no chat.` : `ESTRUTURA DA PROPOSTA (140 a 200 palavras, One-Page Style, separado por \\n\\n):
 Bloco 1: Saudação (${greeting})
 Bloco 2: Gancho com Prazo: Solução direta com prazo em negrito {b}...{/b}. Se houver base pronta ou história citada no input extra, introduza aqui.
 Bloco 3: Escopo Comercial:
@@ -438,7 +476,7 @@ Bloco 5: Portfólio com Autoridade: ${portfolioUrl}
 Bloco 6: Gatilho de Confiança:
 > Minha meta é obter 5 estrelas, então você tem meu total comprometimento.
 Bloco 7: Investimento e Prazo: Investimento: {b}R$ X{/b} | Prazo: {b}Y dias{/b}.
-Bloco 8: CTA Consultivo com chamada remota (se aplicável) e "${closureTiming}".
+Bloco 8: CTA Consultivo com chamada remota (se aplicável) e "${closureTiming}".`}
 
 Retorne EXCLUSIVAMENTE um objeto JSON válido (sem markdown de bloco):
 {

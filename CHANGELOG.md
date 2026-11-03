@@ -2,6 +2,22 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.66.0] - 2026-11-03
+
+### Adicionado (Modo Humanizado Conversacional para Propostas 99Freelas)
+* **Novo Modo de Geração Humanizada (`src/services/proposalAiService.js`)**:
+  * Implementada a abordagem humanizada focada em calor humano, autenticidade e conexão direta com o cliente.
+  * Saudação dinâmica por período do dia: `"Bom dia, [Nome]!"`, `"Boa tarde, [Nome]!"` ou `"Boa noite, [Nome]!"`.
+  * Apresentação pessoal direta de Rafael Pita adaptada ao nicho da demanda:
+    * **Programação e Web**: Técnico em informática voltado para programação e desenvolvimento de sistemas, destacando projetos reais no portfólio.
+    * **Design e Artes**: Profissional com anos de experiência em criação visual e design gráfico.
+  * Substituição de listas técnicas burocráticas por uma menção consultiva e acolhedora à demanda do cliente.
+  * Apresentação maleável de estimativa prévia de investimento e prazo realista com gatilho de comprometimento com 5 estrelas.
+  * Integração com link único de portfólio oficial `{u}https://www.rafaelpitaoficial.com.br/portfolio-v2{/u}`.
+* **Extensão Chrome 99Freelas (`content.js` e userscript)**:
+  * Adicionado o 4º botão de ação: `🤝 Proposta Humanizada` com estilização em gradiente verde-esmeralda.
+  * Sincronização das diretrizes comerciais em `src/data/motor-ia/diretrizes.txt` e na extensão.
+
 ## [1.65.0] - 2026-10-31
 
 ### Adicionado (API de Geração de Propostas Comerciais 99Freelas com IA)

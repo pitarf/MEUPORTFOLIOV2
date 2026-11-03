@@ -2,6 +2,18 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Modo Humanizado Conversacional de Alta Conexão no Motor IA 99Freelas (`proposalAiService.js`, `content.js`, `diretrizes.txt`, `99freelas-produtividade.user.js`)**:
+  - Objetivo: Adicionar um novo modo de proposta comercial menos burocrático e focado em autenticidade humana, apresentando o desenvolvedor Rafael Pita diretamente, com saudação dinâmica pelo horário do dia e eliminando listas frias de escopo técnico.
+  - Implementações Realizadas:
+    - `src/services/proposalAiService.js`:
+      - Suporte ao `modo = 'humanizado'` com saudações sensíveis ao horário (`Bom dia`, `Boa tarde` ou `Boa noite` seguido de `Tudo bem? Espero que sim!`).
+      - Apresentação pessoal direta de Rafael Pita adaptada para desenvolvimento (técnico em informática voltado para programação) ou design gráfico.
+      - Estimativa maleável de valor e prazo com incentivo à conversa consultiva e link único do portfólio.
+    - Extensão do Chrome (`content.js` e userscript):
+      - Adicionado 4º botão de ação: `🤝 Proposta Humanizada` com estilo visual em gradiente esmeralda.
+    - Sincronização Dupla: Diretrizes documentadas e sincronizadas em `motor-ia/` nos dois repositórios.
+  - Validação Automatizada: Testes integrados com a API do Gemini concluídos com sucesso e build de produção validado (`npm run build` em 20.40s).
+
 - [x] **API Backend do Motor de Propostas 99Freelas com IA & Expansão com 60 Cases do Portfólio (`proposalAiService.js`, `repertorio_cases.md`, `api/propostas/gerar.js`, `api/propostas.js`, `vite.config.js`)**:
   - Objetivo: Criar uma API robusta no backend para receber dados de projetos publicados no 99Freelas (enviados por uma extensão do Chrome) e gerar propostas comerciais personalizadas de altíssima conversão utilizando a IA do Google Gemini cruzada com o histórico de 55 avaliações 5 estrelas e os 60 projetos reais do portfólio.
   - Implementações Realizadas:
