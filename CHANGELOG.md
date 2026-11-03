@@ -14,6 +14,8 @@ Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
   * Substituição de listas técnicas burocráticas por uma menção consultiva e acolhedora à demanda do cliente.
   * Apresentação maleável de estimativa prévia de investimento e prazo realista com gatilho de comprometimento com 5 estrelas.
   * Integração com link único de portfólio oficial `{u}https://www.rafaelpitaoficial.com.br/portfolio-v2{/u}`.
+* **Reconciliação e Blindagem de Valores e Prazos (`src/services/proposalAiService.js`)**:
+  * Blindagem pós-geração contra alucinação da IA: sincroniza automaticamente os valores em `{b}R$ ...{/b}` e prazos em `{b}... dias{/b}` do texto gerado para baterem 100% com o `valorFinal` e `prazoDias` calculados no JSON.
 * **Extensão Chrome 99Freelas (`content.js` e userscript)**:
   * Adicionado o 4º botão de ação: `🤝 Proposta Humanizada` com estilização em gradiente verde-esmeralda.
   * Sincronização das diretrizes comerciais em `src/data/motor-ia/diretrizes.txt` e na extensão.

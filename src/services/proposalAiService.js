@@ -548,7 +548,7 @@ Retorne EXCLUSIVAMENTE um objeto JSON válido (sem markdown de bloco):
         finalDeadline = duracaoMediaNum > 0 ? String(duracaoMediaNum) : String(prazoSugeridoEsperado);
     }
 
-    // Sanitiza o texto gerado e corrige menções a R$ 56 residuais no texto
+    // Sanitiza o texto gerado e garante que o valorFinal e o prazoDias batam 100% com o texto
     let sanitizedText = sanitizeProposalText(rawResult.textoDetalhes, {
         categoria,
         titulo,
@@ -557,11 +557,15 @@ Retorne EXCLUSIVAMENTE um objeto JSON válido (sem markdown de bloco):
         finalDeadline
     });
 
-    // Se o valor foi corrigido para cima (ex: não é design simples) e o texto ainda tinha R$ 56 ou R$ 60, corrige no texto:
-    if (!isSimpleDesign && !isManualValor && Number(finalValue) >= 250) {
-        sanitizedText = sanitizedText.replace(/\{b\}R\$\s*(?:56|60)(?:,00)?\{\/b\}/gi, `{b}R$ ${Number(finalValue).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}{/b}`);
-        sanitizedText = sanitizedText.replace(/R\$\s*(?:56|60)(?:,00)?/gi, `R$ ${Number(finalValue).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`);
-    }
+    // RECONCILIAÇÃO OBRIGATÓRIA DE VALOR E PRAZO NO TEXTO (BLINDAGEM CONTRA ALUCINAÇÃO DA IA):
+    // Garante que o valor exibido na descrição seja rigorosamente idêntico ao finalValue preenchido no campo
+    const valorFormatadoPtBr = Number(finalValue).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+    
+    // Substitui qualquer valor dentro de tags {b}R$ ...{/b} na estimativa ou proposta pelo valor real
+    sanitizedText = sanitizedText.replace(/\{b\}R\$\s*[\d.,]+\{\/b\}/gi, `{b}R$ ${valorFormatadoPtBr}{/b}`);
+
+    // Se houver menção solta de prazo em dias diferente do prazoFinal no gancho ou fechamento:
+    sanitizedText = sanitizedText.replace(/\{b\}\d+\s*dias?\{\/b\}/gi, `{b}${finalDeadline} dias{/b}`);
 
     return {
         sucesso: true,
