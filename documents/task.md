@@ -2,6 +2,14 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Calibragem para Vídeos/Motion com IA e Blindagem de Teto Máximo (`proposalAiService.js`, `guia_precificacao_prazos.md`)**:
+  - Objetivo: Calibrar a precificação e a apresentação no modo humanizado para demandas audiovisuais (vídeos, animações, quadros brancos, reels e motion) e criar trava de teto máximo para evitar alucinações de valores estratosféricos (ex: R$ 5.556,00).
+  - Implementações:
+    - Reconhecimento automático do nicho de vídeo e motion com faixa de R$ 180,00 a R$ 450,00 e prazo de 2 a 3 dias.
+    - Apresentação personalizada no modo humanizado: *"Eu sou Rafael Pita, trabalho com criação audiovisual, edição de vídeo e animações com inteligência artificial..."*.
+    - Trava de teto máximo seguro (25% acima da faixa máxima) para projetos comuns, bloqueando valores irreais.
+    - Expurgador residual de anomalias no sanitizador de texto.
+
 - [x] **Modo Humanizado Conversacional de Alta Conexão no Motor IA 99Freelas (`proposalAiService.js`, `content.js`, `diretrizes.txt`, `99freelas-produtividade.user.js`)**:
   - Objetivo: Adicionar um novo modo de proposta comercial menos burocrático e focado em autenticidade humana, apresentando o desenvolvedor Rafael Pita diretamente, com saudação dinâmica pelo horário do dia e eliminando listas frias de escopo técnico.
   - Implementações Realizadas:

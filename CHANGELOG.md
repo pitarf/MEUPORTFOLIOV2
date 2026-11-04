@@ -2,6 +2,17 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.67.0] - 2026-11-04
+
+### Aprimorado (Calibragem para Vídeos/Motion com IA e Blindagem de Teto Máximo)
+* **Suporte ao Nicho Audiovisual & Vídeos com IA (`src/services/proposalAiService.js`, `guia_precificacao_prazos.md`)**:
+  * Detecção inteligente de demandas de vídeo (edição, motion, quadro branco/whiteboard, animação, reels, TikTok, YouTube).
+  * Apresentação contextual humanizada para audiovisual: *"Eu sou Rafael Pita, trabalho com criação audiovisual, edição de vídeo e animações com inteligência artificial há muitos anos..."*.
+  * Faixa justa competitiva de R$ 180,00 a R$ 450,00 em prazos ágeis de 2 a 3 dias.
+* **Blindagem Contra Alucinações de Valores Estratosféricos**:
+  * Implementada trava de teto máximo seguro para projetos que não sejam grandes SaaS/ERPs, evitando propostas fora da realidade da plataforma (ex: anomalias como R$ 5.556,00).
+  * Expurgador explícito no sanitizador para expurgar menções numéricas anômalas no texto da proposta.
+
 ## [1.66.0] - 2026-11-03
 
 ### Adicionado (Modo Humanizado Conversacional para Propostas 99Freelas)

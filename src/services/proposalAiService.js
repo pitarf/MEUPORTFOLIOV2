@@ -328,12 +328,25 @@ export async function generateProposal(payload = {}) {
     // MALÍCIA E ANÁLISE DE COMPLEXIDADE DO PROJETO
     const fullTextSearch = `${titulo} ${descricao} ${categoria} ${(Array.isArray(habilidades) ? habilidades.join(' ') : habilidades)}`.toLowerCase();
 
+    const isVideoOrMotion = fullTextSearch.includes('vídeo') || fullTextSearch.includes('video') ||
+                           fullTextSearch.includes('animação') || fullTextSearch.includes('animacao') ||
+                           fullTextSearch.includes('quadro branco') || fullTextSearch.includes('whiteboard') ||
+                           fullTextSearch.includes('motion') || fullTextSearch.includes('audiovisual') ||
+                           fullTextSearch.includes('locução') || fullTextSearch.includes('locucao') ||
+                           fullTextSearch.includes('reels') || fullTextSearch.includes('tiktok') ||
+                           fullTextSearch.includes('youtube') || fullTextSearch.includes('edição de vídeo') ||
+                           fullTextSearch.includes('edicao de video') || fullTextSearch.includes('after effects') ||
+                           fullTextSearch.includes('premiere');
+
     const isSimpleDesign = (fullTextSearch.includes('vetoriza') || fullTextSearch.includes('vetor') || fullTextSearch.includes('recortar foto') || fullTextSearch.includes('ajuste de banner')) &&
-                           !fullTextSearch.includes('site') && !fullTextSearch.includes('landing') && !fullTextSearch.includes('sistema');
+                           !fullTextSearch.includes('site') && !fullTextSearch.includes('landing') && !fullTextSearch.includes('sistema') && !isVideoOrMotion;
+
+    const isDesignGeneral = isSimpleDesign || ((fullTextSearch.includes('design') || fullTextSearch.includes('logo') || fullTextSearch.includes('logotipo') || fullTextSearch.includes('identidade visual') || fullTextSearch.includes('banner') || fullTextSearch.includes('flyer') || fullTextSearch.includes('arte') || fullTextSearch.includes('photoshop') || fullTextSearch.includes('illustrator') || fullTextSearch.includes('canva')) &&
+                            !fullTextSearch.includes('site') && !fullTextSearch.includes('landing') && !fullTextSearch.includes('sistema') && !isVideoOrMotion);
 
     const isEcommerce = fullTextSearch.includes('loja') || fullTextSearch.includes('woocommerce') || fullTextSearch.includes('shopify') || fullTextSearch.includes('e-commerce') || fullTextSearch.includes('ecommerce');
     const isBigSystem = fullTextSearch.includes('sistema') || fullTextSearch.includes('saas') || fullTextSearch.includes('erp') || fullTextSearch.includes('crm') || fullTextSearch.includes('full stack') || fullTextSearch.includes('fullstack') || fullTextSearch.includes('banco de dados') || fullTextSearch.includes('aplicativo e site');
-    const isLandingOrSite = fullTextSearch.includes('landing page') || fullTextSearch.includes('landing') || fullTextSearch.includes('site') || fullTextSearch.includes('institucional') || fullTextSearch.includes('wordpress') || fullTextSearch.includes('elementor') || fullTextSearch.includes('página de vendas') || fullTextSearch.includes('pagina de vendas') || fullTextSearch.includes('página de captura') || fullTextSearch.includes('pagina de captura');
+    const isLandingOrSite = (fullTextSearch.includes('landing page') || fullTextSearch.includes('landing') || fullTextSearch.includes('site') || fullTextSearch.includes('institucional') || fullTextSearch.includes('wordpress') || fullTextSearch.includes('elementor') || fullTextSearch.includes('página de vendas') || fullTextSearch.includes('pagina de vendas') || fullTextSearch.includes('página de captura') || fullTextSearch.includes('pagina de captura')) && !isVideoOrMotion;
 
     // Define faixas inteligentes mínimas e máximas de precificação
     let precoMinimoEsperado = 350;
@@ -353,6 +366,9 @@ export async function generateProposal(payload = {}) {
             // REGRA: Se for landing page ou site e o tempo médio já é curto (ex: até 5 dias), MANTENHA o tempo médio
             if (isLandingOrSite && duracaoMediaNum <= 5) {
                 prazoSugeridoEsperado = Math.max(1, duracaoMediaNum);
+            } else if (isVideoOrMotion && duracaoMediaNum <= 4) {
+                // Vídeos e animações com IA são produzidos com extrema agilidade
+                prazoSugeridoEsperado = Math.max(1, Math.min(duracaoMediaNum, 3));
             } else {
                 prazoSugeridoEsperado = modo === 'emergencia' ? Math.max(1, Math.round(duracaoMediaNum * 0.50)) : Math.max(1, Math.round(duracaoMediaNum * 0.70));
             }
@@ -363,6 +379,15 @@ export async function generateProposal(payload = {}) {
             precoMinimoEsperado = 60;
             precoMaximoEsperado = 90;
             prazoSugeridoEsperado = 1;
+        } else if (isVideoOrMotion) {
+            // Vídeos curtos com IA (1 a 3 minutos, animações em quadro branco, reels, locução e edição)
+            precoMinimoEsperado = modo === 'emergencia' ? 180 : 250;
+            precoMaximoEsperado = modo === 'emergencia' ? 280 : 450;
+            prazoSugeridoEsperado = modo === 'emergencia' ? 2 : 3;
+        } else if (isDesignGeneral) {
+            precoMinimoEsperado = modo === 'emergencia' ? 120 : 180;
+            precoMaximoEsperado = modo === 'emergencia' ? 200 : 350;
+            prazoSugeridoEsperado = modo === 'emergencia' ? 1 : 2;
         } else if (isBigSystem) {
             precoMinimoEsperado = modo === 'emergencia' ? 1200 : 1800;
             precoMaximoEsperado = modo === 'emergencia' ? 2400 : 3800;
@@ -454,13 +479,18 @@ Neste modo, esqueça estruturas burocráticas ou listas frias de escopo técnico
 ESTRUTURA OBRIGATÓRIA DO MODO HUMANIZADO:
 1. Saudação: "${greeting}"
 2. Apresentação Pessoal:
-   ${isSimpleDesign ? '- Diga com naturalidade: "Eu sou Rafael Pita, trabalho com design gráfico e criação visual há muitos anos e posso com certeza te ajudar com essa demanda."' : '- Diga com naturalidade e segurança: "Eu sou Rafael Pita, sou técnico em informática voltado para programação e desenvolvimento de sistemas. Já atuo nessa área há muitos anos e tenho diversos projetos reais entregues no meu portfólio."'}
+   ${isVideoOrMotion
+       ? '- Diga com naturalidade e segurança: "Eu sou Rafael Pita, trabalho com criação audiovisual, edição de vídeo e animações com inteligência artificial há muitos anos e tenho diversos projetos reais entregues no meu portfólio."'
+       : isDesignGeneral
+           ? '- Diga com naturalidade e simpatia: "Eu sou Rafael Pita, trabalho com design gráfico, criação visual e branding há muitos anos e tenho diversos projetos reais entregues no meu portfólio."'
+           : '- Diga com naturalidade e autoridade: "Eu sou Rafael Pita, sou técnico em informática voltado para programação e desenvolvimento de sistemas. Já atuo nessa área há muitos anos e tenho diversos projetos reais entregues no meu portfólio."'}
 3. Conexão com o Projeto e Portfólio:
    - Diga que acredita muito que pode ajudar nessa demanda (cite brevemente o cerne do pedido do cliente com simpatia e clareza, em 1 ou 2 frases curtas).
    - Indique o portfólio com humildade e autoridade: "Caso queira conferir alguns dos meus trabalhos anteriores, o link está aqui: ${portfolioUrl}"
 4. Abertura para Conversar e Estimativa Prévia:
    - "Se tiver interesse, estou super à disposição para conversarmos mais sobre os detalhes do projeto no chat ou em uma chamada rápida."
-   - Apresente a estimativa: "Segue uma estimativa prévia de investimento de {b}R$ ${precoMinimoEsperado === precoMaximoEsperado ? precoMinimoEsperado : precoMinimoEsperado}{/b} (ou entre {b}R$ ${precoMinimoEsperado},00{/b} e {b}R$ ${precoMaximoEsperado},00{/b}), para ser entregue com calma e qualidade em cerca de {b}${prazoSugeridoEsperado} dias{/b}."
+   - Apresente a estimativa com precisão absoluta: "Segue uma estimativa prévia de investimento de {b}R$ ${precoMinimoEsperado},00{/b}, para ser entregue com calma e dedicação em cerca de {b}${prazoSugeridoEsperado} dias{/b}."
+   - É EXPRESSAMENTE PROIBIDO inventar valores fora da faixa informada (R$ ${precoMinimoEsperado},00 a R$ ${precoMaximoEsperado},00).
 5. Gatilho de Confiança:
 > Minha meta é obter 5 estrelas, então você tem meu total comprometimento.
 6. Fechamento Acolhedor:
@@ -522,7 +552,7 @@ Retorne EXCLUSIVAMENTE um objeto JSON válido (sem markdown de bloco):
     const isManualValor = Boolean(valorManualDefinido);
     const valorNumerico = Number(finalValue || 0);
 
-    // Se NÃO for valor manual do freelancer, aplica a proteção de faixa e média
+    // Se NÃO for valor manual do freelancer, aplica a proteção de faixa, média e TETO MÁXIMO
     if (!isManualValor) {
         if (isSimpleDesign) {
             // Em vetorização ou banners simples, piso entre 56 e 90
@@ -530,11 +560,20 @@ Retorne EXCLUSIVAMENTE um objeto JSON válido (sem markdown de bloco):
                 finalValue = String(precoMinimoEsperado);
             }
         } else {
-            // Em qualquer projeto de site, landing page, app, sistema ou automação:
-            // Proibido propor menos que precoMinimoEsperado (calculado com base na média ou complexidade)
+            // Em qualquer projeto de vídeo, design, site, landing page ou sistema:
+            // 1. Proibido propor menos que precoMinimoEsperado
             if (valorNumerico < precoMinimoEsperado) {
                 console.warn(`[proposalAiService] Valor gerado (R$ ${valorNumerico}) abaixo do piso justo calculado (R$ ${precoMinimoEsperado}). Ajustando.`);
                 finalValue = String(precoMinimoEsperado);
+            }
+            // 2. BLINDAGEM CONTRA ALUCINAÇÃO DE VALORES ESTRATOSFÉRICOS (ex: R$ 5.556,00):
+            // Se o projeto não for um SaaS/ERP ou E-commerce grande, trava no teto da faixa
+            if (!isBigSystem && !isEcommerce && precoMaximoEsperado > 0) {
+                const tetoMaximoSeguro = Math.round(precoMaximoEsperado * 1.25);
+                if (valorNumerico > tetoMaximoSeguro) {
+                    console.warn(`[proposalAiService] Alucinação detectada: Valor gerado (R$ ${valorNumerico}) acima do teto seguro (R$ ${tetoMaximoSeguro}). Travando em R$ ${precoMaximoEsperado}.`);
+                    finalValue = String(precoMaximoEsperado);
+                }
             }
         }
     }
@@ -563,6 +602,9 @@ Retorne EXCLUSIVAMENTE um objeto JSON válido (sem markdown de bloco):
     
     // Substitui qualquer valor dentro de tags {b}R$ ...{/b} na estimativa ou proposta pelo valor real
     sanitizedText = sanitizedText.replace(/\{b\}R\$\s*[\d.,]+\{\/b\}/gi, `{b}R$ ${valorFormatadoPtBr}{/b}`);
+
+    // Expurgador explícito de anomalias residuais como R$ 5.556,00 ou R$ 5556
+    sanitizedText = sanitizedText.replace(/(?:R\$\s*)?5\.?556(?:,00)?/gi, `R$ ${valorFormatadoPtBr}`);
 
     // Se houver menção solta de prazo em dias diferente do prazoFinal no gancho ou fechamento:
     sanitizedText = sanitizedText.replace(/\{b\}\d+\s*dias?\{\/b\}/gi, `{b}${finalDeadline} dias{/b}`);

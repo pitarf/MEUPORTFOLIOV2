@@ -16,6 +16,7 @@ Este documento estabelece as **diretrizes numéricas de precificação, piso mí
 | Categoria / Tipo de Demanda | Faixa de Preço Sugerida | Prazo Realista | Observações Estratégicas |
 | :--- | :--- | :--- | :--- |
 | **Projetos Simples & Pontuais**<br>(Vetorização, 1-2 banners, ajustes de CSS, correções rápidas) | **R$ 56,00 a R$ 90,00** | **1 dia** | Micro-proposta direta de 50 a 90 palavras. Entrega imediata. |
+| **Vídeo, Animação & Motion com IA**<br>(Quadro branco, vídeos curtos 1 a 3 min, reels, edição, locução) | **R$ 180,00 a R$ 450,00** | **2 a 3 dias** | Produção acelerada com IA Generativa, Motion e Sound Design. Proibido propor valores absurdos como R$ 5.556,00. |
 | **Projetos Médios**<br>(Landing Pages, Sites Institucionais, Social Media mensal) | **R$ 250,00 a R$ 600,00** | **2 a 5 dias** | Destacar velocidade de carregamento e foco em conversão. |
 | **Projetos Complexos**<br>(Sistemas Web, Dashboards, APIs, Automações, Power BI) | **R$ 700,00 a R$ 1.500,00+** | **5 a 10 dias** | Citar código limpo, arquitetura escalável e 30 dias de suporte pós-entrega. |
 | **Lojas Virtuais & E-commerce**<br>(WooCommerce, Shopify com catálogo, frete e pagamento) | **R$ 900,00 a R$ 1.800,00+** | **7 a 15 dias** | Proibido propor valores abaixo de R$ 900 ou prazos irreais de 1 a 3 dias para lojas completas. |
