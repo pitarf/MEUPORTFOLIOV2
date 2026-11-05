@@ -62,6 +62,10 @@
 /* ----------------------------------------------------
    2.1 RESET ANTI-QUEBRA DO POSITION STICKY E STACKING CARDS
    ---------------------------------------------------- */
+html {
+    scroll-behavior: smooth;
+}
+
 html, body {
     overflow-x: clip;
     max-width: 100%;

@@ -906,6 +906,22 @@ Para atender às auditorias do Google Lighthouse 13.5+ e aos critérios de Naveg
    - Google Tag Manager diferido: O script do GTM é inicializado apenas no evento `window.load`, liberando a thread primária para os cálculos de FCP e LCP sem disputar recursos de rede.
    - Google Fonts: Pesos essenciais limitados a 400, 600, 700 e 800 carregados assincronamente com `media="print" onload="this.media='all'"`.
 
+### 13.43 Divisores Geométricos de Ondas Orgânicas Contínuas (`NutritionWaveDivider.jsx`)
+
+Para conferir dinamismo, ritmo e elegância moderna à landing page de nutrição, foram implementados divisores vetoriais SVG de ondas orgânicas fiéis à referência visual de Consultas Brasil:
+
+1. **Princípio Geométrico Anti-Oval**:
+   - É proibido o uso de arcos circulares simples ou cúpulas/elipses simétricas abauladas, que criam a sensação de arcos artificiais.
+   - O padrão adota curvas de Bézier cúbicas contínuas com dois pontos de inflexão: um vale suave à esquerda/centro (`C320,68 480,72 760,46`) e uma crista suave à direita (`C1020,20 1240,16 1440,32`).
+2. **Posicionamento e Preenchimento Dinâmico**:
+   - `position="top"`: Preenche o topo da seção com a cor da seção anterior (`toColor`, geralmente `#FFFFFF`), recortando o topo do bloco colorido em onda contínua com colagem `-mt-px`.
+   - `position="bottom"`: Preenche a base da seção com a cor da seção seguinte (`toColor`, `#FFFFFF` ou `#1D211E`), com colagem `-mb-px`.
+   - `flipX={true}`: Inverte horizontalmente a onda (`-scale-x-100`) para que seções consecutivas apresentem dinamismo e ritmos visuais alternados.
+3. **Ausência de Linhas Concorrentes**:
+   - Para que as ondas funcionem perfeitamente sem quebras visuais, todas as bordas horizontais concorrentes (`border-b border-sky-100` e `border-t border-stone-800`) devem ser rigorosamente eliminadas das seções adjacentes.
+4. **Inspeção Visual Automatizada**:
+   - O script `tools/inspect_nutrition_screens.cjs` utiliza Playwright para capturar a página inteira e cada seção individualmente, permitindo auditoria visual pixel a pixel de transições e contrastes.
+
 ### 13.41 Arquitetura da Plataforma de Landing Pages para Nutricionistas
 
 Desenvolvida para viabilizar a expansao comercial em parceria com nutricionistas de diferentes estados e cidades brasileiras, com arquitetura orientada por dados parametrizados e conformidade estrita com o Codigo de Etica do Conselho Federal de Nutricionistas (CFN).
@@ -1109,5 +1125,45 @@ Implementação de uma API de inteligência artificial de alta conversão integr
      - *Gatilho Obrigatório de 5 Estrelas*: `> Minha meta é obter 5 estrelas, então você tem meu total comprometimento.`
      - *Preservação de Histórias Autênticas*: Respeita detalhes passados pelo desenvolvedor em `instrucoesExtras` (ex: bases prontas, apps caseiros de drywall/orçamentos).
      - *Piso Mínimo*: R$ 56,00.
+
+### 13.49 Arquitetura da Navbar Desafogada com Submenu e Paleta Azul Saúde para Nutrição (`NutritionHeader.jsx`, `NutritionistPage.jsx`)
+
+Para resolver a sobrecarga visual na barra de navegação da landing page de nutricionista (`/nutricionista` e `/nutricionista/:slug`), foi implementada uma reestruturação baseada em submenus dropdown e na paleta moderna Azul Saúde:
+
+1. **Desafogamento da Barra de Navegação (`NutritionHeader.jsx`)**:
+   - **Agrupamento Inteligente em Submenu ("Atendimento")**: As seções que antes competiam horizontalmente pelo espaço do menu (*Especialidades*, *Como Funciona a Consulta* e *Nossos Diferenciais*) foram consolidadas sob um menu suspenso flutuante acionado por hover no desktop.
+   - **Menu Desktop Arejado (5 Pontos Focais)**: Redução drástica para apenas 5 itens principais (`Início`, `Sobre`, `Atendimento ▾`, `Dúvidas`, `Consultório`), proporcionando respiro visual (`gap-7`), legibilidade e elegância.
+   - **Dropdown Flutuante com Transição Suave**: Caixa flutuante com sombra elevada (`shadow-xl`), bordas finas em `border-sky-100`, cantos `rounded-2xl` e itens com ícones médicos dedicados (`Stethoscope`, `CalendarCheck`, `Sparkles`), título e descrição explicativa.
+   - **Temporizador Anti-Fechamento Prematuro**: Implementação de temporizador de 160ms para evitar que o dropdown feche acidentalmente durante o movimento diagonal do mouse.
+   - **Menu Mobile com Acordeão Interativo**: Em smartphones e tablets, o menu retrátil exibe um botão de acordeão expansível para as opções de "Atendimento", garantindo acesso imediato com 1 toque sem poluição visual.
+
+2. **Diretrizes Cromáticas em Azul Saúde & Nutrição Clínica**:
+   - Transição completa da antiga paleta verde escura (`#244B3B`) para a paleta médica moderna:
+     - Primária: `#0284C7` (Azul Saúde Clínico)
+     - Secundária: `#0EA5E9` (Azul Oceano Vibrante)
+     - Destaque Escuro: `#0369A1` / `#0C4A6E`
+     - Fundos de Apoio: `#F0F9FF` e `#F8FAFC`
+   - Aplicação consistente no botão de agendamento de consultas da Navbar, no Hero, na barra de credibilidade, nas especialidades, nos diferenciais, na linha do tempo em etapas, na prova social e no banner de conversão final.
+
+### 13.50 Arquitetura de Divisores de Forma Orgânicos (Wave Shape Dividers) & Armazenamento Local de Mídias Médicas (`NutritionWaveDivider.jsx`)
+
+Para garantir estética fluida de alta tecnologia e blindagem contra imagens quebradas na web:
+
+1. **Componente de Divisores Vetoriais SVG (`src/components/nutrition/NutritionWaveDivider.jsx`)**:
+   - Desenvolvido em SVG puro com `viewBox="0 0 1440 64"` e `preserveAspectRatio="none"`, assegurando nitidez matemática absoluta em qualquer densidade de pixels (Retina, 4K, Mobile) com custo zero de rede.
+   - Geometria orgânica contínua e assimétrica fiel à referência visual do Consultas Brasil (descida suave à esquerda, vale orgânico central e subida suave à direita).
+   - Eliminação de gaps brancos, rotações de 180° que geravam cúpulas ovais e bordas concorrentes (`border-b`), posicionando o divisor de forma colada (`-mt-px` e `-mb-px`) para transições fluidas no banner final e na base de Especialidades.
+
+2. **Blindagem de Mídias Fotográficas Locais (`public/images/nutrition/`)**:
+   - A imagem da Dra. Camila Rocha foi salva e persistida localmente em `public/images/nutrition/dra-camila-rocha.jpg` (137 KB), extinguindo a dependência de CDNs externas sujeitas a erros 404.
+   - Implementado fallback reativo com listener `onError` nos componentes `NutritionHero.jsx` e `ModernNutritionAbout.jsx`, assegurando que mesmo perante requisições offline a imagem institucional médica padrão seja apresentada sem ícones de erro do navegador.
+
+3. **Correção e Sincronização de Âncoras de Navegação (`ModernNutritionDarkLocation.jsx`, `ScrollToTop.jsx`)**:
+   - Resolução da divergência de âncora na página `/nutrivida`: o elemento da seção de atendimento estava como `id="locais-atendimento"`, enquanto a barra de navegação chamava `href="#localizacao"`.
+   - Adicionado `id="localizacao"` com a classe `scroll-mt-20 md:scroll-mt-24` para compensar a barra de menu fixa, e mantida a âncora `id="locais-atendimento"` para compatibilidade retroativa.
+   - O componente `ScrollToTop.jsx` foi otimizado para monitorar o `hash` e rolar suavemente até o elemento de destino (`element.scrollIntoView({ behavior: 'smooth' })`).
+
+
+
 
 

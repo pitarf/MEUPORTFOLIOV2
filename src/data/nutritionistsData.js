@@ -24,7 +24,7 @@ export const nutritionistsDatabase = {
             avatarInitials: 'CR',
             shortBio: 'Especialista em Nutrição Clínica e Comportamento Alimentar pela UFRJ, com mais de 8 anos dedicados a promover saúde duradoura sem dietas restritivas ou culpa à mesa.',
             fullBio: 'Acredito que a verdadeira nutrição não impõe proibições radicais, mas constrói autonomia e equilíbrio. Meu método alia fundamentação científica atualizada a uma escuta empática e acolhedora, respeitando a sua rotina profissional, suas preferências gastronômicas e sua história com a comida. Cada orientação é formulada de maneira estritamente personalizada, promovendo exames laboratoriais otimizados, disposição física e uma relação pacífica com o próprio corpo.',
-            photo: 'https://images.unsplash.com/photo-1594824813572-8869b0e271eb?auto=format&fit=crop&w=800&q=80',
+            photo: '/images/nutrition/dra-camila-rocha.jpg',
             secondaryPhoto: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80',
             logo: null,
             academicBackground: [
@@ -59,15 +59,15 @@ export const nutritionistsDatabase = {
             keywords: 'nutricionista rio de janeiro, nutricionista ipanema, nutricionista clinica rj, nutricionista comportamental rj, consulta nutricionista rj, nutricionista online brasil',
             canonicalUrl: 'https://rafaelpitaoficial.com.br/nutricionista/dra-camila-rocha-rio-de-janeiro',
             indexable: true,
-            ogImage: 'https://images.unsplash.com/photo-1594824813572-8869b0e271eb?auto=format&fit=crop&w=1200&h=630&q=85'
+            ogImage: '/images/nutrition/dra-camila-rocha.jpg'
         },
         theme: {
-            primary: '#244B3B', // Verde-escuro sofisticado
-            secondary: '#557A61', // Verde secundário elegante
-            background: '#F8F7F2', // Off-white acolhedor
+            primary: '#0284C7', // Azul saúde e nutrição clínica de alta conversão
+            secondary: '#0EA5E9', // Azul celeste moderno
+            background: '#F0F9FF', // Fundo fresco e limpo
             surface: '#FFFFFF',
-            text: '#252925', // Grafite mineral
-            accent: '#2e634e'
+            text: '#0F172A', // Slate escuro de alta legibilidade
+            accent: '#0369A1'
         },
         hero: {
             badge: 'Atendimento Presencial em Ipanema & Online em Todo o Brasil',

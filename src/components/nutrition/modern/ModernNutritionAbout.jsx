@@ -18,7 +18,7 @@ export default function ModernNutritionAbout({ data, nutritionist, onStoryClick 
     const profile = data || nutritionist || {};
     const prof = profile.professional || profile;
     const crn = prof.crn || 'CRN-4 12345';
-    const photo = prof.photo || 'https://images.unsplash.com/photo-1594824813572-8869b0e271eb?auto=format&fit=crop&w=800&q=80';
+    const photo = prof.photo || '/images/nutrition/dra-camila-rocha.jpg';
 
     // Lista de qualificacoes em checklist
     const qualifications = [

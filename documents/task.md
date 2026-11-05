@@ -2,6 +2,44 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Ondas Orgânicas Assimétricas Contínuas Sem Deformação Oval, Eliminação de Bordas Concorrentes e Auditoria Visual (`NutritionWaveDivider.jsx`, `NutritionHero.jsx`, `NutritionServices.jsx`, `NutritionFinalCta.jsx`, `NutritionTrustBar.jsx`, `NutritionHowItWorks.jsx`, `NutritionDifferentials.jsx`, `NutritionLocation.jsx`, `NutritionFooter.jsx`, `inspect_nutrition_screens.cjs`)**:
+  - Objetivo: Substituir formatos ovais e cúpulas simétricas por ondas orgânicas reais assimétricas com vale e crista idênticas à referência do Consultas Brasil, eliminando linhas retas concorrentes (`border-b`, `border-t`), gaps brancos e validando pixel a pixel via screenshots automatizados Playwright.
+  - Implementações Realizadas:
+    - **Geometria de Onda Orgânica Real (`NutritionWaveDivider.jsx`)**:
+      - Substituição de arcos ovais simétricos por curvas de Bézier cúbicas contínuas com vale suave à esquerda/centro e crista suave à direita.
+      - Suporte nativo a `position="top"` e `position="bottom"`, com `flipX={true}` para inversão horizontal dinâmica.
+      - Colagem sub-pixel perfeita (`-mt-px` e `-mb-px`) sem frestas ou gaps.
+    - **Harmonização de Transições nas Seções**:
+      - Base de `NutritionHero.jsx`: onda contínua azul bebê transicionando para a barra de credibilidade branca.
+      - Topo e Base de `NutritionServices.jsx`: ondas orgânicas abraçando a seção de serviços azul claro, sem cortes retos.
+      - Topo e Base de `NutritionFinalCta.jsx`: ondas orgânicas em Azul Saúde (`#0284C7`), fluindo do FAQ branco para o azul e do azul para o rodapé escuro `#1D211E`.
+    - **Remoção de Bordas Retas Concorrentes**:
+      - Removidas classes `border-b border-sky-100` e `border-t border-stone-800` de `NutritionTrustBar.jsx`, `NutritionHowItWorks.jsx`, `NutritionDifferentials.jsx`, `NutritionLocation.jsx` e `NutritionFooter.jsx`.
+    - **Auditoria Visual Automatizada via Playwright (`tools/inspect_nutrition_screens.cjs`)**:
+      - Captura e inspeção de screenshots (`nutrition_fullpage.png`, `sec_inicio.png`, `sec_servicos.png`, `sec_final_cta.png`, `nutrivida_fullpage.png`) atestando a pureza ondulada e visual moderno da página.
+  - Validação Automatizada: Build de produção concluído com 100% de sucesso via Vite (`npm run build`).
+
+- [x] **Desafogamento da Navbar, Divisores de Ondas Orgânicas Refinados, Correção de #localizacao & Foto Médica na Landing Page de Nutrição (`NutritionHeader.jsx`, `NutritionWaveDivider.jsx`, `ModernNutritionDarkLocation.jsx`, `ScrollToTop.jsx`, `NutritionHero.jsx`, `NutritionServices.jsx`, `NutritionFinalCta.jsx`, `nutritionistsData.js`)**:
+  - Objetivo: Desafogar a barra de navegação da landing page de nutricionista (`/nutricionista`), estruturando um submenu dropdown moderno ("Atendimento"), aplicando a paleta Azul Saúde Clínico (`#0284C7` / `#0EA5E9` / `#0369A1`), refinando as ondas orgânicas sem gaps vazios nem bordas retas concorrentes, corrigindo a imagem médica local e corrigindo a âncora `#localizacao` no modelo NutriVida.
+  - Implementações Realizadas:
+    - **Refinamento de Ondas Orgânicas**:
+      - Eliminação dos espaços vazios gigantes e linhas retas concorrentes (`border-b border-sky-100`) apontados pelo usuário.
+      - Remoção do divisor artificial branco-sobre-branco na base do Hero, reconectando naturalmente com a barra de credibilidade.
+      - Simplificação do topo de Especialidades (`NutritionServices.jsx`) e aplicação de onda na base com transição suave para Como Funciona.
+      - Alinhamento de transição no Banner Final (`NutritionFinalCta.jsx`) com onda superior e inferior nativas sem distorções de 180°.
+    - **Correção da Âncora #localizacao**:
+      - Atualizado `ModernNutritionDarkLocation.jsx` para definir `id="localizacao"` com offset `scroll-mt-24` para acomodar a barra de navegação sticky sem ocultar o título.
+      - Aprimorado `ScrollToTop.jsx` para identificar âncoras na URL (hash) e rolar suavemente até o elemento desejado.
+    - **Foto Médica Local e Segura**:
+      - Baixada e integrada foto profissional em alta resolução em `public/images/nutrition/dra-camila-rocha.jpg`, eliminando dependência de CDN externa.
+      - Adicionado listener de `onError` com fallback gracioso em `NutritionHero.jsx` e `ModernNutritionAbout.jsx`.
+    - **Navbar Desafogada (`NutritionHeader.jsx`)**:
+      - Agrupamento das opções *Especialidades*, *Como Funciona* e *Diferenciais* em um submenu dropdown flutuante com elevação, delay suave e ícones clínicos.
+      - Navbar desktop arejada com apenas 5 pontos focais (`Início`, `Sobre`, `Atendimento ▾`, `Dúvidas`, `Consultório`).
+      - Botão CTA de agendamento em azul `#0284C7` com cantos suaves e ícone de calendário.
+      - Menu mobile com suporte a acordeão expansível para as opções de atendimento.
+  - Validação Automatizada: Build de produção concluído com 100% de sucesso via Vite (`npm run build`).
+
 - [x] **Preço de Emergência no Modo Humanizado e Flexibilização de Precificação (`proposalAiService.js`)**:
   - Objetivo: Suportar o desconto de emergência (30% sobre o valor médio) também para o modo humanizado, garantindo flexibilidade na precificação da IA ancorada na média dos concorrentes.
   - Implementações:

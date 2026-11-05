@@ -46,7 +46,13 @@ export default function ModernNutritionDarkLocation({ data, nutritionist, onBook
     };
 
     return (
-        <section id="locais-atendimento" className="py-16 md:py-20 bg-[#0C4A6E] text-white relative overflow-hidden">
+        <section
+            id="localizacao"
+            className="py-16 md:py-20 bg-[#0C4A6E] text-white relative overflow-hidden scroll-mt-20 md:scroll-mt-24"
+        >
+            {/* Âncora de compatibilidade retroativa */}
+            <span id="locais-atendimento" className="sr-only" />
+
             {/* Efeitos luminosos de fundo em azul profundo */}
             <div className="absolute top-0 right-0 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-80 h-80 bg-cyan-400/10 rounded-full blur-3xl pointer-events-none" />

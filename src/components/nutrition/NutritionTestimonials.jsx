@@ -18,7 +18,7 @@ export default function NutritionTestimonials({ data }) {
         <section id="avaliacoes" className="py-16 md:py-24 bg-white border-b border-stone-200/80">
             <div className="max-w-6xl mx-auto px-4 sm:px-6">
                 <div className="text-center max-w-2xl mx-auto space-y-3 mb-14">
-                    <span className="text-xs font-bold uppercase tracking-wider text-[#557A61]">
+                    <span className="text-xs font-bold uppercase tracking-wider text-[#0284C7]">
                         Depoimentos de Pacientes
                     </span>
                     <h2 className="text-2xl sm:text-4xl font-extrabold text-[#252925] tracking-tight">
@@ -35,10 +35,10 @@ export default function NutritionTestimonials({ data }) {
                             <div className="space-y-3">
                                 <div className="flex items-center gap-1 text-amber-500">
                                     {[...Array(5)].map((_, sIdx) => (
-                                        <Star key={sIdx} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                                         <Star key={sIdx} className="w-4 h-4 fill-amber-400 text-amber-400" />
                                     ))}
                                 </div>
-                                <Quote className="w-6 h-6 text-[#557A61]/40" />
+                                <Quote className="w-6 h-6 text-[#0284C7]/40" />
                                 <p className="text-xs sm:text-sm text-stone-700 italic leading-relaxed">
                                     "{item.text}"
                                 </p>

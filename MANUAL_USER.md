@@ -1017,6 +1017,18 @@ Agora você conta com um nicho comercial completo e de altíssima demanda para p
    * Para cadastrar um novo cliente parceiro, basta adicionar um novo bloco no array com o nome, cidade, CRN, telefone de WhatsApp, serviços e fotos.
    * A nova landing page do cliente ficará instantaneamente no ar na rota `/nutricionista/slug-do-cliente`, com SEO local, mapa e botões personalizados sem precisar programar nada do zero.
 
+### 19.44 Divisores de Ondas Orgânicas Contínuas e Fluidez Visual
+
+A página de nutricionista (`/nutricionista`) agora conta com divisores de transição em formato de **ondas orgânicas suaves**, inspiradas em plataformas médicas e de consulta modernas:
+
+1. **Design Orgânico e Fluido (Sem Efeito Oval)**:
+   - Em vez de arcos simétricos ou cúpulas convexas ("abauladas"), as divisórias utilizam ondas suaves com vales e cristas orgânicas contínuas.
+   - Isso confere um visual contemporâneo, leve e acolhedor, essencial para a área de saúde e bem-estar nutricional.
+2. **Harmonia Total Entre Seções**:
+   - A transição do Hero (azul suave) para a barra de confiança, da seção Sobre para Especialidades e do FAQ para o Banner Final de Conversão é feita por meio de ondas limpas, sem bordas horizontais cinzas ou gaps vazios.
+3. **Responsividade Total**:
+   - As ondas adaptam-se dinamicamente a qualquer tela de celular, tablet ou monitor desktop, mantendo nitidez vetorial sem distorção.
+
 ### 19.43 Novo Modelo Visual Moderno para Nutricionistas (Referência NutriVida)
 
 Para oferecer uma opção visual ainda mais conectada às tendências de saúde privada e estética médica moderna, foi criado o conjunto de componentes **NutriVida** em `src/components/nutrition/modern/`:
@@ -1174,4 +1186,43 @@ O seu portfólio agora conta com uma API de inteligência artificial de vendas c
      * Link único e seguro do seu portfólio sem contatos externos em `{u}https://www.rafaelpitaoficial.com.br/portfolio-v2{/u}`.
      * Gatilho de Compromisso 5 estrelas em destaque.
      * Convite para demonstração em chamada de vídeo 100% remota.
+
+### 19.29 Nova Navbar Desafogada com Submenu e Paleta Azul Saúde na Landing Page de Nutricionista
+
+Para que a experiência do visitante na página de demonstração para nutricionistas (`/nutricionista` e `/nutricionista/:slug`) seja limpa, agradável e proporcione alta conversão sem sensação de sufocamento visual:
+
+1. **Menu Desafogado e com Respiro Visual**:
+   * A quantidade excessiva de links colados horizontalmente foi substituída por um menu arejado com 5 pontos essenciais: **Início**, **Sobre**, **Atendimento ▾**, **Dúvidas** e **Consultório**.
+   * Ao passar o mouse sobre **Atendimento**, um submenu dropdown flutuante se abre com transição suave e ícones dedicados:
+     * **Especialidades & Tratamentos**: Nutrição Clínica, Emagrecimento, Esportiva e Comportamental.
+     * **Como Funciona a Consulta**: O passo a passo simples da consulta (avaliação, plano alimentar e suporte).
+     * **Nossos Diferenciais**: Acolhimento humanizado, plano alimentar realista e sem dietas restritivas radicais.
+   * O menu possui um temporizador inteligente de tolerância que impede que o dropdown se feche caso o usuário mova o mouse de forma rápida ou diagonal.
+
+2. **Identidade Visual em Azul Saúde e Estética Médica**:
+   * Toda a landing page agora adota os tons de **Azul Saúde Clínico** (`#0284C7`), **Azul Oceano** (`#0EA5E9`) e fundos em azul muito suave (`#F0F9FF`), inspirada nas referências visuais modernas de saúde.
+   * O botão de ação primária **Agendar consulta** na Navbar ganhou cantos arredondados modernos, ícone de calendário e destaque em azul saúde.
+   * A barra de credibilidade, cards de especialidades, linha do tempo e banners foram todos alinhados a essa paleta agradável aos olhos.
+
+3. **Facilidade em Celulares e Tablets**:
+   * No celular, ao tocar no menu hambúrguer, o item "Atendimento" conta com uma seta expansível (acordeão) que abre as sub-opções com um toque, sem poluir a tela.
+
+### 19.30 Transições com Curvas e Ondas Orgânicas Modernas & Foto Profissional da Nutricionista
+
+Para tornar o design ainda mais inovador, dinâmico e agradável aos olhos:
+
+1. **Divisores de Ondas Orgânicas Refinados**:
+   * O site utiliza ondas vetoriais contínuas e fluidas idênticas à referência do Consultas Brasil, com encaixe perfeito sem gaps brancos, sem linhas cinzas retas cortando a curva e sem cúpulas ovais artificiais.
+   * A onda recorta suavemente a base da seção de especialidades e o banner final em azul vibrante, garantindo visual moderno e arejado.
+
+2. **Fotografia Nítida em Jaleco Branco Integrada Localmente**:
+   * A fotografia da Dra. Camila Rocha agora fica armazenada diretamente dentro do projeto (`/images/nutrition/dra-camila-rocha.jpg`).
+   * Nunca mais haverá problema de foto sumindo por erro de servidores externos ou links fora do ar. A imagem carrega com velocidade instantânea e máxima definição em qualquer computador ou smartphone.
+
+3. **Navegação Ágil até a Localização do Consultório (`#localizacao`)**:
+   * O link "Localização" no topo da página NutriVida e o acesso direto via endereço `/nutrivida#localizacao` agora rolam de forma precisa e suave até a seção de consultório, horários e mapa, com margem ideal para não cobrir o título da seção.
+
+
+
+
 

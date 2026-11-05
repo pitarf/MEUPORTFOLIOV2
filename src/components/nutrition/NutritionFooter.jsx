@@ -14,7 +14,7 @@ export default function NutritionFooter({ data }) {
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="bg-[#1D211E] text-stone-300 py-12 border-t border-stone-800 text-xs">
+        <footer className="bg-[#1D211E] text-stone-300 py-12 text-xs">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-8">
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
                     {/* Identificação Profissional */}
@@ -58,7 +58,7 @@ export default function NutritionFooter({ data }) {
                 {/* Aviso Ético Obrigatório da Área de Saúde */}
                 <div className="pt-6 border-t border-stone-800/80 text-[11px] text-stone-400 leading-relaxed space-y-2">
                     <p className="flex items-start gap-2">
-                        <ShieldCheck className="w-4 h-4 text-[#557A61] shrink-0 mt-0.5" />
+                        <ShieldCheck className="w-4 h-4 text-[#0284C7] shrink-0 mt-0.5" />
                         <span>
                             <strong>Aviso Importante:</strong> As informações contidas neste site possuem caráter exclusivamente informativo, educativo e de orientação sobre hábitos saudáveis. Elas não substituem a consulta, o diagnóstico e a prescrição dietética individualizada realizada por profissional nutricionista devidamente habilitado e registrado no Conselho Regional de Nutricionistas (CRN).
                         </span>

@@ -39,7 +39,7 @@ export default function NutritionFloatingWhatsApp({ data, nutritionist }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="mb-3 max-w-xs backdrop-blur-xl bg-[#244B3B]/95 border border-white/20 text-white p-4 rounded-2xl shadow-[0_15px_35px_rgba(36,75,59,0.35)] relative pointer-events-none"
+            className="mb-3 max-w-xs backdrop-blur-xl bg-gradient-to-br from-[#0284C7]/95 to-[#0369A1]/95 border border-white/20 text-white p-4 rounded-2xl shadow-[0_15px_35px_rgba(2,132,199,0.35)] relative pointer-events-none"
           >
             <div className="flex items-center gap-2 mb-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-sm shadow-emerald-400" />
