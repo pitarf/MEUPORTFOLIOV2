@@ -266,11 +266,16 @@ export async function generateProposal(payload = {}) {
         valorMedio = 0,
         duracaoMedia = 0,
         modo = 'padrao', // 'padrao', 'emergencia', 'falsa_emergencia', 'humanizado'
+        humanizadoPrecoEmergencia = false,
+        precoEmergencia = false,
         horaEnvio = new Date().getHours(),
         instrucoesExtras = '',
         valorManualNativo = '',
         prazoManualNativo = ''
     } = payload;
+
+    // Detecta se a condição de preço de emergência (30% OFF) deve ser aplicada
+    const isPrecoEmergencia = modo === 'emergencia' || humanizadoPrecoEmergencia === true || precoEmergencia === true || payload.isPrecoEmergencia === true || modo === 'humanizado_emergencia';
 
     // Detecta saudação personalizada por gênero ou horário
     const gender = detectGenderByName(clienteNome);
@@ -325,7 +330,7 @@ export async function generateProposal(payload = {}) {
     const valorMedioNum = Number(payload.valorMedio || payload.valorMedioNum || 0);
     const duracaoMediaNum = Number(payload.duracaoMedia || 0);
 
-    // MALÍCIA E ANÁLISE DE COMPLEXIDADE DO PROJETO
+    // MALÍCIA E ANÁLISE DE COMPLEXIDADE DO PROJETO E DEMANDA SOLICITADA
     const fullTextSearch = `${titulo} ${descricao} ${categoria} ${(Array.isArray(habilidades) ? habilidades.join(' ') : habilidades)}`.toLowerCase();
 
     const isVideoOrMotion = fullTextSearch.includes('vídeo') || fullTextSearch.includes('video') ||
@@ -348,70 +353,48 @@ export async function generateProposal(payload = {}) {
     const isBigSystem = fullTextSearch.includes('sistema') || fullTextSearch.includes('saas') || fullTextSearch.includes('erp') || fullTextSearch.includes('crm') || fullTextSearch.includes('full stack') || fullTextSearch.includes('fullstack') || fullTextSearch.includes('banco de dados') || fullTextSearch.includes('aplicativo e site');
     const isLandingOrSite = (fullTextSearch.includes('landing page') || fullTextSearch.includes('landing') || fullTextSearch.includes('site') || fullTextSearch.includes('institucional') || fullTextSearch.includes('wordpress') || fullTextSearch.includes('elementor') || fullTextSearch.includes('página de vendas') || fullTextSearch.includes('pagina de vendas') || fullTextSearch.includes('página de captura') || fullTextSearch.includes('pagina de captura')) && !isVideoOrMotion;
 
-    // Define faixas inteligentes mínimas e máximas de precificação
-    let precoMinimoEsperado = 350;
-    let precoMaximoEsperado = 600;
-    let prazoSugeridoEsperado = 4;
+    // Definição flexível de referência de precificação e prazo
+    let precoReferenciaBase = 350;
+    let prazoReferenciaBase = 4;
 
     if (valorMedioNum > 0) {
-        // Se a plataforma possui valor médio dos concorrentes, calcula faixa competitiva proporcional
-        if (modo === 'emergencia') {
-            precoMinimoEsperado = Math.max(56, Math.round(valorMedioNum * 0.70));
-            precoMaximoEsperado = Math.max(56, Math.round(valorMedioNum * 0.75));
+        // REGRA PRIMÁRIA: Se a plataforma tem valor médio dos concorrentes, baseie-se na média como sempre foi!
+        if (isPrecoEmergencia) {
+            precoReferenciaBase = Math.max(56, Math.round(valorMedioNum * 0.70));
         } else {
-            precoMinimoEsperado = Math.max(56, Math.round(valorMedioNum * 0.85));
-            precoMaximoEsperado = Math.max(56, Math.round(valorMedioNum * 0.95));
+            precoReferenciaBase = Math.max(56, Math.round(valorMedioNum * 0.90));
         }
+
         if (duracaoMediaNum > 0) {
-            // REGRA: Se for landing page ou site e o tempo médio já é curto (ex: até 5 dias), MANTENHA o tempo médio
             if (isLandingOrSite && duracaoMediaNum <= 5) {
-                prazoSugeridoEsperado = Math.max(1, duracaoMediaNum);
-            } else if (isVideoOrMotion && duracaoMediaNum <= 4) {
-                // Vídeos e animações com IA são produzidos com extrema agilidade
-                prazoSugeridoEsperado = Math.max(1, Math.min(duracaoMediaNum, 3));
+                prazoReferenciaBase = Math.max(1, duracaoMediaNum);
+            } else if (isPrecoEmergencia) {
+                prazoReferenciaBase = Math.max(1, Math.round(duracaoMediaNum * 0.50));
             } else {
-                prazoSugeridoEsperado = modo === 'emergencia' ? Math.max(1, Math.round(duracaoMediaNum * 0.50)) : Math.max(1, Math.round(duracaoMediaNum * 0.70));
+                prazoReferenciaBase = Math.max(1, Math.round(duracaoMediaNum * 0.70));
             }
         }
     } else {
-        // Quando o valor médio for desconhecido, ancora na complexidade do projeto
+        // REGRA SECUNDÁRIA: Quando NÃO houver valor médio dos concorrentes, a IA avalia a demanda solicitada
         if (isSimpleDesign) {
-            precoMinimoEsperado = 60;
-            precoMaximoEsperado = 90;
-            prazoSugeridoEsperado = 1;
+            precoReferenciaBase = 70;
+            prazoReferenciaBase = 1;
         } else if (isVideoOrMotion) {
-            // Vídeos curtos com IA (1 a 3 minutos, animações em quadro branco, reels, locução e edição)
-            precoMinimoEsperado = modo === 'emergencia' ? 180 : 250;
-            precoMaximoEsperado = modo === 'emergencia' ? 280 : 450;
-            prazoSugeridoEsperado = modo === 'emergencia' ? 2 : 3;
+            precoReferenciaBase = isPrecoEmergencia ? 220 : 350;
+            prazoReferenciaBase = 3;
         } else if (isDesignGeneral) {
-            precoMinimoEsperado = modo === 'emergencia' ? 120 : 180;
-            precoMaximoEsperado = modo === 'emergencia' ? 200 : 350;
-            prazoSugeridoEsperado = modo === 'emergencia' ? 1 : 2;
+            precoReferenciaBase = isPrecoEmergencia ? 150 : 250;
+            prazoReferenciaBase = 2;
         } else if (isBigSystem) {
-            precoMinimoEsperado = modo === 'emergencia' ? 1200 : 1800;
-            precoMaximoEsperado = modo === 'emergencia' ? 2400 : 3800;
-            prazoSugeridoEsperado = 12;
+            precoReferenciaBase = isPrecoEmergencia ? 1800 : 2800;
+            prazoReferenciaBase = 12;
         } else if (isEcommerce) {
-            precoMinimoEsperado = 900;
-            precoMaximoEsperado = 1800;
-            prazoSugeridoEsperado = 10;
+            precoReferenciaBase = isPrecoEmergencia ? 950 : 1400;
+            prazoReferenciaBase = 10;
         } else if (isLandingOrSite) {
-            precoMinimoEsperado = modo === 'emergencia' ? 280 : 450;
-            precoMaximoEsperado = modo === 'emergencia' ? 450 : 650;
-            prazoSugeridoEsperado = 4;
+            precoReferenciaBase = isPrecoEmergencia ? 320 : 500;
+            prazoReferenciaBase = 4;
         }
-    }
-
-    // Se vier sugestões calculadas pelo algoritmo da extensão no payload, respeita
-    if (payload.sugestaoMin && Number(payload.sugestaoMin) > 0) {
-        precoMinimoEsperado = Number(payload.sugestaoMin);
-    }
-    if (payload.sugestaoMax && Number(payload.sugestaoMax) > 0) {
-        precoMaximoEsperado = Number(payload.sugestaoMax);
-    }
-    if (payload.sugestaoPrazo && Number(payload.sugestaoPrazo) > 0) {
-        prazoSugeridoEsperado = Number(payload.sugestaoPrazo);
     }
 
     // Monta o prompt do sistema ultra-calibrado
@@ -426,12 +409,15 @@ DIRETRIZES FUNDAMENTAIS DO FREELANCER (RAFAEL PITA):
 
 ${valorManualDefinido ? `🚨 VALOR FIXADO PELO FREELANCER (PRIORIDADE ABSOLUTA):
 O freelancer determinou o valor exato de R$ ${valorManualDefinido},00.
-Você DEVE utilizar exatamente esse valor ({b}R$ ${Number(valorManualDefinido).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}{/b}) no JSON ('valorFinal') e no corpo da proposta. NÃO calcule nem altere este valor!` : `🚨 REGRA DE PRECIFICAÇÃO CONFORME MÉDIA E COMPLEXIDADE:
-- Valor Médio dos Concorrentes: ${valorMedioNum > 0 ? `R$ ${valorMedioNum},00` : 'Desconhecido'}
-- Prazo Médio dos Concorrentes: ${duracaoMediaNum > 0 ? `${duracaoMediaNum} dias` : 'Desconhecido'}
-- FAIXA COMPETITIVA CALCULADA: Proponha um valor estritamente entre {b}R$ ${precoMinimoEsperado},00 e R$ ${precoMaximoEsperado},00{/b} (prazo de cerca de {b}${prazoSugeridoEsperado} dias{/b}).
-- REGRA DE OURO DE PRAZO PARA LANDING PAGE E SITE: Se for Landing Page ou Site Institucional e a duração média dos concorrentes já for curta (até 5 dias), MANTENHA exatamente a duração média informada (${duracaoMediaNum > 0 ? duracaoMediaNum : prazoSugeridoEsperado} dias). Não force prazos irreais de 1 ou 2 dias que possam soar amadores ou impossíveis para o cliente.
-- PROIBIÇÃO DE VALOR IRRISÓRIO: R$ 56 a R$ 90 é EXCLUSIVO para micro-design (vetorização ou banner). NUNCA proponha menos de R$ 250 para qualquer projeto web, dev ou sistema.`}
+Você DEVE utilizar exatamente esse valor ({b}R$ ${Number(valorManualDefinido).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}{/b}) no JSON ('valorFinal') e no corpo da proposta. NÃO calcule nem altere este valor!` : `🚨 REGRA DE PRECIFICAÇÃO FLEXÍVEL (MÉDIA DOS CONCORRENTES + DEMANDA SOLICITADA):
+- REFERÊNCIA PRIMÁRIA: Se o projeto tiver 'Valor Médio dos Concorrentes' (${valorMedioNum > 0 ? `R$ ${valorMedioNum},00` : 'Desconhecido na página'}), você DEVE se basear prioritariamente nessa média dos concorrentes como sempre foi!
+  * ${isPrecoEmergencia ? 'CONDIÇÃO DE PREÇO DE EMERGÊNCIA ATIVA (30% OFF): Aplique cerca de 30% de desconto sobre a média dos concorrentes (faixa em torno de 70% da média).' : 'CONDIÇÃO DE PREÇO PADRÃO / COMPETITIVO: Proponha um valor competitivo em torno da média dos concorrentes (geralmente entre 85% e 100% da média), ajustando conforme a demanda solicitada.'}
+- SENSIBILIDADE À DEMANDA SOLICITADA: Analise criticamente o briefing do cliente!
+  * Se a demanda solicitada for complexa, com muitos entregáveis, telas, integrações ou exigências especiais, ajuste o valor para cima em relação à base.
+  * Se a demanda solicitada for enxuta, pontual ou rápida de fazer com suas ferramentas e IA, proponha um valor mais agressivo e competitivo para fechar rápido.
+- QUANDO A MÉDIA FOR DESCONHECIDA (projeto novo sem lances de concorrentes): Estime o valor com base na demanda solicitada (referência base sugerida: R$ ${precoReferenciaBase},00 | prazo base: ${prazoReferenciaBase} dias), mantendo sempre coerência de mercado sem alucinar valores irreais.
+- REGRA DE OURO DE PRAZO: Se for Landing Page ou Site Institucional e a duração média dos concorrentes já for curta (até 5 dias), MANTENHA exatamente a duração média (${duracaoMediaNum > 0 ? duracaoMediaNum : prazoReferenciaBase} dias).
+- PISO LEGAL ABSOLUTO DA PLATAFORMA: R$ 56,00. NUNCA proponha menos de R$ 56,00 em nenhum caso.`}
 
 ${prazoManualDefinido ? `🚨 PRAZO FIXADO PELO FREELANCER (PRIORIDADE ABSOLUTA):
 O freelancer determinou o prazo exato de ${prazoManualDefinido} dias.
@@ -489,8 +475,8 @@ ESTRUTURA OBRIGATÓRIA DO MODO HUMANIZADO:
    - Indique o portfólio com humildade e autoridade: "Caso queira conferir alguns dos meus trabalhos anteriores, o link está aqui: ${portfolioUrl}"
 4. Abertura para Conversar e Estimativa Prévia:
    - "Se tiver interesse, estou super à disposição para conversarmos mais sobre os detalhes do projeto no chat ou em uma chamada rápida."
-   - Apresente a estimativa com precisão absoluta: "Segue uma estimativa prévia de investimento de {b}R$ ${precoMinimoEsperado},00{/b}, para ser entregue com calma e dedicação em cerca de {b}${prazoSugeridoEsperado} dias{/b}."
-   - É EXPRESSAMENTE PROIBIDO inventar valores fora da faixa informada (R$ ${precoMinimoEsperado},00 a R$ ${precoMaximoEsperado},00).
+   - Apresente a estimativa prévia de forma fluida e direta: "Segue uma estimativa prévia de investimento de {b}R$ X,00{/b}, para ser entregue com calma e dedicação em cerca de {b}Y dias{/b}." (Onde X é o mesmo 'valorFinal' e Y é o mesmo 'prazoDias' que você definiu para o projeto).
+   - Se houver média de concorrência, o valor deve se basear nela como sempre foi, ${isPrecoEmergencia ? 'aplicando a condição especial de preço de emergência (cerca de 30% de desconto sobre a média)' : 'ajustando conforme a complexidade da demanda solicitada no briefing'}.
 5. Gatilho de Confiança:
 > Minha meta é obter 5 estrelas, então você tem meu total comprometimento.
 6. Fechamento Acolhedor:
@@ -552,39 +538,38 @@ Retorne EXCLUSIVAMENTE um objeto JSON válido (sem markdown de bloco):
     const isManualValor = Boolean(valorManualDefinido);
     const valorNumerico = Number(finalValue || 0);
 
-    // Se NÃO for valor manual do freelancer, aplica a proteção de faixa, média e TETO MÁXIMO
+    // Se NÃO for valor manual do freelancer, valida sem engessar a IA:
     if (!isManualValor) {
-        if (isSimpleDesign) {
-            // Em vetorização ou banners simples, piso entre 56 e 90
-            if (valorNumerico < 56 || valorNumerico > 150) {
-                finalValue = String(precoMinimoEsperado);
-            }
-        } else {
-            // Em qualquer projeto de vídeo, design, site, landing page ou sistema:
-            // 1. Proibido propor menos que precoMinimoEsperado
-            if (valorNumerico < precoMinimoEsperado) {
-                console.warn(`[proposalAiService] Valor gerado (R$ ${valorNumerico}) abaixo do piso justo calculado (R$ ${precoMinimoEsperado}). Ajustando.`);
-                finalValue = String(precoMinimoEsperado);
-            }
-            // 2. BLINDAGEM CONTRA ALUCINAÇÃO DE VALORES ESTRATOSFÉRICOS (ex: R$ 5.556,00):
-            // Se o projeto não for um SaaS/ERP ou E-commerce grande, trava no teto da faixa
-            if (!isBigSystem && !isEcommerce && precoMaximoEsperado > 0) {
-                const tetoMaximoSeguro = Math.round(precoMaximoEsperado * 1.25);
-                if (valorNumerico > tetoMaximoSeguro) {
-                    console.warn(`[proposalAiService] Alucinação detectada: Valor gerado (R$ ${valorNumerico}) acima do teto seguro (R$ ${tetoMaximoSeguro}). Travando em R$ ${precoMaximoEsperado}.`);
-                    finalValue = String(precoMaximoEsperado);
-                }
-            }
+        // 1. Piso legal obrigatório do 99Freelas: R$ 56,00
+        if (valorNumerico < 56) {
+            finalValue = isSimpleDesign ? '60' : '56';
+        }
+
+        // 2. Proteção contra anomalia de concatenação residual (ex: 5556):
+        if (finalValue.includes('5556')) {
+            console.warn('[proposalAiService] Anomalia 5556 detectada. Ajustando para o valor de referência base:', precoReferenciaBase);
+            finalValue = String(precoReferenciaBase);
+        }
+
+        // 3. Se for micro-design simples (1 vetorização / 1 banner):
+        if (isSimpleDesign && valorNumerico > 150) {
+            finalValue = '70';
+        }
+
+        // 4. Se a média for desconhecida e não for sistema grande ou e-commerce:
+        if (valorMedioNum === 0 && !isBigSystem && !isEcommerce && valorNumerico > 1200) {
+            console.warn(`[proposalAiService] Valor gerado (R$ ${valorNumerico}) sem média de concorrentes. Ajustando para referência base: ${precoReferenciaBase}`);
+            finalValue = String(precoReferenciaBase);
         }
     }
 
     // Piso mínimo legal do 99Freelas: R$ 56,00
     if (!finalValue || Number(finalValue) < 56) {
-        finalValue = isSimpleDesign ? '60' : String(precoMinimoEsperado);
+        finalValue = isSimpleDesign ? '60' : '56';
     }
 
     if (!finalDeadline || Number(finalDeadline) <= 0) {
-        finalDeadline = duracaoMediaNum > 0 ? String(duracaoMediaNum) : String(prazoSugeridoEsperado);
+        finalDeadline = duracaoMediaNum > 0 ? String(duracaoMediaNum) : String(prazoReferenciaBase);
     }
 
     // Sanitiza o texto gerado e garante que o valorFinal e o prazoDias batam 100% com o texto

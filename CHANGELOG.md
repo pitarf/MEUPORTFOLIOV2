@@ -2,6 +2,14 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.68.0] - 2026-11-05
+
+### Aprimorado (Preço de Emergência no Modo Humanizado e Flexibilização de Precificação)
+* **Preço de Emergência Humanizado (`src/services/proposalAiService.js`)**:
+  * Suporte nativo aos parâmetros `humanizadoPrecoEmergencia`, `precoEmergencia` e `isPrecoEmergencia` para aplicação do desconto especial de 30% sobre a média de concorrentes no modo humanizado.
+  * Ancoragem primária na média de concorrentes da plataforma como padrão de equilíbrio de mercado.
+  * Validação pós-geração que evita engessamentos da IA e bloqueia anomalias de concatenação residual (ex: 5556).
+
 ## [1.67.0] - 2026-11-04
 
 ### Aprimorado (Calibragem para Vídeos/Motion com IA e Blindagem de Teto Máximo)

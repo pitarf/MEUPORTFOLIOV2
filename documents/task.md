@@ -2,6 +2,13 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Preço de Emergência no Modo Humanizado e Flexibilização de Precificação (`proposalAiService.js`)**:
+  - Objetivo: Suportar o desconto de emergência (30% sobre o valor médio) também para o modo humanizado, garantindo flexibilidade na precificação da IA ancorada na média dos concorrentes.
+  - Implementações:
+    - Suporte aos parâmetros `humanizadoPrecoEmergencia`, `precoEmergencia` e `isPrecoEmergencia`.
+    - Ancoragem na média com desconto inteligente em caso de emergência ou ajuste proporcional por complexidade.
+    - Validação refinada sem engessar a IA e com proteção contra anomalias residuais.
+
 - [x] **Calibragem para Vídeos/Motion com IA e Blindagem de Teto Máximo (`proposalAiService.js`, `guia_precificacao_prazos.md`)**:
   - Objetivo: Calibrar a precificação e a apresentação no modo humanizado para demandas audiovisuais (vídeos, animações, quadros brancos, reels e motion) e criar trava de teto máximo para evitar alucinações de valores estratosféricos (ex: R$ 5.556,00).
   - Implementações:
