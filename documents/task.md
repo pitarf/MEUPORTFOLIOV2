@@ -2,6 +2,87 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Redesign Anti-Slop Completo da Hamburgueria (`BurgerHero.jsx`, `BurgerHeader.jsx`, `BurgerTrustBar.jsx`, `BurgerMenu.jsx`, `BurgerDifferentials.jsx`, `BurgerCombos.jsx`, `BurgerLocation.jsx`, `BurgerTestimonials.jsx`, `BurgerFaq.jsx`, `BurgerFinalCta.jsx`, `BurgerFloatingWhatsApp.jsx`)**:
+  - Objetivo: Eliminar completamente o aspecto genérico/"meme" (emojis soltos, gradientes de circo, caixas flutuantes cobrindo fotos e slogans vazios), elevando a página ao padrão de estúdio gastronômico internacional contemporâneo (baseado em `design-taste-frontend` e `frontend-design`).
+  - Implementações Realizadas:
+    - Paleta sóbria em preto carvão profundo (`#0C0A09`), ardósia quente (`#12100E`) e acentos dourados (`#F59E0B`).
+    - Ficha técnica real de açougue e panificação (corte, pão, queijo, ponto).
+    - Molduras fotográficas em proporção 4:5 limpas, sem caixas flutuantes poluidoras.
+    - Cardápio com diagramação de restaurante autêntico e comparativo honesto de economia contra apps de entrega.
+    - Microinterações refinadas com física de mola no `framer-motion`.
+  - Validação Automatizada: Build de produção Vite executado com código 0 (sucesso absoluto).
+
+- [x] **Instalação da Skill de Framer Motion & Enriquecimento com Animações Fluidas (`framer-motion`, `BurgerHero.jsx`, `BarbershopHero.jsx`, `DentalHero.jsx`, `PsychologyHero.jsx`)**:
+  - Objetivo: Instalar formalmente a skill de engenharia de animações modernas `framer-motion` e enriquecer as 4 novas landing pages com física de molas (springs), revelações escalonadas (fade-up) e badges com movimento suave.
+  - Implementações Realizadas:
+    - Criação da skill `C:\Users\rfpit\.gemini\config\skills\framer-motion\SKILL.md` baseada nas diretrizes do catálogo oficial.
+    - Animações de entrada, botões com feedback háptico (`whileHover`, `whileTap`) e badges flutuantes em `BurgerHero.jsx`, `BarbershopHero.jsx`, `DentalHero.jsx` e `PsychologyHero.jsx`.
+    - Build de produção Vite executado com código 0 (sucesso absoluto).
+
+- [x] **Renderização Confiável de QR Code PIX Client-Side (`QrCodeImage.jsx`, `InvoicePixModal.jsx`, `InvoicePdfModal.jsx`, `ClientSubscriptionPortal.jsx`, `pixPayloadGenerator.js`)**:
+  - Objetivo: Corrigir a falha de imagem quebrada do QR Code PIX no modal de faturas e no portal do cliente, eliminando a dependência do serviço externo instável `api.qrserver.com`.
+  - Implementações Realizadas:
+    - Instalação e integração do pacote oficial `qrcode` (`npm install qrcode`).
+    - Criação do componente `src/components/common/QrCodeImage.jsx` com geração local ultrarrápida (menos de 5ms), suporte nativo a Base64 e Copia e Cola, resolução Retina 2x e tratamento de erros.
+    - Atualização do modal administrativo `InvoicePixModal.jsx`.
+    - Atualização do modal de emissão e impressão de PDF `InvoicePdfModal.jsx` com suporte a `crossOrigin="anonymous"`.
+    - Atualização do Portal do Assinante `ClientSubscriptionPortal.jsx`.
+    - Atualização de `src/utils/pixPayloadGenerator.js` com a nova função assíncrona `generatePixQrCodeDataUrl`.
+  - Validação Automatizada: Build de produção com Vite executado com código 0 (sucesso absoluto).
+
+- [x] **Landing Page Ultra-Premium para Hamburgueria Artesanal & Gastrobar (`BurgerPage.jsx`, `burgerData.js`, `burgerProspectUtils.js`, `src/components/burger/`)**:
+  - Objetivo: Criar a landing page definitiva de alta conversão para hamburguerias artesanais, smash burgers e gastrobares gastronômicos, com foco em pedidos diretos no WhatsApp (fugindo das taxas de 27% dos apps de entrega), fotos de altíssimo apelo de apetite e compatibilidade integral com o Google Maps Scraper e CRM.
+  - Implementações Realizadas:
+    - Base de dados completa (`src/data/burgerData.js`) com perfil demonstrativo "Iron Burger Artesanal", cardápio categorizado (Smash Burgers, Gourmet 200g, Entradas & Porções, Sobremesas & Milkshakes, Chopps & Bebidas), combos com desconto real, avaliações Google 4.9 e políticas de entrega térmica expressa.
+    - Utilitários dinâmicos (`src/utils/burgerProspectUtils.js`) com `applyBurgerOverrides` suportando query params (?nome=...&whatsapp=...&cidade=...&bairro=...), higienização de nomes e geração de links de WhatsApp com mensagens pré-formatadas para pedidos individuais e combos.
+    - Componentes modulares dedicados (`src/components/burger/`): `BurgerHeader`, `BurgerHero`, `BurgerTrustBar`, `BurgerMenu`, `BurgerCombos`, `BurgerDifferentials`, `BurgerLocation`, `BurgerTestimonials`, `BurgerFaq`, `BurgerFinalCta`, `BurgerFooter` e `BurgerFloatingWhatsApp`.
+    - Estética Gourmet Street / Dark Culinary em carvão defumado (#0C0A09, #1C1917), chamas em laranja brasa (#EA580C, #F97316) e amarelo cheddar (#EAB308), contraste impecável e cards responsivos mobile-first.
+    - Rotas `/hamburgueria`, `/hamburgueria/:slug`, `/burger`, `/burger/:slug` e `/modelo-hamburgueria` registradas no `src/App.jsx`.
+  - Validação Automatizada: Build de produção Vite executado com código 0 (sucesso absoluto), gerando chunk otimizado `BurgerPage-3a1f56a5.js` (81.67 kB / gzip: 20.67 kB).
+
+- [x] **Landing Page Ultra-Premium para Consultório de Psicologia & Saúde Mental (`PsychologyPage.jsx`, `psychologyData.js`, `psychologyProspectUtils.js`, `src/components/psychology/`)**:
+  - Objetivo: Criar a landing page definitiva para psicólogos clínicos e consultórios de saúde mental, unindo rigor ético (CFP), estética serena e acolhedora (Warm Empathic Organic), prova social humanizada e suporte a prospecção dinâmica via Google Maps e CRM.
+  - Implementações Realizadas:
+    - Base de dados completa (`src/data/psychologyData.js`) com perfil demonstrativo ("Dra. Juliana Mendes", CRP 05/67890, especialização em TCC, modalidades presencial e online, avaliações Google 5.0).
+    - Utilitários dinâmicos (`src/utils/psychologyProspectUtils.js`) com `applyPsychologyOverrides` para query params, higienização de nomes, geração de mapas interativos e roteiros de pitch comercial.
+    - Componentes modulares (`src/components/psychology/`): `PsychologyHeader`, `PsychologyHero`, `PsychologyTrustBar`, `PsychologySpecialties`, `PsychologyHowItWorks`, `PsychologyAbout`, `PsychologySpace`, `PsychologyTestimonials`, `PsychologyFaq`, `PsychologyFinalCta`, `PsychologyFooter`, `PsychologyFloatingWhatsApp`, `PsychologyProspectDrawer` e `PsychologySeo`.
+    - Conformidade integral com o Código de Ética Profissional do Psicólogo (Art. 9º sigilo) e integração com o CVV 188 para suporte emergencial.
+    - Registro e teste das rotas `/psicologo`, `/psicologo/:slug`, `/psicologia`, `/consultorio-psicologia` no `App.jsx`.
+  - Validação Automatizada: Build de produção com Vite executado com código 0 (sucesso absoluto), gerando chunk otimizado de 81 kB sem avisos impeditivos.
+
+- [x] **Execução da Migration do Banco de Dados PostgreSQL na VPS Oracle Cloud (`supabase/migrations/20261105_crm_leads_and_tracking.sql`, `migrations/15_create_crm_leads_and_tracking.sql`)**:
+  - Objetivo: Aplicar e validar em ambiente de produção na VPS (`144.22.173.125`) as tabelas de CRM e rastreamento de e-mails (`crm_leads` e `crm_email_logs`), garantindo índices, foreign keys e permissões para o PostgREST / Supabase.
+  - Implementações Realizadas:
+    - Execução do script SQL de migração no container `portfolio-db` via túnel seguro SSH autenticado com chave privada.
+    - Criação das tabelas `public.crm_leads` e `public.crm_email_logs` com integridade relacional (`ON DELETE CASCADE`), UUID v4 padrão e índices otimizados para busca e ordenação.
+    - Concessão de privilégios (`GRANT ALL`) para as roles `anon`, `authenticated` e `authenticator`.
+    - Configuração de políticas de Row Level Security (RLS) seguras para usuários autenticados e operações via anon/serviço.
+    - Recarga do cache do PostgREST via `NOTIFY pgrst, 'reload schema';` e reinicialização segura do container `portfolio-api`.
+    - Teste de consulta em tempo real via `@supabase/supabase-js` confirmando comunicação bem-sucedida com retorno status 200.
+  - Validação Automatizada: Inspeção de schema via `\d` confirmando existência das tabelas, índices e policies; chamada de query via API PostgREST validada com sucesso.
+
+- [x] **CRM de Prospecção Ativa, Cold Mail com SMTP Hostinger e Rastreamento de E-mails (`ManageCrmLeads.jsx`, `crmService.js`, `emailSenderService.js`, `tracking_and_mailer.cjs`, `20261105_crm_leads_and_tracking.sql`)**:
+  - Objetivo: Expandir o ecossistema de captação ativa para envio de propostas por e-mail, rastreando visualizações e cliques em tempo real através de um CRM completo com funil Kanban, métricas de fechamento e integração nativa com o SMTP da Hostinger.
+  - Implementações Realizadas:
+    - Interface administrativa do CRM (`/admin/crm`) com alternador entre Kanban e Tabela, filtros por nicho/cidade e métricas em tempo real.
+    - Motor de rastreamento com pixel 1x1 (`/track/open/:token`) e links redirecionadores (`/track/click/:token`).
+    - Despachador SMTP compatível com Hostinger (`smtp.hostinger.com:465 SSL`).
+    - Template HTML responsivo de cold mail para nutricionistas com proposta de valor clara e link demonstrativo.
+    - Botão de importação direta de leads minerados pelo scraper do Google Maps.
+    - Migration SQL com tabelas `crm_leads` e `crm_email_logs`.
+  - Validação Automatizada: Servidor de tracking testado com abertura registrada de pixel, build de produção concluído com 100% de sucesso.
+
+- [x] **Integração do Google Maps Scraper Kit & Pipeline Automatizado de Prospecção (`tools/scrapers/google-maps-scraper-kit/`, `tools/scrapers/prospect_pipeline.cjs`)**:
+  - Objetivo: Automatizar a captação de nutricionistas (e advogados) reais diretamente do Google Maps sem custos de API, filtrando apenas leads sem website e gerando links demonstrativos dinâmicos com mensagens de WhatsApp prontas para disparo comercial.
+  - Implementações Realizadas:
+    - Clone e inicialização do `google-maps-scraper-kit` utilizando o Google Chrome nativo do sistema e API local na porta 8080.
+    - Criação do script de pipeline `tools/scrapers/prospect_pipeline.cjs` com geocodificação automática, filtros `--no-website` e `--has-phone`.
+    - Higienização algorítmica de nomes próprios ("Dra. Roberta Valsechy", "Dr. Lucas Borda", etc.).
+    - Geração automática de links dinâmicos para os modelos `/nutricionista` e `/nutrivida`.
+    - Redação contextual da mensagem de pitch com a nota real e número de avaliações do Google Maps e link `https://wa.me/...`.
+    - Testes reais validados para os bairros Ipanema e Barra da Tijuca no Rio de Janeiro.
+  - Validação Automatizada: Execução via Node.js gerando relatórios em JSON e Markdown na pasta `tools/scrapers/output/`.
+
 - [x] **Ondas Orgânicas Assimétricas Contínuas Sem Deformação Oval, Eliminação de Bordas Concorrentes e Auditoria Visual (`NutritionWaveDivider.jsx`, `NutritionHero.jsx`, `NutritionServices.jsx`, `NutritionFinalCta.jsx`, `NutritionTrustBar.jsx`, `NutritionHowItWorks.jsx`, `NutritionDifferentials.jsx`, `NutritionLocation.jsx`, `NutritionFooter.jsx`, `inspect_nutrition_screens.cjs`)**:
   - Objetivo: Substituir formatos ovais e cúpulas simétricas por ondas orgânicas reais assimétricas com vale e crista idênticas à referência do Consultas Brasil, eliminando linhas retas concorrentes (`border-b`, `border-t`), gaps brancos e validando pixel a pixel via screenshots automatizados Playwright.
   - Implementações Realizadas:

@@ -2,6 +2,151 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.78.0] - 2026-11-06
+
+### Melhorado (Redesign Anti-Slop e Elevação de Alto Padrão da Hamburgueria)
+* **Aplicação Rigorosa de `design-taste-frontend` & `frontend-design`**:
+  * **Eliminação de Vícios Gráficos e Clichês**: Removidos emojis nos cards de ingredientes, gradientes chamativos em laranja/vermelho, caixas flutuantes poluindo fotos e frases genéricas de IA.
+  * **Estética Contemporânea de Gastrobar**: Fundo em preto carvão profundo (`#0C0A09` e `#12100E`), acentos discretos em dourado mostarda (`#F59E0B`), tipografia forte com proporções editoriais e contrastes nítidos.
+  * **Fotografia Gastronômica Respeitada**: Imagens de produtos reais ocupando molduras limpas com proporção 4:5, sem caixas soltas sobrepostas e com especificações de cortes técnicos no rodapé ("Blend 180g moído no dia", "Fermentação lenta 36h", "Crosta smash a 260°C").
+  * **Refatoração Completa dos Módulos**:
+    * `BurgerHero.jsx`: Layout amplo e direto, tabela de ficha técnica limpa e CTAs com microinterações refinadas do Framer Motion.
+    * `BurgerHeader.jsx`: Banner superior de status da cozinha discreto com indicador em verde, navbar em glassmorphism fosco e tipografia marcante.
+    * `BurgerTrustBar.jsx`: Linha de autoridade com métricas objetivas (tempo médio, notas Google, embalagem respirável).
+    * `BurgerMenu.jsx`: Cardápio com visual de restaurante internacional, cards limpos com especificações e botão de pedido direto no WhatsApp.
+    * `BurgerDifferentials.jsx`: Grade editorial com etapas técnicas do processo de cozinha (01 a 06).
+    * `BurgerCombos.jsx`: Cards com comparativo honesto de economia contra plataformas de entrega.
+    * `BurgerLocation.jsx`, `BurgerTestimonials.jsx`, `BurgerFaq.jsx`, `BurgerFinalCta.jsx`, `BurgerFloatingWhatsApp.jsx`: Padronização visual uniforme, séria e profissional.
+
+## [1.77.0] - 2026-11-06
+
+### Adicionado (Instalação da Framer Motion Skill & Animações Interativas Modernas)
+* **Skill Oficial de Animações Físicas (`framer-motion`)**:
+  * Instalada e configurada a skill em `C:\Users\rfpit\.gemini\config\skills\framer-motion\SKILL.md`.
+  * Diretrizes de performance rígidas: Aceleração obrigatória por hardware/GPU (`transform`, `opacity`), proibição de animação em layout thrashing (`width`, `height`), física de molas (`spring physics`, `stiffness`, `damping`), scroll reveal otimizado (`whileInView`, `viewport={{ once: true }}`) e microinterações de clique/hover.
+* **Aplicação Prática nas Novas Landing Pages**:
+  * `BurgerHero.jsx`: Efeito escalonado de entrada (fade-up), badge com pulso contínuo, microinterações táteis nos botões de CTA e flutuação em mola dos badges de avaliação do Google e entrega quentinha.
+  * `BarbershopHero.jsx`: Revelação suave de proposta de valor, flutuação contínua do selo 4.9 do Google Maps e Chopp Artesanal, botões com feedback de elevação e escala ao toque.
+  * `DentalHero.jsx`: Animações delicadas para estética clínica, badges flutuantes de scanner 3D e notas do Google sem sensação de estaticidade.
+  * `PsychologyHero.jsx`: Transições serenas, efeito aveludado na fotografia médica e pulso suave nas modalidades de atendimento presencial e online.
+* **Validação de Build**:
+  * Build com Vite executado com sucesso e zero erros de compilação.
+
+## [1.76.0] - 2026-11-06
+
+### Corrigido (Renderização Client-Side de QR Code PIX 100% Confiável)
+* **Eliminação de Dependência Externa Instável (`api.qrserver.com`)**:
+  * O QR Code do modal de Fatura PIX & Pagamento vinha falhando por bloqueio de rede, CORS ou extensões de AdBlocker no navegador devido ao fallback antigo via endpoint externo `https://api.qrserver.com/v1/create-qr-code/...`.
+  * Instalado o pacote oficial `qrcode` (`npm install qrcode`) no ecossistema da aplicação.
+  * Criado o componente reutilizável `src/components/common/QrCodeImage.jsx`, que converte o payload Copia e Cola do PIX para uma Data URL (`data:image/png;base64,...`) em tempo real no cliente com alta nitidez (escala 2x), margem controlada, estados visuais de carregamento e acessibilidade nativa.
+* **Refatoração dos Componentes de Pagamento & Portal**:
+  * `InvoicePixModal.jsx`: Substituída a tag `<img>` antiga por `<QrCodeImage />`, garantindo exibição instantânea do QR Code tanto quando há imagem em base64 prévia do gateway quanto a partir do código Copia e Cola.
+  * `InvoicePdfModal.jsx`: Integrado `<QrCodeImage />` com suporte a `crossOrigin="anonymous"` seguro para geração e exportação de PDF de faturas via `html2pdf.js` sem corrupção de canvas.
+  * `ClientSubscriptionPortal.jsx`: Atualizado o portal público do assinante com o novo componente, evitando imagens quebradas na visualização de faturas em aberto.
+  * `src/utils/pixPayloadGenerator.js`: Adicionada a função assíncrona `generatePixQrCodeDataUrl(payload, options)` para geração programática rápida de Data URLs com padrão EMV/Bacen.
+
+## [1.75.0] - 2026-11-06
+
+### Adicionado (Landing Page Ultra-Premium de Hamburgueria Artesanal & Gastrobar)
+* **Arquitetura Visual e Design System UI/UX Pro Max para Gastronomia & Hamburgueria**:
+  * Estética: *Bold Gourmet Street / Vibrant Dark Culinary & Appetite Appeal*.
+  * Paleta cromática saborosa: Fundo em carvão e ardósia defumada (`#0C0A09`, `#1C1917`, `#18181B`), chamas em laranja brasa e vermelho apetite (`#EA580C`, `#F97316`, `#DC2626`), amarelo ouro e cheddar melt (`#EAB308`, `#CA8A04`), texto em creme suave e branco puro (`#FEF2F2`, `#FFFFFF`).
+  * Alto contraste, tipografia impactante, cards gastronômicos com fotografia suculenta em alta resolução e badges de apetite ("Blend 100% Angus", "Pão Brioche Selado na Manteiga", "Cheddar Inglês Melt", "Fogo Vivo & Defumação").
+  * Engenharia focada em conversão para pedidos diretos no WhatsApp, livrando o restaurante das taxas abusivas de 27% dos marketplaces de entrega.
+* **Módulo de Dados e Parametrização Dinâmica (`src/data/burgerData.js`, `src/utils/burgerProspectUtils.js`)**:
+  * `burgerData.js`: Perfil demonstrativo "Iron Burger Artesanal", cardápio categorizado completo (Smash Burgers, Gourmet 200g, Entradas & Porções como Batatas Rústicas com Cheddar e Bacon, Sobremesas & Shakes, Chopps Artesanais na Torneira e Bebidas), Combos Promocionais com economia explícita, avaliação Google 4.9 (+500 reviews), horários e raio de delivery.
+  * `burgerProspectUtils.js`: Utilitário `applyBurgerOverrides` suportando query params (`?nome=...&whatsapp=...&cidade=...&bairro=...&tempo=...&desconto=...`), higienização de nomes, geração de links automáticos para wa.me com mensagens pré-formatadas para pedidos rápidos individuais e combos.
+* **Componentes Modulares Gastronômicos (`src/components/burger/`)**:
+  * `BurgerHeader.jsx`: Navbar fixa com banner de chapa quente, status de atendimento, links âncora suaves e botão de pedido direto no WhatsApp.
+  * `BurgerHero.jsx`: Headline de impacto gastronômico, pílulas de diferenciais na manteiga e queijo melt, CTAs duplos de alta conversão e fotografia apetitosa com badges flutuantes.
+  * `BurgerTrustBar.jsx`: 5 pilares de credibilidade operacional (+18.000 Burgers Entregues, 4.9 no Google, Delivery em até 35 min, Embalagem Térmica Anti-Vazamento e Zero Taxas iFood).
+  * `BurgerMenu.jsx`: Cardápio categorizado interativo com busca em tempo real, badges de picância/veggie, ingredientes destacados e botão de pedido imediato no WhatsApp por item.
+  * `BurgerCombos.jsx`: Seção especial de combos promocionais com comparativo de economia contra aplicativos tradicionais.
+  * `BurgerDifferentials.jsx`: Os 6 segredos culinários da casa (Carne fresca moída no dia, pão de fermentação natural, queijo legítimo, embalagem respirável, fogo a carvão e preço justo).
+  * `BurgerLocation.jsx`: Área de atendimento, horários de funcionamento, bairros atendidos, formas de pagamento e mapa geográfico interativo.
+  * `BurgerTestimonials.jsx`: Prova social com avaliações verificadas do Google Maps e pratos preferidos dos clientes.
+  * `BurgerFaq.jsx`: Acordeão moderno tirando dúvidas sobre tempo de entrega, pagamento (VR/VA, Pix, Cartão) e personalizações.
+  * `BurgerFinalCta.jsx`: Chamada final de alta urgência gastronômica com botão gigante de pedido.
+  * `BurgerFooter.jsx`: Rodapé com horários, redes sociais, endereço e direitos autorais.
+  * `BurgerFloatingWhatsApp.jsx`: Botão flutuante estilizado em brasa com pulso suave, aviso de chapa aberta e mensagem automática pré-preenchida.
+* **Página Mestre e Roteamento (`src/pages/burger/BurgerPage.jsx`, `src/App.jsx`)**:
+  * Suporte nativo às rotas `/hamburgueria`, `/hamburgueria/:slug`, `/burger`, `/burger/:slug` e `/modelo-hamburgueria`.
+  * Barra superior e gaveta interativa para operadores de prospecção simularem qualquer hamburgueria em tempo real.
+  * Metadados de SEO e Open Graph via `react-helmet-async`.
+* **Validação de Build**:
+  * Build com Vite executado com sucesso e zero erros de compilação (`BurgerPage-3a1f56a5.js`).
+
+### Adicionado (Landing Page Ultra-Premium para Consultório de Psicologia e Saúde Mental)
+* **Arquitetura Visual e Design System UI/UX Pro Max para Psicologia & Saúde Mental**:
+  * Estética: *Warm Empathic Organic / Serene Soft Earthy*, projetada para transmitir acolhimento humano, alívio de ansiedade e rigor científico.
+  * Paleta cromática serena: Verde Sálvia & Esmeralda Suave (`#059669`, `#10B981`), nuances de Lavanda e Violeta Profundo (`#4C1D95`, `#8B5CF6`), fundos aconchegantes em Off-White / Marfim / Areia (`#FAF8F5`, `#FAF5FF`) e tipografia em ardósia suave (`#1E293B`, `#334155`).
+  * Total conformidade com o Código de Ética Profissional do Psicólogo (CFP), ênfase no sigilo profissional inegociável (Art. 9º) e aviso de emergência imediata (CVV 188).
+* **Motor de Dados e Parametrização Maleável (`src/data/psychologyData.js`, `src/utils/psychologyProspectUtils.js`)**:
+  * `psychologyData.js`: Dados demonstrativos completos ("Dra. Juliana Mendes", CRP 05/67890, especialização em TCC pelo IPUB/UFRJ, sessões presenciais em Ipanema/RJ e online com autorização E-Psi para Brasil e Exterior, avaliação Google 5.0 com +48 depoimentos éticos, áreas de atuação e perguntas frequentes).
+  * `psychologyProspectUtils.js`: Algoritmo `applyPsychologyOverrides` para sobreposições dinâmicas via query params (`?nome=...&whatsapp=...&cidade=...&bairro=...&crp=...`), gerador de embeds do Google Maps, construtor de links do WhatsApp contextualizados e roteiros de abordagem consultiva (`PSYCHOLOGY_PITCH_SCRIPTS`).
+* **Componentes Modulares Especializados (`src/components/psychology/`)**:
+  * `PsychologyHeader.jsx`: Navbar serena com identificação profissional, selo de regularidade CRP, links âncora e botão de agendamento.
+  * `PsychologyHero.jsx`: Headline acolhedora, modalidades presencial e online, badges de sigilo, prova social Google 5.0 e foto profissional humanizada.
+  * `PsychologyTrustBar.jsx`: 4 pilares de confiança (Sigilo Profissional Absoluto, Prática Baseada em Evidências, Acolhimento Sem Julgamentos e Atendimento Global E-Psi).
+  * `PsychologySpecialties.jsx`: Áreas de atuação com sintomatologia do cotidiano e CTAs específicos para cada demanda (Ansiedade/Pânico, Burnout/Depressão, Relacionamentos, Autoestima, Luto/Transições, Regulação Emocional).
+  * `PsychologyHowItWorks.jsx`: Linha do tempo em 3 passos descomplicados para diminuir a fricção do primeiro contato.
+  * `PsychologyAbout.jsx`: Apresentação sensível unindo rigor acadêmico à postura humana e afetuosa.
+  * `PsychologySpace.jsx`: Fotos do consultório físico (isolamento acústico, iluminação regulável) e orientações acolhedoras para teleconsulta privada.
+  * `PsychologyTestimonials.jsx`: Relatos de transformação emocional preservando integralmente o anonimato ético do paciente conforme o CFP.
+  * `PsychologyFaq.jsx`: Acordeão para desmistificar a psicoterapia (primeira sessão, eficácia online, confidencialidade, duração/frequência e reembolso).
+  * `PsychologyFinalCta.jsx`: Encorajamento ao autocuidado com chamada de WhatsApp em tom sereno.
+  * `PsychologyFooter.jsx`: Rodapé com número de inscrição no CFP, suporte de emergência 24h (CVV 188) e links institucionais.
+  * `PsychologyFloatingWhatsApp.jsx`: Botão discreto e acolhedor para mensagem direta.
+  * `PsychologyProspectDrawer.jsx`: Painel flutuante para operadores e SDRs customizarem qualquer psicólogo minerado no Google Maps em tempo real.
+  * `PsychologySeo.jsx`: Metadados dinâmicos e schema.org estruturado (`MedicalBusiness`, `Person`) para indexação de alta autoridade.
+* **Rotas e Página Principal (`src/pages/psychology/PsychologyPage.jsx`, `src/App.jsx`)**:
+  * Rotas integradas no Vite: `/psicologo`, `/psicologo/:slug`, `/psicologia`, `/psicologia/:slug`, `/consultorio-psicologia` e `/modelo-psicologia`.
+
+### Adicionado (Execução e Aplicação da Migration PostgreSQL na VPS Oracle Cloud)
+* **Aplicação da Migration 15 (`supabase/migrations/20261105_crm_leads_and_tracking.sql`, `migrations/15_create_crm_leads_and_tracking.sql`)**:
+  * Execução do script SQL de migração diretamente no container `portfolio-db` da VPS (`144.22.173.125`) via SSH seguro.
+  * Criação oficial das tabelas `public.crm_leads` e `public.crm_email_logs` com integridade relacional em cascata (`ON DELETE CASCADE`), UUIDs aleatórios padrão e índices de performance para busca por token, status, e-mail e geolocalização.
+  * Configuração de concessão de privilégios (`GRANT ALL`) para as roles `anon`, `authenticated` e `authenticator`.
+  * Criação de políticas de segurança de linha (RLS) transparentes para leitura e escrita autenticada e via serviços de backend.
+  * Notificação e recarga do cache de esquemas do PostgREST (`NOTIFY pgrst, 'reload schema';`) e reinicialização segura do container `portfolio-api`.
+  * Validação em tempo real via cliente Supabase confirmando comunicação ativa sem erros (status 200).
+
+## [1.72.0] - 2026-11-05
+
+### Adicionado (CRM de Prospecção Ativa, Cold Mail com SMTP Hostinger e Rastreamento de E-mails)
+* **Painel Administrativo do CRM (`src/pages/admin/ManageCrmLeads.jsx`, `src/App.jsx`, `AdminLayout.jsx`)**:
+  * Implementação da interface visual completa de gestão de leads com suporte a visualização em **Funil Kanban** e **Tabela Avançada**.
+  * Estágios nativos do funil: *Descobertos*, *Com E-mail*, *E-mail Enviado*, *E-mail Aberto*, *Clicou na Demo*, *Em Negociação* e *Fechado / Ganho*.
+  * Cards de métricas consolidadas em tempo real: Total de Leads, E-mails Enviados, Taxa de Abertura (%), Taxa de Cliques (CTR %) e Fechamentos (R$).
+  * Botão de importação inteligente direta dos leads minerados pelo Google Maps Scraper Kit em 1 clique.
+  * Modal interativo de pré-visualização de e-mail e disparo com formulário de credenciais SMTP Hostinger.
+* **Servidor de Rastreamento & Despacho SMTP (`tools/email_server/tracking_and_mailer.cjs`)**:
+  * Servidor HTTP local leve rodando na porta `3005` com endpoints dedicados:
+    * `/track/open/:token`: Entrega pixel invisível 1x1 GIF (`image/gif`) sem cache e registra timestamp, IP e User-Agent da abertura.
+    * `/track/click/:token?url=...`: Registra o clique na demonstração e efetua redirecionamento HTTP 302 imediato para a landing page personalizada.
+    * `/api/metrics`: Retorna estatísticas consolidadas de engajamento em JSON.
+    * `/api/send-email`: Disparador direto via protocolo SMTP TLS/SSL para servidores Hostinger (`smtp.hostinger.com:465`).
+* **Camada de Serviços & Templates (`src/services/crmService.js`, `src/services/emailSenderService.js`)**:
+  * `crmService.js`: Gerenciamento do ciclo de vida dos leads com persistência no Supabase e fallback seguro em cache local.
+  * `emailSenderService.js`: Template responsivo HTML ultra-premium para nutrição com interpolação dinâmica (`{{nome}}`, `{{bairro}}`, `{{nota_google}}`, `{{link_demo}}`), botão chamativo e rodapé ético anti-spam.
+* **Migration SQL (`supabase/migrations/20261105_crm_leads_and_tracking.sql`)**:
+  * Criação das tabelas `crm_leads` e `crm_email_logs` com índices otimizados e políticas de segurança RLS para administradores.
+
+## [1.71.0] - 2026-11-05
+
+### Adicionado (Integração do Google Maps Scraper Kit & Pipeline Automatizado de Prospecção)
+* **Instalação e Configuração da Engine Google Maps Scraper Kit (`tools/scrapers/google-maps-scraper-kit/`)**:
+  * Clone e configuração da engine local leve em Python padrão (sem Docker obrigatório e sem custos de API oficial do Google Places).
+  * Detecção e acoplamento automático ao Google Chrome nativo do sistema operacional (`C:\Program Files\Google\Chrome\Application\chrome.exe`).
+  * Execução local via HTTP REST API e web UI em `http://localhost:8080`.
+* **Pipeline Integrado de Prospecção Ativa (`tools/scrapers/prospect_pipeline.cjs`)**:
+  * Varredura automatizada com filtros de alta conversão: extrai apenas profissionais com número de telefone/WhatsApp e **sem website próprio** (`--no-website`, `--has-phone`, `--lang pt`, `--country br`).
+  * Higienização e tratamento inteligente de nomes próprios e pronomes de tratamento (`Dra.` / `Dr.`), expurgando termos genéricos de SEO de nomes de fichas.
+  * Identificação automática de bairros e cidades brasileiras.
+  * Geração instantânea de links demonstrativos dinâmicos com parâmetros de URL (`/nutricionista?nome=...&whatsapp=...&cidade=...` e `/nutrivida?...`).
+  * Redação automática de mensagens de abordagem consultivas e humanizadas, com botão direto de disparo para WhatsApp (`https://wa.me/...`).
+  * Exportação simultânea em formato JSON estruturado e Relatório Executivo em Markdown (`tools/scrapers/output/`).
+
 ## [1.70.0] - 2026-11-05
 
 ### Aprimorado (Ondas Orgânicas Assimétricas Contínuas Sem Deformação Oval, Eliminação de Bordas Concorrentes e Auditoria Visual)

@@ -24,6 +24,7 @@ import {
     Globe
 } from 'lucide-react';
 import html2pdf from 'html2pdf.js';
+import QrCodeImage from '@/components/common/QrCodeImage';
 import { fetchPricingSettings } from '@/services/budgetService';
 import { getSubscriptionById, ensureInvoicePix } from '@/services/maintenanceService';
 import {
@@ -568,23 +569,14 @@ const InvoicePdfModal = ({
                                     <div className="flex flex-col sm:flex-row items-center gap-4">
                                         {/* QR Code */}
                                         <div className="p-2 bg-white rounded-lg border border-slate-200 shadow-sm flex-shrink-0">
-                                            {pixQrImage ? (
-                                                <img
-                                                    src={
-                                                        pixQrImage.startsWith('data:')
-                                                            ? pixQrImage
-                                                            : `data:image/png;base64,${pixQrImage}`
-                                                    }
+                                            {(pixQrImage || pixCode) ? (
+                                                <QrCodeImage
+                                                    value={pixCode}
+                                                    imageBase64={pixQrImage}
+                                                    size={128}
+                                                    className="w-32 h-32 object-contain"
                                                     alt="QR Code PIX"
                                                     crossOrigin="anonymous"
-                                                    className="w-32 h-32 object-contain"
-                                                />
-                                            ) : pixCode ? (
-                                                <img
-                                                    src={`https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodeURIComponent(pixCode)}`}
-                                                    alt="QR Code PIX"
-                                                    crossOrigin="anonymous"
-                                                    className="w-32 h-32 object-contain"
                                                 />
                                             ) : (
                                                 <div className="w-32 h-32 flex items-center justify-center text-xs text-slate-400 text-center p-2">

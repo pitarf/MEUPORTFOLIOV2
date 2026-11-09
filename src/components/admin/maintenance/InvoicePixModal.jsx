@@ -30,6 +30,7 @@ import {
 } from 'lucide-react';
 import { generatePortalUrl } from '@/utils/whatsappMessages';
 import { ensureInvoicePix } from '@/services/maintenanceService';
+import QrCodeImage from '@/components/common/QrCodeImage';
 
 /**
  * Modal para exibicao e compartilhamento do QR Code PIX e chave Copia e Cola.
@@ -278,17 +279,13 @@ const InvoicePixModal = ({
                                 <span className="text-xs font-semibold text-foreground">Gerando QR Code PIX oficial...</span>
                                 <span className="text-[11px] text-muted-foreground mt-1">Conectando aos servidores de pagamento</span>
                             </div>
-                        ) : qrImageBase64 ? (
-                            <img
-                                src={qrImageBase64.startsWith('data:') ? qrImageBase64 : `data:image/png;base64,${qrImageBase64}`}
-                                alt="QR Code PIX para pagamento"
+                        ) : (qrImageBase64 || pixCode) ? (
+                            <QrCodeImage
+                                value={pixCode}
+                                imageBase64={qrImageBase64}
+                                size={208}
                                 className="w-52 h-52 object-contain rounded-lg shadow-sm border border-border/40"
-                            />
-                        ) : pixCode ? (
-                            <img
-                                src={`https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(pixCode)}`}
-                                alt="QR Code PIX"
-                                className="w-52 h-52 object-contain rounded-lg shadow-sm"
+                                alt="QR Code PIX para pagamento"
                             />
                         ) : (
                             <div className="w-52 h-52 flex flex-col items-center justify-center text-muted-foreground text-center p-4 bg-muted/30 rounded-lg">

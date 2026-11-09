@@ -4,7 +4,100 @@ Este documento detalha o funcionamento técnico da infraestrutura de SEO Dinâmi
 
 ---
 
-## 1. Arquitetura de Temas (Claro e Escuro)
+## 24. Skill de Animações Modernas & Framer Motion (`framer-motion`)
+
+O projeto utiliza a biblioteca `framer-motion` orientada pela skill instalada em `C:\Users\rfpit\.gemini\config\skills\framer-motion\SKILL.md`.
+
+### 24.1 Regras de Performance e Fluidez
+1. **Aceleração por Hardware (GPU)**: Apenas propriedades de transformação geométrica e transparência (`transform`, `opacity`, `scale`, `rotate`) são animadas, preservando a taxa de 60 FPS em navegadores móveis e desktops.
+2. **Física de Molas (*Spring Physics*)**: Transições naturais utilizando `stiffness` e `damping` para eliminar a sensação de animações duras ou robóticas.
+3. **Flutuação de Elementos (*Floating Badges*)**: Selos do Google Maps, notas de avaliações e tags de benefícios utilizam flutuação senoidal contínua (`animate={{ y: [0, -8, 0] }}`).
+
+---
+
+## 23. Renderização Client-Side de QR Code PIX (`QrCodeImage.jsx`)
+
+Para garantir confiabilidade absoluta e eliminar imagens quebradas causadas por bloqueadores de anúncios, falhas de conectividade e restrições de CORS da API legada `api.qrserver.com`, o sistema adota geração 100% no navegador (Client-Side) com a biblioteca `qrcode`.
+
+### 23.1 Componente `src/components/common/QrCodeImage.jsx`
+O componente unifica a exibição de QR Code no modal administrativo de faturas, no gerador de PDF e no Portal do Assinante:
+* **Entradas Suportadas**:
+  * `value`: Código Copia e Cola / Payload EMV do PIX (ex: `00020126...`).
+  * `imageBase64`: String Base64 vinda de gateways como Asaas ou Mercado Pago.
+  * `size`: Dimensões em pixels (largura e altura).
+  * `crossOrigin`: Suporte a `anonymous` para exportação segura em PDF via `html2pdf.js` sem corromper o canvas.
+* **Resolução 2x**: Renderiza o canvas em escala dobrada antes de converter para Data URL (`data:image/png;base64,...`), assegurando nitidez em telas Retina e impressões físicas.
+* **Velocidade de Execução**: Menos de 5 milissegundos para gerar o PNG na memória RAM, sem realizar nenhuma chamada HTTP externa.
+
+### 23.2 Utilitário `src/utils/pixPayloadGenerator.js`
+Foi adicionada a função auxiliar assíncrona:
+```javascript
+import { generatePixQrCodeDataUrl } from '@/utils/pixPayloadGenerator';
+
+const dataUrl = await generatePixQrCodeDataUrl(payloadPix, { size: 240 });
+```
+
+---
+
+## 22. Arquitetura da Landing Page de Hamburgueria Artesanal & Gastrobar (`/hamburgueria`)
+
+A landing page de Hamburgueria Artesanal foi concebida sob o Design System **Bold Gourmet Street / Vibrant Dark Culinary & Appetite Appeal**, com foco estrito em conversão para pedidos diretos no WhatsApp (livrando o comerciante das taxas de 27% do iFood) e compatibilidade com o ecossistema de captação ativa via Google Maps Scraper e CRM de Prospecção.
+
+### 22.1 Estrutura de Arquivos
+* `src/data/burgerData.js`: Dados demonstrativos completos ("Iron Burger Artesanal", cardápio com Smash Burgers, Burgers Gourmet de 200g, Entradas & Porções como Batata com Cheddar e Bacon, Sobremesas & Shakes, Chopps Artesanais, Combos com desconto explícito, avaliações Google 4.9, horários de entrega e salão, e raio de atendimento).
+* `src/utils/burgerProspectUtils.js`: Utilitários de higienização de nomes (`cleanBurgerBusinessName`), sobreposições em tempo real (`applyBurgerOverrides`), construtor de links do WhatsApp com mensagens pré-formatadas para itens e combos (`buildWhatsAppLink`, `buildItemOrderMessage`, `buildComboOrderMessage`).
+* `src/pages/burger/BurgerPage.jsx`: Página mestre que renderiza todos os blocos gastronômicos, gerencia o estado da gaveta de simulação de prospecção e injeta metadados com `react-helmet-async`.
+* `src/components/burger/`:
+  * `BurgerHeader.jsx`: Navbar fixa em glassmorphism escuro com banner dinâmico de status ("Chapa Quente"), links âncora e botão de pedido no WhatsApp.
+  * `BurgerHero.jsx`: Headline gastronômica de impacto, pílulas de ingredientes artesanais, CTAs duplos de alta conversão e foto de hambúrguer suculento com selos de autoridade.
+  * `BurgerTrustBar.jsx`: Faixa de credibilidade (+18.000 lanches entregues, nota 4.9 no Google, entrega em até 35 min, embalagem térmica anti-umidade e economia direta no WhatsApp).
+  * `BurgerMenu.jsx`: Cardápio categorizado interativo com filtro de busca em tempo real, badges de picância/vegetariano, ingredientes e botão "Pedir no WhatsApp" com preço e nome do item embutido.
+  * `BurgerCombos.jsx`: Seção de combos promocionais comparando o valor no aplicativo com o desconto do pedido direto.
+  * `BurgerDifferentials.jsx`: Os 6 diferenciais gastronômicos da casa (Blend Angus moído no dia, pão de fermentação natural, queijo cheddar melt, picles artesanal, fogo na lenha e embalagem respirável).
+  * `BurgerLocation.jsx`: Endereço físico, horários de atendimento, bairros com entrega expressa, formas de pagamento (Pix, Cartão, VR/VA) e mapa Google Maps interativo.
+  * `BurgerTestimonials.jsx`: Prova social autêntica com fotos e comentários verificados do Google Maps.
+  * `BurgerFaq.jsx`: Acordeão intuitivo com dúvidas frequentes sobre entrega, formas de pagamento e opções personalizadas.
+  * `BurgerFinalCta.jsx`: Chamada final em brasa de alta urgência gastronômica com botão gigante de pedido.
+  * `BurgerFooter.jsx`: Rodapé com contatos, horários, links de navegação e créditos institucionais.
+  * `BurgerFloatingWhatsApp.jsx`: Botão flutuante em brasa/laranja com badge de chapa aberta e pulso suave para mobile e desktop.
+
+### 22.2 Parametrização Dinâmica (Query Params)
+A rota suporta personalização instantânea compatível com o Google Maps Scraper:
+`https://dominio.com.br/hamburgueria?nome=Bull+Burger+Artesanal&whatsapp=21988887777&cidade=Niterói&bairro=Icaraí&tempo=30+min&desconto=20%+OFF`
+
+---
+
+## 21. Arquitetura da Landing Page de Psicologia & Saúde Mental (`/psicologo`)
+
+A landing page de Psicologia foi projetada com base no Design System **Warm Empathic Organic / Serene Soft Earthy**, atendendo às normas éticas do Conselho Federal de Psicologia (CFP).
+
+### 21.1 Estrutura de Arquivos
+* `src/data/psychologyData.js`: Base de dados completa com informações da psicóloga demonstrativa ("Dra. Juliana Mendes", CRP 05/67890, abordagem TCC, modalidades presencial e online, avaliações Google 5.0, horários e fotos de alta resolução).
+* `src/utils/psychologyProspectUtils.js`: Utilitários de higienização de nomes, geração de mapas interativos, construtor de links de WhatsApp pré-preenchidos e aplicação de sobreposições em tempo real (`applyPsychologyOverrides`).
+* `src/pages/psychology/PsychologyPage.jsx`: Página mestre que renderiza todos os blocos sequenciais e sincroniza parâmetros de busca da URL com o estado local.
+* `src/components/psychology/`:
+  * `PsychologyHeader.jsx`: Navbar serena com selo de regularidade CRP, links âncora e botão de agendamento.
+  * `PsychologyHero.jsx`: Chamada humanizada e empática, modalidades, avaliação Google 5.0 e foto de alta resolução.
+  * `PsychologyTrustBar.jsx`: 4 pilares de confiança (Sigilo Profissional Absoluto, Prática Baseada em Evidências, Acolhimento Sem Julgamentos e Atendimento Global E-Psi).
+  * `PsychologySpecialties.jsx`: Áreas de atuação com sintomatologia cotidiana e botões direcionados de WhatsApp.
+  * `PsychologyHowItWorks.jsx`: Linha do tempo em 3 passos para desmistificar o primeiro contato.
+  * `PsychologyAbout.jsx`: Apresentação sensível equilibrando credenciais acadêmicas e acolhimento humano.
+  * `PsychologySpace.jsx`: Fotos do consultório físico e orientações acolhedoras para teleconsulta privada.
+  * `PsychologyTestimonials.jsx`: Relatos de transformação emocional preservando integralmente o anonimato ético do paciente.
+  * `PsychologyFaq.jsx`: Acordeão para desmistificar a psicoterapia (primeira sessão, eficácia online, confidencialidade e reembolso).
+  * `PsychologyFinalCta.jsx`: Encorajamento ao autocuidado com chamada de WhatsApp em tom sereno.
+  * `PsychologyFooter.jsx`: Rodapé com número de inscrição no CFP, suporte de emergência 24h (CVV 188) e links institucionais.
+  * `PsychologyFloatingWhatsApp.jsx`: Botão discreto e acolhedor para mensagem direta.
+  * `PsychologyProspectDrawer.jsx`: Simulador flutuante para operadores e SDRs customizarem qualquer psicólogo minerado no Google Maps em tempo real.
+  * `PsychologySeo.jsx`: Metadados dinâmicos e Schema.org (`MedicalBusiness`, `Person`).
+
+### 21.2 Parametrização Dinâmica (Query Params)
+A rota aceita qualquer combinação de parâmetros na URL:
+`https://dominio.com.br/psicologo?nome=Dra.+Camila+Albuquerque&crp=06/98765&whatsapp=11999998888&cidade=São+Paulo&bairro=Vila+Mariana`
+
+---
+
+
 
 O projeto foi reestruturado para suportar a alternância entre o **Tema Claro (Light Mode)**  -  padrão comercial corporativo focado em legibilidade e conversão  -  e o **Tema Escuro (Dark Mode)**, preservando a imersão visual original.
 
@@ -955,6 +1048,39 @@ Desenvolvida para viabilizar a expansao comercial em parceria com nutricionistas
    - Disponivel nas rotas publicas `/criacao-site-nutricionista` e `/sites-para-nutricionistas`.
    - Estrutura completa de conversao comercial: proposta de valor de R$ 297 a vista (ou 12x de R$ 29,70), mostruario com links para os modelos ao vivo, cronometro regressivo com persistencia em localStorage e integracao direta com o WhatsApp do Rafael Pita.
 
+### 13.45 Arquitetura do CRM de Prospecção & Rastreamento de E-mails (`ManageCrmLeads.jsx`, `crmService.js`, `tracking_and_mailer.cjs`)
+
+Para gerenciar o funil de fechamento de landing pages e automatizar o cold mail com rastreamento em tempo real:
+
+1. **Camada de Dados (`crm_leads` e `crm_email_logs`)**:
+   - Tabela `crm_leads`: armazena dados minerados (nome, email, telefone, WhatsApp, nota Google, status do funil, links de demonstração, contadores de abertura e clique).
+   - Tabela `crm_email_logs`: armazena histórico de cada envio, token exclusivo de rastreamento, timestamps de abertura (`opened_at`) e clique (`clicked_at`).
+   - Gerenciamento reativo via `src/services/crmService.js` com fallback automático em `localStorage` para tolerância a falhas.
+2. **Servidor de Tracking & Despacho SMTP (`tools/email_server/tracking_and_mailer.cjs`)**:
+   - **Pixel de Abertura**: Rota `/track/open/:token` que entrega um GIF 1x1 transparente (RFC standard 43 bytes) com headers `no-store` e registra a abertura, IP e User-Agent.
+   - **Link de Clique**: Rota `/track/click/:token?url=...` que computa o engajamento e faz redirect 302 imediato para a URL da demonstração.
+   - **Protocolo SMTP Hostinger**: Comunicação TLS direta via porta 465 com `smtp.hostinger.com`, autenticação `AUTH LOGIN` em base64 e montagem multipart/alternative (texto e HTML).
+3. **Interface Administrativa (`src/pages/admin/ManageCrmLeads.jsx`)**:
+   - Visualização em Funil Kanban (*Descobertos*, *Com E-mail*, *E-mail Enviado*, *E-mail Aberto*, *Clicou na Demo*, *Em Negociação*, *Fechado / Ganho*).
+   - Cards de métricas com taxas de conversão automáticas (Open Rate % e CTR %).
+   - Modal de pré-visualização e disparo de e-mails em tempo real.
+
+### 13.44 Pipeline de Prospecção Ativa via Google Maps Scraper Kit (`tools/scrapers/`)
+
+Para automatizar a captação de clientes sem custos com APIs oficiais do Google, foi integrado o kit de scraping local e desenvolvido o pipeline de enriquecimento de leads:
+
+1. **Arquitetura da Engine Local (`tools/scrapers/google-maps-scraper-kit/`)**:
+   - Engine Python leve baseada no `serve.py` que roda como daemon HTTP na porta `8080`.
+   - Utiliza a instalação nativa do Google Chrome (`C:\Program Files\Google\Chrome\Application\chrome.exe`) em modo headless.
+   - Script CLI `scripts/scrape.py` para execução de consultas com geocodificação via OpenStreetMap Nominatim.
+2. **Pipeline de Enriquecimento (`tools/scrapers/prospect_pipeline.cjs`)**:
+   - **Comando de execução**: `node tools/scrapers/prospect_pipeline.cjs "<nicho>" "<bairro, cidade>"`
+   - **Filtros automáticos**: `--has-phone`, `--no-website`, `--lang pt`, `--country br`.
+   - **Higienização de dados**: Extração de nomes próprios humanizados (com prefixação de `Dra.` ou `Dr.`), sanitização de telefones para formato WhatsApp internacional (`55 + DDD + número`) e extração do bairro.
+   - **Geração de URLs dinâmicas**: Montagem automática de query params (`nome`, `whatsapp`, `cidade`, `bairro`, `endereco`) apontando para `/nutricionista` e `/nutrivida`.
+   - **Geração de Pitch**: Mensagem com saudação contextual, citação da nota média e quantidade de avaliações no Google, e link de disparo direto `https://wa.me/...`.
+   - **Saídas**: Arquivos JSON enriquecidos e Relatórios em Markdown em `tools/scrapers/output/`.
+
 ### 13.42 Design System Moderno de Nutrição : Referência NutriVida (`src/components/nutrition/modern/`)
 
 Desenvolvido para oferecer um layout de altíssima conversão baseado na referência visual NutriVida, com paleta médica em azul ciano, azul marinho profundo e contrastes acessíveis.
@@ -1162,6 +1288,27 @@ Para garantir estética fluida de alta tecnologia e blindagem contra imagens que
    - Resolução da divergência de âncora na página `/nutrivida`: o elemento da seção de atendimento estava como `id="locais-atendimento"`, enquanto a barra de navegação chamava `href="#localizacao"`.
    - Adicionado `id="localizacao"` com a classe `scroll-mt-20 md:scroll-mt-24` para compensar a barra de menu fixa, e mantida a âncora `id="locais-atendimento"` para compatibilidade retroativa.
    - O componente `ScrollToTop.jsx` foi otimizado para monitorar o `hash` e rolar suavemente até o elemento de destino (`element.scrollIntoView({ behavior: 'smooth' })`).
+
+### 13.51 Arquitetura do CRM de Prospecção Ativa, Tracking de E-mails & Migrations na VPS (`ManageCrmLeads.jsx`, `crmService.js`, `tracking_and_mailer.cjs`, `20261105_crm_leads_and_tracking.sql`)
+
+1. **Estrutura de Dados e Migrations PostgreSQL**:
+   - As tabelas foram migradas e implantadas no PostgreSQL 15 da VPS Oracle Cloud (`portfolio-db`):
+     - `public.crm_leads`: Armazena leads prospectados (nome, e-mail, telefone, WhatsApp, nicho, cidade, bairro, endereço, nota do Google Maps, status do funil, contador de e-mails, aberturas, cliques e valor da oportunidade).
+     - `public.crm_email_logs`: Armazena o histórico individual de cada disparo com token único de rastreamento (`tracking_token`), destinatário, remetente, assunto, template, status, data de abertura, data de clique, IP e User-Agent.
+   - **Políticas de Acesso (RLS)**: Habilitadas com permissão de leitura/escrita para as roles `authenticated` e `anon`, permitindo sincronização fluida entre o painel administrativo, o servidor de tracking e scripts locais.
+   - **PostgREST Schema Reload**: Atualizado com comando `NOTIFY pgrst, 'reload schema';` e reinicialização segura do container `portfolio-api`.
+
+2. **Serviço de Rastreamento (Pixel & Redirecionamento 302)**:
+   - Rodando em daemon Node.js (`tools/email_server/tracking_and_mailer.cjs`) na porta 3005:
+     - `/track/open/:token`: Retorna GIF 1x1 transparente de 43 bytes sem cache (`Cache-Control: no-store, no-cache, must-revalidate`) e grava abertura no banco.
+     - `/track/click/:token?url=...`: Registra o clique e faz o redirecionamento 302 imediato para a URL da demonstração.
+     - `/api/send-email`: Conexão direta com o servidor SMTP Hostinger via TLS/SSL na porta 465.
+
+3. **Frontend do CRM Administrativo (`/admin/crm`)**:
+   - Construído com alternador entre Visão em Funil (Kanban interativo em 6 colunas) e Visão em Tabela com busca em tempo real.
+   - Botão de importação em 1 clique dos relatórios de prospecção do Google Maps Scraper Kit.
+   - Modal de disparo de e-mails com pré-visualização responsiva e campos de autenticação SMTP da Hostinger.
+
 
 
 

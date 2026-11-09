@@ -29,7 +29,8 @@ import {
     Moon,
     Menu,
     X,
-    Home
+    Home,
+    Flame
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
@@ -248,6 +249,11 @@ const AdminLayout = () => {
                         title: 'Prospecção Ativa',
                         icon: Target,
                         items: [
+                            {
+                                label: 'CRM & Funil de Leads',
+                                path: '/admin/crm',
+                                icon: Flame
+                            },
                             {
                                 label: 'Radar Google Maps',
                                 path: '/admin/radar-google-maps',

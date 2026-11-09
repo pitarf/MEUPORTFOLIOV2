@@ -75,6 +75,7 @@ import {
     ensureUrlProtocol
 } from '@/utils/maintenanceFormatters';
 import InvoicePdfModal from '@/components/admin/maintenance/InvoicePdfModal';
+import QrCodeImage from '@/components/common/QrCodeImage';
 
 /**
  * Portal Publico do Assinante : Acesso sem senha para clientes de manutencao continua.
@@ -864,21 +865,13 @@ const ClientSubscriptionPortal = () => {
                                                             >
                                                                 {/* Imagem do QR Code */}
                                                                 <div className="p-3 bg-white dark:bg-zinc-950 rounded-xl border border-border inline-block mx-auto shadow-sm">
-                                                                    {inv.pix_qr_code_base64 ? (
-                                                                        <img
-                                                                            src={
-                                                                                inv.pix_qr_code_base64.startsWith('data:')
-                                                                                    ? inv.pix_qr_code_base64
-                                                                                    : `data:image/png;base64,${inv.pix_qr_code_base64}`
-                                                                            }
-                                                                            alt="QR Code PIX"
+                                                                    {(inv.pix_qr_code_base64 || inv.pix_qr_code) ? (
+                                                                        <QrCodeImage
+                                                                            value={inv.pix_qr_code}
+                                                                            imageBase64={inv.pix_qr_code_base64}
+                                                                            size={176}
                                                                             className="w-44 h-44 object-contain rounded-lg"
-                                                                        />
-                                                                    ) : inv.pix_qr_code ? (
-                                                                        <img
-                                                                            src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(inv.pix_qr_code)}`}
-                                                                            alt="QR Code PIX"
-                                                                            className="w-44 h-44 object-contain rounded-lg"
+                                                                            alt="QR Code PIX para pagamento"
                                                                         />
                                                                     ) : (
                                                                         <div className="w-44 h-44 flex items-center justify-center text-xs text-muted-foreground">

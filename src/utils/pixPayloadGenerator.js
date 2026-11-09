@@ -1,3 +1,5 @@
+import QRCode from 'qrcode';
+
 /**
  * Utilitario oficial para geracao de payloads PIX EMV (BR Code) padrao Banco Central do Brasil.
  *
@@ -147,4 +149,31 @@ export const generatePixPayload = ({
 export const getQrCodeImageUrl = (payload, size = 240) => {
     if (!payload) return '';
     return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(payload)}`;
+};
+
+/**
+ * Gera uma Data URL (base64) em alta resolução do QR Code no cliente de forma síncrona/assíncrona.
+ * Não depende de requisições de rede ou APIs de terceiros.
+ *
+ * @param {string} payload Payload Copia e Cola
+ * @param {object} [options] Opções de renderização
+ * @returns {Promise<string>} Data URL da imagem em PNG
+ */
+export const generatePixQrCodeDataUrl = async (payload, options = {}) => {
+    if (!payload) return '';
+    const size = options.size || 240;
+    try {
+        return await QRCode.toDataURL(payload.trim(), {
+            width: size * 2,
+            margin: options.margin !== undefined ? options.margin : 1,
+            errorCorrectionLevel: 'M',
+            color: {
+                dark: '#000000',
+                light: '#FFFFFF'
+            }
+        });
+    } catch (err) {
+        console.error('Erro ao gerar QR Code localmente via qrcode:', err);
+        return getQrCodeImageUrl(payload, size);
+    }
 };

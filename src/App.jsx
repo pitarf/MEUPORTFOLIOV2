@@ -45,6 +45,12 @@ const NutritionistPage = lazy(() => import('@/pages/nutrition/NutritionistPage')
 const ModernNutritionPage = lazy(() => import('@/pages/nutrition/ModernNutritionPage'));
 const NutritionSalesLandingPage = lazy(() => import('@/pages/nutrition/NutritionSalesLandingPage'));
 
+// Landing pages de demonstração comercial por nicho (Barbearia, Odontologia, Psicologia, Hamburgueria)
+const BarbershopPage = lazy(() => import('@/pages/barbershop/BarbershopPage'));
+const DentalPage = lazy(() => import('@/pages/dental/DentalPage'));
+const PsychologyPage = lazy(() => import('@/pages/psychology/PsychologyPage'));
+const BurgerPage = lazy(() => import('@/pages/burger/BurgerPage'));
+
 // Painel administrativo sob demanda (não sobrecarrega o carregamento para visitantes públicos)
 const Dashboard = lazy(() => import('@/pages/Dashboard'));
 const ManagePortfolio = lazy(() => import('@/pages/ManagePortfolio'));
@@ -61,6 +67,7 @@ const ManageVPS = lazy(() => import('@/pages/admin/ManageVPS'));
 const ManageBudgets = lazy(() => import('@/pages/admin/ManageBudgets'));
 const ManageMaintenanceSubscriptions = lazy(() => import('@/pages/admin/ManageMaintenanceSubscriptions'));
 const ManageLegalProspects = lazy(() => import('@/pages/admin/ManageLegalProspects'));
+const ManageCrmLeads = lazy(() => import('@/pages/admin/ManageCrmLeads'));
 
 /**
  * Componente principal da aplicação MeuPortfolio v2 / Rafael Pita Solutions
@@ -150,6 +157,30 @@ function App() {
                                 <Route path="/modelo-nutricao/nutrivida" element={<ModernNutritionPage />} />
                                 <Route path="/criacao-site-nutricionista" element={<NutritionSalesLandingPage />} />
                                 <Route path="/sites-para-nutricionistas" element={<NutritionSalesLandingPage />} />
+
+                                {/* Novos Modelos de Demonstração Comercial de Alto Padrão por Nicho */}
+                                <Route path="/barbearia" element={<BarbershopPage />} />
+                                <Route path="/barbearia/:slug" element={<BarbershopPage />} />
+                                <Route path="/modelo-barbearia/:slug" element={<BarbershopPage />} />
+                                <Route path="/barber/:slug" element={<BarbershopPage />} />
+                                <Route path="/dentista" element={<DentalPage />} />
+                                <Route path="/dentista/:slug" element={<DentalPage />} />
+                                <Route path="/odonto/:slug" element={<DentalPage />} />
+                                <Route path="/clinica-odontologica" element={<DentalPage />} />
+                                <Route path="/clinica-odontologica/:slug" element={<DentalPage />} />
+                                <Route path="/modelo-odontologia" element={<DentalPage />} />
+                                <Route path="/psicologo" element={<PsychologyPage />} />
+                                <Route path="/psicologo/:slug" element={<PsychologyPage />} />
+                                <Route path="/psicologia" element={<PsychologyPage />} />
+                                <Route path="/psicologia/:slug" element={<PsychologyPage />} />
+                                <Route path="/consultorio-psicologia" element={<PsychologyPage />} />
+                                <Route path="/modelo-psicologia" element={<PsychologyPage />} />
+                                <Route path="/hamburgueria" element={<BurgerPage />} />
+                                <Route path="/hamburgueria/:slug" element={<BurgerPage />} />
+                                <Route path="/burger" element={<BurgerPage />} />
+                                <Route path="/burger/:slug" element={<BurgerPage />} />
+                                <Route path="/modelo-hamburgueria" element={<BurgerPage />} />
+                                <Route path="/modelo-hamburgueria/:slug" element={<BurgerPage />} />
                                 
                                 {/* Acesso Direto ao Radar Google Maps de Prospecção */}
                                 <Route path="/radar-google-maps" element={<RadarGoogleMaps />} />
@@ -161,6 +192,7 @@ function App() {
                                     <Route path="/admin/profile" element={<Profile />} />
                                     <Route path="/admin/orcamentos" element={<ProtectedRoute adminOnly={true}><ManageBudgets /></ProtectedRoute>} />
                                     <Route path="/admin/assinaturas" element={<ProtectedRoute adminOnly={true}><ManageMaintenanceSubscriptions /></ProtectedRoute>} />
+                                    <Route path="/admin/crm" element={<ProtectedRoute adminOnly={true}><ManageCrmLeads /></ProtectedRoute>} />
                                     <Route path="/admin/radar-google-maps" element={<ProtectedRoute adminOnly={true}><RadarGoogleMaps /></ProtectedRoute>} />
                                     <Route path="/admin/prospeccao-advogados" element={<ProtectedRoute adminOnly={true}><ManageLegalProspects /></ProtectedRoute>} />
                                     <Route path="/admin/portfolio" element={<ProtectedRoute adminOnly={true}><ManagePortfolio /></ProtectedRoute>} />

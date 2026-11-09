@@ -4,7 +4,72 @@ Este guia prático ensina você a gerenciar e otimizar a presença do seu site n
 
 ---
 
-## 1. Introdução ao SEO
+## 21. Pagamento e Visualização de QR Code PIX de Faturas
+
+O sistema conta com um mecanismo ultra-rápido de renderização de QR Code PIX no próprio dispositivo, garantindo que você e seus clientes consigam visualizar o código para pagamento mesmo com bloqueadores de anúncios ativos ou conexões móveis instáveis.
+
+### 21.1 Onde Encontrar o QR Code PIX
+1. **No Painel Administrativo de Assinaturas**:
+   * Acesse **Gerenciar Assinaturas**.
+   * Localize a fatura desejada e clique no ícone do PIX.
+   * O modal **Fatura PIX & Pagamento** abrirá exibindo o QR Code em alta definição e o botão para copiar o código Copia e Cola.
+2. **Na Exportação de PDF da Fatura**:
+   * Clique em **Visualizar / Baixar Fatura em PDF**.
+   * O QR Code é incorporado diretamente ao documento gerado, permitindo que o cliente pague apontando a câmera do celular para o PDF na tela ou impresso.
+3. **No Portal Público do Assinante**:
+   * O cliente ao acessar o link público da assinatura pode expandir a fatura pendente para escanear o QR Code ou copiar o código Pix em um clique.
+
+---
+
+## 20. Como Usar a Landing Page de Hamburgueria Artesanal & Gastrobar (`/hamburgueria`)
+
+A landing page de Hamburgueria Artesanal foi desenvolvida especificamente para prospecção ativa de donos de hamburguerias, gastrobares e operações de delivery gastronômico. O objetivo principal do modelo é demonstrar ao cliente como ele pode vender diretamente pelo WhatsApp, escapando das taxas abusivas de 27% dos aplicativos tradicionais como o iFood.
+
+### 20.1 Rotas Disponíveis
+* `/hamburgueria`: Modelo padrão com a "Iron Burger Artesanal".
+* `/hamburgueria/:slug`: Suporte a slugs personalizados.
+* `/burger` ou `/modelo-hamburgueria`: Atalhos diretos amigáveis para envio rápido de propostas comerciais.
+
+### 20.2 Como Personalizar para uma Hamburgueria em Tempo Real
+1. Ao acessar `/hamburgueria`, observe a barra superior com o botão **"Simular com Outro Restaurante"**.
+2. Clique no botão para abrir a gaveta interativa de simulação.
+3. Preencha os campos com os dados do lead minerado no Google Maps:
+   - **Nome da Hamburgueria**: ex. "Fogo & Brasa Smash Burger".
+   - **Cidade**: ex. "Curitiba".
+   - **Bairro**: ex. "Batel".
+   - **WhatsApp**: ex. "41999998888".
+4. Clique em **"Aplicar Alterações Instantâneas"**. A página inteira se atualiza na hora, incluindo:
+   - O logotipo, slogan e nome nos cabeçalhos e textos.
+   - Os links de pedidos no WhatsApp com mensagens pré-formatadas contendo o nome e o preço de cada lanche.
+   - O endereço no Google Maps e as áreas de atendimento do delivery.
+5. Copie a URL gerada no navegador e envie diretamente no WhatsApp do dono da hamburgueria como proposta de alto impacto visual.
+
+---
+
+## 19. Como Usar a Landing Page de Demonstração para Psicólogos (`/psicologo`)
+
+A landing page de Psicologia foi projetada especialmente para prospecção ativa de consultórios de psicologia e saúde mental.
+
+### 19.1 Rotas Disponíveis
+* `/psicologo`: Modelo padrão com a Dra. Juliana Mendes (Ipanema/RJ).
+* `/psicologo/:slug`: Suporte a slugs personalizados.
+* `/psicologia` ou `/consultorio-psicologia`: Atalhos diretos amigáveis.
+
+### 19.2 Como Personalizar para um Lead em Tempo Real
+Ao abrir a página `/psicologo`, clique no botão flutuante **"Personalizar Demonstração"** no canto inferior esquerdo.
+1. Digite o nome da psicóloga (ex: "Dra. Renata Vasconcelos").
+2. Insira o registro do CRP (ex: "CRP 06/12345").
+3. Insira o WhatsApp para direcionamento dos botões.
+4. Ajuste a cidade, o bairro e o endereço do consultório.
+5. Clique em **"Aplicar Alterações na Tela"** para ver a mágica instantânea.
+6. Clique em **"Copiar Link Personalizado"** para gerar a URL com todos os parâmetros e enviar pelo WhatsApp ao psicólogo prospectado.
+
+### 19.3 Scripts de Abordagem Prontos
+Na aba **"Scripts de Abordagem"** dentro do simulador, você encontra roteiros empáticos prontos para colar diretamente no WhatsApp do cliente em 1 clique.
+
+---
+
+
 
 O **SEO (Search Engine Optimization)** é o conjunto de técnicas que ajuda o seu portfólio a aparecer nas primeiras posições de busca do Google de forma orgânica (gratuita). 
 
@@ -1029,6 +1094,55 @@ A página de nutricionista (`/nutricionista`) agora conta com divisores de trans
 3. **Responsividade Total**:
    - As ondas adaptam-se dinamicamente a qualquer tela de celular, tablet ou monitor desktop, mantendo nitidez vetorial sem distorção.
 
+### 19.46 CRM de Prospecção & Máquina de Cold Mail (Com Rastreamento)
+
+Agora você tem um **CRM completo de vendas integrado ao seu painel administrativo** para transformar contatos minerados do Google Maps em contratos fechados:
+
+1. **Acessando o CRM**:
+   - No menu lateral do Painel Administrativo, vá em **Prospecção Ativa ➔ CRM & Funil de Leads** (ou acesse diretamente `/admin/crm`).
+2. **Estágios do Funil (Kanban)**:
+   - 📥 **Descobertos**: Leads recém-capturados pelo scraper.
+   - ✉️ **Com E-mail**: Profissionais qualificados com endereço de e-mail pronto para abordagem.
+   - 📤 **E-mail Enviado**: Proposta disparada com a demonstração interativa exclusiva.
+   - 👁️ **E-mail Aberto**: O sistema detecta automaticamente e avisa quando o profissional leu seu e-mail!
+   - 🔗 **Clicou na Demo**: O profissional clicou no botão e visitou a landing page com o nome dele!
+   - 💬 **Em Negociação**: Lead respondeu e vocês estão alinhando detalhes ou tirando dúvidas.
+   - 🏆 **Fechado / Ganho**: Landing page vendida (registra o valor no faturamento do painel!).
+3. **Disparando E-mails com SMTP da Hostinger**:
+   - Clique no ícone de e-mail (✉️) no card de qualquer lead.
+   - Uma janela de pré-visualização abrirá mostrando o e-mail exato que a profissional receberá, com elogio às avaliações no Google e o link da demonstração montada.
+   - Insira suas credenciais de e-mail da Hostinger (`seu-email@seudominio.com.br` e sua senha de e-mail) ou deixe pré-configurado no seu arquivo `.env`.
+   - Clique em **"Disparar E-mail com Rastreamento"**.
+4. **Importando Leads do Scraper em 1 Clique**:
+   - No topo do CRM, clique em **`📥 Importar do Google Maps`** para carregar os leads minerados pelo robô diretamente no seu funil!
+
+### 19.45 Como Usar o Radar Automatizado de Prospecção no Google Maps
+
+Agora você tem um robô que varre o Google Maps em qualquer bairro ou cidade brasileira, filtra quem **não possui site** e já gera o link demonstrativo com a mensagem de WhatsApp pronta para copiar e colar:
+
+1. **Como Executar uma Busca**:
+   - Abra o terminal na pasta do projeto e execute:
+     ```bash
+     node tools/scrapers/prospect_pipeline.cjs "nutricionista" "Barra da Tijuca, Rio de Janeiro"
+     ```
+   - Você pode trocar o termo e a cidade livremente, por exemplo:
+     * `node tools/scrapers/prospect_pipeline.cjs "nutricionista" "Ipanema, Rio de Janeiro"`
+     * `node tools/scrapers/prospect_pipeline.cjs "nutricionista" "Moema, São Paulo"`
+     * `node tools/scrapers/prospect_pipeline.cjs "advogado tributario" "Centro, Rio de Janeiro"`
+
+2. **Onde Ver os Resultados**:
+   - O robô cria automaticamente uma pasta `tools/scrapers/output/` com:
+     * Um arquivo `.json` com todos os dados tratados.
+     * Um **Relatório Executivo em Markdown** (`relatorio_prospeccao_...md`).
+
+3. **Como Disparar o Pitch no WhatsApp**:
+   - Abra o relatório gerado. Para cada profissional listado, você verá:
+     * Nome da nutricionista tratado (ex: "Dra. Roberta Valsechy").
+     * Avaliação no Google (ex: ⭐ 5.0 com 65 avaliações).
+     * O link da página demonstrativa pronta com o nome e consultório dela.
+     * Um botão direto: **`📲 Abrir WhatsApp com Pitch Pré-preenchido`**.
+   - Ao clicar no link, o WhatsApp abre automaticamente com uma mensagem personalizada e humanizada, citando as avaliações reais dela no Google e convidando a ver a demonstração ao vivo!
+
 ### 19.43 Novo Modelo Visual Moderno para Nutricionistas (Referência NutriVida)
 
 Para oferecer uma opção visual ainda mais conectada às tendências de saúde privada e estética médica moderna, foi criado o conjunto de componentes **NutriVida** em `src/components/nutrition/modern/`:
@@ -1221,6 +1335,26 @@ Para tornar o design ainda mais inovador, dinâmico e agradável aos olhos:
 
 3. **Navegação Ágil até a Localização do Consultório (`#localizacao`)**:
    * O link "Localização" no topo da página NutriVida e o acesso direto via endereço `/nutrivida#localizacao` agora rolam de forma precisa e suave até a seção de consultório, horários e mapa, com margem ideal para não cobrir o título da seção.
+
+### 19.31 Novo CRM de Prospecção Ativa & Disparo de Cold Mail com Rastreamento em Tempo Real
+
+No menu administrativo, você agora conta com um CRM de Vendas completo (`/admin/crm`) para transformar contatos minerados no Google Maps em contratos fechados:
+
+1. **Funil Visual Kanban**:
+   * Acompanhe cada nutricionista ou profissional em etapas claras: *Descoberto*, *Com E-mail*, *E-mail Enviado*, *E-mail Aberto*, *Clicou na Demo*, *Em Negociação* e *Fechado*.
+   * Arraste os cards entre as colunas conforme a conversa com o cliente evolui.
+
+2. **Importação Rápida em 1 Clique**:
+   * Os relatórios gerados pelo minerador do Google Maps podem ser importados diretamente para o banco de dados oficial do seu portfólio.
+   * Todos os dados (nome, telefone, WhatsApp, nota do Google Maps, endereço e website) são preenchidos automaticamente.
+
+3. **Disparo de Cold Mail via SMTP Hostinger**:
+   * Envie propostas personalizadas diretamente do painel utilizando sua conta de e-mail profissional da Hostinger (`smtp.hostinger.com:465`).
+   * A mensagem já é pré-configurada com a proposta de valor, o link demonstrativo personalizado e a nota do Google do profissional.
+
+4. **Rastreamento de Aberturas e Cliques**:
+   * O sistema inclui um pixel invisível e links de rastreamento para que você saiba exatamente quando o profissional abriu o e-mail ou clicou na demonstração interativa.
+
 
 
 
