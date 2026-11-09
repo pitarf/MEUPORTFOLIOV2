@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import QRCode from 'qrcode';
-import { Loader2, QrCode as QrCodeIcon } from 'lucide-react';
+import React, { useState } from 'react';
+import { QRCodeSVG } from 'qrcode.react';
+import { QrCode as QrCodeIcon } from 'lucide-react';
 
 /**
- * QrCodeImage: Componente de alta confiabilidade para renderização de QR Code 100% Client-Side.
- * Elimina falhas de rede, bloqueios de ad-blockers e dependências de APIs externas (como qrserver.com).
- * 
+ * QrCodeImage: Componente de altíssima confiabilidade para renderização de QR Code PIX 100% Client-Side.
+ * Utiliza geração vetorial SVG nativa via `qrcode.react`, garantindo que o QR Code seja exibido
+ * instantaneamente em qualquer dispositivo, tela de alta densidade (Retina) ou impressão PDF,
+ * sem requisições a APIs externas e com fallback automático caso uma imagem base64 pré-gerada falhe.
+ *
  * @param {object} props
  * @param {string} [props.value] - Código Copia e Cola / Payload PIX a ser convertido
  * @param {string} [props.imageBase64] - Imagem pré-gerada em base64 vinda do gateway
@@ -22,99 +24,67 @@ export default function QrCodeImage({
     alt = 'QR Code PIX',
     crossOrigin = undefined
 }) {
-    const [dataUrl, setDataUrl] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [hasError, setHasError] = useState(false);
+    const [imageLoadError, setImageLoadError] = useState(false);
 
-    useEffect(() => {
-        let isMounted = true;
+    const cleanValue = typeof value === 'string' ? value.trim() : '';
 
-        // 1. Se já recebemos a imagem em base64 do gateway/banco de dados, usamos diretamente
-        if (imageBase64 && typeof imageBase64 === 'string' && imageBase64.trim().length > 20) {
-            const formatted = imageBase64.startsWith('data:')
-                ? imageBase64
-                : `data:image/png;base64,${imageBase64}`;
-            setDataUrl(formatted);
-            setLoading(false);
-            setHasError(false);
-            return;
-        }
+    // 1. Se recebemos uma imagem pré-gerada em base64 e ela não falhou ao carregar
+    const hasValidBase64 = Boolean(
+        !imageLoadError &&
+        imageBase64 &&
+        typeof imageBase64 === 'string' &&
+        imageBase64.trim().length > 30 &&
+        (imageBase64.startsWith('data:image') || !imageBase64.startsWith('http'))
+    );
 
-        // 2. Se temos o código Copia e Cola (payload), geramos o QR Code localmente via biblioteca `qrcode`
-        if (value && typeof value === 'string' && value.trim().length > 0) {
-            setLoading(true);
-            setHasError(false);
+    if (hasValidBase64) {
+        const formattedSrc = imageBase64.startsWith('data:')
+            ? imageBase64
+            : `data:image/png;base64,${imageBase64.trim()}`;
 
-            QRCode.toDataURL(value.trim(), {
-                width: size * 2, // Resolução 2x para nitidez em telas Retina e impressão PDF
-                margin: 1,
-                errorCorrectionLevel: 'M',
-                color: {
-                    dark: '#000000',
-                    light: '#FFFFFF'
-                }
-            })
-                .then((url) => {
-                    if (isMounted) {
-                        setDataUrl(url);
-                        setLoading(false);
-                    }
-                })
-                .catch((err) => {
-                    console.error('Falha ao gerar QR Code localmente:', err);
-                    if (isMounted) {
-                        // Fallback emergencial com endpoint público caso ocorra falha de geração
-                        setDataUrl(`https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(value)}`);
-                        setLoading(false);
-                    }
-                });
-        } else {
-            setDataUrl('');
-            setLoading(false);
-        }
+        return (
+            <img
+                src={formattedSrc}
+                alt={alt}
+                crossOrigin={crossOrigin}
+                onError={() => {
+                    console.warn('[QrCodeImage] Imagem Base64 falhou, acionando fallback SVG do payload.');
+                    setImageLoadError(true);
+                }}
+                style={{ width: size, height: size }}
+                className={`object-contain bg-white rounded-lg ${className}`}
+            />
+        );
+    }
 
-        return () => {
-            isMounted = false;
-        };
-    }, [value, imageBase64, size]);
-
-    if (loading) {
+    // 2. Renderização direta em SVG vetorial puro a partir do código Copia e Cola (100% confiável e instantâneo)
+    if (cleanValue && cleanValue.length > 5) {
         return (
             <div
                 style={{ width: size, height: size }}
-                className={`flex flex-col items-center justify-center bg-slate-50 dark:bg-zinc-900 rounded-lg border border-slate-200 dark:border-zinc-800 ${className}`}
+                className={`bg-white p-2 rounded-lg flex items-center justify-center shadow-xs ${className}`}
             >
-                <Loader2 className="w-8 h-8 animate-spin text-emerald-500 mb-2" />
-                <span className="text-[11px] font-medium text-slate-500 dark:text-zinc-400">
-                    Renderizando QR Code...
-                </span>
+                <QRCodeSVG
+                    value={cleanValue}
+                    size={Math.max(32, size - 16)}
+                    level="M"
+                    includeMargin={false}
+                    bgColor="#FFFFFF"
+                    fgColor="#000000"
+                    className="w-full h-full max-w-full max-h-full"
+                />
             </div>
         );
     }
 
-    if (hasError || (!dataUrl && !value && !imageBase64)) {
-        return (
-            <div
-                style={{ width: size, height: size }}
-                className={`flex flex-col items-center justify-center bg-slate-50 dark:bg-zinc-900 rounded-lg border border-slate-200 dark:border-zinc-800 text-slate-400 p-2 text-center ${className}`}
-            >
-                <QrCodeIcon className="w-10 h-10 mb-1 opacity-50" />
-                <span className="text-xs">QR Code indisponível</span>
-            </div>
-        );
-    }
-
+    // 3. Fallback visual caso nem o payload nem a imagem estejam disponíveis
     return (
-        <img
-            src={dataUrl}
-            alt={alt}
-            crossOrigin={crossOrigin}
-            onError={() => {
-                // Se a imagem falhar (por exemplo no fallback externo), ativa estado de erro seguro
-                setHasError(true);
-            }}
+        <div
             style={{ width: size, height: size }}
-            className={`object-contain rounded-lg shadow-xs bg-white ${className}`}
-        />
+            className={`flex flex-col items-center justify-center bg-slate-50 dark:bg-zinc-900 rounded-lg border border-slate-200 dark:border-zinc-800 text-slate-400 p-2 text-center ${className}`}
+        >
+            <QrCodeIcon className="w-10 h-10 mb-1 opacity-50" />
+            <span className="text-xs">QR Code indisponível</span>
+        </div>
     );
 }

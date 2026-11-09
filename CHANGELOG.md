@@ -2,7 +2,43 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
-## [1.78.0] - 2026-11-06
+## [1.80.0] - 2026-11-09
+
+### Corrigido (Renderização Infalível de QR Code PIX com `qrcode.react` SVG Vetorial)
+* **Solução Definitiva para "QR Code indisponível"**:
+  * O pacote antigo `qrcode` no browser não fornecia exportação default compatível com o bundler ESM do Vite, causando falhas assíncronas e caindo indevidamente no estado de erro "QR Code indisponível".
+  * Instalado o pacote padrão da comunidade React: `qrcode.react`.
+  * Refatorado o componente `src/components/common/QrCodeImage.jsx` para renderizar diretamente via `<QRCodeSVG />` nativo vetorial em SVG puro:
+    * Renderização síncrona, instantânea (0ms de latência) e sem requisição a nenhuma API ou endpoint externo.
+    * Nitidez vetorial perfeita tanto na tela quanto na exportação de faturas em PDF (`html2pdf.js`).
+    * Fallback resiliente: caso a fatura possua imagem base64 pré-gerada que falhe no carregamento, o SVG é acionado automaticamente a partir do código Copia e Cola `value`.
+* **Validação**:
+  * Build de produção Vite (`npm run build`) concluído com código 0.
+
+## [1.79.0] - 2026-11-09
+
+### Adicionado (Radar Google Maps Multi-Nicho: Dentistas, Hamburguerias, Barbearias, Psicólogos, Nutricionistas e Advocacia)
+* **Expansão Completa de Nichos no Radar Google Maps**:
+  * O Radar de Prospecção ativa do Google Maps agora suporta todos os segmentos de landing pages criados no ecossistema:
+    * 🦷 **Clínicas Odontológicas & Dentistas** (Termo de busca: `clinica odontologica`, rota `/odonto/:slug` e `/dentista`).
+    * 🍔 **Hamburguerias Artesanais & Gastrobares** (Termo de busca: `hamburgueria artesanal`, rota `/burger/:slug` e `/hamburgueria`, foco em cardápio próprio e pedido no WhatsApp sem taxa do iFood).
+    * 💈 **Barbearias & Barber Shops** (Termo de busca: `barbearia`, rota `/barber/:slug` e `/barbearia`, foco em tabela de cortes e agendamento sem fila).
+    * 🧠 **Psicólogos & Saúde Mental** (Termo de busca: `psicologo`, rota `/psicologia/:slug` e `/psicologo`, foco em teleconsulta ética e sigilo CFP).
+    * 🥗 **Nutricionistas & Nutrologia** (Termo de busca: `nutricionista`, rota `/nutrivida/:slug` e `/nutricionista`, foco em consultas particulares).
+    * ⚖️ **Escritórios de Advocacia** (Termo de busca: `advogado`, subnichos Trabalhista, Família, Consumidor e Geral, rota `/adv/:slug` e `/advocacia`, ética OAB).
+    * 🌐 **Todos os Nichos** (Varredura unificada com detecção inteligente de segmento).
+* **Interface Dinâmica do Radar (`RadarGoogleMaps.jsx`)**:
+  * Adicionada barra superior com seletor visual em cards de nicho com ícones estilizados (`Globe`, `Stethoscope`, `Utensils`, `Scissors`, `Brain`, `Salad`, `Scale`), permitindo alternar de nicho com 1 clique.
+  * O título principal e a descrição do Radar adaptam-se instantaneamente ao nicho ativo.
+  * Dropdown de Especialidade nos filtros expandido com todos os novos nichos e subnichos.
+  * Modal de cadastro manual/colagem de ficha do Maps atualizado para permitir a seleção de qualquer nicho.
+  * Cards de leads exibem o badge visual e ícone do nicho real da empresa.
+* **Inteligência Comercial Contextual (`googleMapsProspectService.js` & `api/places-search.js`)**:
+  * A função `buildDemoUrl(lead)` direciona automaticamente para a landing page respectiva de cada nicho, injetando `?nome=...&cidade=...&whatsapp=...` para personalização em tempo real.
+  * Roteiro cadenciado de WhatsApp (`generateProposalMessage`) agora possui mensagens específicas por nicho para todas as etapas (Passo 1 Abertura/Anti-Spam, Passo 2 Oportunidade/Permissão, Passo 3 Demonstração/R$ 297, Resgate 1 e 2).
+* **Validação**:
+  * Build com Vite concluído com 100% de sucesso e zero erros de compilação.
+
 
 ### Melhorado (Redesign Anti-Slop e Elevação de Alto Padrão da Hamburgueria)
 * **Aplicação Rigorosa de `design-taste-frontend` & `frontend-design`**:

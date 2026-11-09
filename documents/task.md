@@ -2,6 +2,23 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Renderização Infalível de QR Code PIX com `qrcode.react` SVG (`QrCodeImage.jsx`)**:
+  - Objetivo: Resolver em definitivo o problema do QR Code PIX exibindo "QR Code indisponível" no portal do assinante e nos modais de fatura.
+  - Causa Raiz: Incompatibilidade de exportação default do pacote CommonJS `qrcode` no navegador sob o Vite, acionando o estado de erro `hasError`.
+  - Solução: Instalação de `qrcode.react` e refatoração de `src/components/common/QrCodeImage.jsx` para renderizar SVG vetorial síncrono nativo via `<QRCodeSVG />` direto no DOM a partir do Copia e Cola `value`, com fallback automático caso uma imagem base64 prévia falhe.
+  - Validação Automatizada: Build de produção Vite concluído com código 0.
+
+- [x] **Radar Google Maps Multi-Nicho (`RadarGoogleMaps.jsx`, `googleMapsProspectService.js`, `api/places-search.js`)**:
+  - Objetivo: Expandir o Radar Google Maps para permitir busca, extração e prospecção direta de todos os nichos de landing pages existentes no projeto (Dentistas, Hamburguerias, Barbearias, Psicólogos, Nutricionistas e Advocacia).
+  - Implementações Realizadas:
+    - Adicionada barra com 7 chips visuais clicáveis no topo do Radar para alternância imediata de nicho.
+    - Título e subtítulo do Radar reativos ao nicho selecionado.
+    - `api/places-search.js` e `googleMapsProspectService.js` adaptados para montar termos contextuais por nicho (`clinica odontologica`, `hamburgueria artesanal`, `barbearia`, `psicologo`, `nutricionista`, `advogado`).
+    - Botão "Demo" nos cards direciona para as landing pages correspondentes (`/odonto/:slug`, `/burger/:slug`, `/barber/:slug`, `/psicologia/:slug`, `/nutrivida/:slug`, `/adv/:slug`) com parâmetros dinâmicos de nome, whatsapp e cidade.
+    - Scripts de WhatsApp e proposta comercial customizados para cada nicho (foco em pedidos sem taxa do iFood para hamburguerias, agendamento de avaliações para dentistas, tabela de cortes para barbearias, teleconsulta ética para psicologia, consultas particulares para nutricionistas e ética OAB para advocacia).
+    - Modal de colagem manual do Maps atualizado com suporte a todos os nichos.
+  - Validação Automatizada: Build de produção Vite finalizado com sucesso absoluto (código 0).
+
 - [x] **Redesign Anti-Slop Completo da Hamburgueria (`BurgerHero.jsx`, `BurgerHeader.jsx`, `BurgerTrustBar.jsx`, `BurgerMenu.jsx`, `BurgerDifferentials.jsx`, `BurgerCombos.jsx`, `BurgerLocation.jsx`, `BurgerTestimonials.jsx`, `BurgerFaq.jsx`, `BurgerFinalCta.jsx`, `BurgerFloatingWhatsApp.jsx`)**:
   - Objetivo: Eliminar completamente o aspecto genérico/"meme" (emojis soltos, gradientes de circo, caixas flutuantes cobrindo fotos e slogans vazios), elevando a página ao padrão de estúdio gastronômico internacional contemporâneo (baseado em `design-taste-frontend` e `frontend-design`).
   - Implementações Realizadas:

@@ -11,17 +11,99 @@ import { cleanLawyerName } from '../utils/lawyerNameFormatter.js';
 import { getGreetingByBrasiliaTime, formatLawyerSalutation } from '../utils/greetingUtils.js';
 
 /**
- * Gera um slug único, limpo e amigável para a URL da landing page de um advogado
- * Remove termos redundantes como dr, dra, advogada para manter o link extremamente curto
+ * Catálogo mestre de nichos suportados no Radar de Prospecção do Google Maps
+ */
+export const PROSPECT_NICHES = {
+  todos: {
+    id: 'todos',
+    name: 'Todos os Nichos',
+    shortName: 'Todos',
+    icon: 'Globe',
+    defaultQueryPrefix: 'estabelecimentos',
+    badgeColor: 'bg-primary/10 text-primary border-primary/20',
+    title: 'Radar Google Maps: Negócios Locais com Avaliação Alta & Sem Site Oficial',
+    subtitle: 'Identifique empresas locais bem avaliadas no Google Maps sem website próprio e ofereça presença digital profissional com demonstração imediata.',
+    leadTerm: 'Estabelecimento'
+  },
+  dentista: {
+    id: 'dentista',
+    name: 'Dentistas & Clínicas Odontológicas',
+    shortName: 'Dentistas',
+    icon: 'Stethoscope',
+    defaultQueryPrefix: 'clinica odontologica',
+    badgeColor: 'bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-500/20',
+    title: 'Radar Google Maps: Clínicas Odontológicas & Dentistas Sem Site',
+    subtitle: 'Mapeie clínicas dentárias e dentistas com ótima reputação no Google que ainda não possuem página de agendamento de consultas e avaliações.',
+    leadTerm: 'Clínica Odontológica'
+  },
+  hamburgueria: {
+    id: 'hamburgueria',
+    name: 'Hamburguerias & Gastrobares',
+    shortName: 'Hamburguerias',
+    icon: 'Utensils',
+    defaultQueryPrefix: 'hamburgueria artesanal',
+    badgeColor: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
+    title: 'Radar Google Maps: Hamburguerias & Gastrobares Sem Cardápio Próprio',
+    subtitle: 'Encontre hamburguerias artesanais bem avaliadas que são reféns dos 27% de taxa do iFood por não terem cardápio próprio e pedido direto no WhatsApp.',
+    leadTerm: 'Hamburgueria'
+  },
+  barbearia: {
+    id: 'barbearia',
+    name: 'Barbearias & Barber Shops',
+    shortName: 'Barbearias',
+    icon: 'Scissors',
+    defaultQueryPrefix: 'barbearia',
+    badgeColor: 'bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20',
+    title: 'Radar Google Maps: Barbearias com Alta Avaliação & Sem Site',
+    subtitle: 'Localize barbearias de estilo com notas altas no Maps sem página de agendamento sem fila e apresentação de cortes.',
+    leadTerm: 'Barbearia'
+  },
+  psicologo: {
+    id: 'psicologo',
+    name: 'Psicólogos & Clínicas de Saúde Mental',
+    shortName: 'Psicólogos',
+    icon: 'Brain',
+    defaultQueryPrefix: 'psicologo',
+    badgeColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+    title: 'Radar Google Maps: Psicólogos & Clínicas de Psicologia Sem Site',
+    subtitle: 'Identifique profissionais de saúde mental com ótimas recomendações que necessitam de landing page ética para teleconsulta e acolhimento.',
+    leadTerm: 'Consultório de Psicologia'
+  },
+  nutricionista: {
+    id: 'nutricionista',
+    name: 'Nutricionistas & Nutrologia',
+    shortName: 'Nutricionistas',
+    icon: 'Salad',
+    defaultQueryPrefix: 'nutricionista',
+    badgeColor: 'bg-teal-500/10 text-teal-600 dark:text-teal-400 border-teal-500/20',
+    title: 'Radar Google Maps: Nutricionistas & Clínicas Nutricionais Sem Site',
+    subtitle: 'Descubra nutricionistas conceituados sem presença digital própria para converter pesquisas do Maps em consultas particulares.',
+    leadTerm: 'Clínica de Nutrição'
+  },
+  advocacia: {
+    id: 'advocacia',
+    name: 'Escritórios de Advocacia',
+    shortName: 'Advocacia',
+    icon: 'Scale',
+    defaultQueryPrefix: 'advogado',
+    badgeColor: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20',
+    title: 'Radar Google Maps: Advogados com Avaliação Alta & Sem Site',
+    subtitle: 'Identifique escritórios com excelente reputação no Google que não possuem presença na web. Dispare propostas de R$ 297 + domínio no WhatsApp.',
+    leadTerm: 'Escritório de Advocacia'
+  }
+};
+
+/**
+ * Gera um slug único, limpo e amigável para a URL da landing page de um lead
  * @param {Object} lawyer 
  * @returns {string}
  */
 export const generateLawyerSlug = (lawyer) => {
-  const rawName = lawyer.lawyer_name || lawyer.name || 'advogado';
+  const rawName = lawyer.lawyer_name || lawyer.name || 'empresa';
   const cleaned = cleanLawyerName(rawName);
-  // Remove títulos e palavras redundantes para manter o slug conciso e elegante
+  // Remove títulos e termos redundantes para manter o slug conciso e elegante
   const cleanName = cleaned
-    .replace(/\b(dr|dra|doutor|doutora|advogado|advogada|advocacia|escritorio|associados)\b/gi, '')
+    .replace(/\b(dr|dra|doutor|doutora|advogado|advogada|advocacia|escritorio|associados|clinica|odontologia|barbearia|barber|burger|hamburgueria|psicologo|psicologa|nutricionista)\b/gi, '')
     .trim() || cleaned;
 
   const slugBase = cleanName
@@ -31,19 +113,17 @@ export const generateLawyerSlug = (lawyer) => {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)+/g, '');
 
-  return slugBase || 'advocacia';
+  return slugBase || 'empresa';
 };
 
 /**
  * Constrói a URL oficial de busca no Google Maps unindo Nome, Endereço e Cidade
- * Garante que o pino e a ficha aberta no Maps coincidam 100% com os dados exibidos
  * @param {Object} lawyer 
  * @returns {string}
  */
 export const buildGoogleMapsUrl = (lawyer) => {
   if (!lawyer) return 'https://www.google.com/maps';
   
-  // Se já for uma URL do Google Maps com query e NÃO for a busca genérica de 'sem site'
   if (lawyer.google_maps_url && !lawyer.google_maps_url.includes('sem+site') && !lawyer.google_maps_url.includes('sem%20site')) {
     if (lawyer.google_maps_url.includes('api=1&query=')) {
       return lawyer.google_maps_url;
@@ -55,29 +135,27 @@ export const buildGoogleMapsUrl = (lawyer) => {
   const city = lawyer.city || '';
   const state = lawyer.state || '';
 
-  // Combina Nome + Endereço Detalhado + Cidade/UF para cravar o local exato com precisão milimétrica no Maps
   const queryParts = [name, address, (!address.includes(city) && city) ? `${city} - ${state}` : ''].filter(Boolean);
   const query = queryParts.join(', ');
 
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query || 'Advocacia')}`;
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query || 'Empresa')}`;
 };
 
 /**
- * Constrói a URL de demonstração curta e limpa oficial
- * Utiliza o prefixo enxuto /adv/:slug sem poluição de query strings pesadas
+ * Constrói a URL de demonstração conectando diretamente ao nicho e à landing page criada
+ * Injeta query params para personalização em tempo real (nome, whatsapp, cidade, bairro)
  * @param {Object} lawyer 
  * @param {string} baseUrl
  * @returns {string}
  */
 export const buildDemoUrl = (lawyer, baseUrl = '') => {
-  if (!lawyer) return 'https://rafaelpitaoficial.com.br/adv';
+  if (!lawyer) return 'https://rafaelpitaoficial.com.br';
   
   let host = baseUrl;
   if (!host && typeof window !== 'undefined') {
     host = window.location.origin;
   }
   
-  // Se for o domínio do projeto, usa a versão canônica sem www para reduzir caracteres
   if (host && host.includes('rafaelpitaoficial.com.br')) {
     host = 'https://rafaelpitaoficial.com.br';
   } else if (!host) {
@@ -85,6 +163,39 @@ export const buildDemoUrl = (lawyer, baseUrl = '') => {
   }
 
   const slug = lawyer.slug || lawyer.landing_page_slug || generateLawyerSlug(lawyer);
+  const niche = (lawyer.niche || 'advocacia').toLowerCase();
+  const rawName = lawyer.lawyer_name || lawyer.name || '';
+  const cleanName = cleanLawyerName(rawName);
+  const nameParam = encodeURIComponent(cleanName);
+  const phoneParam = (lawyer.whatsapp || lawyer.phone || '').toString().replace(/\D/g, '');
+  const cityParam = encodeURIComponent(lawyer.city || '');
+
+  // 1. Nicho Odontologia / Dentista
+  if (niche.includes('dentist') || niche.includes('odonto')) {
+    return `${host}/odonto/${slug}?nome=${nameParam}&cidade=${cityParam}&whatsapp=${phoneParam}`;
+  }
+
+  // 2. Nicho Hamburgueria / Gastronomia
+  if (niche.includes('burger') || niche.includes('hamburguer') || niche.includes('gastro')) {
+    return `${host}/burger/${slug}?nome=${nameParam}&cidade=${cityParam}&whatsapp=${phoneParam}`;
+  }
+
+  // 3. Nicho Barbearia / Barber Shop
+  if (niche.includes('barber') || niche.includes('barbearia')) {
+    return `${host}/barber/${slug}?nome=${nameParam}&cidade=${cityParam}&whatsapp=${phoneParam}`;
+  }
+
+  // 4. Nicho Psicologia / Saúde Mental
+  if (niche.includes('psicolog') || niche.includes('terapia') || niche.includes('mente')) {
+    return `${host}/psicologia/${slug}?nome=${nameParam}&cidade=${cityParam}&whatsapp=${phoneParam}`;
+  }
+
+  // 5. Nicho Nutrição / Nutricionista
+  if (niche.includes('nutri')) {
+    return `${host}/nutrivida/${slug}?nome=${nameParam}&cidade=${cityParam}&whatsapp=${phoneParam}`;
+  }
+
+  // 6. Nicho Advocacia (padrão)
   return `${host}/adv/${slug}`;
 };
 
@@ -137,22 +248,42 @@ const sanitizeStoredLeads = () => {
 export const googleMapsProspectService = {
   /**
    * Realiza a busca ao vivo na API oficial do Google Places
-   * Filtra advogados reais que não possuem site e com avaliação qualificada
+   * Filtra estabelecimentos reais que não possuem site e com avaliação qualificada
    * @param {Object} params
    * @param {string} params.city - Cidade de busca
    * @param {string} params.state - Estado (UF)
-   * @param {string} params.niche - Especialidade
+   * @param {string} params.niche - Nicho/Especialidade
    * @param {number} params.minRating - Avaliação mínima
    * @returns {Promise<Array>}
    */
   searchLiveGooglePlaces: async ({ city = '', state = '', niche = 'todos', minRating = 4.0 }) => {
     try {
-      let query = '';
-      const nichePrefix = niche === 'trabalhista' ? 'advogado trabalhista'
-        : niche === 'familia' ? 'advogado de familia'
-        : niche === 'consumidor' ? 'advogado do consumidor'
-        : 'advogado';
+      let nichePrefix = 'estabelecimentos';
+      const cleanNiche = (niche || 'todos').toLowerCase();
 
+      if (cleanNiche === 'dentista' || cleanNiche === 'odonto') {
+        nichePrefix = 'clinica odontologica';
+      } else if (cleanNiche === 'hamburgueria' || cleanNiche === 'burger') {
+        nichePrefix = 'hamburgueria artesanal';
+      } else if (cleanNiche === 'barbearia' || cleanNiche === 'barber') {
+        nichePrefix = 'barbearia';
+      } else if (cleanNiche === 'psicologo' || cleanNiche === 'psicologia') {
+        nichePrefix = 'psicologo';
+      } else if (cleanNiche === 'nutricionista' || cleanNiche === 'nutricao') {
+        nichePrefix = 'nutricionista';
+      } else if (cleanNiche === 'trabalhista') {
+        nichePrefix = 'advogado trabalhista';
+      } else if (cleanNiche === 'familia') {
+        nichePrefix = 'advogado de familia';
+      } else if (cleanNiche === 'consumidor') {
+        nichePrefix = 'advogado do consumidor';
+      } else if (cleanNiche === 'advocacia') {
+        nichePrefix = 'advogado';
+      } else {
+        nichePrefix = 'negocios locais';
+      }
+
+      let query = '';
       if (city) {
         query = `${nichePrefix} em ${city} ${state}`.trim();
       } else if (state) {
@@ -165,6 +296,7 @@ export const googleMapsProspectService = {
         query,
         city,
         state,
+        niche: cleanNiche,
         onlyWithoutWebsite: 'true',
         minRating: String(minRating || 4.0)
       });
@@ -182,11 +314,12 @@ export const googleMapsProspectService = {
 
       const leadsFromApi = (result.data || []).map((lead) => {
         const cleanName = cleanLawyerName(lead.name || lead.lawyer_name);
+        const resolvedNiche = lead.niche || (cleanNiche !== 'todos' ? cleanNiche : 'geral');
         return {
           ...lead,
           name: cleanName,
           lawyer_name: cleanName,
-          niche: niche,
+          niche: resolvedNiche,
           status: 'novo'
         };
       });
@@ -213,12 +346,12 @@ export const googleMapsProspectService = {
   },
 
   /**
-   * Realiza a busca de advogados sem site no Google Maps
+   * Realiza a busca de estabelecimentos sem site no Google Maps
    * @param {Object} params
    * @param {string} params.city - Cidade de busca
    * @param {string} params.state - Estado (UF)
-   * @param {string} params.niche - Especialidade (geral, trabalhista, familia, consumidor, todos)
-   * @param {number} params.minRating - Avaliação mínima (ex: 4.5, 4.7)
+   * @param {string} params.niche - Especialidade/Nicho
+   * @param {number} params.minRating - Avaliação mínima
    * @param {boolean} params.liveApi - Se deve consultar a API oficial do Google Places ao vivo
    * @returns {Promise<Array>}
    */
@@ -235,7 +368,7 @@ export const googleMapsProspectService = {
     const results = storedLeads.filter((item) => {
       const matchCity = !city || (item.city || '').toLowerCase().includes(city.toLowerCase().trim());
       const matchState = !state || (item.state || '').toLowerCase() === state.toLowerCase().trim();
-      const matchNiche = niche === 'todos' || item.niche === niche;
+      const matchNiche = niche === 'todos' || item.niche === niche || (!item.niche && niche === 'advocacia');
       const matchRating = Number(item.rating || 0) >= Number(minRating);
 
       return matchCity && matchState && matchNiche && matchRating;
@@ -345,145 +478,146 @@ export const googleMapsProspectService = {
   },
 
   /**
-   * Gera a mensagem de proposta comercial de R$ 297 + domínio anual
-   * @param {Object} lawyer - Dados do advogado
-   * @param {string} variant - 'direto', 'autoridade' ou 'curto'
-   * @returns {string}
-   */
-  /**
    * Gera a mensagem de proposta comercial de R$ 297 + anuidade do domínio
-   * Sem uso de travessão, com menção à personalização completa de fotos e textos
-   * @param {Object} lawyer - Dados do advogado
-   * @param {string} variant - 'direto', 'autoridade' ou 'curto'
+   * Hiper-personalizada de acordo com o nicho do lead
+   * @param {Object} lawyer - Dados do lead
+   * @param {string} variant - 'passo1', 'passo2', 'passo3', 'recuperacao1', 'recuperacao2', 'curto', 'autoridade'
    * @returns {string}
    */
   generateProposalMessage: (lawyer, variant = 'direto') => {
-    const rawName = lawyer.lawyer_name || lawyer.name || 'Doutor(a)';
+    const rawName = lawyer.lawyer_name || lawyer.name || 'Empresa';
+    const cleanName = cleanLawyerName(rawName);
     const salutation = formatLawyerSalutation(rawName);
-    const name = salutation.cleanName;
     const greeting = getGreetingByBrasiliaTime();
     const rating = lawyer.rating ? `${Number(lawyer.rating).toFixed(1)}★` : '5.0★';
     const reviews = lawyer.reviews_count ? ` (${lawyer.reviews_count} avaliações)` : '';
     const city = lawyer.city || 'sua região';
-    const baseUrl = window.location.origin;
-
-    // Gerar URL limpa e oficial da landing page de demonstração
+    const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://rafaelpitaoficial.com.br';
     const previewUrl = buildDemoUrl(lawyer, baseUrl);
+    const niche = (lawyer.niche || 'advocacia').toLowerCase();
 
+    // 1. Nicho ODONTOLOGIA / DENTISTA
+    if (niche.includes('dentist') || niche.includes('odonto')) {
+      if (variant === 'passo1') {
+        return `Olá, ${greeting}! Tudo bem?\n\nPor gentileza, este canal é o contato direto com a administração da ${cleanName} ou falo com a equipe de atendimento da clínica?`;
+      }
+      if (variant === 'passo2') {
+        return `Aqui é o Rafael. Estava analisando as clínicas odontológicas em ${city} e vi que vocês possuem excelente reputação e ótimas avaliações no Google (${rating}${reviews})!\n\nPorém, notei que ainda não possuem um site próprio de agendamento de avaliações conectado ao perfil, e hoje muitos pacientes da região acabam fechando com outras clínicas por não encontrarem uma página oficial com os tratamentos.\n\nDesenvolvi um protótipo exclusivo para a clínica de vocês para mostrar na prática como converter essas buscas em consultas.\n\nMe autoriza a enviar o link rápido de demonstração para vocês darem uma olhada sem nenhum compromisso?`;
+      }
+      if (variant === 'passo3') {
+        return `Perfeito! Montei esta prévia personalizada pensando exatamente no posicionamento da ${cleanName}:\n\n👉 ${previewUrl}\n(Caso prefira por segurança, posso te encaminhar a prévia completa em PDF por aqui para você avaliar o layout com tranquilidade!)\n\nO objetivo é transformar quem pesquisa por dentistas e implantes em ${city} no Google em agendamentos diretos no WhatsApp de vocês, com alto padrão visual e destaque para os tratamentos.\n\nTodos os textos, fotos dos consultórios e especialidades podem ser 100% personalizados com a identidade oficial de vocês.\n\nPara colocar no ar com domínio próprio e configurado, o valor é de apenas R$ 297 (taxa única de implementação) mais a anuidade do domínio próprio (em média R$ 60 ao ano).\n\nDepois me conte o que achou da estrutura!`;
+      }
+      if (variant === 'recuperacao' || variant === 'recuperacao1' || variant === 'followup') {
+        return `Olá, tudo bem?\n\nMandei uma mensagem anteriormente, mas nem sei se este é o melhor contato para tratar sobre a presença digital e novos pacientes da clínica...\n\nCaso não seja, teria algum outro canal ou pessoa responsável que você pudesse me indicar?`;
+      }
+      if (variant === 'recuperacao2' || variant === 'recuperacao_confirmou') {
+        return `Perfeito! Retomei o contato porque verifiquei que vocês possuem excelente avaliação no Google Maps em ${city}, mas ainda não têm um site oficial cadastrado.\n\nCheguei a desenhar um modelo exclusivo para a clínica de vocês verem na prática como reter os pacientes da região:\n\n👉 ${previewUrl}\n\nPara subir com domínio próprio e configurado, o valor é de apenas R$ 297 (taxa única de implementação) mais a anuidade do domínio (cerca de R$ 60 ao ano). Dê uma olhada quando puder!`;
+      }
+    }
+
+    // 2. Nicho HAMBURGUERIA / GASTROBAR
+    if (niche.includes('burger') || niche.includes('hamburguer') || niche.includes('gastro')) {
+      if (variant === 'passo1') {
+        return `Olá, ${greeting}! Tudo bem?\n\nPor gentileza, falo com a gerência ou com o responsável pelos pedidos e delivery da ${cleanName}?`;
+      }
+      if (variant === 'passo2') {
+        return `Aqui é o Rafael. Estava analisando as hamburguerias em ${city} e vi que a ${cleanName} tem excelente reputação e nota alta no Google (${rating}${reviews})!\n\nPorém, notei que vocês ainda não possuem um cardápio digital próprio conectado ao perfil, e hoje muitos estabelecimentos acabam perdendo até 27% de comissão por pedido para o iFood por não terem canal direto.\n\nDesenvolvi um modelo interativo exclusivo para a ${cleanName} com cardápio online e pedidos direto no WhatsApp, sem nenhuma taxa sobre as vendas.\n\nMe autoriza a enviar uma prévia rápida para vocês darem uma olhada sem compromisso?`;
+      }
+      if (variant === 'passo3') {
+        return `Perfeito! Montei esta demonstração exclusiva com o visual da ${cleanName}:\n\n👉 ${previewUrl}\n(Se preferir, também posso te enviar a prévia em PDF por aqui!)\n\nCom essa estrutura, seus clientes montam os combos, escolhem os burgers e o pedido chega pronto e formatado no WhatsApp de vocês, economizando milhares de reais em taxas de aplicativos todo mês.\n\nTodos os burgers, fotos, adicionais e preços são 100% personalizáveis.\n\nPara colocar no ar no domínio próprio da hamburgueria (ex: suahamburgueria.com.br), o valor é de apenas R$ 297 (taxa única de implementação) mais o domínio anual (~R$ 60 ao ano).\n\nDê uma olhada no link e me diga o que achou!`;
+      }
+      if (variant === 'recuperacao' || variant === 'recuperacao1' || variant === 'followup') {
+        return `Olá, tudo bem?\n\nMandei mensagem aqui antes sobre o cardápio próprio para pedidos direto no WhatsApp da hamburgueria. Este é o canal certo ou teria outro contato da gerência?`;
+      }
+      if (variant === 'recuperacao2' || variant === 'recuperacao_confirmou') {
+        return `Show! Retomei o contato para deixar o link da demonstração que preparei para a ${cleanName} lucrar 100% dos pedidos sem taxa de app:\n\n👉 ${previewUrl}\n\nFica apenas R$ 297 para subir no domínio próprio de vocês. Veja o que achou!`;
+      }
+    }
+
+    // 3. Nicho BARBEARIA
+    if (niche.includes('barber') || niche.includes('barbearia')) {
+      if (variant === 'passo1') {
+        return `Olá, ${greeting}! Tudo bem?\n\nPor gentileza, falo com o barbeiro titular ou com o atendimento da ${cleanName}?`;
+      }
+      if (variant === 'passo2') {
+        return `Aqui é o Rafael. Estava pesquisando as barbearias de destaque em ${city} e vi que a ${cleanName} tem ótima reputação e avaliações no Google (${rating}${reviews})!\n\nPorém, notei que ainda não possuem um site oficial com tabela de cortes e agendamento rápido sem fila, e muitos clientes novos da região acabam indo para barbearias com agendamento web.\n\nDesenvolvi um modelo exclusivo para a ${cleanName} ver como facilitar o agendamento dos clientes.\n\nMe autoriza a enviar o link rápido de demonstração sem compromisso?`;
+      }
+      if (variant === 'passo3') {
+        return `Perfeito! Montei esta prévia com o estilo e identidade da ${cleanName}:\n\n👉 ${previewUrl}\n\nO objetivo é permitir que quem busca barbearia em ${city} no Google veja seus cortes, serviços e reserve horário direto no WhatsApp sem complicação.\n\nTabela de serviços, fotos reais e horários são 100% personalizáveis.\n\nPara colocar no ar com domínio próprio, o valor é de apenas R$ 297 (taxa única de implementação) mais o domínio anual (~R$ 60 ao ano). Me conte o que achou!`;
+      }
+      if (variant === 'recuperacao' || variant === 'recuperacao1' || variant === 'followup') {
+        return `Olá, tudo bem?\n\nMandei mensagem antes sobre a página de agendamento da barbearia. Caso este não seja o canal correto com a administração, teria outro para me indicar?`;
+      }
+      if (variant === 'recuperacao2' || variant === 'recuperacao_confirmou') {
+        return `Show! Deixando aqui a demonstração que fiz para a ${cleanName} para agendamentos rápidos de barba e corte:\n\n👉 ${previewUrl}\n\nTaxa única de R$ 297 para subir no domínio próprio. Depois me diga o que achou!`;
+      }
+    }
+
+    // 4. Nicho PSICOLOGIA / SAÚDE MENTAL
+    if (niche.includes('psicolog') || niche.includes('terapia') || niche.includes('mente')) {
+      if (variant === 'passo1') {
+        return `Olá, ${greeting}! Tudo bem?\n\nPor gentileza, este contato fala com o(a) psicólogo(a) ${cleanName} ou com a recepção do consultório?`;
+      }
+      if (variant === 'passo2') {
+        return `Aqui é o Rafael. Estava pesquisando consultórios de psicologia em ${city} e vi que você possui excelentes recomendações e avaliações no Google (${rating}${reviews})!\n\nPorém, notei que ainda não tem um site profissional para acolhimento e agendamento de teleconsulta ou consultas presenciais.\n\nDesenvolvi um protótipo exclusivo estruturado de acordo com as diretrizes éticas do CFP para apresentar suas abordagens terapêuticas.\n\nMe autoriza a enviar uma demonstração rápida para você avaliar sem nenhum compromisso?`;
+      }
+      if (variant === 'passo3') {
+        return `Perfeito! Montei esta demonstração ética pensada para o seu posicionamento clínico:\n\n👉 ${previewUrl}\n\nO objetivo é transmitir acolhimento, autoridade e facilitar o agendamento seguro de novos pacientes em ${city}.\n\nTextos de abordagem, fotos do consultório e perguntas frequentes são 100% personalizáveis.\n\nPara subir com domínio próprio (ex: seunome.com.br), o investimento é de apenas R$ 297 (taxa única de implementação) mais a anuidade do domínio (~R$ 60 ao ano). Fico à disposição para qualquer ajuste!`;
+      }
+    }
+
+    // 5. Nicho NUTRIÇÃO
+    if (niche.includes('nutri')) {
+      if (variant === 'passo1') {
+        return `Olá, ${greeting}! Tudo bem?\n\nPor gentileza, este canal fala com o consultório do(a) Dr(a). ${cleanName} ou com a equipe de atendimento?`;
+      }
+      if (variant === 'passo2') {
+        return `Aqui é o Rafael. Estava analisando nutricionistas em ${city} e vi suas ótimas avaliações no Google (${rating}${reviews})!\n\nPorém, verifiquei que ainda não possui uma página oficial para agendamento de consultas particulares e apresentação dos planos alimentares.\n\nDesenvolvi um modelo exclusivo para o seu perfil profissional. Me autoriza a enviar para você dar uma olhada sem compromisso?`;
+      }
+      if (variant === 'passo3') {
+        return `Perfeito! Montei esta demonstração pensada para o seu consultório de nutrição:\n\n👉 ${previewUrl}\n\nO objetivo é converter buscas no Google Maps em consultas particulares agendadas direto no seu WhatsApp. Implementação por apenas R$ 297 mais o domínio anual. Me conte o que achou!`;
+      }
+    }
+
+    // 6. Nicho ADVOCACIA / GERAL (Padrão com Ética OAB)
     if (variant === 'passo1') {
-      return `Olá, ${greeting}! Tudo bem?
-
-Por gentileza, este canal é o contato direto ${salutation.directContactPhrase} ou falo com a equipe do escritório?`;
+      return `Olá, ${greeting}! Tudo bem?\n\nPor gentileza, este canal é o contato direto ${salutation.directContactPhrase} ou falo com a equipe do escritório?`;
     }
 
     if (variant === 'passo2') {
-      return `Aqui é o Rafael. Estava analisando os escritórios de advocacia em ${city} e vi que vocês possuem uma excelente reputação e ótimas avaliações no Google (${rating}${reviews})!
-
-Porém, notei que ainda não possuem um site próprio de atendimento rápido conectado ao perfil, e hoje muitos clientes em potencial da região acabam fechando com outros escritórios por não encontrarem uma página oficial.
-
-Desenvolvi um protótipo exclusivo para o escritório de vocês para mostrar na prática como reter esses clientes.
-
-Me autoriza a enviar o link rápido de demonstração para vocês darem uma olhada sem nenhum compromisso?`;
+      return `Aqui é o Rafael. Estava analisando os escritórios de advocacia em ${city} e vi que vocês possuem uma excelente reputação e ótimas avaliações no Google (${rating}${reviews})!\n\nPorém, notei que ainda não possuem um site próprio de atendimento rápido conectado ao perfil, e hoje muitos clientes em potencial da região acabam fechando com outros escritórios por não encontrarem uma página oficial.\n\nDesenvolvi um protótipo exclusivo para o escritório de vocês para mostrar na prática como reter esses clientes.\n\nMe autoriza a enviar o link rápido de demonstração para vocês darem uma olhada sem nenhum compromisso?`;
     }
 
     if (variant === 'passo3') {
-      return `Perfeito, ${salutation.salutationCall}! Montei esta prévia personalizada pensando exatamente no posicionamento de vocês:
-
-👉 ${previewUrl}
-(Caso prefira por segurança, posso te encaminhar a prévia completa em PDF por aqui para você avaliar o layout com tranquilidade!)
-
-O objetivo é transformar quem pesquisa por advogados em ${city} no Google em contatos diretos no WhatsApp de vocês, com alto padrão visual e total respeito ao Código de Ética da OAB.
-
-Todos os textos, fotos e áreas de atuação podem ser 100% personalizados com a identidade oficial do escritório.
-
-Para colocar no ar com domínio próprio e configurado, o valor é de apenas R$ 297 (taxa única de implementação) mais a anuidade do domínio próprio (em média R$ 60 ao ano).
-
-Depois me conte o que achou da estrutura!`;
+      return `Perfeito, ${salutation.salutationCall}! Montei esta prévia personalizada pensando exatamente no posicionamento de vocês:\n\n👉 ${previewUrl}\n(Caso prefira por segurança, posso te encaminhar a prévia completa em PDF por aqui para você avaliar o layout com tranquilidade!)\n\nO objetivo é transformar quem pesquisa por advogados em ${city} no Google em contatos diretos no WhatsApp de vocês, com alto padrão visual e total respeito ao Código de Ética da OAB.\n\nTodos os textos, fotos e áreas de atuação podem ser 100% personalizados com a identidade oficial do escritório.\n\nPara colocar no ar com domínio próprio e configurado, o valor é de apenas R$ 297 (taxa única de implementação) mais a anuidade do domínio próprio (em média R$ 60 ao ano).\n\nDepois me conte o que achou da estrutura!`;
     }
 
     if (variant === 'recuperacao' || variant === 'recuperacao1' || variant === 'followup') {
-      return `Olá, tudo bem? 
-
-Mandei uma mensagem aqui anteriormente, mas nem sei se este é o melhor contato para tratar sobre a presença digital e novos clientes do escritório... 
-
-Caso não seja, teria algum outro canal ou pessoa responsável que você pudesse me indicar?`;
+      return `Olá, tudo bem?\n\nMandei uma mensagem aqui anteriormente, mas nem sei se este é o melhor contato para tratar sobre a presença digital e novos clientes do escritório...\n\nCaso não seja, teria algum outro canal ou pessoa responsável que você pudesse me indicar?`;
     }
 
     if (variant === 'recuperacao2' || variant === 'recuperacao_confirmou') {
-      return `Perfeito, ${salutation.salutationCall}! 
-
-Quis apenas retomar o contato porque verifiquei que vocês possuem excelente avaliação no Google Maps em ${city}, mas ainda não têm um site oficial cadastrado.
-
-Hoje, potenciais clientes que pesquisam por advogados na sua região acabam fechando com outros escritórios por não encontrarem uma página de contato rápido de vocês.
-
-Cheguei a desenhar um modelo exclusivo para o escritório de vocês verem na prática como resolver isso:
-
-👉 ${previewUrl}
-(Caso ache mais seguro e prático, também posso te enviar a prévia completa em PDF por aqui para dar uma olhada no layout).
-
-(Lembrando que todos os textos, áreas de atuação e fotos podem ser 100% personalizados com a identidade oficial de vocês).
-
-Para subir com domínio próprio e configurado, o valor é de apenas R$ 297 (taxa única de implementação) mais a anuidade do domínio (em média R$ 60 ao ano).
-
-Depois me dê um retorno sobre o que achou da estrutura!`;
+      return `Perfeito, ${salutation.salutationCall}!\n\nQuis apenas retomar o contato porque verifiquei que vocês possuem excelente avaliação no Google Maps em ${city}, mas ainda não têm um site oficial cadastrado.\n\nHoje, potenciais clientes que pesquisam por advogados na sua região acabam fechando com outros escritórios por não encontrarem uma página de contato rápido de vocês.\n\nCheguei a desenhar um modelo exclusivo para o escritório de vocês verem na prática como resolver isso:\n\n👉 ${previewUrl}\n(Caso ache mais seguro e prático, também posso te enviar a prévia completa em PDF por aqui para dar uma olhada no layout).\n\n(Lembrando que todos os textos, áreas de atuação e fotos podem ser 100% personalizados com a identidade oficial de vocês).\n\nPara subir com domínio próprio e configurado, o valor é de apenas R$ 297 (taxa única de implementação) mais a anuidade do domínio (em média R$ 60 ao ano).\n\nDepois me dê um retorno sobre o que achou da estrutura!`;
     }
 
     if (variant === 'recuperacao_indicado') {
-      return `Olá! Tudo bem?
-
-Falei anteriormente no canal principal do escritório ${salutation.officeOfPhrase} e me indicaram falar com você sobre a presença digital e captação de clientes.
-
-Desenvolvi um protótipo visual exclusivo para o escritório em ${city}:
-👉 ${previewUrl}
-
-Gostaria de saber se você teria 2 minutinhos para dar uma olhada sem nenhum compromisso?`;
+      return `Olá! Tudo bem?\n\nFalei anteriormente no canal principal do escritório ${salutation.officeOfPhrase} e me indicaram falar com você sobre a presença digital e captação de clientes.\n\nDesenvolvi um protótipo visual exclusivo para o escritório em ${city}:\n👉 ${previewUrl}\n\nGostaria de saber se você teria 2 minutinhos para dar uma olhada sem nenhum compromisso?`;
     }
 
     if (variant === 'recuperacao_recusa') {
-      return `Sem problemas! Agradeço pelo retorno e pela atenção.
-
-Caso em algum momento decidam estruturar uma página rápida para converter quem pesquisa pelo escritório no Google em ${city}, fico à disposição. 
-
-Um abraço e excelente trabalho para toda a equipe!`;
+      return `Sem problemas! Agradeço pelo retorno e pela atenção.\n\nCaso em algum momento decidam estruturar uma página rápida para converter quem pesquisa pelo escritório no Google em ${city}, fico à disposição.\n\nUm abraço e excelente trabalho para toda a equipe!`;
     }
 
     if (variant === 'curto') {
-      return `Olá, ${salutation.salutationCall}, tudo bem? Me chamo Rafael Pita.
-
-Vi seu perfil no Google Maps com ótima avaliação (${rating}${reviews}), porém notei que ainda não tem um site oficial cadastrado.
-
-Fiz um modelo sob medida para você ver como ficaria:
-👉 ${previewUrl}
-(Se preferir por segurança, também posso te enviar o PDF da prévia por aqui!)
-
-(Lembrando que todos os textos, áreas de atuação e as fotos podem ser 100% alterados para colocar suas fotos reais e biografia. A ideia aqui é apenas ilustrar como o seu escritório pode se posicionar com alto padrão).
-
-Cobro apenas R$ 297 (taxa única de implementação com desconto de lançamento), mais a anuidade do domínio próprio (em média R$ 60 ao ano).
-
-Se tiver interesse em colocar no ar com o seu nome essa semana, é só me dar um retorno por aqui!`;
+      return `Olá, ${salutation.salutationCall}, tudo bem? Me chamo Rafael Pita.\n\nVi seu perfil no Google Maps com ótima avaliação (${rating}${reviews}), porém notei que ainda não tem um site oficial cadastrado.\n\nFiz um modelo sob medida para você ver como ficaria:\n👉 ${previewUrl}\n(Se preferir por segurança, também posso te enviar o PDF da prévia por aqui!)\n\n(Lembrando que todos os textos, áreas de atuação e as fotos podem ser 100% alterados para colocar suas fotos reais e biografia. A ideia aqui é apenas ilustrar como o seu escritório pode se posicionar com alto padrão).\n\nCobro apenas R$ 297 (taxa única de implementação com desconto de lançamento), mais a anuidade do domínio próprio (em média R$ 60 ao ano).\n\nSe tiver interesse em colocar no ar com o seu nome essa semana, é só me dar um retorno por aqui!`;
     }
 
     if (variant === 'autoridade') {
-      return `Olá, ${salutation.salutationCall}, tudo bem? Me chamo Rafael Pita, especialista em presença digital para o setor jurídico.
-
-Estava pesquisando escritórios de referência em ${city} e me deparei com a excelente nota do seu escritório no Google (${rating}${reviews}).
-
-Muitos clientes em potencial procuram um site oficial para validar autoridade antes de entrar em contato e não conseguem localizar o seu. Pensando nisso, desenhei uma estrutura executiva sob medida pronta para o seu escritório:
-
-👉 ${previewUrl}
-(Ou caso prefira, te encaminho a prévia completa em PDF por aqui para conferir a estrutura!)
-
-(Lembrando que fotos reais, biografia, textos e especialidades são 100% personalizáveis com a sua identidade oficial. A proposta é demonstrar visualmente o potencial de autoridade da sua banca).
-
-A implementação completa fica em apenas R$ 297 (pagamento único de lançamento), mais a taxa anual do domínio próprio (em média R$ 60 ao ano).
-
-Teria interesse em subir essa página oficial para converter mais contatos que te encontram no Google Maps?`;
+      return `Olá, ${salutation.salutationCall}, tudo bem? Me chamo Rafael Pita, especialista em presença digital.\n\nEstava pesquisando em ${city} e me deparei com a excelente nota do seu estabelecimento no Google (${rating}${reviews}).\n\nMuitos clientes em potencial procuram um site oficial para validar credibilidade antes de entrar em contato e não conseguem localizar o seu. Pensando nisso, desenhei uma estrutura executiva sob medida pronta para vocês:\n\n👉 ${previewUrl}\n\nA implementação completa fica em apenas R$ 297 (pagamento único de lançamento), mais a taxa anual do domínio próprio (em média R$ 60 ao ano).\n\nTeria interesse em subir essa página oficial para converter mais contatos que te encontram no Google Maps?`;
     }
 
-    // Padrão: Passo 1 do Roteiro Cadenciado
-    return `Olá, ${greeting}! Tudo bem?
-
-Por gentileza, este canal é o contato direto ${salutation.directContactPhrase} ou falo com a equipe do escritório?`;
+    // Padrão: Passo 1
+    return `Olá, ${greeting}! Tudo bem?\n\nPor gentileza, este canal é o contato direto ${salutation.directContactPhrase} ou falo com a equipe?`;
   },
 
   /**
@@ -752,9 +886,17 @@ Por gentileza, este canal é o contato direto ${salutation.directContactPhrase} 
    * @returns {string}
    */
   getGoogleMapsWebSearchUrl: (city = '', state = '', niche = '') => {
+    const cleanNiche = (niche || '').toLowerCase();
+    let prefix = 'estabelecimentos';
+    if (cleanNiche.includes('dentist') || cleanNiche.includes('odonto')) prefix = 'clinica odontologica';
+    else if (cleanNiche.includes('burger') || cleanNiche.includes('hamburguer')) prefix = 'hamburgueria artesanal';
+    else if (cleanNiche.includes('barber') || cleanNiche.includes('barbearia')) prefix = 'barbearia';
+    else if (cleanNiche.includes('psicolog') || cleanNiche.includes('terapia')) prefix = 'psicologo';
+    else if (cleanNiche.includes('nutri')) prefix = 'nutricionista';
+    else if (cleanNiche.includes('advocacia') || cleanNiche.includes('trabalhista') || cleanNiche.includes('familia') || cleanNiche.includes('consumidor')) prefix = 'advogado';
+
     const query = [
-      'advogado',
-      niche && niche !== 'todos' ? niche : '',
+      prefix,
       city,
       state,
       'sem site'

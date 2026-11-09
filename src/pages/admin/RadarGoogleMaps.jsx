@@ -22,11 +22,23 @@ import {
   PhoneCall,
   Trash2,
   Clock,
-  FileText
+  FileText,
+  Stethoscope,
+  Utensils,
+  Scissors,
+  Brain,
+  Salad,
+  Scale
 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
-import { googleMapsProspectService, generateLawyerSlug, buildGoogleMapsUrl, buildDemoUrl } from '../../services/googleMapsProspectService';
+import {
+  googleMapsProspectService,
+  generateLawyerSlug,
+  buildGoogleMapsUrl,
+  buildDemoUrl,
+  PROSPECT_NICHES
+} from '../../services/googleMapsProspectService';
 import { LEGAL_NICHES } from '../../data/legalTemplates';
 import { cleanLawyerName } from '../../utils/lawyerNameFormatter';
 import { getGreetingByBrasiliaTime } from '../../utils/greetingUtils';
@@ -210,9 +222,10 @@ export default function RadarGoogleMaps() {
   ];
 
   // Executa a busca
-  const handleSearch = async (overrideCity, overrideUf) => {
+  const handleSearch = async (overrideCity, overrideUf, overrideNiche) => {
     const searchCity = overrideCity !== undefined ? overrideCity : city;
     const searchState = overrideUf !== undefined ? overrideUf : state;
+    const searchNiche = overrideNiche !== undefined ? overrideNiche : niche;
 
     setLoading(true);
     setResults([]);
@@ -220,7 +233,7 @@ export default function RadarGoogleMaps() {
       const data = await googleMapsProspectService.search({
         city: searchCity,
         state: searchState,
-        niche,
+        niche: searchNiche,
         minRating: Number(minRating),
         liveApi: useLiveApi
       });
@@ -231,16 +244,17 @@ export default function RadarGoogleMaps() {
         }, 150);
       }
 
+      const activeMeta = PROSPECT_NICHES[searchNiche] || PROSPECT_NICHES.todos;
       if (data.length === 0) {
         toast({
-          title: 'Nenhum lead sem site encontrado com estes filtros',
+          title: `Nenhum estabelecimento (${activeMeta.shortName}) sem site encontrado`,
           description: 'Dica: diminua a avaliação mínima para 4.0★ ou pesquise outras cidades da região.'
         });
       } else {
         toast({
-          title: `${data.length} advogados reais sem site identificados!`,
+          title: `${data.length} estabelecimentos reais sem site encontrados!`,
           description: useLiveApi
-            ? 'Dados extraídos em tempo real via Google Places API Oficial.'
+            ? `Leads de ${activeMeta.name} extraídos em tempo real via Google Places API.`
             : 'Leads carregados do histórico salvo.'
         });
       }
@@ -253,6 +267,12 @@ export default function RadarGoogleMaps() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Alternador de Nicho com disparo imediato
+  const handleSelectNiche = (selectedNicheId) => {
+    setNiche(selectedNicheId);
+    handleSearch(city, state, selectedNicheId);
   };
 
   // Carregamento inicial com todos os leads curados
@@ -406,10 +426,24 @@ export default function RadarGoogleMaps() {
     return { total, avgRating, potentialRevenue };
   }, [results]);
 
+  // Ícone visual de cada nicho
+  const renderNicheIcon = (nicheId, className = "w-4 h-4") => {
+    const clean = (nicheId || '').toLowerCase();
+    if (clean.includes('dentist') || clean.includes('odonto')) return <Stethoscope className={className} />;
+    if (clean.includes('burger') || clean.includes('hamburguer') || clean.includes('gastro')) return <Utensils className={className} />;
+    if (clean.includes('barber') || clean.includes('barbearia')) return <Scissors className={className} />;
+    if (clean.includes('psicolog') || clean.includes('terapia') || clean.includes('mente')) return <Brain className={className} />;
+    if (clean.includes('nutri')) return <Salad className={className} />;
+    if (clean.includes('advocacia') || clean.includes('trabalhista') || clean.includes('familia') || clean.includes('consumidor')) return <Scale className={className} />;
+    return <Globe className={className} />;
+  };
+
+  const currentNicheMeta = PROSPECT_NICHES[niche] || PROSPECT_NICHES.todos;
+
   return (
     <div className="space-y-8 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
       
-      {/* Header Executivo com Indicadores de Negócio */}
+      {/* Header Executivo com Indicadores de Negócio Dinâmicos */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 bg-card border rounded-2xl p-6 sm:p-8 shadow-sm">
         <div className="space-y-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold">
@@ -417,11 +451,10 @@ export default function RadarGoogleMaps() {
             <span>Radar de Vendas B2B • Google Maps Brasil</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-            Radar Google Maps: Advogados com Avaliação Alta & Sem Site
+            {currentNicheMeta.title}
           </h1>
           <p className="text-sm text-muted-foreground max-w-2xl leading-relaxed">
-            Identifique escritórios com excelente reputação no Google que não possuem presença na web. 
-            Dispare propostas irresistíveis de <strong className="text-foreground font-semibold">R$ 297 (implementação única) + anuidade do domínio</strong> direto no WhatsApp.
+            {currentNicheMeta.subtitle}
           </p>
         </div>
 
@@ -454,6 +487,47 @@ export default function RadarGoogleMaps() {
               R$ {metrics.potentialRevenue.toLocaleString('pt-BR')}
             </span>
           </div>
+        </div>
+      </div>
+
+      {/* Barra de Seleção Rápida de Nichos de Mercado */}
+      <div className="bg-card border rounded-2xl p-4 sm:p-5 shadow-sm space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-xs font-bold text-foreground uppercase tracking-wider">
+            <Sparkles className="w-4 h-4 text-primary" />
+            <span>Selecione o Nicho de Prospecção</span>
+          </div>
+          <span className="text-[11px] text-muted-foreground hidden sm:inline">
+            Clique para filtrar e disparar propostas personalizadas por segmento
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
+          {Object.values(PROSPECT_NICHES).map((item) => {
+            const isSelected = (niche === item.id) || (item.id === 'advocacia' && ['trabalhista', 'familia', 'consumidor', 'geral'].includes(niche));
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => handleSelectNiche(item.id)}
+                className={`flex items-center gap-2 p-2.5 rounded-xl border text-xs font-semibold transition-all text-left ${
+                  isSelected
+                    ? 'bg-primary text-primary-foreground border-primary shadow-sm scale-[1.02]'
+                    : 'bg-muted/30 hover:bg-muted text-muted-foreground hover:text-foreground border-transparent hover:border-border'
+                }`}
+              >
+                <span className={`p-1.5 rounded-lg shrink-0 ${isSelected ? 'bg-white/20' : 'bg-background border'}`}>
+                  {renderNicheIcon(item.id, "w-4 h-4")}
+                </span>
+                <div className="min-w-0">
+                  <span className="block truncate font-bold text-[11px]">{item.shortName}</span>
+                  <span className={`text-[9px] block truncate ${isSelected ? 'text-primary-foreground/80' : 'text-muted-foreground'}`}>
+                    {item.leadTerm}
+                  </span>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -575,18 +649,23 @@ export default function RadarGoogleMaps() {
           {/* Nicho / Especialidade */}
           <div>
             <label className="block text-xs font-medium text-muted-foreground mb-1.5">
-              Especialidade
+              Especialidade / Nicho
             </label>
             <select
               value={niche}
-              onChange={(e) => setNiche(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl border bg-background text-sm text-foreground focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+              onChange={(e) => handleSelectNiche(e.target.value)}
+              className="w-full px-3.5 py-2.5 rounded-xl border bg-background text-sm text-foreground focus:ring-2 focus:ring-primary/20 outline-none transition-all font-medium"
             >
-              <option value="todos">Todos os Nichos</option>
-              <option value="geral">Geral / Full-Service</option>
-              <option value="trabalhista">Direito Trabalhista</option>
-              <option value="familia">Família & Sucessões</option>
-              <option value="consumidor">Direito do Consumidor</option>
+              <option value="todos">🌐 Todos os Nichos</option>
+              <option value="dentista">🦷 Dentistas & Odontologia</option>
+              <option value="hamburgueria">🍔 Hamburguerias & Gastrobares</option>
+              <option value="barbearia">💈 Barbearias & Barber Shops</option>
+              <option value="psicologo">🧠 Psicólogos & Saúde Mental</option>
+              <option value="nutricionista">🥗 Nutricionistas & Nutrologia</option>
+              <option value="advocacia">⚖️ Advocacia Geral</option>
+              <option value="trabalhista">⚖️ Direito Trabalhista</option>
+              <option value="familia">⚖️ Família & Sucessões</option>
+              <option value="consumidor">⚖️ Direito do Consumidor</option>
             </select>
           </div>
 
@@ -732,11 +811,23 @@ export default function RadarGoogleMaps() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {results.map((lawyer) => {
-            const nicheDetails = LEGAL_NICHES[lawyer.niche] || LEGAL_NICHES.geral;
+            const rawNicheKey = (lawyer.niche || 'advocacia').toLowerCase();
+            let leadNicheKey = 'advocacia';
+            if (rawNicheKey.includes('dentist') || rawNicheKey.includes('odonto')) leadNicheKey = 'dentista';
+            else if (rawNicheKey.includes('burger') || rawNicheKey.includes('hamburguer') || rawNicheKey.includes('gastro')) leadNicheKey = 'hamburgueria';
+            else if (rawNicheKey.includes('barber') || rawNicheKey.includes('barbearia')) leadNicheKey = 'barbearia';
+            else if (rawNicheKey.includes('psicolog') || rawNicheKey.includes('terapia') || rawNicheKey.includes('mente')) leadNicheKey = 'psicologo';
+            else if (rawNicheKey.includes('nutri')) leadNicheKey = 'nutricionista';
+
+            const nicheMeta = PROSPECT_NICHES[leadNicheKey] || (LEGAL_NICHES[lawyer.niche] ? {
+              name: LEGAL_NICHES[lawyer.niche].name,
+              badgeColor: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20'
+            } : PROSPECT_NICHES.advocacia);
+
             const isSaved = savedIds.has(lawyer.id);
             const isCopied = copiedId === lawyer.id;
 
-            // Link dinâmico para a demonstração com parâmetros portáteis
+            // Link dinâmico para a demonstração com parâmetros portáteis (específica de cada nicho)
             const demoUrl = buildDemoUrl(lawyer);
 
             // Link oficial ou de busca do Google Maps baseado na correspondência precisa de Nome e Endereço
@@ -752,8 +843,9 @@ export default function RadarGoogleMaps() {
                   <div className="flex items-start justify-between gap-3">
                     <div className="space-y-1">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="text-[10px] uppercase font-mono font-bold tracking-wider px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
-                          {nicheDetails.name}
+                        <span className={`text-[10px] uppercase font-mono font-bold tracking-wider px-2 py-0.5 rounded-md border flex items-center gap-1 ${nicheMeta.badgeColor || 'bg-primary/10 text-primary border-primary/20'}`}>
+                          {renderNicheIcon(leadNicheKey, "w-3 h-3")}
+                          <span>{nicheMeta.shortName || nicheMeta.name}</span>
                         </span>
                         <span className="text-[10px] uppercase font-mono font-bold tracking-wider px-2 py-0.5 rounded-md bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20">
                           Sem Site Oficial
@@ -772,7 +864,7 @@ export default function RadarGoogleMaps() {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="hover:underline inline-flex items-center gap-1.5"
-                          title="Abrir perfil deste advogado no Google Maps"
+                          title="Abrir perfil no Google Maps"
                         >
                           <span>{cleanLawyerName(lawyer.lawyer_name || lawyer.name)}</span>
                           <ExternalLink className="w-3.5 h-3.5 text-muted-foreground opacity-60 group-hover:opacity-100" />
@@ -1579,12 +1671,12 @@ export default function RadarGoogleMaps() {
             <form onSubmit={handleSaveManual} className="space-y-4">
               <div>
                 <label className="block text-xs font-medium text-muted-foreground mb-1">
-                  Nome do Advogado ou Escritório *
+                  Nome do Estabelecimento ou Profissional *
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="Ex: Dr. Marcelo Santos Advocacia"
+                  placeholder="Ex: Burger Prime, Clínica Odonto Sorriso, Barbearia Dom..."
                   value={manualData.lawyer_name}
                   onChange={(e) => setManualData({ ...manualData, lawyer_name: e.target.value })}
                   className="w-full px-3.5 py-2.5 rounded-xl border bg-background text-sm text-foreground outline-none"
@@ -1653,17 +1745,22 @@ export default function RadarGoogleMaps() {
 
               <div>
                 <label className="block text-xs font-medium text-muted-foreground mb-1">
-                  Especialidade / Nicho
+                  Nicho de Atuação
                 </label>
                 <select
                   value={manualData.niche}
                   onChange={(e) => setManualData({ ...manualData, niche: e.target.value })}
                   className="w-full px-3.5 py-2.5 rounded-xl border bg-background text-sm text-foreground outline-none"
                 >
-                  <option value="geral">Geral & Full-Service</option>
-                  <option value="trabalhista">Direito Trabalhista</option>
-                  <option value="familia">Família & Sucessões</option>
-                  <option value="consumidor">Direito do Consumidor</option>
+                  <option value="dentista">🦷 Dentista & Odontologia</option>
+                  <option value="hamburgueria">🍔 Hamburgueria & Gastrobar</option>
+                  <option value="barbearia">💈 Barbearia & Barber Shop</option>
+                  <option value="psicologo">🧠 Psicologia & Saúde Mental</option>
+                  <option value="nutricionista">🥗 Nutricionista & Nutrologia</option>
+                  <option value="advocacia">⚖️ Advocacia Geral</option>
+                  <option value="trabalhista">⚖️ Direito Trabalhista</option>
+                  <option value="familia">⚖️ Família & Sucessões</option>
+                  <option value="consumidor">⚖️ Direito do Consumidor</option>
                 </select>
               </div>
 
