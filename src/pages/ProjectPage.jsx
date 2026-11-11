@@ -39,11 +39,11 @@ const ProjectPage = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
     // Detecta se a página está no modo limpo para propostas externas
     const isCleanMode = Boolean(
         propCleanMode ||
-        location.pathname.startsWith('/portfolio-v2') ||
-        location.pathname.startsWith('/portfolio/v2') ||
-        location.pathname.startsWith('/projetos-v2')
+        location.pathname.startsWith('/portfolio-v3') ||
+        location.pathname.startsWith('/portfolio/v3') ||
+        location.pathname.startsWith('/projetos-v3')
     );
-    const effectiveBasePath = propBasePath || (isCleanMode ? '/portfolio-v2' : '/portfolio');
+    const effectiveBasePath = propBasePath || (isCleanMode ? '/portfolio-v3' : '/portfolio');
 
     const [project, setProject] = useState(null);
     const [loading, setLoading] = useState(true);

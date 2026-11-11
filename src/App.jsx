@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Toaster } from '@/components/ui/toaster';
 
@@ -76,6 +76,12 @@ const ManageCrmLeads = lazy(() => import('@/pages/admin/ManageCrmLeads'));
  */
 const isPhotoSubdomain = typeof window !== 'undefined' && window.location.hostname.includes('fotografia');
 
+// Redirecionamento dinâmico de projetos v2 para a rota canônica normal (/portfolio/:categorySlug/:projectSlug)
+const RedirectProjectV2 = () => {
+    const { categorySlug, projectSlug } = useParams();
+    return <Navigate to={`/portfolio/${categorySlug}/${projectSlug}`} replace />;
+};
+
 function App() {
     return (
         <ThemeProvider>
@@ -120,22 +126,38 @@ function App() {
                                     <Route path="/acompanhar-projeto/:budgetCode" element={<ClientProjectTrack />} />
                                 </Route>
 
-                                {/* Rotas da Vitrine Limpa para Propostas 99freelas (Sem Rodapé, Sem WhatsApp, Sem Contatos Externos) */}
-                                <Route element={<CleanShowcaseLayout />}>
-                                    <Route path="/portfolio-v2" element={<Portfolio cleanMode={true} basePath="/portfolio-v2" />} />
-                                    <Route path="/portfolio-v2/:categorySlug/:projectSlug" element={<ProjectPage cleanMode={true} basePath="/portfolio-v2" />} />
-                                    <Route path="/portfolio/v2" element={<Portfolio cleanMode={true} basePath="/portfolio-v2" />} />
-                                    <Route path="/portfolio/v2/:categorySlug/:projectSlug" element={<ProjectPage cleanMode={true} basePath="/portfolio-v2" />} />
-                                    <Route path="/projetos-v2" element={<Portfolio cleanMode={true} basePath="/portfolio-v2" />} />
-                                    <Route path="/projetos-v2/:categorySlug/:projectSlug" element={<ProjectPage cleanMode={true} basePath="/portfolio-v2" />} />
+                                {/* Redirecionamentos de Legado: rotas v2 agora redirecionam automaticamente para as rotas canônicas normais com WhatsApp e rodapé */}
+                                <Route path="/portfolio-v2" element={<Navigate to="/portfolio" replace />} />
+                                <Route path="/portfolio-v2/:categorySlug/:projectSlug" element={<RedirectProjectV2 />} />
+                                <Route path="/portfolio/v2" element={<Navigate to="/portfolio" replace />} />
+                                <Route path="/portfolio/v2/:categorySlug/:projectSlug" element={<RedirectProjectV2 />} />
+                                <Route path="/projetos-v2" element={<Navigate to="/portfolio" replace />} />
+                                <Route path="/projetos-v2/:categorySlug/:projectSlug" element={<RedirectProjectV2 />} />
 
-                                    {/* Fotografia v2 (Blindada para Propostas 99freelas) */}
-                                    <Route path="/portfolio-fotografia-v2" element={<PhotographyLanding cleanMode={true} basePath="/portfolio-v2" />} />
-                                    <Route path="/portfolio-fotografia-v2/galeria" element={<PhotographyPortfolio cleanMode={true} basePath="/portfolio-v2" />} />
-                                    <Route path="/portfolio-v2/fotografia" element={<PhotographyLanding cleanMode={true} basePath="/portfolio-v2" />} />
-                                    <Route path="/portfolio-v2/fotografia/galeria" element={<PhotographyPortfolio cleanMode={true} basePath="/portfolio-v2" />} />
-                                    <Route path="/fotografia-v2" element={<PhotographyLanding cleanMode={true} basePath="/portfolio-v2" />} />
-                                    <Route path="/fotografia-v2/galeria" element={<PhotographyPortfolio cleanMode={true} basePath="/portfolio-v2" />} />
+                                {/* Fotografia v2 (Redirecionamento para o normal) */}
+                                <Route path="/portfolio-fotografia-v2" element={<Navigate to="/portfolio-fotografia" replace />} />
+                                <Route path="/portfolio-fotografia-v2/galeria" element={<Navigate to="/portfolio-fotografia/galeria" replace />} />
+                                <Route path="/portfolio-v2/fotografia" element={<Navigate to="/portfolio-fotografia" replace />} />
+                                <Route path="/portfolio-v2/fotografia/galeria" element={<Navigate to="/portfolio-fotografia/galeria" replace />} />
+                                <Route path="/fotografia-v2" element={<Navigate to="/portfolio-fotografia" replace />} />
+                                <Route path="/fotografia-v2/galeria" element={<Navigate to="/portfolio-fotografia/galeria" replace />} />
+
+                                {/* Rotas da Vitrine Limpa v3 para Propostas 99freelas (Sem Rodapé, Sem WhatsApp, Sem Contatos Externos) */}
+                                <Route element={<CleanShowcaseLayout />}>
+                                    <Route path="/portfolio-v3" element={<Portfolio cleanMode={true} basePath="/portfolio-v3" />} />
+                                    <Route path="/portfolio-v3/:categorySlug/:projectSlug" element={<ProjectPage cleanMode={true} basePath="/portfolio-v3" />} />
+                                    <Route path="/portfolio/v3" element={<Portfolio cleanMode={true} basePath="/portfolio-v3" />} />
+                                    <Route path="/portfolio/v3/:categorySlug/:projectSlug" element={<ProjectPage cleanMode={true} basePath="/portfolio-v3" />} />
+                                    <Route path="/projetos-v3" element={<Portfolio cleanMode={true} basePath="/portfolio-v3" />} />
+                                    <Route path="/projetos-v3/:categorySlug/:projectSlug" element={<ProjectPage cleanMode={true} basePath="/portfolio-v3" />} />
+
+                                    {/* Fotografia v3 (Blindada para Propostas 99freelas) */}
+                                    <Route path="/portfolio-fotografia-v3" element={<PhotographyLanding cleanMode={true} basePath="/portfolio-v3" />} />
+                                    <Route path="/portfolio-fotografia-v3/galeria" element={<PhotographyPortfolio cleanMode={true} basePath="/portfolio-v3" />} />
+                                    <Route path="/portfolio-v3/fotografia" element={<PhotographyLanding cleanMode={true} basePath="/portfolio-v3" />} />
+                                    <Route path="/portfolio-v3/fotografia/galeria" element={<PhotographyPortfolio cleanMode={true} basePath="/portfolio-v3" />} />
+                                    <Route path="/fotografia-v3" element={<PhotographyLanding cleanMode={true} basePath="/portfolio-v3" />} />
+                                    <Route path="/fotografia-v3/galeria" element={<PhotographyPortfolio cleanMode={true} basePath="/portfolio-v3" />} />
                                 </Route>
 
                                 {/* Rotas Especiais de Demonstração & Landing Pages de Advocacia (Layout Dedicado Próprio) */}

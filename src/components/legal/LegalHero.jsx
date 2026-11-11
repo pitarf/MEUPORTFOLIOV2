@@ -11,9 +11,12 @@ export default function LegalHero({ lawyer, nicheInfo, heroImage, theme }) {
   const isFemale = theme?.gender === 'female';
   const honorific = theme?.honorific || 'Dr(a).';
 
-  const primaryHeroImage = isFemale
-    ? ((heroImage && heroImage.includes('advogada')) ? heroImage : '/images/legal/advogada_hero.jpg')
-    : (heroImage || '/images/legal/hero_desk.jpg');
+  // Se o advogado possuir foto própria cadastrada via URL externa, utilizamos com prioridade.
+  // Caso contrário, utilizamos imagens institucionais neutras (sem retratos de terceiros) para total sobriedade e identificação.
+  const hasCustomUserImage = heroImage && heroImage.startsWith('http');
+  const primaryHeroImage = hasCustomUserImage
+    ? heroImage
+    : '/images/legal/hero_desk.jpg';
 
   const slides = isFemale
     ? [
@@ -26,7 +29,7 @@ export default function LegalHero({ lawyer, nicheInfo, heroImage, theme }) {
           badge: 'Atendimento Exclusivo e Dedicado'
         },
         {
-          image: '/images/legal/advogada_sobre.jpg',
+          image: '/images/legal/tribunal.jpg',
           tag: 'ADVOCACIA CONSULTIVA & ESTRATÉGICA',
           title: 'Assessoria Especializada perante os',
           highlight: 'Tribunais Superiores',
@@ -34,7 +37,7 @@ export default function LegalHero({ lawyer, nicheInfo, heroImage, theme }) {
           badge: 'Reuniões Presenciais e Online'
         },
         {
-          image: '/images/legal/advogada_tribunal.jpg',
+          image: '/images/legal/sede.jpg',
           tag: 'DEFESA E SEGURANÇA PATRIMONIAL',
           title: 'Solidez e Firmeza na Proteção dos',
           highlight: 'Seus Interesses',
@@ -42,7 +45,7 @@ export default function LegalHero({ lawyer, nicheInfo, heroImage, theme }) {
           badge: 'Prática Forense Especializada'
         },
         {
-          image: '/images/legal/advogada_sede.jpg',
+          image: '/images/legal/skyline.jpg',
           tag: 'COMPROMISSO ÉTICO E TRANSPARÊNCIA',
           title: 'Estrutura Completa a Serviço da',
           highlight: 'Sua Tranquilidade',
@@ -60,7 +63,7 @@ export default function LegalHero({ lawyer, nicheInfo, heroImage, theme }) {
           badge: 'Atendimento Executivo e Personalizado'
         },
         {
-          image: '/images/legal/reuniao.jpg',
+          image: '/images/legal/tribunal.jpg',
           tag: 'ADVOCACIA CONSULTIVA & CONTENCIOSA',
           title: 'Assessoria Especializada perante os',
           highlight: 'Tribunais Superiores',
@@ -68,7 +71,7 @@ export default function LegalHero({ lawyer, nicheInfo, heroImage, theme }) {
           badge: 'Reuniões Presenciais e Online'
         },
         {
-          image: '/images/legal/tribunal.jpg',
+          image: '/images/legal/sede.jpg',
           tag: 'DEFESA E SEGURANÇA PATRIMONIAL',
           title: 'Solidez e Firmeza na Proteção dos',
           highlight: 'Seus Interesses',
@@ -76,7 +79,7 @@ export default function LegalHero({ lawyer, nicheInfo, heroImage, theme }) {
           badge: 'Prática Forense Dedicada'
         },
         {
-          image: '/images/legal/sede.jpg',
+          image: '/images/legal/skyline.jpg',
           tag: 'COMPROMISSO ÉTICO E TRANSPARÊNCIA',
           title: 'Estrutura Completa a Serviço da',
           highlight: 'Sua Tranquilidade',

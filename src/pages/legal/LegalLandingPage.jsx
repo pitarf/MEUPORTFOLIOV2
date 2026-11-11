@@ -8,6 +8,7 @@ import { cleanLawyerName } from '../../utils/lawyerNameFormatter';
 
 import LegalTopBar from '../../components/legal/LegalTopBar';
 import LegalNavbar from '../../components/legal/LegalNavbar';
+import LegalDemoNoticeBar from '../../components/legal/LegalDemoNoticeBar';
 import LegalHero from '../../components/legal/LegalHero';
 import LegalTrustBar from '../../components/legal/LegalTrustBar';
 import LegalPracticeAreas from '../../components/legal/LegalPracticeAreas';
@@ -263,6 +264,9 @@ export default function LegalLandingPage() {
   return (
     <div className={`min-h-screen bg-white text-slate-800 font-sans w-full max-w-full overflow-x-clip ${theme.gender === 'female' ? 'selection:bg-[#9A1E58]' : 'selection:bg-[#C6923C]'} selection:text-white`}>
       
+      {/* 0. Barra Superior de Demonstração Interativa (Informa que fotos e textos são adaptáveis) */}
+      <LegalDemoNoticeBar lawyer={lawyerData} theme={theme} />
+
       {/* 1. Barra Utilitária Superior (Topo Escuro com Endereço, Horário e Telefone) */}
       <LegalTopBar lawyer={lawyerData} theme={theme} />
 

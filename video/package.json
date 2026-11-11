@@ -1,0 +1,24 @@
+{
+  "name": "rp-solutions-promo-video",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "remotion preview src/index.ts",
+    "build:vertical": "remotion render src/index.ts PromoVertical out/promo-reels.mp4 --concurrency=4",
+    "build:horizontal": "remotion render src/index.ts PromoHorizontal out/promo-hero.mp4 --concurrency=4"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.218",
+    "@remotion/transitions": "^4.0.218",
+    "lucide-react": "^0.285.0",
+    "puppeteer-core": "^25.16.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "remotion": "^4.0.218",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.15",
+    "typescript": "^5.0.0"
+  }
+}

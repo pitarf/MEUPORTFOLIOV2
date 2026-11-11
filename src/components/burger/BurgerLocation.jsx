@@ -84,7 +84,7 @@ export default function BurgerLocation({ data }) {
                 Tempo médio de entrega: <strong className="text-white">{data.avgDeliveryTime}</strong>
               </p>
               <div className="flex flex-wrap gap-1.5 pt-1">
-                {data.deliveryNeighborhoods.map((nb, i) => (
+                {(data.deliveryNeighborhoods || data.location?.coveredNeighborhoods || []).map((nb, i) => (
                   <span
                     key={i}
                     className="px-2.5 py-1 rounded bg-stone-900 border border-stone-800 text-[11px] font-mono text-stone-300"

@@ -2,6 +2,101 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Ajuste dos Modelos de Demonstração (Sem Fotos Fictícias de Terceiros) e Implementação do Botão/Modal de Envio de E-mails (`src/pages/admin/ManageLegalProspects.jsx`, `src/services/emailSenderService.js`, `src/components/legal/LegalHero.jsx`, `src/components/legal/LegalAbout.jsx`, `src/components/legal/LegalDemoNoticeBar.jsx`, `src/pages/legal/LegalLandingPage.jsx`, `src/data/barbershopData.js`, `src/utils/nutritionProspectUtils.js`)**:
+  - Objetivo: Corrigir as landing pages de modelo para que não exibam rostos fictícios de terceiros quando abertas como demonstração por clientes prospectados, adicionar aviso superior interativo informando a total personalização com a marca do cliente, e implementar o botão e modal completo de disparo de e-mails institucionais com rastreamento no painel de prospecção.
+  - Entregas Realizadas:
+    - `src/services/emailSenderService.js`: Criação do método `buildLegalPitchEmail` estruturado rigorosamente no Provimento 205/2021 da OAB (sem mercantilização, tom institucional, link parametrizado e pixel de rastreamento 1x1 invisível) e atualização do número oficial de WhatsApp da marca para `(21) 96614-9077`.
+    - `src/pages/admin/ManageLegalProspects.jsx`: Adicionado nos cards de cada advogado o botão proeminente de "Enviar E-mail de Demonstração", exibição clara do status ("Enviado") e modal completo de disparo (com campo editável de e-mail, assunto personalizado, prévia do texto, link testável da demo, disparo via API local e botões rápidos "Abrir no Webmail" e "Copiar Texto").
+    - `src/components/legal/LegalDemoNoticeBar.jsx`: Nova barra superior fixa e elegante de demonstração interativa para advogados, informando que a estrutura é sob medida e 100% personalizável (fotos, logotipo, textos, áreas de atuação) e botão de ação direta para aprovar o site por R$ 297 no WhatsApp oficial.
+    - `src/components/legal/LegalHero.jsx` e `LegalAbout.jsx`: Substituição de retratos de pessoas desconhecidas por imagens conceituais e arquitetônicas de alto padrão (`hero_desk.jpg`, `sede.jpg`, `tribunal.jpg`, `skyline.jpg`), resguardando fotos pessoais apenas quando explicitamente cadastradas.
+    - `src/data/barbershopData.js`: Substituição de foto inadequada na equipe de barbeiros por fotografia profissional autêntica de mestre barbeiro em ação (`photo-1503951914875-452162b0f3f1`).
+    - `src/utils/nutritionProspectUtils.js`: Ajuste para fotos de demonstração de nutricionistas masculinos e neutros sem quebrar a identidade visual do cliente.
+  - Validação Automatizada: Build de produção (`cmd.exe /c "npm run build"`) executado e aprovado com sucesso em 14.14s (zero erros).
+
+- [x] **Redirecionamento Automático das Rotas v2 para o Portfólio Normal e Migração da Vitrine Limpa para v3 (`src/App.jsx`, `src/components/CleanShowcaseLayout.jsx`, `src/pages/`, `src/services/proposalAiService.js`)**:
+  - Objetivo: Configurar o redirecionamento automático de todas as rotas v2 legadas (`/portfolio-v2`, `/portfolio/v2`, `/projetos-v2`, `/portfolio-fotografia-v2`, `/fotografia-v2`) para as rotas canônicas padrão (`/portfolio`, `/portfolio-fotografia`), com preservação dinâmica de categoria e slug do projeto, e migrar a vitrine limpa (sem rodapé e sem WhatsApp para 99freelas) para as rotas **v3** (`/portfolio-v3`, `/projetos-v3`, `/portfolio-fotografia-v3`).
+  - Entregas Realizadas:
+    - Componente utilitário `RedirectProjectV2` em `src/App.jsx` para redirecionamento canônico com `replace: true`.
+    - Redirecionamento completo das 6 rotas v2 de desenvolvimento e fotografia para as rotas normais com WhatsApp e rodapé de conversão.
+    - Novas rotas v3 registradas em `CleanShowcaseLayout` (`/portfolio-v3`, `/portfolio-v3/:categorySlug/:projectSlug`, `/portfolio/v3`, `/projetos-v3`, `/portfolio-fotografia-v3`, `/fotografia-v3`).
+    - Atualização do header de `CleanShowcaseLayout.jsx` apontando para `/portfolio-v3`.
+    - Atualização da detecção de `isCleanMode` em `Portfolio.jsx`, `ProjectPage.jsx`, `PhotographyLanding.jsx` e `PhotographyPortfolio.jsx`.
+    - Atualização dos links gerados em propostas da 99freelas em `proposalAiService.js` apontando para `portfolio-v3`.
+  - Validação Automatizada: Build de produção (`vite build`) executado com sucesso e zero erros em 24.79s.
+
+- [x] **Artes de Feed Quadradas (1:1, 1080x1080) na Identidade Oficial RP Solutions (`campanha-meta-ads/artes-feed/`, `public/artes-feed/`)**:
+  - Objetivo: Criar 4 artes no formato quadrado 1:1 (1080x1080) para o Feed do Instagram e campanhas Meta Ads com a identidade visual oficial da RP Solutions (fundo preto obsidiana `#0a0a08`, grid cibernético 3D, elementos orgânicos em vidro líquido, luz neon lime `#bcf13b`, logotipo oficial `rp.` com subtítulo `SOLUÇÕES DIGITAIS`, chamada brutalista por nicho, oferta monumental `15% OFF` + `+5% NO PIX`, 3 pilares de benefícios e rodapé de conversão).
+  - Entregas Realizadas:
+    - `feed-rp-1-delivery.jpg`: Nicho Restaurante & Delivery (Cardápio Próprio, Zero Taxas de Apps, Pedidos no WhatsApp).
+    - `feed-rp-2-barbearia.jpg`: Nicho Barbearia & Salão (Agendamento 24h, Agenda Cheia Sem Parar Corte, Presença VIP Google).
+    - `feed-rp-3-clinica.jpg`: Nicho Clínica & Consultório (84% Buscam Médicos no Google, Consultas Particulares, Autoridade Médica).
+    - `feed-rp-4-advocacia.jpg`: Nicho Advocacia & B2B (Top 1 no Google, Captação Ativa de Clientes, 100% Normas da OAB).
+    - Cópia espelhada em `public/artes-feed/` e documentação integrada em `campanha-meta-ads/roteiro-e-orientacoes.md`.
+  - Validação Automatizada: 4 imagens inspecionadas e aprovadas com diagramação limpa, contraste de alto nível e legibilidade imediata.
+
+- [x] **Artes de Story em 1080x1920 na Identidade Oficial RP Solutions (Dark Cyber-Luxury com Verde Neon) (`campanha-meta-ads/artes-stories/`, `public/artes-stories/`)**:
+  - Objetivo: Recriar e renderizar as artes de Story no formato vertical (1080x1920) aplicando rigorosamente a identidade visual genuína da RP Solutions: fundo preto obsidiana fosco (`#0a0a08`), logotipo oficial `rp.` (letras brancas e ponto final em verde neon `#bcf13b`), subtítulo `SOLUÇÕES DIGITAIS`, iluminação volumétrica verde elétrico, formas 3D em vidro líquido translúcido, badge `OPORTUNIDADE EXCLUSIVA`, tipografia brutalista de alto impacto ("VOCÊ TEM [NICHO]? FAÇA SUA LANDING PAGE AGORA"), oferta de 15% OFF com destaque gigante e tag de +5% no PIX, além dos cards translúcidos de benefícios e chamada com botão de ação.
+  - Entregas Realizadas:
+    1. **Coleção 3D Cyber-Luxury Oficial RP Solutions (Alta Conversão)**:
+       - `story-rp-1-delivery.jpg`: Restaurante & Delivery (Cardápio próprio, zero taxas de apps, pedidos direto no WhatsApp).
+       - `story-rp-2-barbearia.jpg`: Barbearia & Salão (Agendamento automático 24h, agenda cheia sem parar atendimento, presença VIP no Google).
+       - `story-rp-3-clinica.jpg`: Clínica & Consultório (84% buscam médicos no Google, atração de consultas particulares, autoridade médica).
+       - `story-rp-4-advocacia.jpg`: Advocacia & B2B (Top 1 na região, clientes qualificados, normas da OAB).
+    2. **Coleção Vetorial com Telas Reais no Mockup Dark Neon (Remotion Still)**:
+       - `story-1-delivery.png`, `story-2-barbearia.png`, `story-3-clinica.png`, `story-4-advocacia.png` atualizados com logo `rp.`, fundo `#0a0a08` e paleta `#bcf13b`.
+    3. **Distribuição e Acesso**:
+       - Arquivos salvos em `campanha-meta-ads/artes-stories/` e espelhados na pasta acessível `public/artes-stories/`.
+       - Roteiro e orientações atualizados em `campanha-meta-ads/roteiro-e-orientacoes.md`.
+  - Validação Automatizada: Imagens inspecionadas e validadas visualmente com precisão estética de agência premium internacional.
+
+- [x] **Vídeos Comerciais Meta Ads em Tema Claro na Identidade da Marca (15s e 30s) (`video/src/meta-ads-motion/`, `campanha-meta-ads/`)**:
+  - Objetivo: Criar e renderizar as versões em Tema Claro (Light Mode) dos vídeos comerciais de 15 segundos e 30 segundos com a identidade visual corporativa da Rafael Pita Solutions (fundo claro `#F8FAFC`, cards em vidro branco fosco, tipografia em ardósia profunda e azul royal `#2563EB`, e páginas reais do portfólio, odontologia, psicologia e nutrição rolando ao fundo em 3D).
+  - Implementações Realizadas:
+    - Capturas em altíssima resolução vertical das páginas claras (`full_portfolio_light.png`, `full_odonto_light.png`, `full_psicologia_light.png`, `full_nutrivida_light.png`).
+    - Componente `BackgroundScrollWebsitesLight.tsx` com 4 colunas em perspectiva 3D (`perspective: 1300px`, `rotateX: 10deg`, `rotateY: -5deg`), bordas brancas com sombra e gradientes de proteção em tons claros.
+    - Suporte a `theme="light"` nos componentes `GoogleSearchSim.tsx`, `WhatsAppLiveCard.tsx`, `BeforeAfterCard.tsx`, `PromoBadge3D.tsx` e `MetaAdsActionCta.tsx`.
+    - Composições dedicadas `MetaAds15sLightComposition.tsx` e `MetaAds30sLightComposition.tsx` registradas no Remotion Root.
+    - Renderização da versão 15s Clara: `campanha-meta-ads/anuncio-15s-tema-claro-reels.mp4` (8.5 MB, 450 frames / 15.0s).
+    - Renderização da versão 30s Clara: `campanha-meta-ads/anuncio-30s-tema-claro-reels.mp4` (11.5 MB, 900 frames / 30.0s).
+    - Cópias sincronizadas para `public/videos/meta-ads/`.
+    - Documentação estratégica atualizada em `campanha-meta-ads/roteiro-e-orientacoes.md`.
+  - Validação Automatizada: Renderizações concluídas com código 0 pelo Remotion e verificadas via ffprobe (1080x1920, H.264 / AAC).
+
+- [x] **Motion Graphics com Fundo Real 4 Colunas em Movimento 3D de Alta Visibilidade para Meta Ads (15s e 30s) (`video/src/meta-ads-motion/`, `campanha-meta-ads/`)**:
+  - Objetivo: Exibir com máxima visibilidade, saturação e iluminação as landing pages reais desenvolvidas no projeto rolando em 3D em 4 colunas em segundo plano, com cards de primeiro plano em vidro fosco (glassmorphism frosted), texto com sombra e contraste impecável, em versões diretas de 15 segundos e 30 segundos, sincronizadas com a voz neural da Thalita e trilha sonora.
+  - Implementações Realizadas:
+    - Captura de páginas inteiras em altíssima definição (Full Page Scroll, 1080x1920) via script automatizado: `full_burger.png`, `full_barber.png`, `full_odonto.png` e `full_portfolio.png`.
+    - Componente de fundo dinâmico `BackgroundScrollWebsites.tsx`: ampliado para 4 colunas simultâneas (Hamburgueria, Portfólio, Barbearia, Odontologia) com rotação espacial (`perspective: 1300px`, `rotateX: 10deg`, `rotateY: -5deg`), brilho aumentado (`brightness: 1.25`, `saturate: 1.25`, `opacity: 0.92`), bordas iluminadas e vinheta suave para manter as páginas nítidas e vibrantes.
+    - Estrutura de primeiro plano em Glassmorphism Frosted: containers centrais em vidro escuro fosco (`rgba(4, 9, 22, 0.72)` com `backdropFilter: blur(20px)` e bordas sutis) garantindo legibilidade absoluta das mensagens e das simulações (`GoogleSearchSim`, `WhatsAppLiveCard`, `BeforeAfterCard`, `PromoBadge3D` e `MetaAdsActionCta`) sem concorrer com as páginas que passam ao fundo.
+    - Renderização da versão de 15 segundos: `campanha-meta-ads/anuncio-15s-direto-reels.mp4` (13.3 MB, 450 frames / 15.0s, 1080x1920 H.264 / AAC).
+    - Renderização da versão de 30 segundos: `campanha-meta-ads/anuncio-30s-completo-reels.mp4` (900 frames / 30.0s, 1080x1920 H.264 / AAC).
+    - Cópias sincronizadas para `public/videos/meta-ads/`.
+    - Atualização do guia estratégico `campanha-meta-ads/roteiro-e-orientacoes.md`.
+  - Validação Automatizada: Renderizações concluídas com código 0 pelo Remotion e verificadas via ffprobe (1080x1920, H.264 / AAC).
+
+- [x] **Campanha de Vídeo Meta Ads para Venda de Landing Pages (`campanha-meta-ads/`, `video/src/meta-ads/`, `public/videos/meta-ads/`)**:
+  - Objetivo: Criar um vídeo comercial dinâmico e chamativo em formato 9:16 (1080x1920) para Meta Ads (Reels, Stories, Feed) com prints reais dos mostruários desenvolvidos, dados reais do Google sobre buscas locais, foco nos nichos de delivery, barbearia e consultórios, narração profissional sincronizada com trilha sonora e a oferta de Novembro (15% OFF, 5x no cartão ou +5% no PIX).
+  - Implementações Realizadas:
+    - Capturas automatizadas em alta definição com `puppeteer-core` (`burger_mobile.png`, `barber_mobile.png`, `dental_mobile.png`, `psychology_mobile.png`, `portfolio_desktop.png`).
+    - Narração com a voz neural brasileira **Thalita Multilingual** (`pt-BR-ThalitaMultilingualNeural`) com entonação conversacional humana, pausas de respiração e mixada com trilha sonora ambiental estéreo.
+    - Estrutura completa de 6 cenas (Gancho, Dados do Google 46% e 84%, Mockups de Celular para Restaurante/Barbearia/Saúde, Autoridade Desktop com SEO, Oferta de Novembro 15% OFF e Botão CTA para WhatsApp).
+    - Renderização do vídeo final em `campanha-meta-ads/anuncio-landing-pages-reels-9x16.mp4` (12.3 MB, 51.07s, 1080x1920).
+    - Elaboração de manual estratégico com sugestões de segmentação e copys prontas em `campanha-meta-ads/roteiro-e-orientacoes.md`.
+    - Cópia pública disponível em `public/videos/meta-ads/anuncio-landing-pages-reels-9x16.mp4`.
+    - Ajuste preventivo de compatibilidade em `BurgerLocation.jsx`.
+  - Validação Automatizada: Renderização concluída com código 0 pelo Remotion e validação dos metadados com ffprobe (H.264 / AAC 51.07s).
+
+- [x] **Vídeos Promocionais Remotion em Formato Vertical e Horizontal (`video/`, `public/videos/`)**:
+  - Objetivo: Criar e renderizar vídeos comerciais em alta resolução (MP4) baseados na identidade visual da Rafael Pita Solutions, utilizando a suíte Remotion e o guia oficial `guia-promo-video.md`.
+  - Implementações Realizadas:
+    - Instalação das skills `create-promo-video` e suíte `remotion-dev/skills`.
+    - Configuração do projeto Remotion em `video/` com TypeScript e React.
+    - Estruturação modular das cenas com roteiro AIDA em `video/src/scenes/` (`HookScene`, `BrandScene`, `FeaturesScene`, `CtaScene`).
+    - Renderização da composição vertical 9:16 (1080x1920) em `video/out/promo-reels.mp4` (5.0 MB).
+    - Renderização da composição horizontal 16:9 (1920x1080) em `video/out/promo-hero.mp4` (4.3 MB).
+    - Cópia dos arquivos finais para `public/videos/` para integração no site.
+  - Validação Automatizada: Renderizações concluídas com código 0 via `@remotion/cli` e Chromium Headless Shell.
+
 - [x] **Renderização Infalível de QR Code PIX com `qrcode.react` SVG (`QrCodeImage.jsx`)**:
   - Objetivo: Resolver em definitivo o problema do QR Code PIX exibindo "QR Code indisponível" no portal do assinante e nos modais de fatura.
   - Causa Raiz: Incompatibilidade de exportação default do pacote CommonJS `qrcode` no navegador sob o Vite, acionando o estado de erro `hasError`.

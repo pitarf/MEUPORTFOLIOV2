@@ -40,7 +40,13 @@ build/Release
 
 # Dependency directories
 node_modules/
+**/node_modules/
 jspm_packages/
+video/out/
+video/.remotion/
+video/.cache/
+video/*.mp4
+campanha-meta-ads/*.mp4
 
 # TypeScript v1 declaration files
 typings/

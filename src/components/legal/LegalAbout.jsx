@@ -38,7 +38,11 @@ export default function LegalAbout({ lawyer, nicheInfo, theme }) {
   ];
 
   const isFemale = theme?.gender === 'female';
-  const aboutImage = isFemale ? (theme?.aboutImg || '/images/legal/advogada_sobre.jpg') : '/images/legal/reuniao.jpg';
+  // Imagem institucional neutra de alta autoridade para que não haja retratos de terceiros no modelo
+  const hasCustomUserImage = lawyer?.custom_about_url && lawyer.custom_about_url.startsWith('http');
+  const aboutImage = hasCustomUserImage
+    ? lawyer.custom_about_url
+    : '/images/legal/sede.jpg';
 
   return (
     <section id="sobre" className={`${isFemale ? 'bg-[#FCF9F7] text-stone-800 border-[#EEDCE7]' : 'bg-white text-slate-800 border-slate-100'} py-20 sm:py-24 border-t overflow-hidden w-full`}>

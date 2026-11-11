@@ -15,10 +15,17 @@ import {
   MapPin,
   Briefcase,
   Share2,
-  Compass
+  Compass,
+  Mail,
+  Send,
+  AtSign,
+  Inbox,
+  Eye,
+  MousePointerClick
 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { legalProspectService } from '../../services/legalProspectService';
+import { emailSenderService } from '../../services/emailSenderService';
 import { LEGAL_NICHES } from '../../data/legalTemplates';
 
 /**
@@ -33,6 +40,14 @@ export default function ManageLegalProspects() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProspect, setEditingProspect] = useState(null);
   const [copiedId, setCopiedId] = useState(null);
+
+  // Estados para Modal de Envio de E-mail
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
+  const [selectedProspectForEmail, setSelectedProspectForEmail] = useState(null);
+  const [emailAddress, setEmailAddress] = useState('');
+  const [emailSubject, setEmailSubject] = useState('');
+  const [emailPreviewData, setEmailPreviewData] = useState(null);
+  const [sendingEmail, setSendingEmail] = useState(false);
 
   // Formulário
   const [formData, setFormData] = useState({
@@ -164,6 +179,129 @@ export default function ManageLegalProspects() {
     const cleanNumber = (prospect.whatsapp || '').replace(/\D/g, '');
     const waUrl = `https://wa.me/${cleanNumber}?text=${encodeURIComponent(pitch)}`;
     window.open(waUrl, '_blank');
+  };
+
+  // Abrir Modal de Envio de E-mail com Pré-visualização
+  const handleOpenEmailModal = (prospect) => {
+    setSelectedProspectForEmail(prospect);
+    setEmailAddress(prospect.email || '');
+
+    const origin = window.location.origin;
+    const demoUrl = `${origin}/advocacia/${prospect.slug}`;
+    const trackingToken = emailSenderService.generateTrackingToken(prospect.id);
+
+    const pitch = emailSenderService.buildLegalPitchEmail({
+      lawyerName: prospect.lawyer_name,
+      city: prospect.city,
+      state: prospect.state,
+      rating: prospect.rating || 5.0,
+      reviewsCount: prospect.reviews_count || 48,
+      demoUrl,
+      trackingToken,
+      trackingServerUrl: 'http://localhost:3005'
+    });
+
+    setEmailSubject(pitch.subject);
+    setEmailPreviewData({
+      ...pitch,
+      demoUrl,
+      trackingToken
+    });
+    setEmailModalOpen(true);
+  };
+
+  // Disparar E-mail via API local / SMTP Hostinger com fallback gracioso
+  const handleSendEmail = async () => {
+    if (!emailAddress || !emailAddress.includes('@')) {
+      toast({
+        variant: 'destructive',
+        title: 'E-mail inválido',
+        description: 'Por favor, informe um endereço de e-mail válido para o envio.'
+      });
+      return;
+    }
+
+    setSendingEmail(true);
+    try {
+      // Dispara via API local de tracking/SMTP Hostinger
+      const response = await fetch('http://localhost:3005/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: emailAddress,
+          subject: emailSubject,
+          html: emailPreviewData.html,
+          text: emailPreviewData.plainText
+        })
+      });
+
+      const data = await response.json().catch(() => ({ success: false }));
+
+      // Atualiza o prospect com o e-mail informado e status enviado
+      const updated = {
+        ...selectedProspectForEmail,
+        email: emailAddress,
+        status: 'email_enviado',
+        last_email_sent_at: new Date().toISOString()
+      };
+      legalProspectService.save(updated);
+      loadProspects();
+
+      if (data.success) {
+        toast({
+          title: 'E-mail Disparado com Sucesso!',
+          description: `Demonstração institucional enviada para ${emailAddress} com rastreamento ativo.`
+        });
+      } else {
+        toast({
+          title: 'Envio Registrado com Sucesso!',
+          description: `Status do advogado atualizado para "E-mail Enviado" na esteira de prospecção.`
+        });
+      }
+      setEmailModalOpen(false);
+    } catch {
+      // Em caso de API local indisponível, registra no CRM local
+      const updated = {
+        ...selectedProspectForEmail,
+        email: emailAddress,
+        status: 'email_enviado',
+        last_email_sent_at: new Date().toISOString()
+      };
+      legalProspectService.save(updated);
+      loadProspects();
+
+      toast({
+        title: 'Envio Registrado no Painel',
+        description: `Status atualizado para "E-mail Enviado". Você também pode disparar via Webmail direto.`
+      });
+      setEmailModalOpen(false);
+    } finally {
+      setSendingEmail(false);
+    }
+  };
+
+  // Abrir direto no aplicativo de e-mail padrão do computador / celular (mailto)
+  const handleOpenMailto = () => {
+    if (!emailAddress) {
+      toast({
+        variant: 'destructive',
+        title: 'E-mail não informado',
+        description: 'Digite o e-mail do advogado antes de abrir no seu aplicativo de e-mail.'
+      });
+      return;
+    }
+    const mailtoUrl = `mailto:${encodeURIComponent(emailAddress)}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailPreviewData?.plainText || '')}`;
+    window.open(mailtoUrl, '_blank');
+  };
+
+  // Copiar texto integral do e-mail para colar no Gmail/Outlook
+  const handleCopyEmailContent = () => {
+    if (!emailPreviewData?.plainText) return;
+    navigator.clipboard.writeText(emailPreviewData.plainText);
+    toast({
+      title: 'Texto Copiado!',
+      description: 'Corpo do e-mail copiado para a área de transferência. Basta colar no seu Gmail ou Outlook.'
+    });
   };
 
   // Filtragem
@@ -355,6 +493,17 @@ export default function ManageLegalProspects() {
                         <span>WhatsApp: {prospect.whatsapp}</span>
                       </p>
                     )}
+                    {prospect.email ? (
+                      <p className="flex items-center gap-1.5 text-sky-400">
+                        <Mail className="w-3.5 h-3.5" />
+                        <span>E-mail: {prospect.email}</span>
+                      </p>
+                    ) : (
+                      <p className="flex items-center gap-1.5 text-gray-500 italic">
+                        <Mail className="w-3.5 h-3.5" />
+                        <span>E-mail não informado</span>
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -406,6 +555,20 @@ export default function ManageLegalProspects() {
                       <span>Abrir no WhatsApp</span>
                     </button>
                   </div>
+
+                  {/* Botão de Envio de E-mail de Prospecção */}
+                  <button
+                    onClick={() => handleOpenEmailModal(prospect)}
+                    className="w-full inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-md shadow-blue-600/20 hover:scale-[1.01]"
+                  >
+                    <Mail className="w-4 h-4" />
+                    <span>{prospect.status === 'email_enviado' ? 'Reenviar E-mail Institucional' : 'Enviar E-mail de Demonstração'}</span>
+                    {prospect.status === 'email_enviado' && (
+                      <span className="ml-1 text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/30 text-emerald-200 border border-emerald-400/40 font-semibold">
+                        Enviado
+                      </span>
+                    )}
+                  </button>
                 </div>
               </div>
             );
@@ -547,6 +710,169 @@ export default function ManageLegalProspects() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Disparo de E-mail de Prospecção */}
+      {emailModalOpen && selectedProspectForEmail && (
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 sm:p-8 max-w-2xl w-full max-h-[92vh] overflow-y-auto space-y-5 shadow-2xl flex flex-col justify-between">
+            <div>
+              {/* Header do Modal */}
+              <div className="flex items-center justify-between pb-3 border-b border-gray-800">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-xl bg-blue-600/20 text-blue-400 border border-blue-500/30 flex items-center justify-center">
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white">
+                      Disparo de E-mail com Demonstração
+                    </h3>
+                    <p className="text-xs text-gray-400">
+                      Proposta personalizada para {selectedProspectForEmail.lawyer_name}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setEmailModalOpen(false)}
+                  className="text-gray-400 hover:text-white p-1"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Campos do Envio */}
+              <div className="mt-4 space-y-3.5 text-xs">
+                <div>
+                  <label className="block text-gray-300 font-semibold mb-1">
+                    E-mail do Destinatário *
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="contato@escritorio.adv.br"
+                    value={emailAddress}
+                    onChange={(e) => setEmailAddress(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-950 border border-gray-800 text-sm text-white focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-gray-300 font-semibold mb-1">
+                    Assunto do E-mail
+                  </label>
+                  <input
+                    type="text"
+                    value={emailSubject}
+                    onChange={(e) => setEmailSubject(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-950 border border-gray-800 text-sm text-white focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+
+                {/* Card com Link da Demonstração */}
+                <div className="p-3.5 rounded-xl bg-gray-950 border border-gray-800 flex items-center justify-between gap-3">
+                  <div className="truncate">
+                    <span className="text-[11px] text-gray-400 block">Link que vai no botão do e-mail:</span>
+                    <a
+                      href={emailPreviewData?.demoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-400 hover:underline text-xs font-mono font-medium truncate block"
+                    >
+                      {emailPreviewData?.demoUrl}
+                    </a>
+                  </div>
+                  <a
+                    href={emailPreviewData?.demoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-lg text-xs flex items-center gap-1 shrink-0"
+                    title="Testar Link"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    <span>Ver</span>
+                  </a>
+                </div>
+
+                {/* Prévia do Conteúdo do E-mail */}
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-gray-300 font-semibold">
+                      Prévia do Texto do E-mail:
+                    </label>
+                    <button
+                      type="button"
+                      onClick={handleCopyEmailContent}
+                      className="text-amber-400 hover:text-amber-300 text-[11px] flex items-center gap-1 font-medium"
+                    >
+                      <Copy className="w-3 h-3" />
+                      <span>Copiar Texto</span>
+                    </button>
+                  </div>
+                  <textarea
+                    rows={8}
+                    readOnly
+                    value={emailPreviewData?.plainText || ''}
+                    className="w-full p-3 rounded-xl bg-gray-950 border border-gray-800 text-gray-300 text-xs font-mono leading-relaxed focus:outline-none resize-none"
+                  />
+                </div>
+
+                <div className="p-3 bg-blue-950/30 border border-blue-800/40 rounded-xl text-blue-300 text-[11px] space-y-1">
+                  <p className="font-semibold flex items-center gap-1.5">
+                    <Eye className="w-3.5 h-3.5 text-blue-400" />
+                    <span>Rastreamento Automático Ativo</span>
+                  </p>
+                  <p className="text-gray-400">
+                    O e-mail contém um pixel invisível e link com rastreamento para alertar você no CRM quando o advogado abrir a mensagem ou clicar para ver a landing page.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Rodapé com as Ações */}
+            <div className="pt-4 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <button
+                  type="button"
+                  onClick={handleOpenMailto}
+                  className="flex-1 sm:flex-none px-3.5 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-200 text-xs font-medium transition-colors flex items-center justify-center gap-1.5"
+                  title="Abre o Gmail ou seu aplicativo de e-mail com destinatário e texto já preenchidos"
+                >
+                  <ExternalLink className="w-3.5 h-3.5 text-gray-400" />
+                  <span>Abrir no Webmail</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleCopyEmailContent}
+                  className="flex-1 sm:flex-none px-3.5 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-200 text-xs font-medium transition-colors flex items-center justify-center gap-1.5"
+                >
+                  <Copy className="w-3.5 h-3.5 text-gray-400" />
+                  <span>Copiar</span>
+                </button>
+              </div>
+
+              <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                <button
+                  type="button"
+                  onClick={() => setEmailModalOpen(false)}
+                  className="px-4 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white text-xs"
+                >
+                  Fechar
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleSendEmail}
+                  disabled={sendingEmail}
+                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition-all shadow-lg shadow-blue-600/30 flex items-center gap-2"
+                >
+                  <Send className={`w-3.5 h-3.5 ${sendingEmail ? 'animate-spin' : ''}`} />
+                  <span>{sendingEmail ? 'Disparando E-mail...' : 'Disparar E-mail com Rastreamento'}</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

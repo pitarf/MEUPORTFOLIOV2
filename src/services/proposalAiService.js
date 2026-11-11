@@ -201,8 +201,8 @@ export function sanitizeProposalText(text = '', context = {}) {
                     (context.descricao || '').toLowerCase().includes('ensaio') ||
                     (context.descricao || '').toLowerCase().includes('fotograf');
 
-    const expectedPhotoUrl = 'https://www.rafaelpitaoficial.com.br/portfolio-fotografia-v2/galeria';
-    const expectedDevUrl = 'https://www.rafaelpitaoficial.com.br/portfolio-v2';
+    const expectedPhotoUrl = 'https://www.rafaelpitaoficial.com.br/portfolio-fotografia-v3/galeria';
+    const expectedDevUrl = 'https://www.rafaelpitaoficial.com.br/portfolio-v3';
     const rawOfficialUrl = isPhoto ? expectedPhotoUrl : expectedDevUrl;
 
     // Remove wrappers {u} residuais para evitar repetição {u}{u}...{/u}{/u}
@@ -307,8 +307,8 @@ export async function generateProposal(payload = {}) {
         (descricao || '').toLowerCase().includes('fotograf');
 
     const portfolioUrl = isPhotoCategory
-        ? '{u}https://www.rafaelpitaoficial.com.br/portfolio-fotografia-v2/galeria{/u}'
-        : '{u}https://www.rafaelpitaoficial.com.br/portfolio-v2{/u}';
+        ? '{u}https://www.rafaelpitaoficial.com.br/portfolio-fotografia-v3/galeria{/u}'
+        : '{u}https://www.rafaelpitaoficial.com.br/portfolio-v3{/u}';
 
     // Regra de horário de envio
     let closureTiming = 'Consigo começar hoje mesmo. Me chama no chat!';

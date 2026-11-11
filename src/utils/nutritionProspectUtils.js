@@ -74,6 +74,12 @@ export function applyNutritionistOverrides(baseProfile, params) {
     profile.professional.displayName = formattedName.replace(/^(Dr\.|Dra\.)\s*/i, '');
     const words = profile.professional.displayName.split(' ');
     profile.professional.avatarInitials = (words[0]?.[0] || 'N') + (words[1]?.[0] || 'U');
+
+    // Se o profissional for masculino (Dr.), e nao houver foto passada, usa foto ou ambiente compativel
+    const isMale = formattedName.startsWith('Dr. ') || formattedName.startsWith('Doutor ');
+    if (isMale && !getParam(['foto', 'photo', 'img'])) {
+      profile.professional.photo = 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=800&q=80';
+    }
   }
 
   const crnParam = getParam(['crn', 'registro', 'r']);

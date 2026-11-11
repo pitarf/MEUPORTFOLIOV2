@@ -23,9 +23,9 @@ const CleanShowcaseLayout = () => {
             {/* Header / Navbar Blindada contra Contatos Externos */}
             <header className="fixed top-0 left-0 w-full z-50 bg-white/90 dark:bg-[#0a0a08]/90 backdrop-blur-xl border-b border-slate-200 dark:border-[#23231f] shadow-sm">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-                    {/* Logotipo da Marca com link interno para a própria vitrine v2 */}
+                    {/* Logotipo da Marca com link interno para a própria vitrine v3 */}
                     <div className="flex items-center gap-3">
-                        <Link to="/portfolio-v2" className="flex items-center">
+                        <Link to="/portfolio-v3" className="flex items-center">
                             <BrandLogo
                                 asLink={false}
                                 size="md"

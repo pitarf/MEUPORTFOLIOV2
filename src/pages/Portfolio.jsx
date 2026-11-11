@@ -79,11 +79,11 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
     // Detecta modo limpo para propostas externas (sem contatos externos)
     const isCleanMode = Boolean(
         propCleanMode ||
-        location.pathname.startsWith('/portfolio-v2') ||
-        location.pathname.startsWith('/portfolio/v2') ||
-        location.pathname.startsWith('/projetos-v2')
+        location.pathname.startsWith('/portfolio-v3') ||
+        location.pathname.startsWith('/portfolio/v3') ||
+        location.pathname.startsWith('/projetos-v3')
     );
-    const effectiveBasePath = propBasePath || (isCleanMode ? '/portfolio-v2' : '/portfolio');
+    const effectiveBasePath = propBasePath || (isCleanMode ? '/portfolio-v3' : '/portfolio');
 
     const [allCategories, setAllCategories] = useState([]);
     const [projects, setProjects] = useState([]);

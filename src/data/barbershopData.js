@@ -166,7 +166,7 @@ export const defaultBarbershopData = {
       role: 'Fundador & Master Barber',
       experience: '12 anos de experiência',
       specialty: 'Especialista em Navalhete Clássico e Cortes Tradicionais Europeus',
-      image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=700&q=80',
+      image: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=700&q=80',
       instagram: '@mestre.rafaelsilva'
     },
     {

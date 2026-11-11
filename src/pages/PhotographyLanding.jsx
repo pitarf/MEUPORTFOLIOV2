@@ -85,18 +85,18 @@ const PhotographyLanding = ({ cleanMode: propCleanMode, basePath: propBasePath }
     // Detecta modo limpo para propostas externas (sem contatos externos)
     const isCleanMode = Boolean(
         propCleanMode ||
-        location.pathname.startsWith('/portfolio-fotografia-v2') ||
-        location.pathname.startsWith('/portfolio-v2/fotografia') ||
-        location.pathname.startsWith('/fotografia-v2')
+        location.pathname.startsWith('/portfolio-fotografia-v3') ||
+        location.pathname.startsWith('/portfolio-v3/fotografia') ||
+        location.pathname.startsWith('/fotografia-v3')
     );
-    const effectiveBasePath = propBasePath || (isCleanMode ? '/portfolio-v2' : '/portfolio');
+    const effectiveBasePath = propBasePath || (isCleanMode ? '/portfolio-v3' : '/portfolio');
 
     const [projectCount, setProjectCount] = useState(0);
     const [content, setContent] = useState(null);
 
     const isPhotoSubdomain = typeof window !== 'undefined' && window.location.hostname.includes('fotografia');
     const galleryPath = isCleanMode 
-        ? "/portfolio-fotografia-v2/galeria" 
+        ? "/portfolio-fotografia-v3/galeria" 
         : (isPhotoSubdomain ? "/galeria" : "/portfolio-fotografia/galeria");
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);

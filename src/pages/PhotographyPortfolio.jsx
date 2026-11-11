@@ -44,12 +44,12 @@ const PhotographyPortfolio = ({ cleanMode: propCleanMode, basePath: propBasePath
     // Detecta modo limpo para propostas externas (sem contatos externos)
     const isCleanMode = Boolean(
         propCleanMode ||
-        location.pathname.startsWith('/portfolio-fotografia-v2') ||
-        location.pathname.startsWith('/portfolio-v2/fotografia') ||
-        location.pathname.startsWith('/fotografia-v2')
+        location.pathname.startsWith('/portfolio-fotografia-v3') ||
+        location.pathname.startsWith('/portfolio-v3/fotografia') ||
+        location.pathname.startsWith('/fotografia-v3')
     );
-    const effectiveBasePath = propBasePath || (isCleanMode ? '/portfolio-v2' : '/portfolio');
-    const homePhotoPath = isCleanMode ? "/portfolio-fotografia-v2" : "/portfolio-fotografia";
+    const effectiveBasePath = propBasePath || (isCleanMode ? '/portfolio-v3' : '/portfolio');
+    const homePhotoPath = isCleanMode ? "/portfolio-fotografia-v3" : "/portfolio-fotografia";
 
     const capitalize = (s) => s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
     const [projects, setProjects] = useState([]);
