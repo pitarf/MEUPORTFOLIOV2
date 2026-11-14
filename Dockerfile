@@ -37,12 +37,11 @@ ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL \
     GOOGLE_PLACES_API_KEY=$GOOGLE_PLACES_API_KEY \
     VITE_VPS_MONITOR_API_URL=$VITE_VPS_MONITOR_API_URL \
     VITE_VPS_MONITOR_TOKEN=$VITE_VPS_MONITOR_TOKEN \
-    VITE_GOOGLE_CLIENT_ID=$VITE_GOOGLE_CLIENT_ID \
-    NODE_ENV=production
+    VITE_GOOGLE_CLIENT_ID=$VITE_GOOGLE_CLIENT_ID
 
-# Instala dependências aproveitando cache de camadas do Docker
+# Instala dependências incluindo devDependencies para que o Vite e plugins fiquem disponíveis
 COPY package*.json ./
-RUN npm ci --prefer-offline --no-audit || npm install --legacy-peer-deps
+RUN npm install --include=dev --legacy-peer-deps
 
 # Copia código-fonte e scripts de sitemap
 COPY . .

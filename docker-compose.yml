@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # ----------------------------------------------------------------------------
   # Frontend & Sistema Web (Portfólio, Landing Pages, Radar Maps & PIT.AI)

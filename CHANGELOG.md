@@ -2,6 +2,15 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.93.0] - 2026-11-14
+
+### Adicionado
+* **Deploy Concluído Diretamente na VPS (`2.25.75.243`) com Docker Compose e Nginx Reverso**:
+  * Executada compilação e orquestração dos containers Docker na VPS: `meuportfoliov2-portfolio-web` ativo e saudável na porta local `127.0.0.1:3002` e banco PostgreSQL 16 Alpine `pitai-postgres` com volume mapeado `pitai_postgres_data` na porta `127.0.0.1:5434`.
+  * Configurado proxy reverso no Nginx do host em `/etc/nginx/sites-available/rafaelpitaoficial.conf` para os domínios `rafaelpitaoficial.com.br`, `www`, `pitai` e `fotografia`.
+  * Verificação de roteamento HTTP realizada com sucesso na VPS (respostas HTTP/1.1 200 OK com compressão e cabeçalhos OWASP nos domínios).
+  * Ajustado `Dockerfile` com flag `--include=dev` no build stage para garantir disponibilidade de executáveis de compilação (Vite e plugins) sem inflar a imagem final Nginx Alpine.
+
 ## [1.92.0] - 2026-11-14
 
 ### Adicionado

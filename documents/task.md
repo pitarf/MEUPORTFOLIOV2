@@ -2,6 +2,14 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Deploy Concluído Diretamente na VPS Hostinger (`2.25.75.243`) via SSH, Docker e Nginx (`/var/www/MEUPORTFOLIOV2`)**:
+  - Objetivo: Realizar o deploy direto na VPS do usuário, clonando o repositório Git, configurando as variáveis de ambiente de produção, subindo os containers Docker de frontend e banco PostgreSQL do PIT.AI e configurando o Nginx do host para proxy reverso nos domínios principal e subdomínios (`fotografia`, `pitai`, `www`).
+  - Entregas Realizadas:
+    - Execução remota e subida dos containers `meuportfoliov2-portfolio-web` (porta local `127.0.0.1:3002:80`) e `pitai-postgres` (porta `127.0.0.1:5434:5432` com volume persistente montado).
+    - Deploy do proxy reverso Nginx em `/etc/nginx/sites-available/rafaelpitaoficial.conf` com link em `sites-enabled` e recarga validada (`nginx -t` e `systemctl reload nginx`).
+    - Validação de rotas HTTP com 200 OK para `rafaelpitaoficial.com.br`, `fotografia.rafaelpitaoficial.com.br` e `pitai.rafaelpitaoficial.com.br`.
+    - Script de atualização contínua `deploy-vps.sh` com permissão executável (`chmod +x`).
+
 - [x] **Containerização Docker para Migração da Vercel para VPS com Deploy Contínuo via Git (`Dockerfile`, `nginx.conf`, `docker-compose.yml`, `deploy/nginx/rafaelpitaoficial.conf`, `deploy/deploy-vps.sh`, `.github/workflows/deploy.yml`, `deploy/GUIA_DEPLOY_VPS.md`)**:
   - Objetivo: Desvincular a aplicação da Vercel e prepará-la para execução autônoma em containers Docker na VPS Hostinger/Oracle Cloud, unificando o frontend SPA de alto desempenho com o banco dedicado PostgreSQL do PIT.AI e atualizações automáticas via Git e GitHub Actions.
   - Entregas Realizadas:
