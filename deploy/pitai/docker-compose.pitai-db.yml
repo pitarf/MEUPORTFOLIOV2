@@ -1,0 +1,45 @@
+# ==============================================================================
+# PIT.AI — Container Docker Dedicado PostgreSQL 16 (VPS Hostinger / Produção)
+# Rafael Pita Solutions / MeuPortfolio v2
+# ==============================================================================
+# Execução na VPS:
+#   docker-compose -f docker-compose.pitai-db.yml up -d
+#
+# Volume persistente garante que os dados, briefings e memórias nunca sejam
+# perdidos durante reboots, updates ou recriação do container.
+# ==============================================================================
+
+version: '3.8'
+
+services:
+  pitai-postgres:
+    image: postgres:16-alpine
+    container_name: pitai-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: pitai_core
+      POSTGRES_USER: pitai_admin
+      POSTGRES_PASSWORD: ${PITAI_DB_PASSWORD:-rp_pitai_secure_pass_2026}
+      TZ: America/Sao_Paulo
+    ports:
+      - "127.0.0.1:5434:5432"
+    volumes:
+      - pitai_postgres_data:/var/lib/postgresql/data
+      - ./init-pitai-db.sql:/docker-entrypoint-initdb.d/init-pitai-db.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pitai_admin -d pitai_core"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - pitai_network
+
+volumes:
+  pitai_postgres_data:
+    driver: local
+    name: pitai_postgres_data
+
+networks:
+  pitai_network:
+    name: pitai_network
+    driver: bridge

@@ -53,6 +53,7 @@ const BurgerPage = lazy(() => import('@/pages/burger/BurgerPage'));
 
 // Painel administrativo sob demanda (não sobrecarrega o carregamento para visitantes públicos)
 const Dashboard = lazy(() => import('@/pages/Dashboard'));
+const PitAiDashboard = lazy(() => import('@/pages/pitai/PitAiDashboard'));
 const ManagePortfolio = lazy(() => import('@/pages/ManagePortfolio'));
 const AdminSubmissions = lazy(() => import('@/pages/AdminSubmissions'));
 const ManageReviews = lazy(() => import('@/pages/ManageReviews'));
@@ -75,6 +76,7 @@ const ManageCrmLeads = lazy(() => import('@/pages/admin/ManageCrmLeads'));
  * e integra os provedores de estado global (Autenticação, Configurações de Site, Temas e Idiomas).
  */
 const isPhotoSubdomain = typeof window !== 'undefined' && window.location.hostname.includes('fotografia');
+const isPitAiSubdomain = typeof window !== 'undefined' && window.location.hostname.includes('pitai');
 
 // Redirecionamento dinâmico de projetos v2 para a rota canônica normal (/portfolio/:categorySlug/:projectSlug)
 const RedirectProjectV2 = () => {
@@ -95,6 +97,9 @@ function App() {
 
                         <Suspense fallback={<div className="min-h-screen bg-background" />}>
                             <Routes>
+                                {/* Acesso Dedicado via Subdomínio Oficial PIT.AI (Tela Cheia HUD Isolada) */}
+                                {isPitAiSubdomain && <Route path="/" element={<PitAiDashboard />} />}
+
                                 {/* Rotas Públicas - Envolvidas com o MainLayout */}
                                 <Route element={<MainLayout />}>
                                     <Route path="/" element={isPhotoSubdomain ? <PhotographyLanding /> : <Home />} />
@@ -208,9 +213,15 @@ function App() {
                                 <Route path="/radar-google-maps" element={<RadarGoogleMaps />} />
                                 <Route path="/clientes/radar-maps" element={<RadarGoogleMaps />} />
 
+                                {/* PIT.AI (J.A.R.V.I.S.) — Centro de Comando de Inteligência, Notícias & Agenda */}
+                                <Route path="/pit-ai" element={<PitAiDashboard />} />
+                                <Route path="/pitai" element={<PitAiDashboard />} />
+                                <Route path="/jarvis" element={<PitAiDashboard />} />
+
                                 {/* Rotas Administrativas - Protegidas por Autenticação JWT do Supabase */}
                                 <Route element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
                                     <Route path="/dashboard" element={<Dashboard />} />
+                                    <Route path="/admin/pit-ai" element={<ProtectedRoute adminOnly={true}><PitAiDashboard /></ProtectedRoute>} />
                                     <Route path="/admin/profile" element={<Profile />} />
                                     <Route path="/admin/orcamentos" element={<ProtectedRoute adminOnly={true}><ManageBudgets /></ProtectedRoute>} />
                                     <Route path="/admin/assinaturas" element={<ProtectedRoute adminOnly={true}><ManageMaintenanceSubscriptions /></ProtectedRoute>} />

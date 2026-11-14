@@ -4,6 +4,57 @@ Este guia prático ensina você a gerenciar e otimizar a presença do seu site n
 
 ---
 
+## 23. Como Atualizar e Publicar o Site na sua VPS via Git
+
+O seu portfólio e o PIT.AI agora rodam diretamente na sua VPS em container Docker dedicado, sem depender da Vercel.
+
+### 23.1 Como Funciona a Publicação
+1. Sempre que você fizer alterações no código e enviar para o GitHub (`git push origin main`), os arquivos ficam disponíveis na nuvem.
+2. Na VPS, você pode atualizar tudo com um único comando:
+   ```bash
+   bash deploy/deploy-vps.sh
+   ```
+3. O script baixa o código novo do Git, reconstrói o container Docker em segundos e mantém seus dados seguros sem derrubar o site.
+
+### 23.2 Onde o Site e o PIT.AI Respondem
+* **Site Principal & Portfólio**: `https://rafaelpitaoficial.com.br`
+* **PIT.AI (Centro de Inteligência)**: `https://pitai.rafaelpitaoficial.com.br`
+* **Status do Container**: Acessível localmente no servidor pela porta `3002`.
+
+---
+
+## 22. Como Utilizar o PIT.AI (Seu Assistente Executivo Estilo J.A.R.V.I.S.)
+
+O **PIT.AI** é o seu centro de comando de inteligência, notícias em tempo real e controle de rotina pessoal e de negócios.
+
+### 22.1 Como Acessar
+* No computador ou celular, acesse a rota `/pit-ai` (ou `/pitai`, `/jarvis` ou diretamente pelo subdomínio `pitai.rafaelpitaoficial.com.br`).
+* A página é protegida e não é indexada por motores de busca para resguardar seus dados pessoais e estratégicos.
+
+### 22.2 Como Interagir por Voz e Texto
+1. **Pelo Microfone:**
+   * Clique no orbe central ou no botão de microfone na barra inferior.
+   * O orbe ficará pulsando em azul-cyan com a indicação **"OUVINDO"**. Fale sua ordem normalmente (ex: *"O que tem de novo?", "Marca reunião amanhã às 15h"*).
+   * O PIT.AI transcreve em tempo real e processa a resposta falada em português.
+2. **Pelo Teclado:**
+   * Digite sua pergunta ou comando no campo inferior e tecle Enter ou clique no botão de envio.
+
+### 22.3 Principais Comandos Naturais Suportados
+* **Briefing em Tempo Real:**
+  * *"O que tem de novo?"* ou *"Acontecimentos do dia"*
+  * O PIT.AI faz a varredura das últimas horas no Rio de Janeiro, Brasil e Mundo, fala o resumo executivo e projeta os cartões de notícias e o mapa da cidade na tela.
+* **Consulta de Agenda:**
+  * *"Qual a minha agenda de hoje?"* ou *"Meus compromissos"*
+  * A IA lê seus eventos do dia e tarefas pendentes do Google Workspace.
+* **Agendamento com Detecção de Conflitos:**
+  * *"Marca reunião com cliente quinta-feira às 14h"*
+  * Se o horário estiver livre, ele confirma e registra. Se já houver outro compromisso, o PIT.AI alerta o conflito por áudio e exibe as opções para reagendar para o próximo horário livre ou manter ambos.
+* **Criação de Tarefas:**
+  * *"Anota uma tarefa para revisar os servidores da VPS"*
+  * O PIT.AI registra no Google Tarefas com prioridade alta.
+
+---
+
 ## 21. Pagamento e Visualização de QR Code PIX de Faturas
 
 O sistema conta com um mecanismo ultra-rápido de renderização de QR Code PIX no próprio dispositivo, garantindo que você e seus clientes consigam visualizar o código para pagamento mesmo com bloqueadores de anúncios ativos ou conexões móveis instáveis.

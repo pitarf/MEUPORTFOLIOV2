@@ -24,7 +24,7 @@ const SEO = ({ title, description, keywords, image, url }) => {
     const currentUrl = url || window.location.href;
 
     // Detectar rotas privadas/administrativas que NÃO devem ser indexadas pelo Google (Proteção de Dados)
-    const noIndexPaths = ['/admin', '/dashboard', '/area-clientes', '/support', '/track-ticket'];
+    const noIndexPaths = ['/admin', '/dashboard', '/area-clientes', '/support', '/track-ticket', '/pit-ai', '/pitai', '/jarvis'];
     const isNoIndex = noIndexPaths.some(path => 
         location.pathname === path || location.pathname.startsWith(`${path}/`)
     );

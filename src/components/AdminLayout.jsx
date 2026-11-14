@@ -30,7 +30,8 @@ import {
     Menu,
     X,
     Home,
-    Flame
+    Flame,
+    Cpu
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
@@ -213,6 +214,13 @@ const AdminLayout = () => {
                     label: 'Dashboard Geral',
                     path: '/dashboard',
                     icon: LayoutDashboard
+                },
+                {
+                    type: 'direct',
+                    id: 'pitai',
+                    label: 'PIT.AI (J.A.R.V.I.S.)',
+                    path: '/pit-ai',
+                    icon: Cpu
                 }
             ]
         },

@@ -4,6 +4,53 @@ Este documento detalha o funcionamento técnico da infraestrutura de SEO Dinâmi
 
 ---
 
+## 26. Containerização Docker & Migração da Vercel para VPS (Deploy Contínuo via Git)
+
+A aplicação foi migrada da hospedagem na Vercel para containers Docker autônomos na VPS Hostinger / Oracle Cloud, permitindo independência total de provedores de terceiros, controle absoluto de infraestrutura e custo fixo reduzido.
+
+### 26.1 Arquitetura dos Containers
+* **`Dockerfile`**: Compilação multi-estágio em Node.js 20 Alpine injetando os argumentos de variáveis `VITE_*` e gerando imagem final em Nginx 1.25 Alpine (<35MB).
+* **`nginx.conf` (Container)**: Configuração interna com suporte a rotas SPA (`try_files $uri $uri/ /index.html;`), compressão Gzip, cabeçalhos de proteção OWASP e cache de 1 ano para arquivos estáticos com hash.
+* **`docker-compose.yml` (Raiz)**: Orquestra o container web (`portfolio-web` na porta `127.0.0.1:3002`) e o banco de dados dedicado do PIT.AI (`pitai-postgres` na porta `127.0.0.1:5434`) com volume persistente mapeado (`pitai_postgres_data`).
+* **`deploy/nginx/rafaelpitaoficial.conf`**: Configuração do proxy reverso no host da VPS com terminação SSL via Certbot e encaminhamento com cabeçalho `Host` original preservado.
+
+### 26.2 Ciclo de Atualização e Deploy Contínuo
+1. Alterações no código são enviadas para o repositório GitHub via `git push origin main`.
+2. Na VPS, o script `bash deploy/deploy-vps.sh` sincroniza a branch `main`, reconstrói a imagem sem perder dados e reinicia os serviços.
+3. Integração com GitHub Actions via `.github/workflows/deploy.yml` para disparo automático remoto via SSH.
+
+---
+
+## 25. Arquitetura do PIT.AI (Assistente Operacional Executivo Estilo J.A.R.V.I.S.)
+
+O **PIT.AI** é o centro de comando de inteligência executiva de Rafael Pita, construído diretamente na stack web do projeto (React + Node.js) para acesso imediato no celular e computador através da rota `/pit-ai`, `/pitai` ou do subdomínio `pitai.rafaelpitaoficial.com.br`.
+
+### 25.1 Componentes e Serviços
+1. **`src/services/pitai/pitaiVoiceService.js`**:
+   * Gerencia a Web Speech API (`SpeechRecognition` e `SpeechSynthesis`) sem custos de APIs externas.
+   * Suporte a reconhecimento contínuo e síntese de voz em português brasileiro (tom calmo, grave e executivo).
+2. **`src/services/pitai/pitaiBriefingService.js`**:
+   * Agrega feeds RSS oficiais de alta credibilidade (G1 Rio, Centro de Operações Rio / COR, Agência Brasil, InfoMoney/B3, BBC News Brasil).
+   * Aplica cache com TTL de 7 dias e calcula o intervalo de ausência do usuário ("desde a sua última visita").
+3. **`src/services/pitai/pitaiGoogleService.js`**:
+   * Conecta ao Google Calendar e Google Tasks.
+   * Algoritmo de verificação de conflito de agenda em tempo real: compara intervalos de início/fim antes de criar qualquer compromisso.
+4. **`src/services/pitai/pitaiCoreService.js`**:
+   * System Prompt no estilo J.A.R.V.I.S. acoplado ao Google Gemini 2.0 / 2.5 Flash.
+   * Classificação de intenção e disparo de UI Generativa (`SHOW_MAP`, `SHOW_NEWS_MODAL`, `SHOW_AGENDA_ALERT`).
+5. **`src/components/pitai/PitAiOrb.jsx`**:
+   * Orbe holográfico reativo em SVG/Canvas com pulsações e ondas que respondem a estados de escuta (cyan), pensamento (ouro) e fala (neon lime).
+6. **`src/components/pitai/PitAiVisualFeed.jsx`**:
+   * Painel HUD que renderiza mapas OpenStreetMap/Leaflet, cards de notícias e caixas de alerta de conflito.
+
+### 25.2 Infraestrutura de Banco de Dados Dedicado (VPS)
+* Arquivo Docker: `deploy/pitai/docker-compose.pitai-db.yml`
+* Container: `pitai-postgres` (PostgreSQL 16 Alpine).
+* Volume Mapeado Persistente: `pitai_postgres_data:/var/lib/postgresql/data`.
+* Schema Inicial: `deploy/pitai/init-pitai-db.sql` (tabelas de briefings com TTL de 7 dias e autolimpeza por triggers, eventos de agenda e memórias).
+
+---
+
 ## 24. Skill de Animações Modernas & Framer Motion (`framer-motion`)
 
 O projeto utiliza a biblioteca `framer-motion` orientada pela skill instalada em `C:\Users\rfpit\.gemini\config\skills\framer-motion\SKILL.md`.

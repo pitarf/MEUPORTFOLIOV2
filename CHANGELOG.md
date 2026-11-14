@@ -2,6 +2,47 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.92.0] - 2026-11-14
+
+### Adicionado
+* **Containerização Docker para Migração da Vercel para a VPS & Deploy Contínuo via Git (`Dockerfile`, `nginx.conf`, `docker-compose.yml`, `deploy/nginx/rafaelpitaoficial.conf`, `deploy/deploy-vps.sh`, `.github/workflows/deploy.yml`, `deploy/GUIA_DEPLOY_VPS.md`)**:
+  * **Dockerfile Multi-Stage Otimizado**: Estágio de build com Node.js 20 Alpine injetando variáveis de ambiente e estágio de runner com Nginx 1.25 Alpine ultra-leve (<35MB) com endpoint de verificação de integridade `/healthz`.
+  * **Configuração Nginx Interna do Container (`nginx.conf`)**: Suporte completo ao React Router SPA (`try_files $uri $uri/ /index.html;`), compressão Gzip ativa, cabeçalhos de segurança OWASP e cache imutável de 1 ano para arquivos compilados em `/assets/`.
+  * **Docker Compose Unificado (`docker-compose.yml`)**: Orquestração dos serviços `portfolio-web` (porta local `127.0.0.1:3002:80`) e `pitai-db` (PostgreSQL 16 Alpine na porta `127.0.0.1:5434:5432` com volume persistente mapeado `pitai_postgres_data`), rede em bridge `rp-network` e políticas de reinício automático `unless-stopped`.
+  * **Proxy Reverso Nginx da VPS (`deploy/nginx/rafaelpitaoficial.conf`)**: Configuração para os domínios `rafaelpitaoficial.com.br`, `www` e subdomínios `pitai.rafaelpitaoficial.com.br` e `fotografia.rafaelpitaoficial.com.br`, preservando o cabeçalho `Host` e suporte a certificados SSL Certbot / Let's Encrypt.
+  * **Automação de Deploy na VPS (`deploy/deploy-vps.sh`)**: Script automatizado para puxar atualizações via Git, reconstruir imagem, subir containers sem perda de dados e recarregar o Nginx com zero tempo de inatividade.
+  * **Integração com GitHub Actions (`.github/workflows/deploy.yml`)**: Workflow para deploy contínuo automático a cada push na branch `main`.
+  * **Guia Oficial de Migração (`deploy/GUIA_DEPLOY_VPS.md`)**: Manual prático com comandos SSH, DNS, Docker e Certbot.
+* **Integração Real do Google Workspace no PIT.AI**:
+  * Configurado `VITE_GOOGLE_CLIENT_ID` no `.env` com suporte a autenticação oficial via Google Identity Services (OAuth 2.0) para sincronização da Google Agenda e Google Tarefas.
+
+## [1.91.0] - 2026-11-13
+
+### Adicionado
+* **Lançamento do PIT.AI — Centro de Inteligência Operacional & Executiva Estilo J.A.R.V.I.S. (`src/pages/pitai/`, `src/services/pitai/`, `src/components/pitai/`, `deploy/pitai/`, `src/App.jsx`, `src/components/AdminLayout.jsx`)**:
+  * **Interface Viva HUD Generativa (`PitAiDashboard.jsx`)**: Centro de comando em tema dark executive/cyber-luxury com diálogo vocal e textual em primeiro plano, telemetria em tempo real, relógio de Brasília, atalho global na barra de espaço para alternar microfone e isolamento no cabeçalho com `<Helmet>` (`noindex, nofollow`).
+  * **Orbe Holográfico Reativo (`PitAiOrb.jsx`)**: Núcleo visual em SVG/Canvas com física de pulso respondendo a estados de escuta (cyan), pensamento (ouro) e fala (neon lime).
+  * **Painel HUD de Projeção Contextual (`PitAiVisualFeed.jsx`)**: Exibição automática sem cliques de mapas interativos do Rio de Janeiro (OpenStreetMap), cartões de notícias organizados por categoria e caixas de alerta de conflito de agenda.
+  * **Serviço de Voz Nativo (`pitaiVoiceService.js`)**: Integração da Web Speech API com escuta e síntese de voz em português brasileiro com custo R$ 0,00 de APIs externas.
+  * **Briefing de Notícias em Tempo Real (`pitaiBriefingService.js`)**: Coleta ao vivo de feeds oficiais (G1 Rio, Centro de Operações Rio / COR, Agência Brasil, InfoMoney/B3, BBC Brasil) com cálculo do intervalo desde o último acesso e cache inteligente com TTL de 7 dias.
+  * **Integração com Google Calendar & Tasks (`pitaiGoogleService.js`)**: Leitura diária e semanal de compromissos, verificação de conflitos de horários em tempo real (sobreposição total, parcial inicial/final, envolvente e interna) e criação rápida de eventos e tarefas por fala.
+  * **Cérebro Orquestrador (`pitaiCoreService.js`)**: System Prompt executivo estilo J.A.R.V.I.S., classificação de intenções, gerador de ações de UI generativa no HUD e integração com a família Gemini 2.0 / 2.5 Flash com fallback offline seguro.
+  * **Infraestrutura Docker PostgreSQL Dedicada (`deploy/pitai/`)**: `docker-compose.pitai-db.yml` e `init-pitai-db.sql` configurando PostgreSQL 16 Alpine com volume persistente mapeado (`pitai_postgres_data`), binding restrito a `127.0.0.1:5434:5432`, índices compostos e triggers de autolimpeza para a VPS Hostinger.
+  * **Rotas, Subdomínio e Menu**: Suporte a `/pit-ai`, `/pitai`, `/jarvis`, `/admin/pit-ai`, renderização isolada em tela cheia na raiz do subdomínio `pitai.rafaelpitaoficial.com.br` e atalho com ícone `Cpu` no menu administrativo do painel.
+  * **Auditoria Automatizada com Subagentes**: Suíte E2E automatizada executada pelo Subagente 2 com 29/29 asserções aprovadas com 100% de sucesso.
+
+## [1.90.0] - 2026-11-12
+
+### Adicionado
+* **Botão e Modal de Envio de E-mails com Demonstração no Radar Google Maps (`RadarGoogleMaps.jsx`)**:
+  * Adicionado botão destacado "Enviar Proposta por E-mail" em largura total logo abaixo do roteiro em 3 passos do WhatsApp em cada card de lead (Psicólogos, Dentistas, Barbearias, Hamburguerias, Nutricionistas, Advogados).
+  * Adicionado atalho "E-mail" na barra de ações rápidas inferiores.
+  * Modal completo de envio com prévia de assunto e texto adaptados para o nicho pesquisado, link testável da demonstração personalizada e status visual de envio ("✓ Proposta Enviada por E-mail").
+  * 3 formas de disparo: envio direto via API local / SMTP Hostinger com rastreamento ativo, atalho "Abrir no Webmail" (`mailto`) e "Copiar Texto".
+* **Templates de E-mail de Prospecção Multi-Nicho (`emailSenderService.js`)**:
+  * Implementado `buildUniversalPitchEmail` com inteligência de copy para Psicólogos/Saúde Mental, Clínicas Odontológicas, Barbearias, Hamburguerias/Delivery, Nutricionistas e Advocacia.
+  * Injeção automática de link personalizado da demonstração com R$ 297, pixel invisível 1x1 de rastreamento de abertura e link direto para o WhatsApp oficial `(21) 96614-9077`.
+
 ## [1.89.0] - 2026-11-11
 
 ### Adicionado

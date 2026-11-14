@@ -2,6 +2,43 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Containerização Docker para Migração da Vercel para VPS com Deploy Contínuo via Git (`Dockerfile`, `nginx.conf`, `docker-compose.yml`, `deploy/nginx/rafaelpitaoficial.conf`, `deploy/deploy-vps.sh`, `.github/workflows/deploy.yml`, `deploy/GUIA_DEPLOY_VPS.md`)**:
+  - Objetivo: Desvincular a aplicação da Vercel e prepará-la para execução autônoma em containers Docker na VPS Hostinger/Oracle Cloud, unificando o frontend SPA de alto desempenho com o banco dedicado PostgreSQL do PIT.AI e atualizações automáticas via Git e GitHub Actions.
+  - Entregas Realizadas:
+    - `Dockerfile`: Multi-stage build com Node.js 20 Alpine (compilação do Vite com argumentos e variáveis de ambiente) e runner final Nginx 1.25 Alpine ultra-leve (<35MB) com checagem de saúde `/healthz`.
+    - `nginx.conf`: Configuração Nginx interna do container com suporte integral ao React Router SPA (`try_files $uri $uri/ /index.html;`), compressão Gzip ativa, cabeçalhos de segurança OWASP e cache imutável de 1 ano para arquivos compilados em `/assets/`.
+    - `docker-compose.yml`: Orquestração unificada na raiz contendo os serviços `portfolio-web` (porta local restrita `127.0.0.1:3002:80`) e `pitai-db` (PostgreSQL 16 Alpine na porta `127.0.0.1:5434:5432` com volume persistente mapeado `pitai_postgres_data` e trigger de expiração).
+    - `deploy/nginx/rafaelpitaoficial.conf`: Configuração do proxy reverso Nginx para o host da VPS com suporte aos domínios `rafaelpitaoficial.com.br`, `www` e subdomínios `pitai.rafaelpitaoficial.com.br` e `fotografia.rafaelpitaoficial.com.br`, preservando o cabeçalho `Host` e suporte a SSL Certbot.
+    - `deploy/deploy-vps.sh`: Script executável na VPS para atualização automatizada via Git (`git fetch/pull`, `docker compose build`, `docker compose up -d`, `docker image prune -f` e verificação de saúde HTTP).
+    - `.github/workflows/deploy.yml`: Workflow do GitHub Actions para deploy contínuo automático a cada push na branch `main`.
+    - `deploy/GUIA_DEPLOY_VPS.md`: Guia passo a passo de migração, DNS e comandos para o terminal da VPS.
+  - Validação Automatizada: Build de produção verificado com sucesso e suíte E2E do PIT.AI aprovada com 29/29 asserções.
+
+- [x] **Implementação do PIT.AI (Assistente Operacional & Executivo Estilo J.A.R.V.I.S.) (`src/pages/pitai/`, `src/services/pitai/`, `src/components/pitai/`, `deploy/pitai/`, `src/App.jsx`, `src/components/AdminLayout.jsx`)**:
+  - Objetivo: Criar a inteligência executiva central de Rafael Pita com diálogo contínuo de voz e texto, briefing matinal e diário (Mundo, Brasil e Rio de Janeiro), detecção ativa de conflitos na Google Agenda e Google Tasks, projeção holográfica de mapas e notícias (HUD reativo), atalhos de navegação e container Docker dedicado PostgreSQL na VPS Hostinger com volume persistente mapeado.
+  - Entregas Realizadas:
+    - `deploy/pitai/docker-compose.pitai-db.yml` e `deploy/pitai/init-pitai-db.sql`: Infraestrutura isolada do PostgreSQL 16 Alpine na VPS com porta restrita a `127.0.0.1:5434:5432`, volume persistente mapeado (`pitai_postgres_data`), triggers de expiração com TTL de 7 dias para notícias, índices compostos de performance e tabelas de cache e agenda.
+    - `src/services/pitai/pitaiVoiceService.js`: Gerenciador da Web Speech API nativa dos navegadores (reconhecimento e síntese de voz em português do Brasil) com custo R$ 0,00 de APIs externas e tratamento de cancelamentos silenciosos.
+    - `src/services/pitai/pitaiBriefingService.js`: Coletor de notícias ao vivo e diários oficiais via RSS (G1 Rio, Centro de Operações Rio/COR, Agência Brasil, InfoMoney/B3, BBC News Brasil) com cálculo do intervalo de ausência do Rafael e parser híbrido compatível com navegador e Node.js.
+    - `src/services/pitai/pitaiGoogleService.js`: Integração com Google Calendar e Tasks com verificação automática de sobreposição de horários em tempo real (sobreposição total, parcial inicial/final, envolvente e interna) e criação rápida de eventos e tarefas por fala com extração de datas naturais.
+    - `src/services/pitai/pitaiCoreService.js`: Cérebro orquestrador com System Prompt executivo, classificação de intenções, gerador de ações de UI generativa no HUD e fallback seguro offline quando a chave do Gemini estiver ausente.
+    - `src/components/pitai/PitAiOrb.jsx`: Orbe holográfico reativo em SVG/Canvas com física de pulso (cyan ao ouvir, ouro ao pensar e neon lime ao falar).
+    - `src/components/pitai/PitAiVisualFeed.jsx`: HUD com mapas interativos do Rio de Janeiro (OpenStreetMap), cards de notícias e caixas de alerta de conflito.
+    - `src/pages/pitai/PitAiDashboard.jsx`: Dashboard executivo imersivo dark/cyber-luxury com comandos rápidos, atalho global na barra de espaço para alternar microfone, controle de áudio, meta tags `<Helmet>` com `noindex, nofollow` e limpeza de listeners no unmount.
+    - `src/App.jsx`: Rotas registradas `/pit-ai`, `/pitai`, `/jarvis`, `/admin/pit-ai`, rota raiz isolada em tela cheia para o subdomínio `pitai.rafaelpitaoficial.com.br` e atalho direto no menu lateral do `AdminLayout.jsx`.
+  - Auditoria & Testes com Subagentes Especializados:
+    - *Subagente 1 (Auditor de Código e Segurança):* Aprovado. Correção de sanitização JSON no Gemini, remoção de quebra de mensagens e ajuste no array de SEO do portfólio.
+    - *Subagente 2 (Engenheiro de Testes Funcionais):* Aprovado. Execução da suíte E2E automatizada (`scratch/test_pitai_services.mjs`) com 29/29 asserções aprovadas (100% de sucesso) validando briefings, conflitos na agenda, criação de tarefas e integração com o Gemini.
+    - *Subagente 3 (Auditor de Banco de Dados e Docker):* Aprovado. Validação do compose e do schema SQL com binding restrito na VPS, integridade referencial e triggers de expiração.
+  - Validação Automatizada: Build de produção (`cmd.exe /c "npm run build"`) aprovado com sucesso (zero erros).
+
+- [x] **Disparo de E-mails com Proposta e Demonstração no Radar Google Maps (`src/pages/admin/RadarGoogleMaps.jsx`, `src/services/emailSenderService.js`)**:
+  - Objetivo: Adicionar botão e modal de envio de e-mails de prospecção diretamente nos cards do Radar de prospecção do Google Maps (multi-nicho: Psicologia, Odontologia, Barbearia, Hamburgueria, Nutrição e Advocacia), com tracking de abertura e opções de disparo via API/SMTP local, Webmail (`mailto`) e cópia rápida.
+  - Entregas Realizadas:
+    - `src/pages/admin/RadarGoogleMaps.jsx`: Botão proeminente "Enviar Proposta por E-mail" em largura total logo abaixo do roteiro em 3 passos do WhatsApp, atalho "E-mail" na linha de ações rápidas inferiores, indicador visual de status ("✓ Proposta Enviada por E-mail") e modal completo de disparo com link testável da demonstração interativa.
+    - `src/services/emailSenderService.js`: Criação do método universal `buildUniversalPitchEmail` com inteligência de copy especializada para cada nicho mapeado no Radar Maps, injeção de Pixel 1x1 de rastreamento de abertura e link direto para o WhatsApp oficial `(21) 96614-9077`.
+  - Validação Automatizada: Build de produção (`cmd.exe /c "npm run build"`) executado e aprovado com sucesso em 21.21s (zero erros).
+
 - [x] **Ajuste dos Modelos de Demonstração (Sem Fotos Fictícias de Terceiros) e Implementação do Botão/Modal de Envio de E-mails (`src/pages/admin/ManageLegalProspects.jsx`, `src/services/emailSenderService.js`, `src/components/legal/LegalHero.jsx`, `src/components/legal/LegalAbout.jsx`, `src/components/legal/LegalDemoNoticeBar.jsx`, `src/pages/legal/LegalLandingPage.jsx`, `src/data/barbershopData.js`, `src/utils/nutritionProspectUtils.js`)**:
   - Objetivo: Corrigir as landing pages de modelo para que não exibam rostos fictícios de terceiros quando abertas como demonstração por clientes prospectados, adicionar aviso superior interativo informando a total personalização com a marca do cliente, e implementar o botão e modal completo de disparo de e-mails institucionais com rastreamento no painel de prospecção.
   - Entregas Realizadas:

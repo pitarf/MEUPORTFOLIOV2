@@ -28,10 +28,13 @@ import {
   Scissors,
   Brain,
   Salad,
-  Scale
+  Scale,
+  Mail,
+  Eye
 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
+import { emailSenderService } from '../../services/emailSenderService';
 import {
   googleMapsProspectService,
   generateLawyerSlug,
@@ -190,6 +193,22 @@ export default function RadarGoogleMaps() {
     setPdfLawyer(lawyer);
     setPdfModalOpen(true);
   };
+
+  // Modal de Disparo de E-mail de Prospecção
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
+  const [selectedLeadForEmail, setSelectedLeadForEmail] = useState(null);
+  const [emailAddress, setEmailAddress] = useState('');
+  const [emailSubject, setEmailSubject] = useState('');
+  const [emailPreviewData, setEmailPreviewData] = useState(null);
+  const [sendingEmail, setSendingEmail] = useState(false);
+  const [sentEmailIds, setSentEmailIds] = useState(() => {
+    try {
+      const saved = localStorage.getItem('rp_radar_sent_emails');
+      return saved ? new Set(JSON.parse(saved)) : new Set();
+    } catch {
+      return new Set();
+    }
+  });
 
   // Modal de Adição Manual
   const [isManualModalOpen, setIsManualModalOpen] = useState(false);
@@ -413,6 +432,109 @@ export default function RadarGoogleMaps() {
       title: 'Histórico do Radar limpo!',
       description: 'Todos os registros foram removidos com sucesso.'
     });
+  };
+
+  // Abrir Modal de Envio de E-mail de Prospecção para o Lead
+  const handleOpenEmailModal = (lead) => {
+    setSelectedLeadForEmail(lead);
+    setEmailAddress(lead.email || '');
+
+    const demoUrl = buildDemoUrl(lead);
+    const trackingToken = emailSenderService.generateTrackingToken(lead.id || 'lead');
+
+    const pitch = emailSenderService.buildUniversalPitchEmail({
+      lead,
+      demoUrl,
+      trackingToken,
+      trackingServerUrl: 'http://localhost:3005'
+    });
+
+    setEmailSubject(pitch.subject);
+    setEmailPreviewData({
+      ...pitch,
+      demoUrl,
+      trackingToken
+    });
+    setEmailModalOpen(true);
+  };
+
+  // Disparar E-mail via API local / Hostinger SMTP
+  const handleSendEmail = async () => {
+    if (!emailAddress || !emailAddress.includes('@')) {
+      toast({
+        variant: 'destructive',
+        title: 'E-mail inválido',
+        description: 'Por favor, informe um endereço de e-mail válido para o envio.'
+      });
+      return;
+    }
+
+    setSendingEmail(true);
+    try {
+      const response = await fetch('http://localhost:3005/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: emailAddress,
+          subject: emailSubject,
+          html: emailPreviewData.html,
+          text: emailPreviewData.plainText
+        })
+      });
+
+      const data = await response.json().catch(() => ({ success: false }));
+
+      // Registra como enviado
+      const newSent = new Set(sentEmailIds);
+      if (selectedLeadForEmail?.id) {
+        newSent.add(selectedLeadForEmail.id);
+        setSentEmailIds(newSent);
+        try {
+          localStorage.setItem('rp_radar_sent_emails', JSON.stringify(Array.from(newSent)));
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      if (data.success) {
+        toast({
+          title: 'E-mail Enviado com Sucesso!',
+          description: `Proposta disparada para ${emailAddress} com rastreamento ativo.`
+        });
+        setEmailModalOpen(false);
+      } else {
+        toast({
+          title: 'Servidor local offline',
+          description: data?.error || 'O servidor de disparo direto (porta 3005) não está ativo. Use o botão "Abrir no Webmail" para enviar pelo Gmail/Outlook.'
+        });
+      }
+    } catch (err) {
+      toast({
+        title: 'Disparo direto indisponível',
+        description: 'Servidor local de disparo offline. Clique em "Abrir no Webmail" para enviar pelo seu aplicativo de e-mail.'
+      });
+    } finally {
+      setSendingEmail(false);
+    }
+  };
+
+  // Copiar Conteúdo do E-mail
+  const handleCopyEmailContent = () => {
+    if (!emailPreviewData?.plainText) return;
+    navigator.clipboard.writeText(emailPreviewData.plainText);
+    toast({
+      title: 'Texto Copiado!',
+      description: 'Corpo do e-mail copiado para a área de transferência.'
+    });
+  };
+
+  // Abrir no Webmail (mailto)
+  const handleOpenMailto = () => {
+    if (!emailPreviewData) return;
+    const to = emailAddress || '';
+    const subject = encodeURIComponent(emailSubject);
+    const body = encodeURIComponent(emailPreviewData.plainText);
+    window.open(`mailto:${to}?subject=${subject}&body=${body}`, '_blank');
   };
 
   // Métricas dinâmicas da busca
@@ -1007,8 +1129,27 @@ export default function RadarGoogleMaps() {
 
                   </div>
 
-                  {/* Linha de 5 Ações Rápidas */}
-                  <div className="grid grid-cols-5 gap-1 pt-1">
+                  {/* Botão de Envio de E-mail de Proposta (Ação Principal de E-mail) */}
+                  <div className="pt-1">
+                    <button
+                      type="button"
+                      onClick={() => handleOpenEmailModal(lawyer)}
+                      className={`w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl border text-xs font-semibold transition-all shadow-sm ${
+                        sentEmailIds.has(lawyer.id)
+                          ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/25'
+                          : 'bg-primary/10 hover:bg-primary/20 text-primary border-primary/30'
+                      }`}
+                      title="Enviar proposta personalizada com link da demonstração por e-mail"
+                    >
+                      <Mail className="w-3.5 h-3.5" />
+                      <span>
+                        {sentEmailIds.has(lawyer.id) ? '✓ Proposta Enviada por E-mail (Reenviar)' : 'Enviar Proposta por E-mail'}
+                      </span>
+                    </button>
+                  </div>
+
+                  {/* Linha de 6 Ações Rápidas */}
+                  <div className="grid grid-cols-6 gap-1 pt-1">
                     
                     {/* Link Direto do Google Maps */}
                     <a
@@ -1021,6 +1162,21 @@ export default function RadarGoogleMaps() {
                       <MapPin className="w-3 h-3 text-red-500 shrink-0" />
                       <span className="truncate">Maps</span>
                     </a>
+
+                    {/* Botão Rápido de E-mail */}
+                    <button
+                      type="button"
+                      onClick={() => handleOpenEmailModal(lawyer)}
+                      className={`inline-flex items-center justify-center gap-0.5 text-[11px] px-1 h-8 rounded-md border transition-colors ${
+                        sentEmailIds.has(lawyer.id)
+                          ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30'
+                          : 'border-input bg-background hover:bg-primary/10 hover:text-primary text-foreground'
+                      }`}
+                      title="Abrir modal de envio de e-mail"
+                    >
+                      <Mail className="w-3 h-3 text-blue-500 shrink-0" />
+                      <span className="truncate">E-mail</span>
+                    </button>
 
                     {/* Ver Proposta / Roteiro Completo */}
                     <Button
@@ -1068,7 +1224,7 @@ export default function RadarGoogleMaps() {
                       size="sm"
                       onClick={() => handleSaveToCrm(lawyer)}
                       disabled={isSaved}
-                      className="text-[11px] px-1.5 h-8 gap-1"
+                      className="text-[11px] px-1 h-8 gap-0.5"
                       title="Salvar no gerenciador de prospecção do painel"
                     >
                       {isSaved ? (
@@ -1788,6 +1944,186 @@ export default function RadarGoogleMaps() {
         onClose={() => setPdfModalOpen(false)}
         lawyer={pdfLawyer}
       />
+
+      {/* Modal de Disparo de E-mail de Prospecção */}
+      {emailModalOpen && selectedLeadForEmail && (
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-card border rounded-3xl p-6 sm:p-8 max-w-2xl w-full max-h-[92vh] overflow-y-auto space-y-5 shadow-2xl flex flex-col justify-between">
+            <div>
+              {/* Header do Modal */}
+              <div className="flex items-center justify-between pb-3 border-b">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary border border-primary/20 flex items-center justify-center">
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-foreground">
+                      Enviar Proposta por E-mail
+                    </h3>
+                    <p className="text-xs text-muted-foreground">
+                      Proposta personalizada para {cleanLawyerName(selectedLeadForEmail.lawyer_name || selectedLeadForEmail.name)}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setEmailModalOpen(false)}
+                  className="text-muted-foreground hover:text-foreground p-1 text-sm font-bold"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Campos do Envio */}
+              <div className="mt-4 space-y-3.5 text-xs">
+                <div>
+                  <label className="block text-foreground font-semibold mb-1">
+                    E-mail do Destinatário *
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="contato@estabelecimento.com.br"
+                    value={emailAddress}
+                    onChange={(e) => setEmailAddress(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-background border text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-foreground font-semibold mb-1">
+                    Assunto do E-mail
+                  </label>
+                  <input
+                    type="text"
+                    value={emailSubject}
+                    onChange={(e) => setEmailSubject(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-background border text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+
+                {/* Card com Link da Demonstração */}
+                <div className="p-3.5 rounded-xl bg-muted/40 border flex items-center justify-between gap-3">
+                  <div className="truncate">
+                    <span className="text-[11px] text-muted-foreground block font-medium">Link do site modelo no botão do e-mail:</span>
+                    <a
+                      href={emailPreviewData?.demoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline text-xs font-mono font-medium truncate block"
+                    >
+                      {emailPreviewData?.demoUrl}
+                    </a>
+                  </div>
+                  <a
+                    href={emailPreviewData?.demoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-3 py-1.5 bg-background hover:bg-muted text-foreground border rounded-lg text-xs flex items-center gap-1 shrink-0 font-medium transition-colors"
+                    title="Testar Link"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5 text-primary" />
+                    <span>Ver Demo</span>
+                  </a>
+                </div>
+
+                {/* Prévia do Conteúdo do E-mail */}
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-foreground font-semibold">
+                      Prévia do Texto do E-mail:
+                    </label>
+                    <button
+                      type="button"
+                      onClick={handleCopyEmailContent}
+                      className="text-primary hover:underline text-[11px] flex items-center gap-1 font-medium"
+                    >
+                      <Copy className="w-3 h-3" />
+                      <span>Copiar Texto</span>
+                    </button>
+                  </div>
+                  <textarea
+                    rows={8}
+                    readOnly
+                    value={emailPreviewData?.plainText || ''}
+                    className="w-full p-3 rounded-xl bg-muted/20 border text-foreground text-xs font-mono leading-relaxed focus:outline-none resize-none"
+                  />
+                </div>
+
+                <div className="p-3 bg-primary/5 border border-primary/20 rounded-xl text-primary text-[11px] space-y-1">
+                  <p className="font-semibold flex items-center gap-1.5">
+                    <Eye className="w-3.5 h-3.5" />
+                    <span>Rastreamento Inteligente de Abertura & Cliques</span>
+                  </p>
+                  <p className="text-muted-foreground">
+                    O e-mail contém um pixel invisível de rastreamento para notificar quando o prospect abrir a mensagem ou clicar no link da demonstração.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Rodapé com as Ações */}
+            <div className="pt-4 border-t flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleOpenMailto}
+                  className="flex-1 sm:flex-none gap-1.5 text-xs"
+                  title="Abre o Gmail ou seu aplicativo de e-mail padrão com destinatário, assunto e texto já preenchidos"
+                >
+                  <ExternalLink className="w-3.5 h-3.5 text-muted-foreground" />
+                  <span>Abrir no Webmail</span>
+                </Button>
+
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCopyEmailContent}
+                  className="flex-1 sm:flex-none gap-1.5 text-xs"
+                >
+                  <Copy className="w-3.5 h-3.5 text-muted-foreground" />
+                  <span>Copiar</span>
+                </Button>
+              </div>
+
+              <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setEmailModalOpen(false)}
+                  className="text-xs"
+                >
+                  Fechar
+                </Button>
+
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={handleSendEmail}
+                  disabled={sendingEmail}
+                  className="gap-2 text-xs bg-primary text-primary-foreground hover:bg-primary/90 font-semibold shadow-sm"
+                >
+                  {sendingEmail ? (
+                    <>
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                      <span>Disparando...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-3.5 h-3.5" />
+                      <span>Disparar com Rastreamento</span>
+                    </>
+                  )}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
