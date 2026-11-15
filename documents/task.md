@@ -2,6 +2,13 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Resolução Definitiva de Responsividade e Raciocínio no PIT.AI (`src/services/pitai/`, `src/pages/pitai/`)**:
+  - Objetivo: Corrigir a falta de resposta a perguntas em linguagem natural sem acento (ex: "Quais são as noticias do Rio de Janeiro?"), adicionar indicador visual de processamento em tempo real no chat e estabilizar as chamadas ao Gemini e aos feeds com o SDK oficial e timeouts de proteção.
+  - Entregas Realizadas:
+    - `src/services/pitai/pitaiCoreService.js`: Normalização Unicode com remoção de diacríticos para reconhecimento imediato de intenções independentemente de acentuação, e conexão com o SDK oficial `@google/generative-ai` com ordem estrita de turnos e fallback entre `gemini-flash-latest`, `gemini-3.8-flash` e `gemini-flash-lite-latest`.
+    - `src/services/pitai/pitaiBriefingService.js`: Timeout de 2.8 segundos com `AbortController` por fonte e dados operacionais base do Rio de Janeiro e B3, eliminando travamento da UI por lentidão de proxies externos.
+    - `src/pages/pitai/PitAiDashboard.jsx`: Balão dinâmico de carregamento com pulso e animação ("PIT.AI Processando - Consultando sistemas e dados em tempo real...") e `Promise.race` com limite de 12 segundos com resposta garantida.
+
 - [x] **Integração do Assistente Financeiro Jarvis Grana+ (Finanças Fácil) no PIT.AI (`src/services/pitai/pitaiFinanceService.js`, `src/services/pitai/pitaiCoreService.js`, `src/components/pitai/PitAiVisualFeed.jsx`, `src/pages/pitai/PitAiDashboard.jsx`)**:
   - Objetivo: Habilitar o PIT.AI a gerenciar finanças pessoais e empresariais através de comandos naturais informais em áudio e texto, convertendo intenções em requisições para a API REST do sistema financeiro Grana+ (Finanças Fácil).
   - Entregas Realizadas:

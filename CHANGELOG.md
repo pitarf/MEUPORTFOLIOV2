@@ -2,6 +2,16 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.97.0] - 2026-11-14
+
+### Corrigido & Aprimorado
+* **Resolução Definitiva de Responsividade e Raciocínio no PIT.AI (`src/services/pitai/pitaiCoreService.js`, `src/services/pitai/pitaiBriefingService.js`, `src/pages/pitai/PitAiDashboard.jsx`)**:
+  * **Normalização Semântica de Entrada**: Implementada remoção rigorosa de diacríticos e acentuação (`normalize('NFD')`), permitindo que variações como "Quais são as noticias do Rio de Janeiro?" (sem acento) ou perguntas coloquiais ativem instantaneamente os módulos de notícias e briefing.
+  * **Indicador Visual de Processamento no HUD**: Adicionado balão reativo de status *"PIT.AI Processando - Consultando sistemas e dados em tempo real..."* na lista de mensagens enquanto o assistente processa a consulta, garantindo feedback visual imediato e contínuo ao usuário.
+  * **Timeout de Segurança e Fallback Ultrarrápido de Feeds RSS**: Adicionado controle de cancelamento (`AbortController` de 2.8s) na coleta de notícias externas, impedindo travamento da interface caso proxies de rede sofram lentidão.
+  * **Integração Resiliente com SDK Oficial Google Generative AI**: Conexão com a biblioteca oficial `@google/generative-ai` com ordem de turnos validada (`user` como primeiro turno) e fallback automático entre modelos oficiais (`gemini-flash-latest`, `gemini-3.8-flash`, `gemini-flash-lite-latest`).
+  * **Timeout de Proteção na Mensagem**: Adicionado `Promise.race` com limite de 12 segundos garantindo que o assistente sempre entregue uma resposta falada e em texto com retorno ao estado operacional pronto.
+
 ## [1.96.0] - 2026-11-14
 
 ### Adicionado

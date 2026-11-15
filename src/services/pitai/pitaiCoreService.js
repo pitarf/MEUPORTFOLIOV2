@@ -7,6 +7,7 @@
  * e orquestra respostas de texto e áudio no estilo executivo J.A.R.V.I.S.
  */
 
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { pitaiBriefingService } from './pitaiBriefingService.js';
 import { pitaiGoogleService } from './pitaiGoogleService.js';
 import { pitaiSearchService } from './pitaiSearchService.js';
@@ -115,88 +116,111 @@ CONTRATO OBRIGATÓRIO DE RESPOSTA (JSON):
   }
 
   /**
+   * Normaliza texto para comparações sem acentos e minúsculas
+   */
+  normalizeText(text) {
+    return (text || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim();
+  }
+
+  /**
    * Processa a mensagem do usuário e devolve a resposta executiva e ações do HUD
    * @param {string} userMessage - Mensagem ou fala do usuário
    * @param {Array} conversationHistory - Histórico recente
    * @returns {Promise<Object>}
    */
   async processUserInput(userMessage, conversationHistory = []) {
-    const textLower = userMessage.toLowerCase().trim();
+    const rawText = (userMessage || '').trim();
+    if (!rawText) {
+      return {
+        spokenText: 'Rafael, estou à sua disposição. Como posso auxiliá-lo?',
+        displayText: 'Estou pronto. O que deseja consultar ou registrar?',
+        intent: 'general_chat',
+        visualPayload: { type: 'none', data: {} }
+      };
+    }
 
-    // 1. Comando de Briefing / Novidades
+    const norm = this.normalizeText(rawText);
+
+    // 1. Comando de Briefing / Novidades / Notícias (ex: "Quais são as notícias do Rio de Janeiro?")
     if (
-      textLower.includes('o que tem de novo') ||
-      textLower.includes('novidades') ||
-      textLower.includes('acontecimentos') ||
-      textLower.includes('notícias') ||
-      textLower.includes('briefing') ||
-      textLower.includes('como estão as coisas')
+      norm.includes('o que tem de novo') ||
+      norm.includes('novidade') ||
+      norm.includes('acontecimento') ||
+      norm.includes('noticia') ||
+      norm.includes('briefing') ||
+      norm.includes('como estao as coisas') ||
+      (norm.includes('rio de janeiro') && (norm.includes('noticia') || norm.includes('como ta') || norm.includes('situacao') || norm.includes('quais')))
     ) {
       return this.handleBriefingIntent();
     }
 
     // 2. Consulta de Agenda / Compromissos
     if (
-      textLower.includes('minha agenda') ||
-      textLower.includes('o que tenho hoje') ||
-      textLower.includes('compromissos') ||
-      textLower.includes('meus horários')
+      norm.includes('minha agenda') ||
+      norm.includes('o que tenho hoje') ||
+      norm.includes('compromisso') ||
+      norm.includes('meus horarios') ||
+      norm.includes('minha programacao')
     ) {
       return this.handleAgendaQueryIntent();
     }
 
     // 3. Marcação rápida de evento
     if (
-      textLower.startsWith('marca') ||
-      textLower.startsWith('agende') ||
-      textLower.includes('marca na minha agenda') ||
-      textLower.includes('agendar reunião')
+      norm.startsWith('marca') ||
+      norm.startsWith('agende') ||
+      norm.includes('marca na minha agenda') ||
+      norm.includes('agendar reuniao')
     ) {
-      return this.handleAgendaCreateIntent(userMessage);
+      return this.handleAgendaCreateIntent(rawText);
     }
 
     // 4. Criação de tarefa / lembrete
     if (
-      textLower.startsWith('anota') ||
-      textLower.startsWith('lembrete') ||
-      textLower.includes('cria uma tarefa') ||
-      textLower.includes('cria tarefa')
+      norm.startsWith('anota') ||
+      norm.startsWith('lembrete') ||
+      norm.includes('cria uma tarefa') ||
+      norm.includes('cria tarefa')
     ) {
-      return this.handleTaskCreateIntent(userMessage);
+      return this.handleTaskCreateIntent(rawText);
     }
 
     // 5. Intenção Financeira Grana+ (Finanças Fácil)
-    const financeIntent = pitaiFinanceService.parseFinanceIntent(userMessage);
+    const financeIntent = pitaiFinanceService.parseFinanceIntent(rawText);
     if (financeIntent) {
-      return this.handleFinanceIntent(userMessage, financeIntent);
+      return this.handleFinanceIntent(rawText, financeIntent);
     }
 
     // 6. Detecção ativa de Pesquisa Web em Tempo Real
     const isSearchExplicit = 
-      textLower.startsWith('pesquise') ||
-      textLower.startsWith('pesquisa') ||
-      textLower.startsWith('busque') ||
-      textLower.startsWith('busca') ||
-      textLower.startsWith('quem é') ||
-      textLower.startsWith('o que é') ||
-      textLower.startsWith('onde fica') ||
-      textLower.includes('cotação') ||
-      textLower.includes('dólar') ||
-      textLower.includes('ibovespa') ||
-      textLower.includes('clima') ||
-      textLower.includes('previsão do tempo') ||
-      textLower.includes('trânsito') ||
-      textLower.includes('linha vermelha') ||
-      textLower.includes('ponte rio-niterói') ||
-      textLower.includes('notícia sobre') ||
-      textLower.includes('últimas sobre');
+      norm.startsWith('pesquise') ||
+      norm.startsWith('pesquisa') ||
+      norm.startsWith('busque') ||
+      norm.startsWith('busca') ||
+      norm.startsWith('quem e') ||
+      norm.startsWith('o que e') ||
+      norm.startsWith('onde fica') ||
+      norm.includes('cotacao') ||
+      norm.includes('dolar') ||
+      norm.includes('ibovespa') ||
+      norm.includes('clima') ||
+      norm.includes('previsao do tempo') ||
+      norm.includes('transito') ||
+      norm.includes('linha vermelha') ||
+      norm.includes('ponte rio-niteroi') ||
+      norm.includes('noticia sobre') ||
+      norm.includes('ultimas sobre');
 
     if (isSearchExplicit) {
-      return this.handleWebSearchIntent(userMessage, conversationHistory);
+      return this.handleWebSearchIntent(rawText, conversationHistory);
     }
 
-    // 6. Consulta via LLM com fallback enriquecido por busca
-    return this.queryGeminiLlm(userMessage, conversationHistory);
+    // 7. Consulta via LLM com fallback enriquecido por busca
+    return this.queryGeminiLlm(rawText, conversationHistory);
   }
 
   /**
@@ -603,41 +627,34 @@ CONTRATO OBRIGATÓRIO DE RESPOSTA (JSON):
     const apiKey = this.getApiKey();
 
     if (apiKey) {
-      try {
-        const geminiModel = 'gemini-3.8-flash';
-        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:generateContent?key=${apiKey}`;
-        
-        const payload = {
-          systemInstruction: {
-            parts: [{ text: this.getSystemPrompt() }]
-          },
-          contents: [
-            ...conversationHistory.slice(-4).map(msg => ({
-              role: msg.role === 'user' ? 'user' : 'model',
-              parts: [{ text: msg.text || msg.content || '' }]
-            })),
-            {
-              role: 'user',
-              parts: [{ text: userMessage }]
+      const modelsToTry = ['gemini-flash-latest', 'gemini-3.8-flash', 'gemini-flash-lite-latest'];
+      const genAI = new GoogleGenerativeAI(apiKey);
+
+      for (const modelName of modelsToTry) {
+        try {
+          const model = genAI.getGenerativeModel({
+            model: modelName,
+            systemInstruction: this.getSystemPrompt(),
+            generationConfig: {
+              temperature: 0.3,
+              responseMimeType: 'application/json'
             }
-          ],
-          generationConfig: {
-            temperature: 0.3,
-            responseMimeType: 'application/json'
+          });
+
+          // Prepara histórico com alternância de turnos garantindo que o primeiro seja user
+          const contents = [];
+          for (const msg of conversationHistory.slice(-4)) {
+            const role = msg.role === 'user' ? 'user' : 'model';
+            const text = msg.text || msg.content || '';
+            if (!text) continue;
+            if (contents.length === 0 && role === 'model') continue;
+            contents.push({ role, parts: [{ text }] });
           }
-        };
+          contents.push({ role: 'user', parts: [{ text: userMessage }] });
 
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
+          const result = await model.generateContent({ contents });
+          const rawText = result.response.text();
 
-        if (response.ok) {
-          const resData = await response.json();
-          const rawText = resData.candidates?.[0]?.content?.parts?.[0]?.text || '';
-          
-          // Tenta extrair JSON do modelo
           const jsonMatch = rawText.match(/\{[\s\S]*\}/);
           if (jsonMatch) {
             const parsed = JSON.parse(jsonMatch[0]);
@@ -683,9 +700,9 @@ CONTRATO OBRIGATÓRIO DE RESPOSTA (JSON):
             intent: 'general_chat',
             visualPayload: { type: 'none', data: {} }
           };
+        } catch (err) {
+          console.warn(`[PIT.AI Core] Falha na tentativa com modelo ${modelName}:`, err?.message || err);
         }
-      } catch (err) {
-        console.warn('[PIT.AI Core] Chamada do Gemini falhou, ativando motor de pesquisa e síntese contextual:', err);
       }
     }
 
