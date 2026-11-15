@@ -2,6 +2,22 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.94.0] - 2026-11-14
+
+### Adicionado
+* **Voz Humana de Cinema (ElevenLabs) e Vozes Neurais Naturais no PIT.AI (`src/services/pitai/pitaiTtsService.js`, `src/services/pitai/pitaiVoiceService.js`)**:
+  * Implementada integração completa com ElevenLabs API suportando o modelo `eleven_multilingual_v2` e vozes ultrarrealistas em português brasileiro com expressividade, respiração e timbre executivo de cinema (`Daniel` - estilo J.A.R.V.I.S., `George`, `Liam`, `Sarah`, `Laura`).
+  * Filtro inteligente de vozes neurais locais do navegador que elimina os sintetizadores mecânicos antigos do Windows (como SAPI5 Maria), selecionando automaticamente vozes neurais de alta fidelidade do Microsoft Edge e Google Chrome (`Microsoft Antonio Online Natural`, `Google português do Brasil`).
+  * Ferramenta de pré-audição ("Ouvir Demonstração") e persistência das configurações no `localStorage`.
+* **Motor de Pesquisa Web em Tempo Real no PIT.AI (`src/services/pitai/pitaiSearchService.js`, `src/services/pitai/pitaiCoreService.js`, `src/components/pitai/PitAiVisualFeed.jsx`)**:
+  * Conexão ao vivo e gratuita com fontes abertas sem necessidade de API paga: Google News RSS Brasil (notícias de última hora de hoje), DuckDuckGo Instant Search (fatos e definições diretas), Wikipédia em Português (conceitos enciclopédicos) e feeds do Rio de Janeiro / Economia (COR, G1, InfoMoney).
+  * O PIT.AI não depende mais exclusivamente de chamadas estáticas: ele varre a web em tempo real sobre qualquer tópico perguntado por voz ou texto e sintetiza respostas ricas com links de leitura e cartões visuais no HUD.
+* **Modo Conversação Contínua J.A.R.V.I.S. (Live) e Modal de Configuração (`src/pages/pitai/PitAiDashboard.jsx`)**:
+  * Adicionado alternador `[● Modo Live: Contínuo]` na Topbar: o PIT.AI reabre o microfone automaticamente após responder para conversa fluida sem necessidade de clicar no mouse ou teclado repetidas vezes.
+  * Botão de ativação rápida com texto interativo abaixo do Orbe holográfico.
+  * Modal central de configurações do PIT.AI para alternar motores de voz (ElevenLabs vs Neural), inserir chave de API e validar conexão com o modelo Google Gemini 2.0 Flash.
+  * Suíte automatizada de testes E2E (`scratch/test_pitai_live.mjs`) aprovada com 8/8 asserções (100% de sucesso).
+
 ## [1.93.0] - 2026-11-14
 
 ### Adicionado

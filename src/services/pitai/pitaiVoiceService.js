@@ -1,35 +1,51 @@
 /**
- * PIT.AI — Serviço de Voz Nativo (Web Speech API)
+ * PIT.AI — Serviço de Voz Integrado & Conversação Contínua
  * Rafael Pita Solutions / MeuPortfolio v2
  * 
- * Gerencia a escuta vocal (SpeechRecognition) e a síntese de fala (SpeechSynthesis)
- * em português do Brasil com latência zero e custo R$ 0,00 de APIs externas.
+ * Gerencia a escuta vocal (Web Speech Recognition) e delega a síntese
+ * ao pitaiTtsService (com suporte a ElevenLabs e Vozes Neurais Naturais).
+ * Inclui o modo "Conversação Contínua" (Live / J.A.R.V.I.S.) onde o microfone
+ * reabre automaticamente após a IA responder.
  */
+
+import { pitaiTtsService } from './pitaiTtsService.js';
 
 class PitAiVoiceService {
   constructor() {
     this.recognition = null;
-    this.synthesis = typeof window !== 'undefined' ? window.speechSynthesis : null;
     this.isListening = false;
     this.isSpeaking = false;
-    this.selectedVoice = null;
+    this.continuousMode = true; // Conversação contínua por padrão
     this.onTranscriptCallback = null;
     this.onStatusChangeCallback = null;
     this.onSpeechEndCallback = null;
+    this.autoRestartTimer = null;
 
     if (typeof window !== 'undefined') {
       this.initRecognition();
-      this.initVoices();
+      pitaiTtsService.bindCallbacks({
+        onStatusChange: (status) => {
+          this.isSpeaking = status === 'speaking';
+          this.notifyStatus(status);
+        },
+        onSpeechEnd: () => {
+          this.isSpeaking = false;
+          if (this.onSpeechEndCallback) this.onSpeechEndCallback();
+          // Se estiver em modo contínuo, reabre o microfone suavemente para o usuário continuar falando
+          if (this.continuousMode) {
+            this.scheduleAutoListen();
+          } else {
+            this.notifyStatus('idle');
+          }
+        }
+      });
     }
   }
 
-  /**
-   * Inicializa o mecanismo de reconhecimento de voz do navegador
-   */
   initRecognition() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      console.warn('[PIT.AI Voice] Reconhecimento de voz não suportado neste navegador.');
+      console.warn('[PIT.AI Voice] Reconhecimento de voz não suportado nativamente neste navegador.');
       return;
     }
 
@@ -66,47 +82,42 @@ class PitAiVoiceService {
     };
 
     this.recognition.onerror = (event) => {
-      console.warn('[PIT.AI Voice] Erro de captura vocal:', event.error);
+      console.warn('[PIT.AI Voice] Aviso de captura vocal:', event.error);
       this.isListening = false;
-      this.notifyStatus('idle');
+      if (event.error === 'not-allowed') {
+        this.continuousMode = false;
+        this.notifyStatus('idle');
+      } else if (this.continuousMode && !this.isSpeaking) {
+        // Reinicia em silêncio após breve pausa
+        this.scheduleAutoListen(600);
+      } else {
+        this.notifyStatus('idle');
+      }
     };
 
     this.recognition.onend = () => {
       this.isListening = false;
-      this.notifyStatus('idle');
+      if (!this.isSpeaking) {
+        this.notifyStatus('idle');
+      }
     };
   }
 
-  /**
-   * Carrega a melhor voz disponível no navegador para Português do Brasil
-   */
-  initVoices() {
-    if (!this.synthesis) return;
+  scheduleAutoListen(delayMs = 450) {
+    if (this.autoRestartTimer) clearTimeout(this.autoRestartTimer);
+    if (!this.continuousMode || this.isSpeaking) return;
 
-    const pickBestVoice = () => {
-      const voices = this.synthesis.getVoices();
-      // Procura primeiro por vozes neurais / naturais do Chrome/Edge (Microsoft Daniel, Google português, etc.)
-      const ptBrVoices = voices.filter(v => v.lang.includes('pt-BR') || v.lang.includes('pt_BR'));
-      
-      const naturalVoice = ptBrVoices.find(v => 
-        v.name.toLowerCase().includes('natural') || 
-        v.name.toLowerCase().includes('google') ||
-        v.name.toLowerCase().includes('daniel') ||
-        v.name.toLowerCase().includes('antonio')
-      );
-
-      this.selectedVoice = naturalVoice || ptBrVoices[0] || voices.find(v => v.lang.startsWith('pt')) || null;
-    };
-
-    pickBestVoice();
-    if (this.synthesis.onvoiceschanged !== undefined) {
-      this.synthesis.onvoiceschanged = pickBestVoice;
-    }
+    this.autoRestartTimer = setTimeout(() => {
+      if (!this.isSpeaking && !this.isListening) {
+        try {
+          this.startListening();
+        } catch {
+          // Ignore
+        }
+      }
+    }, delayMs);
   }
 
-  /**
-   * Registra callbacks de transcrição e status
-   */
   bindCallbacks({ onTranscript, onStatusChange, onSpeechEnd }) {
     this.onTranscriptCallback = onTranscript;
     this.onStatusChangeCallback = onStatusChange;
@@ -119,100 +130,48 @@ class PitAiVoiceService {
     }
   }
 
-  /**
-   * Inicia a escuta do microfone
-   */
+  setContinuousMode(enabled) {
+    this.continuousMode = enabled;
+    if (!enabled) {
+      if (this.autoRestartTimer) clearTimeout(this.autoRestartTimer);
+    }
+  }
+
   startListening() {
     if (!this.recognition) {
-      throw new Error('Reconhecimento de voz não disponível.');
+      throw new Error('Reconhecimento de voz não suportado.');
     }
     if (this.isSpeaking) {
       this.stopSpeaking();
     }
     try {
       this.recognition.start();
-    } catch (e) {
-      // Já pode estar rodando
-      console.debug('[PIT.AI Voice] Recognition start ignorado (já ativo).');
+    } catch {
+      // Já ativo
     }
   }
 
-  /**
-   * Para a escuta do microfone
-   */
   stopListening() {
+    if (this.autoRestartTimer) clearTimeout(this.autoRestartTimer);
     if (!this.recognition) return;
     try {
       this.recognition.stop();
-    } catch (e) {
+    } catch {
       // Ignore
     }
+    this.isListening = false;
   }
 
-  /**
-   * Fala uma mensagem em português do Brasil no tom executivo
-   * @param {string} text - Texto a ser falado
-   * @param {number} rate - Velocidade da fala (padrão 1.05 para fala executiva ágil)
-   */
-  speak(text, rate = 1.05) {
-    if (!this.synthesis) return Promise.resolve();
-
-    this.stopSpeaking();
-
-    // Limpa tags HTML ou marcações markdown antes de falar
-    const cleanText = text
-      .replace(/<[^>]*>?/gm, '')
-      .replace(/[*_#`~[\]]/g, '')
-      .replace(/https?:\/\/\S+/g, 'link anexo')
-      .trim();
-
-    if (!cleanText) return Promise.resolve();
-
-    return new Promise((resolve) => {
-      const utterance = new SpeechSynthesisUtterance(cleanText);
-      utterance.lang = 'pt-BR';
-      utterance.rate = rate;
-      utterance.pitch = 0.98; // Tom ligeiramente grave e sóbrio
-
-      if (this.selectedVoice) {
-        utterance.voice = this.selectedVoice;
-      }
-
-      utterance.onstart = () => {
-        this.isSpeaking = true;
-        this.notifyStatus('speaking');
-      };
-
-      utterance.onend = () => {
-        this.isSpeaking = false;
-        this.notifyStatus('idle');
-        if (this.onSpeechEndCallback) this.onSpeechEndCallback();
-        resolve();
-      };
-
-      utterance.onerror = (e) => {
-        console.warn('[PIT.AI Voice] Erro na síntese de fala:', e);
-        this.isSpeaking = false;
-        this.notifyStatus('idle');
-        resolve();
-      };
-
-      this.synthesis.speak(utterance);
-    });
+  speak(text) {
+    if (this.autoRestartTimer) clearTimeout(this.autoRestartTimer);
+    this.stopListening();
+    return pitaiTtsService.speak(text);
   }
 
-  /**
-   * Interrompe qualquer fala em andamento imediatamente
-   */
   stopSpeaking() {
-    if (!this.synthesis) return;
-    try {
-      this.synthesis.cancel();
-      this.isSpeaking = false;
-      this.notifyStatus('idle');
-    } catch (e) {
-      // Ignore
-    }
+    if (this.autoRestartTimer) clearTimeout(this.autoRestartTimer);
+    pitaiTtsService.stop();
+    this.isSpeaking = false;
   }
 }
 

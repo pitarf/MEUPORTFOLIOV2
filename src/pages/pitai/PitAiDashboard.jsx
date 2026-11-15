@@ -23,12 +23,18 @@ import {
   LogOut,
   Key,
   X,
-  ExternalLink
+  ExternalLink,
+  Settings,
+  Sliders,
+  Globe,
+  Play,
+  Flame
 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import PitAiOrb from '@/components/pitai/PitAiOrb';
 import PitAiVisualFeed from '@/components/pitai/PitAiVisualFeed';
 import { pitaiVoiceService } from '@/services/pitai/pitaiVoiceService';
+import { pitaiTtsService, ELEVENLABS_VOICES } from '@/services/pitai/pitaiTtsService';
 import { pitaiCoreService } from '@/services/pitai/pitaiCoreService';
 import { pitaiBriefingService } from '@/services/pitai/pitaiBriefingService';
 import { pitaiGoogleService } from '@/services/pitai/pitaiGoogleService';
@@ -40,10 +46,28 @@ export default function PitAiDashboard() {
   const [status, setStatus] = useState('idle'); // 'idle' | 'listening' | 'thinking' | 'speaking'
   const [isListening, setIsListening] = useState(false);
   const [audioEnabled, setAudioEnabled] = useState(true);
+  const [continuousMode, setContinuousMode] = useState(true);
   const [inputText, setInputText] = useState('');
   const [messages, setMessages] = useState([]);
   const [visualPayload, setVisualPayload] = useState({ type: 'none', data: {} });
   const [currentTime, setCurrentTime] = useState('');
+
+  // Modais de Configuração
+  const [settingsModalOpen, setSettingsModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('voice'); // 'voice' | 'brain'
+
+  // Configurações de Voz (TTS)
+  const [ttsMode, setTtsMode] = useState(() => pitaiTtsService.getMode());
+  const [elevenKey, setElevenKey] = useState(() => pitaiTtsService.getElevenLabsKey());
+  const [elevenVoiceId, setElevenVoiceId] = useState(() => pitaiTtsService.getElevenLabsVoiceId());
+  const [browserVoices, setBrowserVoices] = useState([]);
+  const [selectedBrowserVoiceUri, setSelectedBrowserVoiceUri] = useState(() => pitaiTtsService.getBrowserVoiceUri());
+  const [isTestingVoice, setIsTestingVoice] = useState(false);
+
+  // Configurações do Gemini (Brain)
+  const [geminiKeyInput, setGeminiKeyInput] = useState(() => pitaiCoreService.getApiKey());
+  const [isTestingGemini, setIsTestingGemini] = useState(false);
+  const [geminiStatus, setGeminiStatus] = useState(null); // 'ok' | 'error' | null
 
   // Estados do Google Workspace (Agenda & Tasks)
   const [googleConnected, setGoogleConnected] = useState(() => pitaiGoogleService.isConnected());
@@ -54,6 +78,21 @@ export default function PitAiDashboard() {
   const [isSyncingGoogle, setIsSyncingGoogle] = useState(false);
 
   const chatBottomRef = useRef(null);
+
+  // Carrega vozes neurais instaladas no navegador
+  useEffect(() => {
+    const updateVoices = () => {
+      const voices = pitaiTtsService.getAvailableBrowserVoices();
+      setBrowserVoices(voices);
+      if (!selectedBrowserVoiceUri && voices.length > 0) {
+        setSelectedBrowserVoiceUri(voices[0].voiceURI);
+      }
+    };
+    updateVoices();
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      window.speechSynthesis.onvoiceschanged = updateVoices;
+    }
+  }, [selectedBrowserVoiceUri]);
 
   // Relógio de Brasília ao vivo
   useEffect(() => {
@@ -68,6 +107,8 @@ export default function PitAiDashboard() {
 
   // Inicialização e vínculo de callbacks de voz
   useEffect(() => {
+    pitaiVoiceService.setContinuousMode(continuousMode);
+
     pitaiVoiceService.bindCallbacks({
       onTranscript: ({ interim, final, isFinal }) => {
         if (interim) {
@@ -83,7 +124,10 @@ export default function PitAiDashboard() {
         setIsListening(newStatus === 'listening');
       },
       onSpeechEnd: () => {
-        setStatus('idle');
+        if (!continuousMode) {
+          setStatus('idle');
+          setIsListening(false);
+        }
       }
     });
 
@@ -91,17 +135,17 @@ export default function PitAiDashboard() {
     const initialWelcome = {
       id: 'welcome',
       role: 'assistant',
-      text: 'Olá, Rafael. Sistemas operacionais. Como posso auxiliar suas operações hoje?',
+      text: 'Olá, Rafael. Sistemas operacionais e conectados à internet em tempo real. Como posso auxiliar suas operações hoje?',
       timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
     };
     setMessages([initialWelcome]);
 
-    // Opcional: fala inicial se o áudio estiver liberado
+    // Fala inicial se áudio ativado
     let welcomeTimer = null;
     if (audioEnabled) {
       welcomeTimer = setTimeout(() => {
-        pitaiVoiceService.speak('Olá, Rafael. Sistemas operacionais.');
-      }, 600);
+        pitaiVoiceService.speak('Olá, Rafael. Sistemas operacionais e conectados.');
+      }, 500);
     }
 
     // Atalho global: Barra de Espaço alterna microfone quando não estiver digitando
@@ -149,10 +193,23 @@ export default function PitAiDashboard() {
         toast({
           variant: 'destructive',
           title: 'Microfone indisponível',
-          description: 'Verifique as permissões de áudio no seu navegador.'
+          description: 'Permita o acesso ao microfone no seu navegador para utilizar os comandos vocais.'
         });
       }
     }
+  };
+
+  // Alterna o modo contínuo de conversação
+  const handleToggleContinuous = () => {
+    const next = !continuousMode;
+    setContinuousMode(next);
+    pitaiVoiceService.setContinuousMode(next);
+    toast({
+      title: next ? 'Modo Contínuo Ativado' : 'Modo Manual Ativado',
+      description: next
+        ? 'O PIT.AI reabrirá o microfone automaticamente após responder para conversa fluida ininterrupta.'
+        : 'O microfone aguardará seu clique ou barra de espaço para falar.'
+    });
   };
 
   // Envia a mensagem (voz ou texto digitado)
@@ -199,59 +256,104 @@ export default function PitAiDashboard() {
         setStatus('idle');
       }
     } catch (err) {
-      console.error('[PIT.AI Dashboard] Erro no processamento:', err);
+      console.warn('[PIT.AI Dashboard] Erro no processamento:', err);
+      const fallbackMsg = {
+        id: `ai_${Date.now()}`,
+        role: 'assistant',
+        text: 'Rafael, houve uma intermitência momentânea no processador. Os subsistemas continuam ativos.',
+        timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+      };
+      setMessages((prev) => [...prev, fallbackMsg]);
       setStatus('idle');
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: `err_${Date.now()}`,
-          role: 'assistant',
-          text: 'Ocorreu uma instabilidade na consulta. Todos os sistemas locais permanecem ativos.',
-          timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
-        }
-      ]);
     }
   };
 
-  // Resolução de Conflito de Agenda por clique no HUD
-  const handleResolveConflict = (action) => {
-    if (action === 'reschedule') {
-      handleSendMessage('reagenda para a próxima hora livre');
-    } else {
-      handleSendMessage('mantém ambos os compromissos');
-    }
-  };
-
-  // Conexão Google Workspace (Agenda & Tasks)
-  const handleConnectGoogle = async (customId = null) => {
-    setIsConnectingGoogle(true);
-    const idToUse = customId || clientIdInput.trim();
-    if (idToUse) {
-      pitaiGoogleService.saveClientId(idToUse);
-    }
-
+  // Testar a Voz no Modal de Configurações
+  const handleTestVoice = async () => {
+    setIsTestingVoice(true);
+    pitaiVoiceService.stopSpeaking();
     try {
-      const res = await pitaiGoogleService.requestGoogleAccess(idToUse || null);
+      const sampleText = 'Olá, Rafael. Este é o meu novo tom de voz executivo para o centro de inteligência PIT.AI.';
+      await pitaiTtsService.speak(sampleText);
+    } finally {
+      setIsTestingVoice(false);
+    }
+  };
+
+  // Salvar Configurações de Voz
+  const handleSaveVoiceSettings = () => {
+    pitaiTtsService.setMode(ttsMode);
+    pitaiTtsService.setElevenLabsKey(elevenKey);
+    pitaiTtsService.setElevenLabsVoiceId(elevenVoiceId);
+    pitaiTtsService.setBrowserVoiceUri(selectedBrowserVoiceUri);
+    toast({
+      title: 'Configurações de Voz Salvas',
+      description: `Motor ativo: ${ttsMode === 'elevenlabs' ? 'ElevenLabs (Ultra-Humana)' : 'Neural do Navegador'}.`
+    });
+  };
+
+  // Testar Chave do Gemini
+  const handleTestGeminiKey = async () => {
+    setIsTestingGemini(true);
+    setGeminiStatus(null);
+    try {
+      const key = geminiKeyInput.trim();
+      if (!key) {
+        setGeminiStatus('error');
+        toast({ variant: 'destructive', title: 'Chave Vazia', description: 'Insira sua chave da API do Google Gemini.' });
+        return;
+      }
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ parts: [{ text: 'Responda OK' }] }] })
+      });
+      if (res.ok) {
+        setGeminiStatus('ok');
+        pitaiCoreService.setApiKey(key);
+        toast({ title: 'Gemini 2.0 Flash Conectado', description: 'A chave foi validada com sucesso e salva no PIT.AI.' });
+      } else {
+        setGeminiStatus('error');
+        const errData = await res.json();
+        toast({ variant: 'destructive', title: 'Falha na Validação', description: errData.error?.message || 'Chave rejeitada.' });
+      }
+    } catch (e) {
+      setGeminiStatus('error');
+      toast({ variant: 'destructive', title: 'Erro de Conexão', description: e.message });
+    } finally {
+      setIsTestingGemini(false);
+    }
+  };
+
+  // Salvar Chave do Gemini
+  const handleSaveGeminiKey = () => {
+    pitaiCoreService.setApiKey(geminiKeyInput.trim());
+    toast({ title: 'Configurações Salvas', description: 'Chave do Gemini atualizada com sucesso.' });
+  };
+
+  // Conectar com Google Workspace
+  const handleConnectGoogle = async () => {
+    setIsConnectingGoogle(true);
+    try {
+      if (clientIdInput && clientIdInput !== pitaiGoogleService.getClientId()) {
+        pitaiGoogleService.setClientId(clientIdInput.trim());
+      }
+      const res = await pitaiGoogleService.requestAccessTokenInteractive();
       if (res.success) {
         setGoogleConnected(true);
-        setGoogleUser(res.profile);
+        setGoogleUser(res.userProfile);
         setGoogleModalOpen(false);
         toast({
-          title: 'Google Workspace Conectado!',
-          description: `Agenda e Tarefas sincronizadas com ${res.profile?.email || 'sua conta'}.`
+          title: 'Google Workspace Conectado',
+          description: `Sincronizado como ${res.userProfile?.email || 'Rafael Pita'}.`
         });
-        // Atualiza a visualização da agenda no HUD
-        handleSendMessage('qual a minha agenda de hoje?');
+        handleSyncGoogle();
       } else {
-        if (res.error === 'CLIENT_ID_REQUIRED') {
-          setGoogleModalOpen(true);
-        } else {
-          toast({
-            variant: 'destructive',
-            title: 'Falha na conexão Google',
-            description: res.message || 'Não foi possível autorizar o acesso.'
-          });
-        }
+        toast({
+          variant: 'destructive',
+          title: 'Falha na conexão Google',
+          description: res.message || 'Não foi possível autorizar o acesso.'
+        });
       }
     } catch (err) {
       toast({
@@ -264,28 +366,27 @@ export default function PitAiDashboard() {
     }
   };
 
-  // Sincronização ao vivo da agenda e tarefas
+  // Sincronização Google
   const handleSyncGoogle = async () => {
     setIsSyncingGoogle(true);
     try {
       const result = await pitaiGoogleService.syncFromGoogleLive();
       toast({
         title: 'Sincronização Concluída',
-        description: `${result.calendarEventsCount} eventos da agenda e ${result.tasksCount} tarefas atualizadas com o Google.`
+        description: `${result.calendarEventsCount} eventos da agenda e ${result.tasksCount} tarefas sincronizadas.`
       });
       handleSendMessage('qual a minha agenda de hoje?');
     } catch (err) {
       toast({
         variant: 'destructive',
         title: 'Erro de sincronização',
-        description: 'Não foi possível buscar os dados mais recentes do Google Workspace.'
+        description: 'Não foi possível buscar os dados do Google Workspace.'
       });
     } finally {
       setIsSyncingGoogle(false);
     }
   };
 
-  // Desconectar Google
   const handleDisconnectGoogle = () => {
     pitaiGoogleService.clearToken();
     setGoogleConnected(false);
@@ -300,13 +401,13 @@ export default function PitAiDashboard() {
   return (
     <div className="min-h-screen bg-[#070b14] text-slate-100 flex flex-col justify-between selection:bg-cyan-500 selection:text-black relative overflow-x-hidden font-sans">
       
-      {/* Proteção de Área Interna & Metadados (Regra de SEO) */}
+      {/* Proteção de Área Interna & Metadados */}
       <Helmet>
         <title>PIT.AI | Centro de Inteligência Executiva</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 
-      {/* Grid Cibernético Sutil & Luzes Volumétricas de Fundo */}
+      {/* Grid Cibernético & Iluminação */}
       <div className="fixed inset-0 pointer-events-none opacity-20 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px]" />
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-gradient-to-b from-cyan-500/10 via-blue-600/5 to-transparent blur-3xl pointer-events-none" />
 
@@ -325,6 +426,10 @@ export default function PitAiDashboard() {
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 ONLINE
               </span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 font-mono hidden md:inline-flex items-center gap-1">
+                <Globe className="w-3 h-3 text-cyan-400" />
+                WEB LIVE
+              </span>
             </div>
             <p className="text-[11px] text-slate-400 hidden sm:block">
               Centro de Comando & Inteligência Operacional • Rafael Pita
@@ -333,25 +438,34 @@ export default function PitAiDashboard() {
         </div>
 
         {/* Telemetria e Controles */}
-        <div className="flex items-center gap-3 sm:gap-6 text-xs font-mono">
-          <div className="hidden md:flex items-center gap-2 text-slate-400">
+        <div className="flex items-center gap-2.5 sm:gap-4 text-xs font-mono">
+          <div className="hidden lg:flex items-center gap-2 text-slate-400">
             <Clock className="w-3.5 h-3.5 text-cyan-400" />
             <span>Brasília:</span>
             <strong className="text-slate-200">{currentTime || '--:--:--'}</strong>
           </div>
 
-          <div className="hidden lg:flex items-center gap-2 text-slate-400">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-            <span>VPS Hostinger:</span>
-            <strong className="text-emerald-400">100%</strong>
-          </div>
+          {/* Alternador Modo Contínuo (Live / Sempre Ouvindo) */}
+          <button
+            type="button"
+            onClick={handleToggleContinuous}
+            className={`px-2.5 py-1.5 rounded-xl border transition-all flex items-center gap-1.5 ${
+              continuousMode
+                ? 'bg-cyan-500/15 border-cyan-500/40 text-cyan-300 font-bold shadow-sm shadow-cyan-500/20'
+                : 'bg-slate-900 border-slate-800 text-slate-500'
+            }`}
+            title={continuousMode ? 'Modo Contínuo J.A.R.V.I.S. Ativo (o microfone reabre sozinho)' : 'Modo Manual'}
+          >
+            <span className={`w-2 h-2 rounded-full ${continuousMode ? 'bg-cyan-400 animate-ping' : 'bg-slate-600'}`} />
+            <span className="hidden sm:inline">{continuousMode ? 'Modo Live: Contínuo' : 'Modo: Manual'}</span>
+          </button>
 
-          {/* Conexão Google Workspace (Agenda & Tasks) */}
+          {/* Conexão Google Workspace */}
           {googleConnected ? (
             <div className="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-1 rounded-xl text-emerald-400">
               <Calendar className="w-3.5 h-3.5" />
-              <span className="hidden xl:inline text-[11px] truncate max-w-[150px]">
-                {googleUser?.email || 'Google Conectado'}
+              <span className="hidden xl:inline text-[11px] truncate max-w-[130px]">
+                {googleUser?.email || 'Google OK'}
               </span>
               <button
                 type="button"
@@ -362,24 +476,16 @@ export default function PitAiDashboard() {
               >
                 <RefreshCw className={`w-3 h-3 ${isSyncingGoogle ? 'animate-spin' : ''}`} />
               </button>
-              <button
-                type="button"
-                onClick={() => setGoogleModalOpen(true)}
-                title="Opções da conta Google"
-                className="p-1 hover:bg-emerald-500/20 rounded-md transition-colors"
-              >
-                <Key className="w-3 h-3" />
-              </button>
             </div>
           ) : (
             <button
               type="button"
               onClick={() => setGoogleModalOpen(true)}
               className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 transition-colors"
-              title="Conectar sua Google Agenda e Google Tarefas"
+              title="Conectar Google Agenda e Tarefas"
             >
               <Calendar className="w-3.5 h-3.5 text-amber-400" />
-              <span className="hidden sm:inline">Conectar Google</span>
+              <span className="hidden sm:inline">Google</span>
             </button>
           )}
 
@@ -391,15 +497,24 @@ export default function PitAiDashboard() {
               setAudioEnabled(next);
               if (!next) pitaiVoiceService.stopSpeaking();
             }}
-            className={`p-2 rounded-xl border transition-colors flex items-center gap-1.5 text-xs ${
+            className={`p-2 rounded-xl border transition-colors flex items-center gap-1.5 ${
               audioEnabled
                 ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400'
                 : 'bg-slate-900 border-slate-800 text-slate-500'
             }`}
-            title={audioEnabled ? 'Áudio ativado (fala ativada)' : 'Áudio mudo'}
+            title={audioEnabled ? 'Voz ativada' : 'Voz mudo'}
           >
             {audioEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
-            <span className="hidden sm:inline">{audioEnabled ? 'Voz Ativa' : 'Voz Mudo'}</span>
+          </button>
+
+          {/* Botão de Configurações (Voz & Cérebro) */}
+          <button
+            type="button"
+            onClick={() => setSettingsModalOpen(true)}
+            className="p-2 rounded-xl border border-slate-800 hover:border-cyan-500/40 bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white transition-all"
+            title="Ajustar Voz Humana e Cérebro Gemini"
+          >
+            <Settings className="w-4 h-4" />
           </button>
         </div>
       </header>
@@ -408,19 +523,35 @@ export default function PitAiDashboard() {
       <main className="relative z-10 flex-1 max-w-5xl w-full mx-auto p-4 sm:p-6 flex flex-col justify-between space-y-6">
         
         {/* Orbe Holográfico no Topo Central */}
-        <div className="flex flex-col items-center justify-center pt-2">
+        <div className="flex flex-col items-center justify-center pt-1 space-y-2">
           <PitAiOrb
             status={status}
             isListening={isListening}
             onToggleMic={handleToggleMic}
           />
+          
+          {/* Botão de Ativação Vocal Rápida */}
+          <button
+            type="button"
+            onClick={handleToggleMic}
+            className={`px-4 py-1.5 rounded-full border text-xs font-mono font-semibold transition-all flex items-center gap-2 ${
+              isListening
+                ? 'bg-rose-500/20 border-rose-500/50 text-rose-300 shadow-lg shadow-rose-500/20 animate-pulse'
+                : 'bg-slate-900/80 hover:bg-slate-800 border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-300'
+            }`}
+          >
+            <Mic className={`w-3.5 h-3.5 ${isListening ? 'text-rose-400' : 'text-cyan-400'}`} />
+            <span>
+              {isListening ? 'Ouvindo você... Fale agora' : 'Clique ou aperte Espaço para Falar'}
+            </span>
+          </button>
         </div>
 
-        {/* Projeção Visual Generativa do HUD (Mapas, Notícias, Agenda) */}
+        {/* Projeção Visual Generativa do HUD (Mapas, Notícias, Pesquisa Web, Agenda) */}
         <PitAiVisualFeed
           payload={visualPayload}
-          onResolveConflict={handleResolveConflict}
-          onRefreshBriefing={() => handleSendMessage('atualiza o briefing')}
+          onResolveConflict={() => handleSendMessage('ajuste o conflito')}
+          onRefreshBriefing={() => handleSendMessage('o que tem de novo?')}
         />
 
         {/* Linha de Conversação e Mensagens */}
@@ -457,7 +588,7 @@ export default function PitAiDashboard() {
           <div ref={chatBottomRef} />
         </div>
 
-        {/* Comandos Rápidos em 1 Clique */}
+        {/* Comandos Rápidos em 1 Clique (Notícias, Agenda, Pesquisa em Tempo Real) */}
         <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-1 no-scrollbar text-xs">
           <button
             type="button"
@@ -465,7 +596,7 @@ export default function PitAiDashboard() {
             className="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-400 transition-all flex items-center gap-1.5 shrink-0"
           >
             <Newspaper className="w-3.5 h-3.5 text-cyan-400" />
-            <span>O que tem de novo?</span>
+            <span>Briefing de Notícias</span>
           </button>
 
           <button
@@ -474,16 +605,25 @@ export default function PitAiDashboard() {
             className="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-400 transition-all flex items-center gap-1.5 shrink-0"
           >
             <Calendar className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Minha agenda de hoje</span>
+            <span>Minha Agenda</span>
           </button>
 
           <button
             type="button"
-            onClick={() => handleSendMessage('Notícias de segurança do Rio de Janeiro')}
+            onClick={() => handleSendMessage('Pesquise a cotação do dólar hoje')}
+            className="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-400 transition-all flex items-center gap-1.5 shrink-0"
+          >
+            <Globe className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Cotação do Dólar</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleSendMessage('Como está o trânsito no Rio de Janeiro agora?')}
             className="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-400 transition-all flex items-center gap-1.5 shrink-0"
           >
             <MapPin className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Segurança no Rio de Janeiro</span>
+            <span>Trânsito no Rio</span>
           </button>
 
           <button
@@ -492,7 +632,7 @@ export default function PitAiDashboard() {
             className="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-400 transition-all flex items-center gap-1.5 shrink-0"
           >
             <Clock className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Agendar reunião</span>
+            <span>Agendar Reunião</span>
           </button>
         </div>
 
@@ -509,7 +649,7 @@ export default function PitAiDashboard() {
               type="text"
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              placeholder="Fale ou digite sua ordem para o PIT.AI..."
+              placeholder="Fale ou digite para o PIT.AI (ex: 'pesquise sobre...', 'o que tem de novo?', 'minha agenda')..."
               className="w-full bg-slate-950/90 border border-slate-800 focus:border-cyan-500/60 rounded-2xl py-3.5 pl-4 pr-24 text-sm text-white placeholder-slate-500 outline-none transition-all shadow-2xl backdrop-blur-xl"
             />
 
@@ -543,8 +683,278 @@ export default function PitAiDashboard() {
 
       {/* Footer Minimalista */}
       <footer className="relative z-10 border-t border-slate-900/80 px-4 py-2.5 text-center text-[10px] font-mono text-slate-600">
-        <span>PIT.AI v1.0 • Rafael Pita Solutions • Conectado à VPS e Google Workspace</span>
+        <span>PIT.AI v1.1 • Rafael Pita Solutions • Pesquisa em Tempo Real e Voz Humana</span>
       </footer>
+
+      {/* MODAL DE CONFIGURAÇÃO (VOZ & CÉREBRO) */}
+      <AnimatePresence>
+        {settingsModalOpen && (
+          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              className="bg-slate-950 border border-slate-800 rounded-3xl p-6 sm:p-7 max-w-lg w-full shadow-2xl space-y-5 text-slate-200"
+            >
+              {/* Header do Modal */}
+              <div className="flex items-start justify-between border-b border-slate-800/80 pb-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center">
+                    <Sliders className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-white flex items-center gap-2">
+                      Configurações do PIT.AI
+                    </h3>
+                    <p className="text-xs text-slate-400">
+                      Voz Humana de Alta Fidelidade e Inteligência
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setSettingsModalOpen(false)}
+                  className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Abas: Voz vs Cérebro */}
+              <div className="flex border-b border-slate-800 text-xs font-semibold">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('voice')}
+                  className={`pb-2.5 px-4 border-b-2 transition-colors flex items-center gap-1.5 ${
+                    activeTab === 'voice'
+                      ? 'border-cyan-400 text-cyan-400'
+                      : 'border-transparent text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  <Volume2 className="w-3.5 h-3.5" />
+                  <span>Voz Humana (TTS)</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('brain')}
+                  className={`pb-2.5 px-4 border-b-2 transition-colors flex items-center gap-1.5 ${
+                    activeTab === 'brain'
+                      ? 'border-cyan-400 text-cyan-400'
+                      : 'border-transparent text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  <Cpu className="w-3.5 h-3.5" />
+                  <span>Cérebro & Pesquisa Web</span>
+                </button>
+              </div>
+
+              {/* CONTEÚDO DA ABA DE VOZ */}
+              {activeTab === 'voice' && (
+                <div className="space-y-4 text-xs">
+                  {/* Seleção do Motor */}
+                  <div className="space-y-1.5">
+                    <label className="font-semibold text-slate-300 block">Motor de Síntese de Voz:</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setTtsMode('elevenlabs')}
+                        className={`p-3 rounded-2xl border text-left transition-all ${
+                          ttsMode === 'elevenlabs'
+                            ? 'bg-cyan-500/10 border-cyan-500/50 text-cyan-300 shadow-md shadow-cyan-500/10'
+                            : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-1">
+                          <strong className="text-white text-xs">ElevenLabs</strong>
+                          <Flame className="w-3.5 h-3.5 text-amber-400" />
+                        </div>
+                        <p className="text-[11px] text-slate-400">Voz humana ultra-realista de estúdio/cinema.</p>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setTtsMode('neural_browser')}
+                        className={`p-3 rounded-2xl border text-left transition-all ${
+                          ttsMode === 'neural_browser'
+                            ? 'bg-cyan-500/10 border-cyan-500/50 text-cyan-300 shadow-md shadow-cyan-500/10'
+                            : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-1">
+                          <strong className="text-white text-xs">Voz Neural Grátis</strong>
+                          <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                        </div>
+                        <p className="text-[11px] text-slate-400">Microsoft Edge / Google Natural (sem custo).</p>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Campos do ElevenLabs */}
+                  {ttsMode === 'elevenlabs' && (
+                    <div className="space-y-3 p-3.5 bg-slate-900/60 border border-slate-800 rounded-2xl">
+                      <div className="space-y-1">
+                        <label className="text-slate-300 font-medium block">
+                          Chave da API ElevenLabs (xi-api-key):
+                        </label>
+                        <input
+                          type="password"
+                          value={elevenKey}
+                          onChange={(e) => setElevenKey(e.target.value)}
+                          placeholder="Ex: sk_... (plano gratuito disponível em elevenlabs.io)"
+                          className="w-full bg-slate-950 border border-slate-800 focus:border-cyan-500/60 rounded-xl py-2 px-3 text-xs text-white font-mono outline-none"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-slate-300 font-medium block">Voz Executiva Selecionada:</label>
+                        <select
+                          value={elevenVoiceId}
+                          onChange={(e) => setElevenVoiceId(e.target.value)}
+                          className="w-full bg-slate-950 border border-slate-800 focus:border-cyan-500/60 rounded-xl py-2 px-3 text-xs text-white outline-none"
+                        >
+                          {ELEVENLABS_VOICES.map((v) => (
+                            <option key={v.id} value={v.id}>
+                              {v.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <p className="text-[11px] text-slate-400">
+                        Crie sua conta gratuita em{' '}
+                        <a
+                          href="https://elevenlabs.io"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-cyan-400 hover:underline inline-flex items-center gap-0.5"
+                        >
+                          elevenlabs.io <ExternalLink className="w-2.5 h-2.5" />
+                        </a>{' '}
+                        para ter 10.000 caracteres mensais com voz de estúdio cinematográfica.
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Campos da Voz Neural do Navegador */}
+                  {ttsMode === 'neural_browser' && (
+                    <div className="space-y-2 p-3.5 bg-slate-900/60 border border-slate-800 rounded-2xl">
+                      <label className="text-slate-300 font-medium block">
+                        Voz Neural Instalada no seu Navegador:
+                      </label>
+                      <select
+                        value={selectedBrowserVoiceUri}
+                        onChange={(e) => setSelectedBrowserVoiceUri(e.target.value)}
+                        className="w-full bg-slate-950 border border-slate-800 focus:border-cyan-500/60 rounded-xl py-2 px-3 text-xs text-white outline-none"
+                      >
+                        {browserVoices.map((v) => (
+                          <option key={v.voiceURI} value={v.voiceURI}>
+                            {v.name} ({v.lang})
+                          </option>
+                        ))}
+                      </select>
+                      <p className="text-[11px] text-slate-400">
+                        Filtramos as vozes antigas e robóticas do Windows (como Maria SAPI5) para selecionar as vozes naturais do Edge/Chrome.
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Botões de Ação da Voz */}
+                  <div className="flex items-center gap-2 pt-2">
+                    <button
+                      type="button"
+                      onClick={handleTestVoice}
+                      disabled={isTestingVoice}
+                      className="py-2.5 px-4 rounded-xl border border-cyan-500/30 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 font-semibold flex items-center gap-1.5 transition-colors"
+                    >
+                      <Play className="w-3.5 h-3.5" />
+                      <span>{isTestingVoice ? 'Falando...' : 'Ouvir Demonstração'}</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleSaveVoiceSettings}
+                      className="flex-1 py-2.5 px-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold transition-all shadow-md shadow-cyan-500/20 text-center"
+                    >
+                      Salvar Preferência de Voz
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* CONTEÚDO DA ABA DE CÉREBRO */}
+              {activeTab === 'brain' && (
+                <div className="space-y-4 text-xs">
+                  <div className="space-y-1.5">
+                    <label className="font-semibold text-slate-300 block">
+                      Chave da API Google Gemini (AI Studio):
+                    </label>
+                    <input
+                      type="password"
+                      value={geminiKeyInput}
+                      onChange={(e) => setGeminiKeyInput(e.target.value)}
+                      placeholder="Ex: AIzaSy..."
+                      className="w-full bg-slate-900 border border-slate-800 focus:border-cyan-500/60 rounded-xl py-2.5 px-3 text-xs text-white font-mono outline-none"
+                    />
+                  </div>
+
+                  <div className="p-3.5 bg-slate-900/60 border border-slate-800 rounded-2xl space-y-2 text-slate-400 text-[11px] leading-relaxed">
+                    <p className="font-semibold text-cyan-400 flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>Como obter sua chave gratuita do Gemini em 30 segundos:</span>
+                    </p>
+                    <p>
+                      1. Acesse o{' '}
+                      <a
+                        href="https://aistudio.google.com/app/apikey"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-cyan-400 hover:underline font-semibold inline-flex items-center gap-0.5"
+                      >
+                        Google AI Studio <ExternalLink className="w-2.5 h-2.5" />
+                      </a>.
+                      <br />
+                      2. Clique em <strong>"Create API Key"</strong>.
+                      <br />
+                      3. Cole sua chave acima e clique em "Validar e Conectar".
+                    </p>
+                  </div>
+
+                  {/* Status da Pesquisa Web Integrada */}
+                  <div className="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-2 text-emerald-400 text-[11px]">
+                    <Globe className="w-4 h-4 shrink-0" />
+                    <span>
+                      <strong>Pesquisa Web em Tempo Real:</strong> Ativa e operando sem limites (Google News, DuckDuckGo, Wikipédia, Diários Oficiais e COR).
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-2">
+                    <button
+                      type="button"
+                      onClick={handleTestGeminiKey}
+                      disabled={isTestingGemini}
+                      className="py-2.5 px-4 rounded-xl border border-cyan-500/30 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 font-semibold flex items-center gap-1.5 transition-colors"
+                    >
+                      <RefreshCw className={`w-3.5 h-3.5 ${isTestingGemini ? 'animate-spin' : ''}`} />
+                      <span>{isTestingGemini ? 'Testando...' : 'Validar e Conectar'}</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleSaveGeminiKey}
+                      className="flex-1 py-2.5 px-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold transition-all shadow-md shadow-cyan-500/20 text-center"
+                    >
+                      Salvar Chave
+                    </button>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* Modal de Conexão com Google Workspace (Agenda & Tasks) */}
       <AnimatePresence>
@@ -557,7 +967,6 @@ export default function PitAiDashboard() {
               transition={{ duration: 0.2 }}
               className="bg-slate-950 border border-slate-800 rounded-3xl p-6 sm:p-7 max-w-lg w-full shadow-2xl space-y-5 text-slate-200"
             >
-              {/* Header do Modal */}
               <div className="flex items-start justify-between border-b border-slate-800/80 pb-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center">
@@ -573,7 +982,7 @@ export default function PitAiDashboard() {
                       )}
                     </h3>
                     <p className="text-xs text-slate-400">
-                      Sincronização ao vivo com Google Agenda e Google Tarefas
+                      Sincronização com Google Agenda e Google Tarefas
                     </p>
                   </div>
                 </div>
@@ -587,7 +996,6 @@ export default function PitAiDashboard() {
                 </button>
               </div>
 
-              {/* Status da Conta Conectada */}
               {googleConnected ? (
                 <div className="space-y-4">
                   <div className="p-4 rounded-2xl bg-emerald-500/5 border border-emerald-500/20 space-y-2">
@@ -599,7 +1007,7 @@ export default function PitAiDashboard() {
                       {googleUser?.email || 'rafaelpita...'}
                     </p>
                     <p className="text-[11px] text-slate-400">
-                      Seus comandos de voz para criar, listar e reagendar compromissos ou tarefas estão sendo refletidos diretamente na nuvem oficial da Google e salvos na VPS.
+                      Seus comandos de voz para criar, listar e reagendar compromissos ou tarefas estão sendo sincronizados com o Google Agenda.
                     </p>
                   </div>
 
@@ -635,24 +1043,11 @@ export default function PitAiDashboard() {
                         type="text"
                         value={clientIdInput}
                         onChange={(e) => setClientIdInput(e.target.value)}
-                        placeholder="Ex: 123456789-abcdef.apps.googleusercontent.com"
+                        placeholder="Ex: 38604710980-...apps.googleusercontent.com"
                         className="w-full bg-slate-900 border border-slate-800 focus:border-cyan-500/60 rounded-xl py-2.5 pl-3.5 pr-10 text-xs text-white placeholder-slate-500 outline-none font-mono"
                       />
                       <Key className="w-4 h-4 text-slate-500 absolute right-3 top-3 pointer-events-none" />
                     </div>
-                  </div>
-
-                  {/* Instruções Rápidas de Configuração */}
-                  <div className="p-3.5 rounded-2xl bg-slate-900/70 border border-slate-800 text-[11px] space-y-2 text-slate-400">
-                    <p className="font-semibold text-cyan-400 flex items-center gap-1.5">
-                      <Terminal className="w-3.5 h-3.5" />
-                      <span>Como obter seu Client ID gratuito (Google Cloud):</span>
-                    </p>
-                    <ol className="list-decimal list-inside space-y-1 text-slate-300 leading-relaxed">
-                      <li>Acesse o <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline font-medium inline-flex items-center gap-0.5">Google Cloud Console <ExternalLink className="w-2.5 h-2.5" /></a> e crie um <strong>ID do cliente OAuth (Aplicativo da Web)</strong>.</li>
-                      <li>Ative as APIs <strong>Google Calendar API</strong> e <strong>Google Tasks API</strong> na biblioteca.</li>
-                      <li>Adicione nas origens autorizadas: <code className="text-cyan-300 bg-cyan-950/60 px-1 py-0.5 rounded font-mono">http://localhost:3001</code> e <code className="text-cyan-300 bg-cyan-950/60 px-1 py-0.5 rounded font-mono">https://pitai.rafaelpitaoficial.com.br</code>.</li>
-                    </ol>
                   </div>
 
                   <div className="flex items-center gap-2 pt-2">

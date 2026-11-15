@@ -3,24 +3,26 @@
  * Rafael Pita Solutions / MeuPortfolio v2
  * 
  * Integra o Google Gemini (2.0/2.5 Flash), analisa intenções em linguagem natural,
- * evoca ações visuais contextuais (HUD / Mapas / Agenda / Notícias) e orquestra
- * respostas de texto e áudio no estilo executivo J.A.R.V.I.S.
+ * evoca ações visuais contextuais (HUD / Mapas / Agenda / Notícias / Pesquisa Web)
+ * e orquestra respostas de texto e áudio no estilo executivo J.A.R.V.I.S.
  */
 
 import { pitaiBriefingService } from './pitaiBriefingService.js';
 import { pitaiGoogleService } from './pitaiGoogleService.js';
+import { pitaiSearchService } from './pitaiSearchService.js';
 
 const getEnvGeminiKey = () => {
   try {
-    if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GEMINI_API_KEY) {
-      return import.meta.env.VITE_GEMINI_API_KEY;
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('pitai_gemini_api_key');
+      if (stored) return stored;
     }
   } catch {
     // Ignore
   }
   try {
-    if (typeof process !== 'undefined' && process.env?.VITE_GEMINI_API_KEY) {
-      return process.env.VITE_GEMINI_API_KEY;
+    if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GEMINI_API_KEY) {
+      return import.meta.env.VITE_GEMINI_API_KEY;
     }
   } catch {
     // Ignore
@@ -33,42 +35,40 @@ class PitAiCoreService {
     this.customApiKey = null;
   }
 
-  /**
-   * Obtém a chave do Gemini ativa (configurada em runtime ou ambiente)
-   */
   getApiKey() {
     return this.customApiKey !== null ? this.customApiKey : getEnvGeminiKey();
   }
 
-  /**
-   * Permite configurar ou limpar a chave do Gemini dinamicamente (para testes ou UI)
-   */
   setApiKey(key) {
     this.customApiKey = key;
+    if (typeof window !== 'undefined') {
+      if (key) {
+        localStorage.setItem('pitai_gemini_api_key', key);
+      } else {
+        localStorage.removeItem('pitai_gemini_api_key');
+      }
+    }
   }
-  /**
-   * System Prompt Oficial do PIT.AI — O J.A.R.V.I.S. de Rafael Pita
-   */
+
   getSystemPrompt() {
     const now = new Date();
     const dataHoraStr = now.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
 
     return `
-Você é o PIT.AI (pronuncia-se P I T . A I ou Pita AI), o sistema central de inteligência executiva, operacional e estratégica de Rafael Pita (fundador da Rafael Pita Solutions / RP Solutions), no Rio de Janeiro.
-Sua personalidade e dinâmica são diretamente inspiradas no J.A.R.V.I.S. do Tony Stark:
-- Tom de voz: Calmo, perspicaz, confiante, executivo, extremamente inteligente e respeitoso. Chame o usuário naturalmente pelo primeiro nome ("Rafael") ou pontualmente no tom clássico executivo.
-- Clareza e concisão: Vá direto ao ponto sem enrolações, floreios artificiais ou introduções vazias. Entregue a resposta exata.
-- Consciência situacional: Hoje é ${dataHoraStr}. O Rafael mora e opera no Rio de Janeiro (RJ), Brasil.
-- Ações no sistema: Você tem capacidade de controlar a Google Agenda, Google Tarefas, consultar notícias do Mundo, Brasil (B3/economia/governo) e Rio de Janeiro (segurança, trânsito, diários oficiais), além de monitorar a saúde da VPS e negócios.
+Você é o PIT.AI (pronuncia-se P I T . A I ou Pita AI), a inteligência executiva, estratégica e operacional central de Rafael Pita (fundador da Rafael Pita Solutions / RP Solutions), no Rio de Janeiro.
+Sua dinâmica e personalidade são inspiradas no J.A.R.V.I.S.:
+- Tom de voz: Calmo, perspicaz, extremamente inteligente, confiante e respeitoso. Dirija-se naturalmente a Rafael pelo primeiro nome ("Rafael").
+- Concisão executiva: Vá direto ao ponto. Entregue a resposta exata sem floreios ou enrolações.
+- Momento temporal: Hoje é ${dataHoraStr}. Rafael opera no Rio de Janeiro (RJ), Brasil.
+- Ações reais: Você gerencia a Google Agenda, Google Tarefas, realiza pesquisas em tempo real na internet, monitora notícias do Rio, Brasil e Mundo, e os sistemas do ecossistema RP Solutions.
 
-QUANDO O USUÁRIO PERGUNTAR ALGO:
-Sempre responda em formato JSON estruturado com o seguinte contrato exato:
+CONTRATO OBRIGATÓRIO DE RESPOSTA (JSON):
 {
-  "spokenText": "Texto conciso, natural e direto que será falado por voz pelo sistema (sem links ou markdown).",
-  "displayText": "Texto completo e bem diagramado que aparecerá no chat do HUD.",
+  "spokenText": "Texto conciso, natural e fluido para fala em áudio pelo PIT.AI (sem asteriscos, markdown ou links brutos).",
+  "displayText": "Texto formatado em markdown com detalhes, tópicos e links úteis para leitura no HUD.",
   "intent": "briefing" | "agenda_query" | "agenda_create" | "agenda_conflict" | "task_create" | "web_search" | "general_chat",
   "visualPayload": {
-    "type": "none" | "map" | "news_cards" | "agenda_list" | "conflict_alert" | "web_preview",
+    "type": "none" | "map" | "news_cards" | "agenda_list" | "conflict_alert" | "web_results",
     "data": {}
   }
 }
@@ -82,9 +82,9 @@ Sempre responda em formato JSON estruturado com o seguinte contrato exato:
    * @returns {Promise<Object>}
    */
   async processUserInput(userMessage, conversationHistory = []) {
-    const textLower = userMessage.toLowerCase();
+    const textLower = userMessage.toLowerCase().trim();
 
-    // 1. Detecção rápida de comando de Briefing / Novidades
+    // 1. Comando de Briefing / Novidades
     if (
       textLower.includes('o que tem de novo') ||
       textLower.includes('novidades') ||
@@ -96,7 +96,7 @@ Sempre responda em formato JSON estruturado com o seguinte contrato exato:
       return this.handleBriefingIntent();
     }
 
-    // 2. Detecção rápida de Agenda / Compromissos
+    // 2. Consulta de Agenda / Compromissos
     if (
       textLower.includes('minha agenda') ||
       textLower.includes('o que tenho hoje') ||
@@ -106,7 +106,7 @@ Sempre responda em formato JSON estruturado com o seguinte contrato exato:
       return this.handleAgendaQueryIntent();
     }
 
-    // 3. Detecção rápida de marcação de evento por fala rápida
+    // 3. Marcação rápida de evento
     if (
       textLower.startsWith('marca') ||
       textLower.startsWith('agende') ||
@@ -116,7 +116,7 @@ Sempre responda em formato JSON estruturado com o seguinte contrato exato:
       return this.handleAgendaCreateIntent(userMessage);
     }
 
-    // 4. Detecção de tarefa / lembrete
+    // 4. Criação de tarefa / lembrete
     if (
       textLower.startsWith('anota') ||
       textLower.startsWith('lembrete') ||
@@ -126,7 +126,68 @@ Sempre responda em formato JSON estruturado com o seguinte contrato exato:
       return this.handleTaskCreateIntent(userMessage);
     }
 
-    // 5. Chamada de IA Generativa profunda (Gemini 2.5 / 2.0 Flash)
+    // 5. Detecção ativa de Pesquisa Web em Tempo Real
+    const isSearchExplicit = 
+      textLower.startsWith('pesquise') ||
+      textLower.startsWith('pesquisa') ||
+      textLower.startsWith('busque') ||
+      textLower.startsWith('busca') ||
+      textLower.startsWith('quem é') ||
+      textLower.startsWith('o que é') ||
+      textLower.startsWith('onde fica') ||
+      textLower.includes('cotação') ||
+      textLower.includes('dólar') ||
+      textLower.includes('ibovespa') ||
+      textLower.includes('clima') ||
+      textLower.includes('previsão do tempo') ||
+      textLower.includes('trânsito') ||
+      textLower.includes('linha vermelha') ||
+      textLower.includes('ponte rio-niterói') ||
+      textLower.includes('notícia sobre') ||
+      textLower.includes('últimas sobre');
+
+    if (isSearchExplicit) {
+      return this.handleWebSearchIntent(userMessage, conversationHistory);
+    }
+
+    // 6. Consulta via LLM com fallback enriquecido por busca
+    return this.queryGeminiLlm(userMessage, conversationHistory);
+  }
+
+  /**
+   * Realiza pesquisa web em tempo real e sintetiza resposta rica
+   */
+  async handleWebSearchIntent(userMessage, conversationHistory = []) {
+    const searchResult = await pitaiSearchService.search(userMessage);
+
+    // Se encontrou dados em tempo real
+    if (searchResult.results && searchResult.results.length > 0) {
+      const topFact = searchResult.results[0];
+      const spokenSummary = `Rafael, encontrei informações atualizadas sobre ${searchResult.query}. ${topFact.title.replace(/ - [^-]+$/, '')}.`;
+
+      const displayText = `### 🌐 Pesquisa em Tempo Real: **${searchResult.query}**\n\n` +
+        `**Principais Resultados:**\n` +
+        searchResult.results.map((r, i) => 
+          `**${i + 1}. [${r.source}] ${r.title}**\n${r.snippet ? `> ${r.snippet}\n` : ''}${r.url ? `🔗 [Ver fonte completa](${r.url})\n` : ''}`
+        ).join('\n') +
+        `\n*Fontes consultadas: ${searchResult.sources.join(', ')}.*`;
+
+      return {
+        spokenText: spokenSummary,
+        displayText,
+        intent: 'web_search',
+        visualPayload: {
+          type: 'web_results',
+          data: {
+            query: searchResult.query,
+            results: searchResult.results,
+            sources: searchResult.sources
+          }
+        }
+      };
+    }
+
+    // Se não encontrou dados específicos, delega ao Gemini ou síntese contextual
     return this.queryGeminiLlm(userMessage, conversationHistory);
   }
 
@@ -138,7 +199,6 @@ Sempre responda em formato JSON estruturado com o seguinte contrato exato:
     const spokenText = pitaiBriefingService.generateSpokenScript(briefingData, 'Rafael');
     pitaiBriefingService.markBriefingAsRead();
 
-    // Detecta se há menção a bairros do Rio para plotar mapa
     let mapData = null;
     if (briefingData.rj.length > 0) {
       mapData = {
@@ -201,18 +261,16 @@ Sempre responda em formato JSON estruturado com o seguinte contrato exato:
   }
 
   /**
-   * Trata a criação rápida de eventos e detecção de conflitos
+   * Trata a criação de eventos e detecção de conflitos
    */
   async handleAgendaCreateIntent(message) {
     const now = new Date();
     let targetDate = new Date(now);
 
-    // Detecta "amanhã" ou "hoje"
     if (/amanh[ãa]/i.test(message)) {
       targetDate.setDate(targetDate.getDate() + 1);
     }
 
-    // Procura por especificação de horário (ex: às 15h, 15:30, às 14:00, 15h30, etc.)
     const timeMatch = message.match(/(?:às|as|\b)\s*(\d{1,2})(?:h(\d{2})?|:(\d{2}))/i);
     let startHour = null;
     let startMinute = 0;
@@ -228,7 +286,7 @@ Sempre responda em formato JSON estruturado com o seguinte contrato exato:
     if (startHour !== null) {
       targetDate.setHours(startHour, startMinute, 0, 0);
       startTime = new Date(targetDate);
-      endTime = new Date(targetDate.getTime() + 60 * 60 * 1000); // 1 hora de duração padrão
+      endTime = new Date(targetDate.getTime() + 60 * 60 * 1000);
     } else {
       const nextHour = new Date(now.getTime() + 60 * 60 * 1000);
       nextHour.setMinutes(0, 0, 0);
@@ -236,7 +294,6 @@ Sempre responda em formato JSON estruturado com o seguinte contrato exato:
       endTime = new Date(nextHour.getTime() + 60 * 60 * 1000);
     }
 
-    // Limpa o título removendo palavras de comando e referências temporais
     let cleanTitle = message
       .replace(/^(marca|agende|marca na minha agenda|agendar reunião|agendar compromisso)\s*(para|com|de)?\s*/i, '')
       .replace(/(?:^|\s+)(amanh[ãa]|hoje)(?=\s|$|[,.])/gi, '')
@@ -256,7 +313,7 @@ Sempre responda em formato JSON estruturado com o seguinte contrato exato:
     });
 
     if (!result.success && result.conflict) {
-      const conflictMsg = `Rafael, identifiquei um possível conflito de horários: você já tem '${result.conflict.title}' agendado para o mesmo período. O que deseja fazer?`;
+      const conflictMsg = `Rafael, identifiquei um possível conflito de horários: você já tem '${result.conflict.title}' agendado para o mesmo período. Deseja reagendar ou manter ambos?`;
       return {
         spokenText: conflictMsg,
         displayText: `⚠️ **Conflito de Agenda Detectado**\n\n` +
@@ -323,77 +380,86 @@ Sempre responda em formato JSON estruturado com o seguinte contrato exato:
   }
 
   /**
-   * Dispara a inteligência central com o Gemini para perguntas livres e raciocínio profundo
+   * Dispara a inteligência central com o Gemini ou fallback enriquecido por busca em tempo real
    */
   async queryGeminiLlm(userMessage, conversationHistory = []) {
     const apiKey = this.getApiKey();
 
-    if (!apiKey) {
-      return {
-        spokenText: 'Minha chave de inteligência ainda não foi configurada no ambiente, mas os módulos de agenda e notícias estão totalmente operacionais.',
-        displayText: 'Chave de API do Gemini não detectada em `VITE_GEMINI_API_KEY`. Operando em modo autônomo offline.',
-        intent: 'general_chat',
-        visualPayload: { type: 'none', data: {} }
-      };
-    }
-
-    try {
-      // Prioriza a nova família Gemini 2.0 / 2.5 Flash
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-      
-      const payload = {
-        systemInstruction: {
-          parts: [{ text: this.getSystemPrompt() }]
-        },
-        contents: [
-          ...conversationHistory.slice(-4).map(msg => ({
-            role: msg.role === 'user' ? 'user' : 'model',
-            parts: [{ text: msg.text || msg.content || '' }]
-          })),
-          {
-            role: 'user',
-            parts: [{ text: userMessage }]
+    if (apiKey) {
+      try {
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+        
+        const payload = {
+          systemInstruction: {
+            parts: [{ text: this.getSystemPrompt() }]
+          },
+          contents: [
+            ...conversationHistory.slice(-4).map(msg => ({
+              role: msg.role === 'user' ? 'user' : 'model',
+              parts: [{ text: msg.text || msg.content || '' }]
+            })),
+            {
+              role: 'user',
+              parts: [{ text: userMessage }]
+            }
+          ],
+          generationConfig: {
+            temperature: 0.3
           }
-        ],
-        generationConfig: {
-          responseMimeType: 'application/json',
-          temperature: 0.3
+        };
+
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          const resData = await response.json();
+          const rawText = resData.candidates?.[0]?.content?.parts?.[0]?.text || '';
+          
+          // Tenta extrair JSON do modelo
+          const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            const parsed = JSON.parse(jsonMatch[0]);
+            return {
+              spokenText: parsed.spokenText || rawText.replace(/[*_#`~[\]]/g, '').slice(0, 200),
+              displayText: parsed.displayText || rawText,
+              intent: parsed.intent || 'general_chat',
+              visualPayload: parsed.visualPayload || { type: 'none', data: {} }
+            };
+          }
+
+          return {
+            spokenText: rawText.replace(/[*_#`~[\]]/g, '').slice(0, 220),
+            displayText: rawText,
+            intent: 'general_chat',
+            visualPayload: { type: 'none', data: {} }
+          };
         }
-      };
-
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      if (!response.ok) {
-        throw new Error(`Erro na API Gemini (${response.status})`);
+      } catch (err) {
+        console.warn('[PIT.AI Core] Chamada do Gemini falhou, ativando motor de pesquisa e síntese contextual:', err);
       }
-
-      const resData = await response.json();
-      const rawText = resData.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
-      const cleanJson = rawText
-        .replace(/```json/gi, '')
-        .replace(/```/g, '')
-        .trim();
-      const parsed = JSON.parse(cleanJson);
-
-      return {
-        spokenText: parsed.spokenText || 'Entendido, Rafael.',
-        displayText: parsed.displayText || parsed.spokenText,
-        intent: parsed.intent || 'general_chat',
-        visualPayload: parsed.visualPayload || { type: 'none', data: {} }
-      };
-    } catch (err) {
-      console.warn('[PIT.AI Core] Erro na consulta do Gemini, usando fallback executivo:', err);
-      return {
-        spokenText: 'Rafael, processei sua solicitação. Todos os sistemas estão monitorados e operando com normalidade.',
-        displayText: `**PIT.AI:** Processei sua solicitação: "${userMessage}".\n\nTodos os subsistemas de inteligência, notícias e agenda continuam ativos.`,
-        intent: 'general_chat',
-        visualPayload: { type: 'none', data: {} }
-      };
     }
+
+    // FALLBACK INTELIGENTE: Se a chave falhar ou não estiver ativa, pesquisa na web e constrói resposta real!
+    const liveSearch = await pitaiSearchService.search(userMessage);
+    if (liveSearch.results && liveSearch.results.length > 0) {
+      return this.handleWebSearchIntent(userMessage, conversationHistory);
+    }
+
+    // Resposta executiva contextual
+    return {
+      spokenText: `Rafael, registrei sua solicitação: "${userMessage}". Os módulos de agenda, notícias ao vivo e pesquisa web estão operando normalmente.`,
+      displayText: `### 🛡️ **PIT.AI • Central Operacional**\n\n` +
+        `Recebido: *"${userMessage}"*\n\n` +
+        `• **Google Agenda & Tarefas:** Sincronizados com o Google Workspace.\n` +
+        `• **Monitoramento de Notícias:** Feeds ao vivo de Rio de Janeiro, Brasil e Economia prontos.\n` +
+        `• **Pesquisa em Tempo Real:** Diga *"Pesquise sobre..."* ou *"Notícias sobre..."* para varredura ao vivo na web.\n\n` +
+        `*Dica: Você pode conectar sua chave direta do Google AI Studio no botão de Configurações no topo para raciocínio generativo ilimitado.*`,
+      intent: 'general_chat',
+      visualPayload: { type: 'none', data: {} }
+    };
   }
 }
 

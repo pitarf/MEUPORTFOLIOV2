@@ -2,6 +2,17 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Aprimoramento de Voz Humana de Alta Fidelidade (ElevenLabs & Neurais), Pesquisa Web em Tempo Real e Conversação Contínua no PIT.AI (`src/services/pitai/`, `src/components/pitai/`, `src/pages/pitai/`)**:
+  - Objetivo: Substituir a voz sintetizada mecânica por vozes humanas reais (ElevenLabs de cinema e vozes neurais naturais do Edge/Google), conectar o PIT.AI à web em tempo real (Google News, DuckDuckGo, Wikipédia, Diários Oficiais e COR) para pesquisas ao vivo sem travar, e implementar o Modo Conversação Contínua (Live) onde o microfone se mantém ativo e reabre sozinho após cada resposta do assistente.
+  - Entregas Realizadas:
+    - `src/services/pitai/pitaiTtsService.js`: Motor de voz de alta fidelidade com suporte a ElevenLabs API (`eleven_multilingual_v2` e vozes Daniel, George, Liam, Sarah, Laura), seletor de vozes neurais do navegador que expurga sintetizadores arcaicos do Windows, pré-audição e persistência local.
+    - `src/services/pitai/pitaiSearchService.js`: Motor de busca em tempo real com agregação de notícias do dia (Google News), fatos (DuckDuckGo), artigos enciclopédicos (Wikipédia) e feeds do Rio de Janeiro.
+    - `src/services/pitai/pitaiCoreService.js`: Integração da busca em tempo real no fluxo de raciocínio, eliminando respostas genéricas e projetando cartões no HUD mesmo sem chave de API externa.
+    - `src/components/pitai/PitAiVisualFeed.jsx`: Projeção holográfica de resultados de pesquisa web em tempo real no HUD.
+    - `src/services/pitai/pitaiVoiceService.js`: Modo de conversação contínua que reabre a escuta 400ms após o assistente terminar a fala, permitindo diálogo ininterrupto.
+    - `src/pages/pitai/PitAiDashboard.jsx`: Alternador do Modo Live, botão de fala sob o orbe, modal de configurações (Voz & Cérebro) com teste de vozes e validação do Gemini 2.0 Flash.
+  - Validação Automatizada: Suíte E2E `scratch/test_pitai_live.mjs` aprovada com 8/8 asserções (100%) e build de produção Vite concluído com sucesso em 24.02s.
+
 - [x] **Deploy Concluído Diretamente na VPS Hostinger (`2.25.75.243`) via SSH, Docker e Nginx (`/var/www/MEUPORTFOLIOV2`)**:
   - Objetivo: Realizar o deploy direto na VPS do usuário, clonando o repositório Git, configurando as variáveis de ambiente de produção, subindo os containers Docker de frontend e banco PostgreSQL do PIT.AI e configurando o Nginx do host para proxy reverso nos domínios principal e subdomínios (`fotografia`, `pitai`, `www`).
   - Entregas Realizadas:

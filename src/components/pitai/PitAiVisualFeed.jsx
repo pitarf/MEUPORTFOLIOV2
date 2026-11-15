@@ -172,6 +172,64 @@ export default function PitAiVisualFeed({ payload, onResolveConflict, onRefreshB
           </div>
         )}
 
+        {/* 4. Projeção de Resultados de Pesquisa Web em Tempo Real */}
+        {type === 'web_results' && data?.results && (
+          <div className="bg-card border border-primary/20 rounded-2xl p-5 shadow-xl space-y-4">
+            <div className="flex items-center justify-between border-b pb-3">
+              <div className="flex items-center gap-2">
+                <Globe className="w-4 h-4 text-cyan-400" />
+                <h4 className="text-sm font-bold text-foreground">
+                  Pesquisa em Tempo Real: "{data.query}"
+                </h4>
+              </div>
+              <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                Fontes Abertas Verificadas
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {data.results.map((res, idx) => (
+                <div
+                  key={idx}
+                  className="p-3.5 rounded-xl bg-muted/30 border border-border/60 hover:border-primary/40 transition-all flex flex-col justify-between space-y-2"
+                >
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-primary/10 text-primary">
+                        {res.source}
+                      </span>
+                      {res.date && (
+                        <span className="text-[10px] text-muted-foreground">
+                          {res.date}
+                        </span>
+                      )}
+                    </div>
+                    <h5 className="text-xs font-semibold text-foreground line-clamp-2">
+                      {res.title}
+                    </h5>
+                    {res.snippet && (
+                      <p className="text-[11px] text-muted-foreground line-clamp-3">
+                        {res.snippet}
+                      </p>
+                    )}
+                  </div>
+                  {res.url && (
+                    <a
+                      href={res.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[11px] font-medium text-cyan-400 hover:text-cyan-300 inline-flex items-center gap-1 self-start pt-1"
+                    >
+                      <span>Acessar fonte</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* 3. Alerta Crítico de Conflito de Horários */}
         {type === 'conflict_alert' && data?.conflictEvent && (
           <div className="bg-rose-950/20 border-2 border-rose-500/40 rounded-2xl p-5 shadow-2xl space-y-4">
@@ -305,6 +363,64 @@ export default function PitAiVisualFeed({ payload, onResolveConflict, onRefreshB
                   </p>
                 )}
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* 4. Projeção de Resultados de Pesquisa Web em Tempo Real */}
+        {type === 'web_results' && data?.results && (
+          <div className="bg-card border border-primary/20 rounded-2xl p-5 shadow-xl space-y-4">
+            <div className="flex items-center justify-between border-b pb-3">
+              <div className="flex items-center gap-2">
+                <Globe className="w-4 h-4 text-cyan-400" />
+                <h4 className="text-sm font-bold text-foreground">
+                  Pesquisa em Tempo Real: "{data.query}"
+                </h4>
+              </div>
+              <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                Fontes Abertas Verificadas
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {data.results.map((res, idx) => (
+                <div
+                  key={idx}
+                  className="p-3.5 rounded-xl bg-muted/30 border border-border/60 hover:border-primary/40 transition-all flex flex-col justify-between space-y-2"
+                >
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-primary/10 text-primary">
+                        {res.source}
+                      </span>
+                      {res.date && (
+                        <span className="text-[10px] text-muted-foreground">
+                          {res.date}
+                        </span>
+                      )}
+                    </div>
+                    <h5 className="text-xs font-semibold text-foreground line-clamp-2">
+                      {res.title}
+                    </h5>
+                    {res.snippet && (
+                      <p className="text-[11px] text-muted-foreground line-clamp-3">
+                        {res.snippet}
+                      </p>
+                    )}
+                  </div>
+                  {res.url && (
+                    <a
+                      href={res.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[11px] font-medium text-cyan-400 hover:text-cyan-300 inline-flex items-center gap-1 self-start pt-1"
+                    >
+                      <span>Acessar fonte</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         )}
