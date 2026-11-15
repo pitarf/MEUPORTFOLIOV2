@@ -314,7 +314,7 @@ export default function PitAiDashboard() {
     setIsTestingVoice(true);
     pitaiVoiceService.stopSpeaking();
     try {
-      const sampleText = 'Olá, Rafael. Este é o meu novo tom de voz executivo para o centro de inteligência PIT.AI.';
+      const sampleText = 'Olá, Rafael. Sistemas operacionais e inteligência estratégica conectados. Este é o meu tom de voz executivo masculino.';
       await pitaiTtsService.speak(sampleText);
     } finally {
       setIsTestingVoice(false);
@@ -679,11 +679,20 @@ export default function PitAiDashboard() {
         <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-1 no-scrollbar text-xs">
           <button
             type="button"
+            onClick={() => handleSendMessage('Quais são as notícias do Rio de Janeiro?')}
+            className="px-3 py-1.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 hover:text-cyan-200 transition-all flex items-center gap-1.5 shrink-0 font-semibold"
+          >
+            <MapPin className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Notícias do Rio</span>
+          </button>
+
+          <button
+            type="button"
             onClick={() => handleSendMessage('O que tem de novo?')}
             className="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-400 transition-all flex items-center gap-1.5 shrink-0"
           >
             <Newspaper className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Briefing de Notícias</span>
+            <span>Briefing Geral</span>
           </button>
 
           <button
@@ -978,7 +987,7 @@ export default function PitAiDashboard() {
                   {ttsMode === 'neural_browser' && (
                     <div className="space-y-2 p-3.5 bg-slate-900/60 border border-slate-800 rounded-2xl">
                       <label className="text-slate-300 font-medium block">
-                        Voz Neural Instalada no seu Navegador:
+                        Voz Neural Masculina Selecionada (J.A.R.V.I.S.):
                       </label>
                       <select
                         value={selectedBrowserVoiceUri}
@@ -987,12 +996,12 @@ export default function PitAiDashboard() {
                       >
                         {browserVoices.map((v) => (
                           <option key={v.voiceURI} value={v.voiceURI}>
-                            {v.name} ({v.lang})
+                            🎙️ {v.name} (Masculina Executiva)
                           </option>
                         ))}
                       </select>
                       <p className="text-[11px] text-slate-400">
-                        Filtramos as vozes antigas e robóticas do Windows (como Maria SAPI5) para selecionar as vozes naturais do Edge/Chrome.
+                        Voz masculina calibrada com tom grave e cadência executiva estilo J.A.R.V.I.S., eliminando vozes femininas e sintetizadores robóticos mecânicos.
                       </p>
                     </div>
                   )}

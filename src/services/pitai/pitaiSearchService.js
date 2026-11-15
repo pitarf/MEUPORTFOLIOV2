@@ -104,11 +104,31 @@ class PitAiSearchService {
    */
   async fetchGoogleNews(query) {
     try {
-      const url = `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=pt-BR&gl=BR&ceid=BR:pt-419`;
-      const res = await fetch(url);
-      if (!res.ok) return [];
+      const encodedQuery = encodeURIComponent(query);
+      const directProxyUrl = `/api/news/search?q=${encodedQuery}&hl=pt-BR&gl=BR&ceid=BR:pt-419`;
+      
+      let xml = '';
+      try {
+        const res = await fetch(directProxyUrl);
+        if (res.ok) {
+          xml = await res.text();
+        }
+      } catch {
+        // Tenta fallback via proxy CORS público
+      }
 
-      const xml = await res.text();
+      if (!xml) {
+        const externalUrl = `https://news.google.com/rss/search?q=${encodedQuery}&hl=pt-BR&gl=BR&ceid=BR:pt-419`;
+        const fallbackUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(externalUrl)}`;
+        const res = await fetch(fallbackUrl);
+        if (res.ok) {
+          const json = await res.json();
+          xml = json?.contents || '';
+        }
+      }
+
+      if (!xml) return [];
+
       const items = [];
       const itemMatches = xml.match(/<item>[\s\S]*?<\/item>/g) || [];
 
@@ -123,7 +143,7 @@ class PitAiSearchService {
         const link = linkMatch ? linkMatch[1].trim() : '';
         const pubDate = dateMatch ? new Date(dateMatch[1]).toLocaleDateString('pt-BR') : '';
 
-        if (title) {
+        if (title && !title.toLowerCase().startsWith('google notícias')) {
           items.push({ title, link, pubDate });
         }
       }

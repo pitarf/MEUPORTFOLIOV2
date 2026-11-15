@@ -2,6 +2,20 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.98.0] - 2026-11-14
+
+### Corrigido & Aprimorado
+* **Voz Masculina Executiva de Alta Fidelidade (J.A.R.V.I.S.) no PIT.AI (`src/services/pitai/pitaiTtsService.js`, `src/pages/pitai/PitAiDashboard.jsx`)**:
+  * **Exclusão Estrita de Vozes Femininas e Sintetizadores Mecânicos**: Mapeamento de vozes com pontuação negativa (-999) para nomes femininos (`maria`, `francisca`, `helena`, `luciana`, etc.), eliminando 100% de vozes robóticas agudas ou mecânicas (SAPI5 Maria).
+  * **Priorização de Vozes Neurais Masculinas**: Seleção prioritária de `Microsoft Antonio Online (Natural)` e `Microsoft Daniel` com tom grave encorpado (`pitch = 0.88`) e cadência executiva firme (`rate = 1.0`).
+  * **Motor Google Natural TTS Stream**: Rota de áudio de alta fidelidade via endpoint interno `/api/tts/google` gerando áudio MP3 límpido em português sem dependência do sintetizador local do sistema operacional.
+  * **ElevenLabs Masculino**: Configuração padrão e exclusiva com as vozes masculinas de ponta (`Daniel` - estilo J.A.R.V.I.S., `George` e `Liam`).
+* **Notícias Reais do Rio de Janeiro em Tempo Real (`src/services/pitai/pitaiCoreService.js`, `src/services/pitai/pitaiBriefingService.js`, `src/services/pitai/pitaiSearchService.js`, `nginx.conf`)**:
+  * **Tratamento Dedicado `handleRioNewsIntent()`**: Perguntas focadas no Rio (ex: "Quais são as notícias do Rio de Janeiro?", "o que está acontecendo no rio") agora ativam um fluxo dedicado que coleta manchetes reais locais e sintetiza resposta executiva com os destaques em primeiro lugar.
+  * **Proxy Reverso Nginx no Container Docker**: Criadas as rotas `/api/news/rio` (Google Notícias RJ), `/api/news/g1-rio` (G1 Rio) e `/api/news/search` com resolver DNS e cabeçalhos adequados, eliminando bloqueios de CORS e timeouts de proxies de terceiros.
+  * **Botão Rápido no HUD**: Adicionado atalho em 1 clique "Notícias do Rio" no painel principal do PIT.AI.
+  * **Suíte de Testes Automatizada**: Validação aprovada com `scratch/test_pitai_news_voice.mjs`.
+
 ## [1.97.0] - 2026-11-14
 
 ### Corrigido & Aprimorado

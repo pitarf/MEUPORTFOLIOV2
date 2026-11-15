@@ -2,6 +2,16 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Voz Masculina Executiva (J.A.R.V.I.S.) e Notícias do Rio de Janeiro em Tempo Real no PIT.AI (`src/services/pitai/`, `src/pages/pitai/`, `nginx.conf`)**:
+  - Objetivo: Atender à solicitação direta do usuário configurando voz estritamente masculina encorpada e sóbria estilo J.A.R.V.I.S. (eliminando qualquer voz feminina ou sintetizador robótico arcaico) e garantir entrega imediata de notícias reais do Rio de Janeiro ao comando "Quais são as notícias do Rio de Janeiro?".
+  - Entregas Realizadas:
+    - `src/services/pitai/pitaiTtsService.js`: Descarte de 100% de vozes femininas (`maria`, `francisca`, `helena`, etc.) com score -999, priorização no topo de `Microsoft Antonio Online Natural` e `Microsoft Daniel` com pitch grave 0.88, áudio MP3 Google Natural TTS stream via proxy interno e ElevenLabs padrão na voz Daniel J.A.R.V.I.S.
+    - `src/services/pitai/pitaiBriefingService.js`: Rota dedicada `fetchRioNews()` com Google Notícias RJ e G1 Rio, e roteiro falado `generateRioSpokenScript()`.
+    - `src/services/pitai/pitaiCoreService.js`: Roteamento semântico `handleRioNewsIntent()` que responde direto com as manchetes do Rio e projeta mapa do RJ e cards de notícias com links.
+    - `nginx.conf`: Rotas de proxy reverso `/api/news/rio`, `/api/news/g1-rio`, `/api/news/search` e `/api/tts/google` com resolver DNS 8.8.8.8, eliminando CORS e timeouts.
+    - `src/pages/pitai/PitAiDashboard.jsx`: Botão rápido "Notícias do Rio", seletor de voz neural masculina J.A.R.V.I.S. e demonstração vocal com texto afirmativo.
+    - `scratch/test_pitai_news_voice.mjs`: Testes automatizados executados e 100% aprovados.
+
 - [x] **Resolução Definitiva de Responsividade e Raciocínio no PIT.AI (`src/services/pitai/`, `src/pages/pitai/`)**:
   - Objetivo: Corrigir a falta de resposta a perguntas em linguagem natural sem acento (ex: "Quais são as noticias do Rio de Janeiro?"), adicionar indicador visual de processamento em tempo real no chat e estabilizar as chamadas ao Gemini e aos feeds com o SDK oficial e timeouts de proteção.
   - Entregas Realizadas:

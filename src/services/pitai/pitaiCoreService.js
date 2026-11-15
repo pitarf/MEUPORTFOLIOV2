@@ -145,15 +145,34 @@ CONTRATO OBRIGATÓRIO DE RESPOSTA (JSON):
 
     const norm = this.normalizeText(rawText);
 
-    // 1. Comando de Briefing / Novidades / Notícias (ex: "Quais são as notícias do Rio de Janeiro?")
+    // 1. Notícias Específicas do Rio de Janeiro (ex: "Quais são as notícias do Rio de Janeiro?", "o que está acontecendo no rio?")
+    const isRioNews = (
+      norm.includes('rio de janeiro') ||
+      norm.includes(' rj') ||
+      norm.includes('no rio') ||
+      norm.includes('do rio')
+    ) && (
+      norm.includes('noticia') ||
+      norm.includes('novidade') ||
+      norm.includes('acontec') ||
+      norm.includes('como ta') ||
+      norm.includes('situacao') ||
+      norm.includes('quais') ||
+      norm.includes('o que tem')
+    );
+
+    if (isRioNews) {
+      return this.handleRioNewsIntent();
+    }
+
+    // 2. Comando de Briefing Geral / Notícias Globais (ex: "o que tem de novo?", "briefing")
     if (
       norm.includes('o que tem de novo') ||
       norm.includes('novidade') ||
       norm.includes('acontecimento') ||
       norm.includes('noticia') ||
       norm.includes('briefing') ||
-      norm.includes('como estao as coisas') ||
-      (norm.includes('rio de janeiro') && (norm.includes('noticia') || norm.includes('como ta') || norm.includes('situacao') || norm.includes('quais')))
+      norm.includes('como estao as coisas')
     ) {
       return this.handleBriefingIntent();
     }
@@ -430,6 +449,46 @@ CONTRATO OBRIGATÓRIO DE RESPOSTA (JSON):
 
     // Se não encontrou dados específicos, delega ao Gemini ou síntese contextual
     return this.queryGeminiLlm(userMessage, conversationHistory);
+  }
+
+  /**
+   * Trata busca dedicada de Notícias do Rio de Janeiro
+   */
+  async handleRioNewsIntent() {
+    const rioNews = await pitaiBriefingService.fetchRioNews(true);
+    const spokenText = pitaiBriefingService.generateRioSpokenScript(rioNews, 'Rafael');
+
+    let mapData = null;
+    if (rioNews.length > 0) {
+      mapData = {
+        lat: -22.9068,
+        lng: -43.1729,
+        zoom: 12,
+        title: 'Rio de Janeiro — Acontecimentos e Notícias em Tempo Real',
+        newsTitle: rioNews[0].title
+      };
+    }
+
+    const displayText = `### 📰 **Destaques do Rio de Janeiro • Tempo Real**\n\n` +
+      rioNews.slice(0, 6).map((n, i) => 
+        `**${i + 1}. [${n.sourceName}] ${n.title}**\n` +
+        (n.summary ? `> ${n.summary.slice(0, 220)}...\n` : '') +
+        (n.link ? `🔗 [Ler matéria completa no portal](${n.link})\n` : '')
+      ).join('\n') +
+      `\n*Fontes em tempo real: Google Notícias RJ, G1 Rio e Centro de Operações Rio (COR).*`;
+
+    return {
+      spokenText,
+      displayText,
+      intent: 'briefing',
+      visualPayload: {
+        type: 'map',
+        data: {
+          briefing: { rj: rioNews, brazil: [], world: [] },
+          map: mapData
+        }
+      }
+    };
   }
 
   /**
