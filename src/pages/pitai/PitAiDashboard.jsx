@@ -28,7 +28,15 @@ import {
   Sliders,
   Globe,
   Play,
-  Flame
+  Flame,
+  Wallet,
+  Utensils,
+  Receipt,
+  ArrowDownRight,
+  ArrowUpRight,
+  ArrowRightLeft,
+  DollarSign,
+  CreditCard
 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import PitAiOrb from '@/components/pitai/PitAiOrb';
@@ -38,6 +46,7 @@ import { pitaiTtsService, ELEVENLABS_VOICES } from '@/services/pitai/pitaiTtsSer
 import { pitaiCoreService } from '@/services/pitai/pitaiCoreService';
 import { pitaiBriefingService } from '@/services/pitai/pitaiBriefingService';
 import { pitaiGoogleService } from '@/services/pitai/pitaiGoogleService';
+import { pitaiFinanceService } from '@/services/pitai/pitaiFinanceService';
 
 export default function PitAiDashboard() {
   const { toast } = useToast();
@@ -76,6 +85,11 @@ export default function PitAiDashboard() {
   const [clientIdInput, setClientIdInput] = useState(() => pitaiGoogleService.getClientId());
   const [isConnectingGoogle, setIsConnectingGoogle] = useState(false);
   const [isSyncingGoogle, setIsSyncingGoogle] = useState(false);
+
+  // Estados do Grana+ (Finanças Fácil)
+  const [financeUrlInput, setFinanceUrlInput] = useState(() => pitaiFinanceService.getBaseUrl());
+  const [financeKeyInput, setFinanceKeyInput] = useState(() => pitaiFinanceService.getApiKey());
+  const [localTxCount, setLocalTxCount] = useState(() => pitaiFinanceService.getLocalTransactions().length);
 
   const chatBottomRef = useRef(null);
 
@@ -329,6 +343,28 @@ export default function PitAiDashboard() {
   const handleSaveGeminiKey = () => {
     pitaiCoreService.setApiKey(geminiKeyInput.trim());
     toast({ title: 'Configurações Salvas', description: 'Chave do Gemini atualizada com sucesso.' });
+  };
+
+  // Salvar Configurações Grana+ (Finanças Fácil)
+  const handleSaveFinanceConfig = () => {
+    pitaiFinanceService.setBaseUrl(financeUrlInput.trim());
+    pitaiFinanceService.setApiKey(financeKeyInput.trim());
+    toast({
+      title: 'Configurações Financeiras Salvas',
+      description: 'Base URL e Chave x-api-key atualizadas com sucesso para o Grana+.'
+    });
+  };
+
+  // Limpar Buffer Local de Transações
+  const handleClearFinanceBuffer = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('pitai_local_transactions');
+      setLocalTxCount(0);
+      toast({
+        title: 'Buffer Local Limpo',
+        description: 'O histórico de transações offline locais foi esvaziado.'
+      });
+    }
   };
 
   // Conectar com Google Workspace
@@ -628,6 +664,42 @@ export default function PitAiDashboard() {
 
           <button
             type="button"
+            onClick={() => handleSendMessage('Gastei R$ 48 no almoço')}
+            className="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-400 transition-all flex items-center gap-1.5 shrink-0"
+          >
+            <Utensils className="w-3.5 h-3.5 text-rose-400" />
+            <span>Almoço R$ 48</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleSendMessage('Recebi R$ 3.500 de cliente PJ')}
+            className="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-400 transition-all flex items-center gap-1.5 shrink-0"
+          >
+            <DollarSign className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Receita PJ R$ 3.5k</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleSendMessage('Guardar R$ 400 na caixinha inter')}
+            className="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-400 transition-all flex items-center gap-1.5 shrink-0"
+          >
+            <Wallet className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Reserva R$ 400</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleSendMessage('Consultar meus gastos recentes')}
+            className="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-400 transition-all flex items-center gap-1.5 shrink-0"
+          >
+            <Receipt className="w-3.5 h-3.5 text-amber-400" />
+            <span>Ver Gastos</span>
+          </button>
+
+          <button
+            type="button"
             onClick={() => handleSendMessage('Marca reunião amanhã às 15h')}
             className="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-400 transition-all flex items-center gap-1.5 shrink-0"
           >
@@ -748,6 +820,19 @@ export default function PitAiDashboard() {
                 >
                   <Cpu className="w-3.5 h-3.5" />
                   <span>Cérebro & Pesquisa Web</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('finance')}
+                  className={`pb-2.5 px-4 border-b-2 transition-colors flex items-center gap-1.5 ${
+                    activeTab === 'finance'
+                      ? 'border-cyan-400 text-cyan-400'
+                      : 'border-transparent text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  <Wallet className="w-3.5 h-3.5" />
+                  <span>Finanças Grana+</span>
                 </button>
               </div>
 
@@ -947,6 +1032,107 @@ export default function PitAiDashboard() {
                       className="flex-1 py-2.5 px-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold transition-all shadow-md shadow-cyan-500/20 text-center"
                     >
                       Salvar Chave
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* CONTEÚDO DA ABA DE FINANÇAS GRANA+ */}
+              {activeTab === 'finance' && (
+                <div className="space-y-4 text-xs">
+                  <div className="p-3 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-start gap-2 text-cyan-300 text-[11px] leading-relaxed">
+                    <Wallet className="w-4 h-4 shrink-0 mt-0.5" />
+                    <div>
+                      <strong>Módulo Jarvis Financeiro:</strong> O PIT.AI interpreta comandos informais de gastos, faturamentos, transferências e cartões e lança diretamente no seu sistema Grana+ (Finanças Fácil).
+                    </div>
+                  </div>
+
+                  {/* URL da API */}
+                  <div className="space-y-1.5">
+                    <label className="font-semibold text-slate-300 block">
+                      Base URL da API Grana+:
+                    </label>
+                    <input
+                      type="text"
+                      value={financeUrlInput}
+                      onChange={(e) => setFinanceUrlInput(e.target.value)}
+                      placeholder="http://localhost:3000"
+                      className="w-full bg-slate-900 border border-slate-800 focus:border-cyan-500/60 rounded-xl py-2 px-3 text-xs text-white font-mono outline-none"
+                    />
+                    <span className="text-[10px] text-slate-500 block">
+                      Local padrão: http://localhost:3000 ou o endereço de produção do Finanças Fácil.
+                    </span>
+                  </div>
+
+                  {/* Header x-api-key */}
+                  <div className="space-y-1.5">
+                    <label className="font-semibold text-slate-300 block">
+                      Chave de Autenticação (x-api-key):
+                    </label>
+                    <input
+                      type="password"
+                      value={financeKeyInput}
+                      onChange={(e) => setFinanceKeyInput(e.target.value)}
+                      placeholder="ff_live_..."
+                      className="w-full bg-slate-900 border border-slate-800 focus:border-cyan-500/60 rounded-xl py-2 px-3 text-xs text-white font-mono outline-none"
+                    />
+                    <span className="text-[10px] text-slate-500 block">
+                      Header x-api-key utilizado para autorizar as chamadas POST /api/transactions.
+                    </span>
+                  </div>
+
+                  {/* Mapeamentos Ativos */}
+                  <div className="p-3 bg-slate-900/60 border border-slate-800 rounded-2xl space-y-2 text-slate-400 text-[11px]">
+                    <span className="font-semibold text-white block">Mapeamentos Pré-Configurados:</span>
+                    <div className="grid grid-cols-2 gap-2 text-[10px]">
+                      <div>
+                        <strong className="text-cyan-400">Contas:</strong>
+                        <ul className="list-disc pl-3 text-slate-300 mt-0.5 space-y-0.5">
+                          <li>PF (Padrão para dia a dia)</li>
+                          <li>PJ (Gastos e faturamento)</li>
+                          <li>Caixinha Inter (Reserva)</li>
+                          <li>Dólar (Investimentos)</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <strong className="text-cyan-400">Cartões:</strong>
+                        <ul className="list-disc pl-3 text-slate-300 mt-0.5 space-y-0.5">
+                          <li>Pão de Açúcar - Itaú</li>
+                          <li>Inter & Santander</li>
+                          <li>Nubank Mãe & Mercado Livre</li>
+                          <li>Casal & Riachuelo</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Buffer Local */}
+                  <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between text-[11px]">
+                    <div>
+                      <span className="text-slate-300 font-semibold block">Buffer Local Offline:</span>
+                      <span className="text-slate-500 text-[10px]">
+                        {localTxCount} transações salvas localmente
+                      </span>
+                    </div>
+                    {localTxCount > 0 && (
+                      <button
+                        type="button"
+                        onClick={handleClearFinanceBuffer}
+                        className="px-2.5 py-1 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[10px] transition-colors"
+                      >
+                        Limpar Buffer
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Botão de Salvar */}
+                  <div className="pt-2">
+                    <button
+                      type="button"
+                      onClick={handleSaveFinanceConfig}
+                      className="w-full py-2.5 px-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold transition-all shadow-md shadow-cyan-500/20 text-center"
+                    >
+                      Salvar Configurações Grana+
                     </button>
                   </div>
                 </div>

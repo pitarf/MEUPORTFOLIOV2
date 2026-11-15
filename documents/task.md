@@ -2,6 +2,16 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Integração do Assistente Financeiro Jarvis Grana+ (Finanças Fácil) no PIT.AI (`src/services/pitai/pitaiFinanceService.js`, `src/services/pitai/pitaiCoreService.js`, `src/components/pitai/PitAiVisualFeed.jsx`, `src/pages/pitai/PitAiDashboard.jsx`)**:
+  - Objetivo: Habilitar o PIT.AI a gerenciar finanças pessoais e empresariais através de comandos naturais informais em áudio e texto, convertendo intenções em requisições para a API REST do sistema financeiro Grana+ (Finanças Fácil).
+  - Entregas Realizadas:
+    - `src/services/pitai/pitaiFinanceService.js`: Mapeamento de contas bancárias (PJ, PF padrão, Caixinha Inter, Dólar), cartões de crédito (Pão de Açúcar, Inter, Casal, Nubank Mãe, Mercado Livre, Riachuelo, Santander) e categorias de despesa e receita. Métodos para `POST /api/transactions` (despesas débito e crédito, receitas e transferências), consultas e buffer offline resiliente no `localStorage`.
+    - `src/services/pitai/pitaiCoreService.js`: Parser semântico e heurístico que identifica valores, contas, cartões e categorias em frases cotidianas. Prompt de sistema integrado com regras financeiras oficiais e geração de contrato de resposta JSON.
+    - `src/components/pitai/PitAiVisualFeed.jsx`: Projeção executiva no HUD do tipo `finance_card` (cartões estilizados com valor em R$, badges da categoria, conta/cartão e selo de sincronização com a API Grana+) e `finance_list` para extratos consolidados.
+    - `src/pages/pitai/PitAiDashboard.jsx`: Botões rápidos de atalho financeiro ("Almoço R$ 48", "Receita PJ R$ 3.5k", "Reserva R$ 400", "Ver Gastos") e aba "Finanças Grana+" no modal de configurações para controle de Base URL, header `x-api-key` e limpeza de buffer.
+    - `scratch/test_pitai_finance.mjs`: Testes automatizados executados e 100% aprovados para todos os fluxos de despesa, receita, transferência e consulta.
+    - Build de produção compilado com sucesso via Vite em 35.36s.
+
 - [x] **Conexão da Chave Ativa do Google Gemini (99Freelas) e Ativação do Modelo `gemini-3.8-flash` no PIT.AI (`src/services/pitai/pitaiCoreService.js`, `.env`)**:
   - Objetivo: Conectar a chave oficial do Google AI Studio em produção utilizada na extensão de propostas do 99Freelas, eliminando qualquer dependência de chaves suspensas e ativando o modelo executivo `gemini-3.8-flash` para raciocínio pleno e respostas em linguagem natural estilo J.A.R.V.I.S.
   - Entregas Realizadas:

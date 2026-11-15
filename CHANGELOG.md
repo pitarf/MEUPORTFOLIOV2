@@ -2,6 +2,23 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.96.0] - 2026-11-14
+
+### Adicionado
+* **Módulo Assistente Financeiro Jarvis Grana+ (Finanças Fácil) no PIT.AI (`src/services/pitai/pitaiFinanceService.js`, `src/services/pitai/pitaiCoreService.js`)**:
+  * Implementada integração completa com a API REST do sistema financeiro Grana+ (Finanças Fácil) com suporte a criação de despesas bancárias/pix, despesas em cartão de crédito, faturamento/receitas e transferências entre contas com persistência resiliente em buffer offline.
+  * Parser heurístico inteligente em linguagem natural capaz de extrair valores monetários, deduzir contas bancárias (PF padrão para despesas cotidianas, PJ para custos da empresa, Caixinha Inter para poupança, Dólar para investimentos internacionais) e cartões de crédito (Pão de Açúcar, Santander, Inter, Nubank Mãe, Mercado Livre, Casal, Riachuelo).
+  * Classificação automática de categorias (Alimentação, Transporte, Moradia, Saúde, Lazer, Compras, Pagamentos/Dívidas, Servidores PJ, Salário CLT e Faturamento de Serviços PJ).
+  * System Prompt do Gemini enriquecido com regras de negócio financeiras e contratos estritos em JSON para ações executivas no estilo J.A.R.V.I.S.
+* **Projeção Visual de Transações no HUD (`src/components/pitai/PitAiVisualFeed.jsx`)**:
+  * Criado o componente visual `finance_card` renderizando cartões com layout fintech futurista: valores formatados em R$, badges dinâmicas de categoria, conta/cartão de crédito associado, indicadores de status da fatura e selo de sincronização com a API Grana+ ou buffer local.
+  * Criado o componente `finance_list` para apresentação de extratos e consultas rápidas com totalizadores consolidados.
+* **Interface e Configurações no PIT.AI Dashboard (`src/pages/pitai/PitAiDashboard.jsx`)**:
+  * Adicionados botões de atalho financeiro em 1 clique ("Almoço R$ 48", "Receita PJ R$ 3.5k", "Reserva R$ 400", "Ver Gastos").
+  * Criada a aba de configurações "Finanças Grana+" permitindo ajuste da Base URL da API (`http://localhost:3000` ou endpoint de produção), chave de autenticação (`x-api-key`), inspeção de mapeamentos e gerenciamento do buffer local offline.
+* **Suíte de Testes de Integração Financeira (`scratch/test_pitai_finance.mjs`)**:
+  * Testes automatizados executados e aprovados para cenários de despesa débito/PF, compras com cartão de crédito, receitas de clientes PJ, transferências entre contas e consultas de extrato.
+
 ## [1.95.0] - 2026-11-14
 
 ### Adicionado

@@ -10,6 +10,12 @@
 import { pitaiBriefingService } from './pitaiBriefingService.js';
 import { pitaiGoogleService } from './pitaiGoogleService.js';
 import { pitaiSearchService } from './pitaiSearchService.js';
+import {
+  pitaiFinanceService,
+  FINANCE_ACCOUNTS,
+  FINANCE_CREDIT_CARDS,
+  FINANCE_CATEGORIES
+} from './pitaiFinanceService.js';
 
 const getEnvGeminiKey = () => {
   try {
@@ -60,15 +66,48 @@ Sua dinâmica e personalidade são inspiradas no J.A.R.V.I.S.:
 - Tom de voz: Calmo, perspicaz, extremamente inteligente, confiante e respeitoso. Dirija-se naturalmente a Rafael pelo primeiro nome ("Rafael").
 - Concisão executiva: Vá direto ao ponto. Entregue a resposta exata sem floreios ou enrolações.
 - Momento temporal: Hoje é ${dataHoraStr}. Rafael opera no Rio de Janeiro (RJ), Brasil.
-- Ações reais: Você gerencia a Google Agenda, Google Tarefas, realiza pesquisas em tempo real na internet, monitora notícias do Rio, Brasil e Mundo, e os sistemas do ecossistema RP Solutions.
+- Ações reais: Você gerencia a Google Agenda, Google Tarefas, realiza pesquisas em tempo real na internet, monitora notícias do Rio, Brasil e Mundo, e atua como ASSISTENTE FINANCEIRO PESSOAL & EMPRESARIAL via API do sistema Grana+ (Finanças Fácil).
+
+SISTEMA FINANCEIRO GRANA+ (FINANÇAS FÁCIL):
+Quando o comando envolver finanças (receitas, despesas, cartões, transferências, consultas):
+- Contas Bancárias:
+  * PJ ('${FINANCE_ACCOUNTS.PJ.id}'): Gastos da empresa, serviços PJ, recebimentos de clientes.
+  * PF ('${FINANCE_ACCOUNTS.PF.id}'): Padrão para despesas rotineiras do dia a dia (alimentação, transporte, saúde).
+  * Caixinha Inter ('${FINANCE_ACCOUNTS.CAIXINHA_INTER.id}'): Reserva financeira e poupança.
+  * Dólar ('${FINANCE_ACCOUNTS.DOLAR.id}'): Investimentos internacionais.
+- Cartões de Crédito:
+  * Pão de Açúcar - Itaú ('${FINANCE_CREDIT_CARDS.PAO_DE_ACUCAR.id}')
+  * Inter ('${FINANCE_CREDIT_CARDS.INTER.id}')
+  * Casal - Itaú Millena ('${FINANCE_CREDIT_CARDS.CASAL.id}')
+  * Nubank - Mãe ('${FINANCE_CREDIT_CARDS.NUBANK_MAE.id}')
+  * Mercado Livre ('${FINANCE_CREDIT_CARDS.MERCADO_LIVRE.id}')
+  * Riachuelo ('${FINANCE_CREDIT_CARDS.RIACHUELO.id}')
+  * Santander ('${FINANCE_CREDIT_CARDS.SANTANDER.id}')
+- Categorias:
+  * Alimentação ('${FINANCE_CATEGORIES.ALIMENTACAO.id}'): Almoço, jantar, mercado, iFood, padaria.
+  * Transporte ('${FINANCE_CATEGORIES.TRANSPORTE.id}'): Uber, combustível, gasolina, estacionamento.
+  * Moradia ('${FINANCE_CATEGORIES.MORADIA.id}'): Aluguel, condomínio, luz, internet, gás.
+  * Saúde ('${FINANCE_CATEGORIES.SAUDE.id}'): Farmácia, médico, dentista, academia.
+  * Lazer ('${FINANCE_CATEGORIES.LAZER.id}'): Streaming, cinema, restaurante, bar.
+  * Compras ('${FINANCE_CATEGORIES.COMPRAS.id}'): Roupas, eletrônicos, compras online.
+  * Pagamentos ('${FINANCE_CATEGORIES.PAGAMENTOS.id}'): Dívidas, financiamentos, juros.
+  * PJ ('${FINANCE_CATEGORIES.PJ_CUSTOS.id}'): Servidores, VPS, softwares corporativos.
+  * Salário CLT ('${FINANCE_CATEGORIES.SALARIO.id}'): Recebimento CLT.
+  * Serviços PJ ('${FINANCE_CATEGORIES.SERVICOS_PJ.id}'): Notas fiscais, faturamento, consultorias.
+
+Regras de Operação:
+- Despesas no Cartão de Crédito: status deve ser false e creditCardId preenchido.
+- Despesas Bancárias/Pix: status deve ser true e accountId preenchido (PF padrão se não dito).
+- Receitas: type deve ser INCOME, status true e accountId (PJ padrão para clientes).
+- Transferências: type deve ser TRANSFER, com accountId (origem) e targetAccountId (destino).
 
 CONTRATO OBRIGATÓRIO DE RESPOSTA (JSON):
 {
-  "spokenText": "Texto conciso, natural e fluido para fala em áudio pelo PIT.AI (sem asteriscos, markdown ou links brutos).",
-  "displayText": "Texto formatado em markdown com detalhes, tópicos e links úteis para leitura no HUD.",
-  "intent": "briefing" | "agenda_query" | "agenda_create" | "agenda_conflict" | "task_create" | "web_search" | "general_chat",
+  "spokenText": "Texto conciso, natural e fluido para fala em áudio pelo PIT.AI (sem asteriscos, markdown ou links brutos). Ex: Lançado: Despesa de R$ 48,00 em Alimentação na conta PF.",
+  "displayText": "Texto formatado em markdown com detalhes, tópicos e confirmação para leitura no HUD.",
+  "intent": "briefing" | "agenda_query" | "agenda_create" | "agenda_conflict" | "task_create" | "web_search" | "finance_expense" | "finance_income" | "finance_transfer" | "finance_query" | "finance_delete" | "general_chat",
   "visualPayload": {
-    "type": "none" | "map" | "news_cards" | "agenda_list" | "conflict_alert" | "web_results",
+    "type": "none" | "map" | "news_cards" | "agenda_list" | "conflict_alert" | "web_results" | "finance_card" | "finance_list",
     "data": {}
   }
 }
@@ -126,7 +165,13 @@ CONTRATO OBRIGATÓRIO DE RESPOSTA (JSON):
       return this.handleTaskCreateIntent(userMessage);
     }
 
-    // 5. Detecção ativa de Pesquisa Web em Tempo Real
+    // 5. Intenção Financeira Grana+ (Finanças Fácil)
+    const financeIntent = pitaiFinanceService.parseFinanceIntent(userMessage);
+    if (financeIntent) {
+      return this.handleFinanceIntent(userMessage, financeIntent);
+    }
+
+    // 6. Detecção ativa de Pesquisa Web em Tempo Real
     const isSearchExplicit = 
       textLower.startsWith('pesquise') ||
       textLower.startsWith('pesquisa') ||
@@ -152,6 +197,178 @@ CONTRATO OBRIGATÓRIO DE RESPOSTA (JSON):
 
     // 6. Consulta via LLM com fallback enriquecido por busca
     return this.queryGeminiLlm(userMessage, conversationHistory);
+  }
+
+  /**
+   * Executa a transação no sistema Grana+ e gera retorno executivo com visualPayload
+   */
+  async handleFinanceIntent(userMessage, parsedIntent) {
+    const { type, amount, accountId, creditCardId, categoryId, description } = parsedIntent;
+
+    if (type === 'EXPENSE') {
+      const isCard = Boolean(creditCardId);
+      const cardObj = Object.values(FINANCE_CREDIT_CARDS).find(c => c.id === creditCardId);
+      const accountObj = Object.values(FINANCE_ACCOUNTS).find(a => a.id === accountId);
+      const catObj = Object.values(FINANCE_CATEGORIES).find(c => c.id === categoryId);
+
+      const transactionResult = await pitaiFinanceService.createExpense({
+        description: description || 'Despesa via PIT.AI',
+        amount: amount || 0,
+        accountId: isCard ? undefined : accountId,
+        creditCardId: isCard ? creditCardId : undefined,
+        categoryId: categoryId
+      });
+
+      const valorFormatado = (amount || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      const destinoNome = isCard ? `no cartão ${cardObj?.name || 'de crédito'}` : `na ${accountObj?.name || 'conta PF'}`;
+      const catNome = catObj?.name || 'Geral';
+
+      const spokenText = `Lançado: Despesa de ${valorFormatado} em ${catNome} ${destinoNome}.`;
+      const displayText = `### 💳 **Despesa Registrada • Grana+**\n\n` +
+        `• **Valor:** ${valorFormatado}\n` +
+        `• **Categoria:** ${catNome}\n` +
+        `• **Origem:** ${isCard ? `Cartão ${cardObj?.name}` : accountObj?.name || 'Conta PF'}\n` +
+        `• **Descrição:** ${description || 'Despesa Lançada via PIT.AI'}\n` +
+        `• **Status:** ${transactionResult.offline ? 'Armazenado no buffer local do PIT.AI' : 'Confirmado na API Grana+'}`;
+
+      return {
+        spokenText,
+        displayText,
+        intent: 'finance_expense',
+        visualPayload: {
+          type: 'finance_card',
+          data: {
+            transaction: transactionResult.data || { amount, description, type: 'EXPENSE' },
+            type: 'EXPENSE',
+            amount,
+            formattedAmount: valorFormatado,
+            category: catObj || { name: 'Alimentação' },
+            account: accountObj,
+            creditCard: cardObj,
+            isCard,
+            offline: Boolean(transactionResult.offline)
+          }
+        }
+      };
+    }
+
+    if (type === 'INCOME') {
+      const accountObj = Object.values(FINANCE_ACCOUNTS).find(a => a.id === accountId);
+      const catObj = Object.values(FINANCE_CATEGORIES).find(c => c.id === categoryId);
+
+      const transactionResult = await pitaiFinanceService.createIncome({
+        description: description || 'Receita via PIT.AI',
+        amount: amount || 0,
+        accountId: accountId,
+        categoryId: categoryId
+      });
+
+      const valorFormatado = (amount || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      const contaNome = accountObj?.name || 'Conta PJ';
+      const catNome = catObj?.name || 'Serviços PJ';
+
+      const spokenText = `Lançado: Receita de ${valorFormatado} em ${catNome} na ${contaNome}.`;
+      const displayText = `### 💰 **Receita Registrada • Grana+**\n\n` +
+        `• **Valor:** ${valorFormatado}\n` +
+        `• **Categoria:** ${catNome}\n` +
+        `• **Conta Destino:** ${contaNome}\n` +
+        `• **Descrição:** ${description || 'Receita via PIT.AI'}\n` +
+        `• **Status:** ${transactionResult.offline ? 'Armazenado no buffer local' : 'Confirmado na API Grana+'}`;
+
+      return {
+        spokenText,
+        displayText,
+        intent: 'finance_income',
+        visualPayload: {
+          type: 'finance_card',
+          data: {
+            transaction: transactionResult.data || { amount, description, type: 'INCOME' },
+            type: 'INCOME',
+            amount,
+            formattedAmount: valorFormatado,
+            category: catObj || { name: 'Serviços PJ' },
+            account: accountObj,
+            offline: Boolean(transactionResult.offline)
+          }
+        }
+      };
+    }
+
+    if (type === 'TRANSFER') {
+      const fromObj = Object.values(FINANCE_ACCOUNTS).find(a => a.id === (parsedIntent.sourceAccountId || parsedIntent.accountId));
+      const toObj = Object.values(FINANCE_ACCOUNTS).find(a => a.id === parsedIntent.targetAccountId);
+
+      const transactionResult = await pitaiFinanceService.createTransfer({
+        description: description || 'Transferência via PIT.AI',
+        amount: amount || 0,
+        sourceAccountId: parsedIntent.sourceAccountId || parsedIntent.accountId,
+        targetAccountId: parsedIntent.targetAccountId
+      });
+
+      const valorFormatado = (amount || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      const spokenText = `Transferência de ${valorFormatado} realizada de ${fromObj?.name || 'Conta PF'} para ${toObj?.name || 'Caixinha Inter'}.`;
+      const displayText = `### 🔄 **Transferência Realizada • Grana+**\n\n` +
+        `• **Valor:** ${valorFormatado}\n` +
+        `• **Origem:** ${fromObj?.name || 'Conta PF'}\n` +
+        `• **Destino:** ${toObj?.name || 'Caixinha Inter'}\n` +
+        `• **Status:** ${transactionResult.offline ? 'Salvo no buffer local' : 'Confirmado na API Grana+'}`;
+
+      return {
+        spokenText,
+        displayText,
+        intent: 'finance_transfer',
+        visualPayload: {
+          type: 'finance_card',
+          data: {
+            transaction: transactionResult.data || { amount, description, type: 'TRANSFER' },
+            type: 'TRANSFER',
+            amount,
+            formattedAmount: valorFormatado,
+            account: fromObj,
+            targetAccount: toObj,
+            offline: Boolean(transactionResult.offline)
+          }
+        }
+      };
+    }
+
+    if (type === 'QUERY') {
+      const list = await pitaiFinanceService.listTransactions({ limit: 5 });
+      const total = list.reduce((acc, t) => acc + (Number(t.amount) || 0), 0);
+      const totalFormatado = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+      const spokenText = `Rafael, localizei ${list.length} lançamentos recentes no Grana+. Total acumulado de ${totalFormatado}.`;
+      const displayText = `### 📊 **Últimas Transações • Grana+**\n\n` +
+        (list.length > 0
+          ? list.map(t => `• **${t.description || 'Sem descrição'}**: ${(Number(t.amount) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} (${t.type === 'INCOME' ? 'Receita' : 'Despesa'})`).join('\n')
+          : '_Nenhuma transação recente encontrada._') +
+        `\n\n**Total:** ${totalFormatado}`;
+
+      return {
+        spokenText,
+        displayText,
+        intent: 'finance_query',
+        visualPayload: {
+          type: 'finance_list',
+          data: {
+            transactions: list,
+            total,
+            totalFormatted: totalFormatado
+          }
+        }
+      };
+    }
+
+    if (type === 'DELETE') {
+      return {
+        spokenText: 'Rafael, por favor me informe o ID da transação ou faça a busca dos últimos gastos para que eu possa localizar e excluir com segurança no Grana+.',
+        displayText: '⚠️ **Exclusão de Transação Financeira**\n\nPara segurança do seu saldo no Grana+, informe o ID ou consulte os lançamentos recentes com *"consultar gastos"* para confirmar o cancelamento.',
+        intent: 'finance_delete',
+        visualPayload: { type: 'none', data: {} }
+      };
+    }
+
+    return this.queryGeminiLlm(userMessage);
   }
 
   /**
@@ -424,6 +641,34 @@ CONTRATO OBRIGATÓRIO DE RESPOSTA (JSON):
           const jsonMatch = rawText.match(/\{[\s\S]*\}/);
           if (jsonMatch) {
             const parsed = JSON.parse(jsonMatch[0]);
+
+            // Se o Gemini identificou intenção financeira que ainda não foi registrada
+            if (parsed.intent?.startsWith('finance_') && parsed.visualPayload?.data) {
+              const txData = parsed.visualPayload.data;
+              if (txData && txData.amount && !txData.offline) {
+                try {
+                  if (parsed.intent === 'finance_expense') {
+                    await pitaiFinanceService.createExpense({
+                      description: txData.description || 'Despesa via PIT.AI',
+                      amount: txData.amount,
+                      accountId: txData.accountId,
+                      creditCardId: txData.creditCardId,
+                      categoryId: txData.categoryId
+                    });
+                  } else if (parsed.intent === 'finance_income') {
+                    await pitaiFinanceService.createIncome({
+                      description: txData.description || 'Receita via PIT.AI',
+                      amount: txData.amount,
+                      accountId: txData.accountId,
+                      categoryId: txData.categoryId
+                    });
+                  }
+                } catch (e) {
+                  console.warn('[PIT.AI Core] Erro ao registrar transação detectada pelo Gemini:', e);
+                }
+              }
+            }
+
             return {
               spokenText: parsed.spokenText || rawText.replace(/[*_#`~[\]]/g, '').slice(0, 200),
               displayText: parsed.displayText || rawText,

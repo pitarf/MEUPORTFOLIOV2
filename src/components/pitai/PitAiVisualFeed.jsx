@@ -10,7 +10,15 @@ import {
   Globe,
   TrendingUp,
   ShieldAlert,
-  Newspaper
+  Newspaper,
+  Wallet,
+  CreditCard,
+  ArrowUpRight,
+  ArrowDownRight,
+  ArrowRightLeft,
+  Receipt,
+  Building2,
+  Sparkles
 } from 'lucide-react';
 
 /**
@@ -367,60 +375,180 @@ export default function PitAiVisualFeed({ payload, onResolveConflict, onRefreshB
           </div>
         )}
 
-        {/* 4. Projeção de Resultados de Pesquisa Web em Tempo Real */}
-        {type === 'web_results' && data?.results && (
-          <div className="bg-card border border-primary/20 rounded-2xl p-5 shadow-xl space-y-4">
+        {/* 5. Projeção de Cartão Financeiro Executivo Grana+ (Finanças Fácil) */}
+        {type === 'finance_card' && data && (
+          <div className="bg-card border border-primary/20 rounded-2xl p-5 shadow-2xl space-y-4">
             <div className="flex items-center justify-between border-b pb-3">
               <div className="flex items-center gap-2">
-                <Globe className="w-4 h-4 text-cyan-400" />
+                <Wallet className="w-4 h-4 text-cyan-400" />
                 <h4 className="text-sm font-bold text-foreground">
-                  Pesquisa em Tempo Real: "{data.query}"
+                  Grana+ (Finanças Fácil) • Lançamento Registrado
                 </h4>
               </div>
-              <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-                Fontes Abertas Verificadas
+              <span
+                className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded border flex items-center gap-1 ${
+                  data.offline
+                    ? 'bg-amber-500/10 border-amber-500/30 text-amber-400'
+                    : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                }`}
+              >
+                <CheckCircle2 className="w-3 h-3" />
+                <span>{data.offline ? 'Buffer Local Offline' : 'API Grana+ Sincronizada'}</span>
               </span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {data.results.map((res, idx) => (
-                <div
-                  key={idx}
-                  className="p-3.5 rounded-xl bg-muted/30 border border-border/60 hover:border-primary/40 transition-all flex flex-col justify-between space-y-2"
-                >
-                  <div className="space-y-1">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-primary/10 text-primary">
-                        {res.source}
-                      </span>
-                      {res.date && (
-                        <span className="text-[10px] text-muted-foreground">
-                          {res.date}
-                        </span>
-                      )}
-                    </div>
-                    <h5 className="text-xs font-semibold text-foreground line-clamp-2">
-                      {res.title}
-                    </h5>
-                    {res.snippet && (
-                      <p className="text-[11px] text-muted-foreground line-clamp-3">
-                        {res.snippet}
-                      </p>
-                    )}
-                  </div>
-                  {res.url && (
-                    <a
-                      href={res.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[11px] font-medium text-cyan-400 hover:text-cyan-300 inline-flex items-center gap-1 self-start pt-1"
-                    >
-                      <span>Acessar fonte</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {/* Bloco 1: Valor em Destaque */}
+              <div className="p-4 rounded-xl bg-muted/40 border flex flex-col justify-between space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+                    {data.type === 'INCOME' ? 'Receita Confirmada' : data.type === 'TRANSFER' ? 'Transferência' : 'Despesa Lançada'}
+                  </span>
+                  {data.type === 'INCOME' ? (
+                    <ArrowDownRight className="w-4 h-4 text-emerald-400" />
+                  ) : data.type === 'TRANSFER' ? (
+                    <ArrowRightLeft className="w-4 h-4 text-cyan-400" />
+                  ) : (
+                    <ArrowUpRight className="w-4 h-4 text-rose-400" />
                   )}
                 </div>
-              ))}
+                <div
+                  className={`text-2xl font-bold font-mono tracking-tight ${
+                    data.type === 'INCOME'
+                      ? 'text-emerald-400'
+                      : data.type === 'TRANSFER'
+                      ? 'text-cyan-400'
+                      : 'text-rose-400'
+                  }`}
+                >
+                  {data.formattedAmount || `R$ ${Number(data.amount || 0).toFixed(2).replace('.', ',')}`}
+                </div>
+                <span className="text-[10px] text-muted-foreground truncate">
+                  {data.transaction?.description || 'Transação PIT.AI'}
+                </span>
+              </div>
+
+              {/* Bloco 2: Categoria e Origem/Destino */}
+              <div className="p-4 rounded-xl bg-muted/40 border flex flex-col justify-between space-y-2">
+                <div>
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground block mb-1">
+                    Classificação
+                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-bold text-foreground">
+                      {data.category?.name || (data.type === 'INCOME' ? 'Serviços PJ' : 'Alimentação')}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="pt-1 border-t border-border/50">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground block">
+                    Conta / Instrumento
+                  </span>
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    {data.isCard ? (
+                      <>
+                        <CreditCard className="w-3.5 h-3.5 text-cyan-400" />
+                        <span className="text-xs font-semibold text-cyan-300">
+                          {data.creditCard?.name || 'Cartão de Crédito'}
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <Building2 className="w-3.5 h-3.5 text-primary" />
+                        <span className="text-xs font-semibold text-foreground">
+                          {data.type === 'TRANSFER'
+                            ? `${data.account?.name || 'Conta PF'} ➔ ${data.targetAccount?.name || 'Caixinha Inter'}`
+                            : data.account?.name || (data.type === 'INCOME' ? 'Conta PJ' : 'Conta PF')}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Bloco 3: Metadados Executivos */}
+              <div className="p-4 rounded-xl bg-muted/40 border flex flex-col justify-between space-y-2">
+                <div>
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground block mb-1">
+                    Auditoria & Data
+                  </span>
+                  <span className="text-xs font-mono text-foreground flex items-center gap-1">
+                    <Clock className="w-3 h-3 text-muted-foreground" />
+                    <span>{new Date().toLocaleString('pt-BR')}</span>
+                  </span>
+                </div>
+
+                <div className="pt-1 border-t border-border/50 text-[10px] text-muted-foreground space-y-0.5">
+                  <div>Status Fatura: <span className="font-mono text-foreground">{data.isCard ? 'Pendente Fatura' : 'Compensado'}</span></div>
+                  <div>Assistente: <span className="font-mono text-cyan-400">Jarvis PIT.AI</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 6. Projeção de Lista de Transações Recentes Grana+ */}
+        {type === 'finance_list' && data && (
+          <div className="bg-card border border-primary/20 rounded-2xl p-5 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b pb-3">
+              <div className="flex items-center gap-2">
+                <Receipt className="w-4 h-4 text-cyan-400" />
+                <h4 className="text-sm font-bold text-foreground">
+                  Grana+ • Transações Recentes
+                </h4>
+              </div>
+              <div className="text-right">
+                <span className="text-[10px] font-mono text-muted-foreground block">Total Acumulado</span>
+                <span className="text-xs font-bold font-mono text-foreground">{data.totalFormatted}</span>
+              </div>
+            </div>
+
+            <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
+              {data.transactions?.length > 0 ? (
+                data.transactions.map((tx, idx) => (
+                  <div
+                    key={tx.id || idx}
+                    className="p-3 rounded-xl bg-muted/30 border text-xs flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <div
+                        className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
+                          tx.type === 'INCOME'
+                            ? 'bg-emerald-500/10 text-emerald-400'
+                            : 'bg-rose-500/10 text-rose-400'
+                        }`}
+                      >
+                        {tx.type === 'INCOME' ? (
+                          <ArrowDownRight className="w-3.5 h-3.5" />
+                        ) : (
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                        )}
+                      </div>
+                      <div>
+                        <span className="font-semibold text-foreground block">
+                          {tx.description || 'Lançamento Grana+'}
+                        </span>
+                        <span className="text-[10px] text-muted-foreground">
+                          {tx.date ? new Date(tx.date).toLocaleDateString('pt-BR') : 'Data recente'}
+                        </span>
+                      </div>
+                    </div>
+
+                    <span
+                      className={`font-mono font-bold text-xs ${
+                        tx.type === 'INCOME' ? 'text-emerald-400' : 'text-rose-400'
+                      }`}
+                    >
+                      {tx.type === 'INCOME' ? '+' : '-'} {(Number(tx.amount) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <p className="text-xs text-muted-foreground italic p-3 text-center">
+                  Nenhuma transação recente localizada no Grana+.
+                </p>
+              )}
             </div>
           </div>
         )}
