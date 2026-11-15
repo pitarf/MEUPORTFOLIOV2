@@ -35,13 +35,36 @@ O **PIT.AI** é o centro de comando de inteligência executiva de Rafael Pita, c
 3. **`src/services/pitai/pitaiGoogleService.js`**:
    * Conecta ao Google Calendar e Google Tasks.
    * Algoritmo de verificação de conflito de agenda em tempo real: compara intervalos de início/fim antes de criar qualquer compromisso.
-4. **`src/services/pitai/pitaiCoreService.js`**:
-   * System Prompt no estilo J.A.R.V.I.S. acoplado ao Google Gemini 2.0 / 2.5 Flash.
-   * Classificação de intenção e disparo de UI Generativa (`SHOW_MAP`, `SHOW_NEWS_MODAL`, `SHOW_AGENDA_ALERT`).
-5. **`src/components/pitai/PitAiOrb.jsx`**:
-   * Orbe holográfico reativo em SVG/Canvas com pulsações e ondas que respondem a estados de escuta (cyan), pensamento (ouro) e fala (neon lime).
-6. **`src/components/pitai/PitAiVisualFeed.jsx`**:
-   * Painel HUD que renderiza mapas OpenStreetMap/Leaflet, cards de notícias e caixas de alerta de conflito.
+4. **`src/services/pitai/pitaiWeatherService.js`**:
+   * Telemetria climática em tempo real do Rio de Janeiro via API pública Open-Meteo (`latitude: -22.9068`, `longitude: -43.1729`).
+   * Decodificação de códigos meteorológicos WMO (Céu limpo, Parcialmente nublado, Chuvas, Tempestades, Nevoeiro).
+   * Cache tático de 15 minutos em memória e `localStorage` com controle de TTL e contingência offline.
+   * Síntese vocal de telemetria no padrão executivo J.A.R.V.I.S. e formatação de Markdown enriquecido para leitura no HUD.
+5. **`src/services/pitai/pitaiSoundFxService.js`**:
+   * Síntese de efeitos sonoros sci-fi holográficos em tempo real via Web Audio API pura (`AudioContext`, `OscillatorNode`, `GainNode`, `BiquadFilterNode`).
+   * Elimina completamente a dependência de arquivos de áudio externos MP3/WAV suscetíveis a erros 404, bloqueios de CORS ou latência de rede.
+   * Catálogo acústico:
+     * `playActivate()`: Chime harmônico de abertura de canal holográfico (D5 -> A5 -> D6) com sweep de filtro passa-baixas.
+     * `playAcknowledge()`: Pulso duplo cristalino de comando recebido (C6 -> G6) estilo HUD Stark.
+     * `playDone()`: Acorde tríade maior futurista em cascata (F#5, A#5, C#6, F#6) para conclusão de tarefas.
+     * `playAlert()`: Bi-tom tático suavemente filtrado em 1100Hz (C#5 / A4) para conflitos operacionais.
+   * Master Gain ajustável com controle de volume persistido em `localStorage` e atalhos de teste no HUD.
+6. **`src/services/pitai/pitaiAudioVisualizerService.js`**:
+   * Conecta o `AudioContext` ao `AnalyserNode` com FFT de 64 faixas espectrais e taxa de 60fps via `requestAnimationFrame`.
+   * Monitoramento bipolar simultâneo: capta tanto o microfone do usuário (sem retorno de saída) quanto o áudio de resposta do PIT.AI (`HTMLAudioElement` roteado via `createMediaElementSource` e sintetizador neural procedimental).
+   * Alimenta as 24 barras de espectro do Arc Reactor e modula o núcleo em tempo real.
+7. **`src/services/pitai/pitaiCoreService.js`**:
+   * System Prompt no estilo J.A.R.V.I.S. acoplado ao Google Gemini.
+   * Classificação de intenções: `weather_query`, `briefing`, `agenda_query`, `agenda_create`, `finance_expense`, `web_search`, etc.
+   * Disparo de UI Generativa contextual (`weather_card`, `map`, `news_cards`, `agenda_list`, `finance_card`).
+8. **`src/components/pitai/PitAiOrb.jsx`**:
+   * Arc Reactor holográfico reativo em SVG e Framer Motion.
+   * Anéis concêntricos graduados em graus angulares (000°, 090°, 180°, 270°) com marcadores nos 4 quadrantes.
+   * Retículo tático de mira central com eixos ortogonais e mira laser.
+   * Espectrograma de áudio circular de 24 frequências sincronizado via Web Audio API em 60fps diretamente nos nós do DOM.
+   * Transições cromáticas: escuta azul-celeste (`#00f0ff`), cálculo quântico acelerado âmbar (`#f59e0b`) e resposta vocal neon lime (`#bcf13b`).
+9. **`src/components/pitai/PitAiVisualFeed.jsx`**:
+   * Painel HUD que renderiza telemetria climática `weather_card` com temperatura gigante em glow neon, métricas de vento, umidade, probabilidade de chuva e índice UV, mapas OpenStreetMap, cards de notícias e transações financeiras.
 
 ### 25.2 Infraestrutura de Banco de Dados Dedicado (VPS)
 * Arquivo Docker: `deploy/pitai/docker-compose.pitai-db.yml`

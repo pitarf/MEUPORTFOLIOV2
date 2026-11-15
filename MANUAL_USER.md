@@ -32,10 +32,15 @@ O **PIT.AI** é o seu centro de comando de inteligência, notícias em tempo rea
 * A página é protegida e não é indexada por motores de busca para resguardar seus dados pessoais e estratégicos.
 
 ### 22.2 Como Interagir por Voz e Texto
-1. **Pelo Microfone:**
-   * Clique no orbe central ou no botão de microfone na barra inferior.
-   * O orbe ficará pulsando em azul-cyan com a indicação **"OUVINDO"**. Fale sua ordem normalmente (ex: *"O que tem de novo?", "Marca reunião amanhã às 15h"*).
-   * O PIT.AI transcreve em tempo real e processa a resposta falada em português.
+1. **Pelo Microfone e Arc Reactor Reativo à Voz Real:**
+   * Clique no núcleo do **Arc Reactor Holográfico** central ou pressione a barra de **[Espaço]**.
+   * **Reações Visuais & Efeitos Acústicos do Arc Reactor:**
+     * **Ouvindo (Activate)**: Toca um chime suave sci-fi de abertura de canal holográfico. O reator pulsa em azul-celeste com anéis sonares expansivos e captura ativa do microfone. As 24 barras de espectro oscilam em 60fps acompanhando a entonação da sua voz.
+     * **Comando Entendido (Acknowledge)**: Assim que você faz a pausa para pensar de 2.2s, soa um pulso duplo sutil de confirmação de recepção de ordem.
+     * **Calculando**: Os anéis concêntricos giram com aceleração quântica veloz em tom dourado/âmbar.
+     * **Falando (Done)**: A voz executiva J.A.R.V.I.S. fala a resposta enquanto as barras circulares vibram em neon lime e o núcleo de fusão pulsa na cadência dos graves. Concluída a tarefa, soa a tríade sci-fi harmoniosa de sucesso.
+     * **Standby**: Rotação giroscópica suave com anel graduado em graus (000°, 090°, 180°, 270°) e retículo de mira.
+   * Todos os efeitos sonoros são sintetizados no seu navegador via Web Audio API pura, sem travar nem depender de arquivos de internet. Você pode ativar/desativar ou calibrar o volume a qualquer momento na engrenagem de configurações.
 2. **Pelo Teclado:**
    * Digite sua pergunta ou comando no campo inferior e tecle Enter ou clique no botão de envio.
 
@@ -43,6 +48,9 @@ O **PIT.AI** é o seu centro de comando de inteligência, notícias em tempo rea
 * **Briefing em Tempo Real:**
   * *"O que tem de novo?"* ou *"Acontecimentos do dia"*
   * O PIT.AI faz a varredura das últimas horas no Rio de Janeiro, Brasil e Mundo, fala o resumo executivo e projeta os cartões de notícias e o mapa da cidade na tela.
+* **Previsão e Telemetria Climática do Rio de Janeiro:**
+  * *"Como está o tempo no Rio?"*, *"Vai chover hoje?"*, *"Qual a temperatura no Rio agora?"*
+  * O PIT.AI aciona a telemetria via satélite Open-Meteo para a cidade do Rio de Janeiro, fala a temperatura, sensação térmica, umidade, velocidade do vento e probabilidade de chuva, e projeta na tela o widget tático Stark Industries com o resumo de hoje e amanhã.
 * **Consulta de Agenda:**
   * *"Qual a minha agenda de hoje?"* ou *"Meus compromissos"*
   * A IA lê seus eventos do dia e tarefas pendentes do Google Workspace.

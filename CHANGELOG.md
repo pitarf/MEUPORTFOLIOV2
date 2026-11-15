@@ -2,6 +2,56 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [2.1.0] - 2026-11-15
+
+### Adicionado & Aprimorado
+* **Arquitetura de Áudio e Síntese Acústica Neural J.A.R.V.I.S. (`src/services/pitai/pitaiSoundFxService.js`)**:
+  * **Síntese Web Audio API Pura**: Efeitos sonoros sci-fi holográficos gerados em tempo real sem qualquer dependência de arquivos externos MP3/WAV, eliminando erros 404, latências de rede e restrições de CORS.
+  * **Efeitos Táteis Acústicos**:
+    * `playActivate()`: Chime harmônico suave de abertura de canal holográfico (arpeggio em quinta D5 -> A5 -> D6 com filtro passa-baixas dinâmico).
+    * `playAcknowledge()`: Pulso duplo cristalino de comando compreendido e recebido (C6 -> G6 estilo HUD Stark).
+    * `playDone()`: Acorde tríade maior em cascata harmoniosa (F#5, A#5, C#6, F#6) sinalizando conclusão de tarefas com sucesso.
+    * `playAlert()`: Alerta tático bi-tom filtrado (C#5 / A4) para conflitos operacionais e avisos.
+  * **Controles Calibrados**: Volume master suave e executivo (padrão 18%), persistência de configurações no `localStorage` e painel de teste rápido no HUD.
+* **Serviço de Visualização Espectral em Tempo Real (`src/services/pitai/pitaiAudioVisualizerService.js`)**:
+  * **Análise FFT de Alta Resolução**: Medição em tempo real do espectro acústico (FFT com 64 faixas, métricas de volume, sub-bass, frequências médias e agudas).
+  * **Conexão Bipolar Inteligente**: Analisa simultaneamente o fluxo do microfone do usuário (sem retorno de áudio para evitar microfonia) e o áudio de fala do PIT.AI (ElevenLabs, Google Natural MP3 e simulação procedural para SpeechSynthesis).
+  * **Loop 60fps de Alta Performance**: Barramento de subscrição via `requestAnimationFrame` alimentando o Arc Reactor e o HUD tático.
+* **Orbe e Arc Reactor Reativo à Voz Real (`src/components/pitai/PitAiOrb.jsx`)**:
+  * **Modulação Espectral dos 24 Segmentos Circulares**: As barras do anel oscilam em 60fps em sincronia direta com a fala masculina executiva ou a voz do usuário.
+  * **Pulsação Mecânica do Núcleo**: O botão central do reator oscila suavemente com os graves da voz, oferecendo imersão cinematográfica autêntica.
+* **Roteamento de Áudio Integrado no TTS Service (`src/services/pitai/pitaiTtsService.js`)**:
+  * `HTMLAudioElement` conectado ao `AnalyserNode` do Web Audio API antes da reprodução, garantindo pulsação perfeita durante a fala do assistente.
+
+## [2.0.0] - 2026-11-15
+
+### Adicionado & Aprimorado
+* **Arc Reactor Holográfico Reativo Stark Industries no PIT.AI (`src/components/pitai/PitAiOrb.jsx`)**:
+  * **Anéis Táticos Concêntricos Graduados**: Projeção com divisões em graus angulares (000°, 090°, 180°, 270°) e linhas de calibração nos quadrantes táticos.
+  * **Retículo Central de Mira Holográfico**: Mira laser de alta precisão com folga central de núcleo e eixos ortogonais ativos.
+  * **Espectrograma de Áudio Circular**: 24 barras de frequência que oscilam ao redor do núcleo de fusão sincronizadas dinamicamente aos estados sonoros.
+  * **Estados Operacionais Reativos**:
+    * `listening`: Azul-celeste elétrico (`#00f0ff`) com ondas sonares expansivas de captura.
+    * `thinking`: Âmbar / Ouro solar com aceleração quântica veloz nos giros concêntricos.
+    * `speaking`: Neon lime (`#bcf13b`) com pulsações acústicas e espectro de áudio vivo.
+    * `idle`: Rotação giroscópica suave em standby tático.
+* **Telemetria Meteorológica em Tempo Real do Rio de Janeiro (`src/services/pitai/pitaiWeatherService.js`)**:
+  * **Open-Meteo Sat Telemetry**: Coleta atmosférica sem chave e de alta precisão para as coordenadas do Rio de Janeiro (-22.9068, -43.1729).
+  * **Dados Completos**: Temperatura atual, sensação térmica aparente, umidade relativa, velocidade e rajadas de vento, probabilidade de chuva e índice de radiação UV.
+  * **Cache Tático Inteligente**: Cache de 15 minutos em memória e `localStorage` com fallback operacional para consultas offline.
+  * **Síntese Vocal J.A.R.V.I.S.**: Geração de respostas faladas executivas em tom solene e direto ("Senhor, no Rio de Janeiro a temperatura atual é de...").
+* **Intenção de Clima/Tempo no Core Service (`src/services/pitai/pitaiCoreService.js`)**:
+  * Reconhecimento semântico robusto de perguntas como *"como está o tempo no Rio?"*, *"vai chover hoje?"*, *"temperatura no Rio"*, *"clima agora"*, *"previsão para amanhã"*.
+  * Despacho automático da intenção `weather_query` e injeção do payload visual `weather_card`.
+* **Card Holográfico Stark `weather_card` no HUD (`src/components/pitai/PitAiVisualFeed.jsx`)**:
+  * Design inspirado em monitores táticos Stark Industries com temperatura em destaque gigante (ex: 22°C com glow neon).
+  * Ícones meteorológicos reativos com iluminação neon (sol, nuvens, chuva, tempestades, nevoeiro).
+  * Grid tático de métricas: Umidade do ar, velocidade dos ventos, probabilidade de chuva com medidores de progresso e radiação solar UV.
+  * Previsão comparativa rápida de Hoje e Amanhã (mínimas, máximas e chance de precipitação).
+* **Atalhos e Atualização Rápida no PIT.AI Dashboard (`src/pages/pitai/PitAiDashboard.jsx`)**:
+  * Adicionado botão de atalho em 1 clique "Clima no Rio" na barra de ações rápidas.
+  * Botão de atualização rápida de telemetria diretamente no cabeçalho do widget climático.
+
 ## [1.99.0] - 2026-11-14
 
 ### Corrigido & Aprimorado

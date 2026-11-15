@@ -18,17 +18,62 @@ import {
   ArrowRightLeft,
   Receipt,
   Building2,
-  Sparkles
+  Sparkles,
+  Sun,
+  CloudSun,
+  Cloud,
+  CloudRain,
+  CloudDrizzle,
+  CloudLightning,
+  Snowflake,
+  Wind,
+  Droplets,
+  Thermometer,
+  Compass,
+  Eye,
+  CloudFog,
+  RefreshCw
 } from 'lucide-react';
+
+/**
+ * Renderiza ícone com glow neon correspondente à condição meteorológica
+ */
+function WeatherIcon({ name, className = 'w-6 h-6' }) {
+  switch (name) {
+    case 'sun':
+      return <Sun className={`${className} text-amber-400 filter drop-shadow-[0_0_8px_#f59e0b]`} />;
+    case 'cloud-sun':
+      return <CloudSun className={`${className} text-cyan-400 filter drop-shadow-[0_0_8px_#06b6d4]`} />;
+    case 'cloud':
+      return <Cloud className={`${className} text-sky-300 filter drop-shadow-[0_0_6px_#38bdf8]`} />;
+    case 'cloud-drizzle':
+      return <CloudDrizzle className={`${className} text-cyan-300 filter drop-shadow-[0_0_8px_#22d3ee]`} />;
+    case 'cloud-rain':
+      return <CloudRain className={`${className} text-blue-400 filter drop-shadow-[0_0_10px_#3b82f6]`} />;
+    case 'cloud-lightning':
+      return <CloudLightning className={`${className} text-violet-400 filter drop-shadow-[0_0_12px_#a855f7]`} />;
+    case 'cloud-fog':
+      return <CloudFog className={`${className} text-slate-300 filter drop-shadow-[0_0_6px_#94a3b8]`} />;
+    case 'snowflake':
+      return <Snowflake className={`${className} text-cyan-200 filter drop-shadow-[0_0_8px_#a5f3fc]`} />;
+    default:
+      return <CloudSun className={`${className} text-cyan-400`} />;
+  }
+}
 
 /**
  * PIT.AI — Painel HUD de Projeção Visual Generativa
  * Rafael Pita Solutions / MeuPortfolio v2
  * 
  * Renderiza elementos visuais evocados dinamicamente pela conversa:
- * Mapas do RJ/Brasil, Cards de Notícias, Alertas de Conflito e Agenda.
+ * Telemetria Climática Stark, Mapas do RJ/Brasil, Cards de Notícias, Alertas e Finanças.
  */
-export default function PitAiVisualFeed({ payload, onResolveConflict, onRefreshBriefing }) {
+export default function PitAiVisualFeed({
+  payload,
+  onResolveConflict,
+  onRefreshBriefing,
+  onRefreshWeather
+}) {
   if (!payload || payload.type === 'none') {
     return null;
   }
@@ -45,6 +90,194 @@ export default function PitAiVisualFeed({ payload, onResolveConflict, onRefreshB
         transition={{ duration: 0.3 }}
         className="w-full max-w-4xl mx-auto space-y-4"
       >
+        {/* 0. Projeção de Telemetria Meteorológica Stark Industries (Open-Meteo) */}
+        {type === 'weather_card' && data && (
+          <div className="relative bg-card/95 border-2 border-cyan-500/40 rounded-2xl p-5 sm:p-6 shadow-2xl backdrop-blur-xl overflow-hidden space-y-5">
+            {/* Linha decorativa Stark HUD no topo */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent" />
+            
+            {/* Header Tático com Grid de Coordenadas */}
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-cyan-500/20 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center">
+                  <Compass className="w-4 h-4 text-cyan-400 animate-spin-slow" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h4 className="text-sm font-bold font-mono tracking-wider text-foreground uppercase">
+                      STARK SATELLITE TELEMETRY // MET-01
+                    </h4>
+                    <span className="inline-flex items-center gap-1 text-[9px] uppercase font-mono px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
+                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+                      Ao Vivo
+                    </span>
+                  </div>
+                  <p className="text-[11px] font-mono text-muted-foreground">
+                    {data.city || 'Rio de Janeiro, RJ'} • S 22° 54' 24" W 43° 10' 22"
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {onRefreshWeather && (
+                  <button
+                    type="button"
+                    onClick={onRefreshWeather}
+                    className="p-1.5 rounded-lg border border-border/60 hover:border-cyan-500/40 text-muted-foreground hover:text-cyan-300 transition-colors"
+                    title="Atualizar Telemetria"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" />
+                  </button>
+                )}
+                <span className="text-[10px] font-mono px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-slate-400">
+                  REFRESH 15M
+                </span>
+              </div>
+            </div>
+
+            {/* Painel Central: Temperatura em Destaque & Condição */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-muted/20 border border-border/50 rounded-xl p-4 sm:p-5">
+              {/* Destaque de Temperatura e Ícone */}
+              <div className="md:col-span-6 flex items-center gap-4 sm:gap-6 border-b md:border-b-0 md:border-r border-border/40 pb-4 md:pb-0 md:pr-4">
+                <div className="relative flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-cyan-950/30 border border-cyan-500/30 shrink-0 shadow-inner">
+                  <WeatherIcon name={data.current?.icon} className="w-12 h-12 sm:w-14 sm:h-14" />
+                </div>
+                <div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-4xl sm:text-5xl font-extrabold font-mono text-foreground tracking-tight">
+                      {data.current?.temperature ?? '--'}
+                    </span>
+                    <span className="text-2xl font-mono text-cyan-400 font-bold">°C</span>
+                  </div>
+                  <h5 className="text-sm font-bold text-cyan-300 mt-0.5">
+                    {data.current?.condition || 'Parcialmente nublado'}
+                  </h5>
+                  <p className="text-xs text-muted-foreground flex items-center gap-1.5 mt-1">
+                    <Thermometer className="w-3.5 h-3.5 text-rose-400" />
+                    <span>Sensação térmica de <strong className="text-foreground">{data.current?.apparentTemperature ?? '--'}°C</strong></span>
+                  </p>
+                </div>
+              </div>
+
+              {/* Sub-painel: Previsão Rápida Hoje e Amanhã */}
+              <div className="md:col-span-6 grid grid-cols-2 gap-3">
+                {/* Bloco Hoje */}
+                <div className="p-3 rounded-lg bg-card/60 border border-border/60 flex flex-col justify-between space-y-1">
+                  <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground uppercase">
+                    <span>HOJE</span>
+                    <span className="text-[10px] text-cyan-400">TÁTICO</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <WeatherIcon name={data.forecast?.today?.icon} className="w-5 h-5" />
+                    <span className="text-sm font-mono font-bold text-foreground">
+                      {data.forecast?.today?.min}° / {data.forecast?.today?.max}°
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-[10px] text-muted-foreground pt-1 border-t border-border/40">
+                    <span>Chuva</span>
+                    <span className="font-mono text-cyan-300 font-semibold">{data.forecast?.today?.rainChance ?? 0}%</span>
+                  </div>
+                </div>
+
+                {/* Bloco Amanhã */}
+                <div className="p-3 rounded-lg bg-card/60 border border-border/60 flex flex-col justify-between space-y-1">
+                  <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground uppercase">
+                    <span>AMANHÃ</span>
+                    <span className="text-[10px] text-emerald-400">PROJEÇÃO</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <WeatherIcon name={data.forecast?.tomorrow?.icon} className="w-5 h-5" />
+                    <span className="text-sm font-mono font-bold text-foreground">
+                      {data.forecast?.tomorrow?.min}° / {data.forecast?.tomorrow?.max}°
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-[10px] text-muted-foreground pt-1 border-t border-border/40">
+                    <span>Chuva</span>
+                    <span className="font-mono text-cyan-300 font-semibold">{data.forecast?.tomorrow?.rainChance ?? 0}%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Grid de Métricas de Telemetria Stark HUD */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {/* Umidade */}
+              <div className="p-3.5 rounded-xl bg-muted/30 border border-border/60 space-y-2">
+                <div className="flex items-center justify-between text-muted-foreground">
+                  <span className="text-[10px] font-mono uppercase tracking-wider">Umidade Relativa</span>
+                  <Droplets className="w-4 h-4 text-cyan-400" />
+                </div>
+                <div className="text-xl font-bold font-mono text-foreground">
+                  {data.current?.humidity ?? '--'}%
+                </div>
+                <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                  <div
+                    className="bg-cyan-400 h-1.5 rounded-full transition-all duration-500"
+                    style={{ width: `${Math.min(100, Math.max(0, data.current?.humidity ?? 50))}%` }}
+                  />
+                </div>
+              </div>
+
+              {/* Ventos */}
+              <div className="p-3.5 rounded-xl bg-muted/30 border border-border/60 space-y-2">
+                <div className="flex items-center justify-between text-muted-foreground">
+                  <span className="text-[10px] font-mono uppercase tracking-wider">Velocidade Vento</span>
+                  <Wind className="w-4 h-4 text-emerald-400" />
+                </div>
+                <div className="text-xl font-bold font-mono text-foreground">
+                  {data.current?.windSpeed ?? '--'} <span className="text-xs text-muted-foreground">km/h</span>
+                </div>
+                <p className="text-[10px] text-muted-foreground font-mono">
+                  {data.current?.windSpeed > 25 ? 'Brisa intensa / rajadas' : 'Ventos regulares na costa'}
+                </p>
+              </div>
+
+              {/* Probabilidade de Chuva */}
+              <div className="p-3.5 rounded-xl bg-muted/30 border border-border/60 space-y-2">
+                <div className="flex items-center justify-between text-muted-foreground">
+                  <span className="text-[10px] font-mono uppercase tracking-wider">Probabilidade Chuva</span>
+                  <CloudRain className="w-4 h-4 text-blue-400" />
+                </div>
+                <div className="text-xl font-bold font-mono text-foreground">
+                  {data.current?.rainChance ?? 0}%
+                </div>
+                <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                  <div
+                    className={`h-1.5 rounded-full transition-all duration-500 ${
+                      (data.current?.rainChance ?? 0) > 50
+                        ? 'bg-rose-500'
+                        : (data.current?.rainChance ?? 0) > 25
+                        ? 'bg-amber-400'
+                        : 'bg-emerald-400'
+                    }`}
+                    style={{ width: `${Math.min(100, Math.max(0, data.current?.rainChance ?? 0))}%` }}
+                  />
+                </div>
+              </div>
+
+              {/* Índice de Radiação UV */}
+              <div className="p-3.5 rounded-xl bg-muted/30 border border-border/60 space-y-2">
+                <div className="flex items-center justify-between text-muted-foreground">
+                  <span className="text-[10px] font-mono uppercase tracking-wider">Índice Solar UV</span>
+                  <Sun className="w-4 h-4 text-amber-400" />
+                </div>
+                <div className="text-xl font-bold font-mono text-foreground">
+                  {data.forecast?.today?.uvIndex ?? 7} <span className="text-xs text-muted-foreground">/ 11</span>
+                </div>
+                <p className="text-[10px] text-muted-foreground font-mono">
+                  {(data.forecast?.today?.uvIndex ?? 7) >= 8 ? 'Radiação muito alta' : 'Radiação moderada'}
+                </p>
+              </div>
+            </div>
+
+            {/* Rodapé Tático */}
+            <div className="flex flex-wrap items-center justify-between text-[10px] font-mono text-muted-foreground pt-2 border-t border-border/40">
+              <span>Sincronização: {new Date(data.updatedAt).toLocaleTimeString('pt-BR')} (Horário de Brasília)</span>
+              <span className="text-cyan-400/80">Open-Meteo Sat Telemetry • Protocolo J.A.R.V.I.S.</span>
+            </div>
+          </div>
+        )}
+
         {/* 1. Projeção de Mapa Interativo (Ocorrências no Rio de Janeiro / Brasil) */}
         {type === 'map' && data?.map && (
           <div className="bg-card border border-primary/20 rounded-2xl p-4 shadow-xl overflow-hidden space-y-3">

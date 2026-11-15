@@ -2,6 +2,27 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Arquitetura de Áudio Sci-Fi e Visualização Espectral J.A.R.V.I.S. (`src/services/pitai/`, `src/components/pitai/`, `src/pages/pitai/`)**:
+  - Objetivo: Desenvolver e integrar efeitos sonoros táteis sci-fi sintetizados via Web Audio API pura (sem arquivos externos) e visualizador de espectro em tempo real (FFT 60fps) modulando o Arc Reactor / Orbe do PIT.AI de acordo com a voz real.
+  - Entregas Realizadas:
+    - `src/services/pitai/pitaiSoundFxService.js`: Síntese acústica neural pura em tempo real com `AudioContext`, `OscillatorNode`, `GainNode` e `BiquadFilterNode`. Efeitos: `playActivate()` (chime harmônico de abertura D5/A5/D6), `playAcknowledge()` (ack de comando recebido C6/G6), `playDone()` (tríade de sucesso F#5/A#5/C#6/F#6) e `playAlert()` (alerta tático C#5/A4). Master gain calibrado em 18% com persistência local e controles no painel.
+    - `src/services/pitai/pitaiAudioVisualizerService.js`: Análise de áudio com `AnalyserNode` (FFT de 64 faixas, métricas de volume, graves, médios e agudos), suporte bipolar a microfone e saída de voz TTS (ElevenLabs / Google Natural MP3 via `createMediaElementSource` e simulação orgânica para vozes neurais locais), e barramento de subscrição em 60fps via `requestAnimationFrame`.
+    - `src/components/pitai/PitAiOrb.jsx`: Modulação em 60fps das 24 barras circulares do espectrograma e pulsação dinâmica do núcleo de fusão via referências diretas no DOM, eliminando re-renderizações desnecessárias no React e mantendo resposta fluida.
+    - `src/services/pitai/pitaiTtsService.js`: Conexão direta do `HTMLAudioElement` ao analisador Web Audio e sincronização dos estados de síntese com o visualizador.
+    - `src/services/pitai/pitaiVoiceService.js`: Disparo automático de `playActivate()` e abertura do microfone no visualizador, ack sonoro em `commitSpeech()` e desconexão limpa ao encerrar a escuta.
+    - `src/pages/pitai/PitAiDashboard.jsx`: Integração de sons em envio de mensagens, sucesso e alerta tático, e painel de ajuste/teste sonoro nas configurações.
+    - Build de produção compilado com sucesso via Vite em 12.73s.
+
+- [x] **Arc Reactor Holográfico Reativo e Telemetria Climática Stark Industries no PIT.AI (`src/components/pitai/`, `src/services/pitai/`, `src/pages/pitai/`)**:
+  - Objetivo: Implementar a experiência visual e operacional de comando Stark Industries no PIT.AI, integrando o Arc Reactor reativo com anéis graduados e retículo, telemetria meteorológica do Rio de Janeiro via Open-Meteo e projeção do widget holográfico `weather_card`.
+  - Entregas Realizadas:
+    - `src/services/pitai/pitaiWeatherService.js`: Módulo de coleta climática em tempo real para o Rio de Janeiro com cache inteligente de 15 minutos, decodificação de códigos WMO, formatação de fala executiva estilo Jarvis e telemetria completa.
+    - `src/services/pitai/pitaiCoreService.js`: Interceptação semântica de intenções climáticas ("como está o tempo no Rio?", "vai chover hoje?", "temperatura no Rio", "clima agora"), geração de respostas executivas e projeção do payload `weather_card`.
+    - `src/components/pitai/PitAiOrb.jsx`: Arc Reactor holográfico tático com anéis rotativos concêntricos graduados em graus (000°, 090°, 180°, 270°), retículo de mira central de alta precisão, espectrograma de áudio circular de 24 frequências e transições dinâmicas de estados (escuta azul-celeste, cálculo quântico âmbar e fala neon lime).
+    - `src/components/pitai/PitAiVisualFeed.jsx`: Projeção holográfica `weather_card` com temperatura em destaque gigante, ícones neon reativos, métricas HUD de umidade, vento, chuva e UV, e comparativo de previsão Hoje vs Amanhã.
+    - `src/pages/pitai/PitAiDashboard.jsx`: Integração com atalho em 1 clique "Clima no Rio" e botão de recarga rápida de telemetria no widget.
+    - Build de produção compilado com sucesso via Vite em 14.28s.
+
 - [x] **Debounce Inteligente de Voz e Fim dos Cortes na Fala durante o Pensamento no PIT.AI (`src/services/pitai/pitaiVoiceService.js`, `src/pages/pitai/PitAiDashboard.jsx`)**:
   - Objetivo: Resolver a reclamação do usuário de que o assistente cortava a fala e pesquisava antes da hora enquanto ele ainda estava pensando ou respirando.
   - Entregas Realizadas:

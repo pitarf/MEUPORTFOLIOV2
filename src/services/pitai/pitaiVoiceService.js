@@ -8,6 +8,8 @@
  */
 
 import { pitaiTtsService } from './pitaiTtsService.js';
+import { pitaiSoundFxService } from './pitaiSoundFxService.js';
+import { pitaiAudioVisualizerService } from './pitaiAudioVisualizerService.js';
 
 const STORAGE_SILENCE_DELAY_KEY = 'pitai_voice_silence_delay_ms';
 const DEFAULT_SILENCE_DELAY_MS = 2200; // 2.2 segundos de pausa para concluir pensamento
@@ -164,6 +166,9 @@ class PitAiVoiceService {
     this.accumulatedText = '';
 
     if (textToCommit && textToCommit.length >= 2 && this.onTranscriptCallback) {
+      // Toca o efeito sutil sci-fi de comando aceito/reconhecido
+      pitaiSoundFxService.playAcknowledge();
+
       this.onTranscriptCallback({
         text: textToCommit,
         interim: textToCommit,
@@ -223,6 +228,10 @@ class PitAiVoiceService {
     this.accumulatedText = '';
     if (this.silenceTimer) clearTimeout(this.silenceTimer);
 
+    // Efeito de abertura de canal holográfico e conexão do analisador de áudio do microfone
+    pitaiSoundFxService.playActivate();
+    pitaiAudioVisualizerService.startMicVisualizer().catch(() => {});
+
     try {
       this.recognition.start();
     } catch {
@@ -234,6 +243,9 @@ class PitAiVoiceService {
     if (this.autoRestartTimer) clearTimeout(this.autoRestartTimer);
     if (this.silenceTimer) clearTimeout(this.silenceTimer);
     this.accumulatedText = '';
+
+    // Encerra visualizador do microfone
+    pitaiAudioVisualizerService.stopMicVisualizer();
 
     if (!this.recognition) return;
     try {

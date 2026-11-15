@@ -11,6 +11,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { pitaiBriefingService } from './pitaiBriefingService.js';
 import { pitaiGoogleService } from './pitaiGoogleService.js';
 import { pitaiSearchService } from './pitaiSearchService.js';
+import { pitaiWeatherService } from './pitaiWeatherService.js';
 import {
   pitaiFinanceService,
   FINANCE_ACCOUNTS,
@@ -106,9 +107,9 @@ CONTRATO OBRIGATÓRIO DE RESPOSTA (JSON):
 {
   "spokenText": "Texto conciso, natural e fluido para fala em áudio pelo PIT.AI (sem asteriscos, markdown ou links brutos). Ex: Lançado: Despesa de R$ 48,00 em Alimentação na conta PF.",
   "displayText": "Texto formatado em markdown com detalhes, tópicos e confirmação para leitura no HUD.",
-  "intent": "briefing" | "agenda_query" | "agenda_create" | "agenda_conflict" | "task_create" | "web_search" | "finance_expense" | "finance_income" | "finance_transfer" | "finance_query" | "finance_delete" | "general_chat",
+  "intent": "briefing" | "weather_query" | "agenda_query" | "agenda_create" | "agenda_conflict" | "task_create" | "web_search" | "finance_expense" | "finance_income" | "finance_transfer" | "finance_query" | "finance_delete" | "general_chat",
   "visualPayload": {
-    "type": "none" | "map" | "news_cards" | "agenda_list" | "conflict_alert" | "web_results" | "finance_card" | "finance_list",
+    "type": "none" | "weather_card" | "map" | "news_cards" | "agenda_list" | "conflict_alert" | "web_results" | "finance_card" | "finance_list",
     "data": {}
   }
 }
@@ -214,7 +215,33 @@ CONTRATO OBRIGATÓRIO DE RESPOSTA (JSON):
       return this.handleFinanceIntent(rawText, financeIntent);
     }
 
-    // 6. Detecção ativa de Pesquisa Web em Tempo Real
+    // 6. Intenção Meteorológica e Clima em Tempo Real (Open-Meteo)
+    const isWeatherQuery =
+      norm.includes('clima') ||
+      norm.includes('previsao do tempo') ||
+      norm.includes('vai chover') ||
+      norm.includes('vai cair chuva') ||
+      norm.includes('chance de chuva') ||
+      norm.includes('probabilidade de chuva') ||
+      norm.includes('temperatura') ||
+      norm.includes('sensacao termica') ||
+      norm.includes('chovendo') ||
+      (norm.includes('tempo') && (
+        norm.includes('como ta') ||
+        norm.includes('como esta') ||
+        norm.includes('no rio') ||
+        norm.includes('do rio') ||
+        norm.includes('hoje') ||
+        norm.includes('amanha') ||
+        norm.includes('agora') ||
+        norm.includes('previsao')
+      ));
+
+    if (isWeatherQuery) {
+      return this.handleWeatherIntent(rawText);
+    }
+
+    // 7. Detecção ativa de Pesquisa Web em Tempo Real
     const isSearchExplicit = 
       norm.startsWith('pesquise') ||
       norm.startsWith('pesquisa') ||
@@ -226,8 +253,6 @@ CONTRATO OBRIGATÓRIO DE RESPOSTA (JSON):
       norm.includes('cotacao') ||
       norm.includes('dolar') ||
       norm.includes('ibovespa') ||
-      norm.includes('clima') ||
-      norm.includes('previsao do tempo') ||
       norm.includes('transito') ||
       norm.includes('linha vermelha') ||
       norm.includes('ponte rio-niteroi') ||
@@ -238,7 +263,7 @@ CONTRATO OBRIGATÓRIO DE RESPOSTA (JSON):
       return this.handleWebSearchIntent(rawText, conversationHistory);
     }
 
-    // 7. Consulta via LLM com fallback enriquecido por busca
+    // 8. Consulta via LLM com fallback enriquecido por busca
     return this.queryGeminiLlm(rawText, conversationHistory);
   }
 
@@ -412,6 +437,29 @@ CONTRATO OBRIGATÓRIO DE RESPOSTA (JSON):
     }
 
     return this.queryGeminiLlm(userMessage);
+  }
+
+  /**
+   * Trata a consulta de telemetria climática em tempo real para o Rio de Janeiro (Open-Meteo)
+   * @param {string} userMessage - Mensagem recebida
+   * @returns {Promise<Object>} Resposta executiva e visualPayload weather_card
+   */
+  async handleWeatherIntent(userMessage = '') {
+    const norm = this.normalizeText(userMessage);
+    const forceRefresh = norm.includes('atualiza') || norm.includes('agora') || norm.includes('tempo real');
+    const weatherData = await pitaiWeatherService.fetchWeatherData(forceRefresh);
+    const spokenText = pitaiWeatherService.formatSpokenWeather(weatherData, 'Rafael');
+    const displayText = pitaiWeatherService.formatDisplayWeather(weatherData);
+
+    return {
+      spokenText,
+      displayText,
+      intent: 'weather_query',
+      visualPayload: {
+        type: 'weather_card',
+        data: weatherData
+      }
+    };
   }
 
   /**
@@ -717,6 +765,20 @@ CONTRATO OBRIGATÓRIO DE RESPOSTA (JSON):
           const jsonMatch = rawText.match(/\{[\s\S]*\}/);
           if (jsonMatch) {
             const parsed = JSON.parse(jsonMatch[0]);
+
+            // Se o Gemini identificou intenção de clima/tempo
+            if (parsed.intent === 'weather_query' || parsed.visualPayload?.type === 'weather_card') {
+              const liveWeather = await pitaiWeatherService.fetchWeatherData();
+              return {
+                spokenText: parsed.spokenText || pitaiWeatherService.formatSpokenWeather(liveWeather, 'Rafael'),
+                displayText: parsed.displayText || pitaiWeatherService.formatDisplayWeather(liveWeather),
+                intent: 'weather_query',
+                visualPayload: {
+                  type: 'weather_card',
+                  data: liveWeather
+                }
+              };
+            }
 
             // Se o Gemini identificou intenção financeira que ainda não foi registrada
             if (parsed.intent?.startsWith('finance_') && parsed.visualPayload?.data) {

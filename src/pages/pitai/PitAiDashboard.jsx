@@ -36,13 +36,16 @@ import {
   ArrowUpRight,
   ArrowRightLeft,
   DollarSign,
-  CreditCard
+  CreditCard,
+  CloudSun
 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import PitAiOrb from '@/components/pitai/PitAiOrb';
 import PitAiVisualFeed from '@/components/pitai/PitAiVisualFeed';
 import { pitaiVoiceService } from '@/services/pitai/pitaiVoiceService';
 import { pitaiTtsService, ELEVENLABS_VOICES } from '@/services/pitai/pitaiTtsService';
+import { pitaiSoundFxService } from '@/services/pitai/pitaiSoundFxService';
+import { pitaiAudioVisualizerService } from '@/services/pitai/pitaiAudioVisualizerService';
 import { pitaiCoreService } from '@/services/pitai/pitaiCoreService';
 import { pitaiBriefingService } from '@/services/pitai/pitaiBriefingService';
 import { pitaiGoogleService } from '@/services/pitai/pitaiGoogleService';
@@ -73,6 +76,10 @@ export default function PitAiDashboard() {
   const [selectedBrowserVoiceUri, setSelectedBrowserVoiceUri] = useState(() => pitaiTtsService.getBrowserVoiceUri());
   const [isTestingVoice, setIsTestingVoice] = useState(false);
   const [silenceDelay, setSilenceDelay] = useState(() => pitaiVoiceService.getSilenceDelay());
+
+  // Configurações de Efeitos Sonoros Sci-Fi (SFX)
+  const [sfxEnabled, setSfxEnabled] = useState(() => pitaiSoundFxService.isEnabled());
+  const [sfxVolume, setSfxVolume] = useState(() => Math.round(pitaiSoundFxService.getVolume() * 100));
 
   // Configurações do Gemini (Brain)
   const [geminiKeyInput, setGeminiKeyInput] = useState(() => pitaiCoreService.getApiKey());
@@ -235,6 +242,7 @@ export default function PitAiDashboard() {
 
     setInputText('');
     pitaiVoiceService.stopListening();
+    pitaiSoundFxService.playAcknowledge();
 
     const userMsg = {
       id: `user_${Date.now()}`,
@@ -263,6 +271,7 @@ export default function PitAiDashboard() {
       };
 
       setMessages((prev) => [...prev, assistantMsg]);
+      pitaiSoundFxService.playDone();
 
       // Atualiza a projeção visual no HUD
       if (response.visualPayload && response.visualPayload.type !== 'none') {
@@ -283,6 +292,7 @@ export default function PitAiDashboard() {
         setStatus('idle');
       }
     } catch (err) {
+      pitaiSoundFxService.playAlert();
       console.warn('[PIT.AI Dashboard] Aviso no processamento:', err?.message || err);
       const fallbackText = query.toLowerCase().includes('noticia') || query.toLowerCase().includes('rio')
         ? 'Rafael, os sistemas do Rio de Janeiro continuam operando com monitoramento ativo das vias (Avenida Brasil, Linha Vermelha e Ponte). Para ocorrências em tempo real, consulte também o Centro de Operações Rio (COR).'
@@ -323,16 +333,23 @@ export default function PitAiDashboard() {
     }
   };
 
-  // Salvar Configurações de Voz
+  // Salvar Configurações de Voz e Efeitos
   const handleSaveVoiceSettings = () => {
     pitaiTtsService.setMode(ttsMode);
     pitaiTtsService.setElevenLabsKey(elevenKey);
     pitaiTtsService.setElevenLabsVoiceId(elevenVoiceId);
     pitaiTtsService.setBrowserVoiceUri(selectedBrowserVoiceUri);
     pitaiVoiceService.setSilenceDelay(silenceDelay);
+    pitaiSoundFxService.setEnabled(sfxEnabled);
+    pitaiSoundFxService.setVolume(sfxVolume / 100);
+
+    if (sfxEnabled) {
+      pitaiSoundFxService.playDone();
+    }
+
     toast({
-      title: 'Configurações de Voz Salvas',
-      description: `Motor ativo: ${ttsMode === 'elevenlabs' ? 'ElevenLabs (Ultra-Humana)' : 'Neural do Navegador'}. Pausa de silêncio: ${(silenceDelay / 1000).toFixed(1)}s.`
+      title: 'Configurações de Áudio e Voz Salvas',
+      description: `Motor: ${ttsMode === 'elevenlabs' ? 'ElevenLabs' : 'Voz Neural'}. Efeitos Sci-Fi: ${sfxEnabled ? 'Ativados (' + sfxVolume + '%)' : 'Desativados'}.`
     });
   };
 
@@ -613,11 +630,12 @@ export default function PitAiDashboard() {
           </button>
         </div>
 
-        {/* Projeção Visual Generativa do HUD (Mapas, Notícias, Pesquisa Web, Agenda) */}
+        {/* Projeção Visual Generativa do HUD (Telemetria Climática, Mapas, Notícias, Pesquisa Web, Agenda) */}
         <PitAiVisualFeed
           payload={visualPayload}
           onResolveConflict={() => handleSendMessage('ajuste o conflito')}
           onRefreshBriefing={() => handleSendMessage('o que tem de novo?')}
+          onRefreshWeather={() => handleSendMessage('como está o tempo no Rio agora?')}
         />
 
         {/* Linha de Conversação e Mensagens */}
@@ -682,8 +700,17 @@ export default function PitAiDashboard() {
         <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-1 no-scrollbar text-xs">
           <button
             type="button"
-            onClick={() => handleSendMessage('Quais são as notícias do Rio de Janeiro?')}
+            onClick={() => handleSendMessage('Como está o tempo no Rio agora?')}
             className="px-3 py-1.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 hover:text-cyan-200 transition-all flex items-center gap-1.5 shrink-0 font-semibold"
+          >
+            <CloudSun className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Clima no Rio</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleSendMessage('Quais são as notícias do Rio de Janeiro?')}
+            className="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-400 transition-all flex items-center gap-1.5 shrink-0"
           >
             <MapPin className="w-3.5 h-3.5 text-cyan-400" />
             <span>Notícias do Rio</span>
@@ -1032,6 +1059,78 @@ export default function PitAiDashboard() {
                     <p className="text-[11px] text-slate-400">
                       Evita que o assistente corte a sua fala no meio da frase enquanto você ainda está respirando ou elaborando o pensamento.
                     </p>
+                  </div>
+
+                  {/* Efeitos Sonoros Sci-Fi Holográficos (Web Audio API) */}
+                  <div className="space-y-2.5 p-3.5 bg-slate-900/60 border border-slate-800 rounded-2xl">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Radio className="w-3.5 h-3.5 text-cyan-400" />
+                        <label className="text-slate-200 font-semibold block text-xs">
+                          Efeitos Holográficos Sci-Fi (J.A.R.V.I.S.)
+                        </label>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const next = !sfxEnabled;
+                          setSfxEnabled(next);
+                          pitaiSoundFxService.setEnabled(next);
+                          if (next) pitaiSoundFxService.playActivate();
+                        }}
+                        className={`text-[11px] font-mono px-2.5 py-1 rounded-full border transition-all ${
+                          sfxEnabled
+                            ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-300'
+                            : 'bg-slate-800 border-slate-700 text-slate-400'
+                        }`}
+                      >
+                        {sfxEnabled ? 'LIGADO' : 'DESLIGADO'}
+                      </button>
+                    </div>
+
+                    <p className="text-[11px] text-slate-400">
+                      Sons táteis sintetizados em tempo real via Web Audio API pura (sem arquivos externos ou falhas de rede).
+                    </p>
+
+                    {/* Teste Rápido dos 4 Efeitos */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => pitaiSoundFxService.playActivate()}
+                        className="p-1.5 rounded-lg border border-slate-800 hover:border-cyan-500/40 bg-slate-950 text-slate-300 hover:text-white text-[10px] font-mono flex items-center justify-center gap-1 transition-all"
+                        title="Som de abertura de canal"
+                      >
+                        <Play className="w-2.5 h-2.5 text-cyan-400" />
+                        <span>Activate</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => pitaiSoundFxService.playAcknowledge()}
+                        className="p-1.5 rounded-lg border border-slate-800 hover:border-cyan-500/40 bg-slate-950 text-slate-300 hover:text-white text-[10px] font-mono flex items-center justify-center gap-1 transition-all"
+                        title="Som de comando recebido"
+                      >
+                        <Play className="w-2.5 h-2.5 text-cyan-400" />
+                        <span>Acknowledge</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => pitaiSoundFxService.playDone()}
+                        className="p-1.5 rounded-lg border border-slate-800 hover:border-[#bcf13b]/40 bg-slate-950 text-slate-300 hover:text-white text-[10px] font-mono flex items-center justify-center gap-1 transition-all"
+                        title="Som de tarefa concluída"
+                      >
+                        <Play className="w-2.5 h-2.5 text-[#bcf13b]" />
+                        <span>Done</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => pitaiSoundFxService.playAlert()}
+                        className="p-1.5 rounded-lg border border-slate-800 hover:border-amber-500/40 bg-slate-950 text-slate-300 hover:text-white text-[10px] font-mono flex items-center justify-center gap-1 transition-all"
+                        title="Som de alerta operacional"
+                      >
+                        <Play className="w-2.5 h-2.5 text-amber-400" />
+                        <span>Alert</span>
+                      </button>
+                    </div>
                   </div>
 
                   {/* Botões de Ação da Voz */}

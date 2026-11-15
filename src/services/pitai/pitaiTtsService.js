@@ -11,6 +11,8 @@
  * 3. Vozes Neurais Masculinas do Navegador (Microsoft Antonio Online Natural / Daniel) com pitch grave (0.88)
  */
 
+import { pitaiAudioVisualizerService } from './pitaiAudioVisualizerService.js';
+
 const STORAGE_KEY_MODE = 'pitai_tts_mode'; // 'neural_browser' | 'google_natural' | 'elevenlabs'
 const STORAGE_KEY_ELEVEN_KEY = 'pitai_elevenlabs_api_key';
 const STORAGE_KEY_ELEVEN_VOICE = 'pitai_elevenlabs_voice_id';
@@ -40,11 +42,14 @@ class PitAiTtsService {
 
     if (typeof window !== 'undefined') {
       this.audioElement = new Audio();
+      this.audioElement.crossOrigin = 'anonymous';
       this.audioElement.onended = () => this.handleSpeechComplete();
       this.audioElement.onerror = (e) => {
         console.warn('[PIT.AI TTS] Erro no player de áudio:', e);
         this.handleSpeechComplete();
       };
+      // Conecta o elemento de áudio ao AnalyserNode do visualizador
+      pitaiAudioVisualizerService.connectAudioElement(this.audioElement);
     }
   }
 
@@ -122,6 +127,7 @@ class PitAiTtsService {
 
   handleSpeechComplete() {
     this.isSpeaking = false;
+    pitaiAudioVisualizerService.setSimulatedSpeaking(false);
     this.notifyStatus('idle');
     if (this.currentAudioUrl) {
       URL.revokeObjectURL(this.currentAudioUrl);
@@ -275,6 +281,9 @@ class PitAiTtsService {
   async speakGoogleNatural(text) {
     if (!this.audioElement) return false;
     try {
+      await pitaiAudioVisualizerService.resumeContext();
+      pitaiAudioVisualizerService.connectAudioElement(this.audioElement);
+
       const trimmed = text.slice(0, 200);
       // Tenta via proxy do Nginx local ou direto
       const proxyUrl = `/api/tts/google?ie=UTF-8&q=${encodeURIComponent(trimmed)}&tl=pt-BR&client=tw-ob`;
@@ -328,6 +337,10 @@ class PitAiTtsService {
         URL.revokeObjectURL(this.currentAudioUrl);
       }
       this.currentAudioUrl = URL.createObjectURL(audioBlob);
+
+      await pitaiAudioVisualizerService.resumeContext();
+      pitaiAudioVisualizerService.connectAudioElement(this.audioElement);
+
       this.audioElement.src = this.currentAudioUrl;
       await this.audioElement.play();
       return true;
@@ -357,17 +370,24 @@ class PitAiTtsService {
         utterance.voice = voice;
       }
 
+      utterance.onstart = () => {
+        pitaiAudioVisualizerService.setSimulatedSpeaking(true);
+      };
+
       utterance.onend = () => {
+        pitaiAudioVisualizerService.setSimulatedSpeaking(false);
         this.handleSpeechComplete();
         resolve();
       };
 
       utterance.onerror = (e) => {
         console.warn('[PIT.AI TTS] Erro no SpeechSynthesis:', e);
+        pitaiAudioVisualizerService.setSimulatedSpeaking(false);
         this.handleSpeechComplete();
         resolve();
       };
 
+      pitaiAudioVisualizerService.setSimulatedSpeaking(true);
       this.synthesis.speak(utterance);
     });
   }
@@ -377,6 +397,7 @@ class PitAiTtsService {
    */
   stop() {
     this.isSpeaking = false;
+    pitaiAudioVisualizerService.setSimulatedSpeaking(false);
     if (this.audioElement) {
       this.audioElement.pause();
       this.audioElement.currentTime = 0;
