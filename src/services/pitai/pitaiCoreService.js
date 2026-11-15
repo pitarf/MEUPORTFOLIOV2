@@ -387,7 +387,8 @@ CONTRATO OBRIGATÓRIO DE RESPOSTA (JSON):
 
     if (apiKey) {
       try {
-        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+        const geminiModel = 'gemini-3.8-flash';
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:generateContent?key=${apiKey}`;
         
         const payload = {
           systemInstruction: {
@@ -404,7 +405,8 @@ CONTRATO OBRIGATÓRIO DE RESPOSTA (JSON):
             }
           ],
           generationConfig: {
-            temperature: 0.3
+            temperature: 0.3,
+            responseMimeType: 'application/json'
           }
         };
 

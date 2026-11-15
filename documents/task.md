@@ -2,6 +2,13 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Conexão da Chave Ativa do Google Gemini (99Freelas) e Ativação do Modelo `gemini-3.8-flash` no PIT.AI (`src/services/pitai/pitaiCoreService.js`, `.env`)**:
+  - Objetivo: Conectar a chave oficial do Google AI Studio em produção utilizada na extensão de propostas do 99Freelas, eliminando qualquer dependência de chaves suspensas e ativando o modelo executivo `gemini-3.8-flash` para raciocínio pleno e respostas em linguagem natural estilo J.A.R.V.I.S.
+  - Entregas Realizadas:
+    - Chave oficial configurada e protegida no `.env` sob `VITE_GEMINI_API_KEY`.
+    - Atualização do modelo no `pitaiCoreService.js` para `gemini-3.8-flash` com `responseMimeType: "application/json"`.
+    - Teste de homologação com resposta executiva direta validada com sucesso em 200 OK.
+
 - [x] **Aprimoramento de Voz Humana de Alta Fidelidade (ElevenLabs & Neurais), Pesquisa Web em Tempo Real e Conversação Contínua no PIT.AI (`src/services/pitai/`, `src/components/pitai/`, `src/pages/pitai/`)**:
   - Objetivo: Substituir a voz sintetizada mecânica por vozes humanas reais (ElevenLabs de cinema e vozes neurais naturais do Edge/Google), conectar o PIT.AI à web em tempo real (Google News, DuckDuckGo, Wikipédia, Diários Oficiais e COR) para pesquisas ao vivo sem travar, e implementar o Modo Conversação Contínua (Live) onde o microfone se mantém ativo e reabre sozinho após cada resposta do assistente.
   - Entregas Realizadas:

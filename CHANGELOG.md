@@ -2,6 +2,14 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.95.0] - 2026-11-14
+
+### Adicionado
+* **Integração da Chave Nativa Ativa do Gemini (Google AI Studio) & Modelo `gemini-3.8-flash` no PIT.AI (`src/services/pitai/pitaiCoreService.js`, `.env`)**:
+  * Conectada a chave de API oficial ativa utilizada na extensão de propostas do 99Freelas via variável de ambiente protegida `VITE_GEMINI_API_KEY`.
+  * Atualizado o modelo para a versão de ponta `gemini-3.8-flash` com suporte a JSON nativo (`responseMimeType: "application/json"`).
+  * Validada resposta executiva estilo J.A.R.V.I.S. com status 200 OK sem erros de restrição de serviço ou permissão.
+
 ## [1.94.0] - 2026-11-14
 
 ### Adicionado
