@@ -2,6 +2,16 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.99.0] - 2026-11-14
+
+### Corrigido & Aprimorado
+* **Debounce Inteligente de Voz e Detecção de Pausa para Pensar no PIT.AI (`src/services/pitai/pitaiVoiceService.js`, `src/pages/pitai/PitAiDashboard.jsx`)**:
+  * **Fim dos Cortes Prematuros na Fala**: Implementada detecção inteligente de silêncio (`Silence Detection` com temporizador padrão de 2.2 segundos) que acumula as palavras continuamente sem abortar o microfone nas pausas naturais de respiração ou elaboração de pensamento.
+  * **Modo Contínuo Ativo no Speech Recognition (`continuous = true`)**: A API de reconhecimento vocal não encerra mais a sessão a cada pausa curta de 0.5s, permitindo que o usuário fale no seu próprio ritmo e formule frases completas e complexas.
+  * **Ajuste de Sensibilidade de Pausa no Modal de Voz**: Adicionado seletor configurável nas opções do assistente com 4 níveis (1.5s - Rápido, 2.2s - Recomendado, 3.0s - Falar com Calma, 4.0s - Pausas Longas) persistido no `localStorage`.
+  * **Feedback em Tempo Real**: O texto falado é exibido dinamicamente no campo de entrada conforme o usuário fala, e o envio automático só é acionado após a confirmação do término do pensamento.
+  * **Suíte de Testes Automatizada**: Validação aprovada com `scratch/test_pitai_speech_debounce.mjs`.
+
 ## [1.98.0] - 2026-11-14
 
 ### Corrigido & Aprimorado

@@ -2,6 +2,13 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Debounce Inteligente de Voz e Fim dos Cortes na Fala durante o Pensamento no PIT.AI (`src/services/pitai/pitaiVoiceService.js`, `src/pages/pitai/PitAiDashboard.jsx`)**:
+  - Objetivo: Resolver a reclamação do usuário de que o assistente cortava a fala e pesquisava antes da hora enquanto ele ainda estava pensando ou respirando.
+  - Entregas Realizadas:
+    - `src/services/pitai/pitaiVoiceService.js`: Ativação de `continuous = true` no reconhecimento de voz, acumulador de texto contínuo e temporizador de silêncio (`Silence Detection`) de 2.2s que reinicia a cada nova palavra ou som captado.
+    - `src/pages/pitai/PitAiDashboard.jsx`: Integração com `isSpeechComplete`, envio postergado até a finalização real da frase, controle de pausa para pensar configurável no modal de voz (1.5s a 4.0s) e indicação visual atualizada no botão sob o orbe.
+    - `scratch/test_pitai_speech_debounce.mjs`: Testes automatizados executados e 100% aprovados.
+
 - [x] **Voz Masculina Executiva (J.A.R.V.I.S.) e Notícias do Rio de Janeiro em Tempo Real no PIT.AI (`src/services/pitai/`, `src/pages/pitai/`, `nginx.conf`)**:
   - Objetivo: Atender à solicitação direta do usuário configurando voz estritamente masculina encorpada e sóbria estilo J.A.R.V.I.S. (eliminando qualquer voz feminina ou sintetizador robótico arcaico) e garantir entrega imediata de notícias reais do Rio de Janeiro ao comando "Quais são as notícias do Rio de Janeiro?".
   - Entregas Realizadas:

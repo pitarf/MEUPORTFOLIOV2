@@ -72,6 +72,7 @@ export default function PitAiDashboard() {
   const [browserVoices, setBrowserVoices] = useState([]);
   const [selectedBrowserVoiceUri, setSelectedBrowserVoiceUri] = useState(() => pitaiTtsService.getBrowserVoiceUri());
   const [isTestingVoice, setIsTestingVoice] = useState(false);
+  const [silenceDelay, setSilenceDelay] = useState(() => pitaiVoiceService.getSilenceDelay());
 
   // Configurações do Gemini (Brain)
   const [geminiKeyInput, setGeminiKeyInput] = useState(() => pitaiCoreService.getApiKey());
@@ -124,13 +125,14 @@ export default function PitAiDashboard() {
     pitaiVoiceService.setContinuousMode(continuousMode);
 
     pitaiVoiceService.bindCallbacks({
-      onTranscript: ({ interim, final, isFinal }) => {
-        if (interim) {
-          setInputText(interim);
+      onTranscript: ({ text, interim, final, isSpeechComplete }) => {
+        const queryText = text || final || interim || '';
+        if (queryText) {
+          setInputText(queryText);
         }
-        if (isFinal && final) {
-          setInputText(final);
-          handleSendMessage(final);
+        if (isSpeechComplete && queryText.trim()) {
+          setInputText(queryText.trim());
+          handleSendMessage(queryText.trim());
         }
       },
       onStatusChange: (newStatus) => {
@@ -327,9 +329,10 @@ export default function PitAiDashboard() {
     pitaiTtsService.setElevenLabsKey(elevenKey);
     pitaiTtsService.setElevenLabsVoiceId(elevenVoiceId);
     pitaiTtsService.setBrowserVoiceUri(selectedBrowserVoiceUri);
+    pitaiVoiceService.setSilenceDelay(silenceDelay);
     toast({
       title: 'Configurações de Voz Salvas',
-      description: `Motor ativo: ${ttsMode === 'elevenlabs' ? 'ElevenLabs (Ultra-Humana)' : 'Neural do Navegador'}.`
+      description: `Motor ativo: ${ttsMode === 'elevenlabs' ? 'ElevenLabs (Ultra-Humana)' : 'Neural do Navegador'}. Pausa de silêncio: ${(silenceDelay / 1000).toFixed(1)}s.`
     });
   };
 
@@ -605,7 +608,7 @@ export default function PitAiDashboard() {
           >
             <Mic className={`w-3.5 h-3.5 ${isListening ? 'text-rose-400' : 'text-cyan-400'}`} />
             <span>
-              {isListening ? 'Ouvindo você... Fale agora' : 'Clique ou aperte Espaço para Falar'}
+              {isListening ? 'Ouvindo você... Fale no seu ritmo (pausas permitidas)' : 'Clique ou aperte Espaço para Falar'}
             </span>
           </button>
         </div>
@@ -1005,6 +1008,31 @@ export default function PitAiDashboard() {
                       </p>
                     </div>
                   )}
+
+                  {/* Tempo de Espera / Pausa para Pensar */}
+                  <div className="space-y-1.5 p-3.5 bg-slate-900/60 border border-slate-800 rounded-2xl">
+                    <div className="flex items-center justify-between">
+                      <label className="text-slate-300 font-medium block">
+                        Pausa para Pensar (Detecção de Silêncio):
+                      </label>
+                      <span className="text-cyan-400 font-mono font-bold text-xs">
+                        {(silenceDelay / 1000).toFixed(1)}s
+                      </span>
+                    </div>
+                    <select
+                      value={silenceDelay}
+                      onChange={(e) => setSilenceDelay(Number(e.target.value))}
+                      className="w-full bg-slate-950 border border-slate-800 focus:border-cyan-500/60 rounded-xl py-2 px-3 text-xs text-white outline-none"
+                    >
+                      <option value={1500}>1.5 segundos — Resposta Rápida</option>
+                      <option value={2200}>2.2 segundos — Pausa Natural (Recomendado)</option>
+                      <option value={3000}>3.0 segundos — Falar com Calma / Pensativo</option>
+                      <option value={4000}>4.0 segundos — Pausas Longas</option>
+                    </select>
+                    <p className="text-[11px] text-slate-400">
+                      Evita que o assistente corte a sua fala no meio da frase enquanto você ainda está respirando ou elaborando o pensamento.
+                    </p>
+                  </div>
 
                   {/* Botões de Ação da Voz */}
                   <div className="flex items-center gap-2 pt-2">

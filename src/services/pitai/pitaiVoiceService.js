@@ -1,14 +1,16 @@
 /**
- * PIT.AI — Serviço de Voz Integrado & Conversação Contínua
+ * PIT.AI — Serviço de Voz Integrado & Conversação Contínua com Debounce Inteligente
  * Rafael Pita Solutions / MeuPortfolio v2
  * 
- * Gerencia a escuta vocal (Web Speech Recognition) e delega a síntese
- * ao pitaiTtsService (com suporte a ElevenLabs e Vozes Neurais Naturais).
- * Inclui o modo "Conversação Contínua" (Live / J.A.R.V.I.S.) onde o microfone
- * reabre automaticamente após a IA responder.
+ * Gerencia a escuta vocal (Web Speech Recognition) com detecção inteligente de pausas
+ * de pensamento (Speech Debounce / Silence Detection de 2.2 segundos), impedindo que o
+ * assistente corte o usuário no meio da frase enquanto ele ainda está elaborando a ideia.
  */
 
 import { pitaiTtsService } from './pitaiTtsService.js';
+
+const STORAGE_SILENCE_DELAY_KEY = 'pitai_voice_silence_delay_ms';
+const DEFAULT_SILENCE_DELAY_MS = 2200; // 2.2 segundos de pausa para concluir pensamento
 
 class PitAiVoiceService {
   constructor() {
@@ -16,12 +18,21 @@ class PitAiVoiceService {
     this.isListening = false;
     this.isSpeaking = false;
     this.continuousMode = true; // Conversação contínua por padrão
+    this.silenceDelayMs = DEFAULT_SILENCE_DELAY_MS;
+    this.silenceTimer = null;
+    this.accumulatedText = '';
+
     this.onTranscriptCallback = null;
     this.onStatusChangeCallback = null;
     this.onSpeechEndCallback = null;
     this.autoRestartTimer = null;
 
     if (typeof window !== 'undefined') {
+      const savedDelay = localStorage.getItem(STORAGE_SILENCE_DELAY_KEY);
+      if (savedDelay) {
+        this.silenceDelayMs = Number(savedDelay) || DEFAULT_SILENCE_DELAY_MS;
+      }
+
       this.initRecognition();
       pitaiTtsService.bindCallbacks({
         onStatusChange: (status) => {
@@ -42,6 +53,17 @@ class PitAiVoiceService {
     }
   }
 
+  getSilenceDelay() {
+    return this.silenceDelayMs;
+  }
+
+  setSilenceDelay(ms) {
+    this.silenceDelayMs = Math.max(1200, Math.min(5000, Number(ms) || DEFAULT_SILENCE_DELAY_MS));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_SILENCE_DELAY_KEY, String(this.silenceDelayMs));
+    }
+  }
+
   initRecognition() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
@@ -51,7 +73,8 @@ class PitAiVoiceService {
 
     this.recognition = new SpeechRecognition();
     this.recognition.lang = 'pt-BR';
-    this.recognition.continuous = false;
+    // Habilita captura contínua para não desligar o microfone nas pausas de respiração
+    this.recognition.continuous = true;
     this.recognition.interimResults = true;
     this.recognition.maxAlternatives = 1;
 
@@ -61,49 +84,102 @@ class PitAiVoiceService {
     };
 
     this.recognition.onresult = (event) => {
-      let interim = '';
-      let finalTranscript = '';
-
-      for (let i = event.resultIndex; i < event.results.length; ++i) {
-        if (event.results[i].isFinal) {
-          finalTranscript += event.results[i][0].transcript;
-        } else {
-          interim += event.results[i][0].transcript;
-        }
+      let fullTranscript = '';
+      for (let i = 0; i < event.results.length; ++i) {
+        fullTranscript += event.results[i][0].transcript;
       }
 
-      if (this.onTranscriptCallback) {
+      const cleanText = fullTranscript.trim();
+      this.accumulatedText = cleanText;
+
+      // Notifica o texto intermediário para renderizar em tempo real no input
+      if (this.onTranscriptCallback && cleanText) {
         this.onTranscriptCallback({
-          interim,
-          final: finalTranscript,
-          isFinal: Boolean(finalTranscript)
+          text: cleanText,
+          interim: cleanText,
+          final: cleanText,
+          isFinal: false,
+          isSpeechComplete: false
         });
       }
+
+      // Reinicia o temporizador de silêncio: se o usuário parar de falar por 2.2s, encerra e envia
+      this.resetSilenceTimer();
     };
 
     this.recognition.onerror = (event) => {
       console.warn('[PIT.AI Voice] Aviso de captura vocal:', event.error);
-      this.isListening = false;
       if (event.error === 'not-allowed') {
         this.continuousMode = false;
+        this.isListening = false;
         this.notifyStatus('idle');
-      } else if (this.continuousMode && !this.isSpeaking) {
-        // Reinicia em silêncio após breve pausa
-        this.scheduleAutoListen(600);
+      } else if (event.error === 'no-speech') {
+        // Silêncio sem detecção: mantém ativo se contínuo
       } else {
-        this.notifyStatus('idle');
+        this.isListening = false;
+        if (this.continuousMode && !this.isSpeaking) {
+          this.scheduleAutoListen(700);
+        } else {
+          this.notifyStatus('idle');
+        }
       }
     };
 
     this.recognition.onend = () => {
       this.isListening = false;
-      if (!this.isSpeaking) {
+      // Se tiver texto acumulado pendente que ainda não foi enviado
+      if (this.accumulatedText && this.accumulatedText.length >= 2) {
+        this.commitSpeech();
+      } else if (!this.isSpeaking) {
         this.notifyStatus('idle');
       }
     };
   }
 
-  scheduleAutoListen(delayMs = 450) {
+  /**
+   * Reseta o temporizador de silêncio a cada som captado
+   */
+  resetSilenceTimer() {
+    if (this.silenceTimer) {
+      clearTimeout(this.silenceTimer);
+    }
+
+    if (!this.accumulatedText || this.accumulatedText.length < 2) return;
+
+    this.silenceTimer = setTimeout(() => {
+      this.commitSpeech();
+    }, this.silenceDelayMs);
+  }
+
+  /**
+   * Conclui a fala após a pausa de pensamento e dispara o processamento
+   */
+  commitSpeech() {
+    if (this.silenceTimer) {
+      clearTimeout(this.silenceTimer);
+      this.silenceTimer = null;
+    }
+
+    const textToCommit = (this.accumulatedText || '').trim();
+    this.accumulatedText = '';
+
+    if (textToCommit && textToCommit.length >= 2 && this.onTranscriptCallback) {
+      this.onTranscriptCallback({
+        text: textToCommit,
+        interim: textToCommit,
+        final: textToCommit,
+        isFinal: true,
+        isSpeechComplete: true
+      });
+    }
+
+    // Se não estiver em modo contínuo, para a escuta
+    if (!this.continuousMode) {
+      this.stopListening();
+    }
+  }
+
+  scheduleAutoListen(delayMs = 500) {
     if (this.autoRestartTimer) clearTimeout(this.autoRestartTimer);
     if (!this.continuousMode || this.isSpeaking) return;
 
@@ -144,6 +220,9 @@ class PitAiVoiceService {
     if (this.isSpeaking) {
       this.stopSpeaking();
     }
+    this.accumulatedText = '';
+    if (this.silenceTimer) clearTimeout(this.silenceTimer);
+
     try {
       this.recognition.start();
     } catch {
@@ -153,6 +232,9 @@ class PitAiVoiceService {
 
   stopListening() {
     if (this.autoRestartTimer) clearTimeout(this.autoRestartTimer);
+    if (this.silenceTimer) clearTimeout(this.silenceTimer);
+    this.accumulatedText = '';
+
     if (!this.recognition) return;
     try {
       this.recognition.stop();
@@ -164,12 +246,14 @@ class PitAiVoiceService {
 
   speak(text) {
     if (this.autoRestartTimer) clearTimeout(this.autoRestartTimer);
+    if (this.silenceTimer) clearTimeout(this.silenceTimer);
     this.stopListening();
     return pitaiTtsService.speak(text);
   }
 
   stopSpeaking() {
     if (this.autoRestartTimer) clearTimeout(this.autoRestartTimer);
+    if (this.silenceTimer) clearTimeout(this.silenceTimer);
     pitaiTtsService.stop();
     this.isSpeaking = false;
   }
