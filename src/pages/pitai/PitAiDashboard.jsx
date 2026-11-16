@@ -37,7 +37,9 @@ import {
   ArrowRightLeft,
   DollarSign,
   CreditCard,
-  CloudSun
+  CloudSun,
+  AlertTriangle,
+  CalendarClock
 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import PitAiOrb from '@/components/pitai/PitAiOrb';
@@ -414,6 +416,36 @@ export default function PitAiDashboard() {
     }
   };
 
+  // Dá baixa em conta pendente diretamente pelo card visual
+  const handlePayFromFeed = async (transactionId, description) => {
+    try {
+      pitaiSoundFxService.playAcknowledge();
+      const res = await pitaiFinanceService.payTransaction(transactionId);
+      toast({
+        title: 'Baixa Confirmada',
+        description: `Lançamento "${description || 'Conta'}" marcado como pago no Grana+.`
+      });
+
+      // Confirmação no chat
+      const confirmMsg = {
+        id: `ai_${Date.now()}`,
+        role: 'assistant',
+        text: `✅ **Baixa Efetuada no Grana+**\n\nO lançamento *"${description || 'Conta'}"* foi liquidado com sucesso.`,
+        timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+      };
+      setMessages((prev) => [...prev, confirmMsg]);
+
+      // Atualiza projeção visual chamando a verificação de contas
+      handleSendMessage('o que tenho para pagar nos próximos 30 dias?');
+    } catch (err) {
+      toast({
+        variant: 'destructive',
+        title: 'Falha na baixa',
+        description: err?.message || 'Não foi possível liquidar o lançamento.'
+      });
+    }
+  };
+
   // Conectar com Google Workspace
   const handleConnectGoogle = async () => {
     setIsConnectingGoogle(true);
@@ -630,12 +662,13 @@ export default function PitAiDashboard() {
           </button>
         </div>
 
-        {/* Projeção Visual Generativa do HUD (Telemetria Climática, Mapas, Notícias, Pesquisa Web, Agenda) */}
+        {/* Projeção Visual Generativa do HUD (Telemetria Climática, Mapas, Notícias, Pesquisa Web, Agenda, Finanças) */}
         <PitAiVisualFeed
           payload={visualPayload}
           onResolveConflict={() => handleSendMessage('ajuste o conflito')}
           onRefreshBriefing={() => handleSendMessage('o que tem de novo?')}
           onRefreshWeather={() => handleSendMessage('como está o tempo no Rio agora?')}
+          onPayTransaction={handlePayFromFeed}
         />
 
         {/* Linha de Conversação e Mensagens */}
@@ -777,6 +810,33 @@ export default function PitAiDashboard() {
           >
             <Wallet className="w-3.5 h-3.5 text-cyan-400" />
             <span>Reserva R$ 400</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleSendMessage('O que tenho para pagar nos próximos 30 dias?')}
+            className="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-400 transition-all flex items-center gap-1.5 shrink-0"
+          >
+            <CalendarClock className="w-3.5 h-3.5 text-rose-400" />
+            <span>Contas a Pagar</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleSendMessage('O que tenho a receber este mês?')}
+            className="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-400 transition-all flex items-center gap-1.5 shrink-0"
+          >
+            <ArrowDownRight className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Contas a Receber</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleSendMessage('Tenho alguma conta atrasada?')}
+            className="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-400 transition-all flex items-center gap-1.5 shrink-0"
+          >
+            <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
+            <span>Contas Atrasadas</span>
           </button>
 
           <button

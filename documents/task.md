@@ -2,6 +2,24 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Integração Financeira Avançada Jarvis / Grana+ (`src/services/pitai/`, `src/components/pitai/`, `src/pages/pitai/`)**:
+  - Objetivo: Implementar no PIT.AI as novas funcionalidades de gestão financeira do prompt do Jarvis: consulta de contas futuras e atrasadas (`GET /api/transactions/upcoming`), liquidação/baixa em 1 clique (`POST /api/transactions/{id}/pay`), novas categorias (Educação, Igreja/Doações, Outras Receitas) e widget holográfico de projeção com KPIs.
+  - Entregas Realizadas:
+    - `src/services/pitai/pitaiFinanceService.js`: Adicionados métodos `getUpcomingTransactions` com suporte a horizontes de dias, tipo de filtro e busca textual; `payTransaction` para liquidação com o header `x-api-key`; `findPendingTransactionToPay` para localização heurística de contas por descrição e valor; e suporte às categorias Educação, Igreja/Doações e Outras Receitas.
+    - `src/services/pitai/pitaiCoreService.js`: Atualizado System Prompt com contratos de upcoming e pay; parser em linguagem natural e formatação executiva concisa estilo J.A.R.V.I.S. consolidando total a pagar, a receber, saldo projetado e contas atrasadas.
+    - `src/components/pitai/PitAiVisualFeed.jsx`: Novo widget holográfico `finance_upcoming` com grid de 4 KPIs (A Pagar, A Receber, Saldo Líquido, Contas Atrasadas com alerta crítico), listas de vencimentos e botão de ação rápida "Dar Baixa" em 1 clique.
+    - `src/pages/pitai/PitAiDashboard.jsx`: Integração do callback `onPayTransaction` com toast e notificação de baixa no chat, além de atalhos em 1 clique ("Contas a Pagar", "Contas a Receber", "Contas Atrasadas").
+    - Suíte de testes `scratch/test_pitai_finance_upcoming.mjs` executada e 100% aprovada.
+    - Build Vite de produção concluído com sucesso em 19.95s.
+
+- [x] **Ativação e Recompilação do PIT.AI J.A.R.V.I.S. na VPS Hostinger (`2.25.75.243`)**:
+  - Objetivo: Recompilar e reiniciar o container `portfolio-web` na VPS Hostinger para aplicar todas as melhorias do J.A.R.V.I.S., corrigir o roteamento Nginx para permitir acesso direto pelo IP `http://2.25.75.243/pitai` e validar os proxies de notícias em tempo real.
+  - Entregas Realizadas:
+    - Recompilação completa do container Docker `portfolio-web` com `--no-cache` na VPS (`2.25.75.243`), finalizada com status saudável (`healthy`).
+    - Ajuste no Nginx da VPS para definir `rafaelpitaoficial.conf` como `default_server` e remover o interceptador 404 em `puxarplaca.net`, liberando o acesso direto por `http://2.25.75.243/` e `http://2.25.75.243/pitai`.
+    - Proxies reversos do Nginx testados e homologados: `/api/news/rio` e `/api/news/g1-rio` retornando RSS em tempo real sem erros ou bloqueios.
+    - Chave e modelos Gemini homologados com `gemini-3.8-flash` e `gemini-flash-latest`.
+
 - [x] **Arquitetura de Áudio Sci-Fi e Visualização Espectral J.A.R.V.I.S. (`src/services/pitai/`, `src/components/pitai/`, `src/pages/pitai/`)**:
   - Objetivo: Desenvolver e integrar efeitos sonoros táteis sci-fi sintetizados via Web Audio API pura (sem arquivos externos) e visualizador de espectro em tempo real (FFT 60fps) modulando o Arc Reactor / Orbe do PIT.AI de acordo com a voz real.
   - Entregas Realizadas:

@@ -2,6 +2,42 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [2.2.0] - 2026-11-16
+
+### Adicionado & Aprimorado (Integração Financeira Avançada Jarvis / Grana+)
+* **Consulta e Projeção de Vencimentos em Tempo Real (`GET /api/transactions/upcoming`)**:
+  * Integração nativa no `pitaiFinanceService.js` com suporte a horizontes de 7, 15, 30, 60 e 90 dias, filtros por tipo (`ALL`, `EXPENSE`, `INCOME`) e busca por texto.
+  * Parser em linguagem natural para expressões como *"o que tenho para pagar nos próximos 30 dias"*, *"contas a pagar esta semana"*, *"o que tenho a receber este mês"*, *"pagamentos pendentes"* e *"tenho alguma conta atrasada"*.
+  * Respostas faladas executivas em tom calmo e direto estilo J.A.R.V.I.S. consolidando total a pagar, total a receber, saldo projetado e alerta imediato de contas em atraso.
+* **Liquidação Atômica / Baixa de Contas (`POST /api/transactions/{id}/pay`)**:
+  * Módulo `payTransaction(id)` e localizador heurístico de pendências `findPendingTransactionToPay(searchTerm, amount)`.
+  * Capacidade de processar comandos de voz como *"já paguei a internet"*, *"marca como pago o aluguel de 850 reais"* ou *"quitei a luz"*.
+  * Ação de liquidação em 1 clique ("Dar Baixa") diretamente nos cartões do widget holográfico no HUD do PIT.AI.
+* **Expansão do Catálogo Oficial de Categorias**:
+  * Adicionadas as novas categorias homologadas: **Educação** (`cmpalj44w000404jllp24tz80`), **Igreja / Doações** (`cmshf24uc0006bsc6yrjuz6qp`) e **Outras Receitas** (`cmshf25ub000absc6yrtm35yb`).
+* **Widget Holográfico de Projeção Financeira no HUD (`PitAiVisualFeed.jsx`)**:
+  * Grid com 4 KPIs: **A Pagar** (total e contagem), **A Receber** (total e contagem), **Saldo Líquido Projetado** (positivo ou déficit) e **Contas Atrasadas** (com alerta visual em destaque).
+  * Painel de atenção imediata para títulos vencidos com botão rápido de baixa.
+  * Listas de próximos vencimentos e previsão de entradas com identificação de conta bancária ou cartão de crédito.
+* **Atalhos Rápidos no Dashboard (`PitAiDashboard.jsx`)**:
+  * Inclusão dos botões de ação rápida: *"Contas a Pagar"*, *"Contas a Receber"* e *"Contas Atrasadas"*.
+
+## [2.1.1] - 2026-11-15
+
+### Corrigido & Operacionalizado na VPS Hostinger (Produção)
+* **Emissão e Instalação de Certificado SSL Let's Encrypt**:
+  * Certificado SSL oficial emitido via Certbot e ativado no Nginx da VPS Hostinger (`2.25.75.243`) cobrindo `rafaelpitaoficial.com.br`, `www.rafaelpitaoficial.com.br`, `pitai.rafaelpitaoficial.com.br` e `fotografia.rafaelpitaoficial.com.br`.
+  * Redirecionamento automático de HTTP (porta 80) para HTTPS (porta 443) com HTTP/2 habilitado, eliminando os erros `NET::ERR_CERT_COMMON_NAME_INVALID`.
+* **Recompilação e Ativação do Container Docker `portfolio-web` (`2.25.75.243`)**:
+  * O container na VPS estava em execução há 21 horas com o código legado anterior ao commit `167ac7f`, não refletindo as novas funcionalidades do J.A.R.V.I.S., Arc Reactor e notícias em tempo real.
+  * Executado build limpo com `--no-cache` via Vite para produção e recriação forçada do container com status saudável (`healthy`).
+* **Resolução do Roteamento de IP e Nginx Host (`/etc/nginx/sites-available/rafaelpitaoficial.conf`)**:
+  * Removido o bloco conflitante em `puxarplaca.net` que respondia com erro 404 para requisições no IP `2.25.75.243`.
+  * Configurado `listen 80 default_server;` no arquivo `rafaelpitaoficial.conf`, permitindo acesso instantâneo ao portfólio e ao PIT.AI através de `http://2.25.75.243/` e `http://2.25.75.243/pitai`.
+  * Proxies reversos do Nginx ativos para `/api/news/rio`, `/api/news/g1-rio`, `/api/news/brazil`, `/api/news/world` e `/api/tts/google`, eliminando qualquer bloqueio de CORS e garantindo dados ao vivo.
+* **Validação de Chave e Modelos Gemini (`@google/generative-ai`)**:
+  * Validação da chave operacional do Google com o modelo `gemini-3.8-flash` e `gemini-flash-latest`, garantindo que perguntas gerais fora do catálogo estático recebam resposta inteligente em linguagem natural.
+
 ## [2.1.0] - 2026-11-15
 
 ### Adicionado & Aprimorado

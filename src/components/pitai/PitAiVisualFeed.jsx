@@ -72,7 +72,8 @@ export default function PitAiVisualFeed({
   payload,
   onResolveConflict,
   onRefreshBriefing,
-  onRefreshWeather
+  onRefreshWeather,
+  onPayTransaction
 }) {
   if (!payload || payload.type === 'none') {
     return null;
@@ -782,6 +783,256 @@ export default function PitAiVisualFeed({
                   Nenhuma transação recente localizada no Grana+.
                 </p>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* 7. Projeção de Contas a Vencer, a Receber e Atrasadas (Upcoming) */}
+        {type === 'finance_upcoming' && data && (
+          <div className="bg-card border border-primary/25 rounded-2xl p-5 shadow-2xl space-y-5">
+            {/* Header da Projeção */}
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3.5">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center">
+                  <Calendar className="w-4 h-4 text-cyan-400" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-foreground flex items-center gap-2">
+                    <span>Grana+ • Projeção de Caixa & Vencimentos</span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
+                      {data.days || 30} DIAS
+                    </span>
+                  </h4>
+                  <p className="text-[11px] text-muted-foreground font-mono">
+                    Previsão executiva consolidada de despesas, receitas e títulos em aberto
+                  </p>
+                </div>
+              </div>
+
+              <span
+                className={`text-[10px] font-mono uppercase px-2.5 py-1 rounded-full border flex items-center gap-1.5 ${
+                  data.offline
+                    ? 'bg-amber-500/10 border-amber-500/30 text-amber-400'
+                    : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                }`}
+              >
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>{data.offline ? 'Estimativa Offline' : 'API Grana+ Sincronizada'}</span>
+              </span>
+            </div>
+
+            {/* Grid dos 4 KPIs Financeiros */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+              {/* KPI 1: A Pagar */}
+              <div className="p-3.5 rounded-xl bg-rose-500/5 border border-rose-500/20 flex flex-col justify-between space-y-1">
+                <div className="flex items-center justify-between text-[11px] font-mono uppercase text-muted-foreground">
+                  <span>A Pagar</span>
+                  <ArrowUpRight className="w-3.5 h-3.5 text-rose-400" />
+                </div>
+                <div className="text-lg sm:text-xl font-bold font-mono text-rose-400">
+                  {(Number(data.summary?.totalToPay) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                </div>
+                <span className="text-[10px] text-muted-foreground font-mono">
+                  {data.summary?.countToPay || 0} conta(s) no período
+                </span>
+              </div>
+
+              {/* KPI 2: A Receber */}
+              <div className="p-3.5 rounded-xl bg-emerald-500/5 border border-emerald-500/20 flex flex-col justify-between space-y-1">
+                <div className="flex items-center justify-between text-[11px] font-mono uppercase text-muted-foreground">
+                  <span>A Receber</span>
+                  <ArrowDownRight className="w-3.5 h-3.5 text-emerald-400" />
+                </div>
+                <div className="text-lg sm:text-xl font-bold font-mono text-emerald-400">
+                  {(Number(data.summary?.totalToReceive) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                </div>
+                <span className="text-[10px] text-muted-foreground font-mono">
+                  {data.summary?.countToReceive || 0} entrada(s) prevista(s)
+                </span>
+              </div>
+
+              {/* KPI 3: Saldo Projetado */}
+              <div className="p-3.5 rounded-xl bg-cyan-500/5 border border-cyan-500/20 flex flex-col justify-between space-y-1">
+                <div className="flex items-center justify-between text-[11px] font-mono uppercase text-muted-foreground">
+                  <span>Saldo Líquido</span>
+                  <TrendingUp className="w-3.5 h-3.5 text-cyan-400" />
+                </div>
+                <div
+                  className={`text-lg sm:text-xl font-bold font-mono ${
+                    (data.summary?.projectedNet || 0) >= 0 ? 'text-emerald-400' : 'text-rose-400'
+                  }`}
+                >
+                  {(Number(data.summary?.projectedNet) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                </div>
+                <span className="text-[10px] text-muted-foreground font-mono">
+                  {(data.summary?.projectedNet || 0) >= 0 ? 'Projeção Positiva' : 'Déficit Previsto'}
+                </span>
+              </div>
+
+              {/* KPI 4: Atrasadas */}
+              <div
+                className={`p-3.5 rounded-xl border flex flex-col justify-between space-y-1 ${
+                  (data.summary?.countOverdue || 0) > 0
+                    ? 'bg-rose-500/15 border-rose-500/40 shadow-sm shadow-rose-500/20'
+                    : 'bg-muted/30 border-border/50'
+                }`}
+              >
+                <div className="flex items-center justify-between text-[11px] font-mono uppercase text-muted-foreground">
+                  <span>Atrasadas</span>
+                  <AlertTriangle
+                    className={`w-3.5 h-3.5 ${
+                      (data.summary?.countOverdue || 0) > 0 ? 'text-rose-400 animate-pulse' : 'text-muted-foreground'
+                    }`}
+                  />
+                </div>
+                <div
+                  className={`text-lg sm:text-xl font-bold font-mono ${
+                    (data.summary?.countOverdue || 0) > 0 ? 'text-rose-400' : 'text-foreground'
+                  }`}
+                >
+                  {(Number(data.summary?.totalOverdueExpenses) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                </div>
+                <span className="text-[10px] text-muted-foreground font-mono">
+                  {(data.summary?.countOverdue || 0) > 0
+                    ? `⚠️ ${data.summary?.countOverdue} pendência(s) urgente(s)`
+                    : 'Nenhuma conta atrasada'}
+                </span>
+              </div>
+            </div>
+
+            {/* Alerta de Contas em Atraso (se houver) */}
+            {data.overdue?.length > 0 && (
+              <div className="space-y-2.5 p-3.5 rounded-xl bg-rose-950/20 border border-rose-500/40">
+                <div className="flex items-center gap-2 text-xs font-bold text-rose-300">
+                  <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
+                  <span>Atenção Imediata: Contas Vencidas</span>
+                </div>
+                <div className="space-y-2">
+                  {data.overdue.map((item) => (
+                    <div
+                      key={item.id}
+                      className="p-2.5 rounded-lg bg-slate-950/60 border border-rose-500/30 flex items-center justify-between gap-3 text-xs"
+                    >
+                      <div className="min-w-0">
+                        <strong className="text-foreground block truncate">{item.description}</strong>
+                        <div className="flex items-center gap-2 text-[10px] text-muted-foreground mt-0.5">
+                          <span className="text-rose-400 font-mono font-semibold">{item.dueStatus || 'Vencido'}</span>
+                          <span>•</span>
+                          <span>{item.account?.name || item.creditCard?.name || 'Conta Padrão'}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2.5 shrink-0">
+                        <span className="font-mono font-bold text-rose-400">
+                          {(Number(item.amount) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                        </span>
+                        {onPayTransaction && (
+                          <button
+                            type="button"
+                            onClick={() => onPayTransaction(item.id, item.description)}
+                            className="px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 text-[10px] font-semibold flex items-center gap-1 transition-all"
+                            title="Dar baixa como pago"
+                          >
+                            <CheckCircle2 className="w-3 h-3" />
+                            <span>Dar Baixa</span>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Listas Detalhadas: A Vencer e A Receber */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Próximas Despesas */}
+              <div className="space-y-2">
+                <h5 className="text-xs font-bold font-mono text-muted-foreground uppercase flex items-center justify-between">
+                  <span>Próximos Vencimentos</span>
+                  <span className="text-[10px] text-rose-400">{data.expenses?.length || 0} itens</span>
+                </h5>
+                <div className="space-y-1.5 max-h-56 overflow-y-auto pr-1">
+                  {data.expenses?.length > 0 ? (
+                    data.expenses.map((exp) => (
+                      <div
+                        key={exp.id}
+                        className="p-2.5 rounded-lg bg-muted/30 border border-border/40 text-xs flex items-center justify-between gap-2 hover:border-cyan-500/30 transition-all"
+                      >
+                        <div className="min-w-0">
+                          <span className="font-semibold text-foreground block truncate">{exp.description}</span>
+                          <span className="text-[10px] text-muted-foreground block">
+                            {exp.dueStatus || 'A vencer'} • {exp.account?.name || exp.creditCard?.name || 'PF'}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 shrink-0">
+                          <span className="font-mono font-bold text-rose-400 text-xs">
+                            {(Number(exp.amount) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                          </span>
+                          {onPayTransaction && (
+                            <button
+                              type="button"
+                              onClick={() => onPayTransaction(exp.id, exp.description)}
+                              className="p-1 rounded-md bg-slate-900 border border-border/60 hover:border-emerald-500/50 text-muted-foreground hover:text-emerald-400 transition-colors"
+                              title="Marcar como Pago"
+                            >
+                              <CheckCircle2 className="w-3.5 h-3.5" />
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-xs text-muted-foreground italic p-3 text-center border rounded-lg">
+                      Nenhuma despesa pendente nos próximos {data.days} dias.
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Previsão de Receitas */}
+              <div className="space-y-2">
+                <h5 className="text-xs font-bold font-mono text-muted-foreground uppercase flex items-center justify-between">
+                  <span>Previsão de Entradas</span>
+                  <span className="text-[10px] text-emerald-400">{data.incomes?.length || 0} itens</span>
+                </h5>
+                <div className="space-y-1.5 max-h-56 overflow-y-auto pr-1">
+                  {data.incomes?.length > 0 ? (
+                    data.incomes.map((inc) => (
+                      <div
+                        key={inc.id}
+                        className="p-2.5 rounded-lg bg-muted/30 border border-border/40 text-xs flex items-center justify-between gap-2"
+                      >
+                        <div className="min-w-0">
+                          <span className="font-semibold text-foreground block truncate">{inc.description}</span>
+                          <span className="text-[10px] text-muted-foreground block">
+                            {inc.dueStatus || 'Previsão'} • {inc.account?.name || 'PJ'}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 shrink-0">
+                          <span className="font-mono font-bold text-emerald-400 text-xs">
+                            +{(Number(inc.amount) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                          </span>
+                          {onPayTransaction && (
+                            <button
+                              type="button"
+                              onClick={() => onPayTransaction(inc.id, inc.description)}
+                              className="p-1 rounded-md bg-slate-900 border border-border/60 hover:border-emerald-500/50 text-muted-foreground hover:text-emerald-400 transition-colors"
+                              title="Confirmar Recebimento"
+                            >
+                              <CheckCircle2 className="w-3.5 h-3.5" />
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-xs text-muted-foreground italic p-3 text-center border rounded-lg">
+                      Nenhuma receita pendente para o período selecionado.
+                    </p>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         )}

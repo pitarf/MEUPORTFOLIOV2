@@ -93,23 +93,28 @@ Quando o comando envolver finanças (receitas, despesas, cartões, transferênci
   * Lazer ('${FINANCE_CATEGORIES.LAZER.id}'): Streaming, cinema, restaurante, bar.
   * Compras ('${FINANCE_CATEGORIES.COMPRAS.id}'): Roupas, eletrônicos, compras online.
   * Pagamentos ('${FINANCE_CATEGORIES.PAGAMENTOS.id}'): Dívidas, financiamentos, juros.
+  * Educação ('${FINANCE_CATEGORIES.EDUCACAO.id}'): Cursos, faculdade, livros, mensalidades.
+  * Igreja / Doações ('${FINANCE_CATEGORIES.IGREJA_DOACOES.id}'): Dízimos, ofertas, doações.
   * PJ ('${FINANCE_CATEGORIES.PJ_CUSTOS.id}'): Servidores, VPS, softwares corporativos.
   * Salário CLT ('${FINANCE_CATEGORIES.SALARIO.id}'): Recebimento CLT.
   * Serviços PJ ('${FINANCE_CATEGORIES.SERVICOS_PJ.id}'): Notas fiscais, faturamento, consultorias.
+  * Outras Receitas ('${FINANCE_CATEGORIES.OUTRAS_RECEITAS.id}'): Cashback, restituições, dividendos.
 
 Regras de Operação:
 - Despesas no Cartão de Crédito: status deve ser false e creditCardId preenchido.
 - Despesas Bancárias/Pix: status deve ser true e accountId preenchido (PF padrão se não dito).
 - Receitas: type deve ser INCOME, status true e accountId (PJ padrão para clientes).
 - Transferências: type deve ser TRANSFER, com accountId (origem) e targetAccountId (destino).
+- Consultar Contas Futuras/Pendentes: GET /api/transactions/upcoming?days=30&type=ALL (projeção a pagar, a receber e atrasadas).
+- Liquidar / Dar Baixa em Conta: POST /api/transactions/{id}/pay (marca a despesa ou receita como quitada).
 
 CONTRATO OBRIGATÓRIO DE RESPOSTA (JSON):
 {
   "spokenText": "Texto conciso, natural e fluido para fala em áudio pelo PIT.AI (sem asteriscos, markdown ou links brutos). Ex: Lançado: Despesa de R$ 48,00 em Alimentação na conta PF.",
   "displayText": "Texto formatado em markdown com detalhes, tópicos e confirmação para leitura no HUD.",
-  "intent": "briefing" | "weather_query" | "agenda_query" | "agenda_create" | "agenda_conflict" | "task_create" | "web_search" | "finance_expense" | "finance_income" | "finance_transfer" | "finance_query" | "finance_delete" | "general_chat",
+  "intent": "briefing" | "weather_query" | "agenda_query" | "agenda_create" | "agenda_conflict" | "task_create" | "web_search" | "finance_expense" | "finance_income" | "finance_transfer" | "finance_query" | "finance_upcoming" | "finance_pay" | "finance_delete" | "general_chat",
   "visualPayload": {
-    "type": "none" | "weather_card" | "map" | "news_cards" | "agenda_list" | "conflict_alert" | "web_results" | "finance_card" | "finance_list",
+    "type": "none" | "weather_card" | "map" | "news_cards" | "agenda_list" | "conflict_alert" | "web_results" | "finance_card" | "finance_list" | "finance_upcoming",
     "data": {}
   }
 }
@@ -395,6 +400,144 @@ CONTRATO OBRIGATÓRIO DE RESPOSTA (JSON):
             account: fromObj,
             targetAccount: toObj,
             offline: Boolean(transactionResult.offline)
+          }
+        }
+      };
+    }
+
+    if (type === 'UPCOMING') {
+      const days = parsedIntent.days || 30;
+      const filterType = parsedIntent.filterType || 'ALL';
+      const upcomingResult = await pitaiFinanceService.getUpcomingTransactions({
+        days,
+        type: filterType,
+        includeOverdue: true,
+        search: parsedIntent.search
+      });
+
+      const payload = upcomingResult.data || {};
+      const summary = payload.summary || {
+        totalToPay: 0,
+        totalToReceive: 0,
+        projectedNet: 0,
+        totalOverdueExpenses: 0,
+        countToPay: 0,
+        countToReceive: 0,
+        countOverdue: 0
+      };
+
+      const formatBRL = (val) => (Number(val) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      const payStr = formatBRL(summary.totalToPay);
+      const recStr = formatBRL(summary.totalToReceive);
+      const netStr = formatBRL(summary.projectedNet);
+      const overdueStr = formatBRL(summary.totalOverdueExpenses);
+
+      let spokenText = '';
+      if (filterType === 'EXPENSE') {
+        spokenText = `Rafael, você tem ${summary.countToPay} contas a pagar nos próximos ${days} dias, totalizando ${payStr}.`;
+        if (summary.countOverdue > 0) {
+          spokenText += ` Atenção para ${summary.countOverdue} contas em atraso somando ${overdueStr}.`;
+        }
+      } else if (filterType === 'INCOME') {
+        spokenText = `Rafael, há ${summary.countToReceive} recebimentos previstos para os próximos ${days} dias, somando ${recStr}.`;
+      } else {
+        spokenText = `Rafael, nos próximos ${days} dias temos ${payStr} a pagar e ${recStr} a receber. Saldo projetado de ${netStr}.`;
+        if (summary.countOverdue > 0) {
+          spokenText += ` Constam ${summary.countOverdue} pagamentos atrasados totalizando ${overdueStr}.`;
+        }
+      }
+
+      let displayText = `### 📅 **Projeção Financeira • Próximos ${days} Dias**\n\n` +
+        `• **Total a Pagar:** ${payStr} (${summary.countToPay} contas)\n` +
+        `• **Total a Receber:** ${recStr} (${summary.countToReceive} previsões)\n` +
+        `• **Saldo Projetado:** **${netStr}**\n`;
+
+      if (summary.countOverdue > 0) {
+        displayText += `• ⚠️ **Contas em Atraso:** ${overdueStr} (${summary.countOverdue} pendentes)\n`;
+      }
+
+      if (payload.overdue?.length > 0) {
+        displayText += `\n**⚠️ Atrasadas:**\n` +
+          payload.overdue.map(o => `• **${o.description}**: ${formatBRL(o.amount)} (${o.dueStatus || 'Vencido'})`).join('\n');
+      }
+
+      if (payload.expenses?.length > 0) {
+        displayText += `\n**💳 Próximos Vencimentos:**\n` +
+          payload.expenses.slice(0, 5).map(e => `• **${e.description}**: ${formatBRL(e.amount)} • ${e.dueStatus || 'A vencer'}`).join('\n');
+      }
+
+      if (payload.incomes?.length > 0) {
+        displayText += `\n**💰 Previsão de Entradas:**\n` +
+          payload.incomes.slice(0, 3).map(i => `• **${i.description}**: ${formatBRL(i.amount)} • ${i.dueStatus || 'A receber'}`).join('\n');
+      }
+
+      return {
+        spokenText,
+        displayText,
+        intent: 'finance_upcoming',
+        visualPayload: {
+          type: 'finance_upcoming',
+          data: {
+            summary,
+            expenses: payload.expenses || [],
+            incomes: payload.incomes || [],
+            overdue: payload.overdue || [],
+            days,
+            filterType,
+            offline: Boolean(upcomingResult.offline)
+          }
+        }
+      };
+    }
+
+    if (type === 'PAY') {
+      const searchTerm = parsedIntent.search || '';
+      const targetAmount = parsedIntent.amount;
+
+      // Localiza a transação pendente correspondente
+      const foundTx = await pitaiFinanceService.findPendingTransactionToPay(searchTerm, targetAmount);
+
+      if (!foundTx) {
+        const spokenText = `Rafael, não localizei nenhuma conta pendente correspondente a ${searchTerm || 'esta descrição'}. Deseja que eu consulte as contas a pagar?`;
+        const displayText = `⚠️ **Lançamento Não Localizado**\n\n` +
+          `Não encontramos nenhuma conta em aberto com a descrição *"${searchTerm || 'informada'}"*` +
+          (targetAmount ? ` no valor de R$ ${targetAmount}` : '') + `.\n\n` +
+          `Dica: Peça *"o que tenho para pagar"* para visualizar todos os títulos em aberto.`;
+
+        return {
+          spokenText,
+          displayText,
+          intent: 'finance_pay',
+          visualPayload: { type: 'none', data: {} }
+        };
+      }
+
+      // Executa a liquidação
+      const payResult = await pitaiFinanceService.payTransaction(foundTx.id);
+      const valorFmt = (Number(foundTx.amount) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      const spokenText = `Confirmado: Baixa efetuada para ${foundTx.description || 'a conta'} no valor de ${valorFmt}.`;
+      const displayText = `### ✅ **Baixa Efetuada com Sucesso • Grana+**\n\n` +
+        `• **Descrição:** ${foundTx.description}\n` +
+        `• **Valor Liquidado:** ${valorFmt}\n` +
+        `• **Conta/Cartão:** ${foundTx.account?.name || foundTx.creditCard?.name || 'Conta Padrão'}\n` +
+        `• **Status:** ${payResult.offline ? 'Baixa registrada no buffer local' : 'Liquidado com sucesso na API Grana+'}`;
+
+      return {
+        spokenText,
+        displayText,
+        intent: 'finance_pay',
+        visualPayload: {
+          type: 'finance_card',
+          data: {
+            transaction: { ...foundTx, status: true },
+            type: foundTx.type || 'EXPENSE',
+            amount: foundTx.amount,
+            formattedAmount: valorFmt,
+            category: foundTx.category || { name: 'Geral' },
+            account: foundTx.account,
+            creditCard: foundTx.creditCard,
+            isCard: Boolean(foundTx.creditCard),
+            offline: Boolean(payResult.offline)
           }
         }
       };

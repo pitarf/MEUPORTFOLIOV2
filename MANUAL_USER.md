@@ -17,8 +17,10 @@ O seu portfólio e o PIT.AI agora rodam diretamente na sua VPS em container Dock
 3. O script baixa o código novo do Git, reconstrói o container Docker em segundos e mantém seus dados seguros sem derrubar o site.
 
 ### 23.2 Onde o Site e o PIT.AI Respondem
-* **Site Principal & Portfólio**: `https://rafaelpitaoficial.com.br`
-* **PIT.AI (Centro de Inteligência)**: `https://pitai.rafaelpitaoficial.com.br`
+* **Acesso Direto pela VPS Hostinger**: `http://2.25.75.243/` (Portfólio) e `http://2.25.75.243/pitai` (PIT.AI)
+* **Domínios Oficiais (após apontamento na Zona DNS da Hostinger)**:
+  * **Site Principal & Portfólio**: `http://rafaelpitaoficial.com.br` e `https://rafaelpitaoficial.com.br`
+  * **PIT.AI (Centro de Inteligência)**: `http://pitai.rafaelpitaoficial.com.br` e `https://pitai.rafaelpitaoficial.com.br`
 * **Status do Container**: Acessível localmente no servidor pela porta `3002`.
 
 ---
@@ -60,6 +62,22 @@ O **PIT.AI** é o seu centro de comando de inteligência, notícias em tempo rea
 * **Criação de Tarefas:**
   * *"Anota uma tarefa para revisar os servidores da VPS"*
   * O PIT.AI registra no Google Tarefas com prioridade alta.
+* **Assistente Financeiro Jarvis Grana+ (Finanças Fácil):**
+  * **Consultar Contas a Pagar e a Receber:**
+    * *"O que tenho para pagar nos próximos 30 dias?"*
+    * *"Contas a pagar esta semana"* ou *"Contas atrasadas"*
+    * *"O que tenho a receber este mês?"*
+    * O PIT.AI calcula a projeção consolidada, fala o total a pagar, total a receber e saldo líquido projetado, alertando se houver contas vencidas e exibindo no HUD o painel holográfico de vencimentos.
+  * **Dar Baixa / Marcar como Pago:**
+    * *"Já paguei a internet"*
+    * *"Marca como pago o aluguel de 850 reais"*
+    * Ou clique diretamente no botão **Dar Baixa** dentro do card visual de qualquer conta pendente ou atrasada.
+  * **Lançamento de Despesas e Receitas:**
+    * *"Gastei R$ 48 no almoço"* (lança despesa na conta PF em Alimentação).
+    * *"Comprei um mouse de R$ 120 no cartão Inter"* (lança pendente na fatura do cartão).
+    * *"Gastei 350 na faculdade"* (associa à categoria Educação).
+    * *"Recebi R$ 3.500 de cliente PJ"* (lança receita na conta PJ).
+    * *"Guardar R$ 400 na caixinha Inter"* (faz transferência entre PF e Caixinha).
 
 ---
 

@@ -49,7 +49,15 @@ O **PIT.AI** é o centro de comando de inteligência executiva de Rafael Pita, c
      * `playDone()`: Acorde tríade maior futurista em cascata (F#5, A#5, C#6, F#6) para conclusão de tarefas.
      * `playAlert()`: Bi-tom tático suavemente filtrado em 1100Hz (C#5 / A4) para conflitos operacionais.
    * Master Gain ajustável com controle de volume persistido em `localStorage` e atalhos de teste no HUD.
-6. **`src/services/pitai/pitaiAudioVisualizerService.js`**:
+6. **`src/services/pitai/pitaiFinanceService.js`**:
+   * Comunicação oficial com a API REST do sistema financeiro Grana+ (Finanças Fácil).
+   * Mapeamento de contas bancárias (PJ, PF padrão, Caixinha Inter, Dólar) e cartões de crédito (Pão de Açúcar, Inter, Casal, Nubank Mãe, Mercado Livre, Riachuelo, Santander).
+   * Catálogo completo de categorias incluindo Educação (`cmpalj44w000404jllp24tz80`), Igreja / Doações (`cmshf24uc0006bsc6yrjuz6qp`) e Outras Receitas (`cmshf25ub000absc6yrtm35yb`).
+   * `getUpcomingTransactions({ days, type, includeOverdue, accountId, search })`: Conecta ao endpoint `GET /api/transactions/upcoming` com cálculo consolidado de `summary` (totalToPay, totalToReceive, projectedNet, totalOverdueExpenses).
+   * `payTransaction(id)`: Conecta ao endpoint `POST /api/transactions/{id}/pay` para liquidação com o header `x-api-key`.
+   * `findPendingTransactionToPay(searchTerm, amount)`: Algoritmo heurístico de busca nas pendências para casar termo de pesquisa e valor alvo.
+   * `parseFinanceIntent(text)`: Parser com processamento de linguagem natural para extrair tipo, valores, contas, cartões, categorias, horizonte de dias e intenções de baixa.
+7. **`src/services/pitai/pitaiAudioVisualizerService.js`**:
    * Conecta o `AudioContext` ao `AnalyserNode` com FFT de 64 faixas espectrais e taxa de 60fps via `requestAnimationFrame`.
    * Monitoramento bipolar simultâneo: capta tanto o microfone do usuário (sem retorno de saída) quanto o áudio de resposta do PIT.AI (`HTMLAudioElement` roteado via `createMediaElementSource` e sintetizador neural procedimental).
    * Alimenta as 24 barras de espectro do Arc Reactor e modula o núcleo em tempo real.
@@ -448,6 +456,25 @@ Para máxima independência e eliminação de custos de cloud externa, toda a ca
 O Nginx atua como proxy reverso com SSL Let's Encrypt para `license.rafaelpitaoficial.com.br`:
 - `/rest/v1/` ➔ Proxy para PostgREST (`127.0.0.1:3025`).
 - `/auth/v1/` ➔ Proxy para GoTrue (`127.0.0.1:9999`).
+
+### 8.3 Topologia da VPS Hostinger (Frontend & PIT.AI - `2.25.75.243`)
+A aplicação web principal, páginas de conversão e o centro operacional PIT.AI rodam na VPS Hostinger sob o IP `2.25.75.243`:
+- **Container `portfolio-web`**: Imagem compilada com Vite e servida por Nginx interno na porta `127.0.0.1:3002`.
+- **Nginx Host (`/etc/nginx/sites-available/rafaelpitaoficial.conf`)**:
+  - `listen 80 default_server;` — responde como servidor padrão para acessos diretos via IP `http://2.25.75.243/` e `http://2.25.75.243/pitai`.
+  - Mapeia domínios oficiais: `rafaelpitaoficial.com.br`, `www.rafaelpitaoficial.com.br`, `pitai.rafaelpitaoficial.com.br` e `fotografia.rafaelpitaoficial.com.br`.
+  - Proxies reversos para RSS sem CORS:
+    - `/api/news/rio` ➔ Google Notícias RJ (tempo real)
+    - `/api/news/g1-rio` ➔ G1 Rio de Janeiro
+    - `/api/news/brazil` ➔ Google Notícias Brasil
+    - `/api/news/world` ➔ Google Notícias Mundo
+    - `/api/tts/google` ➔ Google Natural Audio Stream
+- **Comandos de Manutenção do Container na VPS**:
+  ```bash
+  cd /var/www/MEUPORTFOLIOV2
+  docker compose build --no-cache portfolio-web
+  docker compose up -d --force-recreate portfolio-web
+  ```
 ---
 
 ## 9. Motor de Geração de Propostas Comerciais em PDF (`BudgetPdfModal.jsx`)
