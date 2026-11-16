@@ -39,11 +39,13 @@ import {
   CreditCard,
   CloudSun,
   AlertTriangle,
-  CalendarClock
+  CalendarClock,
+  Trash2
 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import PitAiOrb from '@/components/pitai/PitAiOrb';
 import PitAiVisualFeed from '@/components/pitai/PitAiVisualFeed';
+import PitAiMarkdown from '@/components/pitai/PitAiMarkdown';
 import { pitaiVoiceService } from '@/services/pitai/pitaiVoiceService';
 import { pitaiTtsService, ELEVENLABS_VOICES } from '@/services/pitai/pitaiTtsService';
 import { pitaiSoundFxService } from '@/services/pitai/pitaiSoundFxService';
@@ -446,6 +448,23 @@ export default function PitAiDashboard() {
     }
   };
 
+  // Reiniciar / Limpar conversa do chat
+  const handleClearChat = () => {
+    setMessages([
+      {
+        id: 'welcome',
+        role: 'assistant',
+        text: 'Olá, Rafael. Sessão reiniciada. Sistemas operacionais prontos. Como posso auxiliar?',
+        timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+      }
+    ]);
+    setVisualPayload({ type: 'none', data: {} });
+    toast({
+      title: 'Chat Reiniciado',
+      description: 'O histórico de mensagens foi redefinido.'
+    });
+  };
+
   // Conectar com Google Workspace
   const handleConnectGoogle = async () => {
     setIsConnectingGoogle(true);
@@ -672,7 +691,22 @@ export default function PitAiDashboard() {
         />
 
         {/* Linha de Conversação e Mensagens */}
-        <div className="flex-1 overflow-y-auto space-y-3.5 max-h-[380px] pr-1 scrollbar-thin scrollbar-thumb-slate-800">
+        <div className="flex-1 overflow-y-auto space-y-3.5 max-h-[460px] min-h-[160px] pr-1 scrollbar-thin scrollbar-thumb-slate-800">
+          {/* Ação discreta de Limpar Conversa quando houver histórico */}
+          {messages.length > 1 && (
+            <div className="flex justify-end pb-1">
+              <button
+                type="button"
+                onClick={handleClearChat}
+                className="text-[11px] font-mono text-slate-500 hover:text-rose-400 transition-colors flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-slate-800/80 hover:border-rose-500/40 bg-slate-950/60"
+                title="Reiniciar a conversa"
+              >
+                <Trash2 className="w-3 h-3" />
+                <span>Limpar Histórico</span>
+              </button>
+            </div>
+          )}
+
           <AnimatePresence initial={false}>
             {messages.map((msg) => (
               <motion.div
@@ -697,7 +731,11 @@ export default function PitAiDashboard() {
                       {msg.timestamp}
                     </span>
                   </div>
-                  <div className="whitespace-pre-wrap">{msg.text}</div>
+                  {msg.role === 'user' ? (
+                    <div className="whitespace-pre-wrap font-medium">{msg.text}</div>
+                  ) : (
+                    <PitAiMarkdown content={msg.text} />
+                  )}
                 </div>
               </motion.div>
             ))}

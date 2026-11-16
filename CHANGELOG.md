@@ -2,6 +2,20 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [2.2.1] - 2026-11-16
+
+### Corrigido & Aprimorado (Tipografia Tática e Renderização de Markdown no PIT.AI)
+* **Novo Renderizador Nativo de Markdown (`src/components/pitai/PitAiMarkdown.jsx`)**:
+  * Elimina a exibição de texto cru não formatado com `###`, `**`, `•` ou tags soltas na tela do PIT.AI.
+  * Suporte a cabeçalhos estilizados em cyan/white (`h4`, `h3`, `h2`), negritos com destaque contrastante, itálicos, blockquotes com barra lateral translúcida e código inline.
+  * Links clicáveis externos (`[texto](url)`) com `target="_blank"` e ícone `ExternalLink` seguro.
+  * Listas estruturadas com bullets em ciano fluorescente.
+  * Sanitização inteligente: detecção e desembalagem de JSONs acidentais para garantir que apenas texto humano seja exibido.
+* **Ajustes de Layout e UX no Chat (`src/pages/pitai/PitAiDashboard.jsx`)**:
+  * Separação clara: mensagens do usuário mantêm formato original e respostas do PIT.AI utilizam o `PitAiMarkdown`.
+  * Expansão da altura visível da conversa para `max-h-[460px] min-h-[160px]`.
+  * Novo botão rápido *"Limpar Histórico"* com ícone `Trash2` para reiniciar o chat sem perder configurações.
+
 ## [2.2.0] - 2026-11-16
 
 ### Adicionado & Aprimorado (Integração Financeira Avançada Jarvis / Grana+)

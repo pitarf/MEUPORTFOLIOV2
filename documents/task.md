@@ -2,6 +2,13 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Renderização de Markdown e Tipografia Tática no Chat do PIT.AI (`src/components/pitai/PitAiMarkdown.jsx`, `src/pages/pitai/PitAiDashboard.jsx`)**:
+  - Objetivo: Corrigir o problema de texto bruto sem formatação exibido na tela do PIT.AI, renderizando Markdown rico (títulos, negritos, tópicos, citações, links clicáveis) e adicionando botão de limpeza de histórico.
+  - Entregas Realizadas:
+    - `src/components/pitai/PitAiMarkdown.jsx`: Parser nativo com suporte a cabeçalhos estilizados em cyan/white, listas com bullets ciano, blockquotes translúcidos, links externos com ícone `ExternalLink` e proteção contra vazamento de JSON cru.
+    - `src/pages/pitai/PitAiDashboard.jsx`: Integração com `PitAiMarkdown`, botão de "Limpar Histórico" e ampliação da altura útil do chat.
+    - Build Vite compilado com sucesso em 19.00s.
+
 - [x] **Integração Financeira Avançada Jarvis / Grana+ (`src/services/pitai/`, `src/components/pitai/`, `src/pages/pitai/`)**:
   - Objetivo: Implementar no PIT.AI as novas funcionalidades de gestão financeira do prompt do Jarvis: consulta de contas futuras e atrasadas (`GET /api/transactions/upcoming`), liquidação/baixa em 1 clique (`POST /api/transactions/{id}/pay`), novas categorias (Educação, Igreja/Doações, Outras Receitas) e widget holográfico de projeção com KPIs.
   - Entregas Realizadas:

@@ -45,6 +45,9 @@ O **PIT.AI** é o seu centro de comando de inteligência, notícias em tempo rea
    * Todos os efeitos sonoros são sintetizados no seu navegador via Web Audio API pura, sem travar nem depender de arquivos de internet. Você pode ativar/desativar ou calibrar o volume a qualquer momento na engrenagem de configurações.
 2. **Pelo Teclado:**
    * Digite sua pergunta ou comando no campo inferior e tecle Enter ou clique no botão de envio.
+3. **Formatação Visual & Limpeza de Conversa:**
+   * Todas as respostas do PIT.AI são formatadas com títulos em destaque, listas estruturadas, negritos e links interativos com abertura em nova aba.
+   * Quando desejar começar uma nova linha de raciocínio, clique no botão **Limpar Histórico** no topo da área de mensagens para reiniciar o chat.
 
 ### 22.3 Principais Comandos Naturais Suportados
 * **Briefing em Tempo Real:**

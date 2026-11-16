@@ -74,6 +74,11 @@ O **PIT.AI** é o centro de comando de inteligência executiva de Rafael Pita, c
 9. **`src/components/pitai/PitAiVisualFeed.jsx`**:
    * Painel HUD que renderiza telemetria climática `weather_card` com temperatura gigante em glow neon, métricas de vento, umidade, probabilidade de chuva e índice UV, mapas OpenStreetMap, cards de notícias e transações financeiras.
 
+10. **`src/components/pitai/PitAiMarkdown.jsx`**:
+    * Renderizador nativo de Markdown e tipografia tática para as respostas da inteligência artificial.
+    * Converte marcações de cabeçalhos (`###`, `##`), listas com marcadores fluorescentes, negrito, itálico, citações com barras laterais e links externos clicáveis com abertura segura em nova aba.
+    * Sanitizador embutido para prevenir vazamento visual de objetos JSON crus.
+
 ### 25.2 Infraestrutura de Banco de Dados Dedicado (VPS)
 * Arquivo Docker: `deploy/pitai/docker-compose.pitai-db.yml`
 * Container: `pitai-postgres` (PostgreSQL 16 Alpine).
