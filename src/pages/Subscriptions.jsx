@@ -101,7 +101,7 @@ const Subscriptions = () => {
     return (
         <>
             <Helmet>
-                <title>Assinaturas - Rafael Pita Solutions</title>
+                <title>Assinaturas - RAMIELL</title>
                 <meta name="description" content="Conheça nossos planos de assinatura e economize em seus projetos recorrentes. Soluções flexíveis para empresas de todos os tamanhos." />
             </Helmet>
 
@@ -115,7 +115,7 @@ const Subscriptions = () => {
                             className="text-center mb-16 space-y-4"
                         >
                             <h1 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight text-slate-900 dark:text-white">
-                                Planos de <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Assinatura</span>
+                                Planos de <span className="text-[#ECBD57] dark:text-[#C9A227]">Assinatura</span>
                             </h1>
                             <p className="text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto font-medium">
                                 Economize tempo e dinheiro com nossos planos recorrentes. Soluções flexíveis para suas necessidades contínuas.
@@ -123,9 +123,9 @@ const Subscriptions = () => {
 
                             {/* Banner do Portal do Assinante */}
                             <div className="mt-8 inline-block max-w-2xl mx-auto">
-                                <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b]/50 shadow-md flex flex-col sm:flex-row items-center justify-between gap-4 text-left transition-all">
+                                <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#C9A227]/50 shadow-md flex flex-col sm:flex-row items-center justify-between gap-4 text-left transition-all">
                                     <div className="flex items-start gap-3">
-                                        <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-[#181814] border border-slate-200 dark:border-[#23231f] text-[#4d7c0f] dark:text-[#bcf13b] flex-shrink-0 mt-0.5">
+                                        <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-[#181814] border border-slate-200 dark:border-[#23231f] text-[#ECBD57] dark:text-[#C9A227] flex-shrink-0 mt-0.5">
                                             <ShieldCheck className="w-5 h-5" />
                                         </div>
                                         <div>
@@ -139,7 +139,7 @@ const Subscriptions = () => {
                                     </div>
                                     <Link
                                         to="/minha-assinatura"
-                                        className="w-full sm:w-auto flex-shrink-0 px-4 py-2.5 rounded-xl bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-sm"
+                                        className="w-full sm:w-auto flex-shrink-0 px-4 py-2.5 rounded-xl bg-[#C9A227] hover:bg-[#ECBD57] text-[#0a0a08] font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-sm"
                                     >
                                         Acessar Portal
                                         <ArrowRight className="w-3.5 h-3.5" />
@@ -159,7 +159,7 @@ const Subscriptions = () => {
                             className="text-center mb-16 space-y-4"
                         >
                             <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                                Por que <span className="text-[#4d7c0f] dark:text-[#bcf13b]">assinar?</span>
+                                Por que <span className="text-[#ECBD57] dark:text-[#C9A227]">assinar?</span>
                             </h2>
                             <p className="text-lg md:text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto font-medium">
                                 Vantagens exclusivas para quem escolhe nossos serviços recorrentes
@@ -173,7 +173,7 @@ const Subscriptions = () => {
                                     initial={{ opacity: 0, y: 20 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     transition={{ delay: index * 0.1 }}
-                                    className="text-center p-6 rounded-2xl bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] hover:shadow-[0_0_20px_rgba(77,124,15,0.15)] dark:hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] transition-all shadow-sm"
+                                    className="text-center p-6 rounded-2xl bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#C9A227] hover:shadow-[0_0_20px_rgba(77,124,15,0.15)] dark:hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] transition-all shadow-sm"
                                 >
                                     <div className="text-4xl mb-4">{benefit.icon}</div>
                                     <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{benefit.title}</h3>
@@ -196,13 +196,13 @@ const Subscriptions = () => {
                                     transition={{ delay: index * 0.1 }}
                                     className={`relative p-8 rounded-2xl flex flex-col justify-between transition-all shadow-sm ${
                                         plan.popular
-                                            ? 'bg-white dark:bg-[#121210] border-2 border-lime-600 dark:border-[#bcf13b] shadow-[0_0_30px_rgba(77,124,15,0.15)] dark:shadow-[0_0_30px_rgba(188,241,59,0.2)] md:-translate-y-2'
-                                            : 'bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] hover:shadow-[0_0_20px_rgba(77,124,15,0.15)] dark:hover:shadow-[0_0_20px_rgba(188,241,59,0.15)]'
+                                            ? 'bg-white dark:bg-[#121210] border-2 border-lime-600 dark:border-[#C9A227] shadow-[0_0_30px_rgba(77,124,15,0.15)] dark:shadow-[0_0_30px_rgba(188,241,59,0.2)] md:-translate-y-2'
+                                            : 'bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#C9A227] hover:shadow-[0_0_20px_rgba(77,124,15,0.15)] dark:hover:shadow-[0_0_20px_rgba(188,241,59,0.15)]'
                                     }`}
                                 >
                                     {plan.popular && (
                                         <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                                            <span className="bg-[#bcf13b] text-[#0a0a08] px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-wider shadow-md">
+                                            <span className="bg-[#C9A227] text-[#0a0a08] px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-wider shadow-md">
                                                 Mais Popular
                                             </span>
                                         </div>
@@ -211,12 +211,12 @@ const Subscriptions = () => {
                                     <div>
                                         <div className="text-center mb-8">
                                             <div className="w-16 h-16 mx-auto mb-4 bg-slate-100 dark:bg-[#181814] border border-slate-200 dark:border-[#23231f] rounded-full flex items-center justify-center">
-                                                <plan.icon className="w-8 h-8 text-[#4d7c0f] dark:text-[#bcf13b]" />
+                                                <plan.icon className="w-8 h-8 text-[#ECBD57] dark:text-[#C9A227]" />
                                             </div>
                                             <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">{plan.name}</h3>
                                             <p className="text-slate-600 dark:text-gray-400 text-sm mb-6 font-medium">{plan.description}</p>
                                             <div className="mb-6 flex items-baseline justify-center">
-                                                <span className="text-4xl md:text-5xl font-extrabold text-[#4d7c0f] dark:text-[#bcf13b]">{plan.price}</span>
+                                                <span className="text-4xl md:text-5xl font-extrabold text-[#ECBD57] dark:text-[#C9A227]">{plan.price}</span>
                                                 <span className="text-slate-500 dark:text-gray-400 font-medium ml-1.5">{plan.period}</span>
                                             </div>
                                         </div>
@@ -224,7 +224,7 @@ const Subscriptions = () => {
                                         <div className="space-y-3.5 mb-8">
                                             {plan.features.map((feature, idx) => (
                                                 <div key={idx} className="flex items-start space-x-3">
-                                                    <Check className="w-5 h-5 text-[#4d7c0f] dark:text-[#bcf13b] flex-shrink-0 mt-0.5" />
+                                                    <Check className="w-5 h-5 text-[#ECBD57] dark:text-[#C9A227] flex-shrink-0 mt-0.5" />
                                                     <span className="text-slate-700 dark:text-gray-300 text-sm font-medium">{feature}</span>
                                                 </div>
                                             ))}
@@ -235,8 +235,8 @@ const Subscriptions = () => {
                                         onClick={() => handleSubscribe(plan.name)}
                                         className={`w-full py-6 rounded-xl font-bold text-base transition-all ${
                                             plan.popular
-                                                ? 'bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] shadow-lg shadow-[#bcf13b]/20'
-                                                : 'bg-slate-100 dark:bg-[#181814] border border-slate-300 dark:border-[#23231f] text-slate-800 dark:text-white hover:border-lime-500 dark:hover:border-[#bcf13b] hover:text-[#4d7c0f] dark:hover:text-[#bcf13b]'
+                                                ? 'bg-[#C9A227] hover:bg-[#ECBD57] text-[#0a0a08] shadow-lg shadow-[#C9A227]/20'
+                                                : 'bg-slate-100 dark:bg-[#181814] border border-slate-300 dark:border-[#23231f] text-slate-800 dark:text-white hover:border-lime-500 dark:hover:border-[#C9A227] hover:text-[#ECBD57] dark:hover:text-[#C9A227]'
                                         }`}
                                     >
                                         Assinar Agora
@@ -256,7 +256,7 @@ const Subscriptions = () => {
                             className="text-center mb-16 space-y-4"
                         >
                             <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                                Perguntas <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Frequentes</span>
+                                Perguntas <span className="text-[#ECBD57] dark:text-[#C9A227]">Frequentes</span>
                             </h2>
                             <p className="text-lg md:text-xl text-slate-600 dark:text-gray-400 font-medium">
                                 Tire suas dúvidas sobre nossos planos de assinatura
@@ -287,7 +287,7 @@ const Subscriptions = () => {
                                     initial={{ opacity: 0, y: 20 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     transition={{ delay: index * 0.1 }}
-                                    className="p-6 rounded-xl bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b]/50 transition-all shadow-sm"
+                                    className="p-6 rounded-xl bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#C9A227]/50 transition-all shadow-sm"
                                 >
                                     <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">{faq.question}</h3>
                                     <p className="text-slate-600 dark:text-gray-400 leading-relaxed font-medium">{faq.answer}</p>
@@ -306,19 +306,19 @@ const Subscriptions = () => {
                             className="text-center bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] p-12 rounded-3xl shadow-xl max-w-4xl mx-auto"
                         >
                             <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-6 tracking-tight">
-                                Ainda tem <span className="text-[#4d7c0f] dark:text-[#bcf13b]">dúvidas?</span>
+                                Ainda tem <span className="text-[#ECBD57] dark:text-[#C9A227]">dúvidas?</span>
                             </h2>
                             <p className="text-lg md:text-xl text-slate-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto font-medium">
                                 Entre em contato conosco e descubra qual plano é ideal para seu negócio
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                 <Link to="/contato">
-                                    <Button size="lg" className="w-full sm:w-auto bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-bold text-lg px-8 py-6 rounded-xl shadow-lg shadow-[#bcf13b]/20">
+                                    <Button size="lg" className="w-full sm:w-auto bg-[#C9A227] hover:bg-[#ECBD57] text-[#0a0a08] font-bold text-lg px-8 py-6 rounded-xl shadow-lg shadow-[#C9A227]/20">
                                         Falar com Especialista
                                     </Button>
                                 </Link>
                                 <Link to="/portfolio">
-                                    <Button size="lg" variant="outline" className="w-full sm:w-auto border-slate-300 dark:border-[#23231f] bg-slate-100 dark:bg-[#181814] text-slate-800 dark:text-white hover:border-lime-500 dark:hover:border-[#bcf13b] hover:text-[#4d7c0f] dark:hover:text-[#bcf13b] text-lg px-8 py-6 rounded-xl font-bold">
+                                    <Button size="lg" variant="outline" className="w-full sm:w-auto border-slate-300 dark:border-[#23231f] bg-slate-100 dark:bg-[#181814] text-slate-800 dark:text-white hover:border-lime-500 dark:hover:border-[#C9A227] hover:text-[#ECBD57] dark:hover:text-[#C9A227] text-lg px-8 py-6 rounded-xl font-bold">
                                         Ver Projetos Avulsos
                                     </Button>
                                 </Link>

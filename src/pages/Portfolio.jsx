@@ -214,8 +214,8 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-screen bg-slate-50 dark:bg-[#0a0a08]">
-                <Loader2 className="h-16 w-16 animate-spin text-[#4d7c0f] dark:text-[#bcf13b]" />
+            <div className="flex justify-center items-center h-screen bg-[#070707]">
+                <Loader2 className="h-16 w-16 animate-spin text-[#ECBD57] dark:text-[#C9A227]" />
             </div>
         );
     }
@@ -223,14 +223,14 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
     return (
         <>
             <SEO 
-                title={`${t('portfolio_title', 'Nosso Portfólio')} - Rafael Pita Solutions`}
+                title={`${t('portfolio_title', 'Nosso Portfólio')} - RAMIELL`}
                 description={t('portfolio_description', 'Explore nosso histórico técnico de excelência.')}
             />
 
-            <div className="min-h-screen bg-slate-50 dark:bg-[#0a0a08] text-slate-900 dark:text-white transition-colors duration-300">
+            <div className="min-h-screen bg-[#070707] text-white transition-colors duration-300">
                 
                 {/* 1. Hero Section de Autoridade */}
-                <section className="relative pt-12 pb-14 md:pt-16 md:pb-20 overflow-hidden bg-slate-50 dark:bg-[#0a0a08]">
+                <section className="relative pt-12 pb-14 md:pt-16 md:pb-20 overflow-hidden bg-[#070707]">
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(77,124,15,0.08)_0%,_transparent_60%)] dark:bg-[radial-gradient(circle_at_top,_rgba(188,241,59,0.06)_0%,_transparent_60%)] pointer-events-none"></div>
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
                         <motion.div
@@ -239,32 +239,32 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                             transition={{ duration: 0.6 }}
                             className="space-y-4"
                         >
-                            <div className="w-14 h-14 mx-auto mb-2 bg-lime-500/10 dark:bg-[#bcf13b]/10 rounded-full flex items-center justify-center border border-lime-500/20 dark:border-[#bcf13b]/20 shadow-md">
-                                <Award className="w-7 h-7 text-[#4d7c0f] dark:text-[#bcf13b]" />
+                            <div className="w-14 h-14 mx-auto mb-2 bg-lime-500/10 dark:bg-[#C9A227]/10 rounded-full flex items-center justify-center border border-lime-500/20 dark:border-[#C9A227]/20 shadow-md">
+                                <Award className="w-7 h-7 text-[#ECBD57] dark:text-[#C9A227]" />
                             </div>
-                            <h1 className="text-4xl sm:text-5xl font-extrabold px-2 tracking-tight text-slate-900 dark:text-white">
-                                Nosso <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Portfólio</span>
+                            <h1 className="text-4xl sm:text-5xl font-extrabold px-2 tracking-tight text-white">
+                                Nosso <span className="text-[#ECBD57] dark:text-[#C9A227]">Portfólio</span>
                             </h1>
                             <p className="text-base md:text-xl text-slate-700 dark:text-gray-300 max-w-2xl mx-auto px-4 font-semibold leading-relaxed">
                                 {t('portfolio_subtitle', 'Excelência Técnica e Design de Conversão em Dezenas de Projetos Entregues')}
                             </p>
-                            <p className="text-xs md:text-sm text-slate-600 dark:text-gray-400 max-w-xl mx-auto px-4 leading-relaxed font-medium">
+                            <p className="text-xs md:text-sm text-[#9E9E9E] max-w-xl mx-auto px-4 leading-relaxed font-medium">
                                 {t('portfolio_description_long', 'Explore a notoriedade do nosso histórico. Cada cartão expõe a aplicação rigorosa de metodologias e ferramentas para gerar lucros e resultados expressivos aos nossos parceiros.')}
                             </p>
 
                             {/* Contadores Rápidos de Autoridade */}
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-3.5 max-w-xl mx-auto pt-4 text-center">
-                                <div className="p-4 rounded-xl border border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] shadow-sm dark:shadow-none">
-                                    <div className="text-2xl sm:text-3xl font-extrabold text-[#4d7c0f] dark:text-[#bcf13b]">50+</div>
-                                    <div className="text-xs text-slate-600 dark:text-gray-400 font-semibold tracking-wide uppercase mt-1">{t('portfolio_stat_deliveries', 'Entregas de Sucesso')}</div>
+                                <div className="p-4 rounded-xl border border-white/[0.06] bg-white dark:bg-[#121210] shadow-sm dark:shadow-none">
+                                    <div className="text-2xl sm:text-3xl font-extrabold text-[#ECBD57] dark:text-[#C9A227]">50+</div>
+                                    <div className="text-xs text-[#9E9E9E] font-semibold tracking-wide uppercase mt-1">{t('portfolio_stat_deliveries', 'Entregas de Sucesso')}</div>
                                 </div>
-                                <div className="p-4 rounded-xl border border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] shadow-sm dark:shadow-none">
-                                    <div className="text-2xl sm:text-3xl font-extrabold text-[#4d7c0f] dark:text-[#bcf13b]">98%</div>
-                                    <div className="text-xs text-slate-600 dark:text-gray-400 font-semibold tracking-wide uppercase mt-1">{t('portfolio_stat_satisfaction', 'Satisfação Geral')}</div>
+                                <div className="p-4 rounded-xl border border-white/[0.06] bg-white dark:bg-[#121210] shadow-sm dark:shadow-none">
+                                    <div className="text-2xl sm:text-3xl font-extrabold text-[#ECBD57] dark:text-[#C9A227]">98%</div>
+                                    <div className="text-xs text-[#9E9E9E] font-semibold tracking-wide uppercase mt-1">{t('portfolio_stat_satisfaction', 'Satisfação Geral')}</div>
                                 </div>
-                                <div className="p-4 rounded-xl border border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] shadow-sm dark:shadow-none col-span-2 md:col-span-1">
-                                    <div className="text-2xl sm:text-3xl font-extrabold text-[#4d7c0f] dark:text-[#bcf13b]">100%</div>
-                                    <div className="text-xs text-slate-600 dark:text-gray-400 font-semibold tracking-wide uppercase mt-1">{t('portfolio_stat_focus', 'Foco Comercial')}</div>
+                                <div className="p-4 rounded-xl border border-white/[0.06] bg-white dark:bg-[#121210] shadow-sm dark:shadow-none col-span-2 md:col-span-1">
+                                    <div className="text-2xl sm:text-3xl font-extrabold text-[#ECBD57] dark:text-[#C9A227]">100%</div>
+                                    <div className="text-xs text-[#9E9E9E] font-semibold tracking-wide uppercase mt-1">{t('portfolio_stat_focus', 'Foco Comercial')}</div>
                                 </div>
                             </div>
                         </motion.div>
@@ -273,7 +273,7 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
 
                 {/* 2. Barra de Controle e Filtros de Elite (Dashboard Style) */}
                 <section ref={filterSectionRef} className="relative z-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto -mt-6">
-                    <div className="rounded-2xl p-4 border border-slate-200 dark:border-[#23231f] shadow-lg dark:shadow-2xl backdrop-blur-xl bg-white/95 dark:bg-[#121210] flex flex-col md:flex-row gap-4 items-center justify-between">
+                    <div className="rounded-2xl p-4 border border-white/[0.06] shadow-lg dark:shadow-2xl backdrop-blur-xl bg-white/95 dark:bg-[#121210] flex flex-col md:flex-row gap-4 items-center justify-between">
                         
                         {/* Seletor de Categorias por Abas Multilinha */}
                         <div className="flex flex-wrap gap-2 justify-center md:justify-start w-full md:flex-1 py-1">
@@ -281,14 +281,14 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                                 onClick={() => setActiveTab('all')}
                                 className={`relative px-3.5 py-2 rounded-xl text-xs md:text-[13px] font-semibold flex items-center gap-1.5 transition-colors duration-300 z-10 border ${
                                     activeTab === 'all'
-                                        ? 'bg-[#bcf13b] text-[#0a0a08] font-bold border-[#bcf13b] shadow-md shadow-[#bcf13b]/20'
-                                        : 'bg-white dark:bg-[#121210] border-slate-200 dark:border-[#23231f] text-slate-700 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#181814]'
+                                        ? 'bg-[#C9A227] text-[#0a0a08] font-bold border-[#C9A227] shadow-md shadow-[#C9A227]/20'
+                                        : 'bg-white dark:bg-[#121210] border-white/[0.06] text-slate-700 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#181814]'
                                 }`}
                             >
                                 <Cpu className="w-3.5 h-3.5" />
                                 {t('portfolio_all_categories', 'Todos')}
                                 <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-semibold transition-colors ${
-                                    activeTab === 'all' ? 'bg-[#0a0a08]/20 text-[#0a0a08]' : 'bg-slate-100 dark:bg-[#181814] text-slate-600 dark:text-gray-400 border border-slate-200 dark:border-[#23231f]'
+                                    activeTab === 'all' ? 'bg-[#0a0a08]/20 text-[#0a0a08]' : 'bg-slate-100 dark:bg-[#181814] text-[#9E9E9E] border border-white/[0.06]'
                                 }`}>
                                     {projects.length}
                                 </span>
@@ -304,14 +304,14 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                                         onClick={() => setActiveTab(cat.slug)}
                                         className={`relative px-3.5 py-2 rounded-xl text-xs md:text-[13px] font-semibold flex items-center gap-1.5 transition-colors duration-300 z-10 border ${
                                             isActive
-                                                ? 'bg-[#bcf13b] text-[#0a0a08] font-bold border-[#bcf13b] shadow-md shadow-[#bcf13b]/20'
-                                                : 'bg-white dark:bg-[#121210] border-slate-200 dark:border-[#23231f] text-slate-700 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#181814]'
+                                                ? 'bg-[#C9A227] text-[#0a0a08] font-bold border-[#C9A227] shadow-md shadow-[#C9A227]/20'
+                                                : 'bg-white dark:bg-[#121210] border-white/[0.06] text-slate-700 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#181814]'
                                         }`}
                                     >
                                         <IconComp className="w-3.5 h-3.5" />
                                         {cat.title}
                                         <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-semibold transition-colors ${
-                                            isActive ? 'bg-[#0a0a08]/20 text-[#0a0a08]' : 'bg-slate-100 dark:bg-[#181814] text-slate-600 dark:text-gray-400 border border-slate-200 dark:border-[#23231f]'
+                                            isActive ? 'bg-[#0a0a08]/20 text-[#0a0a08]' : 'bg-slate-100 dark:bg-[#181814] text-[#9E9E9E] border border-white/[0.06]'
                                         }`}>
                                             {catCount}
                                         </span>
@@ -328,7 +328,7 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                                 placeholder={t('portfolio_search_placeholder', 'Buscar projetos...')}
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-[#181814] border-slate-200 dark:border-[#23231f] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-gray-500 rounded-xl focus:border-lime-500 dark:focus:border-[#bcf13b] focus:ring-1 focus:ring-lime-500 dark:focus:ring-[#bcf13b] font-semibold"
+                                className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-[#181814] border-white/[0.06] text-white placeholder:text-slate-400 dark:placeholder:text-gray-500 rounded-xl focus:border-lime-500 dark:focus:border-[#C9A227] focus:ring-1 focus:ring-lime-500 dark:focus:ring-[#C9A227] font-semibold"
                             />
                             {searchQuery && (
                                 <button 
@@ -359,15 +359,15 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                                             {/* Cabecalho da Categoria Mobile */}
                                             <div className="flex items-center justify-between px-1">
                                                 <div className="flex items-center gap-2.5 min-w-0">
-                                                    <div className="w-8 h-8 rounded-xl bg-lime-500/10 dark:bg-[#bcf13b]/10 flex items-center justify-center border border-lime-500/20 dark:border-[#bcf13b]/20 text-[#4d7c0f] dark:text-[#bcf13b] shrink-0 shadow-xs">
+                                                    <div className="w-8 h-8 rounded-xl bg-lime-500/10 dark:bg-[#C9A227]/10 flex items-center justify-center border border-lime-500/20 dark:border-[#C9A227]/20 text-[#ECBD57] dark:text-[#C9A227] shrink-0 shadow-xs">
                                                         <IconComp className="w-4 h-4" />
                                                     </div>
                                                     <div className="min-w-0">
                                                         <div className="flex items-center gap-2">
-                                                            <h2 className="text-base font-extrabold text-slate-900 dark:text-white tracking-tight truncate">
+                                                            <h2 className="text-base font-extrabold text-white tracking-tight truncate">
                                                                 {cat.title}
                                                             </h2>
-                                                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-[#181814] text-slate-600 dark:text-gray-400 border border-slate-200 dark:border-[#23231f] shrink-0">
+                                                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-[#181814] text-[#9E9E9E] border border-white/[0.06] shrink-0">
                                                                 {catProjects.length}
                                                             </span>
                                                         </div>
@@ -382,7 +382,7 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                                                             filterSectionRef.current.scrollIntoView({ behavior: 'smooth' });
                                                         }
                                                     }}
-                                                    className="text-xs font-bold text-[#4d7c0f] dark:text-[#bcf13b] hover:underline flex items-center gap-1 shrink-0 ml-2 py-1"
+                                                    className="text-xs font-bold text-[#ECBD57] dark:text-[#C9A227] hover:underline flex items-center gap-1 shrink-0 ml-2 py-1"
                                                 >
                                                     <span>Ver todos</span>
                                                     <ArrowRight className="w-3.5 h-3.5" />
@@ -448,10 +448,10 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                         /* Visualizacao 2: Com Filtro Ativo (Por Categoria Especifica ou Busca Textual) */
                         <div className="space-y-6">
                             {/* Barra Informativa do Filtro Ativo */}
-                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-2xl bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] shadow-xs">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-2xl bg-white dark:bg-[#121210] border border-white/[0.06] shadow-xs">
                                 <div className="flex items-center gap-2 text-xs">
                                     <span className="font-semibold text-slate-500 dark:text-gray-400">Exibindo:</span>
-                                    <span className="font-bold text-[#4d7c0f] dark:text-[#bcf13b] bg-lime-50 dark:bg-[#bcf13b]/10 border border-lime-200 dark:border-[#bcf13b]/20 px-2.5 py-0.5 rounded-full">
+                                    <span className="font-bold text-[#ECBD57] dark:text-[#C9A227] bg-lime-50 dark:bg-[#C9A227]/10 border border-lime-200 dark:border-[#C9A227]/20 px-2.5 py-0.5 rounded-full">
                                         {activeTab !== 'all'
                                             ? (allCategories.find(c => c.slug === activeTab)?.title || activeTab)
                                             : `Busca por: "${searchQuery}"`}
@@ -465,7 +465,7 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                                         setActiveTab('all');
                                         setSearchQuery('');
                                     }}
-                                    className="text-xs font-bold text-slate-700 hover:text-[#4d7c0f] dark:text-gray-300 dark:hover:text-[#bcf13b] hover:underline flex items-center gap-1 self-start sm:self-auto"
+                                    className="text-xs font-bold text-slate-700 hover:text-[#ECBD57] dark:text-gray-300 dark:hover:text-[#C9A227] hover:underline flex items-center gap-1 self-start sm:self-auto"
                                 >
                                     <span>Ver todas as categorias</span>
                                     <ArrowRight className="w-3.5 h-3.5" />
@@ -505,10 +505,10 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
 
                     {/* Estado Vazio quando nenhum projeto e encontrado */}
                     {filteredProjects.length === 0 && (
-                        <div className="text-center p-12 rounded-2xl max-w-md mx-auto mt-8 border border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] shadow-sm dark:shadow-none">
+                        <div className="text-center p-12 rounded-2xl max-w-md mx-auto mt-8 border border-white/[0.06] bg-white dark:bg-[#121210] shadow-sm dark:shadow-none">
                             <X className="mx-auto h-12 w-12 text-slate-400 dark:text-gray-500 mb-4" />
-                            <h3 className="text-lg font-bold text-slate-900 dark:text-white">{t('portfolio_no_projects', 'Nenhum projeto encontrado')}</h3>
-                            <p className="text-slate-600 dark:text-gray-400 mt-2 text-sm font-medium">{t('portfolio_no_projects_desc', 'Tente alterar os termos da busca ou filtre por outra especialidade.')}</p>
+                            <h3 className="text-lg font-bold text-white">{t('portfolio_no_projects', 'Nenhum projeto encontrado')}</h3>
+                            <p className="text-[#9E9E9E] mt-2 text-sm font-medium">{t('portfolio_no_projects_desc', 'Tente alterar os termos da busca ou filtre por outra especialidade.')}</p>
                             <Button
                                 variant="outline"
                                 size="sm"
@@ -525,7 +525,7 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                 </section>
 
                 {/* 4. Seção de Pilares de Competência e Notoriedade Técnica */}
-                <section className="py-20 bg-slate-100/60 dark:bg-[#0a0a08] border-y border-slate-200 dark:border-[#23231f]">
+                <section className="py-20 bg-slate-100/60 dark:bg-[#0a0a08] border-y border-white/[0.06]">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
@@ -533,33 +533,33 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                             viewport={{ once: true }}
                             className="text-center mb-16 space-y-4"
                         >
-                            <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                                Rigores & <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Competências</span>
+                            <h2 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight">
+                                Rigores & <span className="text-[#ECBD57] dark:text-[#C9A227]">Competências</span>
                             </h2>
-                            <p className="text-lg md:text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto font-medium">
-                                Por que a Rafael Pita Solutions garante a entrega perfeita de projetos de alta complexidade
+                            <p className="text-lg md:text-xl text-[#9E9E9E] max-w-3xl mx-auto font-medium">
+                                Por que a RAMIELL garante a entrega perfeita de projetos de alta complexidade
                             </p>
                         </motion.div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                             {[
                                 { 
-                                    icon: <Cpu className="w-6 h-6 text-[#4d7c0f] dark:text-[#bcf13b]" />,
+                                    icon: <Cpu className="w-6 h-6 text-[#ECBD57] dark:text-[#C9A227]" />,
                                     title: 'Arquitetura e Escalabilidade', 
                                     description: 'Código limpo, estruturação de banco de dados PostgreSQL robusto e integrações via Supabase prontas para expansão comercial.' 
                                 },
                                 { 
-                                    icon: <Palette className="w-6 h-6 text-[#4d7c0f] dark:text-[#bcf13b]" />,
+                                    icon: <Palette className="w-6 h-6 text-[#ECBD57] dark:text-[#C9A227]" />,
                                     title: 'Design Centrado no Usuário', 
                                     description: 'Interfaces construídas sob rigorosos padrões de ergonomia, design moderno em Figma e consistência visual impecável.' 
                                 },
                                 { 
-                                    icon: <TrendingUp className="w-6 h-6 text-[#4d7c0f] dark:text-[#bcf13b]" />,
+                                    icon: <TrendingUp className="w-6 h-6 text-[#ECBD57] dark:text-[#C9A227]" />,
                                     title: 'Decisões Baseadas em Dados', 
                                     description: 'Desenvolvimento de painéis Power BI de nível executivo com modelagem ETL rápida para decisões financeiras e comerciais imediatas.' 
                                 },
                                 { 
-                                    icon: <CheckCircle2 className="w-6 h-6 text-[#4d7c0f] dark:text-[#bcf13b]" />,
+                                    icon: <CheckCircle2 className="w-6 h-6 text-[#ECBD57] dark:text-[#C9A227]" />,
                                     title: 'Alta Performance Comercial', 
                                     description: 'Campanhas de tráfego pago otimizadas em Google/Meta Ads e SEO ultra-potente para ranqueamento líder nas buscas do Google.' 
                                 }
@@ -570,14 +570,14 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: idx * 0.1 }}
-                                    className="p-6 rounded-2xl border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] transition-all duration-300 hover:shadow-lg dark:hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] bg-white dark:bg-[#121210] shadow-sm dark:shadow-none flex flex-col justify-between"
+                                    className="p-6 rounded-2xl border border-white/[0.06] hover:border-lime-500 dark:hover:border-[#C9A227] transition-all duration-300 hover:shadow-lg dark:hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] bg-white dark:bg-[#121210] shadow-sm dark:shadow-none flex flex-col justify-between"
                                 >
                                     <div className="space-y-4">
-                                        <div className="w-12 h-12 rounded-xl bg-lime-500/10 dark:bg-[#bcf13b]/10 flex items-center justify-center border border-lime-500/20 dark:border-[#bcf13b]/20">
+                                        <div className="w-12 h-12 rounded-xl bg-lime-500/10 dark:bg-[#C9A227]/10 flex items-center justify-center border border-lime-500/20 dark:border-[#C9A227]/20">
                                             {pilar.icon}
                                         </div>
-                                        <h3 className="text-lg font-bold text-slate-900 dark:text-white leading-tight">{pilar.title}</h3>
-                                        <p className="text-sm text-slate-600 dark:text-gray-400 leading-relaxed font-medium">{pilar.description}</p>
+                                        <h3 className="text-lg font-bold text-white leading-tight">{pilar.title}</h3>
+                                        <p className="text-sm text-[#9E9E9E] leading-relaxed font-medium">{pilar.description}</p>
                                     </div>
                                 </motion.div>
                             ))}
@@ -586,7 +586,7 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                 </section>
 
                 {/* 5. CTA Section (Chamada para Ação Corporativa) */}
-                <section className="py-20 bg-white dark:bg-[#121210] border-t border-slate-200 dark:border-[#23231f]">
+                <section className="py-20 bg-white dark:bg-[#121210] border-t border-white/[0.06]">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
@@ -594,8 +594,8 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                             viewport={{ once: true }}
                             className="space-y-6"
                         >
-                            <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white">
-                                Gostou do nosso <span className="text-[#4d7c0f] dark:text-[#bcf13b]">histórico técnico</span>?
+                            <h2 className="text-3xl md:text-5xl font-extrabold text-white">
+                                Gostou do nosso <span className="text-[#ECBD57] dark:text-[#C9A227]">histórico técnico</span>?
                             </h2>
                             <p className="text-lg md:text-xl text-slate-600 dark:text-gray-300 max-w-2xl mx-auto font-medium">
                                 {isCleanMode 
@@ -603,14 +603,14 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                                     : 'Vamos transformar seu próximo projeto em um case de sucesso de alta notoriedade comercial. Agende sua consultoria agora!'}
                             </p>
                             {isCleanMode ? (
-                                <div className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-lime-500/10 text-lime-700 dark:text-[#bcf13b] border border-lime-500/20 text-sm font-bold shadow-sm">
-                                    <CheckCircle2 className="w-5 h-5 text-lime-600 dark:text-[#bcf13b]" />
+                                <div className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-lime-500/10 text-lime-700 dark:text-[#C9A227] border border-lime-500/20 text-sm font-bold shadow-sm">
+                                    <CheckCircle2 className="w-5 h-5 text-lime-600 dark:text-[#C9A227]" />
                                     <span>Comunicação e contratação 100% integradas pela plataforma do 99freelas.</span>
                                 </div>
                             ) : (
                                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                                     <Link to="/contato" className="w-full sm:w-auto">
-                                        <Button size="lg" className="w-full bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-bold rounded-lg shadow-lg shadow-[#bcf13b]/20 text-lg px-8 py-4 transition-all duration-300">
+                                        <Button size="lg" className="w-full bg-[#C9A227] hover:bg-[#ECBD57] text-[#0a0a08] font-bold rounded-lg shadow-lg shadow-[#C9A227]/20 text-lg px-8 py-4 transition-all duration-300">
                                             Solicitar Orçamento
                                             <ArrowRight className="ml-2 w-5 h-5 text-[#0a0a08]" />
                                         </Button>

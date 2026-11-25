@@ -120,7 +120,7 @@ const Reviews = () => {
         return Array.from({ length: 5 }, (_, i) => (
             <Star
                 key={i}
-                className={`w-5 h-5 ${i < rating ? 'text-[#4d7c0f] dark:text-[#bcf13b] fill-current' : 'text-slate-300 dark:text-gray-600'}`}
+                className={`w-5 h-5 ${i < rating ? 'text-[#ECBD57] dark:text-[#C9A227] fill-current' : 'text-slate-300 dark:text-gray-600'}`}
             />
         ));
     };
@@ -130,23 +130,23 @@ const Reviews = () => {
     return (
         <>
             <Helmet>
-                <title>Avaliações - Rafael Pita Solutions</title>
+                <title>Avaliações - RAMIELL</title>
                 <meta name="description" content="Veja o que nossos clientes dizem sobre nossos serviços. Avaliações reais de projetos de design, desenvolvimento, marketing digital e muito mais." />
             </Helmet>
 
-            <div className="pt-20 min-h-screen bg-slate-50 dark:bg-[#0a0a08] text-slate-900 dark:text-white transition-colors duration-300">
+            <div className="pt-20 min-h-screen bg-[#070707] text-white transition-colors duration-300">
                 {/* Hero Section */}
-                <section className="py-20 relative bg-slate-50 dark:bg-[#0a0a08]">
+                <section className="py-20 relative bg-[#070707]">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             className="text-center mb-16"
                         >
-                            <h1 className="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight text-slate-900 dark:text-white">
-                                Todas as <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Avaliações</span>
+                            <h1 className="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight text-white">
+                                Todas as <span className="text-[#ECBD57] dark:text-[#C9A227]">Avaliações</span>
                             </h1>
-                            <p className="text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto font-medium">
+                            <p className="text-xl text-[#9E9E9E] max-w-3xl mx-auto font-medium">
                                 Veja os depoimentos reais de clientes que confiaram em nossos serviços e na qualidade do nosso trabalho
                             </p>
                         </motion.div>
@@ -158,7 +158,7 @@ const Reviews = () => {
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         {loadingReviews ? (
                             <div className="flex justify-center items-center h-64">
-                                <Loader2 className="w-12 h-12 animate-spin text-[#4d7c0f] dark:text-[#bcf13b]" />
+                                <Loader2 className="w-12 h-12 animate-spin text-[#ECBD57] dark:text-[#C9A227]" />
                             </div>
                         ) : (
                             <Carousel
@@ -172,35 +172,35 @@ const Reviews = () => {
                                     {reviews.map((review) => (
                                         <CarouselItem key={review.id} className="md:basis-1/2 lg:basis-1/3">
                                             <div className="p-4 h-full">
-                                                <motion.div className="service-card p-6 rounded-xl relative h-full flex flex-col border border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] hover:border-lime-500 dark:hover:border-[#bcf13b] hover:shadow-[0_0_20px_rgba(77,124,15,0.15)] dark:hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] transition-all duration-300 group shadow-sm">
+                                                <motion.div className="service-card p-6 rounded-[16px] relative h-full flex flex-col border border-white/[0.06] bg-[#0B0B0B] hover:border-lime-500 dark:hover:border-[#C9A227] hover:shadow-[0_0_20px_rgba(77,124,15,0.15)] dark:hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] transition-all duration-300 group shadow-sm">
                                                     <div className="absolute top-4 right-4">
-                                                        <Quote className="w-8 h-8 text-lime-600/30 dark:text-[#bcf13b]/30 group-hover:text-lime-600/60 dark:group-hover:text-[#bcf13b]/60 transition-colors" />
+                                                        <Quote className="w-8 h-8 text-lime-600/30 dark:text-[#C9A227]/30 group-hover:text-lime-600/60 dark:group-hover:text-[#C9A227]/60 transition-colors" />
                                                     </div>
                                                     <div className="flex items-center space-x-4 mb-4">
                                                         {review.avatar_url ? (
                                                             <img
                                                                 alt={review.name}
-                                                                className="w-12 h-12 rounded-full object-cover border border-slate-200 dark:border-[#23231f]"
+                                                                className="w-12 h-12 rounded-full object-cover border border-white/[0.06]"
                                                                 src={review.avatar_url}
                                                                 loading="lazy"
                                                             />
                                                         ) : (
-                                                            <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-[#181814] border border-slate-200 dark:border-[#23231f] flex items-center justify-center">
+                                                            <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-[#181814] border border-white/[0.06] flex items-center justify-center">
                                                                 <User className="w-6 h-6 text-slate-400 dark:text-gray-500" />
                                                             </div>
                                                         )}
                                                         <div>
-                                                            <h3 className="text-slate-900 dark:text-white font-bold group-hover:text-[#4d7c0f] dark:group-hover:text-[#bcf13b] transition-colors">{review.name}</h3>
-                                                            <p className="text-slate-600 dark:text-gray-400 text-sm font-medium">{review.role}</p>
+                                                            <h3 className="text-white font-bold group-hover:text-[#ECBD57] dark:group-hover:text-[#C9A227] transition-colors">{review.name}</h3>
+                                                            <p className="text-[#9E9E9E] text-sm font-medium">{review.role}</p>
                                                         </div>
                                                     </div>
                                                     <div className="flex items-center space-x-2 mb-4">{renderStars(review.rating)}</div>
                                                     <p className="text-slate-700 dark:text-gray-300 mb-4 leading-relaxed flex-grow font-medium">"{review.comment}"</p>
-                                                    <div className="flex justify-between items-center text-sm text-slate-500 dark:text-gray-500 mt-auto pt-4 border-t border-slate-200 dark:border-[#23231f]">
+                                                    <div className="flex justify-between items-center text-sm text-slate-500 dark:text-gray-500 mt-auto pt-4 border-t border-white/[0.06]">
                                                         <span>{new Date(review.created_at).toLocaleDateString()}</span>
                                                         <button
                                                             onClick={() => handleLikeToggle(review.id, review.likes)}
-                                                            className={`flex items-center space-x-1.5 transition-colors ${userLikes.has(review.id) ? 'text-[#4d7c0f] dark:text-[#bcf13b]' : 'text-slate-400 dark:text-gray-400 hover:text-[#4d7c0f] dark:hover:text-[#bcf13b]'}`}
+                                                            className={`flex items-center space-x-1.5 transition-colors ${userLikes.has(review.id) ? 'text-[#ECBD57] dark:text-[#C9A227]' : 'text-slate-400 dark:text-gray-400 hover:text-[#ECBD57] dark:hover:text-[#C9A227]'}`}
                                                         >
                                                             <ThumbsUp className={`w-4 h-4 ${userLikes.has(review.id) ? 'fill-current' : ''}`} />
                                                             <span>{review.likes > 0 ? review.likes : 'Curtir'}</span>
@@ -211,51 +211,51 @@ const Reviews = () => {
                                         </CarouselItem>
                                     ))}
                                 </CarouselContent>
-                                <CarouselPrevious className="hidden sm:flex bg-white dark:bg-[#121210] border-slate-200 dark:border-[#23231f] text-slate-800 dark:text-white hover:border-lime-500 dark:hover:border-[#bcf13b] hover:text-[#4d7c0f] dark:hover:text-[#bcf13b] shadow-sm" />
-                                <CarouselNext className="hidden sm:flex bg-white dark:bg-[#121210] border-slate-200 dark:border-[#23231f] text-slate-800 dark:text-white hover:border-lime-500 dark:hover:border-[#bcf13b] hover:text-[#4d7c0f] dark:hover:text-[#bcf13b] shadow-sm" />
+                                <CarouselPrevious className="hidden sm:flex bg-[#0B0B0B] border-white/[0.06] text-slate-800 dark:text-white hover:border-lime-500 dark:hover:border-[#C9A227] hover:text-[#ECBD57] dark:hover:text-[#C9A227] shadow-sm" />
+                                <CarouselNext className="hidden sm:flex bg-[#0B0B0B] border-white/[0.06] text-slate-800 dark:text-white hover:border-lime-500 dark:hover:border-[#C9A227] hover:text-[#ECBD57] dark:hover:text-[#C9A227] shadow-sm" />
                             </Carousel>
                         )}
                     </div>
                 </section>
 
                 {/* Metrics Section */}
-                <section className="py-20 bg-slate-100/60 dark:bg-[#121210] border-y border-slate-200 dark:border-[#23231f]">
+                <section className="py-20 bg-slate-100/60 dark:bg-[#121210] border-y border-white/[0.06]">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="text-center p-6 rounded-xl bg-white dark:bg-[#181814] border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b]/50 transition-colors shadow-sm">
-                                <div className="text-4xl md:text-5xl font-black text-[#4d7c0f] dark:text-[#bcf13b] mb-2">{averageRating.toFixed(1)}</div>
+                            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="text-center p-6 rounded-[16px] bg-white dark:bg-[#181814] border border-white/[0.06] hover:border-lime-500 dark:hover:border-[#C9A227]/50 transition-colors shadow-sm">
+                                <div className="text-4xl md:text-5xl font-black text-[#ECBD57] dark:text-[#C9A227] mb-2">{averageRating.toFixed(1)}</div>
                                 <div className="flex justify-center mb-2">{renderStars(Math.round(averageRating))}</div>
-                                <div className="text-slate-600 dark:text-gray-400 font-medium">Avaliação Média</div>
+                                <div className="text-[#9E9E9E] font-medium">Avaliação Média</div>
                             </motion.div>
-                            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-center p-6 rounded-xl bg-white dark:bg-[#181814] border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b]/50 transition-colors shadow-sm">
-                                <div className="text-4xl md:text-5xl font-black text-[#4d7c0f] dark:text-[#bcf13b] mb-2">{reviews.length}</div>
-                                <div className="text-slate-600 dark:text-gray-400 font-medium">Avaliações</div>
+                            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-center p-6 rounded-[16px] bg-white dark:bg-[#181814] border border-white/[0.06] hover:border-lime-500 dark:hover:border-[#C9A227]/50 transition-colors shadow-sm">
+                                <div className="text-4xl md:text-5xl font-black text-[#ECBD57] dark:text-[#C9A227] mb-2">{reviews.length}</div>
+                                <div className="text-[#9E9E9E] font-medium">Avaliações</div>
                             </motion.div>
-                            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-center p-6 rounded-xl bg-white dark:bg-[#181814] border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b]/50 transition-colors shadow-sm">
-                                <div className="text-4xl md:text-5xl font-black text-[#4d7c0f] dark:text-[#bcf13b] mb-2">98%</div>
-                                <div className="text-slate-600 dark:text-gray-400 font-medium">Satisfação</div>
+                            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-center p-6 rounded-[16px] bg-white dark:bg-[#181814] border border-white/[0.06] hover:border-lime-500 dark:hover:border-[#C9A227]/50 transition-colors shadow-sm">
+                                <div className="text-4xl md:text-5xl font-black text-[#ECBD57] dark:text-[#C9A227] mb-2">98%</div>
+                                <div className="text-[#9E9E9E] font-medium">Satisfação</div>
                             </motion.div>
-                            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="text-center p-6 rounded-xl bg-white dark:bg-[#181814] border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b]/50 transition-colors shadow-sm">
-                                <div className="text-4xl md:text-5xl font-black text-[#4d7c0f] dark:text-[#bcf13b] mb-2">200+</div>
-                                <div className="text-slate-600 dark:text-gray-400 font-medium">Clientes Atendidos</div>
+                            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="text-center p-6 rounded-[16px] bg-white dark:bg-[#181814] border border-white/[0.06] hover:border-lime-500 dark:hover:border-[#C9A227]/50 transition-colors shadow-sm">
+                                <div className="text-4xl md:text-5xl font-black text-[#ECBD57] dark:text-[#C9A227] mb-2">200+</div>
+                                <div className="text-[#9E9E9E] font-medium">Clientes Atendidos</div>
                             </motion.div>
                         </div>
                     </div>
                 </section>
 
                 {/* Review Form Section */}
-                <section className="py-20 bg-slate-50 dark:bg-[#0a0a08] border-t border-slate-200 dark:border-[#23231f]">
+                <section className="py-20 bg-[#070707] border-t border-white/[0.06]">
                     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="text-center mb-12">
-                            <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-4">
-                                Deixe sua <span className="text-[#4d7c0f] dark:text-[#bcf13b]">avaliação</span>
+                            <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
+                                Deixe sua <span className="text-[#ECBD57] dark:text-[#C9A227]">avaliação</span>
                             </h2>
-                            <p className="text-xl text-slate-600 dark:text-gray-400 font-medium">Compartilhe sua experiência conosco e ajude outros clientes</p>
+                            <p className="text-xl text-[#9E9E9E] font-medium">Compartilhe sua experiência conosco e ajude outros clientes</p>
                         </motion.div>
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            className="bg-white dark:bg-[#121210] p-8 md:p-10 rounded-2xl border border-slate-200 dark:border-[#23231f] shadow-xl hover:border-lime-500/40 dark:hover:border-[#bcf13b]/40 transition-colors"
+                            className="bg-[#0B0B0B] p-8 md:p-10 rounded-[20px] border border-white/[0.06] shadow-xl hover:border-lime-500/40 dark:hover:border-[#C9A227]/40 transition-colors"
                         >
                             <ReviewForm onSuccess={fetchReviews} />
                         </motion.div>

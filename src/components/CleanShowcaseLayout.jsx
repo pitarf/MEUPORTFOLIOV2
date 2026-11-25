@@ -33,7 +33,7 @@ const CleanShowcaseLayout = () => {
                                 showSubtitle={true}
                             />
                         </Link>
-                        <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-lime-500/10 text-lime-700 dark:text-[#bcf13b] border border-lime-500/20">
+                        <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-lime-500/10 text-lime-700 dark:text-[#C9A227] border border-lime-500/20">
                             <ShieldCheck className="w-3.5 h-3.5" />
                             Versão Portfólio Comercial
                         </span>
@@ -51,12 +51,12 @@ const CleanShowcaseLayout = () => {
                             variant="ghost"
                             size="icon"
                             onClick={toggleTheme}
-                            className="w-9 h-9 rounded-xl border border-slate-200 dark:border-[#23231f] text-slate-700 dark:text-gray-300 hover:text-lime-700 dark:hover:text-[#bcf13b]"
+                            className="w-9 h-9 rounded-xl border border-slate-200 dark:border-[#23231f] text-slate-700 dark:text-gray-300 hover:text-lime-700 dark:hover:text-[#C9A227]"
                             title="Alternar modo visual"
                             aria-label="Alternar modo visual"
                         >
                             {theme === 'dark' ? (
-                                <Sun className="w-4 h-4 text-[#bcf13b]" />
+                                <Sun className="w-4 h-4 text-[#C9A227]" />
                             ) : (
                                 <Moon className="w-4 h-4 text-slate-700" />
                             )}
@@ -74,10 +74,10 @@ const CleanShowcaseLayout = () => {
             <footer className="border-t border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] py-6 px-4">
                 <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left text-xs text-slate-500 dark:text-gray-400 font-medium">
                     <p>
-                        Vitrine de Casos Técnicos &copy; {new Date().getFullYear()} Rafael Pita Solutions.
+                        Vitrine de Casos Técnicos &copy; {new Date().getFullYear()} RAMIELL.
                     </p>
                     <p className="flex items-center gap-1.5 justify-center text-[11px] text-slate-500 dark:text-gray-400 font-semibold">
-                        <ShieldCheck className="w-3.5 h-3.5 text-lime-600 dark:text-[#bcf13b]" />
+                        <ShieldCheck className="w-3.5 h-3.5 text-lime-600 dark:text-[#C9A227]" />
                         <span>Comunicação e contratação realizadas exclusivamente via plataforma oficial.</span>
                     </p>
                 </div>

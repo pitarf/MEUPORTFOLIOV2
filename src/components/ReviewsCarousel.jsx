@@ -11,11 +11,16 @@ import { supabase } from '@/lib/customSupabaseClient';
 import { Loader2, Star, Quote, User } from 'lucide-react';
 import Autoplay from "embla-carousel-autoplay";
 
+/**
+ * Carrossel de Avaliações RAMIELL
+ * Apresenta depoimentos em cards editoriais com cantos de 20px,
+ * estrelas douradas e tipografia Geist.
+ */
 const ReviewsCarousel = () => {
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
     const plugin = useRef(
-        Autoplay({ delay: 30000, stopOnInteraction: true })
+        Autoplay({ delay: 6000, stopOnInteraction: true })
     );
 
     useEffect(() => {
@@ -43,15 +48,16 @@ const ReviewsCarousel = () => {
         return Array.from({ length: 5 }, (_, i) => (
             <Star
                 key={i}
-                className={`w-5 h-5 ${i < rating ? 'text-[#4d7c0f] dark:text-[#bcf13b] fill-current' : 'text-slate-300 dark:text-gray-600'}`}
+                className={`w-4 h-4 ${i < rating ? 'text-[#C9A227] fill-[#C9A227]' : 'text-white/20'}`}
+                strokeWidth={1.5}
             />
         ));
     };
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-64">
-                <Loader2 className="h-12 w-12 animate-spin text-[#4d7c0f] dark:text-[#bcf13b]" />
+            <div className="flex justify-center items-center h-48">
+                <Loader2 className="h-8 w-8 animate-spin text-[#C9A227]" />
             </div>
         );
     }
@@ -75,43 +81,45 @@ const ReviewsCarousel = () => {
                 {reviews.map((review) => (
                     <CarouselItem key={review.id}>
                         <div className="p-2 sm:p-4">
-                            {/* Card Premium de Depoimento */}
-                            <div className="rounded-2xl p-6 sm:p-10 border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] shadow-xl bg-white dark:bg-[#121210] relative overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(77,124,15,0.15)] dark:hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] max-w-2xl mx-auto group">
-                                
-                                {/* Aspas flutuantes como marca d'agua */}
-                                <Quote className="absolute top-4 right-6 w-16 h-16 text-lime-600/10 dark:text-[#bcf13b]/10 group-hover:text-lime-600/20 dark:group-hover:text-[#bcf13b]/20 pointer-events-none transform rotate-180 transition-colors" />
-                                
+                            <div className="rounded-[20px] p-8 sm:p-12 border border-white/[0.06] hover:border-[#C9A227]/40 shadow-xl bg-[#0B0B0B] relative overflow-hidden transition-all duration-300 hover:shadow-[0_0_24px_rgba(201,162,39,0.12)] max-w-2xl mx-auto group">
+                                <Quote className="absolute top-6 right-8 w-14 h-14 text-white/[0.03] group-hover:text-[#C9A227]/[0.08] pointer-events-none transform rotate-180 transition-colors" />
+
                                 <div className="relative z-10 text-center">
-                                    <p className="text-base sm:text-lg md:text-xl text-slate-700 dark:text-gray-200 italic leading-relaxed mb-6 font-medium max-w-xl mx-auto transition-colors">
+                                    <div className="flex justify-center gap-1.5 mb-6">
+                                        {renderStars(Number(review.rating) || 5)}
+                                    </div>
+
+                                    <p className="text-base sm:text-lg text-white/90 leading-relaxed mb-6 font-normal max-w-xl mx-auto italic">
                                         "{review.comment}"
                                     </p>
-                                    
-                                    <div className="flex flex-col items-center justify-center space-y-3">
+
+                                    <div className="flex flex-col items-center justify-center space-y-2.5">
                                         {review.avatar_url ? (
-                                            <div className="w-14 h-14 rounded-full p-[2px] bg-[#bcf13b] shadow-md shadow-[#bcf13b]/20">
-                                                <img alt={review.name} className="w-full h-full rounded-full object-cover bg-slate-100 dark:bg-[#0a0a08]" src={review.avatar_url} loading="lazy" />
+                                            <div className="w-12 h-12 rounded-full p-[1.5px] bg-[#C9A227]/40 shadow-md">
+                                                <img alt={review.name} className="w-full h-full rounded-full object-cover bg-[#121212]" src={review.avatar_url} loading="lazy" />
                                             </div>
                                         ) : (
-                                            <div className="w-14 h-14 rounded-full bg-slate-100 dark:bg-[#181814] border border-slate-200 dark:border-[#23231f] flex items-center justify-center">
-                                                <User className="w-6 h-6 text-[#4d7c0f] dark:text-[#bcf13b]" />
+                                            <div className="w-12 h-12 rounded-full bg-[#121212] border border-white/[0.06] flex items-center justify-center">
+                                                <User className="w-5 h-5 text-[#C9A227]" strokeWidth={1.5} />
                                             </div>
                                         )}
                                         <div>
-                                            <h4 className="font-bold text-slate-900 dark:text-white group-hover:text-[#4d7c0f] dark:group-hover:text-[#bcf13b] text-base sm:text-lg transition-colors">{review.name}</h4>
+                                            <h4 className="font-semibold text-white group-hover:text-[#ECBD57] text-base transition-colors tracking-tight">
+                                                {review.name}
+                                            </h4>
                                             {review.role && (
-                                                <p className="text-xs sm:text-sm text-[#4d7c0f] dark:text-[#bcf13b] font-semibold tracking-wide uppercase mt-0.5">{review.role}</p>
+                                                <p className="text-xs font-mono text-[#9E9E9E] mt-0.5">{review.role}</p>
                                             )}
                                         </div>
                                     </div>
-                                    <div className="flex justify-center gap-1 mt-4">{renderStars(review.rating)}</div>
                                 </div>
                             </div>
                         </div>
                     </CarouselItem>
                 ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden md:flex border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] hover:border-lime-500 dark:hover:border-[#bcf13b] hover:text-[#4d7c0f] dark:hover:text-[#bcf13b] text-slate-800 dark:text-white transition-colors shadow-sm" />
-            <CarouselNext className="hidden md:flex border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] hover:border-lime-500 dark:hover:border-[#bcf13b] hover:text-[#4d7c0f] dark:hover:text-[#bcf13b] text-slate-800 dark:text-white transition-colors shadow-sm" />
+            <CarouselPrevious className="hidden sm:flex border border-white/[0.08] bg-[#0B0B0B] text-white hover:bg-[#121212] hover:text-[#C9A227] rounded-full" />
+            <CarouselNext className="hidden sm:flex border border-white/[0.08] bg-[#0B0B0B] text-white hover:bg-[#121212] hover:text-[#C9A227] rounded-full" />
         </Carousel>
     );
 };

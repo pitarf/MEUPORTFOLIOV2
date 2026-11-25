@@ -114,8 +114,8 @@ const ProjectPage = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-screen bg-slate-50 dark:bg-[#0a0a08]">
-                <Loader2 className="h-16 w-16 animate-spin text-[#4d7c0f] dark:text-[#bcf13b]" />
+            <div className="flex justify-center items-center h-screen bg-[#070707]">
+                <Loader2 className="h-16 w-16 animate-spin text-[#ECBD57] dark:text-[#C9A227]" />
             </div>
         );
     }
@@ -187,7 +187,7 @@ const ProjectPage = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
         <>
             <SEO 
                 title={project.title}
-                description={project.description ? (project.description.length > 160 ? `${project.description.substring(0, 157)}...` : project.description) : `Detalhes do projeto ${project.title} desenvolvido por Rafael Pita Solutions.`}
+                description={project.description ? (project.description.length > 160 ? `${project.description.substring(0, 157)}...` : project.description) : `Detalhes do projeto ${project.title} desenvolvido por RAMIELL.`}
                 keywords={`projeto ${project.title}, ${project.client || ''}, ${project.category?.title || ''}, Rafael Pita, portfolio`}
                 image={project.main_image_url}
             />
@@ -200,7 +200,7 @@ const ProjectPage = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                 />
             )}
 
-            <div className="min-h-screen bg-slate-50 dark:bg-[#0a0a08] text-slate-900 dark:text-white transition-colors duration-300">
+            <div className="min-h-screen bg-[#070707] text-white transition-colors duration-300">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                     <motion.div
                         initial={{ opacity: 0, y: -20 }}
@@ -208,16 +208,16 @@ const ProjectPage = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                     >
                         <Link
                             to={project.category && project.category.slug === 'fotografia' ? '/portfolio-fotografia/galeria' : effectiveBasePath}
-                            className="inline-flex items-center text-slate-600 dark:text-gray-400 hover:text-lime-600 dark:hover:text-[#bcf13b] mb-8 transition-colors font-semibold"
+                            className="inline-flex items-center text-[#9E9E9E] hover:text-lime-600 dark:hover:text-[#C9A227] mb-8 transition-colors font-semibold"
                         >
                             <ArrowLeft className="mr-2 w-4 h-4" /> {project.category && project.category.slug === 'fotografia' ? 'Voltar para Galeria' : (isCleanMode ? 'Voltar à Vitrine' : 'Voltar ao Portfólio')}
                         </Link>
-                        <h1 className="text-4xl md:text-6xl font-extrabold mb-2 text-slate-900 dark:text-white">
+                        <h1 className="text-4xl md:text-6xl font-extrabold mb-2 text-white">
                             {project.title}
                         </h1>
                         {project.category && (
-                            <div className="flex flex-wrap items-center gap-x-4 text-slate-600 dark:text-gray-400 mb-8 font-semibold">
-                                <Link to={`${effectiveBasePath}?category=${project.category.slug || ''}`} className="text-[#4d7c0f] dark:text-[#bcf13b] hover:underline transition-colors">
+                            <div className="flex flex-wrap items-center gap-x-4 text-[#9E9E9E] mb-8 font-semibold">
+                                <Link to={`${effectiveBasePath}?category=${project.category.slug || ''}`} className="text-[#ECBD57] dark:text-[#C9A227] hover:underline transition-colors">
                                     {project.category.title || 'Portfólio'}
                                 </Link>
                             </div>
@@ -233,8 +233,8 @@ const ProjectPage = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                                 className={cn(
                                     "px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all shadow-sm",
                                     isShowingVideo
-                                        ? "bg-[#bcf13b] text-[#0a0a08] shadow-lime-500/20"
-                                        : "bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] text-slate-700 dark:text-gray-300 hover:border-lime-500"
+                                        ? "bg-[#C9A227] text-[#0a0a08] shadow-lime-500/20"
+                                        : "bg-[#0B0B0B] border border-white/[0.06] text-[#9E9E9E] hover:border-lime-500"
                                 )}
                             >
                                 <Play className="w-4 h-4 fill-current" />
@@ -246,8 +246,8 @@ const ProjectPage = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                                 className={cn(
                                     "px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all shadow-sm",
                                     !isShowingVideo
-                                        ? "bg-[#bcf13b] text-[#0a0a08] shadow-lime-500/20"
-                                        : "bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] text-slate-700 dark:text-gray-300 hover:border-lime-500"
+                                        ? "bg-[#C9A227] text-[#0a0a08] shadow-lime-500/20"
+                                        : "bg-[#0B0B0B] border border-white/[0.06] text-[#9E9E9E] hover:border-lime-500"
                                 )}
                             >
                                 <ImageIcon className="w-4 h-4" />
@@ -258,7 +258,7 @@ const ProjectPage = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
 
                     <motion.div variants={sectionVariants} initial="hidden" animate="visible">
                         {isShowingVideo ? (
-                            <div className="w-full aspect-video rounded-2xl mb-12 shadow-xl dark:shadow-2xl overflow-hidden border border-slate-200 dark:border-[#23231f] bg-black">
+                            <div className="w-full aspect-video rounded-2xl mb-12 shadow-xl dark:shadow-2xl overflow-hidden border border-white/[0.06] bg-black">
                                 <iframe
                                     src={primaryVideoEmbed}
                                     title={`Vídeo oficial de ${project.title}`}
@@ -270,7 +270,7 @@ const ProjectPage = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                             </div>
                         ) : (
                             <div 
-                                className={cn("w-full rounded-2xl mb-12 shadow-xl dark:shadow-2xl shadow-slate-200/50 dark:shadow-black/50 overflow-hidden cursor-pointer group relative border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] transition-all duration-300", aspectRatioClasses[mainImageAspectRatio])}
+                                className={cn("w-full rounded-2xl mb-12 shadow-xl dark:shadow-2xl shadow-slate-200/50 dark:shadow-black/50 overflow-hidden cursor-pointer group relative border border-white/[0.06] hover:border-lime-500 dark:hover:border-[#C9A227] transition-all duration-300", aspectRatioClasses[mainImageAspectRatio])}
                                 onClick={() => openModal(0)}
                             >
                                 <img
@@ -280,7 +280,7 @@ const ProjectPage = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                                     loading="lazy"
                                 />
                                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                    <p className="text-[#0a0a08] text-sm font-bold bg-[#bcf13b] px-4 py-2 rounded-full border border-[#bcf13b]/30 backdrop-blur-sm shadow-lg">
+                                    <p className="text-[#0a0a08] text-sm font-bold bg-[#C9A227] px-4 py-2 rounded-full border border-[#C9A227]/30 backdrop-blur-sm shadow-lg">
                                         Ver Capa Completa
                                     </p>
                                 </div>
@@ -291,9 +291,9 @@ const ProjectPage = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                         <motion.div variants={sectionVariants} initial="hidden" animate="visible" className="lg:col-span-2 space-y-8">
                             {project.description && (
-                                <motion.div variants={itemVariants} className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] p-8 rounded-2xl shadow-sm dark:shadow-none">
-                                    <h2 className="text-3xl font-bold mb-4 text-slate-900 dark:text-white">
-                                        Sobre o <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Projeto</span>
+                                <motion.div variants={itemVariants} className="bg-[#0B0B0B] border border-white/[0.06] p-8 rounded-2xl shadow-sm dark:shadow-none">
+                                    <h2 className="text-3xl font-bold mb-4 text-white">
+                                        Sobre o <span className="text-[#ECBD57] dark:text-[#C9A227]">Projeto</span>
                                     </h2>
                                     <p className="text-slate-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap font-medium">{project.description}</p>
                                 </motion.div>
@@ -301,17 +301,17 @@ const ProjectPage = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 {project.challenge && (
-                                    <motion.div variants={itemVariants} className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] p-6 rounded-2xl shadow-sm dark:shadow-none">
-                                        <h2 className="text-2xl font-bold mb-3 text-slate-900 dark:text-white">
-                                            O <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Desafio</span>
+                                    <motion.div variants={itemVariants} className="bg-[#0B0B0B] border border-white/[0.06] p-6 rounded-2xl shadow-sm dark:shadow-none">
+                                        <h2 className="text-2xl font-bold mb-3 text-white">
+                                            O <span className="text-[#ECBD57] dark:text-[#C9A227]">Desafio</span>
                                         </h2>
                                         <p className="text-slate-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap text-sm font-medium">{project.challenge}</p>
                                     </motion.div>
                                 )}
                                 {project.solution && (
-                                    <motion.div variants={itemVariants} className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] p-6 rounded-2xl shadow-sm dark:shadow-none">
-                                        <h2 className="text-2xl font-bold mb-3 text-slate-900 dark:text-white">
-                                            A <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Solução</span>
+                                    <motion.div variants={itemVariants} className="bg-[#0B0B0B] border border-white/[0.06] p-6 rounded-2xl shadow-sm dark:shadow-none">
+                                        <h2 className="text-2xl font-bold mb-3 text-white">
+                                            A <span className="text-[#ECBD57] dark:text-[#C9A227]">Solução</span>
                                         </h2>
                                         <p className="text-slate-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap text-sm font-medium">{project.solution}</p>
                                     </motion.div>
@@ -319,9 +319,9 @@ const ProjectPage = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                             </div>
 
                             {project.results && (
-                                <motion.div variants={itemVariants} className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] p-8 rounded-2xl shadow-sm dark:shadow-none">
-                                    <h2 className="text-3xl font-bold mb-4 text-slate-900 dark:text-white">
-                                        <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Resultados</span>
+                                <motion.div variants={itemVariants} className="bg-[#0B0B0B] border border-white/[0.06] p-8 rounded-2xl shadow-sm dark:shadow-none">
+                                    <h2 className="text-3xl font-bold mb-4 text-white">
+                                        <span className="text-[#ECBD57] dark:text-[#C9A227]">Resultados</span>
                                     </h2>
                                     <p className="text-slate-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap font-medium">{project.results}</p>
                                 </motion.div>
@@ -329,22 +329,22 @@ const ProjectPage = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                         </motion.div>
 
                         <aside className="lg:sticky top-24 self-start">
-                            <motion.div variants={sectionVariants} initial="hidden" animate="visible" className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] p-8 rounded-2xl shadow-sm dark:shadow-none space-y-8">
+                            <motion.div variants={sectionVariants} initial="hidden" animate="visible" className="bg-[#0B0B0B] border border-white/[0.06] p-8 rounded-2xl shadow-sm dark:shadow-none space-y-8">
                                 <div>
-                                    <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">Detalhes do Projeto</h3>
+                                    <h3 className="text-xl font-bold mb-4 text-white">Detalhes do Projeto</h3>
                                     <ul className="space-y-3 text-slate-600 dark:text-gray-300 font-semibold text-sm">
                                         <li className="flex items-center gap-3">
-                                            <User className="w-5 h-5 text-[#4d7c0f] dark:text-[#bcf13b]" /> 
+                                            <User className="w-5 h-5 text-[#ECBD57] dark:text-[#C9A227]" /> 
                                             <span>{project.client}</span>
                                         </li>
                                         <li className="flex items-center gap-3">
-                                            <Calendar className="w-5 h-5 text-[#4d7c0f] dark:text-[#bcf13b]" /> 
+                                            <Calendar className="w-5 h-5 text-[#ECBD57] dark:text-[#C9A227]" /> 
                                             <span>{project.year}</span>
                                         </li>
                                     </ul>
                                 </div>
                                 <div>
-                                    <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">Serviços Prestados</h3>
+                                    <h3 className="text-xl font-bold mb-4 text-white">Serviços Prestados</h3>
                                     <ul className="flex flex-wrap gap-2">
                                         {(Array.isArray(project.services)
                                             ? project.services
@@ -353,8 +353,8 @@ const ProjectPage = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                                                 : []))
                                             .filter(service => typeof service === 'string' && !service.startsWith('subcategoria:') && !service.startsWith('nicho:'))
                                             .map((service, index) => (
-                                                <li key={index} className="bg-slate-100 dark:bg-[#181814] text-slate-700 dark:text-gray-200 text-sm px-3 py-1 rounded-full flex items-center gap-2 border border-slate-200 dark:border-[#23231f] font-bold">
-                                                    <Tag className="w-3 h-3 text-[#4d7c0f] dark:text-[#bcf13b]" />
+                                                <li key={index} className="bg-slate-100 dark:bg-[#181814] text-slate-700 dark:text-gray-200 text-sm px-3 py-1 rounded-full flex items-center gap-2 border border-white/[0.06] font-bold">
+                                                    <Tag className="w-3 h-3 text-[#ECBD57] dark:text-[#C9A227]" />
                                                     {service}
                                                 </li>
                                             ))}
@@ -362,11 +362,11 @@ const ProjectPage = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                                 </div>
                                 {project.project_url && (
                                     <div>
-                                        <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">
+                                        <h3 className="text-xl font-bold mb-4 text-white">
                                             {project.project_url.includes('youtu') ? 'Assistir no YouTube' : 'Link do Projeto'}
                                         </h3>
                                         <a href={project.project_url} target="_blank" rel="noopener noreferrer">
-                                            <Button className="w-full bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-bold rounded-lg shadow-lg shadow-[#bcf13b]/20 hover:scale-[1.02] transition-transform">
+                                            <Button className="w-full bg-[#C9A227] hover:bg-[#ECBD57] text-[#0a0a08] font-bold rounded-lg shadow-lg shadow-[#C9A227]/20 hover:scale-[1.02] transition-transform">
                                                 {project.project_url.includes('youtu') ? 'Assistir no YouTube Oficial' : 'Visitar Site'} <ExternalLink className="ml-2 h-4 w-4" />
                                             </Button>
                                         </a>
@@ -378,8 +378,8 @@ const ProjectPage = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
 
                     {normalizedVideoUrls && normalizedVideoUrls.length > 0 && (
                         <motion.div variants={sectionVariants} initial="hidden" animate="visible" className="mt-20">
-                            <h2 className="text-4xl font-bold mb-8 text-center text-slate-900 dark:text-white">
-                                {normalizedVideoUrls.length === 1 ? 'Vídeo Completo' : 'Galeria de'} <span className="text-[#4d7c0f] dark:text-[#bcf13b]">{normalizedVideoUrls.length === 1 ? 'em Alta Definição' : 'Vídeos'}</span>
+                            <h2 className="text-4xl font-bold mb-8 text-center text-white">
+                                {normalizedVideoUrls.length === 1 ? 'Vídeo Completo' : 'Galeria de'} <span className="text-[#ECBD57] dark:text-[#C9A227]">{normalizedVideoUrls.length === 1 ? 'em Alta Definição' : 'Vídeos'}</span>
                             </h2>
                             <div className={cn(
                                 "gap-8",
@@ -389,7 +389,7 @@ const ProjectPage = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                                     const embedUrl = getEmbedUrl(url);
                                     if (!embedUrl) return null;
                                     return (
-                                        <motion.div key={index} variants={itemVariants} className="aspect-video rounded-xl overflow-hidden border border-slate-200 dark:border-[#23231f] bg-black shadow-xl">
+                                        <motion.div key={index} variants={itemVariants} className="aspect-video rounded-xl overflow-hidden border border-white/[0.06] bg-black shadow-xl">
                                             <iframe
                                                 src={embedUrl}
                                                 title={`Vídeo do projeto ${project.title} - ${index + 1}`}
@@ -407,10 +407,10 @@ const ProjectPage = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
 
                     {allGalleryImages && allGalleryImages.length > 0 && (
                         <motion.div variants={sectionVariants} initial="hidden" animate="visible" className="mt-20">
-                            <h2 className="text-4xl font-bold mb-8 text-center text-slate-900 dark:text-white">
+                            <h2 className="text-4xl font-bold mb-8 text-center text-white">
                                 {project.category && (project.category.slug === 'videos-com-ia' || project.category.slug === 'producao-com-ia')
-                                    ? <span>Pranchas de <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Personagens & Mídia</span></span>
-                                    : <span>Galeria de <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Imagens</span></span>}
+                                    ? <span>Pranchas de <span className="text-[#ECBD57] dark:text-[#C9A227]">Personagens & Mídia</span></span>
+                                    : <span>Galeria de <span className="text-[#ECBD57] dark:text-[#C9A227]">Imagens</span></span>}
                             </h2>
                             <div className={cn("grid gap-6",
                                 (project.gallery_aspect_ratio === '16:9' || project.gallery_aspect_ratio === '3:2')
@@ -423,7 +423,7 @@ const ProjectPage = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                                         <motion.div
                                             key={index}
                                             variants={itemVariants}
-                                            className={cn("relative group overflow-hidden rounded-2xl cursor-pointer border border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] hover:border-lime-500 dark:hover:border-[#bcf13b] transition-all duration-300 shadow-md",
+                                            className={cn("relative group overflow-hidden rounded-2xl cursor-pointer border border-white/[0.06] bg-[#0B0B0B] hover:border-lime-500 dark:hover:border-[#C9A227] transition-all duration-300 shadow-md",
                                                 aspectRatioClasses[project.gallery_aspect_ratio || '16:9'] || 'aspect-[4/5]'
                                             )}
                                             onClick={() => openModal(index)}
@@ -437,12 +437,12 @@ const ProjectPage = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                                             {/* Rótulo permanente de identificação do personagem */}
                                             {photoLabel && (
                                                 <div className="absolute top-3 left-3 bg-black/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 text-xs font-bold text-white shadow-lg pointer-events-none">
-                                                    <span className="text-[#bcf13b] mr-1.5 font-black">●</span>
+                                                    <span className="text-[#C9A227] mr-1.5 font-black">●</span>
                                                     {photoLabel}
                                                 </div>
                                             )}
                                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                                <p className="text-[#0a0a08] text-sm font-bold bg-[#bcf13b] px-4 py-2 rounded-full border border-[#bcf13b]/30 shadow-lg">
+                                                <p className="text-[#0a0a08] text-sm font-bold bg-[#C9A227] px-4 py-2 rounded-full border border-[#C9A227]/30 shadow-lg">
                                                     Ampliar Imagem
                                                 </p>
                                             </div>
@@ -459,37 +459,37 @@ const ProjectPage = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                         animate="visible"
                         className="mt-20 text-center"
                     >
-                        <div className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] inline-block p-8 rounded-2xl max-w-3xl mx-auto shadow-sm dark:shadow-none">
-                            <h3 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white">
-                                Vamos criar algo <span className="text-[#4d7c0f] dark:text-[#bcf13b]">incrível</span>?
+                        <div className="bg-[#0B0B0B] border border-white/[0.06] inline-block p-8 rounded-2xl max-w-3xl mx-auto shadow-sm dark:shadow-none">
+                            <h3 className="text-2xl font-bold mb-4 text-white">
+                                Vamos criar algo <span className="text-[#ECBD57] dark:text-[#C9A227]">incrível</span>?
                             </h3>
-                            <p className="text-slate-600 dark:text-gray-400 mb-8 font-medium text-sm md:text-base">
+                            <p className="text-[#9E9E9E] mb-8 font-medium text-sm md:text-base">
                                 Transforme suas ideias em realidade ou nos conte como foi sua experiência.
                             </p>
 
                             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                                 {isCleanMode ? (
-                                    <div className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-lime-500/10 text-lime-700 dark:text-[#bcf13b] border border-lime-500/20 text-sm font-bold shadow-sm">
-                                        <CheckCircle2 className="w-5 h-5 text-lime-600 dark:text-[#bcf13b]" />
+                                    <div className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-lime-500/10 text-lime-700 dark:text-[#C9A227] border border-lime-500/20 text-sm font-bold shadow-sm">
+                                        <CheckCircle2 className="w-5 h-5 text-lime-600 dark:text-[#C9A227]" />
                                         <span>Responda à nossa proposta diretamente no 99freelas para alinharmos seu projeto!</span>
                                     </div>
                                 ) : (
                                     <Link to="/contato">
-                                        <Button size="lg" className="bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-bold rounded-lg shadow-lg shadow-[#bcf13b]/20 hover:scale-[1.02] transition-transform w-full sm:w-auto">
+                                        <Button size="lg" className="bg-[#C9A227] hover:bg-[#ECBD57] text-[#0a0a08] font-bold rounded-lg shadow-lg shadow-[#C9A227]/20 hover:scale-[1.02] transition-transform w-full sm:w-auto">
                                             Peça seu orçamento
                                         </Button>
                                     </Link>
                                 )}
                                 <Dialog>
                                     <DialogTrigger asChild>
-                                        <Button size="lg" variant="outline" className="border border-slate-200 dark:border-[#23231f] bg-slate-100 dark:bg-[#181814] text-slate-800 dark:text-white hover:bg-slate-200 dark:hover:bg-[#23231f] hover:text-lime-600 dark:hover:text-[#bcf13b] hover:border-lime-500 dark:hover:border-[#bcf13b] w-full sm:w-auto font-bold shadow-sm transition-all duration-300">
-                                            <Star className="mr-2 h-4 w-4 text-[#4d7c0f] dark:text-[#bcf13b] fill-current" /> Deixar Avaliação
+                                        <Button size="lg" variant="outline" className="border border-white/[0.06] bg-slate-100 dark:bg-[#181814] text-slate-800 dark:text-white hover:bg-slate-200 dark:hover:bg-[#23231f] hover:text-lime-600 dark:hover:text-[#C9A227] hover:border-lime-500 dark:hover:border-[#C9A227] w-full sm:w-auto font-bold shadow-sm transition-all duration-300">
+                                            <Star className="mr-2 h-4 w-4 text-[#ECBD57] dark:text-[#C9A227] fill-current" /> Deixar Avaliação
                                         </Button>
                                     </DialogTrigger>
-                                    <DialogContent className="sm:max-w-2xl bg-white dark:bg-[#121210] border-slate-200 dark:border-[#23231f] text-slate-900 dark:text-white">
+                                    <DialogContent className="sm:max-w-2xl bg-[#0B0B0B] border-white/[0.06] text-white">
                                         <DialogHeader>
-                                             <DialogTitle className="text-2xl font-bold text-slate-900 dark:text-white">
-                                                Sua opinião é <span className="text-[#4d7c0f] dark:text-[#bcf13b]">importante</span>
+                                             <DialogTitle className="text-2xl font-bold text-white">
+                                                Sua opinião é <span className="text-[#ECBD57] dark:text-[#C9A227]">importante</span>
                                             </DialogTitle>
                                         </DialogHeader>
                                         <div className="py-4">
@@ -505,18 +505,18 @@ const ProjectPage = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                         variants={sectionVariants}
                         initial="hidden"
                         animate="visible"
-                        className="flex justify-between items-center mt-20 pt-8 border-t border-slate-200 dark:border-[#23231f]"
+                        className="flex justify-between items-center mt-20 pt-8 border-t border-white/[0.06]"
                     >
                         {prevProject ? (
                             <Link to={`${effectiveBasePath}/${prevProject.category?.slug || 'geral'}/${prevProject.slug}`}>
-                                <Button variant="outline" className="border border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-[#181814] hover:text-lime-600 dark:hover:text-[#bcf13b] hover:border-lime-500 dark:hover:border-[#bcf13b] font-bold transition-all shadow-sm">
+                                <Button variant="outline" className="border border-white/[0.06] bg-[#0B0B0B] text-[#9E9E9E] hover:bg-slate-100 dark:hover:bg-[#181814] hover:text-lime-600 dark:hover:text-[#C9A227] hover:border-lime-500 dark:hover:border-[#C9A227] font-bold transition-all shadow-sm">
                                     <ArrowLeft className="mr-2 h-4 w-4" /> Projeto Anterior
                                 </Button>
                             </Link>
                         ) : <div />}
                         {nextProject ? (
                             <Link to={`${effectiveBasePath}/${nextProject.category?.slug || 'geral'}/${nextProject.slug}`}>
-                                <Button variant="outline" className="border border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-[#181814] hover:text-lime-600 dark:hover:text-[#bcf13b] hover:border-lime-500 dark:hover:border-[#bcf13b] font-bold transition-all shadow-sm">
+                                <Button variant="outline" className="border border-white/[0.06] bg-[#0B0B0B] text-[#9E9E9E] hover:bg-slate-100 dark:hover:bg-[#181814] hover:text-lime-600 dark:hover:text-[#C9A227] hover:border-lime-500 dark:hover:border-[#C9A227] font-bold transition-all shadow-sm">
                                     Próximo Projeto <ArrowRight className="ml-2 h-4 w-4" />
                                 </Button>
                             </Link>

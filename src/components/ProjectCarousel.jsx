@@ -13,18 +13,22 @@ import { ExternalLink, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Autoplay from "embla-carousel-autoplay";
 
+/**
+ * Carrossel de Projetos RAMIELL
+ * Apresenta projetos em formato card editorial quadrado com cantos de 20px,
+ * gradiente escuro e acentos dourados.
+ */
 const ProjectCarousel = ({ categorySlug, excludeCategorySlug, onDataLoaded, basePath = '/portfolio' }) => {
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
     const plugin = useRef(
-        Autoplay({ delay: 1000, stopOnInteraction: true })
+        Autoplay({ delay: 3500, stopOnInteraction: true })
     );
 
     useEffect(() => {
         const fetchProjects = async () => {
             setLoading(true);
             try {
-                // Use !inner if filtering by category (include or exclude), otherwise left join
                 const selectString = (categorySlug || excludeCategorySlug)
                     ? `*, category:categories!inner(slug, title)`
                     : `*, category:categories(slug, title)`;
@@ -51,7 +55,6 @@ const ProjectCarousel = ({ categorySlug, excludeCategorySlug, onDataLoaded, base
                 } else {
                     let fetchedProjects = data || [];
 
-                    // Randomize the order
                     for (let i = fetchedProjects.length - 1; i > 0; i--) {
                         const j = Math.floor(Math.random() * (i + 1));
                         [fetchedProjects[i], fetchedProjects[j]] = [fetchedProjects[j], fetchedProjects[i]];
@@ -75,7 +78,7 @@ const ProjectCarousel = ({ categorySlug, excludeCategorySlug, onDataLoaded, base
     if (loading) {
         return (
             <div className="flex justify-center items-center h-64">
-                <Loader2 className="h-12 w-12 animate-spin text-[#4d7c0f] dark:text-[#bcf13b]" />
+                <Loader2 className="h-10 w-10 animate-spin text-[#C9A227]" />
             </div>
         );
     }
@@ -94,32 +97,40 @@ const ProjectCarousel = ({ categorySlug, excludeCategorySlug, onDataLoaded, base
             <CarouselContent>
                 {projects.map((project) => (
                     <CarouselItem key={project.id} className="md:basis-1/2 lg:basis-1/3">
-                        <div className="p-1">
-                            <Card className="service-card rounded-xl overflow-hidden group border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] bg-white dark:bg-[#121210] shadow-sm hover:shadow-md dark:shadow-none transition-all duration-300">
-                                <CardContent className="flex flex-col aspect-square items-start justify-between p-0">
-                                    <Link to={`${basePath}/${project.category?.slug}/${project.slug}`} className="block w-full h-full">
-                                        <div className="relative overflow-hidden h-full">
-                                            <img alt={project.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" src={project.main_image_url || "https://images.unsplash.com/photo-1572177812156-58036aae439c"} loading="lazy" />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                                            <div className="absolute inset-0 flex flex-col justify-end p-6">
-                                                <span className="text-sm font-bold text-[#bcf13b] mb-1">{project.category?.title}</span>
-                                                <h3 className="text-2xl font-bold text-white mb-2">{project.title}</h3>
-                                                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                                    <Button size="sm" variant="outline" className="bg-[#121210]/80 border-[#23231f] hover:border-[#bcf13b] text-white hover:text-[#bcf13b] backdrop-blur-sm">
-                                                        Ver detalhes <ExternalLink className="w-4 h-4 ml-2" />
-                                                    </Button>
-                                                </div>
+                        <div className="p-2">
+                            <div className="rounded-[20px] overflow-hidden group border border-white/[0.06] hover:border-[#C9A227]/40 bg-[#0B0B0B] hover:shadow-[0_0_24px_rgba(201,162,39,0.12)] transition-all duration-300">
+                                <Link to={`${basePath}/${project.category?.slug}/${project.slug}`} className="block w-full">
+                                    <div className="relative aspect-[4/3] sm:aspect-square overflow-hidden bg-[#121212]">
+                                        <img
+                                            alt={project.title}
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter brightness-90"
+                                            src={project.main_image_url || "https://images.unsplash.com/photo-1572177812156-58036aae439c"}
+                                            loading="lazy"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-[#070707] via-[#070707]/40 to-transparent" />
+                                        <div className="absolute inset-0 flex flex-col justify-end p-6">
+                                            <span className="text-[11px] font-mono uppercase tracking-wider text-[#C9A227] mb-1">
+                                                {project.category?.title}
+                                            </span>
+                                            <h3 className="text-xl font-semibold text-white mb-3 tracking-[-0.02em] leading-snug group-hover:text-[#ECBD57] transition-colors">
+                                                {project.title}
+                                            </h3>
+                                            <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                                <span className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-[#C9A227] px-4 py-2 rounded-full border border-white/[0.08] bg-[#070707]/90 backdrop-blur-md">
+                                                    <span>Ver detalhes</span>
+                                                    <ExternalLink className="w-3.5 h-3.5" strokeWidth={1.5} />
+                                                </span>
                                             </div>
                                         </div>
-                                    </Link>
-                                </CardContent>
-                            </Card>
+                                    </div>
+                                </Link>
+                            </div>
                         </div>
                     </CarouselItem>
                 ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden sm:flex border border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-[#181814] hover:text-lime-600 dark:hover:text-[#bcf13b]" />
-            <CarouselNext className="hidden sm:flex border border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-[#181814] hover:text-lime-600 dark:hover:text-[#bcf13b]" />
+            <CarouselPrevious className="hidden sm:flex border border-white/[0.08] bg-[#0B0B0B] text-white hover:bg-[#121212] hover:text-[#C9A227] rounded-full" />
+            <CarouselNext className="hidden sm:flex border border-white/[0.08] bg-[#0B0B0B] text-white hover:bg-[#121212] hover:text-[#C9A227] rounded-full" />
         </Carousel>
     );
 };

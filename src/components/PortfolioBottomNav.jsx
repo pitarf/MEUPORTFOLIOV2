@@ -81,7 +81,7 @@ const PortfolioBottomNav = ({
                                     placeholder={t('portfolio_search_placeholder', 'Buscar projetos...')}
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="h-9 w-full bg-slate-100 dark:bg-[#181814] border-slate-200 dark:border-[#23231f] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-gray-500 rounded-xl text-xs sm:text-sm font-semibold focus:border-lime-500 dark:focus:border-[#bcf13b]"
+                                    className="h-9 w-full bg-slate-100 dark:bg-[#181814] border-slate-200 dark:border-[#23231f] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-gray-500 rounded-xl text-xs sm:text-sm font-semibold focus:border-lime-500 dark:focus:border-[#C9A227]"
                                 />
                                 {searchQuery && (
                                     <button
@@ -109,7 +109,7 @@ const PortfolioBottomNav = ({
                                         onClick={() => handleCategoryClick('all')}
                                         className={`relative px-3 py-1.5 rounded-xl sm:rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all duration-200 flex-shrink-0 border ${
                                             activeTab === 'all'
-                                                ? 'bg-[#bcf13b] text-[#0a0a08] font-bold border-[#bcf13b] shadow-sm shadow-[#bcf13b]/30 scale-[1.02]'
+                                                ? 'bg-[#C9A227] text-[#0a0a08] font-bold border-[#C9A227] shadow-sm shadow-[#C9A227]/30 scale-[1.02]'
                                                 : 'bg-slate-100/90 dark:bg-[#181814] border-slate-200/80 dark:border-[#23231f] text-slate-700 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-[#20201a]'
                                         }`}
                                     >
@@ -135,7 +135,7 @@ const PortfolioBottomNav = ({
                                                 onClick={() => handleCategoryClick(cat.slug)}
                                                 className={`relative px-3 py-1.5 rounded-xl sm:rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all duration-200 flex-shrink-0 border ${
                                                     isActive
-                                                        ? 'bg-[#bcf13b] text-[#0a0a08] font-bold border-[#bcf13b] shadow-sm shadow-[#bcf13b]/30 scale-[1.02]'
+                                                        ? 'bg-[#C9A227] text-[#0a0a08] font-bold border-[#C9A227] shadow-sm shadow-[#C9A227]/30 scale-[1.02]'
                                                         : 'bg-slate-100/90 dark:bg-[#181814] border-slate-200/80 dark:border-[#23231f] text-slate-700 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-[#20201a]'
                                                 }`}
                                             >
@@ -159,7 +159,7 @@ const PortfolioBottomNav = ({
                                         onClick={() => setIsSearchExpanded(true)}
                                         className={`p-2 rounded-xl sm:rounded-full transition-colors relative ${
                                             searchQuery
-                                                ? 'bg-[#bcf13b] text-[#0a0a08]'
+                                                ? 'bg-[#C9A227] text-[#0a0a08]'
                                                 : 'text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#181814]'
                                         }`}
                                         title={searchQuery ? `Busca ativa: ${searchQuery}` : 'Buscar projetos'}

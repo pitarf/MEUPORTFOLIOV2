@@ -114,7 +114,7 @@ const ReviewForm = ({ onSuccess, className }) => {
     if (isSuccess) {
         return (
             <div className={`flex flex-col items-center justify-center p-8 text-center space-y-6 ${className || ''}`}>
-                <div className="w-20 h-20 bg-[#bcf13b] text-[#0a0a08] rounded-full flex items-center justify-center animate-bounce shadow-lg shadow-[#bcf13b]/20">
+                <div className="w-20 h-20 bg-[#C9A227] text-[#0a0a08] rounded-full flex items-center justify-center animate-bounce shadow-lg shadow-[#C9A227]/20">
                     <Star className="w-10 h-10 fill-current" />
                 </div>
                 <div className="space-y-2">
@@ -124,7 +124,7 @@ const ReviewForm = ({ onSuccess, className }) => {
                 <Button
                     onClick={() => setIsSuccess(false)}
                     variant="outline"
-                    className="mt-6 border-slate-300 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] text-slate-800 dark:text-white hover:text-[#4d7c0f] dark:hover:text-[#bcf13b] bg-white dark:bg-transparent w-full py-6 text-lg font-bold transition-all shadow-sm"
+                    className="mt-6 border-slate-300 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#C9A227] text-slate-800 dark:text-white hover:text-[#ECBD57] dark:hover:text-[#C9A227] bg-white dark:bg-transparent w-full py-6 text-lg font-bold transition-all shadow-sm"
                 >
                     Enviar outra avaliação
                 </Button>
@@ -145,7 +145,7 @@ const ReviewForm = ({ onSuccess, className }) => {
                     </div>
                     <label
                         htmlFor="avatar-upload-form"
-                        className="absolute -bottom-1 -right-1 bg-[#bcf13b] text-[#0a0a08] p-2 rounded-full cursor-pointer hover:bg-[#a8df2a] transition-colors shadow-md"
+                        className="absolute -bottom-1 -right-1 bg-[#C9A227] text-[#0a0a08] p-2 rounded-full cursor-pointer hover:bg-[#ECBD57] transition-colors shadow-md"
                         title="Upload de foto"
                     >
                         <Upload className="w-4 h-4" />
@@ -161,7 +161,7 @@ const ReviewForm = ({ onSuccess, className }) => {
                             value={newReview.name}
                             onChange={(e) => setNewReview({ ...newReview, name: e.target.value })}
                             placeholder="Seu nome"
-                            className="bg-white dark:bg-[#181814] border-slate-200 dark:border-[#23231f] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-gray-500 focus-visible:ring-lime-500 dark:focus-visible:ring-[#bcf13b] focus-visible:border-lime-500 dark:focus-visible:border-[#bcf13b]"
+                            className="bg-white dark:bg-[#181814] border-slate-200 dark:border-[#23231f] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-gray-500 focus-visible:ring-lime-500 dark:focus-visible:ring-[#C9A227] focus-visible:border-lime-500 dark:focus-visible:border-[#C9A227]"
                             required
                         />
                     </div>
@@ -173,7 +173,7 @@ const ReviewForm = ({ onSuccess, className }) => {
                             value={newReview.role}
                             onChange={(e) => setNewReview({ ...newReview, role: e.target.value })}
                             placeholder="Ex: CEO, TechStart"
-                            className="bg-white dark:bg-[#181814] border-slate-200 dark:border-[#23231f] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-gray-500 focus-visible:ring-lime-500 dark:focus-visible:ring-[#bcf13b] focus-visible:border-lime-500 dark:focus-visible:border-[#bcf13b]"
+                            className="bg-white dark:bg-[#181814] border-slate-200 dark:border-[#23231f] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-gray-500 focus-visible:ring-lime-500 dark:focus-visible:ring-[#C9A227] focus-visible:border-lime-500 dark:focus-visible:border-[#C9A227]"
                         />
                     </div>
                 </div>
@@ -189,7 +189,7 @@ const ReviewForm = ({ onSuccess, className }) => {
                             onClick={() => setNewReview({ ...newReview, rating: star })}
                             className="focus:outline-none transition-transform hover:scale-110"
                         >
-                            <Star className={`w-8 h-8 ${star <= newReview.rating ? 'text-[#4d7c0f] dark:text-[#bcf13b] fill-current' : 'text-slate-300 dark:text-gray-600'} hover:text-lime-500 dark:hover:text-[#bcf13b] transition-colors`} />
+                            <Star className={`w-8 h-8 ${star <= newReview.rating ? 'text-[#ECBD57] dark:text-[#C9A227] fill-current' : 'text-slate-300 dark:text-gray-600'} hover:text-lime-500 dark:hover:text-[#C9A227] transition-colors`} />
                         </button>
                     ))}
                 </div>
@@ -203,14 +203,14 @@ const ReviewForm = ({ onSuccess, className }) => {
                     onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
                     rows={4}
                     placeholder="Conte-nos sobre sua experiência com nossos serviços..."
-                    className="bg-white dark:bg-[#181814] border-slate-200 dark:border-[#23231f] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-gray-500 focus-visible:ring-lime-500 dark:focus-visible:ring-[#bcf13b] focus-visible:border-lime-500 dark:focus-visible:border-[#bcf13b]"
+                    className="bg-white dark:bg-[#181814] border-slate-200 dark:border-[#23231f] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-gray-500 focus-visible:ring-lime-500 dark:focus-visible:ring-[#C9A227] focus-visible:border-lime-500 dark:focus-visible:border-[#C9A227]"
                     required
                 />
             </div>
 
             <Button
                 type="submit"
-                className="w-full bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-bold rounded-lg shadow-lg shadow-[#bcf13b]/20 py-3.5 text-base transition-all flex items-center justify-center"
+                className="w-full bg-[#C9A227] hover:bg-[#ECBD57] text-[#0a0a08] font-bold rounded-lg shadow-lg shadow-[#C9A227]/20 py-3.5 text-base transition-all flex items-center justify-center"
                 disabled={submitting}
             >
                 {submitting ? <Loader2 className="w-5 h-5 mr-2 animate-spin text-[#0a0a08]" /> : <MessageCircle className="w-5 h-5 mr-2 text-[#0a0a08]" />}

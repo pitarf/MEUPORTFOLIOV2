@@ -2,284 +2,262 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import SEO from '@/components/SEO';
-import { Target, Eye, Heart, Award, Users, Lightbulb } from 'lucide-react';
+import { Target, Eye, Heart, Award, Users, Lightbulb, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
 import teamImage from '@/Assets/team-work.webp';
 
+/**
+ * Página Sobre a RAMIELL (ramiell.com/sobre)
+ * Narrativa institucional editorial, princípios da marca, equipe e visão de futuro.
+ */
 const About = () => {
     const values = [
         {
             icon: Lightbulb,
-            title: 'Inovação',
-            description: 'Sempre buscamos as tecnologias mais avançadas e soluções criativas para nossos clientes.'
+            title: 'Inovação & Autonomia',
+            description: 'Utilizamos tecnologias contemporâneas e arquiteturas sólidas para construir soluções digitais duradouras.'
         },
         {
             icon: Award,
-            title: 'Qualidade',
-            description: 'Comprometimento com a excelência em cada projeto, garantindo resultados superiores.'
+            title: 'Rigor Técnico & Design',
+            description: 'Acreditamos que design refinado e engenharia de software de ponta são inseparáveis para um produto de valor.'
         },
         {
             icon: Users,
-            title: 'Parceria',
-            description: 'Construímos relacionamentos duradouros baseados na confiança e transparência.'
+            title: 'Parceria Estratégica',
+            description: 'Atuamos próximos de nossos parceiros com transparência, compromisso de entrega e acompanhamento contínuo.'
         },
         {
-            icon: Heart,
-            title: 'Paixão',
-            description: 'Amamos o que fazemos e isso se reflete na dedicação em cada detalhe.'
+            icon: ShieldCheck,
+            title: 'Confiabilidade',
+            description: 'Sistemas seguros, código limpo e infraestrutura de alta disponibilidade para suportar operações reais.'
         }
     ];
 
     const teamMembers = [
         {
             name: 'Rafael Pita',
-            role: 'Fundador & CEO',
-            bio: 'Especialista em soluções digitais com mais de 10 anos de experiência em tecnologia e design.',
+            role: 'Fundador & Head de Tecnologia',
+            bio: 'Engenheiro de software e diretor criativo com mais de 10 anos desenvolvendo ecossistemas digitais, sistemas e experiências interativas.',
             image: 'https://horizons-cdn.hostinger.com/55810f13-6c54-4da4-a823-2e484d52677d/img_0208-aveV3.JPG'
         },
         {
-            name: 'Equipe Design',
-            role: 'Designers Criativos',
-            bio: 'Profissionais especializados em criar identidades visuais marcantes e experiências únicas.',
+            name: 'Design & UI/UX',
+            role: 'Direção Visual Editorial',
+            bio: 'Especialistas dedicados a identidades marcantes, tipografia refinada e interfaces digitais de alta usabilidade.',
             image: 'https://images.unsplash.com/photo-1495224814653-94f36c0a31ea'
         },
         {
-            name: 'Equipe Tech',
-            role: 'Desenvolvedores',
-            bio: 'Especialistas em desenvolvimento web, mobile e soluções tecnológicas avançadas.',
+            name: 'Engenharia Web & Cloud',
+            role: 'Desenvolvimento & Infraestrutura',
+            bio: 'Engenheiros focados em desenvolvimento Full Stack, automações avançadas e deploys resilientes em nuvem.',
             image: 'https://images.unsplash.com/photo-1634836023845-eddbfe9937da'
         }
     ];
 
     return (
-        <>
+        <div className="bg-[#070707] text-white min-h-screen selection:bg-[#C9A227]/30 selection:text-white">
             <SEO 
-                title="Sobre Nós - Rafael Pita Solutions | Criatividade e Tecnologia"
-                description="Conheça a história, missão, visão e valores da Rafael Pita Solutions. Empresa especializada em desenvolvimento web, sistemas, Power BI e fotografia profissional."
-                keywords="sobre rafael pita solutions, equipe rafael pita, empresa desenvolvimento de sites rj, missao visao valores pita solutions"
+                title="Sobre a RAMIELL | Engenharia Digital & Design de Alto Padrão"
+                description="Conheça a RAMIELL. Desenvolvimento de sites, sistemas sob medida e experiências digitais exclusivas. Vai de Ramiell."
+                keywords="sobre ramiell, vai de ramiell, desenvolvimento web ramiell, sistemas corporativos, historia ramiell"
             />
 
-            <div className="pt-20 min-h-screen bg-slate-50 dark:bg-[#0a0a08] text-slate-900 dark:text-white transition-colors duration-300 overflow-x-hidden">
-                {/* Hero Section */}
-                <section className="py-20 relative bg-slate-50 dark:bg-[#0a0a08]">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            {/* Hero Section Editorial */}
+            <section className="pt-32 pb-20 md:py-28 relative editorial-grid">
+                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0B0B0B] border border-white/[0.08] text-xs font-mono text-[#9E9E9E]"
+                    >
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#C9A227]" />
+                        <span className="text-[#ECBD57] font-semibold uppercase font-sans">RAMIELL</span>
+                        <span className="text-white/20">•</span>
+                        <span className="uppercase tracking-wider">Manifesto Institucional</span>
+                    </motion.div>
+
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-tight text-white">
+                        Construindo o futuro de marcas através de{' '}
+                        <span className="gold-gradient-text">engenharia e design</span>.
+                    </h1>
+
+                    <p className="text-base sm:text-lg text-[#9E9E9E] max-w-2xl mx-auto font-normal leading-relaxed">
+                        A RAMIELL desenvolve experiências digitais e sistemas pensados para negócios que buscam autoridade, estabilidade e elegância.
+                    </p>
+                </div>
+            </section>
+
+            {/* História / Posicionamento */}
+            <section className="py-24 bg-[#0A0A0A] border-y border-white/[0.06]">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                         <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="text-center mb-16"
+                            initial={{ opacity: 0, x: -30 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            className="space-y-6"
                         >
-                            <h1 className="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight text-slate-900 dark:text-white">
-                                Sobre <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Nós</span>
-                            </h1>
-                            <p className="text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto font-medium">
-                                Conheça a história por trás da Rafael Pita Solutions e nossa paixão por transformar ideias em realidade digital
-                            </p>
+                            <span className="text-xs font-mono uppercase tracking-widest text-[#C9A227]">
+                                ORIGEM & PROPÓSITO
+                            </span>
+                            <h2 className="text-3xl sm:text-4xl font-semibold tracking-[-0.03em] text-white leading-tight">
+                                Mais que código, entregamos valor e autoridade digital.
+                            </h2>
+                            <div className="space-y-4 text-[#9E9E9E] text-sm sm:text-base font-normal leading-relaxed">
+                                <p>
+                                    A RAMIELL foi concebida para atender à demanda de clientes e empresas que precisam de soluções além do padrão. Em um ecossistema digital saturado de modelos genéricos, priorizamos arquitetura refinada, estética editorial e performance real.
+                                </p>
+                                <p>
+                                    Cada projeto que entregamos une visual marcante, carregamento ultra-rápido, SEO estruturado e lógica operacional confiável, proporcionando a parceiros e clientes a segurança de uma plataforma premium.
+                                </p>
+                                <p className="text-white font-medium">
+                                    Vai de Ramiell.
+                                </p>
+                            </div>
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, x: 30 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            className="relative"
+                        >
+                            <div className="p-3 rounded-[20px] bg-[#0B0B0B] border border-white/[0.06] shadow-2xl">
+                                <img
+                                    alt="Ambiente de desenvolvimento RAMIELL"
+                                    src={teamImage}
+                                    className="w-full h-auto rounded-[16px] object-cover filter brightness-90"
+                                />
+                            </div>
                         </motion.div>
                     </div>
-                </section>
+                </div>
+            </section>
 
-                {/* Story Section */}
-                <section className="py-20 overflow-hidden bg-slate-50 dark:bg-[#0a0a08]">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                            <motion.div
-                                initial={{ opacity: 0, x: -50 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                className="space-y-6"
-                            >
-                                <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white">
-                                    Nossa <span className="text-[#4d7c0f] dark:text-[#bcf13b]">História</span>
-                                </h2>
-                                <div className="space-y-4 text-slate-600 dark:text-gray-300 font-medium leading-relaxed">
-                                    <p>
-                                        A Rafael Pita Solutions nasceu da paixão por tecnologia e criatividade. Fundada com o objetivo de oferecer soluções digitais completas e inovadoras, nossa empresa cresceu rapidamente, conquistando a confiança de centenas de clientes.
-                                    </p>
-                                    <p>
-                                        Fundada a partir de uma trajetória que começou com serviços de informática e design, hoje a Rafael Pita Solutions é uma empresa completa, oferecendo soluções integradas em design gráfico, fotografia, desenvolvimento de sistemas, dashboards em Power BI e estratégias de marketing digital.
-                                    </p>
-                                    <p>
-                                        Nossa jornada é marcada pela constante busca por excelência e inovação, sempre mantendo o foco na satisfação do cliente e na entrega de resultados excepcionais.
-                                    </p>
+            {/* Pilares Institucionais: Missão, Visão e Valores */}
+            <section className="py-24 bg-[#070707]">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div className="editorial-card p-8 space-y-4">
+                            <div className="w-12 h-12 bg-[#121212] border border-white/[0.06] rounded-full flex items-center justify-center">
+                                <Target className="w-5 h-5 text-[#C9A227]" strokeWidth={1.5} />
+                            </div>
+                            <h3 className="text-xl font-semibold text-white tracking-[-0.02em]">Missão</h3>
+                            <p className="text-[#9E9E9E] text-sm leading-relaxed">
+                                Desenvolver sites e sistemas que representem fielmente o mais alto padrão dos nossos clientes, unindo usabilidade, segurança e velocidade.
+                            </p>
+                        </div>
+
+                        <div className="editorial-card p-8 space-y-4">
+                            <div className="w-12 h-12 bg-[#121212] border border-white/[0.06] rounded-full flex items-center justify-center">
+                                <Eye className="w-5 h-5 text-[#C9A227]" strokeWidth={1.5} />
+                            </div>
+                            <h3 className="text-xl font-semibold text-white tracking-[-0.02em]">Visão</h3>
+                            <p className="text-[#9E9E9E] text-sm leading-relaxed">
+                                Consolidar a RAMIELL como uma das principais referências em engenharia de software e experiências digitais premium no mercado nacional e internacional.
+                            </p>
+                        </div>
+
+                        <div className="editorial-card p-8 space-y-4">
+                            <div className="w-12 h-12 bg-[#121212] border border-white/[0.06] rounded-full flex items-center justify-center">
+                                <Heart className="w-5 h-5 text-[#C9A227]" strokeWidth={1.5} />
+                            </div>
+                            <h3 className="text-xl font-semibold text-white tracking-[-0.02em]">Valores</h3>
+                            <p className="text-[#9E9E9E] text-sm leading-relaxed">
+                                Excelência técnica, discrição, compromisso irrestrito com prazos e valorização do detalhe em cada linha de código e pixel entregue.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Valores Detalhados */}
+            <section className="py-24 bg-[#0A0A0A] border-t border-white/[0.06]">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-16 space-y-3">
+                        <span className="text-xs font-mono uppercase tracking-widest text-[#C9A227]">
+                            DIRETRIZES
+                        </span>
+                        <h2 className="text-3xl sm:text-4xl font-semibold tracking-[-0.03em] text-white">
+                            Princípios que guiam nossa <span className="gold-gradient-text">execução</span>
+                        </h2>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {values.map((val) => (
+                            <div key={val.title} className="editorial-card p-8 flex items-start gap-5">
+                                <div className="w-12 h-12 bg-[#121212] border border-white/[0.06] rounded-full flex items-center justify-center shrink-0">
+                                    <val.icon className="w-5 h-5 text-[#C9A227]" strokeWidth={1.5} />
                                 </div>
-                            </motion.div>
+                                <div className="space-y-2">
+                                    <h3 className="text-lg font-semibold text-white tracking-[-0.02em]">{val.title}</h3>
+                                    <p className="text-[#9E9E9E] text-sm leading-relaxed">{val.description}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
 
-                            <motion.div
-                                initial={{ opacity: 0, x: 50 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                className="relative"
-                            >
-                                <div className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b]/50 transition-colors shadow-sm dark:shadow-none">
+            {/* Equipe RAMIELL */}
+            <section className="py-24 bg-[#070707] border-t border-white/[0.06]">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-16 space-y-3">
+                        <span className="text-xs font-mono uppercase tracking-widest text-[#C9A227]">
+                            LIDERANÇA & TALENTO
+                        </span>
+                        <h2 className="text-3xl sm:text-4xl font-semibold tracking-[-0.03em] text-white">
+                            Quem faz a <span className="gold-gradient-text">RAMIELL acontecer</span>
+                        </h2>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        {teamMembers.map((member) => (
+                            <div key={member.name} className="editorial-card p-8 text-center space-y-5">
+                                <div className="relative inline-block">
                                     <img
-                                        alt="Equipe Rafael Pita Solutions trabalhando"
-                                        src={teamImage}
-                                        className="w-full h-auto rounded-lg shadow-lg"
+                                        alt={member.name}
+                                        className="w-28 h-28 rounded-full mx-auto object-cover border border-white/[0.08] filter drop-shadow-[0_0_12px_rgba(201,162,39,0.15)]"
+                                        src={member.image}
                                     />
                                 </div>
-                            </motion.div>
-                        </div>
-                    </div>
-                </section>
-
-                {/* Mission, Vision, Values */}
-                <section className="py-20 bg-slate-100/60 dark:bg-[#121210] border-y border-slate-200 dark:border-[#23231f] overflow-hidden">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                className="text-center space-y-4 p-8 rounded-xl bg-white dark:bg-[#181814] border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] hover:shadow-[0_0_20px_rgba(77,124,15,0.15)] dark:hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] transition-all duration-300 group shadow-sm"
-                            >
-                                <div className="w-16 h-16 mx-auto bg-slate-50 dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] group-hover:border-lime-500 dark:group-hover:border-[#bcf13b] rounded-full flex items-center justify-center shadow-md transition-colors">
-                                    <Target className="w-8 h-8 text-[#4d7c0f] dark:text-[#bcf13b]" />
+                                <div className="space-y-1">
+                                    <h3 className="text-xl font-semibold text-white tracking-[-0.02em]">{member.name}</h3>
+                                    <p className="text-xs font-mono text-[#C9A227] uppercase tracking-wider">{member.role}</p>
                                 </div>
-                                <h3 className="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-[#4d7c0f] dark:group-hover:text-[#bcf13b] transition-colors">Missão</h3>
-                                <p className="text-slate-600 dark:text-gray-400 font-medium">
-                                    Transformar ideias em soluções digitais inovadoras, ajudando nossos clientes a alcançar seus objetivos através da tecnologia e criatividade.
+                                <p className="text-[#9E9E9E] text-xs sm:text-sm leading-relaxed">
+                                    {member.bio}
                                 </p>
-                            </motion.div>
-
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.1 }}
-                                className="text-center space-y-4 p-8 rounded-xl bg-white dark:bg-[#181814] border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] hover:shadow-[0_0_20px_rgba(77,124,15,0.15)] dark:hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] transition-all duration-300 group shadow-sm"
-                            >
-                                <div className="w-16 h-16 mx-auto bg-slate-50 dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] group-hover:border-lime-500 dark:group-hover:border-[#bcf13b] rounded-full flex items-center justify-center shadow-md transition-colors">
-                                    <Eye className="w-8 h-8 text-[#4d7c0f] dark:text-[#bcf13b]" />
-                                </div>
-                                <h3 className="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-[#4d7c0f] dark:group-hover:text-[#bcf13b] transition-colors">Visão</h3>
-                                <p className="text-slate-600 dark:text-gray-400 font-medium">
-                                    Ser reconhecida como a principal referência em soluções digitais criativas, liderando a transformação digital de empresas no Brasil.
-                                </p>
-                            </motion.div>
-
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.2 }}
-                                className="text-center space-y-4 p-8 rounded-xl bg-white dark:bg-[#181814] border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] hover:shadow-[0_0_20px_rgba(77,124,15,0.15)] dark:hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] transition-all duration-300 group shadow-sm"
-                            >
-                                <div className="w-16 h-16 mx-auto bg-slate-50 dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] group-hover:border-lime-500 dark:group-hover:border-[#bcf13b] rounded-full flex items-center justify-center shadow-md transition-colors">
-                                    <Heart className="w-8 h-8 text-[#4d7c0f] dark:text-[#bcf13b]" />
-                                </div>
-                                <h3 className="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-[#4d7c0f] dark:group-hover:text-[#bcf13b] transition-colors">Valores</h3>
-                                <p className="text-slate-600 dark:text-gray-400 font-medium">
-                                    Inovação, qualidade, transparência e compromisso com o sucesso de nossos clientes são os pilares que guiam todas as nossas ações.
-                                </p>
-                            </motion.div>
-                        </div>
+                            </div>
+                        ))}
                     </div>
-                </section>
+                </div>
+            </section>
 
-                {/* Values Detail */}
-                <section className="py-20 overflow-hidden bg-slate-50 dark:bg-[#0a0a08]">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            className="text-center mb-16"
-                        >
-                            <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white mb-6">
-                                Nossos <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Valores</span>
-                            </h2>
-                            <p className="text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto font-medium">
-                                Os princípios que norteiam nossa empresa e garantem a excelência em tudo que fazemos
-                            </p>
-                        </motion.div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            {values.map((value, index) => (
-                                <motion.div
-                                    key={value.title}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: index * 0.1 }}
-                                    className="service-card p-8 rounded-xl border border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] hover:border-lime-500 dark:hover:border-[#bcf13b] hover:shadow-[0_0_20px_rgba(77,124,15,0.15)] dark:hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] transition-all duration-300 group shadow-sm"
-                                >
-                                    <div className="flex items-start space-x-4">
-                                        <div className="w-12 h-12 bg-slate-50 dark:bg-[#181814] border border-slate-200 dark:border-[#23231f] group-hover:border-lime-500 dark:group-hover:border-[#bcf13b] rounded-lg flex items-center justify-center flex-shrink-0 transition-colors shadow-md">
-                                            <value.icon className="w-6 h-6 text-[#4d7c0f] dark:text-[#bcf13b]" />
-                                        </div>
-                                        <div>
-                                            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-[#4d7c0f] dark:group-hover:text-[#bcf13b] transition-colors">{value.title}</h3>
-                                            <p className="text-slate-600 dark:text-gray-400 font-medium leading-relaxed">{value.description}</p>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </div>
+            {/* CTA Final */}
+            <section className="py-24 bg-[#0A0A0A] border-t border-white/[0.06] text-center">
+                <div className="max-w-3xl mx-auto px-4 space-y-6">
+                    <h2 className="text-3xl sm:text-4xl font-semibold tracking-[-0.03em] text-white">
+                        Vamos iniciar seu próximo projeto?
+                    </h2>
+                    <p className="text-[#9E9E9E] text-base leading-relaxed">
+                        Converse conosco e entenda como a RAMIELL pode transformar sua presença digital.
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center pt-2">
+                        <Link to="/contato">
+                            <button className="bg-[#C9A227] hover:bg-[#ECBD57] text-[#070707] text-xs uppercase tracking-wider font-semibold px-8 py-4 rounded-full shadow-[0_0_24px_rgba(201,162,39,0.25)] transition-all">
+                                Falar com a Equipe
+                            </button>
+                        </Link>
+                        <Link to="/portfolio">
+                            <button className="bg-[#0B0B0B] border border-white/[0.08] hover:border-[#C9A227]/40 text-white hover:text-[#ECBD57] text-xs uppercase tracking-wider font-semibold px-8 py-4 rounded-full transition-all">
+                                Ver Portfólio
+                            </button>
+                        </Link>
                     </div>
-                </section>
-
-                {/* Team Section */}
-                <section className="py-20 bg-slate-100/60 dark:bg-[#121210] border-t border-slate-200 dark:border-[#23231f] overflow-hidden">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            className="text-center mb-16"
-                        >
-                            <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white mb-6">
-                                Nossa <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Equipe</span>
-                            </h2>
-                            <p className="text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto font-medium">
-                                Profissionais especializados e apaixonados por tecnologia, unidos pelo objetivo comum de entregar excelência
-                            </p>
-                        </motion.div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            {teamMembers.map((member, index) => (
-                                <motion.div
-                                    key={member.name}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: index * 0.1 }}
-                                    className="text-center p-8 rounded-xl bg-white dark:bg-[#181814] border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] hover:shadow-[0_0_20px_rgba(77,124,15,0.15)] dark:hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] transition-all duration-300 group shadow-sm"
-                                >
-                                    <div className="relative mb-6 inline-block">
-                                        <img
-                                            alt={member.name}
-                                            className="w-32 h-32 rounded-full mx-auto object-cover border-4 border-slate-200 dark:border-[#23231f] group-hover:border-lime-500 dark:group-hover:border-[#bcf13b] shadow-xl transition-all duration-300"
-                                            src={member.image}
-                                        />
-                                    </div>
-                                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-[#4d7c0f] dark:group-hover:text-[#bcf13b] transition-colors">{member.name}</h3>
-                                    <p className="text-[#4d7c0f] dark:text-[#bcf13b] mb-3 font-bold">{member.role}</p>
-                                    <p className="text-slate-600 dark:text-gray-400 text-sm font-medium leading-relaxed">
-                                        {member.bio}
-                                    </p>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-
-                {/* CTA Section */}
-                <section className="py-20 bg-slate-50 dark:bg-[#0a0a08] border-t border-slate-200 dark:border-[#23231f]">
-                    <div className="max-w-4xl mx-auto px-4 text-center">
-                        <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-4">
-                            Vamos construir algo incrível <span className="text-[#4d7c0f] dark:text-[#bcf13b]">juntos</span>?
-                        </h2>
-                        <p className="text-slate-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto font-medium text-lg">
-                            Entre em contato conosco e descubra como podemos acelerar seu negócio digital com excelência e tecnologia de ponta.
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <Link
-                                to="/contato"
-                                className="inline-flex items-center justify-center px-8 py-3.5 bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-bold rounded-lg shadow-lg shadow-[#bcf13b]/20 transition-all text-base"
-                            >
-                                Iniciar Projeto
-                            </Link>
-                            <Link
-                                to="/servicos"
-                                className="inline-flex items-center justify-center px-8 py-3.5 bg-white dark:bg-transparent border border-slate-300 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] text-slate-900 dark:text-white hover:text-[#4d7c0f] dark:hover:text-[#bcf13b] font-bold rounded-lg transition-all text-base shadow-sm dark:shadow-none"
-                            >
-                                Conhecer Serviços
-                            </Link>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        </>
+                </div>
+            </section>
+        </div>
     );
 };
 

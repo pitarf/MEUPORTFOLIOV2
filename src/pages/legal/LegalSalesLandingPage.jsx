@@ -182,9 +182,9 @@ export default function LegalSalesLandingPage() {
     const schemaData = useMemo(() => ({
         '@context': 'https://schema.org',
         '@type': 'ProfessionalService',
-        'name': 'Criação de Sites para Advogados : Rafael Pita Solutions',
-        'image': 'https://rafaelpitaoficial.com.br/favicon.svg',
-        'url': 'https://rafaelpitaoficial.com.br/criacao-site-advogado',
+        'name': 'Criação de Sites para Advogados : RAMIELL',
+        'image': 'https://ramiell.com/favicon.svg',
+        'url': 'https://ramiell.com/criacao-site-advogado',
         'telephone': '+5521966149077',
         'priceRange': 'R$ 297',
         'description': 'Desenvolvimento de landing pages e sites exclusivos para advogados e escritórios de advocacia com SEO de alto padrão, conformidade com a OAB e integração com WhatsApp.',
@@ -218,7 +218,7 @@ export default function LegalSalesLandingPage() {
                 title="Criação de Site para Advogado | De R$ 450 por R$ 297"
                 description="Criador e desenvolvedor de site de advogado com SEO de alto padrão. Tenha uma landing page jurídica sob medida com sua logo, fotos e botão de WhatsApp. De R$ 450 por apenas R$ 297."
                 keywords="criar site para advogado, criacao de site para advogado, desenvolvedor de site de advogado, onde comprar site de advogado, como comprar site de advogado, site de advogado com seo, landing page para advogados, site juridico pronto, site responsivo oab, marketing juridico site"
-                url="https://rafaelpitaoficial.com.br/criacao-site-advogado"
+                url="https://ramiell.com/criacao-site-advogado"
             />
 
             <Helmet>
@@ -285,14 +285,14 @@ export default function LegalSalesLandingPage() {
                 {/* SEÇÃO 1: HERO MONUMENTAL */}
                 <section className="relative pt-12 pb-16 md:pt-20 md:pb-24 px-4 sm:px-6 max-w-6xl mx-auto">
                     <div className="text-center space-y-6 max-w-3xl mx-auto">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-700 dark:text-[#bcf13b] border border-emerald-500/20">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-700 dark:text-[#C9A227] border border-emerald-500/20">
                             <Shield className="w-3.5 h-3.5" />
                             <span>Conforme Provimento 205/2021 CFOAB</span>
                         </div>
 
                         <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-950 dark:text-white leading-[1.15]">
                             Criação de Site para Advogado com{' '}
-                            <span className="text-emerald-700 dark:text-[#bcf13b]">
+                            <span className="text-emerald-700 dark:text-[#C9A227]">
                                 SEO e Alta Conversão
                             </span>
                         </h1>
@@ -307,7 +307,7 @@ export default function LegalSalesLandingPage() {
                             <div className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] rounded-2xl p-4 shadow-sm inline-flex items-center gap-4">
                                 <div className="text-left">
                                     <span className="text-xs text-slate-500 dark:text-slate-400 line-through block font-medium">De R$ 450,00</span>
-                                    <div className="text-2xl sm:text-3xl font-black text-emerald-700 dark:text-[#bcf13b]">
+                                    <div className="text-2xl sm:text-3xl font-black text-emerald-700 dark:text-[#C9A227]">
                                         R$ 297,00
                                     </div>
                                     <span className="text-[11px] text-slate-600 dark:text-slate-300 font-medium">
@@ -331,15 +331,15 @@ export default function LegalSalesLandingPage() {
                         {/* Benefícios Rápidos */}
                         <div className="pt-4 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-700 dark:text-gray-300">
                             <span className="flex items-center gap-1.5">
-                                <CheckCircle2 className="w-4 h-4 text-emerald-700 dark:text-[#bcf13b]" />
+                                <CheckCircle2 className="w-4 h-4 text-emerald-700 dark:text-[#C9A227]" />
                                 Entrega rápida em 24h a 48h
                             </span>
                             <span className="flex items-center gap-1.5">
-                                <CheckCircle2 className="w-4 h-4 text-emerald-700 dark:text-[#bcf13b]" />
+                                <CheckCircle2 className="w-4 h-4 text-emerald-700 dark:text-[#C9A227]" />
                                 100% responsivo para celulares
                             </span>
                             <span className="flex items-center gap-1.5">
-                                <CheckCircle2 className="w-4 h-4 text-emerald-700 dark:text-[#bcf13b]" />
+                                <CheckCircle2 className="w-4 h-4 text-emerald-700 dark:text-[#C9A227]" />
                                 Sem mensalidade obrigatória
                             </span>
                         </div>
@@ -350,7 +350,7 @@ export default function LegalSalesLandingPage() {
             <section id="modelos" className="py-16 bg-white dark:bg-[#121210] border-y border-slate-200 dark:border-[#23231f]">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6">
                     <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
-                        <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-[#bcf13b]">
+                        <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-[#C9A227]">
                             Demonstrações Reais ao Vivo
                         </span>
                         <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
@@ -365,7 +365,7 @@ export default function LegalSalesLandingPage() {
                         {showcaseTemplates.map((template) => (
                             <div
                                 key={template.id}
-                                className="border border-slate-200 dark:border-[#23231f] rounded-2xl p-6 bg-slate-50 dark:bg-[#181814] flex flex-col justify-between hover:border-emerald-500 dark:hover:border-[#bcf13b] transition-all shadow-sm group"
+                                className="border border-slate-200 dark:border-[#23231f] rounded-2xl p-6 bg-slate-50 dark:bg-[#181814] flex flex-col justify-between hover:border-emerald-500 dark:hover:border-[#C9A227] transition-all shadow-sm group"
                             >
                                 <div className="space-y-4">
                                     <div className="flex items-center justify-between">
@@ -378,7 +378,7 @@ export default function LegalSalesLandingPage() {
                                         </div>
                                     </div>
 
-                                    <h3 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-emerald-700 dark:group-hover:text-[#bcf13b] transition-colors">
+                                    <h3 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-emerald-700 dark:group-hover:text-[#C9A227] transition-colors">
                                         {template.title}
                                     </h3>
 
@@ -389,7 +389,7 @@ export default function LegalSalesLandingPage() {
                                     <ul className="space-y-1.5 pt-2 border-t border-slate-200 dark:border-[#23231f]">
                                         {template.features.map((feat, fIdx) => (
                                             <li key={fIdx} className="text-xs text-slate-700 dark:text-gray-300 flex items-center gap-2">
-                                                <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-[#bcf13b] shrink-0" />
+                                                <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-[#C9A227] shrink-0" />
                                                 <span>{feat}</span>
                                             </li>
                                         ))}
@@ -403,7 +403,7 @@ export default function LegalSalesLandingPage() {
                                         rel="noopener noreferrer"
                                         className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-[#33332d] text-xs font-semibold hover:bg-slate-200 dark:hover:bg-[#23231f] text-slate-800 dark:text-gray-200 transition-colors"
                                     >
-                                        <ExternalLink className="w-3.5 h-3.5 text-emerald-600 dark:text-[#bcf13b]" />
+                                        <ExternalLink className="w-3.5 h-3.5 text-emerald-600 dark:text-[#C9A227]" />
                                         <span>Testar Modelo ao Vivo</span>
                                     </Link>
 
@@ -426,7 +426,7 @@ export default function LegalSalesLandingPage() {
                 {/* SEÇÃO 3: PERSONALIZAÇÃO COMPLETA ("COM A CARA DO SEU ESCRITÓRIO") */}
                 <section className="py-16 max-w-6xl mx-auto px-4 sm:px-6">
                     <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
-                        <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-[#bcf13b]">
+                        <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-[#C9A227]">
                             Personalização Rigorosa
                         </span>
                         <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
@@ -439,7 +439,7 @@ export default function LegalSalesLandingPage() {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         <div className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] p-5 rounded-2xl space-y-3">
-                            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-700 dark:text-[#bcf13b] flex items-center justify-center">
+                            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-700 dark:text-[#C9A227] flex items-center justify-center">
                                 <Palette className="w-5 h-5" />
                             </div>
                             <h3 className="font-bold text-sm text-slate-900 dark:text-white">Suas Cores & Logotipo</h3>
@@ -469,7 +469,7 @@ export default function LegalSalesLandingPage() {
                         </div>
 
                         <div className="bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] p-5 rounded-2xl space-y-3">
-                            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-700 dark:text-[#bcf13b] flex items-center justify-center">
+                            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-700 dark:text-[#C9A227] flex items-center justify-center">
                                 <Smartphone className="w-5 h-5" />
                             </div>
                             <h3 className="font-bold text-sm text-slate-900 dark:text-white">WhatsApp de Atendimento</h3>
@@ -575,7 +575,7 @@ export default function LegalSalesLandingPage() {
                 {/* SEÇÃO 5: PERGUNTAS FREQUENTES (FAQ) */}
                 <section className="py-16 max-w-4xl mx-auto px-4 sm:px-6">
                     <div className="text-center space-y-3 mb-12">
-                        <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-[#bcf13b]">
+                        <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-[#C9A227]">
                             Tire Suas Dúvidas
                         </span>
                         <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
@@ -595,7 +595,7 @@ export default function LegalSalesLandingPage() {
                                         type="button"
                                         aria-expanded={isOpen}
                                         onClick={() => setOpenFaq(isOpen ? null : idx)}
-                                        className="w-full p-5 text-left flex items-center justify-between gap-4 font-bold text-sm text-slate-900 dark:text-white hover:text-emerald-700 dark:hover:text-[#bcf13b] transition-colors"
+                                        className="w-full p-5 text-left flex items-center justify-between gap-4 font-bold text-sm text-slate-900 dark:text-white hover:text-emerald-700 dark:hover:text-[#C9A227] transition-colors"
                                     >
                                         <span>{item.q}</span>
                                         <ChevronDown
@@ -638,7 +638,7 @@ export default function LegalSalesLandingPage() {
             <footer className="border-t border-slate-200 dark:border-[#23231f] py-8 px-4 text-center text-xs text-slate-600 dark:text-slate-400">
                 <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div>
-                        <strong>Rafael Pita Solutions</strong> : Soluções Digitais & Inteligência Web
+                        <strong>RAMIELL</strong> : Soluções Digitais & Inteligência Web
                     </div>
                     <div className="flex items-center gap-4 text-[11px]">
                         <Link to="/" className="hover:underline">Home</Link>

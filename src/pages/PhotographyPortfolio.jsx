@@ -159,13 +159,13 @@ const PhotographyPortfolio = ({ cleanMode: propCleanMode, basePath: propBasePath
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
                         <div className="space-y-3">
                             <Link to={homePhotoPath}>
-                                <Button variant="ghost" className="text-slate-600 hover:text-[#4d7c0f] dark:text-gray-400 dark:hover:text-[#bcf13b] mb-2 pl-0 font-bold transition-colors">
+                                <Button variant="ghost" className="text-slate-600 hover:text-[#ECBD57] dark:text-gray-400 dark:hover:text-[#C9A227] mb-2 pl-0 font-bold transition-colors">
                                     <ArrowLeft className="mr-2 h-4 w-4" /> {isCleanMode ? "Voltar à Vitrine de Fotografia" : "Voltar para Home de Fotografia"}
                                 </Button>
                             </Link>
                             <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-3.5">
-                                <Camera className="w-10 h-10 text-[#4d7c0f] dark:text-[#bcf13b]" />
-                                <span>Galeria de <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Arte</span></span>
+                                <Camera className="w-10 h-10 text-[#ECBD57] dark:text-[#C9A227]" />
+                                <span>Galeria de <span className="text-[#ECBD57] dark:text-[#C9A227]">Arte</span></span>
                             </h1>
                             <p className="text-base md:text-xl text-slate-600 dark:text-gray-400 font-medium leading-relaxed">
                                 Registros artísticos e cases selecionados com acabamento de excelência.
@@ -177,7 +177,7 @@ const PhotographyPortfolio = ({ cleanMode: propCleanMode, basePath: propBasePath
                             <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-slate-400 dark:text-gray-500 w-4 h-4" />
                             <Input
                                 placeholder="Buscar nos cliques..."
-                                className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-[#121210] border-slate-200 dark:border-[#23231f] rounded-xl focus:border-lime-500 dark:focus:border-[#bcf13b] focus:ring-1 focus:ring-lime-500 dark:focus:ring-[#bcf13b] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-gray-500 font-medium shadow-sm"
+                                className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-[#121210] border-slate-200 dark:border-[#23231f] rounded-xl focus:border-lime-500 dark:focus:border-[#C9A227] focus:ring-1 focus:ring-lime-500 dark:focus:ring-[#C9A227] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-gray-500 font-medium shadow-sm"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
@@ -209,7 +209,7 @@ const PhotographyPortfolio = ({ cleanMode: propCleanMode, basePath: propBasePath
                                     {activeTab === tab.id && (
                                         <motion.span
                                             layoutId="activePhotoTabBackground"
-                                            className="absolute inset-0 bg-[#bcf13b] rounded-xl -z-10 shadow-md shadow-[#bcf13b]/20"
+                                            className="absolute inset-0 bg-[#C9A227] rounded-xl -z-10 shadow-md shadow-[#C9A227]/20"
                                             transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                                         />
                                     )}
@@ -227,7 +227,7 @@ const PhotographyPortfolio = ({ cleanMode: propCleanMode, basePath: propBasePath
                     {/* Loader */}
                     {loading ? (
                         <div className="flex justify-center items-center h-64">
-                            <Loader2 className="h-16 w-16 animate-spin text-[#4d7c0f] dark:text-[#bcf13b]" />
+                            <Loader2 className="h-16 w-16 animate-spin text-[#ECBD57] dark:text-[#C9A227]" />
                         </div>
                     ) : (
                         <>
@@ -246,7 +246,7 @@ const PhotographyPortfolio = ({ cleanMode: propCleanMode, basePath: propBasePath
                                                     {/* Cabecalho do Nicho Mobile */}
                                                     <div className="flex items-center justify-between px-1">
                                                         <div className="flex items-center gap-2.5 min-w-0">
-                                                            <div className="w-8 h-8 rounded-xl bg-lime-500/10 dark:bg-[#bcf13b]/10 flex items-center justify-center border border-lime-500/20 dark:border-[#bcf13b]/20 text-[#4d7c0f] dark:text-[#bcf13b] shrink-0">
+                                                            <div className="w-8 h-8 rounded-xl bg-lime-500/10 dark:bg-[#C9A227]/10 flex items-center justify-center border border-lime-500/20 dark:border-[#C9A227]/20 text-[#ECBD57] dark:text-[#C9A227] shrink-0">
                                                                 <Camera className="w-4 h-4" />
                                                             </div>
                                                             <div className="min-w-0">
@@ -264,7 +264,7 @@ const PhotographyPortfolio = ({ cleanMode: propCleanMode, basePath: propBasePath
                                                         <button
                                                             type="button"
                                                             onClick={() => setActiveTab(niche)}
-                                                            className="text-xs font-bold text-[#4d7c0f] dark:text-[#bcf13b] hover:underline flex items-center gap-1 shrink-0 ml-2 py-1"
+                                                            className="text-xs font-bold text-[#ECBD57] dark:text-[#C9A227] hover:underline flex items-center gap-1 shrink-0 ml-2 py-1"
                                                         >
                                                             <span>Ver todos</span>
                                                             <ArrowRight className="w-3.5 h-3.5" />
@@ -280,7 +280,7 @@ const PhotographyPortfolio = ({ cleanMode: propCleanMode, basePath: propBasePath
                                                             >
                                                                 <Link to={`${effectiveBasePath}/fotografia/${project.slug}`} className="block w-full h-full select-none">
                                                                     {/* Conteiner da Imagem */}
-                                                                    <div className="aspect-[3/2] w-full rounded-2xl overflow-hidden shadow-md relative bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] group hover:border-lime-500 dark:hover:border-[#bcf13b] transition-all duration-300">
+                                                                    <div className="aspect-[3/2] w-full rounded-2xl overflow-hidden shadow-md relative bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] group hover:border-lime-500 dark:hover:border-[#C9A227] transition-all duration-300">
                                                                         <img
                                                                             src={project.main_image_url || 'https://via.placeholder.com/800x600'}
                                                                             alt={project.title}
@@ -288,7 +288,7 @@ const PhotographyPortfolio = ({ cleanMode: propCleanMode, basePath: propBasePath
                                                                             loading="lazy"
                                                                         />
                                                                         <div className="absolute top-2.5 left-2.5">
-                                                                            <span className="text-[10px] font-bold text-[#0a0a08] px-2 py-0.5 rounded-full bg-[#bcf13b] uppercase tracking-wider shadow-xs">
+                                                                            <span className="text-[10px] font-bold text-[#0a0a08] px-2 py-0.5 rounded-full bg-[#C9A227] uppercase tracking-wider shadow-xs">
                                                                                 {nicheLabel}
                                                                             </span>
                                                                         </div>
@@ -299,7 +299,7 @@ const PhotographyPortfolio = ({ cleanMode: propCleanMode, basePath: propBasePath
                                                                         <h3 className="text-sm font-extrabold text-slate-900 dark:text-white truncate">
                                                                             {project.title}
                                                                         </h3>
-                                                                        <span className="text-[10px] font-extrabold text-slate-500 dark:text-gray-400 uppercase tracking-widest mt-1 inline-flex items-center gap-1 text-[#4d7c0f] dark:text-[#bcf13b]">
+                                                                        <span className="text-[10px] font-extrabold text-slate-500 dark:text-gray-400 uppercase tracking-widest mt-1 inline-flex items-center gap-1 text-[#ECBD57] dark:text-[#C9A227]">
                                                                             Ver Galeria <ArrowRight className="w-3 h-3" />
                                                                         </span>
                                                                     </div>
@@ -330,7 +330,7 @@ const PhotographyPortfolio = ({ cleanMode: propCleanMode, basePath: propBasePath
                                                     >
                                                         <Link to={`${effectiveBasePath}/fotografia/${project.slug}`} className="block w-full">
                                                             {/* Conteiner da Imagem */}
-                                                            <div className="aspect-[3/2] w-full rounded-2xl overflow-hidden shadow-md relative bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] group-hover:border-lime-500 dark:group-hover:border-[#bcf13b] group-hover:shadow-[0_0_20px_rgba(77,124,15,0.15)] dark:group-hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] transition-all duration-500">
+                                                            <div className="aspect-[3/2] w-full rounded-2xl overflow-hidden shadow-md relative bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] group-hover:border-lime-500 dark:group-hover:border-[#C9A227] group-hover:shadow-[0_0_20px_rgba(77,124,15,0.15)] dark:group-hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] transition-all duration-500">
                                                                 <img
                                                                     src={project.main_image_url || 'https://via.placeholder.com/800x600'}
                                                                     alt={project.title}
@@ -339,7 +339,7 @@ const PhotographyPortfolio = ({ cleanMode: propCleanMode, basePath: propBasePath
                                                                 />
                                                                 {/* Cortina no hover com botao neon */}
                                                                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                                                    <span className="text-[#0a0a08] text-xs font-bold bg-[#bcf13b] px-4 py-2 rounded-full uppercase tracking-widest scale-95 group-hover:scale-100 transition-all duration-300 shadow-lg shadow-[#bcf13b]/20">
+                                                                    <span className="text-[#0a0a08] text-xs font-bold bg-[#C9A227] px-4 py-2 rounded-full uppercase tracking-widest scale-95 group-hover:scale-100 transition-all duration-300 shadow-lg shadow-[#C9A227]/20">
                                                                         Visualizar
                                                                     </span>
                                                                 </div>
@@ -347,11 +347,11 @@ const PhotographyPortfolio = ({ cleanMode: propCleanMode, basePath: propBasePath
 
                                                             {/* Informacoes Centralizadas */}
                                                             <div className="text-center mt-5 flex flex-col items-center">
-                                                                <span className="text-[10px] font-bold text-[#4d7c0f] dark:text-[#bcf13b] uppercase tracking-widest mb-1.5">{nicheLabel}</span>
-                                                                <h3 className="text-lg md:text-xl font-extrabold text-slate-900 dark:text-white group-hover:text-[#4d7c0f] dark:group-hover:text-[#bcf13b] transition-colors duration-300 leading-tight">
+                                                                <span className="text-[10px] font-bold text-[#ECBD57] dark:text-[#C9A227] uppercase tracking-widest mb-1.5">{nicheLabel}</span>
+                                                                <h3 className="text-lg md:text-xl font-extrabold text-slate-900 dark:text-white group-hover:text-[#ECBD57] dark:group-hover:text-[#C9A227] transition-colors duration-300 leading-tight">
                                                                     {project.title}
                                                                 </h3>
-                                                                <span className="text-[11px] font-extrabold text-slate-500 dark:text-gray-400 uppercase tracking-widest mt-2 group-hover:text-[#4d7c0f] dark:group-hover:text-[#bcf13b] transition-colors duration-300">
+                                                                <span className="text-[11px] font-extrabold text-slate-500 dark:text-gray-400 uppercase tracking-widest mt-2 group-hover:text-[#ECBD57] dark:group-hover:text-[#C9A227] transition-colors duration-300">
                                                                     VER GALERIA
                                                                 </span>
                                                             </div>
@@ -369,7 +369,7 @@ const PhotographyPortfolio = ({ cleanMode: propCleanMode, basePath: propBasePath
                                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-2xl bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] shadow-xs">
                                         <div className="flex items-center gap-2 text-xs">
                                             <span className="font-semibold text-slate-500 dark:text-gray-400">Exibindo:</span>
-                                            <span className="font-bold text-[#4d7c0f] dark:text-[#bcf13b] bg-lime-50 dark:bg-[#bcf13b]/10 border border-lime-200 dark:border-[#bcf13b]/20 px-2.5 py-0.5 rounded-full">
+                                            <span className="font-bold text-[#ECBD57] dark:text-[#C9A227] bg-lime-50 dark:bg-[#C9A227]/10 border border-lime-200 dark:border-[#C9A227]/20 px-2.5 py-0.5 rounded-full">
                                                 {activeTab !== 'all' ? capitalize(activeTab) : `Busca: "${searchTerm}"`}
                                             </span>
                                             <span className="text-slate-500 font-medium">({filteredProjects.length} {filteredProjects.length === 1 ? 'ensaio' : 'ensaios'})</span>
@@ -381,7 +381,7 @@ const PhotographyPortfolio = ({ cleanMode: propCleanMode, basePath: propBasePath
                                                 setActiveTab('all');
                                                 setSearchTerm('');
                                             }}
-                                            className="text-xs font-bold text-slate-700 hover:text-[#4d7c0f] dark:text-gray-300 dark:hover:text-[#bcf13b] hover:underline flex items-center gap-1 self-start sm:self-auto"
+                                            className="text-xs font-bold text-slate-700 hover:text-[#ECBD57] dark:text-gray-300 dark:hover:text-[#C9A227] hover:underline flex items-center gap-1 self-start sm:self-auto"
                                         >
                                             <span>Ver todos os nichos</span>
                                             <ArrowRight className="w-3.5 h-3.5" />
@@ -406,7 +406,7 @@ const PhotographyPortfolio = ({ cleanMode: propCleanMode, basePath: propBasePath
                                                     >
                                                         <Link to={`${effectiveBasePath}/fotografia/${project.slug}`} className="block w-full">
                                                             {/* Conteiner da Imagem */}
-                                                            <div className="aspect-[3/2] w-full rounded-2xl overflow-hidden shadow-md relative bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] group-hover:border-lime-500 dark:group-hover:border-[#bcf13b] group-hover:shadow-[0_0_20px_rgba(77,124,15,0.15)] dark:group-hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] transition-all duration-500">
+                                                            <div className="aspect-[3/2] w-full rounded-2xl overflow-hidden shadow-md relative bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] group-hover:border-lime-500 dark:group-hover:border-[#C9A227] group-hover:shadow-[0_0_20px_rgba(77,124,15,0.15)] dark:group-hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] transition-all duration-500">
                                                                 <img
                                                                     src={project.main_image_url || 'https://via.placeholder.com/800x600'}
                                                                     alt={project.title}
@@ -415,7 +415,7 @@ const PhotographyPortfolio = ({ cleanMode: propCleanMode, basePath: propBasePath
                                                                 />
                                                                 {/* Cortina no hover */}
                                                                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                                                    <span className="text-[#0a0a08] text-xs font-bold bg-[#bcf13b] px-4 py-2 rounded-full uppercase tracking-widest scale-95 group-hover:scale-100 transition-all duration-300 shadow-lg shadow-[#bcf13b]/20">
+                                                                    <span className="text-[#0a0a08] text-xs font-bold bg-[#C9A227] px-4 py-2 rounded-full uppercase tracking-widest scale-95 group-hover:scale-100 transition-all duration-300 shadow-lg shadow-[#C9A227]/20">
                                                                         Visualizar
                                                                     </span>
                                                                 </div>
@@ -423,11 +423,11 @@ const PhotographyPortfolio = ({ cleanMode: propCleanMode, basePath: propBasePath
 
                                                             {/* Informacoes Centralizadas */}
                                                             <div className="text-center mt-5 flex flex-col items-center">
-                                                                <span className="text-[10px] font-bold text-[#4d7c0f] dark:text-[#bcf13b] uppercase tracking-widest mb-1.5">{nicheLabel}</span>
-                                                                <h3 className="text-lg md:text-xl font-extrabold text-slate-900 dark:text-white group-hover:text-[#4d7c0f] dark:group-hover:text-[#bcf13b] transition-colors duration-300 leading-tight">
+                                                                <span className="text-[10px] font-bold text-[#ECBD57] dark:text-[#C9A227] uppercase tracking-widest mb-1.5">{nicheLabel}</span>
+                                                                <h3 className="text-lg md:text-xl font-extrabold text-slate-900 dark:text-white group-hover:text-[#ECBD57] dark:group-hover:text-[#C9A227] transition-colors duration-300 leading-tight">
                                                                     {project.title}
                                                                 </h3>
-                                                                <span className="text-[11px] font-extrabold text-slate-500 dark:text-gray-400 uppercase tracking-widest mt-2 group-hover:text-[#4d7c0f] dark:group-hover:text-[#bcf13b] transition-colors duration-300">
+                                                                <span className="text-[11px] font-extrabold text-slate-500 dark:text-gray-400 uppercase tracking-widest mt-2 group-hover:text-[#ECBD57] dark:group-hover:text-[#C9A227] transition-colors duration-300">
                                                                     VER GALERIA
                                                                 </span>
                                                             </div>

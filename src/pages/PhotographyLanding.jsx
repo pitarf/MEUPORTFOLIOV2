@@ -50,7 +50,7 @@ const NicheSlideshow = ({ images, defaultImage, title }) => {
     }, [loadedImages]);
 
     return (
-        <div className="relative aspect-[4/5] overflow-hidden rounded-3xl shadow-2xl bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] group hover:border-lime-500 dark:hover:border-[#bcf13b] hover:shadow-[0_0_20px_rgba(77,124,15,0.15)] dark:hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] transition-all">
+        <div className="relative aspect-[4/5] overflow-hidden rounded-3xl shadow-2xl bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] group hover:border-lime-500 dark:hover:border-[#C9A227] hover:shadow-[0_0_20px_rgba(77,124,15,0.15)] dark:hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] transition-all">
             {loadedImages.map((img, index) => (
                 <div
                     key={img + '-' + index}
@@ -171,7 +171,7 @@ const PhotographyLanding = ({ cleanMode: propCleanMode, basePath: propBasePath }
     const heroTitle = content?.hero_title || (
         <>
             Capturando Momentos <br />
-            <span className="text-[#bcf13b]">Eternos</span>
+            <span className="text-[#C9A227]">Eternos</span>
         </>
     );
 
@@ -257,7 +257,7 @@ const PhotographyLanding = ({ cleanMode: propCleanMode, basePath: propBasePath }
                             transition={{ duration: 0.8 }}
                             className="space-y-6"
                         >
-                            <h2 className="text-[#bcf13b] font-bold tracking-widest uppercase text-xs md:text-sm drop-shadow">
+                            <h2 className="text-[#C9A227] font-bold tracking-widest uppercase text-xs md:text-sm drop-shadow">
                                 Rafael Pita Photography
                             </h2>
                             <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold text-white leading-tight tracking-tight px-2 drop-shadow-md">
@@ -270,7 +270,7 @@ const PhotographyLanding = ({ cleanMode: propCleanMode, basePath: propBasePath }
                                 {isCleanMode ? (
                                     <>
                                         <Link to={galleryPath} className="w-full sm:w-auto">
-                                            <Button size="lg" className="w-full bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] text-lg px-8 py-6 rounded-full font-bold shadow-lg shadow-[#bcf13b]/20 hover:scale-105 transition-all">
+                                            <Button size="lg" className="w-full bg-[#C9A227] hover:bg-[#ECBD57] text-[#0a0a08] text-lg px-8 py-6 rounded-full font-bold shadow-lg shadow-[#C9A227]/20 hover:scale-105 transition-all">
                                                 Conhecer Galeria Completa
                                             </Button>
                                         </Link>
@@ -278,7 +278,7 @@ const PhotographyLanding = ({ cleanMode: propCleanMode, basePath: propBasePath }
                                             <Button
                                                 size="lg"
                                                 variant="outline"
-                                                className="w-full border-white/30 bg-black/40 hover:bg-black/60 text-white hover:border-[#bcf13b] hover:text-[#bcf13b] text-lg px-8 py-6 rounded-full font-semibold shadow-sm transition-all backdrop-blur-sm"
+                                                className="w-full border-white/30 bg-black/40 hover:bg-black/60 text-white hover:border-[#C9A227] hover:text-[#C9A227] text-lg px-8 py-6 rounded-full font-semibold shadow-sm transition-all backdrop-blur-sm"
                                             >
                                                 Ver Últimos Trabalhos
                                             </Button>
@@ -287,7 +287,7 @@ const PhotographyLanding = ({ cleanMode: propCleanMode, basePath: propBasePath }
                                 ) : (
                                     <>
                                         <Link to="/contato?service=fotografia" className="w-full sm:w-auto">
-                                            <Button size="lg" className="w-full bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] text-lg px-8 py-6 rounded-full font-bold shadow-lg shadow-[#bcf13b]/20 hover:scale-105 transition-all">
+                                            <Button size="lg" className="w-full bg-[#C9A227] hover:bg-[#ECBD57] text-[#0a0a08] text-lg px-8 py-6 rounded-full font-bold shadow-lg shadow-[#C9A227]/20 hover:scale-105 transition-all">
                                                 Solicitar Orçamento
                                             </Button>
                                         </Link>
@@ -295,7 +295,7 @@ const PhotographyLanding = ({ cleanMode: propCleanMode, basePath: propBasePath }
                                             <Button
                                                 size="lg"
                                                 variant="outline"
-                                                className="w-full border-white/30 bg-black/40 hover:bg-black/60 text-white hover:border-[#bcf13b] hover:text-[#bcf13b] text-lg px-8 py-6 rounded-full font-semibold shadow-sm transition-all backdrop-blur-sm"
+                                                className="w-full border-white/30 bg-black/40 hover:bg-black/60 text-white hover:border-[#C9A227] hover:text-[#C9A227] text-lg px-8 py-6 rounded-full font-semibold shadow-sm transition-all backdrop-blur-sm"
                                             >
                                                 Ver Portfólio
                                             </Button>
@@ -316,7 +316,7 @@ const PhotographyLanding = ({ cleanMode: propCleanMode, basePath: propBasePath }
                             className="text-center mb-24 space-y-4"
                         >
                             <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-                                Nossas <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Especialidades</span>
+                                Nossas <span className="text-[#ECBD57] dark:text-[#C9A227]">Especialidades</span>
                             </h2>
                             <p className="text-xl md:text-2xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto font-medium">
                                 Diferentes olhares para registrar e eternizar cada história com excelência
@@ -356,7 +356,7 @@ const PhotographyLanding = ({ cleanMode: propCleanMode, basePath: propBasePath }
                                             </p>
                                             <div className="pt-0 md:pt-2">
                                                 <Link to={`${galleryPath}?nicho=${nicheKey}`}>
-                                                    <Button variant="outline" className="rounded-full px-10 py-7 text-lg border border-slate-300 dark:border-[#23231f] bg-white dark:bg-[#121210] text-slate-800 dark:text-white hover:border-lime-500 dark:hover:border-[#bcf13b] hover:text-[#4d7c0f] dark:hover:text-[#bcf13b] transition-all font-semibold shadow-sm">
+                                                    <Button variant="outline" className="rounded-full px-10 py-7 text-lg border border-slate-300 dark:border-[#23231f] bg-white dark:bg-[#121210] text-slate-800 dark:text-white hover:border-lime-500 dark:hover:border-[#C9A227] hover:text-[#ECBD57] dark:hover:text-[#C9A227] transition-all font-semibold shadow-sm">
                                                         Ver Trabalhos
                                                     </Button>
                                                 </Link>
@@ -375,14 +375,14 @@ const PhotographyLanding = ({ cleanMode: propCleanMode, basePath: propBasePath }
                         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
                             <div className="max-w-2xl space-y-4">
                                 <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-                                    Últimos <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Trabalhos</span>
+                                    Últimos <span className="text-[#ECBD57] dark:text-[#C9A227]">Trabalhos</span>
                                 </h2>
                                 <p className="text-slate-600 dark:text-gray-400 font-medium text-lg md:text-xl leading-relaxed">
                                     Explore nossa galeria selecionada com os melhores cliques corporativos e artísticos.
                                 </p>
                             </div>
                             <Link to={galleryPath} className="hidden md:block">
-                                <Button variant="link" className="text-[#4d7c0f] dark:text-[#bcf13b] hover:text-lime-700 dark:hover:text-[#a8df2a] p-0 text-xl font-bold">
+                                <Button variant="link" className="text-[#ECBD57] dark:text-[#C9A227] hover:text-lime-700 dark:hover:text-[#ECBD57] p-0 text-xl font-bold">
                                     Ver galeria completa <ArrowRight className="ml-2 w-6 h-6" />
                                 </Button>
                             </Link>
@@ -392,7 +392,7 @@ const PhotographyLanding = ({ cleanMode: propCleanMode, basePath: propBasePath }
 
                         <div className="mt-16 text-center md:hidden">
                             <Link to={galleryPath}>
-                                <Button variant="link" className="text-[#4d7c0f] dark:text-[#bcf13b] hover:text-lime-700 dark:hover:text-[#a8df2a] font-bold text-lg">
+                                <Button variant="link" className="text-[#ECBD57] dark:text-[#C9A227] hover:text-lime-700 dark:hover:text-[#ECBD57] font-bold text-lg">
                                     Ver galeria completa <ArrowRight className="ml-2 w-5 h-5" />
                                 </Button>
                             </Link>
@@ -413,15 +413,15 @@ const PhotographyLanding = ({ cleanMode: propCleanMode, basePath: propBasePath }
                             className="space-y-8"
                         >
                             <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white leading-tight">
-                                Prontos para eternizar sua <span className="text-[#bcf13b]">história?</span>
+                                Prontos para eternizar sua <span className="text-[#C9A227]">história?</span>
                             </h2>
                             <p className="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto font-medium leading-relaxed">
                                 Agenda aberta para {new Date().getFullYear()}. Garanta sua data e tenha registros de extrema notoriedade.
                             </p>
                             {isCleanMode ? (
                                 <div className="space-y-6 pt-6">
-                                    <div className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-lime-500/10 text-[#bcf13b] border border-lime-500/20 text-sm font-bold shadow-sm">
-                                        <CheckCircle2 className="w-5 h-5 text-[#bcf13b]" />
+                                    <div className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-lime-500/10 text-[#C9A227] border border-lime-500/20 text-sm font-bold shadow-sm">
+                                        <CheckCircle2 className="w-5 h-5 text-[#C9A227]" />
                                         <span>Comunicação e contratação 100% integradas pela plataforma do 99freelas.</span>
                                     </div>
                                     <p className="text-base text-gray-300 max-w-xl mx-auto leading-relaxed">
@@ -429,7 +429,7 @@ const PhotographyLanding = ({ cleanMode: propCleanMode, basePath: propBasePath }
                                     </p>
                                     <div>
                                         <Link to={galleryPath}>
-                                            <Button size="lg" className="bg-[#bcf13b] text-[#0a0a08] hover:bg-[#a8df2a] text-lg px-10 py-7 rounded-full font-bold shadow-lg shadow-[#bcf13b]/20 hover:scale-105 transition-transform">
+                                            <Button size="lg" className="bg-[#C9A227] text-[#0a0a08] hover:bg-[#ECBD57] text-lg px-10 py-7 rounded-full font-bold shadow-lg shadow-[#C9A227]/20 hover:scale-105 transition-transform">
                                                 Explorar Galeria de Fotos
                                             </Button>
                                         </Link>
@@ -438,12 +438,12 @@ const PhotographyLanding = ({ cleanMode: propCleanMode, basePath: propBasePath }
                             ) : (
                                 <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-8">
                                     <a href="https://wa.me/5521966149077" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
-                                        <Button size="lg" className="w-full bg-[#bcf13b] text-[#0a0a08] hover:bg-[#a8df2a] text-lg px-10 py-8 rounded-full font-bold shadow-lg shadow-[#bcf13b]/20 transition-transform hover:scale-105">
+                                        <Button size="lg" className="w-full bg-[#C9A227] text-[#0a0a08] hover:bg-[#ECBD57] text-lg px-10 py-8 rounded-full font-bold shadow-lg shadow-[#C9A227]/20 transition-transform hover:scale-105">
                                             Falar no WhatsApp
                                         </Button>
                                     </a>
-                                    <a href="https://www.instagram.com/rp.digital_/" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
-                                        <Button size="lg" variant="outline" className="w-full bg-[#121210] text-white border border-[#23231f] hover:border-[#bcf13b] hover:text-[#bcf13b] text-lg px-10 py-8 rounded-full font-bold transition-all">
+                                    <a href="https://www.instagram.com/RAMIELLdigital_/" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+                                        <Button size="lg" variant="outline" className="w-full bg-[#121210] text-white border border-[#23231f] hover:border-[#C9A227] hover:text-[#C9A227] text-lg px-10 py-8 rounded-full font-bold transition-all">
                                             <Instagram className="mr-2 w-6 h-6" />
                                             Ver Instagram
                                         </Button>

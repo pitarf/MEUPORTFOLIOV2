@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSiteConfig } from '@/contexts/SiteConfigContext';
-import { supabase } from '@/lib/customSupabaseClient'; // Import supabase
+import { supabase } from '@/lib/customSupabaseClient';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import SEO from '@/components/SEO';
-import { ArrowRight, Zap, Star, Users, Award, TrendingUp, Palette, Camera, Code, BarChart3, Video, Target, Wrench, Shield, Sparkles } from 'lucide-react';
+import { ArrowRight, Star, Users, Award, TrendingUp, Palette, Camera, Code, BarChart3, Video, Target, Wrench, Shield, ShoppingBag, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ProjectCarousel from '@/components/ProjectCarousel';
 import ReviewsCarousel from '@/components/ReviewsCarousel';
@@ -15,16 +15,20 @@ const iconMap = {
     Palette, Camera, Code, BarChart3, Video, Target, Wrench, Shield
 };
 
+/**
+ * Página Inicial da RAMIELL (ramiell.com)
+ * Estética editorial minimalista, fundo #070707, seções #0A0A0A,
+ * cards #0B0B0B com cantos de 20px, acento dourado #C9A227 e botões em pílula.
+ */
 const Home = () => {
     const { config } = useSiteConfig();
     const [photographyCount, setPhotographyCount] = useState(0);
-    const [avgRating, setAvgRating] = useState(5);
 
     const [stats, setStats] = useState([
-        { label: 'Projetos Concluídos', number: config?.stats_projects_count || 500, suffix: '+', icon: Award },
-        { label: 'Clientes Satisfeitos', number: config?.stats_clients_count || 200, suffix: '+', icon: Users },
+        { label: 'Projetos Entregues', number: config?.stats_projects_count || 500, suffix: '+', icon: Award },
+        { label: 'Clientes Atendidos', number: config?.stats_clients_count || 200, suffix: '+', icon: Users },
         { label: 'Avaliação Média', number: 5, suffix: '★', icon: Star },
-        { label: 'Taxa de Sucesso', number: config?.stats_success_rate || 98, suffix: '%', icon: TrendingUp },
+        { label: 'Taxa de Satisfação', number: config?.stats_success_rate || 98, suffix: '%', icon: TrendingUp },
     ]);
     const [bgProjects, setBgProjects] = useState([]);
     const [services, setServices] = useState([]);
@@ -44,16 +48,14 @@ const Home = () => {
 
         const fetchBgProjects = async () => {
             try {
-                // 1. Fetch "Desenvolvimento de Sites" projects (Priority ~70%)
                 const { data: webProjects } = await supabase
                     .from('projects')
                     .select('main_image_url, category:categories!inner(slug)')
                     .eq('category.slug', 'desenvolvimento-web')
                     .order('display_order', { ascending: true })
                     .order('created_at', { ascending: false })
-                    .limit(35);
+                    .limit(30);
 
-                // 2. Fetch Other projects (excluding "fotografia" and "desenvolvimento-web")
                 const { data: otherProjects } = await supabase
                     .from('projects')
                     .select('main_image_url, category:categories!inner(slug)')
@@ -65,13 +67,8 @@ const Home = () => {
 
                 const webList = webProjects || [];
                 const otherList = otherProjects || [];
-
-                // Combine and Shuffle
-                const combined = [...webList, ...otherList];
-                const shuffled = combined.sort(() => 0.5 - Math.random());
-
-                // Duplicate for seamless loop if needed
-                setBgProjects([...shuffled, ...shuffled]);
+                const combined = [...webList, ...otherList].sort(() => 0.5 - Math.random());
+                setBgProjects([...combined, ...combined]);
             } catch (error) {
                 console.error('Error fetching bg projects:', error);
             }
@@ -79,7 +76,6 @@ const Home = () => {
 
         const fetchReviewsAvg = async () => {
             try {
-                // Consulta direta e segura para os reviews aprovados, calculando a média real
                 const { data: revs, error: revError } = await supabase
                     .from('reviews')
                     .select('rating')
@@ -95,235 +91,225 @@ const Home = () => {
             }
         };
 
-        if (config) {
-            setStats(prev => prev.map(s => {
-                if (s.label === 'Projetos Concluídos') return { ...s, number: config.stats_projects_count || 500 };
-                if (s.label === 'Clientes Satisfeitos') return { ...s, number: config.stats_clients_count || 200 };
-                if (s.label === 'Taxa de Sucesso') return { ...s, number: config.stats_success_rate || 98 };
-                return s;
-            }));
-        }
-
         fetchServices();
         fetchBgProjects();
         fetchReviewsAvg();
+    }, []);
+
+    useEffect(() => {
+        if (config) {
+            setStats(prev => prev.map(s => {
+                if (s.label === 'Projetos Entregues') return { ...s, number: config.stats_projects_count || 500 };
+                if (s.label === 'Clientes Atendidos') return { ...s, number: config.stats_clients_count || 200 };
+                if (s.label === 'Taxa de Satisfação') return { ...s, number: config.stats_success_rate || 98 };
+                return s;
+            }));
+        }
     }, [config]);
 
     return (
-        <>
+        <div className="bg-[#070707] text-white min-h-screen selection:bg-[#C9A227]/30 selection:text-white">
             <SEO 
-                title="Rafael Pita Solutions - Desenvolvimento Web e Fotografia Profissional"
-                description="Desenvolvimento de sites profissionais, sistemas web sob medida, dashboards Power BI interativos e fotografia profissional no Rio de Janeiro. Criatividade e tecnologia para impulsionar seu negócio."
-                keywords="desenvolvimento de sites rj, criacao de sites profissional, criacao de sistemas web, programador rio de janeiro, dashboards power bi rio de janeiro, fotografo rio de janeiro, fotos pre wedding rj, rafael pita solutions"
+                title="RAMIELL | Desenvolvimento de Sites, Sistemas & Experiências Digitais"
+                description="Desenvolvimento de sites de alto padrão, sistemas sob medida, aplicações web e experiências digitais exclusivas. Vai de Ramiell."
+                keywords="ramiell, vai de ramiell, desenvolvimento de sites, criacao de sistemas web, programacao web, software ramiell, aplicacoes digitais"
             />
 
-            {/* Hero Section */}
-            <section className="relative min-h-0 md:min-h-screen flex items-center justify-center overflow-hidden bg-slate-50 dark:bg-[#0a0a08] text-slate-900 dark:text-white transition-colors duration-300 pt-28 pb-12 md:py-0 -mt-20">
-                {/* Project Marquee Background */}
-                <div className="absolute inset-0 z-0 opacity-30 dark:opacity-20 overflow-hidden transition-opacity duration-300 pointer-events-none">
-                    <div className="absolute top-10 left-0 w-full rotate-[-5deg]">
-                        <div className="flex gap-4 animate-marquee whitespace-nowrap">
+            {/* Hero Section Editorial */}
+            <section className="relative min-h-[92vh] flex items-center justify-center overflow-hidden bg-[#070707] text-white pt-32 pb-20 md:py-36 editorial-grid">
+                {/* Marquee de Projetos ao Fundo com Opacidade Reduzida */}
+                <div className="absolute inset-0 z-0 opacity-15 overflow-hidden pointer-events-none">
+                    <div className="absolute top-12 left-0 w-full rotate-[-3deg]">
+                        <div className="flex gap-5 animate-marquee whitespace-nowrap">
                             {bgProjects.map((proj, idx) => (
-                                <div key={`row1-${idx}`} className="w-[280px] h-[180px] md:w-[500px] md:h-[330px] rounded-xl overflow-hidden flex-shrink-0 border border-slate-200/50 dark:border-white/5 bg-slate-100 dark:bg-gray-800 shadow-lg">
-                                    <img src={proj.main_image_url || "https://images.unsplash.com/photo-1550745165-9bc0b252726f"} className="w-full h-full object-cover opacity-80" alt="" />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                    <div className="absolute bottom-10 left-0 w-full rotate-[5deg]">
-                        <div className="flex gap-4 animate-marquee-reverse whitespace-nowrap">
-                            {bgProjects.map((proj, idx) => (
-                                <div key={`row2-${idx}`} className="w-[280px] h-[180px] md:w-[500px] md:h-[330px] rounded-xl overflow-hidden flex-shrink-0 border border-slate-200/50 dark:border-white/5 bg-slate-100 dark:bg-gray-800 shadow-lg">
-                                    <img src={proj.main_image_url || "https://images.unsplash.com/photo-1550745165-9bc0b252726f"} className="w-full h-full object-cover opacity-80" alt="" />
+                                <div key={`row1-${idx}`} className="w-[300px] h-[190px] md:w-[480px] md:h-[300px] rounded-[20px] overflow-hidden flex-shrink-0 border border-white/[0.04] bg-[#0B0B0B]">
+                                    <img src={proj.main_image_url || "https://images.unsplash.com/photo-1550745165-9bc0b252726f"} className="w-full h-full object-cover opacity-60" alt="" />
                                 </div>
                             ))}
                         </div>
                     </div>
                 </div>
 
-                {/* Aurora Background Overlay */}
-                <div className="absolute inset-0 aurora-bg opacity-40 dark:opacity-50 z-0 pointer-events-none"></div>
-                <div className="absolute inset-0 bg-slate-50/70 dark:bg-[#0a0a08]/80 z-0 pointer-events-none transition-colors duration-300"></div>
+                {/* Camada de Gradiente Escuro Suave */}
+                <div className="absolute inset-0 bg-gradient-to-b from-[#070707]/90 via-[#070707]/80 to-[#070707] z-0 pointer-events-none" />
 
-                {/* Central Spotlight */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-lime-500/10 dark:bg-blue-500/20 rounded-full blur-[80px] opacity-40 pulse-glow z-0"></div>
+                {/* Glow Central Dourado Sutil */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-[#C9A227]/[0.06] rounded-full blur-[140px] pointer-events-none z-0" />
 
-                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-4 sm:pt-6">
+                <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <motion.div
-                        initial={{ opacity: 0, y: 40 }}
+                        initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
-                        className="space-y-6 sm:space-y-8"
+                        className="space-y-8"
                     >
-                        <div className="space-y-4 sm:space-y-6">
-                            {/* Badge da Marca */}
+                        {/* Badge Editorial de Marca */}
+                        <div className="flex justify-center">
                             <motion.div
-                                initial={{ opacity: 0, scale: 0.9 }}
+                                initial={{ opacity: 0, scale: 0.95 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ duration: 0.5 }}
-                                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] text-xs font-semibold text-slate-800 dark:text-gray-200 shadow-sm hover:border-lime-500 dark:hover:border-[#bcf13b]/50 transition-colors"
+                                className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#0B0B0B] border border-white/[0.08] text-xs font-mono text-[#9E9E9E] shadow-[0_4px_20px_rgba(0,0,0,0.5)]"
                             >
-                                <span className="w-2 h-2 rounded-full bg-[#bcf13b] animate-pulse"></span>
-                                <span className="text-[#4d7c0f] dark:text-[#bcf13b] font-bold">rp .</span>
-                                <span className="text-slate-300 dark:text-gray-600">|</span>
-                                <span className="tracking-wider uppercase text-slate-800 dark:text-gray-200 font-bold">Rafael Pita Solutions</span>
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#C9A227]" />
+                                <span className="text-[#ECBD57] font-semibold tracking-wider uppercase font-sans">RAMIELL</span>
+                                <span className="text-white/20">•</span>
+                                <span className="tracking-widest uppercase text-white/80">Digital Experiences</span>
                             </motion.div>
-
-                            <motion.div
-                                initial={{ scale: 0.85, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                transition={{ delay: 0.2, type: "spring", stiffness: 260, damping: 20 }}
-                                className="flex items-center justify-center my-3 sm:my-4"
-                            >
-                                <BrandLogo size="hero" showSubtitle={false} />
-                            </motion.div>
-
-                            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black px-2 tracking-tight text-slate-950 dark:text-white leading-tight">
-                                Transformamos Ideias em Resultados Digitais<span className="text-[#4d7c0f] dark:text-[#bcf13b]">.</span>
-                            </h1>
-
-                            <p className="text-lg md:text-xl text-slate-700 dark:text-gray-300 max-w-3xl mx-auto px-4 font-semibold leading-relaxed">
-                                {config?.hero_subtitle || 'Criatividade e tecnologia em um so lugar'}
-                            </p>
-
-                            <p className="text-sm md:text-base text-slate-600 dark:text-gray-400 max-w-2xl mx-auto px-4 leading-relaxed font-medium">
-                                {config?.hero_description || 'Transformamos suas ideias em realidade digital com solucoes inovadoras e personalizadas para o seu negocio.'}
-                            </p>
                         </div>
 
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2 sm:pt-4">
+                        {/* Monograma Dourado Hero */}
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ delay: 0.15, type: "spring", stiffness: 220, damping: 20 }}
+                            className="flex items-center justify-center my-2"
+                        >
+                            <BrandLogo size="hero" showSubtitle={false} />
+                        </motion.div>
+
+                        {/* Título Principal Editorial */}
+                        <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-[-0.03em] text-white leading-[1.1] max-w-4xl mx-auto">
+                            Engenharia e design de alto padrão para marcas que exigem{' '}
+                            <span className="gold-gradient-text">excelência</span>.
+                        </h1>
+
+                        {/* Subtítulos */}
+                        <p className="text-base sm:text-lg md:text-xl text-[#9E9E9E] max-w-2xl mx-auto font-normal leading-relaxed">
+                            Desenvolvimento de sites de alta conversão, sistemas corporativos robustos e experiências digitais sob medida.
+                        </p>
+
+                        {/* CTAs em Pílula */}
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
                             <Link to="/contato" className="w-full sm:w-auto">
-                                <Button size="lg" className="w-full sm:w-auto bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] text-lg px-8 py-6 font-extrabold rounded-xl shadow-lg shadow-[#bcf13b]/20 hover:shadow-[#bcf13b]/40 hover:scale-[1.02] transition-all duration-300">
-                                    Solicitar Orçamento
-                                    <ArrowRight className="ml-2 w-5 h-5 text-[#0a0a08]" />
-                                </Button>
+                                <button className="w-full sm:w-auto bg-[#C9A227] hover:bg-[#ECBD57] text-[#070707] text-sm uppercase tracking-wider px-8 py-4 font-semibold rounded-full shadow-[0_0_24px_rgba(201,162,39,0.25)] hover:shadow-[0_0_32px_rgba(201,162,39,0.4)] hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2">
+                                    <span>Iniciar Projeto</span>
+                                    <ArrowRight className="w-4 h-4 text-[#070707]" strokeWidth={2} />
+                                </button>
                             </Link>
 
-                             <Link to="/portfolio" className="w-full sm:w-auto">
-                                <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8 py-6 bg-white dark:bg-[#121210] border-slate-300 dark:border-[#23231f] text-slate-800 dark:text-gray-200 hover:border-lime-600 dark:hover:border-[#bcf13b] hover:text-slate-950 dark:hover:text-[#bcf13b] font-bold rounded-xl transition-all duration-300">
-                                    Ver Portfólio
-                                </Button>
+                            <Link to="/portfolio" className="w-full sm:w-auto">
+                                <button className="w-full sm:w-auto text-sm uppercase tracking-wider px-8 py-4 bg-[#0B0B0B] border border-white/[0.08] hover:border-[#C9A227]/40 text-white hover:text-[#ECBD57] font-semibold rounded-full transition-all duration-300">
+                                    Explorar Portfólio
+                                </button>
                             </Link>
                         </div>
                     </motion.div>
-                </div >
-
-                {/* Floating Elements */}
-                <div className="absolute top-20 left-10 w-20 h-20 bg-[#bcf13b]/10 rounded-full blur-xl floating-animation pointer-events-none" ></div>
-                <div className="absolute bottom-20 right-10 w-32 h-32 bg-[#bcf13b]/5 rounded-full blur-xl floating-animation pointer-events-none" style={{ animationDelay: '2s' }}></div>
-                <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-[#bcf13b]/10 rounded-full blur-xl floating-animation pointer-events-none" style={{ animationDelay: '4s' }}></div>
+                </div>
             </section>
 
-            {/* Floating Stats Section */}
-            <div className="relative z-20 px-4 -mt-20 sm:-mt-24 md:-mt-28">
-                <div className="max-w-6xl mx-auto">
-                    <div className="rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-[#23231f] shadow-2xl backdrop-blur-xl bg-white/95 dark:bg-[#121210]/95">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 divide-x-0 md:divide-x divide-slate-200 dark:divide-[#23231f]">
-                            {stats.map((stat, index) => (
-                                <motion.div
-                                    key={stat.label}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: index * 0.1 }}
-                                    className="text-center px-4"
-                                >
-                                    <div className="w-12 h-12 mx-auto mb-3 bg-slate-50 dark:bg-[#181814] border border-slate-200 dark:border-[#23231f] rounded-xl flex items-center justify-center shadow-inner">
-                                        <stat.icon className="w-6 h-6 text-lime-600 dark:text-[#bcf13b]" />
-                                    </div>
-                                     <div className="text-3xl font-extrabold text-slate-900 dark:text-white mb-1">
-                                         <AnimatedStat to={stat.number} suffix={stat.suffix} />
-                                     </div>
-                                     <div className="text-xs text-slate-500 dark:text-gray-400 font-semibold tracking-wide uppercase">{stat.label}</div>
-                                </motion.div>
-                            ))}
-                        </div>
+            {/* Seção de Métricas Minimalista */}
+            <div className="relative z-20 px-4 -mt-10 sm:-mt-14 max-w-5xl mx-auto">
+                <div className="rounded-[20px] p-6 sm:p-8 border border-white/[0.06] bg-[#0B0B0B]/95 backdrop-blur-xl shadow-2xl">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 divide-x-0 md:divide-x divide-white/[0.06]">
+                        {stats.map((stat, index) => (
+                            <motion.div
+                                key={stat.label}
+                                initial={{ opacity: 0, y: 15 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: index * 0.1 }}
+                                className="text-center px-2 sm:px-4"
+                            >
+                                <div className="w-10 h-10 mx-auto mb-3 bg-[#121212] border border-white/[0.06] rounded-full flex items-center justify-center">
+                                    <stat.icon className="w-4 h-4 text-[#C9A227]" strokeWidth={1.5} />
+                                </div>
+                                <div className="text-2xl sm:text-3xl font-semibold text-white mb-1 font-mono tracking-tight">
+                                    <AnimatedStat to={stat.number} suffix={stat.suffix} />
+                                </div>
+                                <div className="text-[11px] text-[#9E9E9E] font-mono tracking-widest uppercase">
+                                    {stat.label}
+                                </div>
+                            </motion.div>
+                        ))}
                     </div>
                 </div>
             </div>
 
-            {/* Projects Carousel Section */}
-            < section className="py-20" >
+            {/* Carrossel de Projetos */}
+            <section className="py-28 bg-[#070707]">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        className="text-center mb-16"
+                        viewport={{ once: true }}
+                        className="text-center mb-16 space-y-3"
                     >
-                        <h2 className="text-4xl md:text-5xl font-bold mb-6 text-slate-900 dark:text-white">
-                            Projetos em <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Destaque</span>
+                        <span className="text-xs font-mono uppercase tracking-widest text-[#C9A227]">
+                            PORTFÓLIO SELECIONADO
+                        </span>
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-[-0.03em] text-white">
+                            Projetos em <span className="gold-gradient-text">evidência</span>
                         </h2>
-                        <p className="text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto">
-                            Uma amostra do nosso trabalho, combinando criatividade e tecnologia para entregar resultados de impacto.
+                        <p className="text-base text-[#9E9E9E] max-w-2xl mx-auto font-normal">
+                            Aplicações web, sistemas customizados e plataformas digitais com foco em performance e elegância.
                         </p>
                     </motion.div>
+
                     <ProjectCarousel excludeCategorySlug="fotografia" />
 
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        className="text-center mt-12"
-                    >
-                         <Link to="/portfolio">
-                            <Button size="lg" variant="outline" className="bg-white dark:bg-[#121210] border-slate-300 dark:border-[#23231f] text-slate-800 dark:text-gray-200 hover:border-lime-600 dark:hover:border-[#bcf13b] hover:text-slate-950 dark:hover:text-[#bcf13b] font-bold rounded-xl transition-all">
-                                 Conhecer todos os projetos
-                                 <ArrowRight className="ml-2 w-5 h-5" />
-                             </Button>
-                         </Link>
-                    </motion.div>
-                </div>
-            </section >
-
-            {/* Photography Section - Only visible if there are projects */}
-            <section className={`py-20 bg-slate-100 dark:bg-[#0a0a08] border-y border-slate-200 dark:border-[#23231f] text-slate-900 dark:text-white ${photographyCount === 0 ? 'hidden' : ''}`}>
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        className="text-center mb-16"
-                    >
-                        <h2 className="text-4xl md:text-5xl font-extrabold mb-6">
-                            <span>Fotografia em Destaque</span>
-                            <span className="text-[#4d7c0f] dark:text-[#bcf13b]">.</span>
-                        </h2>
-                        <p className="text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto font-medium">
-                            Capturando a essencia de cada momento com olhar artistico e profissional.
-                        </p>
-                    </motion.div>
-                    <ProjectCarousel categorySlug="fotografia" onDataLoaded={setPhotographyCount} />
-
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        className="text-center mt-12"
-                    >
-                        <Link to="/portfolio-fotografia/galeria">
-                            <Button size="lg" className="bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] text-lg px-8 py-4 font-bold rounded-xl shadow-lg shadow-[#bcf13b]/20 hover:scale-105 transition-all">
-                                Ver Galeria de Fotografia
-                                <ArrowRight className="ml-2 w-5 h-5 text-[#0a0a08]" />
-                            </Button>
+                    <div className="text-center mt-12">
+                        <Link to="/portfolio">
+                            <button className="bg-[#0B0B0B] hover:bg-[#121212] border border-white/[0.08] hover:border-[#C9A227]/40 text-white hover:text-[#ECBD57] text-xs uppercase tracking-wider px-8 py-3.5 font-semibold rounded-full transition-all inline-flex items-center gap-2">
+                                <span>Ver Todos os Projetos</span>
+                                <ArrowRight className="w-3.5 h-3.5 text-[#C9A227]" strokeWidth={1.5} />
+                            </button>
                         </Link>
-                    </motion.div>
+                    </div>
                 </div>
             </section>
 
-            {/* Services Section */}
-            < section className="py-20" >
+            {/* Fotografia em Destaque (se houver) */}
+            {photographyCount > 0 && (
+                <section className="py-24 bg-[#0A0A0A] border-y border-white/[0.06]">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="text-center mb-16 space-y-3">
+                            <span className="text-xs font-mono uppercase tracking-widest text-[#C9A227]">
+                                ARTES VISUAIS
+                            </span>
+                            <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-[-0.03em] text-white">
+                                Fotografia <span className="gold-gradient-text">Autoral</span>
+                            </h2>
+                            <p className="text-base text-[#9E9E9E] max-w-xl mx-auto">
+                                Olhares artísticos e composições para marcas, eventos e retratos corporativos.
+                            </p>
+                        </div>
+
+                        <ProjectCarousel categorySlug="fotografia" onDataLoaded={setPhotographyCount} />
+
+                        <div className="text-center mt-12">
+                            <Link to="/portfolio-fotografia/galeria">
+                                <button className="bg-[#0B0B0B] hover:bg-[#121212] border border-white/[0.08] hover:border-[#C9A227]/40 text-white hover:text-[#ECBD57] text-xs uppercase tracking-wider px-8 py-3.5 font-semibold rounded-full transition-all inline-flex items-center gap-2">
+                                    <span>Acessar Galeria Fotográfica</span>
+                                    <ArrowRight className="w-3.5 h-3.5 text-[#C9A227]" strokeWidth={1.5} />
+                                </button>
+                            </Link>
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {/* Grade de Serviços RAMIELL */}
+            <section className="py-28 bg-[#0A0A0A] border-t border-white/[0.06]">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        className="text-center mb-16"
+                        viewport={{ once: true }}
+                        className="text-center mb-16 space-y-3"
                     >
-                        <h2 className="text-4xl md:text-5xl font-bold mb-6 text-slate-900 dark:text-white">
-                            <span>Nossos Serviços</span>
-                            <span className="text-[#4d7c0f] dark:text-[#bcf13b]">.</span>
+                        <span className="text-xs font-mono uppercase tracking-widest text-[#C9A227]">
+                            ESPECIALIDADES
+                        </span>
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-[-0.03em] text-white">
+                            Nossos <span className="gold-gradient-text">Serviços</span>
                         </h2>
-                        <p className="text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto">
-                            Oferecemos solucoes completas para transformar sua presenca digital e impulsionar seu negocio
+                        <p className="text-base text-[#9E9E9E] max-w-2xl mx-auto font-normal">
+                            Soluções integradas de tecnologia para consolidar a presença digital do seu negócio.
                         </p>
                     </motion.div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {services.map((service, index) => {
                             const IconComponent = iconMap[service.icon] || Palette;
                             return (
@@ -331,81 +317,92 @@ const Home = () => {
                                     key={service.id || index}
                                     initial={{ opacity: 0, y: 20 }}
                                     whileInView={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: index * 0.1 }}
-                                    className="service-card p-6 rounded-xl"
+                                    viewport={{ once: true }}
+                                    transition={{ delay: index * 0.08 }}
+                                    className="editorial-card p-8 group"
                                 >
-                                     <div className={`w-12 h-12 mb-4 rounded-lg bg-lime-100 dark:bg-[#181814] flex items-center justify-center shadow-md border border-slate-200 dark:border-[#23231f]`}>
-                                         <IconComponent className="w-6 h-6 text-lime-700 dark:text-[#bcf13b]" />
-                                     </div>
-                                     <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">{service.title}</h3>
-                                     <p className="text-slate-600 dark:text-gray-400 text-sm leading-relaxed">{service.description}</p>
+                                    <div className="w-12 h-12 mb-5 rounded-full bg-[#121212] border border-white/[0.06] flex items-center justify-center group-hover:border-[#C9A227]/40 transition-colors">
+                                        <IconComponent className="w-5 h-5 text-[#C9A227]" strokeWidth={1.5} />
+                                    </div>
+                                    <h3 className="text-xl font-semibold mb-2 text-white group-hover:text-[#ECBD57] transition-colors tracking-[-0.02em]">
+                                        {service.title}
+                                    </h3>
+                                    <p className="text-[#9E9E9E] text-sm leading-relaxed">
+                                        {service.description}
+                                    </p>
                                 </motion.div>
                             );
                         })}
                     </div>
 
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        className="text-center mt-12"
-                    >
+                    <div className="text-center mt-12">
                         <Link to="/servicos">
-                            <Button size="lg" variant="outline" className="bg-white dark:bg-[#121210] border-slate-300 dark:border-[#23231f] text-slate-800 dark:text-gray-200 hover:border-lime-600 dark:hover:border-[#bcf13b] hover:text-slate-950 dark:hover:text-[#bcf13b] font-bold rounded-xl transition-all">
-                                 Ver Todos os Serviços
-                                 <ArrowRight className="ml-2 w-5 h-5" />
-                             </Button>
-                         </Link>
-                    </motion.div>
+                            <button className="bg-[#0B0B0B] hover:bg-[#121212] border border-white/[0.08] hover:border-[#C9A227]/40 text-white hover:text-[#ECBD57] text-xs uppercase tracking-wider px-8 py-3.5 font-semibold rounded-full transition-all inline-flex items-center gap-2">
+                                <span>Ver Todas as Soluções</span>
+                                <ArrowRight className="w-3.5 h-3.5 text-[#C9A227]" strokeWidth={1.5} />
+                            </button>
+                        </Link>
+                    </div>
                 </div>
-            </section >
+            </section>
 
-            {/* CTA Section */}
-            < section className="py-20 bg-gradient-to-b from-slate-100 to-slate-200 dark:from-[#121210] dark:to-[#0a0a08] border-y border-slate-200 dark:border-[#23231f]" >
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        className="space-y-8"
-                    >
-                        <h2 className="text-4xl md:text-5xl font-black text-slate-950 dark:text-white">
-                            Pronto para transformar suas ideias<span className="text-[#4d7c0f] dark:text-[#bcf13b]">?</span>
-                        </h2>
-                        <p className="text-xl text-slate-600 dark:text-gray-400 max-w-2xl mx-auto">
-                            Entre em contato conosco e descubra como podemos ajudar seu negocio a alcancar o proximo nivel
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                            <Link to="/contato" className="w-full sm:w-auto">
-                                <Button size="lg" className="w-full sm:w-auto bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-extrabold text-lg px-8 py-6 rounded-xl shadow-lg shadow-[#bcf13b]/20 hover:scale-[1.02] transition-all">
-                                    Falar Conosco
-                                    <ArrowRight className="ml-2 w-5 h-5" />
-                                </Button>
-                            </Link>
-                             <Link to="/avaliacoes" className="w-full sm:w-auto">
-                                 <Button size="lg" variant="outline" className="w-full sm:w-auto bg-white dark:bg-[#121210] border-slate-300 dark:border-[#23231f] text-slate-800 dark:text-gray-200 hover:border-lime-600 dark:hover:border-[#bcf13b] hover:text-slate-950 dark:hover:text-[#bcf13b] text-lg px-8 py-6 font-bold rounded-xl transition-all">
-                                     Ver Avaliações
-                                 </Button>
-                             </Link>
-                        </div>
-                    </motion.div>
-                </div>
-            </section >
-
-            {/* Reviews Carousel Section */}
-            < section className="py-20" >
+            {/* Avaliações de Clientes */}
+            <section className="py-28 bg-[#070707] border-t border-white/[0.06]">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        className="text-center mb-16"
+                        viewport={{ once: true }}
+                        className="text-center mb-16 space-y-3"
                     >
-                        <h2 className="text-4xl md:text-5xl font-bold mb-6 text-slate-900 dark:text-white">
-                            O que nossos clientes <span className="text-[#4d7c0f] dark:text-[#bcf13b]">dizem</span>
+                        <span className="text-xs font-mono uppercase tracking-widest text-[#C9A227]">
+                            DEPOIMENTOS
+                        </span>
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-[-0.03em] text-white">
+                            A confiança de quem <span className="gold-gradient-text">escolheu a RAMIELL</span>
                         </h2>
                     </motion.div>
                     <ReviewsCarousel />
                 </div>
-            </section >
-        </>
+            </section>
+
+            {/* CTA Final Editorial */}
+            <section className="py-24 bg-[#0A0A0A] border-t border-white/[0.06] text-center">
+                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="space-y-6"
+                    >
+                        <span className="text-xs font-mono uppercase tracking-widest text-[#C9A227]">
+                            VAI DE RAMIELL
+                        </span>
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-[-0.03em] text-white leading-tight">
+                            Pronto para desenvolver o seu próximo projeto?
+                        </h2>
+                        <p className="text-base sm:text-lg text-[#9E9E9E] max-w-xl mx-auto font-normal leading-relaxed">
+                            Fale diretamente com nossa equipe e receba uma proposta detalhada para seu sistema ou site.
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+                            <Link to="/contato" className="w-full sm:w-auto">
+                                <button className="w-full sm:w-auto bg-[#C9A227] hover:bg-[#ECBD57] text-[#070707] text-xs uppercase tracking-wider px-8 py-4 font-semibold rounded-full shadow-[0_0_24px_rgba(201,162,39,0.25)] hover:scale-[1.02] transition-all flex items-center justify-center gap-2">
+                                    <span>Solicitar Proposta</span>
+                                    <ArrowRight className="w-4 h-4 text-[#070707]" strokeWidth={2} />
+                                </button>
+                            </Link>
+
+                            <Link to="/store" className="w-full sm:w-auto">
+                                <button className="w-full sm:w-auto bg-[#0B0B0B] border border-white/[0.08] hover:border-[#C9A227]/40 text-white hover:text-[#ECBD57] text-xs uppercase tracking-wider px-8 py-4 font-semibold rounded-full transition-all inline-flex items-center justify-center gap-2">
+                                    <ShoppingBag className="w-4 h-4 text-[#C9A227]" strokeWidth={1.5} />
+                                    <span>Conhecer a Store</span>
+                                </button>
+                            </Link>
+                        </div>
+                    </motion.div>
+                </div>
+            </section>
+        </div>
     );
 };
 

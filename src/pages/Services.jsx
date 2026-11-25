@@ -3,9 +3,14 @@ import { supabase } from '@/lib/customSupabaseClient';
 import { motion } from 'framer-motion';
 import SEO from '@/components/SEO';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Palette, Camera, Code, BarChart3, Video, Target, Wrench, Shield } from 'lucide-react';
+import { ArrowRight, Palette, Camera, Code, BarChart3, Video, Target, Wrench, Shield, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
+/**
+ * Página de Serviços RAMIELL (ramiell.com/servicos)
+ * Apresentação das áreas de atuação em engenharia de software, plataformas web,
+ * sistemas corporativos e experiências digitais.
+ */
 const Services = () => {
     const [services, setServices] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -30,19 +35,7 @@ const Services = () => {
         fetchServices();
     }, []);
 
-    // Mapeamento estático de cores para evitar a purga do Tailwind CSS
-    const serviceColors = {
-        'design-grafico': 'from-pink-500 to-rose-600',
-        'fotografia': 'from-blue-500 to-cyan-600',
-        'desenvolvimento-web': 'from-green-500 to-emerald-600',
-        'dashboards-power-bi': 'from-yellow-500 to-orange-600',
-        'videos-com-ia': 'from-purple-500 to-violet-600',
-        'trafego-pago': 'from-red-500 to-pink-600',
-        'manutencao-de-computadores': 'from-gray-500 to-slate-600',
-        'instalacao-cftv': 'from-indigo-500 to-blue-600'
-    };
-
-    // Mapeamento de slugs do banco para as novas URLs focadas em SEO de serviços
+    // Mapeamento de rotas dedicadas
     const serviceSlugMap = {
         'desenvolvimento-web': '/criacao-de-sites',
         'dashboards-power-bi': '/dashboards-power-bi',
@@ -54,160 +47,164 @@ const Services = () => {
         'instalacao-cftv': '/portfolio#instalacao-cftv'
     };
 
-    // Icon mapping
     const iconMap = {
         Palette, Camera, Code, BarChart3, Video, Target, Wrench, Shield
     };
 
     return (
-        <>
+        <div className="min-h-screen bg-[#070707] text-white selection:bg-[#C9A227]/30 selection:text-white">
             <SEO 
-                title="Serviços Digitais e Tecnologia - Rafael Pita Solutions"
-                description="Serviços premium de desenvolvimento web, criação de sites profissionais, sistemas comerciais, dashboards Power BI, tráfego pago e fotografia artística no RJ."
-                keywords="servicos de tecnologia rj, criacao de sites profissional rj, programador rio de janeiro, desenvolvimento de sites rj, fotografo rio de janeiro, dashboards power bi rio de janeiro"
+                title="Serviços & Soluções Digitais | RAMIELL"
+                description="Desenvolvimento de sites de alto padrão, sistemas personalizados, aplicações web e infraestrutura digital pela RAMIELL. Vai de Ramiell."
+                keywords="servicos digitais, criacao de sites, sistemas sob medida, aplicacoes web, ramiell"
             />
 
-            <div className="min-h-screen bg-slate-50 dark:bg-[#0a0a08] text-slate-900 dark:text-white transition-colors duration-300">
-                {/* Hero Section */}
-                <section className="relative pt-24 pb-14 md:pt-28 md:pb-20 overflow-hidden bg-slate-50 dark:bg-[#0a0a08] z-0">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(188,241,59,0.05)_0%,_transparent_70%)] pointer-events-none"></div>
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="text-center mb-12"
-                        >
-                            <h1 className="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight text-slate-900 dark:text-white">
-                                Nossos <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Serviços</span>
-                            </h1>
-                            <p className="text-base md:text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto font-medium leading-relaxed px-4">
-                                Soluções completas e personalizadas para transformar sua presença digital e impulsionar seu negócio
-                            </p>
-                        </motion.div>
-                    </div>
-                </section>
+            {/* Hero Section Editorial */}
+            <section className="pt-32 pb-16 md:pt-36 md:pb-24 relative editorial-grid">
+                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-5">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0B0B0B] border border-white/[0.08] text-xs font-mono text-[#9E9E9E]"
+                    >
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#C9A227]" />
+                        <span className="text-[#ECBD57] font-semibold uppercase font-sans">RAMIELL</span>
+                        <span className="text-white/20">•</span>
+                        <span className="uppercase tracking-wider">Capacidades & Engenharia</span>
+                    </motion.div>
 
-                {/* Services Grid */}
-                <section className="py-16 relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {services.map((service, index) => {
-                            const IconComponent = iconMap[service.icon] || Palette;
-                            const gradientColor = serviceColors[service.slug] || service.color || 'from-[#bcf13b]/20 to-[#a8df2a]/10';
-                            return (
-                                <motion.div
-                                    key={service.title}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: index * 0.1 }}
-                                    className="service-card p-8 rounded-xl group relative overflow-hidden bg-white dark:bg-[#121210] border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] text-slate-900 dark:text-white transition-all duration-300 shadow-sm"
-                                >
-                                    <div className="flex flex-col sm:flex-row items-start gap-6 relative z-10">
-                                        <div className="w-16 h-16 bg-slate-100 dark:bg-[#181814] border border-slate-200 dark:border-[#23231f] group-hover:border-lime-500 dark:group-hover:border-[#bcf13b] rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-all shadow-sm">
-                                            <IconComponent className="w-8 h-8 text-[#4d7c0f] dark:text-[#bcf13b]" />
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] text-white leading-tight">
+                        Soluções sob medida para elevar a sua{' '}
+                        <span className="gold-gradient-text">presença digital</span>.
+                    </h1>
+
+                    <p className="text-base sm:text-lg text-[#9E9E9E] max-w-2xl mx-auto font-normal leading-relaxed">
+                        Combinamos precisão técnica, arquitetura de software e design refinado para construir ferramentas de alto impacto para o seu negócio.
+                    </p>
+                </div>
+            </section>
+
+            {/* Grade de Serviços */}
+            <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {services.map((service, index) => {
+                        const IconComponent = iconMap[service.icon] || Palette;
+                        return (
+                            <motion.div
+                                key={service.title}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: index * 0.08 }}
+                                className="editorial-card p-8 group relative overflow-hidden flex flex-col justify-between"
+                            >
+                                <div>
+                                    <div className="flex items-start gap-5 mb-6">
+                                        <div className="w-14 h-14 bg-[#121212] border border-white/[0.06] rounded-full flex items-center justify-center shrink-0 group-hover:border-[#C9A227]/40 transition-colors">
+                                            <IconComponent className="w-6 h-6 text-[#C9A227]" strokeWidth={1.5} />
                                         </div>
 
-                                        <div className="flex-1">
-                                            <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-[#4d7c0f] dark:group-hover:text-[#bcf13b] transition-colors">
+                                        <div>
+                                            <h3 className="text-2xl font-semibold text-white mb-2 group-hover:text-[#ECBD57] transition-colors tracking-[-0.02em]">
                                                 {service.title}
                                             </h3>
-                                            <p className="text-slate-600 dark:text-gray-400 mb-6 leading-relaxed text-sm font-medium">
+                                            <p className="text-[#9E9E9E] text-sm leading-relaxed font-normal">
                                                 {service.description}
                                             </p>
-
-                                            <div className="space-y-2.5 mb-6">
-                                                {service.features.map((feature, idx) => (
-                                                    <div key={idx} className="flex items-center space-x-2.5">
-                                                        <div className="w-2 h-2 bg-[#4d7c0f] dark:bg-[#bcf13b] rounded-full flex-shrink-0"></div>
-                                                        <span className="text-slate-700 dark:text-gray-300 text-sm font-medium">{feature}</span>
-                                                    </div>
-                                                ))}
-                                            </div>
-
-                                            <Link to={serviceSlugMap[service.slug] || `/portfolio#${service.slug}`} className="inline-flex items-center text-[#4d7c0f] dark:text-[#bcf13b] hover:text-[#3f6212] dark:hover:text-[#a8df2a] transition-colors font-bold text-sm group-hover:translate-x-1">
-                                                <span>Saiba mais</span>
-                                                <ArrowRight className="w-4 h-4 ml-1.5" />
-                                            </Link>
                                         </div>
                                     </div>
-                                </motion.div>
-                            );
-                        })}
-                    </div>
-                </section>
 
-                {/* Process Section */}
-                <section className="py-20 bg-slate-100/60 dark:bg-[#0a0a08] border-y border-slate-200 dark:border-[#23231f]">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            className="text-center mb-16 space-y-4"
-                        >
-                            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-                                Como <span className="text-[#4d7c0f] dark:text-[#bcf13b]">Trabalhamos</span>
-                            </h2>
-                            <p className="text-lg md:text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto font-medium">
-                                Nosso processo e estruturado para garantir resultados excepcionais em cada projeto
-                            </p>
-                        </motion.div>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                            {[
-                                { step: '01', title: 'Análise', description: 'Entendemos suas necessidades e objetivos de mercado' },
-                                { step: '02', title: 'Planejamento', description: 'Criamos uma estratégia personalizada de alto impacto' },
-                                { step: '03', title: 'Execução', description: 'Desenvolvemos com extrema qualidade e precisão técnica' },
-                                { step: '04', title: 'Entrega', description: 'Apresentamos resultados excepcionais para sua validação' }
-                            ].map((item, index) => (
-                                <motion.div
-                                    key={item.step}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: index * 0.1 }}
-                                    className="service-card p-6 rounded-2xl border border-slate-200 dark:border-[#23231f] hover:border-lime-500 dark:hover:border-[#bcf13b] hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] bg-white dark:bg-[#121210] text-slate-900 dark:text-white transition-all duration-300 flex flex-col justify-between text-center shadow-sm"
-                                >
-                                    <div>
-                                        <div className="w-14 h-14 mx-auto mb-4 bg-slate-100 dark:bg-[#181814] border border-slate-200 dark:border-[#23231f] rounded-full flex items-center justify-center shadow-sm">
-                                            <span className="text-lg font-bold text-[#4d7c0f] dark:text-[#bcf13b]">{item.step}</span>
+                                    {service.features && service.features.length > 0 && (
+                                        <div className="space-y-2.5 pt-4 border-t border-white/[0.06] mb-6">
+                                            {service.features.map((feature, idx) => (
+                                                <div key={idx} className="flex items-center space-x-2.5 text-xs text-[#9E9E9E]">
+                                                    <CheckCircle2 className="w-3.5 h-3.5 text-[#C9A227] shrink-0" strokeWidth={1.5} />
+                                                    <span>{feature}</span>
+                                                </div>
+                                            ))}
                                         </div>
-                                        <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2 leading-tight">{item.title}</h3>
-                                        <p className="text-xs md:text-sm text-slate-600 dark:text-gray-400 leading-relaxed font-medium">{item.description}</p>
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
+                                    )}
+                                </div>
 
-                {/* CTA Section */}
-                <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        className="text-center p-12 rounded-2xl border border-slate-200 dark:border-[#23231f] bg-white dark:bg-[#121210] shadow-xl dark:shadow-2xl"
-                    >
-                        <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-6 text-slate-900 dark:text-white">
-                            Pronto para começar seu <span className="text-[#4d7c0f] dark:text-[#bcf13b]">projeto</span>?
+                                <div className="pt-2">
+                                    <Link
+                                        to={serviceSlugMap[service.slug] || `/portfolio#${service.slug}`}
+                                        className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-[#ECBD57] hover:text-white transition-colors"
+                                    >
+                                        <span>Detalhes do serviço</span>
+                                        <ArrowRight className="w-3.5 h-3.5" strokeWidth={1.5} />
+                                    </Link>
+                                </div>
+                            </motion.div>
+                        );
+                    })}
+                </div>
+            </section>
+
+            {/* Metodologia de Trabalho */}
+            <section className="py-24 bg-[#0A0A0A] border-y border-white/[0.06]">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-16 space-y-3">
+                        <span className="text-xs font-mono uppercase tracking-widest text-[#C9A227]">
+                            METODOLOGIA
+                        </span>
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-[-0.03em] text-white">
+                            Nosso processo de <span className="gold-gradient-text">execução</span>
                         </h2>
-                        <p className="text-base md:text-xl text-slate-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto font-medium leading-relaxed">
-                            Entre em contato conosco e descubra como podemos transformar suas ideias em realidade digital premium
+                        <p className="text-base text-[#9E9E9E] max-w-2xl mx-auto font-normal">
+                            Uma jornada estruturada em quatro etapas para assegurar rigor técnico e entrega pontual.
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                            <Link to="/contato" className="w-full sm:w-auto">
-                                <Button size="lg" className="w-full sm:w-auto bg-[#bcf13b] hover:bg-[#a8df2a] text-[#0a0a08] font-bold rounded-lg shadow-lg shadow-[#bcf13b]/20 hover:scale-[1.02] transition-all text-base px-8 py-6">
-                                    Solicitar Orçamento
-                                    <ArrowRight className="ml-2 w-5 h-5" />
-                                </Button>
-                            </Link>
-                            <Link to="/portfolio" className="w-full sm:w-auto">
-                                <Button size="lg" variant="outline" className="w-full sm:w-auto border-slate-300 dark:border-[#23231f] hover:border-[#4d7c0f] dark:hover:border-[#bcf13b] bg-transparent hover:bg-slate-100 dark:hover:bg-[#181814] text-slate-800 dark:text-white hover:text-[#4d7c0f] dark:hover:text-[#bcf13b] text-base px-8 py-6 font-bold rounded-lg transition-all">
-                                    Ver Portfólio
-                                </Button>
-                            </Link>
-                        </div>
-                    </motion.div>
-                </section>
-            </div>
-        </>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {[
+                            { step: '01', title: 'Diagnóstico & Escopo', description: 'Mapeamento aprofundado dos requisitos, arquitetura e objetivos de negócio.' },
+                            { step: '02', title: 'Design Editorial', description: 'Criação visual refinada, prototipação responsiva e definição de fluxos de usuário.' },
+                            { step: '03', title: 'Engenharia & Código', description: 'Desenvolvimento ágil, integração com APIs, banco de dados e testes de usabilidade.' },
+                            { step: '04', title: 'Deploy & Suporte', description: 'Publicação em servidores dedicados com SSL, SEO ativado e monitoramento contínuo.' }
+                        ].map((item, index) => (
+                            <div
+                                key={item.step}
+                                className="editorial-card p-6 text-center space-y-4"
+                            >
+                                <div className="w-12 h-12 mx-auto bg-[#121212] border border-white/[0.06] rounded-full flex items-center justify-center">
+                                    <span className="text-sm font-mono font-bold text-[#C9A227]">{item.step}</span>
+                                </div>
+                                <h3 className="text-lg font-semibold text-white tracking-[-0.02em]">{item.title}</h3>
+                                <p className="text-xs text-[#9E9E9E] leading-relaxed">{item.description}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* CTA Final */}
+            <section className="py-24 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <div className="editorial-card p-10 sm:p-14 border-[#C9A227]/20 bg-gradient-to-b from-[#0B0B0B] to-[#0A0A0A] space-y-6">
+                    <span className="text-xs font-mono uppercase tracking-widest text-[#C9A227] block">
+                        VAI DE RAMIELL
+                    </span>
+                    <h2 className="text-3xl sm:text-4xl font-semibold tracking-[-0.03em] text-white">
+                        Pronto para transformar sua ideia em realidade?
+                    </h2>
+                    <p className="text-[#9E9E9E] text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+                        Fale diretamente com nossa equipe e receba uma estimativa técnica detalhada para seu projeto.
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center pt-2">
+                        <Link to="/contato">
+                            <button className="bg-[#C9A227] hover:bg-[#ECBD57] text-[#070707] text-xs uppercase tracking-wider font-semibold px-8 py-4 rounded-full shadow-[0_0_24px_rgba(201,162,39,0.25)] transition-all">
+                                Iniciar Atendimento
+                            </button>
+                        </Link>
+                        <Link to="/portfolio">
+                            <button className="bg-[#121212] border border-white/[0.08] hover:border-[#C9A227]/40 text-white hover:text-[#ECBD57] text-xs uppercase tracking-wider font-semibold px-8 py-4 rounded-full transition-all">
+                                Explorar Portfólio
+                            </button>
+                        </Link>
+                    </div>
+                </div>
+            </section>
+        </div>
     );
 };
 
