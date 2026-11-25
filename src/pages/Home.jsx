@@ -4,7 +4,7 @@ import { supabase } from '@/lib/customSupabaseClient';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import SEO from '@/components/SEO';
-import { ArrowRight, Star, Users, Award, TrendingUp, Palette, Camera, Code, BarChart3, Video, Target, Wrench, Shield, ShoppingBag, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Star, Users, Award, TrendingUp, Palette, Camera, Code, BarChart3, Video, Target, Wrench, Shield, ShoppingBag, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ProjectCarousel from '@/components/ProjectCarousel';
 import ReviewsCarousel from '@/components/ReviewsCarousel';
@@ -403,12 +403,13 @@ const Home = () => {
                                 </button>
                             </Link>
 
-                            <Link to="/store" className="w-full sm:w-auto">
+                            <a href="https://store.ramiell.com" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
                                 <button className="w-full sm:w-auto bg-white dark:bg-[#0B0B0B] border border-black/[0.08] dark:border-white/[0.08] hover:border-[#C9A227]/40 text-[#0C0C0C] dark:text-white hover:text-[#A88218] dark:hover:text-[#ECBD57] text-xs uppercase tracking-wider px-8 py-4 font-semibold rounded-full shadow-sm transition-all inline-flex items-center justify-center gap-2">
                                     <ShoppingBag className="w-4 h-4 text-[#C9A227]" strokeWidth={1.5} />
                                     <span>Conhecer a Store</span>
+                                    <ArrowUpRight className="w-3.5 h-3.5 text-[#C9A227]" strokeWidth={1.5} />
                                 </button>
-                            </Link>
+                            </a>
                         </div>
                     </motion.div>
                 </div>

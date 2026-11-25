@@ -65,7 +65,7 @@ const Navbar = () => {
     const mainNavItems = [
         { name: t('nav_portfolio', 'Portfólio'), path: '/portfolio' },
         { name: t('nav_services', 'Serviços'), path: '/servicos' },
-        { name: t('nav_store', 'Store'), path: '/store', isSpecial: true },
+        { name: t('nav_store', 'Store'), path: 'https://store.ramiell.com', isSpecial: true, isExternal: true },
         { name: t('nav_photography', 'Fotografia'), path: '/portfolio-fotografia' },
         { name: t('nav_contact', 'Contato'), path: '/contato' },
     ];
@@ -103,21 +103,31 @@ const Navbar = () => {
                         {/* Menu Desktop */}
                         <div className="hidden lg:flex items-center space-x-7">
                             {mainNavItems.map((item) => (
-                                <Link
-                                    key={item.name}
-                                    to={item.path}
-                                    className={`text-sm tracking-wide transition-colors ${
-                                        item.isSpecial
-                                            ? 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[#C9A227]/40 bg-[#C9A227]/10 text-[#A88218] dark:text-[#ECBD57] hover:bg-[#C9A227]/20 font-medium'
-                                            : location.pathname === item.path
+                                item.isExternal ? (
+                                    <a
+                                        key={item.name}
+                                        href={item.path}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[#C9A227]/40 bg-[#C9A227]/10 text-[#A88218] dark:text-[#ECBD57] hover:bg-[#C9A227]/20 font-medium text-sm tracking-wide transition-colors"
+                                    >
+                                        <ShoppingBag className="w-3.5 h-3.5 text-[#C9A227]" strokeWidth={1.5} />
+                                        {item.name}
+                                        <ArrowUpRight className="w-3 h-3 text-[#C9A227]" strokeWidth={1.5} />
+                                    </a>
+                                ) : (
+                                    <Link
+                                        key={item.name}
+                                        to={item.path}
+                                        className={`text-sm tracking-wide transition-colors ${
+                                            location.pathname === item.path
                                                 ? 'text-[#C9A227] font-semibold'
                                                 : 'text-[#666666] hover:text-[#0C0C0C] dark:text-[#9E9E9E] dark:hover:text-white font-normal'
-                                    }`}
-                                >
-                                    {item.isSpecial && <ShoppingBag className="w-3.5 h-3.5 text-[#C9A227]" strokeWidth={1.5} />}
-                                    {item.name}
-                                    {item.isSpecial && <ArrowUpRight className="w-3 h-3 text-[#C9A227]" strokeWidth={1.5} />}
-                                </Link>
+                                        }`}
+                                    >
+                                        {item.name}
+                                    </Link>
+                                )
                             ))}
 
                             {/* Dropdown Institucional */}
@@ -244,21 +254,33 @@ const Navbar = () => {
                             >
                                 <div className="flex flex-col space-y-3">
                                     {mainNavItems.map((item) => (
-                                        <Link
-                                            key={item.name}
-                                            to={item.path}
-                                            onClick={() => setIsOpen(false)}
-                                            className={`text-sm tracking-wide py-3 px-4 rounded-xl text-center transition-colors ${
-                                                item.isSpecial
-                                                    ? 'border border-[#C9A227]/40 bg-[#C9A227]/10 text-[#A88218] dark:text-[#ECBD57] font-semibold flex items-center justify-center gap-2'
-                                                    : location.pathname === item.path
+                                        item.isExternal ? (
+                                            <a
+                                                key={item.name}
+                                                href={item.path}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                onClick={() => setIsOpen(false)}
+                                                className="border border-[#C9A227]/40 bg-[#C9A227]/10 text-[#A88218] dark:text-[#ECBD57] font-semibold flex items-center justify-center gap-2 text-sm tracking-wide py-3 px-4 rounded-xl transition-colors"
+                                            >
+                                                <ShoppingBag className="w-4 h-4 text-[#C9A227]" strokeWidth={1.5} />
+                                                {item.name}
+                                                <ArrowUpRight className="w-3.5 h-3.5 text-[#C9A227]" strokeWidth={1.5} />
+                                            </a>
+                                        ) : (
+                                            <Link
+                                                key={item.name}
+                                                to={item.path}
+                                                onClick={() => setIsOpen(false)}
+                                                className={`text-sm tracking-wide py-3 px-4 rounded-xl text-center transition-colors ${
+                                                    location.pathname === item.path
                                                         ? 'bg-black/[0.05] dark:bg-white/[0.06] text-[#C9A227] font-semibold'
                                                         : 'text-[#666666] dark:text-[#9E9E9E] hover:text-[#0C0C0C] dark:hover:text-white'
-                                            }`}
-                                        >
-                                            {item.isSpecial && <ShoppingBag className="w-4 h-4 text-[#C9A227]" strokeWidth={1.5} />}
-                                            {item.name}
-                                        </Link>
+                                                }`}
+                                            >
+                                                {item.name}
+                                            </Link>
+                                        )
                                     ))}
 
                                     <div className="h-px bg-black/[0.06] dark:bg-white/[0.06] my-2" />

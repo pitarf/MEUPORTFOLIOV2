@@ -25,7 +25,7 @@ const Footer = () => {
         { name: t('nav_home', 'Home'), path: '/' },
         { name: t('nav_services', 'Serviços'), path: '/servicos' },
         { name: t('nav_portfolio', 'Portfólio'), path: '/portfolio' },
-        { name: t('nav_store', 'Store'), path: '/store' },
+        { name: t('nav_store', 'Store'), path: 'https://store.ramiell.com', isExternal: true },
         { name: t('nav_about', 'Sobre'), path: '/sobre' },
         { name: t('nav_contact', 'Contato'), path: '/contato' },
     ];
@@ -91,13 +91,26 @@ const Footer = () => {
                         </span>
                         <div className="space-y-2.5">
                             {quickLinks.map((link) => (
-                                <Link
-                                    key={link.name}
-                                    to={link.path}
-                                    className="block text-sm text-[#666666] hover:text-[#C9A227] dark:text-[#9E9E9E] dark:hover:text-[#ECBD57] transition-colors"
-                                >
-                                    {link.name}
-                                </Link>
+                                link.isExternal ? (
+                                    <a
+                                        key={link.name}
+                                        href={link.path}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-1.5 text-sm text-[#666666] hover:text-[#C9A227] dark:text-[#9E9E9E] dark:hover:text-[#ECBD57] transition-colors"
+                                    >
+                                        <span>{link.name}</span>
+                                        <ArrowUpRight className="w-3 h-3 text-[#C9A227]" strokeWidth={1.5} />
+                                    </a>
+                                ) : (
+                                    <Link
+                                        key={link.name}
+                                        to={link.path}
+                                        className="block text-sm text-[#666666] hover:text-[#C9A227] dark:text-[#9E9E9E] dark:hover:text-[#ECBD57] transition-colors"
+                                    >
+                                        {link.name}
+                                    </Link>
+                                )
                             ))}
                         </div>
                     </div>

@@ -1,11 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ShoppingBag, ArrowRight, Sparkles, CheckCircle2, ShieldCheck, Zap } from 'lucide-react';
+import { ShoppingBag, ArrowRight, ArrowUpRight, Sparkles, CheckCircle2, ShieldCheck, Zap } from 'lucide-react';
 import SEO from '@/components/SEO';
 import { Button } from '@/components/ui/button';
 
 /**
- * Página Oficial da Store RAMIELL (ramiell.com/store)
+ * Página Oficial da Store RAMIELL (store.ramiell.com)
  * Apresenta o catálogo exclusivo de soluções digitais, templates e sistemas prontos
  * sob a estética editorial minimalista, suporte completo aos temas Claro e Escuro, e acentos dourados.
  */
@@ -79,6 +79,25 @@ const Store = () => {
                         >
                             Projetos pensados para quem valoriza sofisticação, performance técnica e diferenciação real no mercado.
                         </motion.p>
+
+                        {/* Botão de Acesso Direto à Loja Oficial */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 15 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.25 }}
+                            className="pt-2"
+                        >
+                            <a
+                                href="https://store.ramiell.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 bg-[#C9A227] hover:bg-[#ECBD57] text-[#070707] text-xs uppercase tracking-wider px-6 py-3.5 font-semibold rounded-full shadow-[0_0_20px_rgba(201,162,39,0.25)] transition-all hover:scale-[1.02]"
+                            >
+                                <ShoppingBag className="w-4 h-4 text-[#070707]" strokeWidth={1.5} />
+                                <span>Acessar Loja Oficial em store.ramiell.com</span>
+                                <ArrowUpRight className="w-4 h-4 text-[#070707]" strokeWidth={2} />
+                            </a>
+                        </motion.div>
                     </div>
 
                     {/* Grade de Produtos / Soluções */}
