@@ -117,21 +117,21 @@ const Home = () => {
 
             {/* Hero Section Editorial */}
             <section className="relative min-h-[92vh] flex items-center justify-center pt-32 pb-20 overflow-hidden">
-                {/* Marquee de Projetos ao Fundo com Opacidade Reduzida */}
-                <div className="absolute inset-0 z-0 opacity-10 dark:opacity-15 overflow-hidden pointer-events-none">
-                    <div className="absolute top-12 left-0 w-full rotate-[-3deg]">
-                        <div className="flex gap-5 animate-marquee whitespace-nowrap">
+                {/* Marquee de Projetos ao Fundo com Alta Visibilidade */}
+                <div className="absolute inset-0 z-0 opacity-40 dark:opacity-35 overflow-hidden pointer-events-none">
+                    <div className="absolute top-10 left-0 w-full rotate-[-2deg]">
+                        <div className="flex gap-6 animate-marquee whitespace-nowrap">
                             {bgProjects.map((proj, idx) => (
-                                <div key={`row1-${idx}`} className="w-[300px] h-[190px] md:w-[480px] md:h-[300px] rounded-[20px] overflow-hidden flex-shrink-0 border border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[#0B0B0B]">
-                                    <img src={proj.main_image_url || "https://images.unsplash.com/photo-1550745165-9bc0b252726f"} className="w-full h-full object-cover opacity-60" alt="" />
+                                <div key={`row1-${idx}`} className="w-[320px] h-[200px] md:w-[500px] md:h-[310px] rounded-[22px] overflow-hidden flex-shrink-0 border border-black/10 dark:border-white/10 bg-white dark:bg-[#0B0B0B] shadow-xl">
+                                    <img src={proj.main_image_url || "https://images.unsplash.com/photo-1550745165-9bc0b252726f"} className="w-full h-full object-cover opacity-90 dark:opacity-85" alt="" />
                                 </div>
                             ))}
                         </div>
                     </div>
                 </div>
 
-                {/* Camada de Gradiente Suave Adaptativo ao Tema */}
-                <div className="absolute inset-0 bg-gradient-to-b from-[#F7F7F6]/90 via-[#F7F7F6]/80 to-[#F7F7F6] dark:from-[#070707]/90 dark:via-[#070707]/80 dark:to-[#070707] z-0 pointer-events-none transition-colors duration-300" />
+                {/* Camada de Gradiente Suave Translúcida para destacar os projetos no fundo */}
+                <div className="absolute inset-0 bg-gradient-to-b from-[#F7F7F6]/75 via-[#F7F7F6]/45 to-[#F7F7F6] dark:from-[#070707]/80 dark:via-[#070707]/55 dark:to-[#070707] z-0 pointer-events-none transition-colors duration-300" />
 
                 {/* Glow Central Dourado Sutil */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-[#C9A227]/[0.08] dark:bg-[#C9A227]/[0.06] rounded-full blur-[140px] pointer-events-none z-0" />

@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import ramiellMonogram from '@/assets/brand/ramiell-monogram.png';
 
 /**
  * Componente oficial de logotipo da marca RAMIELL
- * Composto por monograma 'R' dourado + wordmark 'RAMIELL' em caixa alta com letter-spacing 0.2em.
- * Suporta perfeitamente temas Claro e Escuro.
+ * Composto por monograma 'R' dourado sem fundo + wordmark 'RAMIELL' em caixa alta com letter-spacing 0.2em.
+ * Suporta perfeitamente temas Claro e Escuro com zero fundo preto.
  * 
  * Props:
  * - size: 'sm' | 'md' | 'lg' | 'xl' | 'hero' (default: 'md')
@@ -47,7 +48,7 @@ const BrandLogo = ({
             gap: 'gap-5',
         },
         hero: {
-            mark: 'w-24 h-24 sm:w-32 sm:h-32',
+            mark: 'w-20 h-20 sm:w-28 sm:h-28',
             wordmark: 'text-4xl sm:text-6xl md:text-7xl tracking-[0.2em]',
             sub: 'text-xs sm:text-sm tracking-[0.25em] text-[#666666] dark:text-[#9E9E9E]',
             gap: 'gap-4 sm:gap-6',
@@ -57,13 +58,13 @@ const BrandLogo = ({
     const currentSize = sizeMap[size] || sizeMap.md;
     const finalSubtitle = subtitle || (showSubtitle ? 'DIGITAL EXPERIENCES' : null);
 
-    // Renderização visual da marca RAMIELL
+    // Renderização visual da marca RAMIELL (fundo 100% transparente)
     const logoContent = (
         <div className={`inline-flex items-center select-none font-sans ${currentSize.gap} ${className}`}>
-            {/* Monograma Dourado "R" */}
+            {/* Monograma Dourado "R" com Fundo 100% Transparente */}
             <div className={`relative flex items-center justify-center shrink-0 ${currentSize.mark}`}>
                 <img
-                    src="/brand/ramiell-logo.png"
+                    src={ramiellMonogram}
                     alt="RAMIELL"
                     className="w-full h-full object-contain filter drop-shadow-[0_0_12px_rgba(201,162,39,0.25)]"
                 />
