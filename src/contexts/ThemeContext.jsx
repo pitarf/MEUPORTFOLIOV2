@@ -9,10 +9,10 @@ const ThemeContext = createContext();
  * persistindo a preferência no localStorage e aplicando as classes no elemento raiz HTML.
  */
 export const ThemeProvider = ({ children }) => {
-    // Inicia no tema salvo no localStorage ou adota 'dark' como padrão de marca
+    // Inicia no tema salvo no localStorage ou adota 'light' como padrão oficial da marca
     const [theme, setTheme] = useState(() => {
-        const savedTheme = localStorage.getItem('theme');
-        return savedTheme ? savedTheme : 'dark';
+        const savedTheme = localStorage.getItem('ramiell_theme');
+        return savedTheme ? savedTheme : 'light';
     });
 
     useEffect(() => {
@@ -29,6 +29,7 @@ export const ThemeProvider = ({ children }) => {
         }
 
         // Salva a preferência
+        localStorage.setItem('ramiell_theme', theme);
         localStorage.setItem('theme', theme);
     }, [theme]);
 

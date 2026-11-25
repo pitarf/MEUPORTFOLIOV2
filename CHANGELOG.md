@@ -2,6 +2,17 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [2.4.5] - 2026-11-25
+
+### Modificado (Definição do Tema Claro como Padrão de Marca)
+* **Tema Padrão**:
+  * `index.html` e `ThemeContext.jsx` configurados com a classe `light` como padrão oficial da marca RAMIELL.
+  * Armazenamento de preferência via `ramiell_theme`, garantindo que novos e antigos visitantes carreguem imediatamente a estética clara editorial por padrão.
+  * O alternador Sol/Lua continua plenamente funcional para alternar entre Claro e Escuro a qualquer momento.
+* **Deploy e Validação**:
+  * Build gerado e implantado com sucesso no container `ramiell-web` na VPS Oracle Cloud.
+  * Status 200 OK validado em [ramiell.com](https://ramiell.com) com HTML servindo a classe `light` nativamente.
+
 ## [2.4.4] - 2026-11-25
 
 ### Modificado (Redirecionamento Oficial da Loja para store.ramiell.com)

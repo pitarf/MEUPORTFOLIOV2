@@ -2,6 +2,14 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Tema Claro por Padrão da Marca RAMIELL (`ramiell.com`)**:
+  - Objetivo: Configurar o tema claro como estado inicial padrão em todo o site e manter o alternador reativo Sol/Lua.
+  - Entregas Realizadas:
+    - `index.html` atualizado com `<html lang="pt-BR" class="light">`.
+    - `ThemeContext.jsx` atualizado para carregar `'light'` como padrão de marca com a chave `ramiell_theme`.
+    - Build compilado com sucesso e deploy publicado no container `ramiell-web` na VPS Oracle Cloud (`144.22.173.125`).
+    - Validação de resposta HTTP 200 OK com `<html ... class="light">` em `https://ramiell.com`.
+
 - [x] **Integração do Subdomínio Oficial da Loja (`store.ramiell.com`)**:
   - Objetivo: Apontar todos os pontos de acesso à Store diretamente para o subdomínio `store.ramiell.com`.
   - Entregas Realizadas:
