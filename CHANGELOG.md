@@ -2,6 +2,18 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [2.4.2] - 2026-11-25
+
+### Adicionado (Marquee de Projetos em Duas Diagonais Opostas & Refinamento da Logo RAMIELL)
+* **Marquee Cruzado de Projetos no Hero**:
+  * Restauração da segunda fileira de marquee de projetos passando na diagonal inferior oposta.
+  * Linha 1 (Superior): Inclinada em `rotate-[-4deg] md:rotate-[-5deg]` com animação `animate-marquee`.
+  * Linha 2 (Inferior): Inclinada em `rotate-[4deg] md:rotate-[5deg]` com animação reversa `animate-marquee-reverse`.
+  * Cards estilizados com proporção editorial, bordas sutis e fundo translúcido para visibilidade refinada em ambos os temas.
+* **Deploy e Validação em Produção**:
+  * Novo build de produção compilado e transferido para a VPS Oracle Cloud.
+  * Container `ramiell-web` reiniciado e validado com status HTTP 200 OK em `https://ramiell.com/`.
+
 ## [2.4.1] - 2026-11-25
 
 ### Adicionado (Alternador de Tema Claro e Escuro & Logo Oficial RAMIELL)

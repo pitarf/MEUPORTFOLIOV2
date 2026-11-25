@@ -2,6 +2,16 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Marquee de Projetos em Duas Diagonais Opostas & Refinamento da Logo RAMIELL (`ramiell.com`)**:
+  - Objetivo: Restaurar a segunda fileira de marquee de projetos em diagonal oposta com movimento reverso no Hero da Home e garantir alta nitidez visual de fundo.
+  - Entregas Realizadas:
+    - Linha 1 (Superior): Diagonal inclinada descendente (`rotate-[-4deg] md:rotate-[-5deg]`) com classe `animate-marquee`.
+    - Linha 2 (Inferior): Diagonal inclinada ascendente (`rotate-[4deg] md:rotate-[5deg]`) com classe `animate-marquee-reverse`.
+    - Ambas as fileiras configuradas com cards de alta definição, bordas sutis e fundo compatível em light e dark mode.
+    - Build local (`npm run build`) concluído com 0 erros.
+    - Deploy publicado no container `ramiell-web` na VPS Oracle Cloud (`144.22.173.125`).
+    - Validação de Status 200 OK em `https://ramiell.com`.
+
 - [x] **Alternador de Tema Claro e Escuro & Logo Oficial RAMIELL (`ramiell.com`)**:
   - Objetivo: Restaurar a alternância reativa entre tema claro e tema escuro na marca RAMIELL e aplicar a logo e monograma oficiais em alta resolução.
   - Entregas Realizadas:
