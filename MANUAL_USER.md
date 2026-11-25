@@ -4,6 +4,23 @@ Este guia prático ensina você a gerenciar e otimizar a presença do seu site n
 
 ---
 
+## 24. A Nova Marca RAMIELL (ramiell.com)
+
+A **RAMIELL** é a nova marca de alto padrão voltada para desenvolvimento de software corporativo, sistemas sob medida e experiências web de elite.
+
+### 24.1 O que mudou e como funciona a convivência entre marcas
+* **Site Antigo (`rafaelpitaoficial.com.br`)**: Permanece 100% online, intacto e em produção a partir da branch `main`. Nenhuma alteração da RAMIELL interfere nele.
+* **Nova Marca (`ramiell.com`)**: Opera na branch dedicada `ramiell`. Possui design editorial minimalista exclusivo em fundo escuro (`#070707`), cantos arredondados de 20px, acentos dourados (`#C9A227`), tipografia Geist e monograma "R" dourado.
+* **Assinatura e Redes**:
+  * Instagram Oficial: `@vaideramiell` ([instagram.com/vaideramiell](https://instagram.com/vaideramiell))
+  * Assinatura: *Vai de Ramiell.*
+  * E-mail Oficial: `contato@ramiell.com`
+  * WhatsApp Oficial: `(21) 96614-9077` (preservado em todos os canais de atendimento).
+* **Store RAMIELL (`/store`)**:
+  * Nova página acessível pelo menu superior e rodapé (`ramiell.com/store`), apresentando soluções prontas em websites, landing pages e sistemas sob medida com encomendas diretas via WhatsApp.
+
+---
+
 ## 23. Como Atualizar e Publicar o Site na sua VPS via Git
 
 O seu portfólio e o PIT.AI agora rodam diretamente na sua VPS em container Docker dedicado, sem depender da Vercel.

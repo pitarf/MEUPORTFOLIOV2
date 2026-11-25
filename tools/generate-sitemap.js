@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const domain = 'https://rafaelpitaoficial.com.br';
+const domain = 'https://ramiell.com';
 
 async function generate() {
     console.log('Iniciando geração dinâmica do sitemap.xml...');
@@ -9,6 +9,7 @@ async function generate() {
     // Rotas estáticas
     const staticRoutes = [
         { path: '', priority: '1.0', changefreq: 'monthly' },
+        { path: '/store', priority: '0.9', changefreq: 'weekly' },
         { path: '/sobre', priority: '0.8', changefreq: 'monthly' },
         { path: '/servicos', priority: '0.8', changefreq: 'monthly' },
         { path: '/portfolio', priority: '0.9', changefreq: 'weekly' },

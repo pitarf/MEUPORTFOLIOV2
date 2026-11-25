@@ -1,32 +1,32 @@
 {
   "specVersion": "1.0",
   "host": {
-    "displayName": "Rafael Pita Solutions",
-    "identifier": "https://rafaelpitaoficial.com.br",
-    "documentationUrl": "https://rafaelpitaoficial.com.br/llms.txt",
-    "logoUrl": "https://rafaelpitaoficial.com.br/favicon.svg"
+    "displayName": "RAMIELL",
+    "identifier": "https://ramiell.com",
+    "documentationUrl": "https://ramiell.com/llms.txt",
+    "logoUrl": "https://ramiell.com/brand/ramiell-logo.png"
   },
   "entries": [
     {
-      "identifier": "urn:ai:rafaelpitaoficial.com.br:service:legal-landing-page",
-      "displayName": "Criacao de Site para Advogado",
+      "identifier": "urn:ai:ramiell.com:service:web-development",
+      "displayName": "Desenvolvimento de Sites e Aplicações Web",
       "type": "text/html",
-      "url": "https://rafaelpitaoficial.com.br/criacao-site-advogado",
-      "description": "Desenvolvimento e configuracao de landing pages para advogados com SEO avancado, integracao direta com WhatsApp e conformidade OAB."
+      "url": "https://ramiell.com/servicos",
+      "description": "Desenvolvimento de sites de alto padrão, sistemas personalizados e experiências digitais sob medida. Vai de Ramiell."
     },
     {
-      "identifier": "urn:ai:rafaelpitaoficial.com.br:service:legal-templates",
-      "displayName": "Modelos de Sites Juridicos",
+      "identifier": "urn:ai:ramiell.com:store:digital-solutions",
+      "displayName": "Store RAMIELL",
       "type": "text/html",
-      "url": "https://rafaelpitaoficial.com.br/sites-para-advogados",
-      "description": "Demonstracoes interativas de landing pages para advogados nas areas Trabalhista, Familia, Consumidor e Geral."
+      "url": "https://ramiell.com/store",
+      "description": "Catálogo de soluções digitais e templates de alto padrão da marca RAMIELL."
     },
     {
-      "identifier": "urn:ai:rafaelpitaoficial.com.br:portfolio:projects",
-      "displayName": "Portfolio de Projetos Web",
+      "identifier": "urn:ai:ramiell.com:portfolio:projects",
+      "displayName": "Portfólio de Projetos RAMIELL",
       "type": "text/html",
-      "url": "https://rafaelpitaoficial.com.br/portfolio",
-      "description": "Catalogo de sistemas web modernos, dashboards e engenharia de software desenvolvidos por Rafael Pita."
+      "url": "https://ramiell.com/portfolio",
+      "description": "Portfólio de sistemas web modernos, aplicações e engenharia de software da RAMIELL."
     }
   ]
 }

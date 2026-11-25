@@ -2,6 +2,20 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Lançamento da Identidade Visual RAMIELL (`ramiell.com`) na Branch `ramiell`**:
+  - Objetivo: Criar a versão de produção para a nova marca RAMIELL a partir de branch dedicada `ramiell`, preservando 100% intacta a versão atual da `main` (`rafaelpitaoficial.com.br`).
+  - Entregas Realizadas:
+    - Branch `ramiell` criada e ativada a partir da `main` atualizada.
+    - Identidade Visual Dark Exclusiva: Fundo `#070707` (página) e `#0A0A0A` (seções), cards `#0B0B0B`, superfícies `#121212`, bordas de 6% (`rgba(255, 255, 255, 0.06)`), texto principal `#FFFFFF` e secundário `#9E9E9E`.
+    - Acento Dourado `#C9A227` e Degradê de Títulos `#ECBD57` → `#C8942D` aplicado em substituição completa ao verde-lima (`#bcf13b`).
+    - Tipografia Oficial: Fontes `Geist` (300 a 800) e `IBM Plex Mono` carregadas e integradas via Tailwind e Google Fonts.
+    - Logotipo Oficial: Monograma "R" dourado (`/brand/ramiell-logo.png`) e wordmark "RAMIELL" em caixa alta com `letter-spacing: 0.2em` implementados no componente `BrandLogo.jsx`.
+    - Navegação & Rodapé: Link para a nova loja `/store` adicionado na Navbar, remoção de alternador de tema claro, assinatura "Vai de Ramiell.", Instagram `@vaideramiell` e contatos preservados.
+    - Criação da página `src/pages/Store.jsx` com catálogo editorial de soluções digitais.
+    - SEO & Descoberta Agêntica: Atualizados `index.html`, `SEO.jsx`, `robots.txt`, `sitemap.xml`, `.well-known/ai-catalog.json` e `llms.txt` apontando para o domínio canônico `https://ramiell.com`.
+    - Build local (`npm run build`) validado com sucesso sem erros.
+
+
 - [x] **Eliminação de 404 em Rotas Diretas (SPA) e Ponte de Transição de DNS (`144.22.173.125`, `2.25.75.243`)**:
   - Objetivo: Resolver o erro 404 ao acessar rotas diretas como `/portfolio` e cobrir o período de cache do DNS dos provedores locais (Claro/Net).
   - Entregas Realizadas:

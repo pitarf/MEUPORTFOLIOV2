@@ -2,6 +2,19 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [2.4.0] - 2026-11-25
+
+### Adicionado (Lançamento da Identidade Visual RAMIELL - Branch `ramiell`)
+* **Isolamento de Branches e Identidade de Marca**:
+  * Criação da branch `ramiell` dedicada a partir da `main`, mantendo `rafaelpitaoficial.com.br` intacto na `main`.
+  * Identidade visual dark editorial minimalista: fundo da página `#070707`, seções `#0A0A0A`, cards `#0B0B0B`, superfícies secundárias `#121212`, texto principal `#FFFFFF` e texto secundário `#9E9E9E`.
+  * Substituição integral do verde-lima pelo acento dourado `#C9A227` e degradê de títulos `#ECBD57` → `#C8942D`.
+  * Tipografia oficial: carregamento das fontes `Geist` e `IBM Plex Mono` via Google Fonts.
+  * Logotipo: monograma "R" dourado (`/brand/ramiell-logo.png`) e wordmark "RAMIELL" com tracking 0.2em.
+  * Nova página e rota `Store` (`ramiell.com/store`) com catálogo editorial de soluções digitais.
+  * Navegação & Rodapé: link da Store integrado no menu, assinatura "Vai de Ramiell.", Instagram `@vaideramiell` e suporte exclusivo a tema escuro (Dark Only).
+  * Atualização de SEO, Open Graph, Twitter Cards, robots.txt, sitemap.xml e ai-catalog.json para o domínio canônico `https://ramiell.com`.
+
 ## [2.3.6] - 2026-11-20
 
 ### Corrigido (Roteamento SPA e Ponte de Transição de DNS sem Queda)

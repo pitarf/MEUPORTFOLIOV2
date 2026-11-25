@@ -1,6 +1,41 @@
 # MANUAL DO DESENVOLVEDOR (MANUAL_DEV) - ESTRUTURA DE SEO & TEMAS PREMIUM
 
-Este documento detalha o funcionamento técnico da infraestrutura de SEO Dinâmico e da Arquitetura Dinâmica de Temas (Claro/Escuro) implementada no projeto **MeuPortfolio v2**.
+Este documento detalha o funcionamento técnico da infraestrutura de SEO Dinâmico e da Arquitetura Dinâmica de Temas implementada no projeto.
+
+---
+
+## 27. Arquitetura da Marca RAMIELL (Branch `ramiell` & `ramiell.com`)
+
+A marca **RAMIELL** representa a nova linha de posicionamento com foco em engenharia de software de alto padrão, sistemas personalizados e estética editorial minimalista.
+
+### 27.1 Isolamento de Ambientes por Branch
+* **Branch `main`**: Alimenta em produção o domínio `rafaelpitaoficial.com.br` (container `portfolio-web`, porta `3002` na Oracle Cloud `144.22.173.125`). Não deve ser alterada durante o desenvolvimento da RAMIELL.
+* **Branch `ramiell`**: Alimenta a produção de `ramiell.com` e `www.ramiell.com` (container `ramiell-web`, porta `3003` na Oracle Cloud `144.22.173.125`).
+
+### 27.2 Design Tokens e Sistema Visual
+* **Tema Exclusivo Dark (Dark Only)**: Não há alternância para tema claro no site público da RAMIELL. A classe `dark` é persistida no `<html>` e o `ThemeProvider` opera fixado no modo escuro.
+* **Paleta de Cores Estruturais**:
+  * Página (`bg-page` / body): `#070707`
+  * Seções (`bg-section`): `#0A0A0A`
+  * Cards Editoriais (`bg-card`): `#0B0B0B`
+  * Superfícies Secundárias / Elevadas: `#121212`
+  * Texto Primário: `#FFFFFF`
+  * Texto Secundário: `#9E9E9E`
+  * Bordas: `rgba(255, 255, 255, 0.06)` (6% de opacidade branca)
+* **Acento Único Dourado**:
+  * Acento Base: `#C9A227` (tokens `primary`, `accent`, `gold`)
+  * Degradê de Títulos: `linear-gradient(135deg, #ECBD57 0%, #C8942D 100%)`
+  * Texto sobre dourado: `#070707`
+  * Glow sutil: `0 0 24px rgba(201, 162, 39, 0.15)`
+* **Tipografia**:
+  * Corpo e Títulos: `Geist` (300 a 800; uso principal 400, 500, 600)
+  * Títulos com `letter-spacing: -0.03em`
+  * Chips, Labels, Números e Códigos: `IBM Plex Mono`
+* **Componente de Logotipo (`src/components/common/BrandLogo.jsx`)**:
+  * Monograma "R" dourado (`/brand/ramiell-logo.png`)
+  * Wordmark "RAMIELL" em caixa alta com `letter-spacing: 0.2em`
+* **Rota da Loja (`/store`)**:
+  * Componente `src/pages/Store.jsx` apresentando o catálogo de soluções digitais prontas, sistemas e templates.
 
 ---
 

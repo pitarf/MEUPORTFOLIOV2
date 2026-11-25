@@ -5,15 +5,16 @@ import { useLocation } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
 
 /**
- * Componente SEO para gerenciamento dinâmico e centralizado de metadados
- * Melhora drasticamente a indexação no Google com tags robustas, links canônicos e proteção de áreas restritas.
+ * Componente SEO centralizado para a marca RAMIELL
+ * Injeta metadados essenciais, links canônicos, Open Graph e Twitter Cards
+ * direcionados ao domínio oficial https://ramiell.com.
  * 
  * @param {Object} props
  * @param {string} props.title - Título personalizado para a página
  * @param {string} props.description - Descrição personalizada para a página
  * @param {string} props.keywords - Palavras-chave personalizadas para a página
- * @param {string} props.image - Imagem Open Graph de compartilhamento personalizada
- * @param {string} props.url - URL canônica personalizada
+ * @param {string} props.image - Imagem Open Graph de compartilhamento
+ * @param {string} props.url - URL canônica da rota atual
  */
 const SEO = ({ title, description, keywords, image, url }) => {
     const { config } = useSiteConfig();
@@ -21,15 +22,14 @@ const SEO = ({ title, description, keywords, image, url }) => {
     const [photoMetadata, setPhotoMetadata] = useState(null);
 
     const isPhotography = location.pathname.startsWith('/portfolio-fotografia');
-    const currentUrl = url || window.location.href;
+    const currentUrl = url || (typeof window !== 'undefined' ? window.location.href : 'https://ramiell.com');
 
-    // Detectar rotas privadas/administrativas que NÃO devem ser indexadas pelo Google (Proteção de Dados)
+    // Rotas restritas que não devem ser indexadas
     const noIndexPaths = ['/admin', '/dashboard', '/area-clientes', '/support', '/track-ticket', '/pit-ai', '/pitai', '/jarvis'];
     const isNoIndex = noIndexPaths.some(path => 
         location.pathname === path || location.pathname.startsWith(`${path}/`)
     );
 
-    // Carregar metadados específicos para a área de fotografia se necessário
     useEffect(() => {
         const fetchPhotoMeta = async () => {
             if (isPhotography && !photoMetadata) {
@@ -44,107 +44,72 @@ const SEO = ({ title, description, keywords, image, url }) => {
         fetchPhotoMeta();
     }, [isPhotography, photoMetadata]);
 
-    // Função utilitária para garantir que URLs de imagem e favicon sejam absolutas
     const makeAbsoluteUrl = (path) => {
-        if (!path) return '';
+        if (!path) return 'https://ramiell.com/brand/ramiell-logo.png';
         if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('data:')) {
             return path;
         }
-        const origin = window.location.origin || 'https://rafaelpitaoficial.com.br';
-        return `${origin}${path.startsWith('/') ? '' : '/'}${path}`;
+        return `https://ramiell.com${path.startsWith('/') ? '' : '/'}${path}`;
     };
 
-    // ----------------------------------------------------
-    // Definição dos Metadados Principais (Hierarquia de Prioridade)
-    // ----------------------------------------------------
-
-    // 1. TÍTULO DO SITE / PÁGINA
+    // Título Oficial RAMIELL
     let finalTitle = title;
     if (!finalTitle) {
         if (isPhotography && photoMetadata?.nav_site_name) {
-            finalTitle = `${photoMetadata.nav_site_name} - Portfólio de Fotografia`;
+            finalTitle = `${photoMetadata.nav_site_name} | Fotografia Profissional`;
         } else {
-            // Prioridade: SEO site_title do DB -> site_name do DB -> Fallback Padrão
-            finalTitle = config?.site_title || config?.site_name || 'Rafael Pita Solutions - Criatividade e Tecnologia';
+            finalTitle = 'RAMIELL | Desenvolvimento de Sites, Sistemas & Experiências Digitais';
         }
     } else {
-        // Se a página passar um título específico, anexa o nome global do site para branding premium
-        const siteSuffix = config?.site_name || 'Rafael Pita Solutions';
+        const siteSuffix = 'RAMIELL';
         if (!finalTitle.includes(siteSuffix)) {
             finalTitle = `${finalTitle} | ${siteSuffix}`;
         }
     }
 
-    // 2. DESCRIÇÃO
+    // Descrição
     let finalDesc = description;
     if (!finalDesc) {
-        if (isPhotography && photoMetadata?.hero_subtitle) {
-            finalDesc = photoMetadata.hero_subtitle;
-        } else {
-            // Prioridade: SEO site_description do DB -> hero_description do DB -> Fallback Padrão
-            finalDesc = config?.site_description || config?.hero_description || 'Rafael Pita Solutions oferece serviços completos de design gráfico, fotografia, desenvolvimento web e muito mais.';
-        }
+        finalDesc = 'Desenvolvimento de sites de alto padrão, sistemas sob medida, aplicações web e experiências digitais. Vai de Ramiell.';
     }
 
-    // 3. PALAVRAS-CHAVE
+    // Palavras-chave
     let finalKeywords = keywords;
     if (!finalKeywords) {
-        finalKeywords = config?.site_keywords || 'portfólio, rafael pita, soluções digitais, desenvolvimento web, design gráfico, fotografia, power bi';
+        finalKeywords = 'ramiell, vai de ramiell, desenvolvimento de sites, criacao de sistemas web, aplicacoes web, experiencias digitais, design editorial, ui ux';
     }
 
-    // 4. IMAGEM OPEN GRAPH (COMPARTILHAMENTO)
-    let finalImage = image;
-    if (!finalImage) {
-        if (isPhotography && photoMetadata?.nav_logo_url) {
-            finalImage = photoMetadata.nav_logo_url;
-        } else {
-            // Prioridade: SEO og_image_url do DB -> logo_url do DB -> Fallback de imagem tech
-            finalImage = config?.og_image_url || config?.logo_url || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80';
-        }
-    }
+    // Imagem Open Graph
+    const finalImage = image || '/brand/ramiell-logo.png';
     const absoluteImage = makeAbsoluteUrl(finalImage);
-
-    // 5. FAVICON DINÂMICO
-    let rawFavicon = '/vite.svg'; // Fallback absoluto
-    if (isPhotography && photoMetadata?.nav_logo_url) {
-        rawFavicon = photoMetadata.nav_logo_url;
-    } else if (config?.favicon_url) {
-        rawFavicon = config.favicon_url;
-    } else if (config?.logo_url) {
-        rawFavicon = config.logo_url;
-    }
-    const absoluteFavicon = makeAbsoluteUrl(rawFavicon);
+    const absoluteFavicon = makeAbsoluteUrl('/brand/ramiell-logo.png');
 
     return (
         <Helmet>
-            {/* Metadados Básicos */}
             <title>{finalTitle}</title>
             <meta name="description" content={finalDesc} />
             <meta name="keywords" content={finalKeywords} />
 
-            {/* Configuração de Indexação Dinâmica (SEO / Segurança) */}
             {isNoIndex ? (
                 <meta name="robots" content="noindex, nofollow" />
             ) : (
                 <meta name="robots" content="index, follow" />
             )}
 
-            {/* Tag Canônica para evitar conteúdo duplicado no Google */}
             <link rel="canonical" href={currentUrl} />
 
-            {/* Favicons Dinâmicos baseados no painel */}
             <link rel="icon" type="image/png" href={absoluteFavicon} />
             <link rel="apple-touch-icon" href={absoluteFavicon} />
 
-            {/* Open Graph / Facebook (URLs Obrigatórias como Absolutas) */}
+            {/* Open Graph */}
             <meta property="og:type" content="website" />
             <meta property="og:url" content={currentUrl} />
             <meta property="og:title" content={finalTitle} />
             <meta property="og:description" content={finalDesc} />
             <meta property="og:image" content={absoluteImage} />
-            <meta property="og:site_name" content={config?.site_name || 'Rafael Pita Solutions'} />
+            <meta property="og:site_name" content="RAMIELL" />
 
-            {/* Twitter Card */}
+            {/* Twitter */}
             <meta property="twitter:card" content="summary_large_image" />
             <meta property="twitter:url" content={currentUrl} />
             <meta property="twitter:title" content={finalTitle} />
@@ -155,4 +120,3 @@ const SEO = ({ title, description, keywords, image, url }) => {
 };
 
 export default SEO;
-
