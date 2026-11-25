@@ -14,7 +14,7 @@ const WhatsAppFloat = () => {
 
     const handleWhatsAppClick = () => {
         const phoneNumber = '5521966149077';
-        const message = 'Olá! Gostaria de saber mais sobre os serviços da Rafael Pita Solutions.';
+        const message = 'Olá! Gostaria de saber mais sobre as soluções e serviços da RAMIELL.';
         const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
     };

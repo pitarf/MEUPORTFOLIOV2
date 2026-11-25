@@ -2,12 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 /**
- * Componente oficial de logotipo da nova identidade visual: 'rp .'
- * Letras 'rp' em branco (#ffffff) e ponto final '.' em verde neon (#bcf13b).
+ * Componente oficial de logotipo da marca RAMIELL
+ * Composto por monograma 'R' dourado + wordmark 'RAMIELL' em caixa alta com letter-spacing 0.2em.
  * 
  * Props:
- * - size: 'sm' | 'md' | 'lg' | 'xl' (default: 'md')
- * - subtitle: string opcional (ex: 'DADOS & TECNOLOGIA' ou 'SOLUÇÕES DIGITAIS')
+ * - size: 'sm' | 'md' | 'lg' | 'xl' | 'hero' (default: 'md')
+ * - subtitle: string opcional (ex: 'DIGITAL EXPERIENCES' ou 'SOLUÇÕES DIGITAIS')
  * - showSubtitle: boolean opcional
  * - asLink: boolean (se true, engloba em um Link para '/')
  * - className: string para estilização adicional do container
@@ -19,75 +19,72 @@ const BrandLogo = ({
     asLink = false,
     className = ''
 }) => {
-    // Escalas de tamanho tipográfico e proporção do separador
+    // Escalas de tamanho para o monograma e wordmark editorial
     const sizeMap = {
         sm: {
-            text: 'text-2xl',
-            dot: 'text-2xl',
-            sub: 'text-xs tracking-tight sm:tracking-normal',
-            sep: 'text-xs mx-1.5',
-            symbolBox: 'h-6',
+            mark: 'w-6 h-6',
+            wordmark: 'text-sm tracking-[0.2em]',
+            sub: 'text-[10px] tracking-widest text-[#9E9E9E]',
+            gap: 'gap-2.5',
         },
         md: {
-            text: 'text-3xl sm:text-4xl',
-            dot: 'text-3xl sm:text-4xl',
-            sub: 'text-xs sm:text-sm md:text-base tracking-tight sm:tracking-normal',
-            sep: 'text-sm sm:text-base mx-2 sm:mx-2.5',
-            symbolBox: 'h-8 sm:h-9',
+            mark: 'w-8 h-8',
+            wordmark: 'text-base sm:text-lg tracking-[0.2em]',
+            sub: 'text-xs tracking-widest text-[#9E9E9E]',
+            gap: 'gap-3',
         },
         lg: {
-            text: 'text-5xl sm:text-6xl md:text-7xl',
-            dot: 'text-5xl sm:text-6xl md:text-7xl',
-            sub: 'text-sm sm:text-lg tracking-tight',
-            sep: 'text-base sm:text-lg mx-3',
-            symbolBox: 'h-14 sm:h-16',
+            mark: 'w-12 h-12',
+            wordmark: 'text-2xl sm:text-3xl tracking-[0.2em]',
+            sub: 'text-xs sm:text-sm tracking-widest text-[#9E9E9E]',
+            gap: 'gap-4',
         },
         xl: {
-            text: 'text-6xl sm:text-7xl md:text-8xl',
-            dot: 'text-6xl sm:text-7xl md:text-8xl',
-            sub: 'text-base sm:text-xl tracking-tight',
-            sep: 'text-xl mx-4',
-            symbolBox: 'h-24',
+            mark: 'w-16 h-16',
+            wordmark: 'text-4xl sm:text-5xl tracking-[0.2em]',
+            sub: 'text-sm sm:text-base tracking-widest text-[#9E9E9E]',
+            gap: 'gap-5',
         },
         hero: {
-            text: 'text-7xl sm:text-8xl md:text-9xl lg:text-[10rem]',
-            dot: 'text-7xl sm:text-8xl md:text-9xl lg:text-[10rem]',
-            sub: 'text-base sm:text-xl tracking-tight',
-            sep: 'text-xl mx-4',
-            symbolBox: 'h-32',
+            mark: 'w-24 h-24 sm:w-32 sm:h-32',
+            wordmark: 'text-4xl sm:text-6xl md:text-7xl tracking-[0.2em]',
+            sub: 'text-xs sm:text-sm tracking-[0.25em] text-[#9E9E9E]',
+            gap: 'gap-4 sm:gap-6',
         }
     };
 
     const currentSize = sizeMap[size] || sizeMap.md;
-    const finalSubtitle = subtitle || (showSubtitle ? 'Rafael Pita Solutions' : null);
+    const finalSubtitle = subtitle || (showSubtitle ? 'DIGITAL EXPERIENCES' : null);
 
+    // Renderização visual da marca RAMIELL
     const logoContent = (
-        <div className={`inline-flex items-center select-none font-sans ${className}`}>
-            <div className={`flex items-baseline font-black leading-none tracking-tight ${currentSize.text}`}>
-                <span className="text-slate-950 dark:text-white font-black hover:opacity-95 transition-opacity">
-                    rp
-                </span>
-                <span className="text-[#bcf13b] font-black inline-block transform hover:scale-110 transition-transform">
-                    .
-                </span>
+        <div className={`inline-flex items-center select-none font-sans ${currentSize.gap} ${className}`}>
+            {/* Monograma Dourado "R" */}
+            <div className={`relative flex items-center justify-center shrink-0 ${currentSize.mark}`}>
+                <img
+                    src="/brand/ramiell-logo.png"
+                    alt="RAMIELL"
+                    className="w-full h-full object-contain filter drop-shadow-[0_0_12px_rgba(201,162,39,0.2)]"
+                />
             </div>
 
-            {finalSubtitle && (
-                <div className="flex items-center min-w-0">
-                    <span className={`text-slate-300 dark:text-[#33332d] font-light ${currentSize.sep}`}>
-                        |
-                    </span>
-                    <span className={`font-bold tracking-tight text-slate-800 dark:text-gray-200 group-hover:text-black dark:group-hover:text-white transition-colors truncate ${currentSize.sub}`}>
+            {/* Wordmark Tipográfico em Caixa Alta */}
+            <div className="flex flex-col justify-center leading-none">
+                <span className={`font-semibold uppercase text-white font-sans ${currentSize.wordmark}`}>
+                    RAMIELL
+                </span>
+                {finalSubtitle && (
+                    <span className={`uppercase font-mono mt-1 ${currentSize.sub}`}>
                         {finalSubtitle}
                     </span>
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 
     if (asLink) {
         return (
-            <Link to="/" className="inline-flex items-center group focus:outline-none">
+            <Link to="/" className="inline-flex items-center group focus:outline-none transition-opacity hover:opacity-90">
                 {logoContent}
             </Link>
         );
