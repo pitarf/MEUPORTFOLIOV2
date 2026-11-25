@@ -2,6 +2,15 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Integração do Subdomínio Oficial da Loja (`store.ramiell.com`)**:
+  - Objetivo: Apontar todos os pontos de acesso à Store diretamente para o subdomínio `store.ramiell.com`.
+  - Entregas Realizadas:
+    - Navbar (Desktop e Mobile) atualizada com link direto para `https://store.ramiell.com`.
+    - Rodapé (`Footer.jsx`) e Hero/CTA da `Home.jsx` configurados com abertura externa segura.
+    - Banner de redirecionamento imediato incluído na página `/store`.
+    - Build local concluído com 0 erros e deploy publicado no container `ramiell-web` na VPS Oracle Cloud.
+    - Status HTTP 200 OK validado em `https://ramiell.com`.
+
 - [x] **Wordmark Direto RAMIELL na Navbar & Rodapé (`ramiell.com`)**:
   - Objetivo: Remover "DIGITAL EXPERIENCES" e exibir estritamente o monograma dourado + "RAMIELL" na barra de navegação e rodapé.
   - Entregas Realizadas:

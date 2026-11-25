@@ -2,6 +2,17 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [2.4.4] - 2026-11-25
+
+### Modificado (Redirecionamento Oficial da Loja para store.ramiell.com)
+* **Integração Externa da Store**:
+  * Atualização dos links da Store na Navbar (desktop e mobile), no rodapé (`Footer.jsx`) e na chamada de ação da página inicial (`Home.jsx`).
+  * Todos os links agora apontam diretamente para `https://store.ramiell.com` com abertura externa segura e indicador visual refinado (`ArrowUpRight`).
+  * Inclusão de botão de redirecionamento imediato no topo da página `/store` para visitantes que cheguem pela rota antiga.
+* **Deploy e Validação**:
+  * Build gerado com sucesso e atualizado no container `ramiell-web` na VPS Oracle Cloud.
+  * Validação com status 200 OK em [ramiell.com](https://ramiell.com).
+
 ## [2.4.3] - 2026-11-25
 
 ### Modificado (Simplificação da Marca na Navbar e Rodapé)
