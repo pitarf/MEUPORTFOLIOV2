@@ -2,6 +2,18 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Alternador de Tema Claro e Escuro & Logo Oficial RAMIELL (`ramiell.com`)**:
+  - Objetivo: Restaurar a alternância reativa entre tema claro e tema escuro na marca RAMIELL e aplicar a logo e monograma oficiais em alta resolução.
+  - Entregas Realizadas:
+    - `ThemeContext.jsx` atualizado com persistência em `localStorage` e alternância dinâmica da classe `.dark`.
+    - Botão animado Sol/Lua adicionado à Navbar (Desktop e Mobile).
+    - Design tokens configurados para Claro (`#F7F7F6` / `#FFFFFF` / `#0C0C0C`) e Escuro (`#070707` / `#0B0B0B` / `#FFFFFF`).
+    - Páginas adaptadas com contraste editorial perfeito: `Home`, `About`, `Services`, `Store`, `Portfolio`, `Contact`, `Footer`, `PortfolioProjectCard`, `ProjectCarousel` e `ReviewsCarousel`.
+    - Monograma "R" dourado e Logo Completo com wordmark estilizado processados com transparência e integrados aos favicons, apple-touch-icon, PWA icons e OG image.
+    - Build local concluído em 29s com 0 erros.
+    - Deploy publicado no container `ramiell-web` na VPS Oracle Cloud (`144.22.173.125`).
+    - Validação de Status 200 OK em todas as rotas de `ramiell.com` e `rafaelpitaoficial.com.br`.
+
 - [x] **Lançamento da Identidade Visual RAMIELL (`ramiell.com`) na Branch `ramiell`**:
   - Objetivo: Criar a versão de produção para a nova marca RAMIELL a partir de branch dedicada `ramiell`, preservando 100% intacta a versão atual da `main` (`rafaelpitaoficial.com.br`).
   - Entregas Realizadas:

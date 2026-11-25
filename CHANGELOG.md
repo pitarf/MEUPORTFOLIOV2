@@ -2,6 +2,21 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [2.4.1] - 2026-11-25
+
+### Adicionado (Alternador de Tema Claro e Escuro & Logo Oficial RAMIELL)
+* **Alternância Completa de Temas (Light / Dark Mode)**:
+  * Provedor `ThemeContext.jsx` atualizado com estado persistente no `localStorage` e alternância dinâmica da classe `.dark`.
+  * Botão animado de tema (Sol/Lua com Framer Motion) adicionado tanto na barra de navegação Desktop quanto na gaveta Mobile.
+  * Design tokens no `index.css`: Tema Claro Editorial (fundo `#F7F7F6`, cards `#FFFFFF`, texto `#0C0C0C`, bordas `rgba(0,0,0,0.07)`, acento `#B88E18`) e Tema Escuro (fundo `#070707`, cards `#0B0B0B`, texto `#FFFFFF`, bordas `rgba(255,255,255,0.06)`, acento `#C9A227`).
+  * Adaptação de todas as páginas públicas (`Home`, `About`, `Services`, `Store`, `Portfolio`, `Contact`, `Footer`, `PortfolioProjectCard`, `ProjectCarousel`, `ReviewsCarousel`).
+* **Identidade Visual Oficial**:
+  * Integração dos arquivos em alta resolução fornecidos: Monograma "R" dourado com transparência e logotipo completo com wordmark estilizado.
+  * Geração dos favicons, apple-touch-icon, ícones para PWA e imagem de compartilhamento Open Graph (1200x630).
+* **Deploy e Validação em Produção**:
+  * Build gerado e publicado no container `ramiell-web` na VPS Oracle.
+  * Validação com Status 200 OK em `https://ramiell.com/`, `https://ramiell.com/store`, `https://ramiell.com/portfolio` e `https://rafaelpitaoficial.com.br/portfolio`.
+
 ## [2.4.0] - 2026-11-25
 
 ### Adicionado (Lançamento da Identidade Visual RAMIELL - Branch `ramiell`)
