@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 /**
  * Componente oficial de logotipo da marca RAMIELL
  * Composto por monograma 'R' dourado + wordmark 'RAMIELL' em caixa alta com letter-spacing 0.2em.
+ * Suporta perfeitamente temas Claro e Escuro.
  * 
  * Props:
  * - size: 'sm' | 'md' | 'lg' | 'xl' | 'hero' (default: 'md')
@@ -24,31 +25,31 @@ const BrandLogo = ({
         sm: {
             mark: 'w-6 h-6',
             wordmark: 'text-sm tracking-[0.2em]',
-            sub: 'text-[10px] tracking-widest text-[#9E9E9E]',
+            sub: 'text-[10px] tracking-widest text-[#666666] dark:text-[#9E9E9E]',
             gap: 'gap-2.5',
         },
         md: {
             mark: 'w-8 h-8',
             wordmark: 'text-base sm:text-lg tracking-[0.2em]',
-            sub: 'text-xs tracking-widest text-[#9E9E9E]',
+            sub: 'text-xs tracking-widest text-[#666666] dark:text-[#9E9E9E]',
             gap: 'gap-3',
         },
         lg: {
             mark: 'w-12 h-12',
             wordmark: 'text-2xl sm:text-3xl tracking-[0.2em]',
-            sub: 'text-xs sm:text-sm tracking-widest text-[#9E9E9E]',
+            sub: 'text-xs sm:text-sm tracking-widest text-[#666666] dark:text-[#9E9E9E]',
             gap: 'gap-4',
         },
         xl: {
             mark: 'w-16 h-16',
             wordmark: 'text-4xl sm:text-5xl tracking-[0.2em]',
-            sub: 'text-sm sm:text-base tracking-widest text-[#9E9E9E]',
+            sub: 'text-sm sm:text-base tracking-widest text-[#666666] dark:text-[#9E9E9E]',
             gap: 'gap-5',
         },
         hero: {
             mark: 'w-24 h-24 sm:w-32 sm:h-32',
             wordmark: 'text-4xl sm:text-6xl md:text-7xl tracking-[0.2em]',
-            sub: 'text-xs sm:text-sm tracking-[0.25em] text-[#9E9E9E]',
+            sub: 'text-xs sm:text-sm tracking-[0.25em] text-[#666666] dark:text-[#9E9E9E]',
             gap: 'gap-4 sm:gap-6',
         }
     };
@@ -64,13 +65,13 @@ const BrandLogo = ({
                 <img
                     src="/brand/ramiell-logo.png"
                     alt="RAMIELL"
-                    className="w-full h-full object-contain filter drop-shadow-[0_0_12px_rgba(201,162,39,0.2)]"
+                    className="w-full h-full object-contain filter drop-shadow-[0_0_12px_rgba(201,162,39,0.25)]"
                 />
             </div>
 
-            {/* Wordmark Tipográfico em Caixa Alta */}
+            {/* Wordmark Tipográfico em Caixa Alta Adaptativo ao Tema */}
             <div className="flex flex-col justify-center leading-none">
-                <span className={`font-semibold uppercase text-white font-sans ${currentSize.wordmark}`}>
+                <span className={`font-semibold uppercase text-[#0C0C0C] dark:text-white font-sans transition-colors duration-300 ${currentSize.wordmark}`}>
                     RAMIELL
                 </span>
                 {finalSubtitle && (

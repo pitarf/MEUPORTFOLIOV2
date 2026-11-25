@@ -227,11 +227,11 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                 description={t('portfolio_description', 'Explore nosso histórico técnico de excelência.')}
             />
 
-            <div className="min-h-screen bg-[#070707] text-white transition-colors duration-300">
+            <div className="min-h-screen bg-[#F7F7F6] dark:bg-[#070707] text-[#0C0C0C] dark:text-white transition-colors duration-300 font-sans">
                 
                 {/* 1. Hero Section de Autoridade */}
-                <section className="relative pt-12 pb-14 md:pt-16 md:pb-20 overflow-hidden bg-[#070707]">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(77,124,15,0.08)_0%,_transparent_60%)] dark:bg-[radial-gradient(circle_at_top,_rgba(188,241,59,0.06)_0%,_transparent_60%)] pointer-events-none"></div>
+                <section className="relative pt-12 pb-14 md:pt-16 md:pb-20 overflow-hidden bg-[#F7F7F6] dark:bg-[#070707]">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(201,162,39,0.08)_0%,_transparent_60%)] dark:bg-[radial-gradient(circle_at_top,_rgba(201,162,39,0.06)_0%,_transparent_60%)] pointer-events-none"></div>
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
@@ -239,32 +239,32 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                             transition={{ duration: 0.6 }}
                             className="space-y-4"
                         >
-                            <div className="w-14 h-14 mx-auto mb-2 bg-lime-500/10 dark:bg-[#C9A227]/10 rounded-full flex items-center justify-center border border-lime-500/20 dark:border-[#C9A227]/20 shadow-md">
-                                <Award className="w-7 h-7 text-[#ECBD57] dark:text-[#C9A227]" />
+                            <div className="w-14 h-14 mx-auto mb-2 bg-[#C9A227]/10 dark:bg-[#C9A227]/10 rounded-full flex items-center justify-center border border-[#C9A227]/20 dark:border-[#C9A227]/20 shadow-md">
+                                <Award className="w-7 h-7 text-[#A88218] dark:text-[#C9A227]" />
                             </div>
-                            <h1 className="text-4xl sm:text-5xl font-extrabold px-2 tracking-tight text-white">
-                                Nosso <span className="text-[#ECBD57] dark:text-[#C9A227]">Portfólio</span>
+                            <h1 className="text-4xl sm:text-5xl font-extrabold px-2 tracking-tight text-[#0C0C0C] dark:text-white">
+                                Nosso <span className="text-[#A88218] dark:text-[#C9A227]">Portfólio</span>
                             </h1>
-                            <p className="text-base md:text-xl text-slate-700 dark:text-gray-300 max-w-2xl mx-auto px-4 font-semibold leading-relaxed">
+                            <p className="text-base md:text-xl text-[#666666] dark:text-gray-300 max-w-2xl mx-auto px-4 font-semibold leading-relaxed">
                                 {t('portfolio_subtitle', 'Excelência Técnica e Design de Conversão em Dezenas de Projetos Entregues')}
                             </p>
-                            <p className="text-xs md:text-sm text-[#9E9E9E] max-w-xl mx-auto px-4 leading-relaxed font-medium">
+                            <p className="text-xs md:text-sm text-[#888888] dark:text-[#9E9E9E] max-w-xl mx-auto px-4 leading-relaxed font-medium">
                                 {t('portfolio_description_long', 'Explore a notoriedade do nosso histórico. Cada cartão expõe a aplicação rigorosa de metodologias e ferramentas para gerar lucros e resultados expressivos aos nossos parceiros.')}
                             </p>
 
                             {/* Contadores Rápidos de Autoridade */}
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-3.5 max-w-xl mx-auto pt-4 text-center">
-                                <div className="p-4 rounded-xl border border-white/[0.06] bg-white dark:bg-[#121210] shadow-sm dark:shadow-none">
-                                    <div className="text-2xl sm:text-3xl font-extrabold text-[#ECBD57] dark:text-[#C9A227]">50+</div>
-                                    <div className="text-xs text-[#9E9E9E] font-semibold tracking-wide uppercase mt-1">{t('portfolio_stat_deliveries', 'Entregas de Sucesso')}</div>
+                                <div className="p-4 rounded-xl border border-black/[0.08] dark:border-white/[0.06] bg-white dark:bg-[#121210] shadow-sm dark:shadow-none">
+                                    <div className="text-2xl sm:text-3xl font-extrabold text-[#A88218] dark:text-[#C9A227]">50+</div>
+                                    <div className="text-xs text-[#888888] dark:text-[#9E9E9E] font-semibold tracking-wide uppercase mt-1">{t('portfolio_stat_deliveries', 'Entregas de Sucesso')}</div>
                                 </div>
-                                <div className="p-4 rounded-xl border border-white/[0.06] bg-white dark:bg-[#121210] shadow-sm dark:shadow-none">
-                                    <div className="text-2xl sm:text-3xl font-extrabold text-[#ECBD57] dark:text-[#C9A227]">98%</div>
-                                    <div className="text-xs text-[#9E9E9E] font-semibold tracking-wide uppercase mt-1">{t('portfolio_stat_satisfaction', 'Satisfação Geral')}</div>
+                                <div className="p-4 rounded-xl border border-black/[0.08] dark:border-white/[0.06] bg-white dark:bg-[#121210] shadow-sm dark:shadow-none">
+                                    <div className="text-2xl sm:text-3xl font-extrabold text-[#A88218] dark:text-[#C9A227]">98%</div>
+                                    <div className="text-xs text-[#888888] dark:text-[#9E9E9E] font-semibold tracking-wide uppercase mt-1">{t('portfolio_stat_satisfaction', 'Satisfação Geral')}</div>
                                 </div>
-                                <div className="p-4 rounded-xl border border-white/[0.06] bg-white dark:bg-[#121210] shadow-sm dark:shadow-none col-span-2 md:col-span-1">
-                                    <div className="text-2xl sm:text-3xl font-extrabold text-[#ECBD57] dark:text-[#C9A227]">100%</div>
-                                    <div className="text-xs text-[#9E9E9E] font-semibold tracking-wide uppercase mt-1">{t('portfolio_stat_focus', 'Foco Comercial')}</div>
+                                <div className="p-4 rounded-xl border border-black/[0.08] dark:border-white/[0.06] bg-white dark:bg-[#121210] shadow-sm dark:shadow-none col-span-2 md:col-span-1">
+                                    <div className="text-2xl sm:text-3xl font-extrabold text-[#A88218] dark:text-[#C9A227]">100%</div>
+                                    <div className="text-xs text-[#888888] dark:text-[#9E9E9E] font-semibold tracking-wide uppercase mt-1">{t('portfolio_stat_focus', 'Foco Comercial')}</div>
                                 </div>
                             </div>
                         </motion.div>
@@ -273,7 +273,7 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
 
                 {/* 2. Barra de Controle e Filtros de Elite (Dashboard Style) */}
                 <section ref={filterSectionRef} className="relative z-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto -mt-6">
-                    <div className="rounded-2xl p-4 border border-white/[0.06] shadow-lg dark:shadow-2xl backdrop-blur-xl bg-white/95 dark:bg-[#121210] flex flex-col md:flex-row gap-4 items-center justify-between">
+                    <div className="rounded-2xl p-4 border border-black/[0.08] dark:border-white/[0.06] shadow-lg dark:shadow-2xl backdrop-blur-xl bg-white/95 dark:bg-[#121210] flex flex-col md:flex-row gap-4 items-center justify-between">
                         
                         {/* Seletor de Categorias por Abas Multilinha */}
                         <div className="flex flex-wrap gap-2 justify-center md:justify-start w-full md:flex-1 py-1">
@@ -282,13 +282,13 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                                 className={`relative px-3.5 py-2 rounded-xl text-xs md:text-[13px] font-semibold flex items-center gap-1.5 transition-colors duration-300 z-10 border ${
                                     activeTab === 'all'
                                         ? 'bg-[#C9A227] text-[#0a0a08] font-bold border-[#C9A227] shadow-md shadow-[#C9A227]/20'
-                                        : 'bg-white dark:bg-[#121210] border-white/[0.06] text-slate-700 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#181814]'
+                                        : 'bg-[#F0F0EE] dark:bg-[#121210] border-black/[0.08] dark:border-white/[0.06] text-[#666666] dark:text-gray-300 hover:text-[#0C0C0C] dark:hover:text-white hover:bg-[#E5E5E2] dark:hover:bg-[#181814]'
                                 }`}
                             >
                                 <Cpu className="w-3.5 h-3.5" />
                                 {t('portfolio_all_categories', 'Todos')}
                                 <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-semibold transition-colors ${
-                                    activeTab === 'all' ? 'bg-[#0a0a08]/20 text-[#0a0a08]' : 'bg-slate-100 dark:bg-[#181814] text-[#9E9E9E] border border-white/[0.06]'
+                                    activeTab === 'all' ? 'bg-[#0a0a08]/20 text-[#0a0a08]' : 'bg-white dark:bg-[#181814] text-[#888888] dark:text-[#9E9E9E] border border-black/[0.06] dark:border-white/[0.06]'
                                 }`}>
                                     {projects.length}
                                 </span>
@@ -305,13 +305,13 @@ const Portfolio = ({ cleanMode: propCleanMode, basePath: propBasePath }) => {
                                         className={`relative px-3.5 py-2 rounded-xl text-xs md:text-[13px] font-semibold flex items-center gap-1.5 transition-colors duration-300 z-10 border ${
                                             isActive
                                                 ? 'bg-[#C9A227] text-[#0a0a08] font-bold border-[#C9A227] shadow-md shadow-[#C9A227]/20'
-                                                : 'bg-white dark:bg-[#121210] border-white/[0.06] text-slate-700 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#181814]'
+                                                : 'bg-[#F0F0EE] dark:bg-[#121210] border-black/[0.08] dark:border-white/[0.06] text-[#666666] dark:text-gray-300 hover:text-[#0C0C0C] dark:hover:text-white hover:bg-[#E5E5E2] dark:hover:bg-[#181814]'
                                         }`}
                                     >
                                         <IconComp className="w-3.5 h-3.5" />
                                         {cat.title}
                                         <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-semibold transition-colors ${
-                                            isActive ? 'bg-[#0a0a08]/20 text-[#0a0a08]' : 'bg-slate-100 dark:bg-[#181814] text-[#9E9E9E] border border-white/[0.06]'
+                                            isActive ? 'bg-[#0a0a08]/20 text-[#0a0a08]' : 'bg-white dark:bg-[#181814] text-[#888888] dark:text-[#9E9E9E] border border-black/[0.06] dark:border-white/[0.06]'
                                         }`}>
                                             {catCount}
                                         </span>

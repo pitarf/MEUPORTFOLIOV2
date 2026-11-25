@@ -5,31 +5,34 @@
 @tailwind utilities;
 
 /* ----------------------------------------------------
-   1. SISTEMA DE DESIGN TOKENS RAMIELL (TEMA EXCLUSIVO DARK)
+   1. SISTEMA DE DESIGN TOKENS RAMIELL (DUPLO TEMA: CLARO & ESCURO)
    ---------------------------------------------------- */
+
+/* Tema Claro Editorial (Off-white sofisticado estilo editorial de luxo) */
 :root {
-    --background: #070707;
-    --foreground: #FFFFFF;
-    --card: #0B0B0B;
-    --card-foreground: #FFFFFF;
-    --popover: #0B0B0B;
-    --popover-foreground: #FFFFFF;
-    --primary: #C9A227;
-    --primary-foreground: #070707;
-    --secondary: #121212;
-    --secondary-foreground: #FFFFFF;
-    --muted: #121212;
-    --muted-foreground: #9E9E9E;
-    --accent: #C9A227;
-    --accent-foreground: #070707;
+    --background: #F7F7F6;
+    --foreground: #0C0C0C;
+    --card: #FFFFFF;
+    --card-foreground: #0C0C0C;
+    --popover: #FFFFFF;
+    --popover-foreground: #0C0C0C;
+    --primary: #B88E18;
+    --primary-foreground: #FFFFFF;
+    --secondary: #EFEFEF;
+    --secondary-foreground: #0C0C0C;
+    --muted: #F0F0EE;
+    --muted-foreground: #666666;
+    --accent: #B88E18;
+    --accent-foreground: #FFFFFF;
     --destructive: #EF4444;
     --destructive-foreground: #FFFFFF;
-    --border: rgba(255, 255, 255, 0.06);
-    --input: rgba(255, 255, 255, 0.08);
-    --ring: #C9A227;
+    --border: rgba(0, 0, 0, 0.08);
+    --input: rgba(0, 0, 0, 0.08);
+    --ring: #B88E18;
     --radius: 1.25rem; /* 20px */
 }
 
+/* Tema Escuro Editorial Exclusivo RAMIELL */
 .dark {
     --background: #070707;
     --foreground: #FFFFFF;
@@ -61,8 +64,17 @@
    ---------------------------------------------------- */
 html {
     scroll-behavior: smooth;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+html.dark {
     background-color: #070707;
     color: #FFFFFF;
+}
+
+html.light {
+    background-color: #F7F7F6;
+    color: #0C0C0C;
 }
 
 html, body {
@@ -73,26 +85,40 @@ html, body {
 
 body {
     font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-    background-color: #070707;
-    color: #FFFFFF;
     min-height: 100vh;
     letter-spacing: -0.01em;
+    background-color: var(--background);
+    color: var(--foreground);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* ----------------------------------------------------
    3. PADROES EDITORIAL E MINIMALISTA RAMIELL
    ---------------------------------------------------- */
 
-/* Fundo com grid sutilissimo (6% de opacidade) */
+/* Grid sutil adaptativo ao tema */
 .editorial-grid {
     background-size: 40px 40px;
+    background-image: 
+        linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+}
+
+.dark .editorial-grid {
     background-image: 
         linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
 }
 
-/* Degradê exclusivo de títulos dourados RAMIELL: #ECBD57 → #C8942D */
+/* Degradê exclusivo de títulos dourados RAMIELL */
 .gold-gradient-text {
+    background: linear-gradient(135deg, #B88E18 0%, #8C6A0F 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.dark .gold-gradient-text {
     background: linear-gradient(135deg, #ECBD57 0%, #C8942D 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -101,32 +127,49 @@ body {
 
 /* Glow Dourado Sutil */
 .gold-glow {
-    box-shadow: 0 0 24px rgba(201, 162, 39, 0.15);
+    box-shadow: 0 0 24px rgba(184, 142, 24, 0.15);
     transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-.gold-glow:hover {
-    box-shadow: 0 0 32px rgba(201, 162, 39, 0.25);
+.dark .gold-glow {
+    box-shadow: 0 0 24px rgba(201, 162, 39, 0.15);
 }
 
-/* Cartões Editoriais RAMIELL */
+/* Cartões Editoriais Adaptativos */
 .editorial-card {
+    background-color: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+    transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.dark .editorial-card {
     background-color: #0B0B0B;
     border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 20px;
-    transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: none;
 }
 
 .editorial-card:hover {
+    border-color: rgba(184, 142, 24, 0.4);
+    box-shadow: 0 8px 30px rgba(184, 142, 24, 0.1);
+}
+
+.dark .editorial-card:hover {
     border-color: rgba(201, 162, 39, 0.35);
     box-shadow: 0 0 24px rgba(201, 162, 39, 0.12);
 }
 
-/* Efeito Vidro Escuro Minimalista */
+/* Efeito Vidro Adaptativo */
 .glass-effect {
-    background: rgba(11, 11, 11, 0.85);
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.dark .glass-effect {
+    background: rgba(11, 11, 11, 0.85);
     border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
@@ -137,6 +180,11 @@ body {
     z-index: 50;
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
+    background-color: rgba(247, 247, 246, 0.85);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.dark .services-sticky-header {
     background-color: rgba(7, 7, 7, 0.85);
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
@@ -199,20 +247,6 @@ body {
     .animate-marquee-reverse {
         animation: marquee-reverse 18s linear infinite;
     }
-}
-
-/* Animacao flutuante suave */
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0px);
-    }
-    50% {
-        transform: translateY(-12px);
-    }
-}
-
-.floating-animation {
-    animation: float 6s ease-in-out infinite;
 }
 
 /* WhatsApp Flutuante com tema minimalista */

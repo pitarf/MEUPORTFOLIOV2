@@ -179,61 +179,61 @@ const Contact = () => {
                 <meta name="description" content="Entre em contato, solicite orçamentos ou abra um chamado de suporte. Estamos prontos para ajudar." />
             </Helmet>
 
-            <div className="pt-20 min-h-screen bg-[#070707] text-white transition-colors duration-300">
-                <section className="py-20 bg-[#070707] tech-pattern">
+            <div className="pt-20 min-h-screen bg-[#F7F7F6] dark:bg-[#070707] text-[#0C0C0C] dark:text-white transition-colors duration-300 font-sans">
+                <section className="py-20 bg-[#F7F7F6] dark:bg-[#070707]">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                        <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-5xl md:text-6xl font-bold mb-6 tracking-tight text-white">
-                            Fale <span className="text-[#ECBD57] dark:text-[#C9A227]">Conosco</span>
+                        <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-5xl md:text-6xl font-bold mb-6 tracking-tight text-[#0C0C0C] dark:text-white">
+                            Fale <span className="text-[#A88218] dark:text-[#C9A227]">Conosco</span>
                         </motion.h1>
-                        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-xl text-[#9E9E9E] max-w-3xl mx-auto font-medium">
+                        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-xl text-[#666666] dark:text-[#9E9E9E] max-w-3xl mx-auto font-medium">
                             Pronto para transformar suas ideias em realidade? Vamos conversar sobre seu próximo projeto ou resolver qualquer questão.
                         </motion.p>
                     </div>
                 </section>
 
-                <section className="py-12 bg-[#0A0A0A] border-y border-white/[0.06] transition-colors duration-300">
+                <section className="py-12 bg-white dark:bg-[#0A0A0A] border-y border-black/[0.08] dark:border-white/[0.06] transition-colors duration-300">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                         {contactInfo.map((info, index) => (
-                            <motion.div key={info.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }} className="text-center p-6 rounded-[16px] bg-[#0B0B0B] border border-white/[0.06] hover:border-lime-500 dark:hover:border-[#C9A227] hover:shadow-[0_0_20px_rgba(77,124,15,0.15)] dark:hover:shadow-[0_0_20px_rgba(188,241,59,0.15)] transition-all shadow-sm">
-                                <div className="w-16 h-16 mx-auto mb-4 bg-slate-50 dark:bg-[#181814] border border-white/[0.06] rounded-full flex items-center justify-center">
-                                    <info.icon className="w-8 h-8 text-[#ECBD57] dark:text-[#C9A227]" />
+                            <motion.div key={info.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }} className="text-center p-6 rounded-[16px] bg-white dark:bg-[#0B0B0B] border border-black/[0.08] dark:border-white/[0.06] hover:border-[#C9A227] dark:hover:border-[#C9A227] hover:shadow-[0_0_20px_rgba(201,162,39,0.15)] transition-all shadow-sm">
+                                <div className="w-16 h-16 mx-auto mb-4 bg-[#F0F0EE] dark:bg-[#181814] border border-black/[0.06] dark:border-white/[0.06] rounded-full flex items-center justify-center">
+                                    <info.icon className="w-8 h-8 text-[#A88218] dark:text-[#C9A227]" />
                                 </div>
-                                <h3 className="text-xl font-bold text-white mb-3">{info.title}</h3>
-                                <a href={info.link} className="text-[#9E9E9E] hover:text-[#ECBD57] dark:hover:text-[#C9A227] transition-colors block font-medium">{info.info}</a>
+                                <h3 className="text-xl font-bold text-[#0C0C0C] dark:text-white mb-3">{info.title}</h3>
+                                <a href={info.link} className="text-[#666666] dark:text-[#9E9E9E] hover:text-[#A88218] dark:hover:text-[#C9A227] transition-colors block font-medium">{info.info}</a>
                             </motion.div>
                         ))}
                     </div>
                 </section>
 
-                <section className="py-20 bg-[#070707]" id="form-section">
+                <section className="py-20 bg-[#F7F7F6] dark:bg-[#070707]" id="form-section">
                     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                         {/* --- Tab Navigation --- */}
                         <div className="flex justify-center mb-12">
-                            <div className="bg-[#0B0B0B] border border-white/[0.08] p-2 rounded-[16px] flex flex-wrap justify-center gap-2 shadow-sm dark:shadow-2xl">
-                                <Button onClick={() => setActiveForm('contact')} variant={activeForm === 'contact' ? 'default' : 'ghost'} className={`h-11 px-4 sm:px-8 text-sm sm:text-base rounded-full transition-all ${activeForm === 'contact' ? 'bg-[#C9A227] text-[#0a0a08] font-bold shadow-lg shadow-[#C9A227]/20 hover:bg-[#ECBD57]' : 'text-[#9E9E9E] hover:text-slate-900 dark:hover:text-white hover:bg-white/80 dark:hover:bg-[#181814]'}`}><MessageSquare className="w-4 h-4 mr-2" />Contato</Button>
-                                <Button onClick={() => setActiveForm('quote')} variant={activeForm === 'quote' ? 'default' : 'ghost'} className={`h-11 px-4 sm:px-8 text-sm sm:text-base rounded-full transition-all ${activeForm === 'quote' ? 'bg-[#C9A227] text-[#0a0a08] font-bold shadow-lg shadow-[#C9A227]/20 hover:bg-[#ECBD57]' : 'text-[#9E9E9E] hover:text-slate-900 dark:hover:text-white hover:bg-white/80 dark:hover:bg-[#181814]'}`}><Calculator className="w-4 h-4 mr-2" />Orçamento</Button>
-                                <Button onClick={() => setActiveForm('support')} variant={activeForm === 'support' ? 'default' : 'ghost'} className={`h-11 px-4 sm:px-8 text-sm sm:text-base rounded-full transition-all ${activeForm === 'support' ? 'bg-[#C9A227] text-[#0a0a08] font-bold shadow-lg shadow-[#C9A227]/20 hover:bg-[#ECBD57]' : 'text-[#9E9E9E] hover:text-slate-900 dark:hover:text-white hover:bg-white/80 dark:hover:bg-[#181814]'}`}><LifeBuoy className="w-4 h-4 mr-2" />Suporte</Button>
+                            <div className="bg-white dark:bg-[#0B0B0B] border border-black/[0.08] dark:border-white/[0.08] p-2 rounded-[16px] flex flex-wrap justify-center gap-2 shadow-sm dark:shadow-2xl">
+                                <Button onClick={() => setActiveForm('contact')} variant={activeForm === 'contact' ? 'default' : 'ghost'} className={`h-11 px-4 sm:px-8 text-sm sm:text-base rounded-full transition-all ${activeForm === 'contact' ? 'bg-[#C9A227] text-[#0a0a08] font-bold shadow-lg shadow-[#C9A227]/20 hover:bg-[#ECBD57]' : 'text-[#666666] dark:text-[#9E9E9E] hover:text-[#0C0C0C] dark:hover:text-white hover:bg-[#F0F0EE] dark:hover:bg-[#181814]'}`}><MessageSquare className="w-4 h-4 mr-2" />Contato</Button>
+                                <Button onClick={() => setActiveForm('quote')} variant={activeForm === 'quote' ? 'default' : 'ghost'} className={`h-11 px-4 sm:px-8 text-sm sm:text-base rounded-full transition-all ${activeForm === 'quote' ? 'bg-[#C9A227] text-[#0a0a08] font-bold shadow-lg shadow-[#C9A227]/20 hover:bg-[#ECBD57]' : 'text-[#666666] dark:text-[#9E9E9E] hover:text-[#0C0C0C] dark:hover:text-white hover:bg-[#F0F0EE] dark:hover:bg-[#181814]'}`}><Calculator className="w-4 h-4 mr-2" />Orçamento</Button>
+                                <Button onClick={() => setActiveForm('support')} variant={activeForm === 'support' ? 'default' : 'ghost'} className={`h-11 px-4 sm:px-8 text-sm sm:text-base rounded-full transition-all ${activeForm === 'support' ? 'bg-[#C9A227] text-[#0a0a08] font-bold shadow-lg shadow-[#C9A227]/20 hover:bg-[#ECBD57]' : 'text-[#666666] dark:text-[#9E9E9E] hover:text-[#0C0C0C] dark:hover:text-white hover:bg-[#F0F0EE] dark:hover:bg-[#181814]'}`}><LifeBuoy className="w-4 h-4 mr-2" />Suporte</Button>
                             </div>
                         </div>
 
                         <AnimatePresence mode="wait">
-                            <motion.div key={activeForm} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="p-4 sm:p-8 md:p-12 rounded-[20px] border border-white/[0.06] shadow-xl bg-[#0B0B0B] transition-colors">
+                            <motion.div key={activeForm} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="p-4 sm:p-8 md:p-12 rounded-[20px] border border-black/[0.08] dark:border-white/[0.06] shadow-xl bg-white dark:bg-[#0B0B0B] transition-colors">
 
                                 {/* --- CONTACT FORM --- */}
                                 {activeForm === 'contact' && (
                                     <>
                                         <div className="text-center mb-10">
-                                            <h2 className="text-3xl font-bold text-white mb-2">Envie uma Mensagem</h2>
-                                            <p className="text-[#9E9E9E]">Dúvidas gerais ou parcerias? Escreva pra gente.</p>
+                                            <h2 className="text-3xl font-bold text-[#0C0C0C] dark:text-white mb-2">Envie uma Mensagem</h2>
+                                            <p className="text-[#666666] dark:text-[#9E9E9E]">Dúvidas gerais ou parcerias? Escreva pra gente.</p>
                                         </div>
                                         <form onSubmit={(e) => handleSubmit(e, 'contact', contactForm, setContactForm)} className="space-y-6 max-w-2xl mx-auto">
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                <Input className="bg-[#121212] border-white/[0.06] focus:border-lime-500 dark:focus:border-[#C9A227] focus:ring-1 focus:ring-lime-500 dark:focus:ring-[#C9A227] h-14 text-lg text-white placeholder-slate-400 dark:placeholder-gray-500 rounded-[16px]" type="text" name="name" placeholder="Nome *" value={contactForm.name} onChange={handleFormChange('contact', setContactForm)} required />
-                                                <Input className="bg-[#121212] border-white/[0.06] focus:border-lime-500 dark:focus:border-[#C9A227] focus:ring-1 focus:ring-lime-500 dark:focus:ring-[#C9A227] h-14 text-lg text-white placeholder-slate-400 dark:placeholder-gray-500 rounded-[16px]" type="email" name="email" placeholder="Email *" value={contactForm.email} onChange={handleFormChange('contact', setContactForm)} required />
+                                                <Input className="bg-[#F7F7F6] dark:bg-[#121212] border-black/[0.08] dark:border-white/[0.06] focus:border-[#C9A227] dark:focus:border-[#C9A227] focus:ring-1 focus:ring-[#C9A227] dark:focus:ring-[#C9A227] h-14 text-lg text-[#0C0C0C] dark:text-white placeholder-gray-400 dark:placeholder-gray-500 rounded-[16px]" type="text" name="name" placeholder="Nome *" value={contactForm.name} onChange={handleFormChange('contact', setContactForm)} required />
+                                                <Input className="bg-[#F7F7F6] dark:bg-[#121212] border-black/[0.08] dark:border-white/[0.06] focus:border-[#C9A227] dark:focus:border-[#C9A227] focus:ring-1 focus:ring-[#C9A227] dark:focus:ring-[#C9A227] h-14 text-lg text-[#0C0C0C] dark:text-white placeholder-gray-400 dark:placeholder-gray-500 rounded-[16px]" type="email" name="email" placeholder="Email *" value={contactForm.email} onChange={handleFormChange('contact', setContactForm)} required />
                                             </div>
 
                                             <div className="space-y-2">
-                                                <label className="text-sm font-semibold text-slate-700 dark:text-gray-400 ml-1">Assunto</label>
+                                                <label className="text-sm font-semibold text-[#0C0C0C] dark:text-gray-400 ml-1">Assunto</label>
                                                 <div className="flex flex-wrap gap-3">
                                                     {contactSubjects.map(sub => (
                                                         <button
@@ -241,8 +241,8 @@ const Contact = () => {
                                                             type="button"
                                                             onClick={() => handleSelection(setContactForm, 'subject', sub.label)}
                                                             className={`px-6 py-3 rounded-[16px] text-sm font-bold border transition-all flex items-center gap-2 ${contactForm.subject === sub.label
-                                                                ? 'bg-lime-500/10 dark:bg-[#C9A227]/10 border-lime-600 dark:border-[#C9A227] text-[#ECBD57] dark:text-[#C9A227] shadow-sm'
-                                                                : 'bg-slate-50 dark:bg-[#181814] border-white/[0.06] text-[#9E9E9E] hover:border-lime-500/50 dark:hover:border-[#C9A227]/50 hover:text-slate-900 dark:hover:text-white'}`}
+                                                                ? 'bg-[#C9A227]/10 dark:bg-[#C9A227]/10 border-[#C9A227] text-[#A88218] dark:text-[#C9A227] shadow-sm'
+                                                                : 'bg-[#F0F0EE] dark:bg-[#181814] border-black/[0.06] dark:border-white/[0.06] text-[#666666] dark:text-[#9E9E9E] hover:border-[#C9A227]/50 hover:text-[#0C0C0C] dark:hover:text-white'}`}
                                                         >
                                                             <sub.icon className="w-4 h-4" />
                                                             {sub.label}
@@ -251,7 +251,7 @@ const Contact = () => {
                                                 </div>
                                             </div>
 
-                                            <Textarea className="bg-[#121212] border-white/[0.06] focus:border-lime-500 dark:focus:border-[#C9A227] focus:ring-1 focus:ring-lime-500 dark:focus:ring-[#C9A227] text-lg min-h-[150px] text-white placeholder-slate-400 dark:placeholder-gray-500 rounded-[16px]" name="message" placeholder="Sua mensagem *" value={contactForm.message} onChange={handleFormChange('contact', setContactForm)} required />
+                                            <Textarea className="bg-[#F7F7F6] dark:bg-[#121212] border-black/[0.08] dark:border-white/[0.06] focus:border-[#C9A227] dark:focus:border-[#C9A227] focus:ring-1 focus:ring-[#C9A227] dark:focus:ring-[#C9A227] text-lg min-h-[150px] text-[#0C0C0C] dark:text-white placeholder-gray-400 dark:placeholder-gray-500 rounded-[16px]" name="message" placeholder="Sua mensagem *" value={contactForm.message} onChange={handleFormChange('contact', setContactForm)} required />
 
                                             <Button type="submit" className="w-full bg-[#C9A227] hover:bg-[#ECBD57] text-[#0a0a08] font-bold py-6 text-lg shadow-lg shadow-[#C9A227]/20 transition-all rounded-[16px]" disabled={loading}>
                                                 {loading ? <Loader2 className="w-6 h-6 mr-2 animate-spin" /> : <Send className="w-6 h-6 mr-2" />}

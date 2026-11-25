@@ -4,7 +4,8 @@ import { ExternalLink, ArrowRight } from 'lucide-react';
 
 /**
  * Componente de Card de Projeto RAMIELL
- * Estética editorial minimalista, fundo #0B0B0B, bordas de 6% e cantos de 20px.
+ * Estética editorial minimalista, suporte completo a Claro (bg-white) e Escuro (bg-[#0B0B0B]),
+ * bordas sutis e cantos de 20px.
  */
 export default function PortfolioProjectCard({
     project,
@@ -21,16 +22,16 @@ export default function PortfolioProjectCard({
     return (
         <div
             className={`
-                group relative rounded-[20px] overflow-hidden border border-white/[0.06]
+                group relative rounded-[20px] overflow-hidden border border-black/[0.08] dark:border-white/[0.06]
                 hover:border-[#C9A227]/40 shadow-sm
                 hover:shadow-[0_0_24px_rgba(201,162,39,0.12)]
-                transition-all duration-300 cursor-pointer bg-[#0B0B0B] flex flex-col h-full
+                transition-all duration-300 cursor-pointer bg-white dark:bg-[#0B0B0B] flex flex-col h-full
                 ${isCarousel ? 'select-none' : ''}
             `}
         >
             <Link to={projectUrl} className="flex flex-col h-full w-full">
                 {/* Imagem de Fundo com Proporção 16:10 */}
-                <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#121212]">
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#F0F0EE] dark:bg-[#121212]">
                     <img
                         alt={project.title}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 filter brightness-95"
@@ -39,7 +40,7 @@ export default function PortfolioProjectCard({
                     />
 
                     {/* Gradiente sutil no hover */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B]/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 dark:from-[#0B0B0B]/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                     {/* Badge da Categoria em Pílula Dourada */}
                     <div className="absolute top-3 left-3 z-10">
@@ -49,40 +50,40 @@ export default function PortfolioProjectCard({
                     </div>
 
                     {/* Ícone de Acesso no Hover */}
-                    <div className="absolute top-3 right-3 z-10 bg-[#070707]/90 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0 shadow-md border border-white/[0.08]">
+                    <div className="absolute top-3 right-3 z-10 bg-white/90 dark:bg-[#070707]/90 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0 shadow-md border border-black/[0.08] dark:border-white/[0.08]">
                         <ExternalLink className="w-3.5 h-3.5 text-[#C9A227]" strokeWidth={1.5} />
                     </div>
                 </div>
 
                 {/* Conteúdo do Card */}
-                <div className="p-5 flex flex-col justify-between flex-1 space-y-3 bg-[#0B0B0B]">
+                <div className="p-5 flex flex-col justify-between flex-1 space-y-3 bg-white dark:bg-[#0B0B0B]">
                     <div className="space-y-1.5">
                         {/* Cliente e Ano */}
-                        <div className="flex items-center justify-between text-xs font-mono text-[#9E9E9E]">
+                        <div className="flex items-center justify-between text-xs font-mono text-[#888888] dark:text-[#9E9E9E]">
                             <span className="truncate">{project.client || t('portfolio_corporate_client', 'Solução Corporativa')}</span>
                             {project.year && <span className="flex-shrink-0 ml-2">{project.year}</span>}
                         </div>
 
                         {/* Título do Projeto */}
-                        <h3 className="text-base sm:text-lg font-semibold text-white leading-snug group-hover:text-[#ECBD57] transition-colors line-clamp-1 tracking-[-0.02em]">
+                        <h3 className="text-base sm:text-lg font-semibold text-[#0C0C0C] dark:text-white leading-snug group-hover:text-[#A88218] dark:group-hover:text-[#ECBD57] transition-colors line-clamp-1 tracking-[-0.02em]">
                             {project.title}
                         </h3>
 
                         {/* Descrição Curta */}
                         {project.description && (
-                            <p className="text-[#9E9E9E] text-xs line-clamp-2 leading-relaxed font-normal">
+                            <p className="text-[#666666] dark:text-[#9E9E9E] text-xs line-clamp-2 leading-relaxed font-normal">
                                 {project.description}
                             </p>
                         )}
                     </div>
 
                     {/* Rodapé do Card: Tecnologias em Mono e CTA */}
-                    <div className="pt-3 border-t border-white/[0.06] flex items-center justify-between gap-2">
+                    <div className="pt-3 border-t border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between gap-2">
                         <div className="flex flex-wrap gap-1 max-w-[70%]">
                             {techs.slice(0, 3).map((tech) => (
                                 <span
                                     key={tech}
-                                    className="text-[10px] font-mono text-[#ECBD57] bg-[#121212] border border-white/[0.06] px-2 py-0.5 rounded-full truncate"
+                                    className="text-[10px] font-mono text-[#A88218] dark:text-[#ECBD57] bg-[#F0F0EE] dark:bg-[#121212] border border-black/[0.06] dark:border-white/[0.06] px-2 py-0.5 rounded-full truncate"
                                 >
                                     {tech}
                                 </span>

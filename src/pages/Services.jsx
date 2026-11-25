@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
  * Página de Serviços RAMIELL (ramiell.com/servicos)
  * Apresentação das áreas de atuação em engenharia de software, plataformas web,
  * sistemas corporativos e experiências digitais.
+ * Suporta perfeitamente temas Claro e Escuro.
  */
 const Services = () => {
     const [services, setServices] = useState([]);
@@ -52,11 +53,11 @@ const Services = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#070707] text-white selection:bg-[#C9A227]/30 selection:text-white">
+        <div className="min-h-screen bg-[#F7F7F6] dark:bg-[#070707] text-[#0C0C0C] dark:text-white selection:bg-[#C9A227]/30 selection:text-white transition-colors duration-300 font-sans">
             <SEO 
                 title="Serviços & Soluções Digitais | RAMIELL"
                 description="Desenvolvimento de sites de alto padrão, sistemas personalizados, aplicações web e infraestrutura digital pela RAMIELL. Vai de Ramiell."
-                keywords="servicos digitais, criacao de sites, sistemas sob medida, aplicacoes web, ramiell"
+                canonical="https://ramiell.com/servicos"
             />
 
             {/* Hero Section Editorial */}
@@ -65,20 +66,20 @@ const Services = () => {
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0B0B0B] border border-white/[0.08] text-xs font-mono text-[#9E9E9E]"
+                        className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white dark:bg-[#0B0B0B] border border-black/[0.08] dark:border-white/[0.08] text-xs font-mono text-[#666666] dark:text-[#9E9E9E] shadow-sm"
                     >
                         <span className="w-1.5 h-1.5 rounded-full bg-[#C9A227]" />
-                        <span className="text-[#ECBD57] font-semibold uppercase font-sans">RAMIELL</span>
-                        <span className="text-white/20">•</span>
+                        <span className="text-[#A88218] dark:text-[#ECBD57] font-semibold uppercase font-sans">RAMIELL</span>
+                        <span className="text-black/20 dark:text-white/20">•</span>
                         <span className="uppercase tracking-wider">Capacidades & Engenharia</span>
                     </motion.div>
 
-                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] text-white leading-tight">
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] text-[#0C0C0C] dark:text-white leading-tight">
                         Soluções sob medida para elevar a sua{' '}
                         <span className="gold-gradient-text">presença digital</span>.
                     </h1>
 
-                    <p className="text-base sm:text-lg text-[#9E9E9E] max-w-2xl mx-auto font-normal leading-relaxed">
+                    <p className="text-base sm:text-lg text-[#666666] dark:text-[#9E9E9E] max-w-2xl mx-auto font-normal leading-relaxed">
                         Combinamos precisão técnica, arquitetura de software e design refinado para construir ferramentas de alto impacto para o seu negócio.
                     </p>
                 </div>
@@ -100,24 +101,24 @@ const Services = () => {
                             >
                                 <div>
                                     <div className="flex items-start gap-5 mb-6">
-                                        <div className="w-14 h-14 bg-[#121212] border border-white/[0.06] rounded-full flex items-center justify-center shrink-0 group-hover:border-[#C9A227]/40 transition-colors">
+                                        <div className="w-14 h-14 bg-[#F0F0EE] dark:bg-[#121212] border border-black/[0.06] dark:border-white/[0.06] rounded-full flex items-center justify-center shrink-0 group-hover:border-[#C9A227]/40 transition-colors">
                                             <IconComponent className="w-6 h-6 text-[#C9A227]" strokeWidth={1.5} />
                                         </div>
 
                                         <div>
-                                            <h3 className="text-2xl font-semibold text-white mb-2 group-hover:text-[#ECBD57] transition-colors tracking-[-0.02em]">
+                                            <h3 className="text-2xl font-semibold text-[#0C0C0C] dark:text-white mb-2 group-hover:text-[#A88218] dark:group-hover:text-[#ECBD57] transition-colors tracking-[-0.02em]">
                                                 {service.title}
                                             </h3>
-                                            <p className="text-[#9E9E9E] text-sm leading-relaxed font-normal">
+                                            <p className="text-[#666666] dark:text-[#9E9E9E] text-sm leading-relaxed font-normal">
                                                 {service.description}
                                             </p>
                                         </div>
                                     </div>
 
                                     {service.features && service.features.length > 0 && (
-                                        <div className="space-y-2.5 pt-4 border-t border-white/[0.06] mb-6">
+                                        <div className="space-y-2.5 pt-4 border-t border-black/[0.06] dark:border-white/[0.06] mb-6">
                                             {service.features.map((feature, idx) => (
-                                                <div key={idx} className="flex items-center space-x-2.5 text-xs text-[#9E9E9E]">
+                                                <div key={idx} className="flex items-center space-x-2.5 text-xs text-[#666666] dark:text-[#9E9E9E]">
                                                     <CheckCircle2 className="w-3.5 h-3.5 text-[#C9A227] shrink-0" strokeWidth={1.5} />
                                                     <span>{feature}</span>
                                                 </div>
@@ -129,7 +130,7 @@ const Services = () => {
                                 <div className="pt-2">
                                     <Link
                                         to={serviceSlugMap[service.slug] || `/portfolio#${service.slug}`}
-                                        className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-[#ECBD57] hover:text-white transition-colors"
+                                        className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-[#A88218] dark:text-[#ECBD57] hover:text-[#0C0C0C] dark:hover:text-white transition-colors"
                                     >
                                         <span>Detalhes do serviço</span>
                                         <ArrowRight className="w-3.5 h-3.5" strokeWidth={1.5} />
@@ -142,16 +143,16 @@ const Services = () => {
             </section>
 
             {/* Metodologia de Trabalho */}
-            <section className="py-24 bg-[#0A0A0A] border-y border-white/[0.06]">
+            <section className="py-24 bg-white dark:bg-[#0A0A0A] border-y border-black/[0.08] dark:border-white/[0.06] transition-colors duration-300">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16 space-y-3">
                         <span className="text-xs font-mono uppercase tracking-widest text-[#C9A227]">
                             METODOLOGIA
                         </span>
-                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-[-0.03em] text-white">
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-[-0.03em] text-[#0C0C0C] dark:text-white">
                             Nosso processo de <span className="gold-gradient-text">execução</span>
                         </h2>
-                        <p className="text-base text-[#9E9E9E] max-w-2xl mx-auto font-normal">
+                        <p className="text-base text-[#666666] dark:text-[#9E9E9E] max-w-2xl mx-auto font-normal">
                             Uma jornada estruturada em quatro etapas para assegurar rigor técnico e entrega pontual.
                         </p>
                     </div>
@@ -162,16 +163,16 @@ const Services = () => {
                             { step: '02', title: 'Design Editorial', description: 'Criação visual refinada, prototipação responsiva e definição de fluxos de usuário.' },
                             { step: '03', title: 'Engenharia & Código', description: 'Desenvolvimento ágil, integração com APIs, banco de dados e testes de usabilidade.' },
                             { step: '04', title: 'Deploy & Suporte', description: 'Publicação em servidores dedicados com SSL, SEO ativado e monitoramento contínuo.' }
-                        ].map((item, index) => (
+                        ].map((item) => (
                             <div
                                 key={item.step}
                                 className="editorial-card p-6 text-center space-y-4"
                             >
-                                <div className="w-12 h-12 mx-auto bg-[#121212] border border-white/[0.06] rounded-full flex items-center justify-center">
+                                <div className="w-12 h-12 mx-auto bg-[#F0F0EE] dark:bg-[#121212] border border-black/[0.06] dark:border-white/[0.06] rounded-full flex items-center justify-center">
                                     <span className="text-sm font-mono font-bold text-[#C9A227]">{item.step}</span>
                                 </div>
-                                <h3 className="text-lg font-semibold text-white tracking-[-0.02em]">{item.title}</h3>
-                                <p className="text-xs text-[#9E9E9E] leading-relaxed">{item.description}</p>
+                                <h3 className="text-lg font-semibold text-[#0C0C0C] dark:text-white tracking-[-0.02em]">{item.title}</h3>
+                                <p className="text-xs text-[#666666] dark:text-[#9E9E9E] leading-relaxed">{item.description}</p>
                             </div>
                         ))}
                     </div>
@@ -180,14 +181,14 @@ const Services = () => {
 
             {/* CTA Final */}
             <section className="py-24 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <div className="editorial-card p-10 sm:p-14 border-[#C9A227]/20 bg-gradient-to-b from-[#0B0B0B] to-[#0A0A0A] space-y-6">
+                <div className="editorial-card p-10 sm:p-14 border-[#C9A227]/30 bg-gradient-to-b from-white to-[#F0F0EE] dark:from-[#0B0B0B] dark:to-[#0A0A0A] space-y-6">
                     <span className="text-xs font-mono uppercase tracking-widest text-[#C9A227] block">
                         VAI DE RAMIELL
                     </span>
-                    <h2 className="text-3xl sm:text-4xl font-semibold tracking-[-0.03em] text-white">
+                    <h2 className="text-3xl sm:text-4xl font-semibold tracking-[-0.03em] text-[#0C0C0C] dark:text-white">
                         Pronto para transformar sua ideia em realidade?
                     </h2>
-                    <p className="text-[#9E9E9E] text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+                    <p className="text-[#666666] dark:text-[#9E9E9E] text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
                         Fale diretamente com nossa equipe e receba uma estimativa técnica detalhada para seu projeto.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center pt-2">
@@ -197,7 +198,7 @@ const Services = () => {
                             </button>
                         </Link>
                         <Link to="/portfolio">
-                            <button className="bg-[#121212] border border-white/[0.08] hover:border-[#C9A227]/40 text-white hover:text-[#ECBD57] text-xs uppercase tracking-wider font-semibold px-8 py-4 rounded-full transition-all">
+                            <button className="bg-white dark:bg-[#121212] border border-black/[0.08] dark:border-white/[0.08] hover:border-[#C9A227]/40 text-[#0C0C0C] dark:text-white hover:text-[#A88218] dark:hover:text-[#ECBD57] text-xs uppercase tracking-wider font-semibold px-8 py-4 rounded-full shadow-sm transition-all">
                                 Explorar Portfólio
                             </button>
                         </Link>

@@ -1,37 +1,51 @@
-import React, { createContext, useContext, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
-// Criação do contexto de tema para a marca RAMIELL
+// Criação do contexto de tema RAMIELL
 const ThemeContext = createContext();
 
 /**
  * Provedor de Tema RAMIELL (ThemeProvider)
- * Mantém exclusivamente o tema escuro (Dark Only) de acordo com o design editorial minimalista.
- * Bloqueia qualquer transição para tema claro e garante a classe 'dark' no documento HTML.
+ * Gerencia os temas Claro e Escuro com estética editorial minimalista,
+ * persistindo a preferência no localStorage e aplicando as classes no elemento raiz HTML.
  */
 export const ThemeProvider = ({ children }) => {
-    const theme = 'dark';
+    // Inicia no tema salvo no localStorage ou adota 'dark' como padrão de marca
+    const [theme, setTheme] = useState(() => {
+        const savedTheme = localStorage.getItem('theme');
+        return savedTheme ? savedTheme : 'dark';
+    });
 
     useEffect(() => {
         const root = window.document.documentElement;
-        root.classList.remove('light');
-        root.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-    }, []);
 
-    // Função de alternância neutralizada para compatibilidade sem efeito
+        // Limpa classes anteriores do Tailwind
+        root.classList.remove('light', 'dark');
+
+        // Aplica o tema ativo
+        if (theme === 'dark') {
+            root.classList.add('dark');
+        } else {
+            root.classList.add('light');
+        }
+
+        // Salva a preferência
+        localStorage.setItem('theme', theme);
+    }, [theme]);
+
+    // Função para alternar entre Claro e Escuro
     const toggleTheme = () => {
-        // RAMIELL adota identidade exclusivamente dark
+        setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
     };
 
     return (
-        <ThemeContext.Provider value={{ theme: 'dark', toggleTheme, setTheme: () => {} }}>
+        <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>
             {children}
         </ThemeContext.Provider>
     );
 };
 
 /**
- * Hook customizado para consulta de tema
+ * Hook customizado para consulta e alternância de tema
  */
 export const useTheme = () => {
     const context = useContext(ThemeContext);

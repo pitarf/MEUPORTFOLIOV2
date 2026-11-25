@@ -8,8 +8,8 @@ import BrandLogo from '@/components/common/BrandLogo';
 
 /**
  * Componente Footer da marca RAMIELL
- * Visual minimalista editorial em fundo #0A0A0A, tipografia Geist,
- * detalhes em dourado #C9A227, assinatura "Vai de Ramiell." e redes oficiais.
+ * Visual minimalista editorial com suporte completo a Claro (#FFFFFF) e Escuro (#0A0A0A),
+ * tipografia Geist, detalhes em dourado #C9A227, assinatura "Vai de Ramiell." e redes oficiais.
  */
 const Footer = () => {
     const { config } = useSiteConfig();
@@ -40,7 +40,7 @@ const Footer = () => {
     ];
 
     return (
-        <footer className="bg-[#0A0A0A] border-t border-white/[0.06] text-[#9E9E9E] transition-colors duration-300">
+        <footer className="bg-white dark:bg-[#0A0A0A] border-t border-black/[0.08] dark:border-white/[0.06] text-[#666666] dark:text-[#9E9E9E] transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
                     {/* Marca & Assinatura */}
@@ -51,10 +51,10 @@ const Footer = () => {
                             subtitle={isPhotography ? "Fotografia" : "Digital Experiences"}
                             showSubtitle={true}
                         />
-                        <p className="text-[#9E9E9E] text-sm leading-relaxed max-w-sm">
+                        <p className="text-[#666666] dark:text-[#9E9E9E] text-sm leading-relaxed max-w-sm">
                             Desenvolvimento de sites de alto padrão, sistemas personalizados e experiências digitais sob medida.
                         </p>
-                        <p className="text-white font-medium text-sm tracking-wide">
+                        <p className="text-[#0C0C0C] dark:text-white font-medium text-sm tracking-wide">
                             Vai de Ramiell.
                         </p>
 
@@ -65,7 +65,7 @@ const Footer = () => {
                                 href="https://instagram.com/vaideramiell"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="w-9 h-9 rounded-full bg-[#121212] border border-white/[0.06] text-[#C9A227] flex items-center justify-center hover:border-[#C9A227]/40 hover:text-white transition-all"
+                                className="w-9 h-9 rounded-full bg-[#F0F0EE] dark:bg-[#121212] border border-black/[0.08] dark:border-white/[0.06] text-[#C9A227] flex items-center justify-center hover:border-[#C9A227]/40 hover:text-[#0C0C0C] dark:hover:text-white transition-all shadow-sm"
                                 aria-label="Instagram @vaideramiell"
                             >
                                 <Instagram className="w-4 h-4" strokeWidth={1.5} />
@@ -77,7 +77,7 @@ const Footer = () => {
                                 href="https://linkedin.com/in/rafaelpita"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="w-9 h-9 rounded-full bg-[#121212] border border-white/[0.06] text-[#C9A227] flex items-center justify-center hover:border-[#C9A227]/40 hover:text-white transition-all"
+                                className="w-9 h-9 rounded-full bg-[#F0F0EE] dark:bg-[#121212] border border-black/[0.08] dark:border-white/[0.06] text-[#C9A227] flex items-center justify-center hover:border-[#C9A227]/40 hover:text-[#0C0C0C] dark:hover:text-white transition-all shadow-sm"
                                 aria-label="LinkedIn"
                             >
                                 <Linkedin className="w-4 h-4" strokeWidth={1.5} />
@@ -87,7 +87,7 @@ const Footer = () => {
 
                     {/* Links Rápidos */}
                     <div className="space-y-4">
-                        <span className="text-xs font-mono font-semibold text-white tracking-widest uppercase">
+                        <span className="text-xs font-mono font-semibold text-[#0C0C0C] dark:text-white tracking-widest uppercase">
                             {t('footer_quick_links', 'Navegação')}
                         </span>
                         <div className="space-y-2.5">
@@ -95,7 +95,7 @@ const Footer = () => {
                                 <Link
                                     key={link.name}
                                     to={link.path}
-                                    className="block text-sm text-[#9E9E9E] hover:text-[#C9A227] transition-colors"
+                                    className="block text-sm text-[#666666] hover:text-[#C9A227] dark:text-[#9E9E9E] dark:hover:text-[#ECBD57] transition-colors"
                                 >
                                     {link.name}
                                 </Link>
@@ -105,14 +105,14 @@ const Footer = () => {
 
                     {/* Serviços */}
                     <div className="space-y-4">
-                        <span className="text-xs font-mono font-semibold text-white tracking-widest uppercase">
+                        <span className="text-xs font-mono font-semibold text-[#0C0C0C] dark:text-white tracking-widest uppercase">
                             {t('footer_services', 'Soluções')}
                         </span>
                         <div className="space-y-2.5">
                             {services.map((service) => (
                                 <span
                                     key={service}
-                                    className="block text-sm text-[#9E9E9E] hover:text-white transition-colors"
+                                    className="block text-sm text-[#666666] dark:text-[#9E9E9E] hover:text-[#0C0C0C] dark:hover:text-white transition-colors"
                                 >
                                     {service}
                                 </span>
@@ -122,32 +122,32 @@ const Footer = () => {
 
                     {/* Contatos Preservados */}
                     <div className="space-y-4">
-                        <span className="text-xs font-mono font-semibold text-white tracking-widest uppercase">
+                        <span className="text-xs font-mono font-semibold text-[#0C0C0C] dark:text-white tracking-widest uppercase">
                             {t('footer_contact', 'Contato Direto')}
                         </span>
                         <div className="space-y-3.5">
                             <div className="flex items-center space-x-3 text-sm">
                                 <Mail className="w-4 h-4 text-[#C9A227] shrink-0" strokeWidth={1.5} />
-                                <span className="text-[#9E9E9E] hover:text-white transition-colors">{contactEmail}</span>
+                                <span className="text-[#666666] dark:text-[#9E9E9E] hover:text-[#0C0C0C] dark:hover:text-white transition-colors">{contactEmail}</span>
                             </div>
                             <div className="flex items-center space-x-3 text-sm">
                                 <Phone className="w-4 h-4 text-[#C9A227] shrink-0" strokeWidth={1.5} />
-                                <span className="text-[#9E9E9E] hover:text-white transition-colors">{contactPhone}</span>
+                                <span className="text-[#666666] dark:text-[#9E9E9E] hover:text-[#0C0C0C] dark:hover:text-white transition-colors">{contactPhone}</span>
                             </div>
                             <div className="flex items-center space-x-3 text-sm">
                                 <MapPin className="w-4 h-4 text-[#C9A227] shrink-0" strokeWidth={1.5} />
-                                <span className="text-[#9E9E9E]">{contactAddress}</span>
+                                <span className="text-[#666666] dark:text-[#9E9E9E]">{contactAddress}</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Linha de Copyright */}
-                <div className="border-t mt-16 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-[#9E9E9E] font-mono border-white/[0.06] gap-4">
+                <div className="border-t mt-16 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-[#888888] dark:text-[#9E9E9E] font-mono border-black/[0.08] dark:border-white/[0.06] gap-4">
                     <p>
                         © {new Date().getFullYear()} RAMIELL. {t('footer_rights', 'Todos os direitos reservados.')}
                     </p>
-                    <p className="flex items-center gap-1.5 text-white">
+                    <p className="flex items-center gap-1.5 text-[#0C0C0C] dark:text-white">
                         <span>ramiell.com</span>
                         <span className="text-[#C9A227]">•</span>
                         <span>Vai de Ramiell.</span>

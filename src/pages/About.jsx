@@ -8,6 +8,7 @@ import teamImage from '@/Assets/team-work.webp';
 /**
  * Página Sobre a RAMIELL (ramiell.com/sobre)
  * Narrativa institucional editorial, princípios da marca, equipe e visão de futuro.
+ * Suporta perfeitamente temas Claro e Escuro.
  */
 const About = () => {
     const values = [
@@ -55,11 +56,11 @@ const About = () => {
     ];
 
     return (
-        <div className="bg-[#070707] text-white min-h-screen selection:bg-[#C9A227]/30 selection:text-white">
+        <div className="bg-[#F7F7F6] dark:bg-[#070707] text-[#0C0C0C] dark:text-white min-h-screen selection:bg-[#C9A227]/30 selection:text-white transition-colors duration-300 font-sans">
             <SEO 
                 title="Sobre a RAMIELL | Engenharia Digital & Design de Alto Padrão"
                 description="Conheça a RAMIELL. Desenvolvimento de sites, sistemas sob medida e experiências digitais exclusivas. Vai de Ramiell."
-                keywords="sobre ramiell, vai de ramiell, desenvolvimento web ramiell, sistemas corporativos, historia ramiell"
+                canonical="https://ramiell.com/sobre"
             />
 
             {/* Hero Section Editorial */}
@@ -68,27 +69,27 @@ const About = () => {
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0B0B0B] border border-white/[0.08] text-xs font-mono text-[#9E9E9E]"
+                        className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white dark:bg-[#0B0B0B] border border-black/[0.08] dark:border-white/[0.08] text-xs font-mono text-[#666666] dark:text-[#9E9E9E] shadow-sm"
                     >
                         <span className="w-1.5 h-1.5 rounded-full bg-[#C9A227]" />
-                        <span className="text-[#ECBD57] font-semibold uppercase font-sans">RAMIELL</span>
-                        <span className="text-white/20">•</span>
+                        <span className="text-[#A88218] dark:text-[#ECBD57] font-semibold uppercase font-sans">RAMIELL</span>
+                        <span className="text-black/20 dark:text-white/20">•</span>
                         <span className="uppercase tracking-wider">Manifesto Institucional</span>
                     </motion.div>
 
-                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-tight text-white">
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-tight text-[#0C0C0C] dark:text-white">
                         Construindo o futuro de marcas através de{' '}
                         <span className="gold-gradient-text">engenharia e design</span>.
                     </h1>
 
-                    <p className="text-base sm:text-lg text-[#9E9E9E] max-w-2xl mx-auto font-normal leading-relaxed">
+                    <p className="text-base sm:text-lg text-[#666666] dark:text-[#9E9E9E] max-w-2xl mx-auto font-normal leading-relaxed">
                         A RAMIELL desenvolve experiências digitais e sistemas pensados para negócios que buscam autoridade, estabilidade e elegância.
                     </p>
                 </div>
             </section>
 
             {/* História / Posicionamento */}
-            <section className="py-24 bg-[#0A0A0A] border-y border-white/[0.06]">
+            <section className="py-24 bg-white dark:bg-[#0A0A0A] border-y border-black/[0.08] dark:border-white/[0.06] transition-colors duration-300">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                         <motion.div
@@ -100,17 +101,17 @@ const About = () => {
                             <span className="text-xs font-mono uppercase tracking-widest text-[#C9A227]">
                                 ORIGEM & PROPÓSITO
                             </span>
-                            <h2 className="text-3xl sm:text-4xl font-semibold tracking-[-0.03em] text-white leading-tight">
+                            <h2 className="text-3xl sm:text-4xl font-semibold tracking-[-0.03em] text-[#0C0C0C] dark:text-white leading-tight">
                                 Mais que código, entregamos valor e autoridade digital.
                             </h2>
-                            <div className="space-y-4 text-[#9E9E9E] text-sm sm:text-base font-normal leading-relaxed">
+                            <div className="space-y-4 text-[#666666] dark:text-[#9E9E9E] text-sm sm:text-base font-normal leading-relaxed">
                                 <p>
                                     A RAMIELL foi concebida para atender à demanda de clientes e empresas que precisam de soluções além do padrão. Em um ecossistema digital saturado de modelos genéricos, priorizamos arquitetura refinada, estética editorial e performance real.
                                 </p>
                                 <p>
                                     Cada projeto que entregamos une visual marcante, carregamento ultra-rápido, SEO estruturado e lógica operacional confiável, proporcionando a parceiros e clientes a segurança de uma plataforma premium.
                                 </p>
-                                <p className="text-white font-medium">
+                                <p className="text-[#0C0C0C] dark:text-white font-medium">
                                     Vai de Ramiell.
                                 </p>
                             </div>
@@ -122,11 +123,11 @@ const About = () => {
                             viewport={{ once: true }}
                             className="relative"
                         >
-                            <div className="p-3 rounded-[20px] bg-[#0B0B0B] border border-white/[0.06] shadow-2xl">
+                            <div className="p-3 rounded-[20px] bg-white dark:bg-[#0B0B0B] border border-black/[0.08] dark:border-white/[0.06] shadow-xl dark:shadow-2xl">
                                 <img
                                     alt="Ambiente de desenvolvimento RAMIELL"
                                     src={teamImage}
-                                    className="w-full h-auto rounded-[16px] object-cover filter brightness-90"
+                                    className="w-full h-auto rounded-[16px] object-cover filter brightness-95 dark:brightness-90"
                                 />
                             </div>
                         </motion.div>
@@ -135,35 +136,35 @@ const About = () => {
             </section>
 
             {/* Pilares Institucionais: Missão, Visão e Valores */}
-            <section className="py-24 bg-[#070707]">
+            <section className="py-24 bg-[#F7F7F6] dark:bg-[#070707] transition-colors duration-300">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div className="editorial-card p-8 space-y-4">
-                            <div className="w-12 h-12 bg-[#121212] border border-white/[0.06] rounded-full flex items-center justify-center">
+                            <div className="w-12 h-12 bg-[#F0F0EE] dark:bg-[#121212] border border-black/[0.06] dark:border-white/[0.06] rounded-full flex items-center justify-center">
                                 <Target className="w-5 h-5 text-[#C9A227]" strokeWidth={1.5} />
                             </div>
-                            <h3 className="text-xl font-semibold text-white tracking-[-0.02em]">Missão</h3>
-                            <p className="text-[#9E9E9E] text-sm leading-relaxed">
+                            <h3 className="text-xl font-semibold text-[#0C0C0C] dark:text-white tracking-[-0.02em]">Missão</h3>
+                            <p className="text-[#666666] dark:text-[#9E9E9E] text-sm leading-relaxed">
                                 Desenvolver sites e sistemas que representem fielmente o mais alto padrão dos nossos clientes, unindo usabilidade, segurança e velocidade.
                             </p>
                         </div>
 
                         <div className="editorial-card p-8 space-y-4">
-                            <div className="w-12 h-12 bg-[#121212] border border-white/[0.06] rounded-full flex items-center justify-center">
+                            <div className="w-12 h-12 bg-[#F0F0EE] dark:bg-[#121212] border border-black/[0.06] dark:border-white/[0.06] rounded-full flex items-center justify-center">
                                 <Eye className="w-5 h-5 text-[#C9A227]" strokeWidth={1.5} />
                             </div>
-                            <h3 className="text-xl font-semibold text-white tracking-[-0.02em]">Visão</h3>
-                            <p className="text-[#9E9E9E] text-sm leading-relaxed">
+                            <h3 className="text-xl font-semibold text-[#0C0C0C] dark:text-white tracking-[-0.02em]">Visão</h3>
+                            <p className="text-[#666666] dark:text-[#9E9E9E] text-sm leading-relaxed">
                                 Consolidar a RAMIELL como uma das principais referências em engenharia de software e experiências digitais premium no mercado nacional e internacional.
                             </p>
                         </div>
 
                         <div className="editorial-card p-8 space-y-4">
-                            <div className="w-12 h-12 bg-[#121212] border border-white/[0.06] rounded-full flex items-center justify-center">
+                            <div className="w-12 h-12 bg-[#F0F0EE] dark:bg-[#121212] border border-black/[0.06] dark:border-white/[0.06] rounded-full flex items-center justify-center">
                                 <Heart className="w-5 h-5 text-[#C9A227]" strokeWidth={1.5} />
                             </div>
-                            <h3 className="text-xl font-semibold text-white tracking-[-0.02em]">Valores</h3>
-                            <p className="text-[#9E9E9E] text-sm leading-relaxed">
+                            <h3 className="text-xl font-semibold text-[#0C0C0C] dark:text-white tracking-[-0.02em]">Valores</h3>
+                            <p className="text-[#666666] dark:text-[#9E9E9E] text-sm leading-relaxed">
                                 Excelência técnica, discrição, compromisso irrestrito com prazos e valorização do detalhe em cada linha de código e pixel entregue.
                             </p>
                         </div>
@@ -172,13 +173,13 @@ const About = () => {
             </section>
 
             {/* Valores Detalhados */}
-            <section className="py-24 bg-[#0A0A0A] border-t border-white/[0.06]">
+            <section className="py-24 bg-white dark:bg-[#0A0A0A] border-t border-black/[0.08] dark:border-white/[0.06] transition-colors duration-300">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16 space-y-3">
                         <span className="text-xs font-mono uppercase tracking-widest text-[#C9A227]">
                             DIRETRIZES
                         </span>
-                        <h2 className="text-3xl sm:text-4xl font-semibold tracking-[-0.03em] text-white">
+                        <h2 className="text-3xl sm:text-4xl font-semibold tracking-[-0.03em] text-[#0C0C0C] dark:text-white">
                             Princípios que guiam nossa <span className="gold-gradient-text">execução</span>
                         </h2>
                     </div>
@@ -186,12 +187,12 @@ const About = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {values.map((val) => (
                             <div key={val.title} className="editorial-card p-8 flex items-start gap-5">
-                                <div className="w-12 h-12 bg-[#121212] border border-white/[0.06] rounded-full flex items-center justify-center shrink-0">
+                                <div className="w-12 h-12 bg-[#F0F0EE] dark:bg-[#121212] border border-black/[0.06] dark:border-white/[0.06] rounded-full flex items-center justify-center shrink-0">
                                     <val.icon className="w-5 h-5 text-[#C9A227]" strokeWidth={1.5} />
                                 </div>
                                 <div className="space-y-2">
-                                    <h3 className="text-lg font-semibold text-white tracking-[-0.02em]">{val.title}</h3>
-                                    <p className="text-[#9E9E9E] text-sm leading-relaxed">{val.description}</p>
+                                    <h3 className="text-lg font-semibold text-[#0C0C0C] dark:text-white tracking-[-0.02em]">{val.title}</h3>
+                                    <p className="text-[#666666] dark:text-[#9E9E9E] text-sm leading-relaxed">{val.description}</p>
                                 </div>
                             </div>
                         ))}
@@ -200,13 +201,13 @@ const About = () => {
             </section>
 
             {/* Equipe RAMIELL */}
-            <section className="py-24 bg-[#070707] border-t border-white/[0.06]">
+            <section className="py-24 bg-[#F7F7F6] dark:bg-[#070707] border-t border-black/[0.08] dark:border-white/[0.06] transition-colors duration-300">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16 space-y-3">
                         <span className="text-xs font-mono uppercase tracking-widest text-[#C9A227]">
                             LIDERANÇA & TALENTO
                         </span>
-                        <h2 className="text-3xl sm:text-4xl font-semibold tracking-[-0.03em] text-white">
+                        <h2 className="text-3xl sm:text-4xl font-semibold tracking-[-0.03em] text-[#0C0C0C] dark:text-white">
                             Quem faz a <span className="gold-gradient-text">RAMIELL acontecer</span>
                         </h2>
                     </div>
@@ -217,15 +218,15 @@ const About = () => {
                                 <div className="relative inline-block">
                                     <img
                                         alt={member.name}
-                                        className="w-28 h-28 rounded-full mx-auto object-cover border border-white/[0.08] filter drop-shadow-[0_0_12px_rgba(201,162,39,0.15)]"
+                                        className="w-28 h-28 rounded-full mx-auto object-cover border border-black/[0.08] dark:border-white/[0.08] filter drop-shadow-[0_0_12px_rgba(201,162,39,0.15)]"
                                         src={member.image}
                                     />
                                 </div>
                                 <div className="space-y-1">
-                                    <h3 className="text-xl font-semibold text-white tracking-[-0.02em]">{member.name}</h3>
-                                    <p className="text-xs font-mono text-[#C9A227] uppercase tracking-wider">{member.role}</p>
+                                    <h3 className="text-xl font-semibold text-[#0C0C0C] dark:text-white tracking-[-0.02em]">{member.name}</h3>
+                                    <p className="text-xs font-mono text-[#A88218] dark:text-[#C9A227] uppercase tracking-wider">{member.role}</p>
                                 </div>
-                                <p className="text-[#9E9E9E] text-xs sm:text-sm leading-relaxed">
+                                <p className="text-[#666666] dark:text-[#9E9E9E] text-xs sm:text-sm leading-relaxed">
                                     {member.bio}
                                 </p>
                             </div>
@@ -235,12 +236,12 @@ const About = () => {
             </section>
 
             {/* CTA Final */}
-            <section className="py-24 bg-[#0A0A0A] border-t border-white/[0.06] text-center">
+            <section className="py-24 bg-white dark:bg-[#0A0A0A] border-t border-black/[0.08] dark:border-white/[0.06] text-center transition-colors duration-300">
                 <div className="max-w-3xl mx-auto px-4 space-y-6">
-                    <h2 className="text-3xl sm:text-4xl font-semibold tracking-[-0.03em] text-white">
+                    <h2 className="text-3xl sm:text-4xl font-semibold tracking-[-0.03em] text-[#0C0C0C] dark:text-white">
                         Vamos iniciar seu próximo projeto?
                     </h2>
-                    <p className="text-[#9E9E9E] text-base leading-relaxed">
+                    <p className="text-[#666666] dark:text-[#9E9E9E] text-base leading-relaxed">
                         Converse conosco e entenda como a RAMIELL pode transformar sua presença digital.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center pt-2">
@@ -250,7 +251,7 @@ const About = () => {
                             </button>
                         </Link>
                         <Link to="/portfolio">
-                            <button className="bg-[#0B0B0B] border border-white/[0.08] hover:border-[#C9A227]/40 text-white hover:text-[#ECBD57] text-xs uppercase tracking-wider font-semibold px-8 py-4 rounded-full transition-all">
+                            <button className="bg-white dark:bg-[#0B0B0B] border border-black/[0.08] dark:border-white/[0.08] hover:border-[#C9A227]/40 text-[#0C0C0C] dark:text-white hover:text-[#A88218] dark:hover:text-[#ECBD57] text-xs uppercase tracking-wider font-semibold px-8 py-4 rounded-full shadow-sm transition-all">
                                 Ver Portfólio
                             </button>
                         </Link>
