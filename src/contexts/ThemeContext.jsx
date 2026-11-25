@@ -1,51 +1,37 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
 
-// Criação do contexto de tema
+// Criação do contexto de tema para a marca RAMIELL
 const ThemeContext = createContext();
 
 /**
- * Provedor de Tema (ThemeProvider)
- * Gerencia o estado de temas Claro e Escuro, persistindo no localStorage e controlando o Tailwind.
- * O tema padrão do projeto é o Tema Claro ('light') para um ar comercial e corporativo.
+ * Provedor de Tema RAMIELL (ThemeProvider)
+ * Mantém exclusivamente o tema escuro (Dark Only) de acordo com o design editorial minimalista.
+ * Bloqueia qualquer transição para tema claro e garante a classe 'dark' no documento HTML.
  */
 export const ThemeProvider = ({ children }) => {
-    // Busca do localStorage ou inicia no padrao 'dark' com a nova identidade
-    const [theme, setTheme] = useState(() => {
-        const savedTheme = localStorage.getItem('theme');
-        return savedTheme ? savedTheme : 'dark';
-    });
+    const theme = 'dark';
 
     useEffect(() => {
         const root = window.document.documentElement;
+        root.classList.remove('light');
+        root.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+    }, []);
 
-        // Limpa classes anteriores do Tailwind
-        root.classList.remove('light', 'dark');
-
-        // Aplica o tema ativo
-        if (theme === 'dark') {
-            root.classList.add('dark');
-        } else {
-            root.classList.add('light');
-        }
-
-        // Salva a preferência
-        localStorage.setItem('theme', theme);
-    }, [theme]);
-
-    // Função reativa para alternar o tema
+    // Função de alternância neutralizada para compatibilidade sem efeito
     const toggleTheme = () => {
-        setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+        // RAMIELL adota identidade exclusivamente dark
     };
 
     return (
-        <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>
+        <ThemeContext.Provider value={{ theme: 'dark', toggleTheme, setTheme: () => {} }}>
             {children}
         </ThemeContext.Provider>
     );
 };
 
 /**
- * Hook customizado para fácil utilização do tema em componentes React
+ * Hook customizado para consulta de tema
  */
 export const useTheme = () => {
     const context = useContext(ThemeContext);

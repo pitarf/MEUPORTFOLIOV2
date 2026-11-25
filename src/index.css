@@ -1,69 +1,68 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* ----------------------------------------------------
-   1. SISTEMA DE CORES E TEMA CLARO CORPORATIVO (PADRÃO)
+   1. SISTEMA DE DESIGN TOKENS RAMIELL (TEMA EXCLUSIVO DARK)
    ---------------------------------------------------- */
 :root {
-    --background: 210 40% 98%; /* Fundo cinza/azul ultra claro e limpo */
-    --foreground: 222.2 84% 4.9%; /* Tipografia azul escuro comercial */
-    --card: 0 0% 100%; /* Cartões brancos puros */
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%; /* Azul corporativo moderno (Estilo Stripe/Microsoft) */
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%; /* Elementos secundários discretos */
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%; /* Borda suave */
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
-    --radius: 0.75rem;
+    --background: #070707;
+    --foreground: #FFFFFF;
+    --card: #0B0B0B;
+    --card-foreground: #FFFFFF;
+    --popover: #0B0B0B;
+    --popover-foreground: #FFFFFF;
+    --primary: #C9A227;
+    --primary-foreground: #070707;
+    --secondary: #121212;
+    --secondary-foreground: #FFFFFF;
+    --muted: #121212;
+    --muted-foreground: #9E9E9E;
+    --accent: #C9A227;
+    --accent-foreground: #070707;
+    --destructive: #EF4444;
+    --destructive-foreground: #FFFFFF;
+    --border: rgba(255, 255, 255, 0.06);
+    --input: rgba(255, 255, 255, 0.08);
+    --ring: #C9A227;
+    --radius: 1.25rem; /* 20px */
 }
 
-/* ----------------------------------------------------
-   2. SISTEMA DE CORES DO TEMA ESCURO (NOVA IDENTIDADE BRAND)
-   ---------------------------------------------------- */
 .dark {
-    --background: 60 11% 3.5%; /* #0a0a08 */
-    --foreground: 0 0% 98%; /* #f8fafc */
-    --card: 60 7% 6.7%; /* #121210 */
-    --card-foreground: 0 0% 98%;
-    --popover: 60 7% 6.7%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 77.4 86.3% 58.8%; /* #bcf13b Verde Neon */
-    --primary-foreground: 60 11% 3.5%; /* #0a0a08 */
-    --secondary: 60 8% 9%; /* #181814 */
-    --secondary-foreground: 0 0% 98%;
-    --muted: 60 8% 9%;
-    --muted-foreground: 220 9% 65%; /* #9da3af */
-    --accent: 60 8% 9%;
-    --accent-foreground: 77.4 86.3% 58.8%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 60 6% 13%; /* #23231f */
-    --input: 60 6% 13%; /* #23231f */
-    --ring: 77.4 86.3% 58.8%;
+    --background: #070707;
+    --foreground: #FFFFFF;
+    --card: #0B0B0B;
+    --card-foreground: #FFFFFF;
+    --popover: #0B0B0B;
+    --popover-foreground: #FFFFFF;
+    --primary: #C9A227;
+    --primary-foreground: #070707;
+    --secondary: #121212;
+    --secondary-foreground: #FFFFFF;
+    --muted: #121212;
+    --muted-foreground: #9E9E9E;
+    --accent: #C9A227;
+    --accent-foreground: #070707;
+    --destructive: #EF4444;
+    --destructive-foreground: #FFFFFF;
+    --border: rgba(255, 255, 255, 0.06);
+    --input: rgba(255, 255, 255, 0.08);
+    --ring: #C9A227;
 }
 
 * {
-    border-color: hsl(var(--border));
+    border-color: var(--border);
 }
 
 /* ----------------------------------------------------
-   2.1 RESET ANTI-QUEBRA DO POSITION STICKY E STACKING CARDS
+   2. CONFIGURACOES GLOBAIS DE TELA E ROLAGEM
    ---------------------------------------------------- */
 html {
     scroll-behavior: smooth;
+    background-color: #070707;
+    color: #FFFFFF;
 }
 
 html, body {
@@ -72,23 +71,83 @@ html, body {
     width: 100%;
 }
 
-/* Cabecalho Sticky da Secao */
+body {
+    font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #070707;
+    color: #FFFFFF;
+    min-height: 100vh;
+    letter-spacing: -0.01em;
+}
+
+/* ----------------------------------------------------
+   3. PADROES EDITORIAL E MINIMALISTA RAMIELL
+   ---------------------------------------------------- */
+
+/* Fundo com grid sutilissimo (6% de opacidade) */
+.editorial-grid {
+    background-size: 40px 40px;
+    background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+}
+
+/* Degradê exclusivo de títulos dourados RAMIELL: #ECBD57 → #C8942D */
+.gold-gradient-text {
+    background: linear-gradient(135deg, #ECBD57 0%, #C8942D 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Glow Dourado Sutil */
+.gold-glow {
+    box-shadow: 0 0 24px rgba(201, 162, 39, 0.15);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.gold-glow:hover {
+    box-shadow: 0 0 32px rgba(201, 162, 39, 0.25);
+}
+
+/* Cartões Editoriais RAMIELL */
+.editorial-card {
+    background-color: #0B0B0B;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 20px;
+    transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.editorial-card:hover {
+    border-color: rgba(201, 162, 39, 0.35);
+    box-shadow: 0 0 24px rgba(201, 162, 39, 0.12);
+}
+
+/* Efeito Vidro Escuro Minimalista */
+.glass-effect {
+    background: rgba(11, 11, 11, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Cabecalho Sticky de Secao */
 .services-sticky-header {
     position: sticky;
-    top: 64px; /* Altura da navbar mobile */
+    top: 64px;
     z-index: 50;
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    background-color: rgba(7, 7, 7, 0.85);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 @media (min-width: 640px) {
     .services-sticky-header {
-        top: 80px; /* Altura da navbar desktop */
+        top: 80px;
     }
 }
 
-/* Container e Cartoes Empilhaveis (Stacking Cards) */
+/* Container de Stacking Cards */
 .stacking-container {
     position: relative;
     padding-bottom: 0 !important;
@@ -99,82 +158,14 @@ html, body {
     will-change: transform, filter;
     transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s ease;
     margin-bottom: 20px !important;
+    border-radius: 20px;
 }
 
 .stack-card:last-child {
     margin-bottom: 0 !important;
 }
 
-/* ----------------------------------------------------
-   3. ESTILIZACAO DO CORPO (BODY) COM TRANSICAO SUAVE
-   ---------------------------------------------------- */
-body {
-    font-family: 'Inter', sans-serif;
-    background: radial-gradient(circle at top left, #f1f5f9 0%, #e2e8f0 40%, #f8fafc 100%);
-    min-height: 100vh;
-    color: hsl(var(--foreground));
-    transition: background-color 0.4s ease, color 0.4s ease, background 0.4s ease;
-}
-
-/* Fundo escuro com a identidade #0a0a08 */
-.dark body {
-    background: #0a0a08;
-}
-
-/* ----------------------------------------------------
-   4. EFEITOS ESPECIAIS ADAPTATIVOS DE ALTA PERFORMANCE
-   ---------------------------------------------------- */
-
-/* Efeito Vidro (Glassmorphism) */
-.glass-effect {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-}
-
-.dark .glass-effect {
-    background: rgba(18, 18, 16, 0.85);
-    border: 1px solid #23231f;
-    box-shadow: none;
-}
-
-/* Gradiente de Texto com excelente legibilidade comercial */
-.gradient-text {
-    background: linear-gradient(135deg, #1e3a8a 0%, #4f46e5 50%, #7c3aed 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    transition: all 0.3s ease;
-}
-
-.dark .gradient-text {
-    background: linear-gradient(135deg, #ffffff 0%, #ffffff 65%, #bcf13b 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-/* Brilho Neon e Animacao */
-.neon-glow {
-    box-shadow: 0 0 20px rgba(188, 241, 59, 0.2);
-    transition: all 0.3s ease;
-}
-
-.neon-glow:hover {
-    box-shadow: 0 0 30px rgba(188, 241, 59, 0.35);
-}
-
-.dark .neon-glow {
-    box-shadow: 0 0 20px rgba(188, 241, 59, 0.25), 0 0 35px rgba(188, 241, 59, 0.12);
-}
-
-.floating-animation {
-    animation: float 6s ease-in-out infinite;
-}
-
+/* Animacoes Marquee */
 @keyframes marquee {
     0% {
         transform: translateX(0);
@@ -203,167 +194,41 @@ body {
 
 @media (max-width: 768px) {
     .animate-marquee {
-        animation: marquee 16s linear infinite;
+        animation: marquee 18s linear infinite;
     }
     .animate-marquee-reverse {
-        animation: marquee-reverse 16s linear infinite;
+        animation: marquee-reverse 18s linear infinite;
     }
 }
 
+/* Animacao flutuante suave */
 @keyframes float {
     0%, 100% {
         transform: translateY(0px);
     }
     50% {
-        transform: translateY(-20px);
+        transform: translateY(-12px);
     }
 }
 
-@keyframes aurora {
-    0% {
-        background-position: 50% 50%, 50% 50%;
-    }
-    50% {
-        background-position: 100% 0%, 0% 100%;
-    }
-    100% {
-        background-position: 50% 50%, 50% 50%;
-    }
+.floating-animation {
+    animation: float 6s ease-in-out infinite;
 }
 
-/* Fundo aurora polar atenuado no Tema Claro */
-.aurora-bg {
-    background-image:
-        radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 60%),
-        radial-gradient(circle at 100% 0%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 0% 100%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
-    background-size: 150% 150%;
-    animation: aurora 15s ease infinite alternate;
-    transition: all 0.3s ease;
-}
-
-.dark .aurora-bg {
-    background-image:
-        radial-gradient(circle at 50% 50%, rgba(76, 29, 149, 0.4) 0%, transparent 50%),
-        radial-gradient(circle at 100% 0%, rgba(59, 130, 246, 0.4) 0%, transparent 50%),
-        radial-gradient(circle at 0% 100%, rgba(236, 72, 153, 0.4) 0%, transparent 50%);
-}
-
-.pulse-glow {
-    animation: pulse-glow 2s ease-in-out infinite alternate;
-}
-
-@keyframes pulse-glow {
-    from {
-        box-shadow: 0 0 10px rgba(99, 102, 241, 0.1);
-    }
-    to {
-        box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
-    }
-}
-
-.dark .pulse-glow {
-    animation: dark-pulse-glow 2s ease-in-out infinite alternate;
-}
-
-@keyframes dark-pulse-glow {
-    from {
-        box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
-    }
-    to {
-        box-shadow: 0 0 30px rgba(102, 126, 234, 0.8), 0 0 40px rgba(102, 126, 234, 0.6);
-    }
-}
-
-/* Elemento flutuante de WhatsApp adaptado */
+/* WhatsApp Flutuante com tema minimalista */
 .whatsapp-float {
     position: fixed;
     bottom: 25px;
     right: 25px;
     z-index: 1000;
-    animation: bounce 2s infinite;
+    transition: transform 0.3s ease;
 }
 
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
-    }
-    40% {
-        transform: translateY(-10px);
-    }
-    60% {
-        transform: translateY(-5px);
-    }
+.whatsapp-float:hover {
+    transform: scale(1.06);
 }
 
-/* Cartoes de Servico e Destaques Brand */
-.service-card {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 4px 20px -10px rgba(0, 0, 0, 0.05);
-}
-
-.service-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 0 20px rgba(188, 241, 59, 0.25);
-    border-color: #bcf13b;
-}
-
-.dark .service-card {
-    background: #121210;
-    border: 1px solid #23231f;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-}
-
-.dark .service-card:hover {
-    box-shadow: 0 0 20px rgba(188, 241, 59, 0.15), 0 0 35px rgba(188, 241, 59, 0.06);
-    border-color: #bcf13b;
-    transform: translateY(-4px);
-}
-
-.hero-gradient {
-    background: linear-gradient(135deg, #2563eb 0%, #4f46e5 50%, #8b5cf6 100%);
-}
-
-.tech-pattern {
-    background-image:
-        radial-gradient(circle at 25% 25%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 75% 75%, rgba(124, 58, 237, 0.05) 0%, transparent 50%);
-}
-
-.dark .tech-pattern {
-    background-image:
-        radial-gradient(circle at 25% 25%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 75% 75%, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
-}
-
-/* Estilos de Impressão Direta da Proposta Comercial */
-@media print {
-    body * {
-        visibility: hidden !important;
-    }
-    #budget-printable-document,
-    #budget-printable-document * {
-        visibility: visible !important;
-    }
-    #budget-printable-document {
-        position: fixed !important;
-        left: 0 !important;
-        top: 0 !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 !important;
-        padding: 8mm !important;
-        box-shadow: none !important;
-        border: none !important;
-        background: white !important;
-        color: #0f172a !important;
-    }
-}
-
-/* Utilitario para rolagem horizontal suave sem barra visivel */
+/* Utilitario para rolagem sem scrollbar */
 .no-scrollbar::-webkit-scrollbar {
     display: none;
 }
