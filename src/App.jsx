@@ -28,6 +28,7 @@ const Contact = lazy(() => import('@/pages/Contact'));
 const PhotographyLanding = lazy(() => import('@/pages/PhotographyLanding'));
 const ProjectPage = lazy(() => import('@/pages/ProjectPage'));
 const ServiceDetailPage = lazy(() => import('@/pages/ServiceDetailPage'));
+const Store = lazy(() => import('@/pages/Store'));
 
 // Páginas de suporte e área do cliente
 const Support = lazy(() => import('@/pages/Support'));
@@ -113,6 +114,7 @@ function App() {
                                     <Route path="/fotografia-eventos" element={<ServiceDetailPage serviceSlug="fotografia-eventos" />} />
                                     <Route path="/fotografia-corporativa" element={<ServiceDetailPage serviceSlug="fotografia-corporativa" />} />
                                     <Route path="/portfolio" element={<Portfolio />} />
+                                    <Route path="/store" element={<Store />} />
                                     <Route path="/portfolio/:categorySlug/:projectSlug" element={<ProjectPage />} />
                                     <Route path="/area-clientes" element={<ClientArea />} />
                                     <Route path="/assinaturas" element={<Subscriptions />} />
