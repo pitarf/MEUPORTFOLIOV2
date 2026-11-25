@@ -351,7 +351,7 @@ class PitAiTtsService {
   }
 
   /**
-   * Síntese Neural do Navegador com tom executivo MASCULINO (pitch grave 0.88)
+   * Síntese do Navegador com tom executivo natural (pitch 1.0 natural sem distorção mecânica)
    */
   speakBrowserNeural(text, preferredVoice = null) {
     if (!this.synthesis) {
@@ -362,8 +362,8 @@ class PitAiTtsService {
     return new Promise((resolve) => {
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'pt-BR';
-      utterance.rate = 1.0; // Cadência executiva firme
-      utterance.pitch = 0.88; // Tom encorpado e grave (remove timbre fino/robótico)
+      utterance.rate = 1.02; // Cadência executiva natural e fluida
+      utterance.pitch = 1.0; // Tom natural da voz (pitch < 1 gerava distorção metálica e robótica)
 
       const voice = preferredVoice || this.pickBestBrowserVoice();
       if (voice) {

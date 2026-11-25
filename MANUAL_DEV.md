@@ -462,23 +462,24 @@ O Nginx atua como proxy reverso com SSL Let's Encrypt para `license.rafaelpitaof
 - `/rest/v1/` ➔ Proxy para PostgREST (`127.0.0.1:3025`).
 - `/auth/v1/` ➔ Proxy para GoTrue (`127.0.0.1:9999`).
 
-### 8.3 Topologia da VPS Hostinger (Frontend & PIT.AI - `2.25.75.243`)
-A aplicação web principal, páginas de conversão e o centro operacional PIT.AI rodam na VPS Hostinger sob o IP `2.25.75.243`:
-- **Container `portfolio-web`**: Imagem compilada com Vite e servida por Nginx interno na porta `127.0.0.1:3002`.
+### 8.3 Topologia da VPS Oracle Cloud (Ambiente Unificado Oficial - `144.22.173.125`)
+Toda a infraestrutura do ecossistema Rafael Pita Solutions (aplicação web principal, landing pages, banco de dados, API REST PostgREST e o centro operacional PIT.AI) está unificada exclusivamente na VPS Oracle Cloud sob o IP `144.22.173.125`:
+- **Container `portfolio-web`**: Frontend servido por Nginx interno de alta performance na porta local `127.0.0.1:3002`.
+- **Container `pitai-postgres`**: Banco de dados PostgreSQL 16 do PIT.AI na porta local `127.0.0.1:5434`.
+- **Container `portfolio-db`**: Banco de dados PostgreSQL 15 do portfólio na porta local `127.0.0.1:5436`.
+- **Container `portfolio-api`**: PostgREST na porta local `127.0.0.1:3025`.
 - **Nginx Host (`/etc/nginx/sites-available/rafaelpitaoficial.conf`)**:
-  - `listen 80 default_server;` — responde como servidor padrão para acessos diretos via IP `http://2.25.75.243/` e `http://2.25.75.243/pitai`.
-  - Mapeia domínios oficiais: `rafaelpitaoficial.com.br`, `www.rafaelpitaoficial.com.br`, `pitai.rafaelpitaoficial.com.br` e `fotografia.rafaelpitaoficial.com.br`.
+  - Mapeia domínios oficiais com SSL Certbot: `rafaelpitaoficial.com.br`, `www.rafaelpitaoficial.com.br`, `pitai.rafaelpitaoficial.com.br` e `fotografia.rafaelpitaoficial.com.br`.
+  - Proxy local para o PostgREST direto em `http://127.0.0.1:3025/` (rotas `/rest/v1/` e `/api/`).
   - Proxies reversos para RSS sem CORS:
     - `/api/news/rio` ➔ Google Notícias RJ (tempo real)
     - `/api/news/g1-rio` ➔ G1 Rio de Janeiro
     - `/api/news/brazil` ➔ Google Notícias Brasil
     - `/api/news/world` ➔ Google Notícias Mundo
     - `/api/tts/google` ➔ Google Natural Audio Stream
-- **Comandos de Manutenção do Container na VPS**:
+- **Comando de Deploy Rápido**:
   ```bash
-  cd /var/www/MEUPORTFOLIOV2
-  docker compose build --no-cache portfolio-web
-  docker compose up -d --force-recreate portfolio-web
+  python scratch/deploy_dist_fast.py
   ```
 ---
 

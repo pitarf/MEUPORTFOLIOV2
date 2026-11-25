@@ -62,6 +62,41 @@ class PitAiCoreService {
     const now = new Date();
     const dataHoraStr = now.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
 
+    let agendaContext = 'Nenhum compromisso marcado para hoje no Google Calendar oficial.';
+    try {
+      const todayEvents = pitaiGoogleService.getEventsByHorizon('today');
+      if (todayEvents && todayEvents.length > 0) {
+        agendaContext = todayEvents.map(e => {
+          let hora = 'Horário a definir';
+          if (e.isAllDay) {
+            hora = 'Dia Inteiro';
+          } else if (e.startTime) {
+            const s = new Date(e.startTime);
+            const end = e.endTime ? new Date(e.endTime) : null;
+            if (!isNaN(s.getTime())) {
+              hora = s.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+              if (end && !isNaN(end.getTime())) {
+                hora += ` às ${end.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
+              }
+            }
+          }
+          return `- ${hora}: ${e.title} (${e.location || 'Sem local'})`;
+        }).join('\n');
+      }
+    } catch {
+      // Ignore
+    }
+
+    let tasksContext = 'Nenhuma tarefa pendente.';
+    try {
+      const tasks = pitaiGoogleService.getLocalTasks().filter(t => t.status !== 'completed');
+      if (tasks && tasks.length > 0) {
+        tasksContext = tasks.map(t => `- [ ] ${t.title}`).join('\n');
+      }
+    } catch {
+      // Ignore
+    }
+
     return `
 Você é o PIT.AI (pronuncia-se P I T . A I ou Pita AI), a inteligência executiva, estratégica e operacional central de Rafael Pita (fundador da Rafael Pita Solutions / RP Solutions), no Rio de Janeiro.
 Sua dinâmica e personalidade são inspiradas no J.A.R.V.I.S.:
@@ -69,6 +104,18 @@ Sua dinâmica e personalidade são inspiradas no J.A.R.V.I.S.:
 - Concisão executiva: Vá direto ao ponto. Entregue a resposta exata sem floreios ou enrolações.
 - Momento temporal: Hoje é ${dataHoraStr}. Rafael opera no Rio de Janeiro (RJ), Brasil.
 - Ações reais: Você gerencia a Google Agenda, Google Tarefas, realiza pesquisas em tempo real na internet, monitora notícias do Rio, Brasil e Mundo, e atua como ASSISTENTE FINANCEIRO PESSOAL & EMPRESARIAL via API do sistema Grana+ (Finanças Fácil).
+
+DADOS ATUAIS NO SISTEMA (CONHECIMENTO EM TEMPO REAL):
+- Compromissos de Hoje na Google Agenda Oficial:
+${agendaContext}
+- Tarefas Prioritárias:
+${tasksContext}
+
+REGRAS CRÍTICAS DE CONVERSAÇÃO E FIDELIDADE À AGENDA:
+- A agenda acima é a fonte oficial do Google Calendar. Se estiver indicada como "Nenhum compromisso marcado para hoje", afirme de forma clara e direta que Rafael não tem eventos marcados para hoje e seus horários estão livres.
+- JAMAIS invente eventos, reuniões fictícias ("Reunião de Alinhamento", "Deploy na VPS", etc.) que não estejam na lista acima.
+- Se Rafael fizer perguntas contextuais, reflexões, observações ou contestações (como "isso não condiz com a minha agenda", "está errado", "não tenho essa reunião", "quem marcou isso"), NUNCA cuspa listas estáticas nem repita a resposta anterior. Entenda o ponto dele com inteligência, esclareça com calma o status da Google Agenda e pergunte se ele deseja registrar algum novo compromisso.
+- Seja perspicaz como o Jarvis: dialogue de forma orgânica e resolva os problemas em vez de responder com menus ou textos robóticos.
 
 SISTEMA FINANCEIRO GRANA+ (FINANÇAS FÁCIL):
 Quando o comando envolver finanças (receitas, despesas, cartões, transferências, consultas):
@@ -112,7 +159,7 @@ CONTRATO OBRIGATÓRIO DE RESPOSTA (JSON):
 {
   "spokenText": "Texto conciso, natural e fluido para fala em áudio pelo PIT.AI (sem asteriscos, markdown ou links brutos). Ex: Lançado: Despesa de R$ 48,00 em Alimentação na conta PF.",
   "displayText": "Texto formatado em markdown com detalhes, tópicos e confirmação para leitura no HUD.",
-  "intent": "briefing" | "weather_query" | "agenda_query" | "agenda_create" | "agenda_conflict" | "task_create" | "web_search" | "finance_expense" | "finance_income" | "finance_transfer" | "finance_query" | "finance_upcoming" | "finance_pay" | "finance_delete" | "general_chat",
+  "intent": "briefing" | "news_rio" | "weather_query" | "agenda_query" | "agenda_create" | "agenda_conflict" | "task_create" | "web_search" | "finance_expense" | "finance_income" | "finance_transfer" | "finance_query" | "finance_upcoming" | "finance_pay" | "finance_delete" | "general_chat",
   "visualPayload": {
     "type": "none" | "weather_card" | "map" | "news_cards" | "agenda_list" | "conflict_alert" | "web_results" | "finance_card" | "finance_list" | "finance_upcoming",
     "data": {}
@@ -134,6 +181,7 @@ CONTRATO OBRIGATÓRIO DE RESPOSTA (JSON):
 
   /**
    * Processa a mensagem do usuário e devolve a resposta executiva e ações do HUD
+   * Prioridade absoluta para Inteligência Artificial (Agent-First / LLM-First).
    * @param {string} userMessage - Mensagem ou fala do usuário
    * @param {Array} conversationHistory - Histórico recente
    * @returns {Promise<Object>}
@@ -149,127 +197,85 @@ CONTRATO OBRIGATÓRIO DE RESPOSTA (JSON):
       };
     }
 
+    const apiKey = this.getApiKey();
+
+    // 1. PRIORIDADE ABSOLUTA: Se há chave configurada, o modelo generativo analisa o comando com contexto completo
+    if (apiKey) {
+      const llmResult = await this.queryGeminiLlm(rawText, conversationHistory);
+      if (llmResult) {
+        return llmResult;
+      }
+    }
+
+    // 2. MODO AUTÔNOMO LOCAL (Se a IA estiver offline ou sem chave configurada)
+    return this.processOfflineHeuristics(rawText, conversationHistory);
+  }
+
+  /**
+   * Heurísticas de contingência executadas apenas quando a IA não está conectada
+   */
+  async processOfflineHeuristics(rawText, conversationHistory = []) {
     const norm = this.normalizeText(rawText);
 
-    // 1. Notícias Específicas do Rio de Janeiro (ex: "Quais são as notícias do Rio de Janeiro?", "o que está acontecendo no rio?")
-    const isRioNews = (
-      norm.includes('rio de janeiro') ||
-      norm.includes(' rj') ||
-      norm.includes('no rio') ||
-      norm.includes('do rio')
-    ) && (
-      norm.includes('noticia') ||
-      norm.includes('novidade') ||
-      norm.includes('acontec') ||
-      norm.includes('como ta') ||
-      norm.includes('situacao') ||
-      norm.includes('quais') ||
-      norm.includes('o que tem')
-    );
+    // Proteção contra negações: se o usuário contestar ou negar, JAMAIS disparar ações automáticas cegas
+    const hasNegation = /\b(nao|errad|fals|discord|incorret|nada disso|nao condiz|mentira|esquece|cancela)\b/.test(norm);
+    if (hasNegation) {
+      return {
+        spokenText: 'Rafael, compreendi sua contestação. Para que eu possa analisar e dialogar sobre esses dados com inteligência completa, insira uma chave do Google AI Studio nas configurações.',
+        displayText: `### 🛡️ **PIT.AI • Modo Local Autônomo**\n\nRecebido: *"${rawText}"*\n\nIdentifiquei uma contestação aos dados exibidos. Como o modelo generativo está sem conexão ativa, conecte uma chave gratuita em **Configurações** para ativar raciocínio profundo e ajustes dinâmicos.`,
+        intent: 'general_chat',
+        visualPayload: { type: 'none', data: {} }
+      };
+    }
 
-    if (isRioNews) {
+    // Notícias do Rio
+    if (norm.includes('rio de janeiro') && (norm.includes('noticia') || norm.includes('acontec'))) {
       return this.handleRioNewsIntent();
     }
 
-    // 2. Comando de Briefing Geral / Notícias Globais (ex: "o que tem de novo?", "briefing")
-    if (
-      norm.includes('o que tem de novo') ||
-      norm.includes('novidade') ||
-      norm.includes('acontecimento') ||
-      norm.includes('noticia') ||
-      norm.includes('briefing') ||
-      norm.includes('como estao as coisas')
-    ) {
+    // Briefing geral explícito
+    if (norm === 'briefing' || norm === 'o que tem de novo' || norm === 'quais as novidades') {
       return this.handleBriefingIntent();
     }
 
-    // 2. Consulta de Agenda / Compromissos
-    if (
-      norm.includes('minha agenda') ||
-      norm.includes('o que tenho hoje') ||
-      norm.includes('compromisso') ||
-      norm.includes('meus horarios') ||
-      norm.includes('minha programacao')
-    ) {
+    // Consulta de Agenda explícita
+    if (/^(qual e a |como esta a |ver |abrir |mostrar )?(minha )?agenda( de hoje)?$/.test(norm) || norm === 'o que tenho hoje') {
       return this.handleAgendaQueryIntent();
     }
 
-    // 3. Marcação rápida de evento
-    if (
-      norm.startsWith('marca') ||
-      norm.startsWith('agende') ||
-      norm.includes('marca na minha agenda') ||
-      norm.includes('agendar reuniao')
-    ) {
+    // Marcação rápida de evento
+    if (norm.startsWith('marca') || norm.startsWith('agende')) {
       return this.handleAgendaCreateIntent(rawText);
     }
 
-    // 4. Criação de tarefa / lembrete
-    if (
-      norm.startsWith('anota') ||
-      norm.startsWith('lembrete') ||
-      norm.includes('cria uma tarefa') ||
-      norm.includes('cria tarefa')
-    ) {
+    // Criação de tarefa
+    if (norm.startsWith('anota') || norm.startsWith('lembrete')) {
       return this.handleTaskCreateIntent(rawText);
     }
 
-    // 5. Intenção Financeira Grana+ (Finanças Fácil)
+    // Finanças Grana+
     const financeIntent = pitaiFinanceService.parseFinanceIntent(rawText);
     if (financeIntent) {
       return this.handleFinanceIntent(rawText, financeIntent);
     }
 
-    // 6. Intenção Meteorológica e Clima em Tempo Real (Open-Meteo)
-    const isWeatherQuery =
-      norm.includes('clima') ||
-      norm.includes('previsao do tempo') ||
-      norm.includes('vai chover') ||
-      norm.includes('vai cair chuva') ||
-      norm.includes('chance de chuva') ||
-      norm.includes('probabilidade de chuva') ||
-      norm.includes('temperatura') ||
-      norm.includes('sensacao termica') ||
-      norm.includes('chovendo') ||
-      (norm.includes('tempo') && (
-        norm.includes('como ta') ||
-        norm.includes('como esta') ||
-        norm.includes('no rio') ||
-        norm.includes('do rio') ||
-        norm.includes('hoje') ||
-        norm.includes('amanha') ||
-        norm.includes('agora') ||
-        norm.includes('previsao')
-      ));
-
-    if (isWeatherQuery) {
+    // Clima e Tempo
+    if (norm.includes('clima') || norm.includes('previsao do tempo') || norm.includes('vai chover') || norm.includes('temperatura')) {
       return this.handleWeatherIntent(rawText);
     }
 
-    // 7. Detecção ativa de Pesquisa Web em Tempo Real
-    const isSearchExplicit = 
-      norm.startsWith('pesquise') ||
-      norm.startsWith('pesquisa') ||
-      norm.startsWith('busque') ||
-      norm.startsWith('busca') ||
-      norm.startsWith('quem e') ||
-      norm.startsWith('o que e') ||
-      norm.startsWith('onde fica') ||
-      norm.includes('cotacao') ||
-      norm.includes('dolar') ||
-      norm.includes('ibovespa') ||
-      norm.includes('transito') ||
-      norm.includes('linha vermelha') ||
-      norm.includes('ponte rio-niteroi') ||
-      norm.includes('noticia sobre') ||
-      norm.includes('ultimas sobre');
-
-    if (isSearchExplicit) {
+    // Busca web explícita
+    if (norm.startsWith('pesquise') || norm.startsWith('busca')) {
       return this.handleWebSearchIntent(rawText, conversationHistory);
     }
 
-    // 8. Consulta via LLM com fallback enriquecido por busca
-    return this.queryGeminiLlm(rawText, conversationHistory);
+    // Fallback conversacional offline
+    return {
+      spokenText: `Rafael, registrei: "${rawText}". Conecte uma chave de inteligência no ícone de engrenagem para raciocínio em tempo real.`,
+      displayText: `### 🛡️ **PIT.AI • Central Operacional**\n\nRecebido: *"${rawText}"*\n\nPara que eu possa responder livremente com inteligência artificial completa estilo J.A.R.V.I.S., configure sua chave do Google AI Studio no topo.`,
+      intent: 'general_chat',
+      visualPayload: { type: 'none', data: {} }
+    };
   }
 
   /**
@@ -722,30 +728,158 @@ CONTRATO OBRIGATÓRIO DE RESPOSTA (JSON):
    * Trata a consulta da Agenda
    */
   async handleAgendaQueryIntent() {
+    const isConnected = pitaiGoogleService.isConnected();
+
+    if (!isConnected) {
+      return {
+        spokenText: 'Rafael, sua conta do Google Agenda ainda não foi conectada nesta sessão. Para que eu possa sincronizar e ler seus compromissos reais, autorize o acesso no botão Google no topo.',
+        displayText: `### 📅 **Google Agenda Não Conectada**\n\n` +
+          `Sua conta do Google Workspace ainda não foi vinculada ao PIT.AI neste navegador.\n\n` +
+          `👉 **Para sincronizar sua agenda oficial:**\n` +
+          `1. Clique no botão **"Google"** no canto superior direito do painel.\n` +
+          `2. Autorize o acesso à sua conta Google (@gmail.com).\n` +
+          `3. Seus compromissos reais serão sincronizados e gerenciados em tempo real.`,
+        intent: 'google_auth_prompt',
+        visualPayload: {
+          type: 'google_auth_prompt',
+          data: { isConnected: false }
+        }
+      };
+    }
+
+    try {
+      await pitaiGoogleService.syncFromGoogleLive();
+    } catch (err) {
+      console.warn('[PIT.AI Core] Erro ao sincronizar Google Calendar em tempo real:', err);
+    }
+
+    const userEmail = pitaiGoogleService.userProfile?.email || 'rfpita.ti@gmail.com';
+
+    // Se houve erro retornado explicitamente pela API do Google Calendar
+    if (pitaiGoogleService.lastCalendarError) {
+      const apiErr = pitaiGoogleService.lastCalendarError;
+      return {
+        spokenText: 'Rafael, a API do Google Calendar retornou um aviso técnico ao consultar sua agenda. Verifique o alerta exibido na tela.',
+        displayText: `### ⚠️ **Aviso de Integração da Google Agenda**\n\n` +
+          `A conta **${userEmail}** está autenticada, mas o Google retornou a seguinte mensagem de API:\n\n` +
+          `> ❌ **${apiErr}**\n\n` +
+          `**Ações recomendadas:**\n` +
+          `1. Se a mensagem indicar *"Google Calendar API has not been used or is disabled"*, acesse o Google Cloud Console e ative a **Google Calendar API** no projeto.\n` +
+          `2. Se indicar expiração de credenciais, clique no botão **Google** no topo para reconectar.\n\n` +
+          `*Tarefas do Google Tasks continuam operacionais.*`,
+        intent: 'agenda_query',
+        visualPayload: {
+          type: 'agenda_list',
+          data: {
+            events: [],
+            tasks: pitaiGoogleService.getLocalTasks().filter(t => t.status !== 'completed'),
+            isGoogleLive: true,
+            accountEmail: userEmail,
+            calendarError: apiErr
+          }
+        }
+      };
+    }
+
     const todayEvents = pitaiGoogleService.getEventsByHorizon('today');
+    const allEvents = pitaiGoogleService.getLocalEvents();
     const tasks = pitaiGoogleService.getLocalTasks().filter(t => t.status !== 'completed');
 
+    const now = new Date();
+    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0).getTime();
+    const upcomingEvents = allEvents.filter(e => {
+      if (!e?.startTime) return false;
+      if (pitaiGoogleService.isEventToday(e)) return false;
+      if (/^\d{4}-\d{2}-\d{2}$/.test(e.startTime)) {
+        const [y, m, d] = e.startTime.split('-').map(Number);
+        const evD = new Date(y, m - 1, d, 23, 59, 59).getTime();
+        return evD >= startOfDay;
+      }
+      const t = new Date(e.startTime).getTime();
+      return !isNaN(t) && t >= startOfDay;
+    });
+
+    const formatEventItem = (e) => {
+      let timeStr = 'Horário a definir';
+      if (e.isAllDay || (/^\d{4}-\d{2}-\d{2}$/.test(e.startTime))) {
+        timeStr = 'Dia Inteiro';
+      } else if (e.startTime) {
+        const s = new Date(e.startTime);
+        const end = e.endTime ? new Date(e.endTime) : null;
+        if (!isNaN(s.getTime())) {
+          timeStr = s.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+          if (end && !isNaN(end.getTime())) {
+            timeStr += ` - ${end.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
+          }
+        }
+      }
+      const calSuffix = e.calendarName && e.calendarName !== 'Principal' ? ` [${e.calendarName}]` : '';
+      return `• **${timeStr}**: ${e.title}${e.location ? ` (${e.location})` : ''}${calSuffix}`;
+    };
+
     let spoken = '';
-    if (todayEvents.length === 0) {
-      spoken = 'Rafael, você não possui compromissos agendados para o restante do dia de hoje. Sua agenda está livre.';
+    let displayText = '';
+
+    const scopeTip = pitaiGoogleService.needsScopeUpgrade
+      ? `\n\n💡 **Dica de Calendários Secundários:** Seus eventos estão em uma agenda personalizada (cor lilás/secundária). Para liberar a leitura de todos os seus calendários adicionais, clique em **Google OK** no topo direito e reconecte em 1 clique.`
+      : '';
+
+    if (todayEvents.length > 0) {
+      const first = todayEvents[0];
+      const timeFmt = (first.isAllDay || /^\d{4}-\d{2}-\d{2}$/.test(first.startTime))
+        ? 'ao longo de todo o dia'
+        : `às ${new Date(first.startTime).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
+      spoken = `Rafael, localizei ${todayEvents.length} compromisso${todayEvents.length > 1 ? 's' : ''} na sua Google Agenda para hoje. O primeiro é ${first.title} ${timeFmt}.`;
+
+      displayText = `### 📅 **Google Agenda de Hoje (${new Date().toLocaleDateString('pt-BR')})**\n` +
+        `*Conta: ${userEmail}*\n\n` +
+        todayEvents.map(formatEventItem).join('\n') +
+        `\n\n**Tarefas Pendentes:**\n` +
+        (tasks.length > 0 ? tasks.slice(0, 5).map(t => `• [ ] ${t.title}`).join('\n') : '_Nenhuma tarefa pendente._') +
+        scopeTip;
+    } else if (upcomingEvents.length > 0) {
+      spoken = `Rafael, consultei sua Google Agenda (${userEmail}). Não localizei compromissos para hoje, mas localizei ${upcomingEvents.length} compromissos agendados nos próximos dias.`;
+
+      displayText = `### 📅 **Google Agenda • Hoje Livre**\n` +
+        `*Conta: ${userEmail}*\n\n` +
+        `Nenhum evento registrado especificamente para hoje (${new Date().toLocaleDateString('pt-BR')}). Seus horários de hoje estão livres.\n\n` +
+        `**Próximos compromissos na sua agenda:**\n` +
+        upcomingEvents.slice(0, 5).map(e => {
+          const dateStr = /^\d{4}-\d{2}-\d{2}$/.test(e.startTime)
+            ? e.startTime.split('-').reverse().join('/')
+            : new Date(e.startTime).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+          const calSuffix = e.calendarName && e.calendarName !== 'Principal' ? ` [${e.calendarName}]` : '';
+          return `• **${dateStr}** - ${e.title}${calSuffix}`;
+        }).join('\n') +
+        `\n\n**Tarefas Pendentes:**\n` +
+        (tasks.length > 0 ? tasks.slice(0, 5).map(t => `• [ ] ${t.title}`).join('\n') : '_Nenhuma tarefa pendente._') +
+        scopeTip;
     } else {
-      spoken = `Rafael, você possui ${todayEvents.length} compromissos agendados para hoje. O próximo é ${todayEvents[0].title} às ${new Date(todayEvents[0].startTime).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}.`;
+      spoken = `Rafael, consultei sua conta Google (${userEmail}). A API respondeu com sucesso, mas retornou zero eventos agendados nos calendários vinculados.`;
+
+      displayText = `### 📅 **Google Agenda (${new Date().toLocaleDateString('pt-BR')})**\n` +
+        `*Conta conectada: ${userEmail}*\n\n` +
+        `_A API do Google Calendar respondeu normalmente, mas retornou 0 compromissos cadastrados nesta conta._\n\n` +
+        `💡 **Dica:** Se você possui eventos marcados no app do celular ou navegador, confirme se foram salvos exatamente sob a conta **${userEmail}** ou se pertencem a outro e-mail.\n\n` +
+        `**Tarefas Pendentes:**\n` +
+        (tasks.length > 0 ? tasks.slice(0, 5).map(t => `• [ ] ${t.title}`).join('\n') : '_Nenhuma tarefa pendente._') +
+        scopeTip;
     }
 
     return {
       spokenText: spoken,
-      displayText: `### Agenda de Hoje (${new Date().toLocaleDateString('pt-BR')})\n\n` +
-        (todayEvents.length > 0 
-          ? todayEvents.map(e => `• **${new Date(e.startTime).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })} - ${new Date(e.endTime).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}**: ${e.title} (${e.location || 'Sem local'})`).join('\n')
-          : '_Nenhum evento agendado para hoje._') +
-        `\n\n**Tarefas Pendentes:**\n` +
-        tasks.slice(0, 3).map(t => `• [ ] ${t.title}`).join('\n'),
+      displayText,
       intent: 'agenda_query',
       visualPayload: {
         type: 'agenda_list',
         data: {
-          events: todayEvents,
-          tasks
+          events: todayEvents.length > 0 ? todayEvents : allEvents,
+          tasks,
+          isGoogleLive: true,
+          accountEmail: userEmail,
+          isToday: todayEvents.length > 0,
+          totalEventsCount: allEvents.length,
+          todayEventsCount: todayEvents.length
         }
       }
     };
@@ -871,123 +1005,171 @@ CONTRATO OBRIGATÓRIO DE RESPOSTA (JSON):
   }
 
   /**
-   * Dispara a inteligência central com o Gemini ou fallback enriquecido por busca em tempo real
+   * Dispara a inteligência central com o Gemini como CÉREBRO PRIMÁRIO (Agent-First)
    */
   async queryGeminiLlm(userMessage, conversationHistory = []) {
     const apiKey = this.getApiKey();
+    if (!apiKey) return null;
 
-    if (apiKey) {
-      const modelsToTry = ['gemini-flash-latest', 'gemini-3.8-flash', 'gemini-flash-lite-latest'];
-      const genAI = new GoogleGenerativeAI(apiKey);
+    const modelsToTry = ['gemini-2.5-flash', 'gemini-flash-latest', 'gemini-2.5-flash-lite'];
+    const genAI = new GoogleGenerativeAI(apiKey);
 
-      for (const modelName of modelsToTry) {
-        try {
-          const model = genAI.getGenerativeModel({
-            model: modelName,
-            systemInstruction: this.getSystemPrompt(),
-            generationConfig: {
-              temperature: 0.3,
-              responseMimeType: 'application/json'
-            }
-          });
+    let lastError = null;
 
-          // Prepara histórico com alternância de turnos garantindo que o primeiro seja user
-          const contents = [];
-          for (const msg of conversationHistory.slice(-4)) {
-            const role = msg.role === 'user' ? 'user' : 'model';
-            const text = msg.text || msg.content || '';
-            if (!text) continue;
-            if (contents.length === 0 && role === 'model') continue;
-            contents.push({ role, parts: [{ text }] });
+    for (const modelName of modelsToTry) {
+      try {
+        const model = genAI.getGenerativeModel({
+          model: modelName,
+          systemInstruction: this.getSystemPrompt(),
+          generationConfig: {
+            temperature: 0.3,
+            responseMimeType: 'application/json'
           }
-          contents.push({ role: 'user', parts: [{ text: userMessage }] });
+        });
 
-          const result = await model.generateContent({ contents });
-          const rawText = result.response.text();
+        // Prepara histórico com alternância de turnos garantindo que o primeiro seja user
+        const contents = [];
+        for (const msg of conversationHistory.slice(-4)) {
+          const role = msg.role === 'user' ? 'user' : 'model';
+          const text = msg.text || msg.content || '';
+          if (!text) continue;
+          if (contents.length === 0 && role === 'model') continue;
+          contents.push({ role, parts: [{ text }] });
+        }
+        contents.push({ role: 'user', parts: [{ text: userMessage }] });
 
-          const jsonMatch = rawText.match(/\{[\s\S]*\}/);
-          if (jsonMatch) {
-            const parsed = JSON.parse(jsonMatch[0]);
+        const result = await model.generateContent({ contents });
+        const rawText = result.response.text();
 
-            // Se o Gemini identificou intenção de clima/tempo
-            if (parsed.intent === 'weather_query' || parsed.visualPayload?.type === 'weather_card') {
-              const liveWeather = await pitaiWeatherService.fetchWeatherData();
-              return {
-                spokenText: parsed.spokenText || pitaiWeatherService.formatSpokenWeather(liveWeather, 'Rafael'),
-                displayText: parsed.displayText || pitaiWeatherService.formatDisplayWeather(liveWeather),
-                intent: 'weather_query',
-                visualPayload: {
-                  type: 'weather_card',
-                  data: liveWeather
-                }
-              };
-            }
+        const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          const parsed = JSON.parse(jsonMatch[0]);
 
-            // Se o Gemini identificou intenção financeira que ainda não foi registrada
-            if (parsed.intent?.startsWith('finance_') && parsed.visualPayload?.data) {
-              const txData = parsed.visualPayload.data;
-              if (txData && txData.amount && !txData.offline) {
-                try {
-                  if (parsed.intent === 'finance_expense') {
-                    await pitaiFinanceService.createExpense({
-                      description: txData.description || 'Despesa via PIT.AI',
-                      amount: txData.amount,
-                      accountId: txData.accountId,
-                      creditCardId: txData.creditCardId,
-                      categoryId: txData.categoryId
-                    });
-                  } else if (parsed.intent === 'finance_income') {
-                    await pitaiFinanceService.createIncome({
-                      description: txData.description || 'Receita via PIT.AI',
-                      amount: txData.amount,
-                      accountId: txData.accountId,
-                      categoryId: txData.categoryId
-                    });
-                  }
-                } catch (e) {
-                  console.warn('[PIT.AI Core] Erro ao registrar transação detectada pelo Gemini:', e);
-                }
-              }
-            }
+          // Enriquecimento e Execução de Ações baseadas no julgamento da IA:
 
+          // 1. Notícias do Rio
+          if (parsed.intent === 'news_rio') {
+            return this.handleRioNewsIntent();
+          }
+
+          // 2. Briefing Geral
+          if (parsed.intent === 'briefing') {
+            return this.handleBriefingIntent();
+          }
+
+          // 3. Consulta de Agenda Oficial
+          const isAgendaIntent = parsed.intent === 'agenda_query' || 
+            /^(qual|como|ver|abrir|mostrar|o que|tem)?.*(agenda|compromisso|reuni).*$/i.test(userMessage.trim()) ||
+            parsed.visualPayload?.type === 'agenda_list';
+          if (isAgendaIntent) {
+            return this.handleAgendaQueryIntent();
+          }
+
+          // 4. Clima e Tempo
+          if (parsed.intent === 'weather_query' || parsed.visualPayload?.type === 'weather_card') {
+            const liveWeather = await pitaiWeatherService.fetchWeatherData();
             return {
-              spokenText: parsed.spokenText || rawText.replace(/[*_#`~[\]]/g, '').slice(0, 200),
-              displayText: parsed.displayText || rawText,
-              intent: parsed.intent || 'general_chat',
-              visualPayload: parsed.visualPayload || { type: 'none', data: {} }
+              spokenText: parsed.spokenText || pitaiWeatherService.formatSpokenWeather(liveWeather, 'Rafael'),
+              displayText: parsed.displayText || pitaiWeatherService.formatDisplayWeather(liveWeather),
+              intent: 'weather_query',
+              visualPayload: {
+                type: 'weather_card',
+                data: liveWeather
+              }
             };
           }
 
+          // 5. Pesquisa Web em Tempo Real
+          if (parsed.intent === 'web_search') {
+            return this.handleWebSearchIntent(userMessage, conversationHistory);
+          }
+
+          // 6. Transações Financeiras Grana+
+          if (parsed.intent?.startsWith('finance_') && parsed.visualPayload?.data) {
+            const txData = parsed.visualPayload.data;
+            if (txData && txData.amount && !txData.offline) {
+              try {
+                if (parsed.intent === 'finance_expense') {
+                  await pitaiFinanceService.createExpense({
+                    description: txData.description || 'Despesa via PIT.AI',
+                    amount: txData.amount,
+                    accountId: txData.accountId,
+                    creditCardId: txData.creditCardId,
+                    categoryId: txData.categoryId
+                  });
+                } else if (parsed.intent === 'finance_income') {
+                  await pitaiFinanceService.createIncome({
+                    description: txData.description || 'Receita via PIT.AI',
+                    amount: txData.amount,
+                    accountId: txData.accountId,
+                    categoryId: txData.categoryId
+                  });
+                }
+              } catch (e) {
+                console.warn('[PIT.AI Core] Erro ao registrar transação detectada pelo Gemini:', e);
+              }
+            }
+          }
+
+          // Retorno inteligente conversacional padrão do Gemini
           return {
-            spokenText: rawText.replace(/[*_#`~[\]]/g, '').slice(0, 220),
-            displayText: rawText,
-            intent: 'general_chat',
-            visualPayload: { type: 'none', data: {} }
+            spokenText: parsed.spokenText || rawText.replace(/[*_#`~[\]]/g, '').slice(0, 250),
+            displayText: parsed.displayText || rawText,
+            intent: parsed.intent || 'general_chat',
+            visualPayload: parsed.visualPayload || { type: 'none', data: {} }
           };
-        } catch (err) {
-          console.warn(`[PIT.AI Core] Falha na tentativa com modelo ${modelName}:`, err?.message || err);
+        }
+
+        return {
+          spokenText: rawText.replace(/[*_#`~[\]]/g, '').slice(0, 250),
+          displayText: rawText,
+          intent: 'general_chat',
+          visualPayload: { type: 'none', data: {} }
+        };
+      } catch (err) {
+        lastError = err;
+        console.warn(`[PIT.AI Core] Falha na tentativa com modelo ${modelName}:`, err?.message || err);
+
+        const errMsg = String(err?.message || '');
+        // Se for erro de cota ou cobrança (402), não adianta tentar outros modelos, encerra com aviso direto
+        if (errMsg.includes('402') || errMsg.includes('credits are depleted') || errMsg.includes('Payment Required')) {
+          return {
+            spokenText: 'Rafael, identifiquei que a chave da API do Google Gemini está sem créditos ou cota esgotada no Google AI Studio (Erro 402). Por favor, abra o menu de configurações e insira uma nova chave gratuita para reativar minha inteligência em tempo real.',
+            displayText: `### ⚠️ **Chave da API do Google Gemini sem Créditos (Erro 402)**\n\n` +
+              `A chave atual configurada no sistema atingiu o limite de saldo pré-pago ou cota esgotada no Google AI Studio.\n\n` +
+              `**Como reativar o cérebro em 30 segundos:**\n` +
+              `1. Acesse [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey) com sua conta Google.\n` +
+              `2. Clique em **"Create API key"** (camada gratuita).\n` +
+              `3. Abra as **Configurações** (ícone de engrenagem no topo) no PIT.AI e cole a chave no campo **Chave da API Google Gemini**.\n` +
+              `4. Clique em **"Salvar Chave"** para reativar o modelo **Gemini 2.0 Flash**.`,
+            intent: 'api_key_expired',
+            visualPayload: {
+              type: 'api_key_alert',
+              data: {
+                error: '402 Payment Required',
+                url: 'https://aistudio.google.com/app/apikey'
+              }
+            }
+          };
+        }
+
+        // Se for chave inválida (401/403)
+        if (errMsg.includes('401') || errMsg.includes('API_KEY_INVALID') || errMsg.includes('403')) {
+          return {
+            spokenText: 'Rafael, a chave da API do Google Gemini configurada é inválida ou expirou. Por favor, atualize-a no menu de configurações.',
+            displayText: `### ⚠️ **Chave do Google Gemini Inválida (Erro 401/403)**\n\nA chave de API informada não foi reconhecida pelo Google AI Studio.\n\nInsira uma chave válida nas **Configurações** para restaurar a inteligência.`,
+            intent: 'api_key_expired',
+            visualPayload: {
+              type: 'api_key_alert',
+              data: { error: '401/403 Invalid Key' }
+            }
+          };
         }
       }
     }
 
-    // FALLBACK INTELIGENTE: Se a chave falhar ou não estiver ativa, pesquisa na web e constrói resposta real!
-    const liveSearch = await pitaiSearchService.search(userMessage);
-    if (liveSearch.results && liveSearch.results.length > 0) {
-      return this.handleWebSearchIntent(userMessage, conversationHistory);
-    }
-
-    // Resposta executiva contextual
-    return {
-      spokenText: `Rafael, registrei sua solicitação: "${userMessage}". Os módulos de agenda, notícias ao vivo e pesquisa web estão operando normalmente.`,
-      displayText: `### 🛡️ **PIT.AI • Central Operacional**\n\n` +
-        `Recebido: *"${userMessage}"*\n\n` +
-        `• **Google Agenda & Tarefas:** Sincronizados com o Google Workspace.\n` +
-        `• **Monitoramento de Notícias:** Feeds ao vivo de Rio de Janeiro, Brasil e Economia prontos.\n` +
-        `• **Pesquisa em Tempo Real:** Diga *"Pesquise sobre..."* ou *"Notícias sobre..."* para varredura ao vivo na web.\n\n` +
-        `*Dica: Você pode conectar sua chave direta do Google AI Studio no botão de Configurações no topo para raciocínio generativo ilimitado.*`,
-      intent: 'general_chat',
-      visualPayload: { type: 'none', data: {} }
-    };
+    // Se houve erro de rede ou modelo não disponível, retorna null para cair nas heurísticas de contingência
+    return null;
   }
 }
 

@@ -18,6 +18,9 @@ class PitAiGoogleService {
     this.accessToken = this.getStoredToken();
     this.userProfile = this.getStoredUserProfile();
     this.tokenClient = null;
+    this.lastCalendarError = null;
+    this.lastTasksError = null;
+    this.lastSyncDetails = null;
   }
 
   getClientId() {
@@ -41,6 +44,14 @@ class PitAiGoogleService {
     } catch {
       // Ignore
     }
+  }
+
+  setClientId(clientId) {
+    return this.saveClientId(clientId);
+  }
+
+  requestAccessTokenInteractive(customClientId = null) {
+    return this.requestGoogleAccess(customClientId);
   }
 
   getStoredToken() {
@@ -149,10 +160,12 @@ class PitAiGoogleService {
       try {
         const client = window.google.accounts.oauth2.initTokenClient({
           client_id: clientId,
-          scope: 'https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/tasks https://www.googleapis.com/auth/userinfo.email',
+          scope: 'https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/tasks https://www.googleapis.com/auth/userinfo.email',
           callback: async (tokenResponse) => {
+            console.log('[Google OAuth Token Response]:', tokenResponse);
             if (tokenResponse?.access_token) {
               this.saveToken(tokenResponse.access_token);
+              this.needsScopeUpgrade = false;
               // Busca dados do usuário (e-mail)
               const profile = await this.fetchUserProfile(tokenResponse.access_token);
               if (profile) this.saveUserProfile(profile);
@@ -167,18 +180,29 @@ class PitAiGoogleService {
                 message: `Conta Google (${profile?.email || 'Conectada'}) sincronizada com sucesso!`
               });
             } else {
+              const errCode = tokenResponse?.error || 'ACCESS_DENIED';
+              const errDesc = tokenResponse?.error_description || 'Autorização não concluída na janela do Google.';
               resolve({
                 success: false,
-                error: tokenResponse?.error || 'ACCESS_DENIED',
-                message: 'Autorização recusada pelo usuário.'
+                error: errCode,
+                message: `Google: ${errCode} - ${errDesc}`
               });
             }
           },
           error_callback: (err) => {
+            console.error('[Google OAuth Error Callback]:', err);
+            let userMsg = 'Erro durante o fluxo de autenticação do Google.';
+            if (err?.type === 'popup_closed') {
+              userMsg = 'A janela do Google foi fechada antes de você confirmar todas as permissões.';
+            } else if (err?.type === 'popup_blocked') {
+              userMsg = 'O navegador bloqueou o pop-up do Google. Permita pop-ups para este site.';
+            } else if (err?.message) {
+              userMsg = `Google: ${err.message}`;
+            }
             resolve({
               success: false,
-              error: err?.message || 'OAUTH_ERROR',
-              message: 'Erro durante o fluxo de autenticação do Google.'
+              error: err?.type || err?.message || 'OAUTH_ERROR',
+              message: userMsg
             });
           }
         });
@@ -223,156 +247,277 @@ class PitAiGoogleService {
 
     const [calResult, taskResult] = await Promise.allSettled([calendarPromise, tasksPromise]);
 
+    const calEvents = calResult.status === 'fulfilled' ? calResult.value : [];
+    const tasks = taskResult.status === 'fulfilled' ? taskResult.value : [];
+    const todayEvents = this.getEventsByHorizon('today');
+
+    this.lastSyncDetails = {
+      timestamp: new Date().toISOString(),
+      calendarOk: !this.lastCalendarError,
+      calendarError: this.lastCalendarError,
+      calendarEventsCount: calEvents.length,
+      todayEventsCount: todayEvents.length,
+      calendarsFound: this.activeCalendars || ['Principal'],
+      needsScopeUpgrade: Boolean(this.needsScopeUpgrade),
+      tasksOk: !this.lastTasksError,
+      tasksError: this.lastTasksError,
+      tasksCount: tasks.length
+    };
+
     return {
       synced: true,
-      calendarEventsCount: calResult.status === 'fulfilled' ? calResult.value.length : 0,
-      tasksCount: taskResult.status === 'fulfilled' ? taskResult.value.length : 0
+      ...this.lastSyncDetails
     };
   }
 
   /**
    * Busca os eventos ao vivo na API do Google Calendar
+   * Consulta o calendário primary e quaisquer outros calendários ativos do usuário (calendarList)
    */
   async fetchLiveCalendarEvents() {
     if (!this.accessToken) return this.getLocalEvents();
 
     try {
-      const now = new Date();
-      // Pega desde o início do dia até 60 dias à frente
-      const timeMin = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
-      const url = `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${encodeURIComponent(timeMin)}&singleEvents=true&orderBy=startTime&maxResults=50`;
+      this.lastCalendarError = null;
 
-      const response = await fetch(url, {
-        headers: { Authorization: `Bearer ${this.accessToken}` }
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          this.clearToken();
+      // 1. Tenta listar todos os calendários do usuário
+      let calendarEntries = [{ id: 'primary', summary: 'Principal' }];
+      try {
+        const listRes = await fetch('https://www.googleapis.com/calendar/v3/users/me/calendarList', {
+          headers: { Authorization: `Bearer ${this.accessToken}` }
+        });
+        if (listRes.ok) {
+          const listData = await listRes.json();
+          if (Array.isArray(listData.items) && listData.items.length > 0) {
+            calendarEntries = listData.items.map(c => ({
+              id: c.id,
+              summary: c.summary || c.id,
+              primary: Boolean(c.primary)
+            }));
+            this.needsScopeUpgrade = false;
+          }
+        } else if (listRes.status === 403) {
+          // Escopo atual não cobre leitura de calendários adicionais
+          console.warn('[PIT.AI Google Calendar] calendarList retornou 403. Necessário upgrade de escopo.');
+          this.needsScopeUpgrade = true;
         }
-        return this.getLocalEvents();
+      } catch (err) {
+        console.warn('[PIT.AI Google Calendar] Falha ao consultar calendarList:', err);
       }
 
-      const data = await response.json();
-      const rawEvents = data.items || [];
+      this.activeCalendars = calendarEntries.map(c => c.summary);
 
-      const parsedEvents = rawEvents.map(item => ({
-        id: item.id,
-        title: item.summary || 'Sem título',
-        description: item.description || '',
-        startTime: item.start?.dateTime || `${item.start?.date}T00:00:00`,
-        endTime: item.end?.dateTime || `${item.end?.date}T23:59:59`,
-        location: item.location || '',
-        isAllDay: !item.start?.dateTime,
-        status: item.status || 'confirmed'
-      }));
+      // 2. Janela de busca ampla: últimas 48 horas até 45 dias no futuro
+      const timeMin = new Date(Date.now() - (48 * 3600 * 1000)).toISOString();
+      const timeMax = new Date(Date.now() + (45 * 24 * 3600 * 1000)).toISOString();
 
-      if (parsedEvents.length > 0) {
-        this.saveLocalEvents(parsedEvents);
-        return parsedEvents;
+      const allFetchedEvents = [];
+      let anySuccess = false;
+      let lastErrMsg = null;
+
+      for (const cal of calendarEntries) {
+        try {
+          const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(cal.id)}/events?timeMin=${encodeURIComponent(timeMin)}&timeMax=${encodeURIComponent(timeMax)}&singleEvents=true&orderBy=startTime&maxResults=250`;
+          const response = await fetch(url, {
+            headers: { Authorization: `Bearer ${this.accessToken}` }
+          });
+
+          if (!response.ok) {
+            let errorDetail = `Status ${response.status}`;
+            try {
+              const errBody = await response.json();
+              errorDetail = errBody.error?.message || errorDetail;
+            } catch {
+              // Ignore
+            }
+            lastErrMsg = errorDetail;
+            console.error(`[PIT.AI Google Calendar] Erro no calendário '${cal.summary}' (${cal.id}):`, errorDetail);
+            if (response.status === 401) {
+              this.clearToken();
+              this.lastCalendarError = 'Sessão expirada. Reconecte sua conta Google no topo.';
+              return this.getLocalEvents();
+            }
+            continue;
+          }
+
+          anySuccess = true;
+          const data = await response.json();
+          const items = data.items || [];
+
+          for (const item of items) {
+            if (item.status === 'cancelled') continue;
+
+            const isAllDay = !item.start?.dateTime;
+            const startRaw = item.start?.dateTime || item.start?.date;
+            const endRaw = item.end?.dateTime || item.end?.date;
+
+            allFetchedEvents.push({
+              id: item.id,
+              calendarId: cal.id,
+              calendarName: cal.summary,
+              title: item.summary || 'Sem título',
+              description: item.description || '',
+              startTime: startRaw,
+              endTime: endRaw || startRaw,
+              location: item.location || '',
+              isAllDay,
+              status: item.status || 'confirmed'
+            });
+          }
+        } catch (err) {
+          console.warn(`[PIT.AI Google Calendar] Falha ao consultar calendário '${cal.summary}':`, err);
+        }
       }
+
+      if (!anySuccess && lastErrMsg) {
+        this.lastCalendarError = lastErrMsg;
+      } else {
+        this.lastCalendarError = null;
+      }
+
+      // Desduplica por id de evento
+      const uniqueMap = new Map();
+      for (const evt of allFetchedEvents) {
+        if (!uniqueMap.has(evt.id)) {
+          uniqueMap.set(evt.id, evt);
+        }
+      }
+      const uniqueEvents = Array.from(uniqueMap.values());
+
+      // Salva a lista real atualizada
+      this.saveLocalEvents(uniqueEvents);
+      return uniqueEvents;
     } catch (err) {
-      console.warn('[PIT.AI Google Calendar] Erro ao sincronizar eventos ao vivo:', err);
+      console.warn('[PIT.AI Google Calendar] Erro geral ao sincronizar eventos:', err);
+      this.lastCalendarError = err.message;
     }
 
     return this.getLocalEvents();
   }
 
   /**
-   * Busca as tarefas ao vivo na API do Google Tasks
+   * Busca as tarefas ao vivo na API do Google Tasks (todas as listas)
    */
   async fetchLiveTasks() {
     if (!this.accessToken) return this.getLocalTasks();
 
     try {
-      const url = `https://tasks.googleapis.com/tasks/v1/lists/@default/tasks?showCompleted=true&maxResults=50`;
-      const response = await fetch(url, {
-        headers: { Authorization: `Bearer ${this.accessToken}` }
-      });
+      this.lastTasksError = null;
 
-      if (!response.ok) {
-        if (response.status === 401) {
-          this.clearToken();
+      // 1. Tenta listar todas as listas de tarefas do usuário
+      let listIds = ['@default'];
+      try {
+        const listsRes = await fetch('https://tasks.googleapis.com/tasks/v1/users/@me/lists', {
+          headers: { Authorization: `Bearer ${this.accessToken}` }
+        });
+        if (listsRes.ok) {
+          const listsData = await listsRes.json();
+          if (Array.isArray(listsData.items) && listsData.items.length > 0) {
+            listIds = listsData.items.map(l => l.id);
+          }
         }
-        return this.getLocalTasks();
+      } catch {
+        // Fallback para @default
       }
 
-      const data = await response.json();
-      const rawTasks = data.items || [];
+      const allTasks = [];
+      for (const listId of listIds) {
+        try {
+          const url = `https://tasks.googleapis.com/tasks/v1/lists/${encodeURIComponent(listId)}/tasks?showCompleted=true&maxResults=100`;
+          const response = await fetch(url, {
+            headers: { Authorization: `Bearer ${this.accessToken}` }
+          });
 
-      const parsedTasks = rawTasks.map(item => ({
-        id: item.id,
-        title: item.title || 'Sem título',
-        notes: item.notes || '',
-        dueDate: item.due || null,
-        status: item.status || 'needsAction',
-        priority: 'high',
-        completedAt: item.completed || null,
-        createdAt: item.updated || new Date().toISOString()
-      }));
+          if (!response.ok) {
+            let errDetail = `Status ${response.status}`;
+            try {
+              const errBody = await response.json();
+              errDetail = errBody.error?.message || errDetail;
+            } catch {
+              // Ignore
+            }
+            this.lastTasksError = errDetail;
+            if (response.status === 401) {
+              this.clearToken();
+              return this.getLocalTasks();
+            }
+            continue;
+          }
 
-      if (parsedTasks.length > 0) {
-        this.saveLocalTasks(parsedTasks);
-        return parsedTasks;
+          const data = await response.json();
+          const rawTasks = data.items || [];
+
+          for (const item of rawTasks) {
+            allTasks.push({
+              id: item.id,
+              listId,
+              title: item.title || 'Sem título',
+              notes: item.notes || '',
+              dueDate: item.due || null,
+              status: item.status || 'needsAction',
+              priority: 'high',
+              completedAt: item.completed || null,
+              createdAt: item.updated || new Date().toISOString()
+            });
+          }
+        } catch (err) {
+          console.warn(`[PIT.AI Google Tasks] Erro ao buscar lista '${listId}':`, err);
+        }
       }
+
+      // Desduplica tarefas por id
+      const uniqueTasksMap = new Map();
+      for (const t of allTasks) {
+        if (!uniqueTasksMap.has(t.id)) {
+          uniqueTasksMap.set(t.id, t);
+        }
+      }
+      const uniqueTasks = Array.from(uniqueTasksMap.values());
+
+      this.saveLocalTasks(uniqueTasks);
+      return uniqueTasks;
     } catch (err) {
       console.warn('[PIT.AI Google Tasks] Erro ao sincronizar tarefas ao vivo:', err);
+      this.lastTasksError = err.message;
     }
 
     return this.getLocalTasks();
   }
 
   /**
-   * Retorna os eventos salvos localmente (com fallback inicial realista para Rafael Pita)
+   * Retorna os eventos salvos localmente, expurgando quaisquer mocks fictícios
    */
   getLocalEvents() {
     try {
       if (typeof localStorage !== 'undefined') {
         const stored = localStorage.getItem(STORAGE_EVENTS_KEY);
-        if (stored) return JSON.parse(stored);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed)) {
+            // Elimina qualquer mock antigo residual
+            const cleaned = parsed.filter(e => 
+              e && e.id !== 'evt_1' && e.id !== 'evt_2' && 
+              !String(e.title || '').includes('Cliente Jurídico') &&
+              !String(e.title || '').includes('Deploy e Manutenção de Servidores VPS')
+            );
+            if (cleaned.length !== parsed.length) {
+              this.saveLocalEvents(cleaned);
+            }
+            return cleaned;
+          }
+        }
       }
     } catch {
       // Ignore
     }
 
-    // Eventos padrão da rotina de tecnologia e negócios de Rafael Pita
-    const today = new Date();
-    const pad = (n) => String(n).padStart(2, '0');
-    const yyyy = today.getFullYear();
-    const mm = pad(today.getMonth() + 1);
-    const dd = pad(today.getDate());
-
-    const defaultEvents = [
-      {
-        id: 'evt_1',
-        title: 'Reunião de Alinhamento com Cliente Jurídico',
-        description: 'Apresentação da Landing Page e proposta de R$ 297',
-        startTime: `${yyyy}-${mm}-${dd}T14:00:00`,
-        endTime: `${yyyy}-${mm}-${dd}T15:00:00`,
-        location: 'Google Meet',
-        isAllDay: false,
-        status: 'confirmed'
-      },
-      {
-        id: 'evt_2',
-        title: 'Deploy e Manutenção de Servidores VPS',
-        description: 'Revisão periódica de containers Docker e updates de segurança',
-        startTime: `${yyyy}-${mm}-${dd}T16:30:00`,
-        endTime: `${yyyy}-${mm}-${dd}T17:30:00`,
-        location: 'Home Office / VPS',
-        isAllDay: false,
-        status: 'confirmed'
-      }
-    ];
-
-    this.saveLocalEvents(defaultEvents);
-    return defaultEvents;
+    return [];
   }
 
   saveLocalEvents(events) {
     try {
       if (typeof localStorage !== 'undefined') {
-        localStorage.setItem(STORAGE_EVENTS_KEY, JSON.stringify(events));
+        localStorage.setItem(STORAGE_EVENTS_KEY, JSON.stringify(events || []));
       }
     } catch {
       // Ignore
@@ -380,47 +525,38 @@ class PitAiGoogleService {
   }
 
   /**
-   * Retorna tarefas do Google Tasks salvas localmente
+   * Retorna tarefas do Google Tasks salvas localmente, expurgando mocks fictícios
    */
   getLocalTasks() {
     try {
       if (typeof localStorage !== 'undefined') {
         const stored = localStorage.getItem(STORAGE_TASKS_KEY);
-        if (stored) return JSON.parse(stored);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed)) {
+            const cleaned = parsed.filter(t => 
+              t && t.id !== 'tsk_1' && t.id !== 'tsk_2' && 
+              !String(t.title || '').includes('Radar Maps') &&
+              !String(t.title || '').includes('Revisar faturamento')
+            );
+            if (cleaned.length !== parsed.length) {
+              this.saveLocalTasks(cleaned);
+            }
+            return cleaned;
+          }
+        }
       }
     } catch {
       // Ignore
     }
 
-    const defaultTasks = [
-      {
-        id: 'tsk_1',
-        title: 'Disparar e-mails de prospecção do Radar Maps',
-        notes: 'Cold outreach para advogados e psicólogos identificados sem site',
-        dueDate: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-        status: 'needsAction',
-        priority: 'high',
-        recurringInterval: '2_hours'
-      },
-      {
-        id: 'tsk_2',
-        title: 'Revisar faturamento e recebíveis de mensalidades',
-        notes: 'Verificar pagamentos via PIX e transferências',
-        dueDate: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(),
-        status: 'needsAction',
-        priority: 'medium',
-        recurringInterval: 'daily'
-      }
-    ];
-
-    this.saveLocalTasks(defaultTasks);
-    return defaultTasks;
+    return [];
   }
 
   saveLocalTasks(tasks) {
     try {
       if (typeof localStorage !== 'undefined') {
-        localStorage.setItem(STORAGE_TASKS_KEY, JSON.stringify(tasks));
+        localStorage.setItem(STORAGE_TASKS_KEY, JSON.stringify(tasks || []));
       }
     } catch {
       // Ignore
@@ -627,27 +763,69 @@ class PitAiGoogleService {
   }
 
   /**
-   * Filtra eventos por horizonte de tempo
+   * Verifica de forma robusta e resiliente se um evento do Google Calendar pertence ao dia de hoje (Fuso Brasília)
+   */
+  isEventToday(event) {
+    if (!event || !event.startTime) return false;
+    const todayStr = new Date().toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+
+    // 1. Caso seja string de data pura YYYY-MM-DD (dia inteiro)
+    if (/^\d{4}-\d{2}-\d{2}$/.test(event.startTime)) {
+      const [y, m, d] = event.startTime.split('-');
+      const evDateStr = `${d.padStart(2, '0')}/${m.padStart(2, '0')}/${y}`;
+      return evDateStr === todayStr;
+    }
+
+    // 2. Data/hora ISO: verifica pelo fuso de Brasília
+    const s = new Date(event.startTime);
+    if (!isNaN(s.getTime())) {
+      const sLocal = s.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+      if (sLocal === todayStr) return true;
+    }
+
+    // 3. Verifica se o evento está em andamento cobrindo o dia de hoje
+    if (event.endTime) {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(event.endTime)) {
+        const [y, m, d] = event.endTime.split('-');
+        const evEndDateStr = `${d.padStart(2, '0')}/${m.padStart(2, '0')}/${y}`;
+        if (evEndDateStr === todayStr) return true;
+      }
+      const e = new Date(event.endTime);
+      if (!isNaN(e.getTime())) {
+        const eLocal = e.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+        if (eLocal === todayStr) return true;
+
+        if (!isNaN(s.getTime())) {
+          const now = new Date();
+          if (s <= now && e >= now) return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Filtra eventos por horizonte de tempo com validação rigorosa de datas
    * @param {'today'|'week'|'month'} horizon 
    */
   getEventsByHorizon(horizon = 'today') {
     const events = this.getLocalEvents();
-    const now = new Date();
-    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    if (!events || events.length === 0) return [];
 
     if (horizon === 'today') {
-      const endOfDay = startOfDay + 24 * 60 * 60 * 1000;
-      return events.filter(e => {
-        const t = new Date(e.startTime).getTime();
-        return t >= startOfDay && t <= endOfDay;
-      });
+      return events.filter(e => this.isEventToday(e));
     }
 
     if (horizon === 'week') {
-      const endOfWeek = startOfDay + 7 * 24 * 60 * 60 * 1000;
+      const now = new Date();
+      const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0).getTime();
+      const endOfWeek = startOfDay + (7 * 24 * 60 * 60 * 1000);
       return events.filter(e => {
+        if (!e?.startTime) return false;
+        if (this.isEventToday(e)) return true;
         const t = new Date(e.startTime).getTime();
-        return t >= startOfDay && t <= endOfWeek;
+        return !isNaN(t) && t >= (startOfDay - (12 * 3600 * 1000)) && t <= endOfWeek;
       });
     }
 

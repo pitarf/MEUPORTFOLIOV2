@@ -62,7 +62,7 @@ export default function PitAiDashboard() {
   const [status, setStatus] = useState('idle'); // 'idle' | 'listening' | 'thinking' | 'speaking'
   const [isListening, setIsListening] = useState(false);
   const [audioEnabled, setAudioEnabled] = useState(true);
-  const [continuousMode, setContinuousMode] = useState(true);
+  const [continuousMode, setContinuousMode] = useState(false);
   const [inputText, setInputText] = useState('');
   const [messages, setMessages] = useState([]);
   const [visualPayload, setVisualPayload] = useState({ type: 'none', data: {} });
@@ -136,7 +136,15 @@ export default function PitAiDashboard() {
     pitaiVoiceService.setContinuousMode(continuousMode);
 
     pitaiVoiceService.bindCallbacks({
-      onTranscript: ({ text, interim, final, isSpeechComplete }) => {
+      onTranscript: ({ text, interim, final, isSpeechComplete, error, message }) => {
+        if (error) {
+          toast({
+            variant: 'destructive',
+            title: 'Microfone',
+            description: message || 'Verifique a permissão do microfone nas configurações do navegador.'
+          });
+          return;
+        }
         const queryText = text || final || interim || '';
         if (queryText) {
           setInputText(queryText);
@@ -288,8 +296,6 @@ export default function PitAiDashboard() {
         try {
           await pitaiVoiceService.speak(response.spokenText);
         } catch {
-          // Ignore
-        } finally {
           setStatus('idle');
         }
       } else {
@@ -315,8 +321,6 @@ export default function PitAiDashboard() {
         try {
           await pitaiVoiceService.speak(fallbackText);
         } catch {
-          // Ignore
-        } finally {
           setStatus('idle');
         }
       } else {
@@ -368,7 +372,7 @@ export default function PitAiDashboard() {
         toast({ variant: 'destructive', title: 'Chave Vazia', description: 'Insira sua chave da API do Google Gemini.' });
         return;
       }
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`, {
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ contents: [{ parts: [{ text: 'Responda OK' }] }] })
@@ -376,7 +380,7 @@ export default function PitAiDashboard() {
       if (res.ok) {
         setGeminiStatus('ok');
         pitaiCoreService.setApiKey(key);
-        toast({ title: 'Gemini 2.0 Flash Conectado', description: 'A chave foi validada com sucesso e salva no PIT.AI.' });
+        toast({ title: 'Gemini 2.5 Flash Conectado', description: 'A chave foi validada com sucesso e salva no PIT.AI.' });
       } else {
         setGeminiStatus('error');
         const errData = await res.json();
@@ -472,7 +476,17 @@ export default function PitAiDashboard() {
       if (clientIdInput && clientIdInput !== pitaiGoogleService.getClientId()) {
         pitaiGoogleService.setClientId(clientIdInput.trim());
       }
-      const res = await pitaiGoogleService.requestAccessTokenInteractive();
+      const requestFn = typeof pitaiGoogleService.requestGoogleAccess === 'function'
+        ? pitaiGoogleService.requestGoogleAccess.bind(pitaiGoogleService)
+        : (typeof pitaiGoogleService.requestAccessTokenInteractive === 'function'
+          ? pitaiGoogleService.requestAccessTokenInteractive.bind(pitaiGoogleService)
+          : null);
+
+      if (!requestFn) {
+        throw new Error('Módulo de autenticação Google não carregado corretamente.');
+      }
+
+      const res = await requestFn(clientIdInput?.trim());
       if (res.success) {
         setGoogleConnected(true);
         setGoogleUser(res.userProfile);
@@ -505,11 +519,22 @@ export default function PitAiDashboard() {
     setIsSyncingGoogle(true);
     try {
       const result = await pitaiGoogleService.syncFromGoogleLive();
-      toast({
-        title: 'Sincronização Concluída',
-        description: `${result.calendarEventsCount} eventos da agenda e ${result.tasksCount} tarefas sincronizadas.`
-      });
-      handleSendMessage('qual a minha agenda de hoje?');
+      if (result.calendarError) {
+        toast({
+          variant: 'destructive',
+          title: 'Aviso da Google Calendar API',
+          description: result.calendarError
+        });
+      } else {
+        toast({
+          title: 'Google Workspace Sincronizado',
+          description: `${result.calendarEventsCount} eventos totais (${result.todayEventsCount} para hoje) e ${result.tasksCount} tarefas.`
+        });
+      }
+      const agendaResult = await pitaiCoreService.handleAgendaQueryIntent();
+      if (agendaResult?.visualPayload) {
+        setVisualPayload(agendaResult.visualPayload);
+      }
     } catch (err) {
       toast({
         variant: 'destructive',
@@ -523,12 +548,15 @@ export default function PitAiDashboard() {
 
   const handleDisconnectGoogle = () => {
     pitaiGoogleService.clearToken();
+    pitaiGoogleService.saveLocalEvents([]);
+    pitaiGoogleService.saveLocalTasks([]);
     setGoogleConnected(false);
     setGoogleUser(null);
     setGoogleModalOpen(false);
+    setVisualPayload(null);
     toast({
-      title: 'Google Workspace Desconectado',
-      description: 'O PIT.AI voltou a utilizar o armazenamento local e na VPS.'
+      title: 'Google Desconectado',
+      description: 'Conta e eventos locais limpos com sucesso.'
     });
   };
 
@@ -734,7 +762,34 @@ export default function PitAiDashboard() {
                   {msg.role === 'user' ? (
                     <div className="whitespace-pre-wrap font-medium">{msg.text}</div>
                   ) : (
-                    <PitAiMarkdown content={msg.text} />
+                    <>
+                      <PitAiMarkdown content={msg.text} />
+                      {msg.intent === 'api_key_expired' && (
+                        <div className="mt-3 pt-2.5 border-t border-amber-500/20 flex flex-wrap gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setSettingsModalOpen(true)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-semibold border border-amber-500/40 transition-all cursor-pointer shadow-sm"
+                          >
+                            <Settings className="w-3.5 h-3.5" />
+                            Abrir Configurações e Inserir Nova Chave
+                          </button>
+                        </div>
+                      )}
+
+                      {msg.intent === 'google_auth_prompt' && (
+                        <div className="mt-3 pt-2.5 border-t border-cyan-500/20 flex flex-wrap gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setGoogleModalOpen(true)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 text-xs font-semibold border border-cyan-500/40 transition-all cursor-pointer shadow-sm"
+                          >
+                            <Calendar className="w-3.5 h-3.5" />
+                            Conectar Minha Google Agenda
+                          </button>
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
               </motion.div>

@@ -2,6 +2,174 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [2.3.6] - 2026-11-20
+
+### Corrigido (Roteamento SPA e Ponte de Transição de DNS sem Queda)
+* **Regra de SPA no Container da Oracle Cloud (`/var/www/rafaelpitaoficial/nginx.conf`)**:
+  * Configurado `try_files $uri $uri/ /index.html` no container `portfolio-web`, corrigindo o erro 404 ao recarregar ou acessar diretamente sub-rotas como `/portfolio`.
+* **Ponte Temporária de Transição de DNS**:
+  * Configurado proxy transparente para atender requisições enquanto provedores de internet (como Claro/Net) mantêm o IP anterior em cache, encaminhando o tráfego diretamente para a Oracle Cloud com SSL ativo.
+  * Validação 100% com Status 200 OK em todas as rotas e subdomínios.
+
+## [2.3.5] - 2026-11-20
+
+### Concluído (Unificação 100% na Oracle Cloud e Limpeza Completa da VPS do Cliente)
+* **Ativação de SSL e HTTPS na Oracle Cloud (`144.22.173.125`)**:
+  * Emissão de certificados SSL Let's Encrypt para `rafaelpitaoficial.com.br`, `www`, `pitai` e `fotografia` via Certbot.
+  * Validação de ponta a ponta: todos os domínios e a API PostgREST respondendo com Status 200 OK via HTTPS.
+* **Limpeza Definitiva da Máquina do Cliente (`2.25.75.243`)**:
+  * Parada e remoção completa dos containers `portfolio-web` e `pitai-postgres`.
+  * Exclusão do volume `pitai_postgres_data` e da pasta `/var/www/MEUPORTFOLIOV2`.
+  * Remoção do arquivo Nginx `/etc/nginx/sites-available/rafaelpitaoficial.conf` e recarga validada do Nginx no servidor do cliente.
+  * Servidor do cliente operando de forma 100% isolada com apenas `consultaall-app` e `consultaall-db`.
+
+## [2.3.4] - 2026-11-20
+
+### Adicionado (Migração do Portfólio e PIT.AI para a VPS Oficial Oracle Cloud)
+* **Instalação e Roteamento na Oracle Cloud (`144.22.173.125`)**:
+  * Upload do bundle compilado e inicialização do container `portfolio-web` na porta `127.0.0.1:3002` e banco PostgreSQL do PIT.AI na porta `127.0.0.1:5434` na VPS Oracle Cloud oficial do usuário.
+  * Criação do arquivo de roteamento `/etc/nginx/sites-available/rafaelpitaoficial.conf` com suporte a proxy reverso local para a API PostgREST (`127.0.0.1:3025`), feeds de notícias e TTS.
+  * Validação completa de respostas HTTP 200 OK locais para os domínios do usuário.
+  * Automação de limpeza segura (`clean_client_vps.py`) pronta para expurgar containers e arquivos da máquina de cliente (`2.25.75.243`).
+
+## [2.3.3] - 2026-11-20
+
+### Corrigido (Restauração da API do Portfólio, Projetos e Categorias)
+* **Proxy Reverso Nginx para PostgREST / Supabase Self-Hosted (`/etc/nginx/sites-available/rafaelpitaoficial.conf`)**:
+  * Identificada a falha de roteamento onde o subdomínio `license.rafaelpitaoficial.com.br` no DNS apontava para a VPS Hostinger (`2.25.75.243`), que respondia com o HTML do React em vez da API REST PostgREST.
+  * Criado bloco especializado no Nginx da VPS Hostinger roteando as rotas `/rest/v1/` e `/api/` com SSL Let's Encrypt para a VPS Oracle (`144.22.173.125`).
+  * Restaurada a exibição de todos os 60 projetos, 8 categorias, 21 avaliações e 8 serviços na página `/portfolio` e na página inicial.
+  * Geração dinâmica do `sitemap.xml` restabelecida e deploy do container atualizado com sucesso.
+
+## [2.3.2] - 2026-11-20
+
+### Aprimorado (Auditoria de Calendários e Contas Google no PIT.AI)
+* **Diagnóstico de Agendas Secundárias e Múltiplas Contas (`src/services/pitai/pitaiGoogleService.js`, `src/services/pitai/pitaiCoreService.js`)**:
+  * Adicionada a propriedade `calendarsFound` nos detalhes de sincronização ao vivo para listar explicitamente quais calendários da conta conectada foram lidos pela API.
+  * Orientação direta no chat e no HUD para casos em que compromissos estejam salvos em calendários secundários ou em outra conta Google, orientando a reconexão em 1 clique para atualizar as permissões do token OAuth.
+  * Validação estrita para impedir que eventos com datas passadas entrem na lista de próximos compromissos.
+
+## [2.3.1] - 2026-11-20
+
+### Corrigido (Estabilidade do Microfone e Eliminação de Voz Robótica)
+* **Correção no Reconhecimento de Voz e Evento `no-speech` (`src/services/pitai/pitaiVoiceService.js`, `src/pages/pitai/PitAiDashboard.jsx`)**:
+  * Resolvido o encerramento prematuro do microfone causado pelo evento `no-speech` do Web Speech API quando o usuário faz uma breve pausa antes de falar. A escuta agora se mantém ativa para permitir fala no ritmo natural do usuário.
+  * Adicionado feedback explícito caso o microfone esteja bloqueado nas permissões do navegador.
+* **Eliminação do Timbre Robótico na Síntese de Voz (`src/services/pitai/pitaiTtsService.js`)**:
+  * Removida a distorção artificial de pitch (que antes rebaixava para 0.88, gerando som metálico/mecânico). O pitch foi restaurado para 1.0 (tom natural da voz).
+  * Priorização das vozes neurais de estúdio (como `Microsoft Antonio Online Natural` no Edge e vozes neurais masculinas) e integração direta com ElevenLabs para conversação de nível cinema.
+  * Build local em 14s e deploy concluído na VPS Hostinger (`2.25.75.243`).
+
+## [2.3.0] - 2026-11-20
+
+### Aprimorado (Escopo Mestre Google Calendar, Leitura de Agendas Lilás/Secundárias e Multi-Task Lists)
+* **Upgrade do Escopo OAuth do Google GIS (`src/services/pitai/pitaiGoogleService.js`)**:
+  * Adicionado o escopo mestre `https://www.googleapis.com/auth/calendar` e varredura completa da `calendarList` para trazer eventos de calendários personalizados e secundários (como a agenda lilás de compromissos pessoais e operacionais).
+  * Atualizada a busca de tarefas no Google Tasks (`fetchLiveTasks`) para iterar por todas as listas de tarefas da conta (`users/@me/lists`), unificando pendências em um único feed.
+* **Filtro Estrito de Compromissos Futuros (`src/services/pitai/pitaiCoreService.js`)**:
+  * Compromissos passados (anteriores ao dia de hoje) não são mais listados sob *"Próximos compromissos na sua agenda"*.
+  * Adicionado identificador visual do calendário de origem (`[Nome da Agenda]`) quando o evento provém de calendários secundários.
+  * Teste local concluído em 20s e deploy instantâneo na VPS Hostinger (`2.25.75.243`).
+
+## [2.2.9] - 2026-11-19
+
+### Corrigido (Resolução do Filtro de Fuso Horário UTC e Multi-Calendários na Google Agenda)
+* **Correção Crítica no Parser de Datas da Google Agenda (`src/services/pitai/pitaiGoogleService.js`)**:
+  * Identificado e corrigido o problema onde eventos de dia inteiro (`YYYY-MM-DD`) e eventos com fuso horário eram parseados pelo JavaScript como UTC, deslocando a data para o dia anterior no horário de Brasília (`GMT-0300`) e fazendo com que eventos do dia fossem descartados.
+  * Criado método `isEventToday` que compara dia, mês e ano diretamente no fuso horário oficial `America/Sao_Paulo`.
+* **Suporte a Múltiplos Calendários da Conta Google**:
+  * A busca de eventos agora consulta a lista de calendários do usuário (`users/me/calendarList`), abrangendo tanto o calendário primário quanto calendários de trabalho/pessoais ativos na mesma conta.
+* **Diagnóstico e Transparência na Interface e no Chat (`src/services/pitai/pitaiCoreService.js`, `src/components/pitai/PitAiVisualFeed.jsx`, `src/pages/pitai/PitAiDashboard.jsx`)**:
+  * Se a API do Google retornar qualquer mensagem técnica (ex: necessidade de habilitar a Google Calendar API no console ou token expirado), o assistente informa com exatidão o alerta retornado em vez de omitir dados.
+  * O toast de sincronização agora exibe a contagem total de eventos encontrados e quantos pertencem ao dia de hoje.
+  * Validação local em 19s e deploy instantâneo na VPS Hostinger (`2.25.75.243`).
+
+## [2.2.8] - 2026-11-19
+
+### Corrigido (Purga de Mocks Fictícios da Agenda, Sincronização Google Calendar e HUD)
+* **Eliminação Definitiva de Mocks Fictícios de Agenda e Tarefas (`src/services/pitai/pitaiGoogleService.js`)**:
+  * Removidos completamente os compromissos falsos gerados por padrão (`Reunião de Alinhamento com Cliente Jurídico`, `Deploy e Manutenção de Servidores VPS`, `Radar Maps`).
+  * Implementado filtro de purga automática no `getLocalEvents()` e `getLocalTasks()` que varre e remove qualquer dado residual de mock armazenado no navegador.
+  * Se a conta do Google Calendar estiver sincronizada e não houver eventos para o dia, o sistema responde a verdade: informa que a agenda oficial está vazia e os horários estão livres.
+* **Resolução de `Invalid Date - Invalid Date` e Formatação no HUD (`src/components/pitai/PitAiVisualFeed.jsx`)**:
+  * Implementada função de formatação de horários com suporte a eventos de "Dia Inteiro", campos textuais (`time`) e validação estrita com `isNaN(date.getTime())`.
+  * Garantida a exibição do título de eventos e tarefas em qualquer estrutura retornada pela API ou pelo modelo generativo.
+* **Sincronização Ativa de Agenda no Cérebro da IA (`src/services/pitai/pitaiCoreService.js`, `src/pages/pitai/PitAiDashboard.jsx`)**:
+  * O prompt do sistema agora instrui explicitamente a IA a respeitar os compromissos oficiais da nuvem, proibindo criação de dados fictícios.
+  * Consultas diretas sobre agenda redirecionam obrigatoriamente para `handleAgendaQueryIntent()` com sincronização ao vivo (`fetchLiveCalendarEvents`), atualizando o HUD e a fala executiva.
+
+## [2.2.7] - 2026-11-18
+
+### Aprimorado (Diagnóstico de Autorização do Google Workspace & Deploy na VPS)
+* **Diagnóstico da Autorização Google Identity Services (GIS) (`src/services/pitai/pitaiGoogleService.js`)**:
+  * Refatorado o tratamento de erros no `error_callback` e no `callback` para exibir com precisão a causa real de recusa ou fechamento da janela de consentimento (`popup_closed`, `access_denied`, falta de escopos de Calendar/Tasks).
+  * Deploy do build de produção concluído com sucesso no container `portfolio-web` na VPS Hostinger (`2.25.75.243`).
+* **Instruções Guiadas para Conclusão do Fluxo no Google Cloud Console**:
+  * Mapeamento detalhado dos passos no console do Google Cloud para liberar o acesso: adição da Origem JavaScript Autorizada (`https://rafaelpitaoficial.com.br`) no cliente `Pit.ai` e inclusão do e-mail do desenvolvedor (`rfpita.ti@gmail.com`) em *Público-alvo -> Usuários de teste*.
+
+## [2.2.6] - 2026-11-18
+
+### Corrigido (Autenticação Google Workspace & Sincronização SFTP de Serviços na VPS)
+* **Resolução do Erro de Conexão no Modal do Google Workspace (`src/services/pitai/pitaiGoogleService.js`, `src/pages/pitai/PitAiDashboard.jsx`)**:
+  * Eliminado o erro `TypeError: L.requestAccessTokenInteractive is not a function` exibido no toast ao clicar em *"Autorizar e Conectar Conta Google"*.
+  * Implementada chamada polimórfica defensiva no `handleConnectGoogle`: resolve dinamicamente tanto `requestGoogleAccess` quanto `requestAccessTokenInteractive`, vinculando o contexto de execução de forma resiliente.
+  * Inclusão explícita de `pitaiGoogleService.js` no script de transferência e build contínuo da VPS (`scratch/sync_and_rebuild_vps.py`), garantindo paridade de código entre o repositório local e a produção.
+* **Consulta ao Vivo da Google Agenda em Tempo Real**:
+  * O método `handleAgendaQueryIntent` agora executa `fetchLiveCalendarEvents()` em tempo real se a conta estiver conectada, filtrando desde 00:00 do dia atual com margem de fuso horário.
+  * Se a conta Google não estiver conectada, o sistema notifica o usuário com transparência executiva e exibe o botão direto *"Conectar Minha Google Agenda"*.
+
+## [2.2.5] - 2026-11-18
+
+### Adicionado & Atualizado (Ativação da Nova Chave Gratuita & Modelo Gemini 2.5 Flash)
+* **Ativação da Nova Chave de API do Google Gemini (`.env`, `src/services/pitai/pitaiCoreService.js`)**:
+  * Integrada e homologada com sucesso a nova chave gratuita do Google AI Studio fornecida por Rafael Pita (`[CHAVE_PROTEGIDA]`).
+  * Atualizada a família de modelos para `gemini-2.5-flash` (versão estável e ativa com suporte a `generateContent` e JSON nativo).
+  * Validada resposta executiva estilo J.A.R.V.I.S. para contestações complexas de agenda: o assistente agora reconhece o contexto dos compromissos, esclarece a origem do registro e dialoga naturalmente oferecendo remoção ou ajuste.
+* **Ajuste no Modal de Teste do Dashboard (`src/pages/pitai/PitAiDashboard.jsx`)**:
+  * O teste rápido de chave no modal de configurações agora consulta diretamente o endpoint `gemini-2.5-flash`, com toast de sucesso e atualização de estado reativo.
+
+## [2.2.4] - 2026-11-16
+
+### Corrigido & Aprimorado (Arquitetura Agent-First, Fim dos Filtros Cegos e Gestão de Cota da IA)
+* **Arquitetura Agent-First / LLM-First no PIT.AI (`src/services/pitai/pitaiCoreService.js`)**:
+  * Eliminadas as regras estáticas cegas de string (`norm.includes('minha agenda')`, `norm.includes('noticia')`, etc.) que interceptavam contestações naturais do usuário e cuspiam respostas mockadas antes de consultar a IA.
+  * O modelo generativo do Gemini agora é o **Cérebro Primário** absoluto para qualquer diálogo, dúvida ou contestação, com conhecimento contextual injetado em tempo real (data/hora, compromissos da agenda de hoje e pendências).
+  * Se o usuário contestar ou discordar ("isso não condiz com a minha agenda", "está errado"), o sistema dialoga com inteligência executiva estilo J.A.R.V.I.S., esclarecendo a origem dos dados e oferecendo ajustes em vez de repetir a agenda.
+* **Detecção Transparente de Cota da API (Erro 402 / 401)**:
+  * Identificação de status `402 Payment Required` (saldo pré-pago esgotado no Google AI Studio) e `401/403`. O sistema não oculta mais erros com textos genéricos: informa verbalmente e no HUD a necessidade de renovar a chave e disponibiliza link direto para [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey).
+* **Ação Rápida de Configuração no Chat (`src/pages/pitai/PitAiDashboard.jsx`)**:
+  * Inserção do botão de 1 clique *"Abrir Configurações e Inserir Nova Chave"* nas mensagens de alerta de cota, abrindo diretamente o modal para colar a chave gratuita da Google AI Studio.
+
+## [2.2.3] - 2026-11-16
+
+### Corrigido & Infraestrutura (SSL Multi-Domínio e Resolução de `NET::ERR_CERT_COMMON_NAME_INVALID`)
+* **Certificado SSL Unificado Cobrindo 100% dos Domínios e Subdomínios (Let's Encrypt / Certbot)**:
+  * Erro `NET::ERR_CERT_COMMON_NAME_INVALID` eliminado em `www.rafaelpitaoficial.com.br` e em todos os subdomínios vinculados na Hostinger.
+  * O certificado SSL foi renovado e expandido incluindo simultaneamente os 8 registros DNS:
+    * `rafaelpitaoficial.com.br`
+    * `www.rafaelpitaoficial.com.br`
+    * `pitai.rafaelpitaoficial.com.br`
+    * `fotografia.rafaelpitaoficial.com.br`
+    * `api.rafaelpitaoficial.com.br`
+    * `cronometro.rafaelpitaoficial.com.br`
+    * `license.rafaelpitaoficial.com.br`
+    * `vantageapp.rafaelpitaoficial.com.br`
+* **Isolamento de Desafio ACME e Roteamento Nginx (`/etc/nginx/sites-available/rafaelpitaoficial.conf`)**:
+  * Desacoplada a rota de validação `/.well-known/acme-challenge/` do redirecionamento HTTP->HTTPS para evitar conflitos em renovações automáticas.
+  * Inclusão de HSTS (`Strict-Transport-Security: max-age=31536000; includeSubDomains`) e cabeçalhos de proteção.
+
+## [2.2.2] - 2026-11-16
+
+### Corrigido (Ciclo de Vida do Microfone e Estabilização da Escuta Vocal no PIT.AI)
+* **Eliminação Definitiva do Loop de Abertura e Fechamento do Microfone (`pitaiVoiceService.js`)**:
+  * Removido o loop que reabria o microfone continuamente após eventos de erro (`no-speech`, `aborted`, `network`). O microfone agora encerra pacificamente e retorna para o estado `idle` sem insistência.
+  * Implementada a flag de segurança `userInitiatedVoice`: o microfone **nunca** mais é aberto sozinho no carregamento da página ou após a saudação inicial do sistema. Ele só é acionado mediante comando direto do usuário (clique no Orbe, botão de microfone ou atalho de [Espaço]).
+  * No modo contínuo, a reabertura ocorre estritamente uma única vez após uma resposta falada da IA originada por voz. Se houver silêncio subsequente, o sistema desliga a escuta automaticamente em vez de alternar freneticamente.
+  * O chime de ativação `playActivate()` agora toca apenas em ativações manuais do usuário, evitando ruídos desnecessários e prevenindo auto-captura de áudio pelo microfone.
+* **Sincronização de Estados no Dashboard (`PitAiDashboard.jsx`)**:
+  * O modo contínuo inicia desativado por padrão na carga da página, evitando qualquer disparo prematuro de captura sem interação do usuário.
+  * Removida a corrida de concorrência que forçava `setStatus('idle')` simultaneamente à transição de fala para escuta.
+
 ## [2.2.1] - 2026-11-16
 
 ### Corrigido & Aprimorado (Tipografia Tática e Renderização de Markdown no PIT.AI)

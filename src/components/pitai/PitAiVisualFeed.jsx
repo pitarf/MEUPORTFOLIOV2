@@ -528,44 +528,95 @@ export default function PitAiVisualFeed({
             <div className="flex items-center justify-between border-b pb-3">
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-cyan-400" />
-                <h4 className="text-sm font-bold text-foreground">
-                  Google Workspace • Agenda & Tarefas
-                </h4>
+                <div>
+                  <h4 className="text-sm font-bold text-foreground">
+                    Google Workspace • Agenda & Tarefas
+                  </h4>
+                  {data.accountEmail && (
+                    <span className="text-[10px] text-muted-foreground font-mono block">
+                      {data.accountEmail}
+                    </span>
+                  )}
+                </div>
               </div>
-              <span className="text-xs text-emerald-400 font-mono flex items-center gap-1 font-semibold">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                Sincronizado
+              <span className={`text-xs font-mono flex items-center gap-1 font-semibold ${data.calendarError ? 'text-amber-400' : 'text-emerald-400'}`}>
+                {data.calendarError ? (
+                  <>
+                    <AlertTriangle className="w-3.5 h-3.5" />
+                    Alerta de API
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    Sincronizado
+                  </>
+                )}
               </span>
             </div>
+
+            {data.calendarError && (
+              <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs space-y-1">
+                <span className="font-bold flex items-center gap-1">
+                  <AlertTriangle className="w-4 h-4 text-amber-400" />
+                  Aviso da API do Google Calendar:
+                </span>
+                <p className="font-mono text-[11px] text-amber-300/90 break-words">
+                  {data.calendarError}
+                </p>
+              </div>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Eventos */}
               <div className="space-y-2">
                 <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">
-                  Compromissos Agendados
+                  {data.isToday ? 'Compromissos de Hoje' : 'Compromissos Agendados'}
                 </span>
                 {data.events?.length > 0 ? (
-                  data.events.map(evt => (
-                    <div
-                      key={evt.id}
-                      className="p-3 rounded-xl bg-muted/30 border text-xs flex items-center justify-between"
-                    >
-                      <div>
-                        <span className="font-semibold text-foreground block">
-                          {evt.title}
-                        </span>
-                        <span className="text-[10px] text-muted-foreground flex items-center gap-1 mt-0.5">
-                          <Clock className="w-3 h-3 text-cyan-400" />
-                          <span>
-                            {new Date(evt.startTime).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })} - {new Date(evt.endTime).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                  data.events.map((evt, idx) => {
+                    const title = evt.title || evt.summary || evt.description || 'Compromisso';
+                    let timeDisplay = 'Horário a definir';
+
+                    if (evt.isAllDay || (/^\d{4}-\d{2}-\d{2}$/.test(evt.startTime))) {
+                      const dt = evt.startTime ? evt.startTime.split('-').reverse().join('/') : '';
+                      timeDisplay = dt ? `Dia Inteiro (${dt})` : 'Dia Inteiro';
+                    } else if (evt.time) {
+                      timeDisplay = evt.time;
+                    } else if (evt.startTime) {
+                      const startDate = new Date(evt.startTime);
+                      const endDate = evt.endTime ? new Date(evt.endTime) : null;
+                      if (!isNaN(startDate.getTime())) {
+                        const datePrefix = startDate.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+                        const startStr = startDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                        if (endDate && !isNaN(endDate.getTime())) {
+                          const endStr = endDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                          timeDisplay = `${datePrefix} • ${startStr} - ${endStr}`;
+                        } else {
+                          timeDisplay = `${datePrefix} • ${startStr}`;
+                        }
+                      }
+                    }
+
+                    return (
+                      <div
+                        key={evt.id || `evt_${idx}`}
+                        className="p-3 rounded-xl bg-muted/30 border text-xs flex items-center justify-between"
+                      >
+                        <div>
+                          <span className="font-semibold text-foreground block">
+                            {title}
                           </span>
+                          <span className="text-[10px] text-muted-foreground flex items-center gap-1 mt-0.5">
+                            <Clock className="w-3 h-3 text-cyan-400" />
+                            <span>{timeDisplay}</span>
+                          </span>
+                        </div>
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-primary/10 text-primary">
+                          Confirmado
                         </span>
                       </div>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-primary/10 text-primary">
-                        Confirmado
-                      </span>
-                    </div>
-                  ))
+                    );
+                  })
                 ) : (
                   <p className="text-xs text-muted-foreground italic p-2">
                     Nenhum compromisso marcado para este período.
