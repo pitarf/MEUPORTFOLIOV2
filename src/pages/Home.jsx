@@ -117,12 +117,23 @@ const Home = () => {
 
             {/* Hero Section Editorial */}
             <section className="relative min-h-[92vh] flex items-center justify-center pt-32 pb-20 overflow-hidden">
-                {/* Marquee de Projetos ao Fundo com Alta Visibilidade */}
+                {/* Marquee de Projetos ao Fundo com Alta Visibilidade em Duas Diagonais */}
                 <div className="absolute inset-0 z-0 opacity-40 dark:opacity-35 overflow-hidden pointer-events-none">
-                    <div className="absolute top-10 left-0 w-full rotate-[-2deg]">
+                    {/* Linha 1 (Superior) - Diagonal Inclinada Descendente */}
+                    <div className="absolute top-6 md:top-10 left-0 w-full rotate-[-4deg] md:rotate-[-5deg]">
                         <div className="flex gap-6 animate-marquee whitespace-nowrap">
                             {bgProjects.map((proj, idx) => (
                                 <div key={`row1-${idx}`} className="w-[320px] h-[200px] md:w-[500px] md:h-[310px] rounded-[22px] overflow-hidden flex-shrink-0 border border-black/10 dark:border-white/10 bg-white dark:bg-[#0B0B0B] shadow-xl">
+                                    <img src={proj.main_image_url || "https://images.unsplash.com/photo-1550745165-9bc0b252726f"} className="w-full h-full object-cover opacity-90 dark:opacity-85" alt="" />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    {/* Linha 2 (Inferior) - Diagonal Inclinada Ascendente (Sentido Oposto) */}
+                    <div className="absolute bottom-6 md:bottom-10 left-0 w-full rotate-[4deg] md:rotate-[5deg]">
+                        <div className="flex gap-6 animate-marquee-reverse whitespace-nowrap">
+                            {bgProjects.map((proj, idx) => (
+                                <div key={`row2-${idx}`} className="w-[320px] h-[200px] md:w-[500px] md:h-[310px] rounded-[22px] overflow-hidden flex-shrink-0 border border-black/10 dark:border-white/10 bg-white dark:bg-[#0B0B0B] shadow-xl">
                                     <img src={proj.main_image_url || "https://images.unsplash.com/photo-1550745165-9bc0b252726f"} className="w-full h-full object-cover opacity-90 dark:opacity-85" alt="" />
                                 </div>
                             ))}
