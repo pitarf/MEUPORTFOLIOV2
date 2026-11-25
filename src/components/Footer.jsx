@@ -48,8 +48,7 @@ const Footer = () => {
                         <BrandLogo
                             asLink={true}
                             size="md"
-                            subtitle={isPhotography ? "Fotografia" : "Digital Experiences"}
-                            showSubtitle={true}
+                            showSubtitle={false}
                         />
                         <p className="text-[#666666] dark:text-[#9E9E9E] text-sm leading-relaxed max-w-sm">
                             Desenvolvimento de sites de alto padrão, sistemas personalizados e experiências digitais sob medida.

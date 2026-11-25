@@ -96,8 +96,7 @@ const Navbar = () => {
                             <BrandLogo
                                 asLink={true}
                                 size="md"
-                                subtitle={isPhotography ? "Fotografia" : "Digital Experiences"}
-                                showSubtitle={true}
+                                showSubtitle={false}
                             />
                         </div>
 
