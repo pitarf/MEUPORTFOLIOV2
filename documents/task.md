@@ -14,6 +14,9 @@ Roadmap de acompanhamento para a reestruturação visual de alta conversão, com
     - Criação da página `src/pages/Store.jsx` com catálogo editorial de soluções digitais.
     - SEO & Descoberta Agêntica: Atualizados `index.html`, `SEO.jsx`, `robots.txt`, `sitemap.xml`, `.well-known/ai-catalog.json` e `llms.txt` apontando para o domínio canônico `https://ramiell.com`.
     - Build local (`npm run build`) validado com sucesso sem erros.
+    - Deploy na VPS Oracle (`144.22.173.125`): Container dedicado `ramiell-web` ativo na porta `127.0.0.1:3003`.
+    - SSL & Redirecionamentos: Certificado Let's Encrypt emitido com sucesso para `ramiell.com` e `www.ramiell.com`, redirecionando HTTP -> HTTPS e www -> raiz.
+    - Testes E2E: Status 200 OK validado em `https://ramiell.com` e `https://ramiell.com/store`, mantendo `rafaelpitaoficial.com.br` 100% no ar.
 
 
 - [x] **Eliminação de 404 em Rotas Diretas (SPA) e Ponte de Transição de DNS (`144.22.173.125`, `2.25.75.243`)**:
