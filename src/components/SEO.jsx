@@ -80,9 +80,9 @@ const SEO = ({ title, description, keywords, image, url }) => {
     }
 
     // Imagem Open Graph
-    const finalImage = image || '/brand/ramiell-logo.png';
+    const finalImage = image || '/brand/ramiell-og.png';
     const absoluteImage = makeAbsoluteUrl(finalImage);
-    const absoluteFavicon = makeAbsoluteUrl('/brand/ramiell-logo.png');
+    const absoluteFavicon = makeAbsoluteUrl('/brand/ramiell-monogram.png');
 
     return (
         <Helmet>
