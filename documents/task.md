@@ -2,6 +2,15 @@
 
 Roadmap de acompanhamento para a reestruturação visual de alta conversão, com tema claro por padrão e alternador reativo de temas.
 
+- [x] **Wordmark Direto RAMIELL na Navbar & Rodapé (`ramiell.com`)**:
+  - Objetivo: Remover "DIGITAL EXPERIENCES" e exibir estritamente o monograma dourado + "RAMIELL" na barra de navegação e rodapé.
+  - Entregas Realizadas:
+    - Navbar e Rodapé ajustados para `showSubtitle={false}`.
+    - Wordmark perfeitamente centrado ao monograma dourado.
+    - Build local (`npm run build`) concluído com 0 erros.
+    - Deploy publicado no container `ramiell-web` na VPS Oracle Cloud (`144.22.173.125`).
+    - Validação de Status 200 OK em `https://ramiell.com`.
+
 - [x] **Marquee de Projetos em Duas Diagonais Opostas & Refinamento da Logo RAMIELL (`ramiell.com`)**:
   - Objetivo: Restaurar a segunda fileira de marquee de projetos em diagonal oposta com movimento reverso no Hero da Home e garantir alta nitidez visual de fundo.
   - Entregas Realizadas:

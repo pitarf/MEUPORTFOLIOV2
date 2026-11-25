@@ -2,6 +2,16 @@
 
 Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 
+## [2.4.3] - 2026-11-25
+
+### Modificado (Simplificação da Marca na Navbar e Rodapé)
+* **Wordmark Exclusivo**:
+  * Removido o subtítulo "DIGITAL EXPERIENCES" da barra de navegação superior e do rodapé.
+  * Exibição estritamente com o monograma "R" dourado e o nome **RAMIELL** alinhados.
+* **Deploy e Validação**:
+  * Novo build de produção compilado e implantado no container `ramiell-web` na VPS Oracle.
+  * Status 200 OK verificado em `https://ramiell.com/`.
+
 ## [2.4.2] - 2026-11-25
 
 ### Adicionado (Marquee de Projetos em Duas Diagonais Opostas & Refinamento da Logo RAMIELL)
